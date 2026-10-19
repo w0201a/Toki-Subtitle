@@ -116,10 +116,18 @@ final class ExtensionSemanticContracts {
     private static void discoverCaptionRenderer(Map<String,ClassDef> definitions,Properties result) {
         String name="com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2";
         ClassDef assem=definitions.get(name);String frame=result.getProperty("class.X.0B14"),state=result.getProperty("class.X.0B17");
-        if(assem==null || frame==null || state==null) return;
-        String frameType="L"+frame.replace('.','/')+";",stateType="L"+state.replace('.','/')+";";
+        if(assem==null || frame==null) return;
         String text=result.getProperty("X.0B14:field.LIZ"),status=result.getProperty("X.0B14:field.LIZIZ");
         if(text==null || status==null) return;
+        // The frame's verified state field anchors the actual parameter type even
+        // when the enum itself gained constants and its old shape no longer matches.
+        ClassDef frameClass=definitions.get(frame);
+        if(state==null && frameClass!=null) for(Field field:frameClass.getFields()) if(field.getName().equals(status) && field.getType().startsWith("L")) {
+            state=field.getType().substring(1,field.getType().length()-1).replace('/','.');
+            accept(result,"class.X.0B17",state);
+        }
+        if(state==null) return;
+        String frameType="L"+frame.replace('.','/')+";",stateType="L"+state.replace('.','/')+";";
         Map<String,List<String>> candidates=new HashMap<>();
         for(Method method:assem.getMethods()) if(ExtensionDexIndex.signature(method).equals("("+frameType+")V")) {
             Set<String> reads=new HashSet<>();Map<String,String> fields=new HashMap<>();
@@ -128,18 +136,18 @@ final class ExtensionSemanticContracts {
                 if(f.getDefiningClass().equals(assem.getType())) fields.put(f.getType(),f.getName());
             }
             if(!reads.contains(text) || !reads.contains(status)) continue;
-            for(var call:calls(method)) if(call.getParameterTypes().size()==4 && call.getReturnType().equals("V") &&
+            for(var call:calls(method)) if(call.getParameterTypes().size()>=3 && call.getReturnType().equals("V") &&
                 call.getParameterTypes().get(0).toString().equals("Ljava/lang/String;") && call.getParameterTypes().get(1).toString().equals(stateType) &&
                 call.getParameterTypes().get(2).toString().equals("Ljava/lang/String;") && fields.containsKey(call.getDefiningClass())) {
-                String actual=call.getDefiningClass(),mode=call.getParameterTypes().get(3).toString();
-                if(!mode.startsWith("LX/")) continue;
+                String actual=call.getDefiningClass(),mode=call.getParameterTypes().size()>3?call.getParameterTypes().get(3).toString():"";
+                if(!mode.startsWith("L") || !mode.endsWith(";")) mode="";
                 candidates.put(actual+":"+key(call),List.of(actual,mode,key(call),key(method),fields.get(actual)));
             }
         }
         if(candidates.size()!=1) return;
         var evidence=candidates.values().iterator().next();
         accept(result,"class.X.0B1g",evidence.get(0).substring(1,evidence.get(0).length()-1).replace('/','.'));
-        accept(result,"class.X.0B18",evidence.get(1).substring(1,evidence.get(1).length()-1).replace('/','.'));
+        if(!evidence.get(1).isEmpty()) accept(result,"class.X.0B18",evidence.get(1).substring(1,evidence.get(1).length()-1).replace('/','.'));
         accept(result,"X.0B1g:method.LJIIIZ(Ljava/lang/String;LX/0B17;Ljava/lang/String;LX/0B18;)V",evidence.get(2));
         accept(result,name+":method.bs(LX/0B14;)V",evidence.get(3));
         accept(result,name+":field.LLLLLILLIL",evidence.get(4));

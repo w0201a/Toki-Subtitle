@@ -10,7 +10,8 @@ internal data class HostScanStatus(
     val total: Int = 0,
     val extensionStage: String = "",
     val extensionCompleted: Int = 0,
-    val extensionTotal: Int = 0
+    val extensionTotal: Int = 0,
+    val workers: Int = 1
 )
 
 /** 统一约束扫描、保存与结果确认顺序，供工作线程和主线程共同使用。 */
@@ -19,9 +20,9 @@ internal class HostScanSession {
         private set
 
     /** 开始唯一扫描。@return Unit。Callers: HostSymbols.initialize、单元测试。 */
-    @Synchronized fun begin() {
+    @Synchronized fun begin(workers: Int = 1) {
         check(status.phase == HostScanPhase.IDLE)
-        status = HostScanStatus(HostScanPhase.SCANNING)
+        status = HostScanStatus(HostScanPhase.SCANNING, workers = workers.coerceAtLeast(1))
     }
 
     /**
@@ -35,7 +36,7 @@ internal class HostScanSession {
         check(status.phase == HostScanPhase.SCANNING)
         require(total > 0 && completed in status.completed..total)
         require(status.total == 0 || status.total == total)
-        status = HostScanStatus(HostScanPhase.SCANNING, completed, total)
+        status = status.copy(phase = HostScanPhase.SCANNING, completed = completed, total = total)
     }
 
     /** 扫描全部完成后开始保存结果。@return Unit。Callers: HostSymbols、单元测试。 */
@@ -48,7 +49,7 @@ internal class HostScanSession {
     /** Extension discovery has different work units; never show the completed core percentage here. */
     @Synchronized fun extensions() {
         check(status.phase == HostScanPhase.SCANNING && (status.total == 0 || status.completed == status.total))
-        status = HostScanStatus(HostScanPhase.EXTENSIONS)
+        status = HostScanStatus(HostScanPhase.EXTENSIONS, workers = status.workers)
     }
 
     @Synchronized fun extensionProgress(stage: String, completed: Int, total: Int) {

@@ -310,7 +310,7 @@
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
     <string name="host_scan_title_saving" formatted="false">"Saving results"</string>
-    <string name="host_scan_keep_foreground" formatted="false">"Keep TikTok in the foreground."</string>
+    <string name="host_scan_keep_foreground" formatted="false">"适配在后台进行，可继续刷视频。"</string>
     <string name="host_scan_saving_hint" formatted="false">"Please wait."</string>
     <string name="host_scan_done" formatted="false">"Got it"</string>
     <string name="video_fit_center" formatted="false">"Centered"</string>
@@ -335,4 +335,10 @@
     <string name="host_scan_stage_members">"Verifying translation and display contracts"</string>
     <string name="host_scan_dex_progress">"Processed %1$d / %2$d DEX files in this phase"</string>
     <string name="status_path_comment">"Comment translation entry"</string>
+    <string name="host_scan_workers">"并行线程上限：%1$d"</string>
+    <string name="host_scan_background">"Continue watching while scanning"</string>
+    <string name="host_scan_background_hint">"Compatibility analysis continues in the background. You will be notified when it finishes."</string>
+    <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
+    <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
+    <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
 </resources>

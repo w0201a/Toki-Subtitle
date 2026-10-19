@@ -48,15 +48,17 @@ import java.text.NumberFormat
  * @param onResultDismiss 关闭完成或失败提示的回调。
  * Callers: HostScanController.render。
  */
-internal class HostScanDialog(activity: Activity, moduleResources: ModuleResources, onResultDismiss: () -> Unit) :
+internal class HostScanDialog(activity: Activity, moduleResources: ModuleResources, onResultDismiss: () -> Unit, onBackground: () -> Unit) :
     ComponentDialog(moduleResources.createActivityContext(activity), android.R.style.Theme_Material_Light_Dialog_NoActionBar) {
+    constructor(activity: Activity, moduleResources: ModuleResources, onResultDismiss: () -> Unit) :
+        this(activity, moduleResources, onResultDismiss, {})
     private var status by mutableStateOf(HostScanStatus())
     private val composeView = ComposeView(context).apply {
         layoutDirection = context.resources.configuration.layoutDirection
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
             MaterialTheme(colorScheme = tokiColorScheme(LocalContext.current, isSystemInDarkTheme())) {
-                ScanContent(status, onResultDismiss)
+                ScanContent(status, onResultDismiss, onBackground)
             }
         }
     }
@@ -69,8 +71,10 @@ internal class HostScanDialog(activity: Activity, moduleResources: ModuleResourc
         setContentView(composeView)
         checkNotNull(window).apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
-            setDimAmount(0.48f)
+            addFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL)
+            clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND)
+            setDimAmount(0f)
+            setGravity(android.view.Gravity.TOP or android.view.Gravity.CENTER_HORIZONTAL)
         }
     }
 
@@ -106,7 +110,7 @@ internal class HostScanDialog(activity: Activity, moduleResources: ModuleResourc
  * Callers: HostScanDialog 的 ComposeView。
  */
 @Composable
-private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit) {
+private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit, onBackground: () -> Unit) {
     val failed = state.phase == HostScanPhase.FAILED
     val complete = state.phase == HostScanPhase.READY
     val partial = state.phase == HostScanPhase.PARTIAL
@@ -141,6 +145,7 @@ private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit) {
             Column(Modifier.weight(1f).verticalScroll(contentScroll),
                 verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(stringResource(heading), style = MaterialTheme.typography.headlineSmall)
+                if (!complete && !partial && !failed) Text(stringResource(R.string.host_scan_workers, state.workers), style = MaterialTheme.typography.bodySmall)
                 Text(stringResource(description), style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                 if (state.phase == HostScanPhase.EXTENSIONS && state.extensionStage.isNotEmpty()) {
@@ -155,6 +160,9 @@ private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit) {
                         stringResource(R.string.host_scan_dex_progress, state.extensionCompleted, state.extensionTotal),
                         style = MaterialTheme.typography.bodySmall)
                 }
+            }
+            if (!complete && !partial && !failed) TextButton(onClick = onBackground, modifier = Modifier.align(Alignment.End)) {
+                Text(stringResource(R.string.host_scan_background))
             }
             Spacer(Modifier.height(16.dp))
             if (complete || partial || failed) {

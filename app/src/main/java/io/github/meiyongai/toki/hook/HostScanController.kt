@@ -38,13 +38,14 @@ internal class HostScanController private constructor(
     private val main = Handler(Looper.getMainLooper())
     private var foreground = WeakReference<Activity>(null)
     private var dialog: HostScanDialog? = null
+    private var backgroundMode = false
     private val refresh = object : Runnable {
         /** 更新可见窗口；无前台活动时停止刷新。@return Unit。Callers: 主线程Handler。 */
         override fun run() {
             render()
             val phase = session.status.phase
-            if (dialog != null && phase in setOf(HostScanPhase.SCANNING, HostScanPhase.EXTENSIONS, HostScanPhase.SAVING)) {
-                main.postDelayed(this, 150)
+            if (foreground.get() != null && phase in setOf(HostScanPhase.SCANNING, HostScanPhase.EXTENSIONS, HostScanPhase.SAVING)) {
+                main.postDelayed(this, 500)
             }
         }
     }
@@ -59,9 +60,25 @@ internal class HostScanController private constructor(
         if (activity.isFinishing || activity.isDestroyed) return
         val state = session.status
         if (state.phase == HostScanPhase.IDLE) { dismissDialog(); return }
+        if (backgroundMode) {
+            if (state.phase in setOf(HostScanPhase.READY, HostScanPhase.PARTIAL, HostScanPhase.FAILED)) {
+                val text = when (state.phase) {
+                    HostScanPhase.READY -> io.github.meiyongai.toki.subtitle.R.string.host_scan_background_complete
+                    HostScanPhase.PARTIAL -> io.github.meiyongai.toki.subtitle.R.string.host_scan_background_partial
+                    else -> io.github.meiyongai.toki.subtitle.R.string.host_scan_background_failed
+                }
+                android.widget.Toast.makeText(moduleResources.createActivityContext(activity), text, android.widget.Toast.LENGTH_LONG).show()
+                session.dismissResult(); backgroundMode = false
+            }
+            return
+        }
         if (dialog == null) {
-            dialog = HostScanDialog(activity, moduleResources) { session.dismissResult(); dismissDialog() }
-                .also { it.render(state); it.show() }
+            dialog = HostScanDialog(activity, moduleResources, { session.dismissResult(); dismissDialog() }, {
+                backgroundMode = true
+                dismissDialog()
+                android.widget.Toast.makeText(moduleResources.createActivityContext(activity), io.github.meiyongai.toki.subtitle.R.string.host_scan_background_hint, android.widget.Toast.LENGTH_LONG).show()
+                main.post(refresh)
+            }).also { it.render(state); it.show() }
         }
         dialog!!.render(state)
     }

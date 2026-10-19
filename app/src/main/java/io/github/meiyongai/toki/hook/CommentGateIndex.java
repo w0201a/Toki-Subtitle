@@ -72,6 +72,18 @@ final class CommentGateIndex {
         Map<String,List<String>> language=new HashMap<>();
         ExtensionDexIndex.visit(paths,type->{
             if(supplier(type)) suppliers.add(type.getType());
+            for(Method method:type.getMethods()) if((method.getAccessFlags()&8)!=0 &&
+                ExtensionDexIndex.signature(method).equals("(Lcom/ss/android/ugc/aweme/feed/model/Aweme;Ljava/lang/Boolean;)Z") && method.getImplementation()!=null) {
+                Set<String> enumValues=new HashSet<>();boolean aid=false,originalGuard=false;
+                for(var instruction:method.getImplementation().getInstructions()) if(instruction instanceof ReferenceInstruction ref) {
+                    if(ref.getReference() instanceof FieldReference f) {
+                        if(f.getName().equals("OVERRIDE_TO_TRANSLATED") || f.getName().equals("OVERRIDE_TO_ORIGINAL")) enumValues.add(f.getName());
+                        if(f.getDefiningClass().equals("Ljava/lang/Boolean;") && f.getName().equals("FALSE")) originalGuard=true;
+                    }
+                    if(ref.getReference() instanceof MethodReference call && call.getDefiningClass().equals("Lcom/ss/android/ugc/aweme/feed/model/Aweme;") && call.getName().equals("getAid")) aid=true;
+                }
+                if(enumValues.size()==2 && originalGuard && aid) language.computeIfAbsent("originalVisibility",unused->new ArrayList<>()).add(type.getType()+"->"+method.getName());
+            }
             for(Method method:type.getMethods()) for(boolean target:List.of(true,false)) {
                 if((method.getAccessFlags()&8)==0 || method.getImplementation()==null || !ExtensionDexIndex.signature(method).equals(target?"()Ljava/lang/String;":"()[Ljava/lang/String;")) continue;
                 boolean key=false,read=false;

@@ -7,7 +7,7 @@ import java.util.Properties
 
 /** Independently cached extension contracts. Unknown versions require unique structural matches. */
 internal object ExtensionSymbols {
-    private const val MATCHER_REVISION = "relationships-v7"
+    private const val MATCHER_REVISION = "relationships-v8"
     private val reference: Properties by lazy {
         Properties().apply { checkNotNull(ExtensionSymbols::class.java.getResourceAsStream("/toki-extension-profile.properties")).use(::load) }
     }
@@ -87,6 +87,16 @@ internal object ExtensionSymbols {
         val classes = result.stringPropertyNames().count { it.startsWith("class.") }
         val failures = result.stringPropertyNames().count { it.startsWith("error.") }
         HookRuntime.event("ExtensionSymbols", "$stage classes=$classes unresolvedContracts=$failures; unique structural contracts only")
+    }
+    fun captionOriginalVisibility(loader: ClassLoader): Method? {
+        val value = resolved.getProperty("captionLanguage.originalVisibility") ?: return null
+        val owner = value.substringBefore("->")
+        val type = Class.forName(owner.substring(1, owner.length - 1).replace('/', '.'), false, loader)
+        val aweme = Class.forName("com.ss.android.ugc.aweme.feed.model.Aweme", false, loader)
+        return type.getDeclaredMethod(value.substringAfter("->"), aweme, java.lang.Boolean::class.java).apply {
+            check(java.lang.reflect.Modifier.isStatic(modifiers) && returnType == Boolean::class.javaPrimitiveType)
+            isAccessible = true
+        }
     }
     fun captionLanguage(loader: ClassLoader, target: Boolean): Method? {
         val encoded = resolved.getProperty("captionLanguage.${if (target) "target" else "excluded"}") ?: return null

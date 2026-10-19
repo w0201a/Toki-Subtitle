@@ -310,7 +310,7 @@
     <string name="host_scan_title_extensions">"正在適配字幕擴充"</string>
     <string name="host_scan_extensions_hint">"正在檢查字幕、影片文案和留言投票。完成後儲存結果，後續啟動直接沿用。"</string>
     <string name="host_scan_title_saving" formatted="false">"正在儲存結果"</string>
-    <string name="host_scan_keep_foreground" formatted="false">"請保持 TikTok 在前景。"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"适配在后台进行，可继续刷视频。"</string>
     <string name="host_scan_saving_hint" formatted="false">"請稍候。"</string>
     <string name="host_scan_done" formatted="false">"知道了"</string>
     <string name="video_fit_center" formatted="false">"置中"</string>
@@ -335,4 +335,10 @@
     <string name="host_scan_stage_members">"正在核验翻译接口与显示入口"</string>
     <string name="host_scan_dex_progress">"已处理 %1$d / %2$d 个 DEX（当前阶段）"</string>
     <string name="status_path_comment">"普通评论翻译入口"</string>
+    <string name="host_scan_workers">"并行线程上限：%1$d"</string>
+    <string name="host_scan_background">"后台适配，继续刷视频"</string>
+    <string name="host_scan_background_hint">"正在后台适配，完成后会提醒。"</string>
+    <string name="host_scan_background_complete">"适配完成，已应用可用功能。"</string>
+    <string name="host_scan_background_partial">"适配完成，部分功能未匹配，可在 Toki 查看。"</string>
+    <string name="host_scan_background_failed">"适配未完成，可在 Toki 查看状态并重试。"</string>
 </resources>

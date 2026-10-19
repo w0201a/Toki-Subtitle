@@ -134,4 +134,26 @@ public class ExtensionSemanticContractsTest {
             if(derived) assertEquals(complete,result.containsKey(renderRole));
         }
     }
+    @Test public void captionRendererCanGainTrailingParametersAndStateEnumWithoutLosingItsFrameRelationship() {
+        String assem="com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2",owner="L"+assem.replace('.','/')+";";
+        var signature=List.of("Ljava/lang/String;","LX/NewState;","Ljava/lang/String;","Lexample/Mode;","Z");
+        var code=List.of(
+            new ImmutableInstruction22c(Opcode.IGET_OBJECT,0,1,new ImmutableFieldReference(owner,"actualRenderer","LX/NewRenderer;")),
+            new ImmutableInstruction22c(Opcode.IGET_OBJECT,2,1,new ImmutableFieldReference("LX/Frame;","text","Ljava/lang/String;")),
+            new ImmutableInstruction22c(Opcode.IGET_OBJECT,3,1,new ImmutableFieldReference("LX/Frame;","state","LX/NewState;")),
+            new ImmutableInstruction3rc(Opcode.INVOKE_VIRTUAL_RANGE,0,6,new ImmutableMethodReference("LX/NewRenderer;","draw",signature,"V")),
+            new ImmutableInstruction10x(Opcode.RETURN_VOID));
+        var method=new ImmutableMethod(owner,"frame",List.of(new ImmutableMethodParameter("LX/Frame;",Set.of(),null)),"V",1,Set.of(),Set.of(),new ImmutableMethodImplementation(6,code,List.of(),List.of()));
+        var frame=new ImmutableClassDef("LX/Frame;",1,"Ljava/lang/Object;",List.of(),null,Set.of(),List.of(
+            new ImmutableField("LX/Frame;","text","Ljava/lang/String;",1,null,Set.of(),Set.of()),
+            new ImmutableField("LX/Frame;","state","LX/NewState;",1,null,Set.of(),Set.of())),List.of());
+        Properties result=new Properties();result.setProperty("class.X.0B14","X.Frame");
+        result.setProperty("X.0B14:field.LIZ","text");result.setProperty("X.0B14:field.LIZIZ","state");
+        ExtensionSemanticContracts.resolve(Map.of(assem,type(owner,List.of(method)),"X.Frame",frame),result);
+        assertEquals("X.NewState",result.getProperty("class.X.0B17"));
+        assertEquals("example.Mode",result.getProperty("class.X.0B18"));
+        assertEquals("X.NewRenderer",result.getProperty("class.X.0B1g"));
+        assertEquals("draw(Ljava/lang/String;LX/NewState;Ljava/lang/String;Lexample/Mode;Z)V",result.getProperty("X.0B1g:method.LJIIIZ(Ljava/lang/String;LX/0B17;Ljava/lang/String;LX/0B18;)V"));
+    }
+
 }

@@ -64,8 +64,8 @@ internal object CaptionFallbackHook {
         val itemUrls: Field = item.adaptiveDeclaredField("urlList").apply { isAccessible = true }
         val itemRealtime: Field = item.adaptiveDeclaredField("isRealtimeTranslated").apply { isAccessible = true }
         val hostCaptionsEnabled: Method = loader.adaptiveClass("X.08ZA").adaptiveDeclaredMethod("LJJ", aweme)
-        val strategySkipLoading: Method = loader.adaptiveClass("com.ss.android.ugc.aweme.strategy.CaptionStrategyServiceImpl")
-            .adaptiveDeclaredMethod("ii", aweme)
+        val strategySkipLoading: Method? = runCatching { loader.adaptiveClass("com.ss.android.ugc.aweme.strategy.CaptionStrategyServiceImpl")
+            .adaptiveDeclaredMethod("ii", aweme) }.getOrNull()
         val serviceClass: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.service.CaptionServiceImpl")
         val serviceResult: Method? = runCatching { serviceClass.adaptiveDeclaredMethod("LJIIIZ", aweme) }.getOrNull()
         val serviceTrackId: Method? = runCatching { serviceClass.adaptiveDeclaredMethod("LJIIJ", aweme) }.getOrNull()
@@ -137,7 +137,7 @@ internal object CaptionFallbackHook {
         }
         }
 
-        module.trackHook(feature, contract.strategySkipLoading).intercept { chain ->
+        contract.strategySkipLoading?.let { strategy -> module.trackHook(feature, strategy).intercept { chain ->
             val skipped = chain.proceed() as Boolean
             guarded(skipped) {
             val aweme = chain.args[0]
@@ -150,12 +150,13 @@ internal object CaptionFallbackHook {
             }
         }
 
+        }
         // SUB-TRANSLATE-GATE：译文尚未可用时，宿主的 foreign_original_hidden 会隐藏有效原字幕。
         // true 为原字幕帧，null 为到帧前的基础状态判定；false 为译文帧，始终保留宿主结果。
         // 到帧前也必须允许有效原字幕，否则基础状态可能先被设为 HIDDEN。
-        val hideOriginal = loader.adaptiveClass("X.08ZA").adaptiveDeclaredMethod(
-            "LJJIJIIJI", contract.aweme, java.lang.Boolean::class.java)
-        module.trackHook(feature, hideOriginal).intercept { chain ->
+        val hideOriginal = runCatching { loader.adaptiveClass("X.08ZA").adaptiveDeclaredMethod(
+            "LJJIJIIJI", contract.aweme, java.lang.Boolean::class.java) }.getOrNull()
+        hideOriginal?.let { method -> module.trackHook(feature, method).intercept { chain ->
             val hidden = chain.proceed() as Boolean
             if (!hidden || chain.args[1] == false) return@intercept hidden
             guarded(hidden) {
@@ -173,6 +174,7 @@ internal object CaptionFallbackHook {
             }
         }
 
+        }
         HookRuntime.event(TAG, "verified readers installed owner=$feature selector=${contract.result != null} cache=${contract.cacheResult != null} service=true identity=${HostSymbols.codeIdentity()}")
     }
 

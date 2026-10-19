@@ -34,6 +34,7 @@ object VideoTranslateHook {
             (chain.proceed() as Boolean) || enabled()
         }
         }
+        CaptionOriginalVisibility.install(module, classLoader)
         HookRuntime.install("CaptionFallback") { CaptionFallbackHook.install(module, classLoader, "CaptionFallback") }
         HookRuntime.install("SubtitleFeature") { SubtitleFeature.install(module, classLoader, "SubtitleFeature") }
         DescriptionTranslation.install(module, classLoader)

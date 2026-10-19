@@ -120,7 +120,7 @@ internal object HostSymbols {
         HookRuntime.adaptation(if (scanAllowed) "正在查找 ${targets.size} 项基础依赖${if (!extensionsReady) "及字幕扩展" else ""} · $identity" else "等待主进程扫描完成后重启")
         HookRuntime.state("HostSymbols", if (scanAllowed) "正在扫描" else "等待主进程准备")
         if (scanAllowed) {
-            HostScanController.session.begin()
+            HostScanController.session.begin(ScanWorkers.recommended())
             Thread({
                 try {
                     val scanned = if (targets.isEmpty()) java.util.Properties() else HostCoreScanner.scan(paths, selectedRules) { completed, total ->

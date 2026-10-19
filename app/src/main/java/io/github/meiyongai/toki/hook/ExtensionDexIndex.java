@@ -21,7 +21,7 @@ public final class ExtensionDexIndex {
     private static void phase(String value) { PHASE.set(value); if(OBSERVER.get()!=null) OBSERVER.get().update(value,0,0); }
     public static Properties scan(List<String> paths, Properties profile, Set<String> selected, Progress progress) throws IOException {
         OBSERVER.set(progress);
-        try { phase("structure"); return scan(paths,profile,selected); }
+        try (ScanWorkers.Scope workers=ScanWorkers.open()) { phase("structure"); return scan(paths,profile,selected); }
         finally { OBSERVER.remove(); PHASE.remove(); }
     }
 
@@ -129,8 +129,11 @@ public final class ExtensionDexIndex {
         Map<String,String> fieldTypes = new HashMap<>();
         Map<String,String> fieldContracts = new HashMap<>();
         Map<String,List<String>> uses = new HashMap<>();
-        for (Method method : type.getMethods()) {
-            String hash = methodFingerprint(method);
+        List<Method> methods=new ArrayList<>();type.getMethods().forEach(methods::add);
+        List<String> methodHashes=ScanWorkers.map(methods,ExtensionDexIndex::methodFingerprint);
+        for (int methodIndex=0;methodIndex<methods.size();methodIndex++) {
+            Method method=methods.get(methodIndex);
+            String hash = methodHashes.get(methodIndex);
             shape.add("method:" + hash);
             members.setProperty("method." + method.getName() + signature(method), hash);
             if (method.getImplementation() != null) {
@@ -214,6 +217,19 @@ public final class ExtensionDexIndex {
                 if(OBSERVER.get()!=null) OBSERVER.get().update(PHASE.get(),++completed,total);
             }
         }
+    }
+    /** Bound parallel class analysis to one small batch; merge results in source order. */
+    static <T> void visitPrepared(List<String> paths, java.util.function.Function<ClassDef,T> prepare,
+            java.util.function.Consumer<T> publish) throws IOException {
+        List<ClassDef> batch=new ArrayList<>(128);
+        visit(paths,type->{
+            batch.add(type);
+            if(batch.size()==128) {
+                for(T result:ScanWorkers.map(batch,prepare)) publish.accept(result);
+                batch.clear();
+            }
+        });
+        if(!batch.isEmpty()) for(T result:ScanWorkers.map(batch,prepare)) publish.accept(result);
     }
     /** Generates public fingerprints, not host bytecode or private user data. */
     public static Properties profile(List<String> paths, Set<String> names) throws IOException {

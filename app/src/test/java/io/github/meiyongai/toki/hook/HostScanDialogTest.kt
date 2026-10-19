@@ -103,7 +103,7 @@ class HostScanDialogTest {
         }
         show(HostScanStatus(HostScanPhase.SCANNING, 1, 2), fontScale = 1f) {}
         compose.onNodeWithText("正在查找方法").assertIsDisplayed()
-        compose.onNodeWithText("保持 TikTok 在前台。").assertIsDisplayed()
+        compose.onNodeWithText("适配在后台进行，可继续刷视频。").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("50%").assertIsDisplayed()
         saveScreenshot("running-320dp-1.0")
         compose.runOnIdle { dialog!!.render(HostScanStatus(HostScanPhase.READY, 2, 2)) }
@@ -177,6 +177,39 @@ class HostScanDialogTest {
             assertFalse(controller.get().isFinishing)
             assertFalse(controller.get().isDestroyed)
             assertFalse(ShadowProcess.wasKilled(4703))
+        }
+    }
+
+    @Test fun backgroundChoiceKeepsScanRunningAndCompletionNotifiesWithoutBlockingVideo() {
+        compose.runOnUiThread {
+            controller.pause()
+            HostScanController.session.fail(); HostScanController.session.dismissResult()
+            controllerField().set(null, null)
+            HostScanController.attach(controller.get().application, moduleResources())
+            scanLifecycle = controllerField().get(null) as Application.ActivityLifecycleCallbacks
+            HostScanController.session.begin(4)
+            HostScanController.session.progress(1, 10)
+            controller.resume()
+        }
+        shadowOf(Looper.getMainLooper()).idle()
+        compose.waitForIdle()
+        val flags = currentControllerDialog()!!.window!!.attributes.flags
+        assertTrue(flags and android.view.WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE != 0)
+        assertTrue(flags and android.view.WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL != 0)
+        compose.onNodeWithText("后台适配，继续刷视频").performClick()
+        compose.runOnIdle {
+            assertNull(currentControllerDialog())
+            assertEquals(HostScanPhase.SCANNING, HostScanController.session.status.phase)
+            HostScanController.session.progress(10, 10)
+            HostScanController.session.saving(); HostScanController.session.ready()
+            HostScanController.onScanFinished()
+        }
+        shadowOf(Looper.getMainLooper()).idle()
+        compose.runOnIdle {
+            assertNull(currentControllerDialog())
+            assertEquals(HostScanPhase.IDLE, HostScanController.session.status.phase)
+            assertTrue(org.robolectric.shadows.ShadowToast.getTextOfLatestToast().contains("适配完成"))
+            assertFalse(controller.get().isFinishing)
         }
     }
 

@@ -123,8 +123,8 @@ public final class HostDexIndex {
     }
     /** Register/data-flow fingerprints retain semantics while tolerating obfuscated callee renames. */
     public static String semanticLiterals(ClassDef type) {
-        List<String> methods=new ArrayList<>();
-        for (Method method:type.getMethods()) methods.add(ExtensionDexIndex.methodFingerprint(method));
+        List<Method> source=new ArrayList<>();type.getMethods().forEach(source::add);
+        List<String> methods=ScanWorkers.map(source,ExtensionDexIndex::methodFingerprint);
         Collections.sort(methods);
         return digest(String.join("\n",methods));
     }
@@ -356,15 +356,18 @@ public final class HostDexIndex {
             if (selectedTypes != null && !selectedTypes.contains(type.getType())) return;
             if (!speedSymbols.isEmpty() && (selected == null || selected.speed().contains(type.getType()))) speedIndex.collect(type);
             if (!commentSymbols.isEmpty() && (selected == null || selected.comments().contains(type.getType()))) commentIndex.collect(type);
-            if (!methodRules.isEmpty() && (selected == null || selected.methods().contains(type.getType()))) for (Method method : type.getMethods()) {
-                for (HostMethodRule rule : methodIndex.match(method)) {
-                    Set<String> calls = new HashSet<>();
-                    for (var instruction : method.getImplementation().getInstructions())
-                        if (instruction instanceof ReferenceInstruction ref &&
-                                ref.getReference() instanceof org.jf.dexlib2.iface.reference.MethodReference call &&
+            if (!methodRules.isEmpty() && (selected == null || selected.methods().contains(type.getType()))) {
+                List<Method> methods=new ArrayList<>();type.getMethods().forEach(methods::add);
+                var matched=ScanWorkers.map(methods,methodIndex::match);
+                for(int methodNumber=0;methodNumber<methods.size();methodNumber++) {
+                    Method method=methods.get(methodNumber);
+                    for (HostMethodRule rule : matched.get(methodNumber)) {
+                        Set<String> calls = new HashSet<>();
+                        for (var instruction : method.getImplementation().getInstructions())
+                            if (instruction instanceof ReferenceInstruction ref && ref.getReference() instanceof org.jf.dexlib2.iface.reference.MethodReference call &&
                                 instruction.getOpcode().name().startsWith("INVOKE_")) calls.add(call.toString());
-                    methodCandidates.get(rule.symbol()).add(new MethodTarget(type.getType(),
-                            memberDescriptor(method), rule.role(), Set.copyOf(calls)));
+                        methodCandidates.get(rule.symbol()).add(new MethodTarget(type.getType(),memberDescriptor(method),rule.role(),Set.copyOf(calls)));
+                    }
                 }
             }
             if (byShape.isEmpty()) return;

@@ -5,10 +5,10 @@ import java.util.Properties
 /** Native candidate search is an optimization; missing targets get independent full local verification. */
 internal object HostCoreScanner {
     const val REVISION = "local-recovery-v1"
-    fun scan(paths: List<String>, rules: String, progress: (Int, Int) -> Unit): Properties = recover(rules,
+    fun scan(paths: List<String>, rules: String, progress: (Int, Int) -> Unit): Properties = ScanWorkers.open().use { recover(rules,
         primary = { HostNativeIndex.scan(paths, rules) { done, total -> progress((done.toLong() * 600 / total.coerceAtLeast(1)).toInt(), 1000) } },
         secondary = { selected -> HostDexIndex.scan(paths, selected) { done, total -> progress(600 + (done.toLong() * 400 / total.coerceAtLeast(1)).toInt(), 1000) } }
-    ).also { progress(1000, 1000) }
+    ).also { progress(1000, 1000) } }
 
     internal fun recover(rules: String, primary: () -> Properties, secondary: (String) -> Properties): Properties {
         val first = try { primary() } catch (_: Exception) { Properties() } catch (_: LinkageError) { Properties() }

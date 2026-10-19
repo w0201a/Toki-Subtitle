@@ -62,9 +62,9 @@ internal object SubtitleFeature {
         val rootField = renderer.adaptiveDeclaredField("LIZJ").apply { isAccessible = true }
         val videoField = renderer.adaptiveDeclaredField("LJI").apply { isAccessible = true }
         val display = ExtensionSymbols.methodByRole(renderer, "LJIIIZ")
-        check(display.returnType == Void.TYPE && display.parameterTypes.size == 4 &&
+        check(display.returnType == Void.TYPE && display.parameterTypes.size >= 3 &&
             display.parameterTypes[0] == String::class.java && display.parameterTypes[2] == String::class.java &&
-            !display.parameterTypes[1].isPrimitive && !display.parameterTypes[3].isPrimitive) { "Caption display contract changed" }
+            !display.parameterTypes[1].isPrimitive) { "Caption display contract changed" }
         val bindings = WeakHashMap<View, WeakReference<SubtitleOverlay>>()
         val verifiedRenderers = WeakHashMap<Any, Boolean>()
         HookRuntime.install("SubtitleMenu") { SubtitleMenu.install(module, loader, "SubtitleMenu") }

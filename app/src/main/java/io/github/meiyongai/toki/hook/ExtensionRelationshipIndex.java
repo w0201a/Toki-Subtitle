@@ -57,6 +57,7 @@ final class ExtensionRelationshipIndex {
             result.remove(key);result.setProperty("error."+key,"independent relationship evidence disagrees");
         } else { result.setProperty(key,value);result.remove("error."+key); }
     }
+    private record PreparedRelationships(String actual,String hierarchy,Map<String,Map<String,List<Method>>> matches) {}
     static void resolve(List<String> paths,Properties profile,Properties result,Map<String,ClassDef> definitions) throws IOException {
         Map<String,List<String>> byHash=new HashMap<>();
         Set<String> signatures=new HashSet<>(),namedOwners=new HashSet<>(),hierarchies=new HashSet<>();
@@ -71,20 +72,28 @@ final class ExtensionRelationshipIndex {
         }
         Map<String,Map<String,Map<String,List<Method>>>> candidates=new HashMap<>();
         Map<String,String> candidateHierarchies=new HashMap<>();
-        ExtensionDexIndex.visit(paths,type->{
-            if(!type.getType().startsWith("LX/") && !namedOwners.contains(name(type.getType()))) return;
-            if(!hierarchies.contains(ExtensionDexIndex.relationshipHierarchy(type))) return;
+        ExtensionDexIndex.visitPrepared(paths,type->{
+            if(!type.getType().startsWith("LX/") && !namedOwners.contains(name(type.getType()))) return null;
+            String hierarchy=ExtensionDexIndex.relationshipHierarchy(type);
+            if(!hierarchies.contains(hierarchy)) return null;
             Map<String,List<Method>> hashes=new HashMap<>();
             for(Method method:type.getMethods()) {
                 if(!signatures.contains(ExtensionDexIndex.normalized(ExtensionDexIndex.signature(method)))) continue;
-                String hash=evidence(method);if(hash!=null && byHash.containsKey(hash)) hashes.computeIfAbsent(hash,unused->new ArrayList<>()).add(org.jf.dexlib2.immutable.ImmutableMethod.of(method));
+                String hash=evidence(method);
+                if(hash!=null && byHash.containsKey(hash)) hashes.computeIfAbsent(hash,unused->new ArrayList<>()).add(org.jf.dexlib2.immutable.ImmutableMethod.of(method));
             }
+            String actual=name(type.getType());
+            Map<String,Map<String,List<Method>>> matches=new HashMap<>();
             for(var entry:hashes.entrySet()) for(String role:byHash.get(entry.getKey())) {
-                String expected=role.substring(0,role.indexOf(':')),actual=name(type.getType());
+                String expected=role.substring(0,role.indexOf(':'));
                 if(!expected.startsWith("X.") && !expected.equals(actual)) continue;
-                candidates.computeIfAbsent(expected,unused->new HashMap<>()).computeIfAbsent(actual,unused->new HashMap<>()).put(role,entry.getValue());
-                candidateHierarchies.put(actual,ExtensionDexIndex.relationshipHierarchy(type));
+                matches.computeIfAbsent(expected,unused->new HashMap<>()).put(role,entry.getValue());
             }
+            return matches.isEmpty()?null:new PreparedRelationships(actual,hierarchy,matches);
+        },prepared->{
+            if(prepared==null) return;
+            for(var match:prepared.matches().entrySet()) candidates.computeIfAbsent(match.getKey(),unused->new HashMap<>()).put(prepared.actual(),match.getValue());
+            candidateHierarchies.put(prepared.actual(),prepared.hierarchy());
         });
         for(var group:candidates.entrySet()) {
             String expected=group.getKey(),existing=result.getProperty("class."+expected);
@@ -141,8 +150,10 @@ final class ExtensionRelationshipIndex {
             String role=key.substring(13),owner=role.substring(0,role.indexOf(':'));
             ClassDef type=definitions.get(result.getProperty("class."+owner,""));if(type==null) continue;
             Map<String,List<Method>> hashes=indexed.computeIfAbsent(type.getType(),unused->{
-                Map<String,List<Method>> values=new HashMap<>();for(Method method:type.getMethods()) {
-                    String hash=evidence(method);if(hash!=null) values.computeIfAbsent(hash,ignored->new ArrayList<>()).add(method);
+                Map<String,List<Method>> values=new HashMap<>();List<Method> methods=new ArrayList<>();type.getMethods().forEach(methods::add);
+                List<String> hashesForClass=ScanWorkers.map(methods,ExtensionRelationshipIndex::evidence);
+                for(int number=0;number<methods.size();number++) {
+                    String hash=hashesForClass.get(number);if(hash!=null) values.computeIfAbsent(hash,ignored->new ArrayList<>()).add(methods.get(number));
                 }return values;
             });
             List<Method> matches=hashes.getOrDefault(profile.getProperty(key),List.of());

@@ -68,7 +68,7 @@ internal object HookRuntime {
         adaptation = if (failed.isEmpty()) base else "部分功能未适配，已保留可用功能\n${failed.joinToString()}\n$base"
         state("HostSymbols", if (failed.isEmpty()) "适配结果已应用" else "部分适配")
         for ((parent, children) in mapOf(
-            "VideoTranslateHook" to listOf("TranslationReverseGate", "CaptionConsumerGate", "CaptionFallback", "SubtitleLanguage", "SubtitleFeature", "SubtitleMenu", "DescriptionNativeTranslation", "DescriptionTranslation", "CaptionMenuGate"),
+            "VideoTranslateHook" to listOf("TranslationReverseGate", "CaptionConsumerGate", "CaptionFallback", "CaptionOriginalVisibility", "SubtitleLanguage", "SubtitleFeature", "SubtitleMenu", "DescriptionNativeTranslation", "DescriptionTranslation", "CaptionMenuGate"),
             "CommentTranslateHook" to listOf("CommentTranslationGate", "CommentPollTranslation"),
             "DownloadHook" to listOf("DownloadSource"),
             "AutoScrollHook" to listOf("AutoScrollBehavior"),

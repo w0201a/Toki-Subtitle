@@ -308,7 +308,7 @@
     <string name="layout_activities">"Veranstaltungszugang"</string>
     <string name="host_scan_title_running" formatted="false">"Methoden werden gesucht"</string>
     <string name="host_scan_title_saving" formatted="false">"Ergebnisse werden gespeichert"</string>
-    <string name="host_scan_keep_foreground" formatted="false">"Lasse TikTok im Vordergrund."</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Analysis runs in the background. You can keep watching videos."</string>
     <string name="host_scan_saving_hint" formatted="false">"Bitte warten."</string>
     <string name="host_scan_done" formatted="false">"Verstanden"</string>
     <string name="video_fit_center" formatted="false">"Zentriert"</string>
@@ -335,4 +335,10 @@
     <string name="host_scan_stage_members">"Verifying translation and display contracts"</string>
     <string name="host_scan_dex_progress">"Processed %1$d / %2$d DEX files in this phase"</string>
     <string name="status_path_comment">"Comment translation entry"</string>
+    <string name="host_scan_workers">"Parallel worker limit: %1$d"</string>
+    <string name="host_scan_background">"Continue watching while scanning"</string>
+    <string name="host_scan_background_hint">"Compatibility analysis continues in the background. You will be notified when it finishes."</string>
+    <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
+    <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
+    <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
 </resources>

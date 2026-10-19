@@ -16,6 +16,13 @@ class HostScanSessionTest {
         session.saving()
         assertThrows(IllegalStateException::class.java) { session.extensionProgress("members", 0, 0) }
     }
+    @Test fun workerBudgetSurvivesCoreAndExtensionProgress() {
+        val session = HostScanSession()
+        session.begin(6); session.progress(1, 2); session.progress(2, 2)
+        assertEquals(6, session.status.workers)
+        session.extensions(); session.extensionProgress("members", 1, 2)
+        assertEquals(6, session.status.workers)
+    }
     @Test fun partialInstallationDoesNotStayReady() {
         val session = HostScanSession()
         session.begin()
