@@ -6,8 +6,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        Adapted TikTok versions: 47.0.3 and 46.8.3. Store variants can differ.
-        已适配 TikTok 47.0.3、46.8.3；请注明下载渠道。请勿上传 APK、账号信息或未经处理的私人日志。
+        Report subtitle edition issues here. Current on-device validation primarily targets TikTok 47.0.3; store variants can differ.
+        此处反馈字幕版问题，当前主要在 TikTok 47.0.3 实机验证；请注明下载渠道。请勿上传 APK、API 密钥、账号信息或未经处理的私人日志。
   - type: checkboxes
     id: prerequisites
     attributes:
@@ -22,7 +22,7 @@ body:
     attributes:
       label: Versions and device / 版本与设备
       description: Toki, TikTok, download source, Android, device and LSPosed version / 请列出这些信息。
-      placeholder: Toki 1.0.0; TikTok 47.0.3 (Google Play); Android; device; LSPosed API 102
+      placeholder: Toki Subtitle 2.0.15 (Debug/Release); TikTok 47.0.3 (Google Play); Android; device; LSPosed API 102
     validations:
       required: true
   - type: textarea

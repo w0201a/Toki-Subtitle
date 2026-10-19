@@ -4,7 +4,7 @@
 
 ## Toki 字幕版
 
-此仓库是基于 [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki) 的字幕版衍生项目，采用 MIT 许可证。下方保留原项目介绍及上游社区链接。
+此仓库是基于 [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki) 的字幕版衍生项目，采用 MIT 许可证。原项目介绍、原作者署名及上游社区链接保留；下载和反馈入口使用字幕版仓库。
 
 - 字幕拖动开关、水平与垂直方向独立锁定。
 - 播放清屏时显示字幕，优化翻译调度和视频预读。
@@ -15,23 +15,26 @@
 
 赞助完全自愿，不影响功能使用。可在首页打开「赞助字幕版开发」，选择微信或支付宝并保存原图扫码。收款码作为应用公开资源随源码发布。
 
+[最近更新](CHANGELOG.md) · [问题与修复记录](docs/ISSUES_AND_FIXES.md) · [链接说明](docs/LINKS.md) · [发行流程](RELEASING.md)
+
 此仓库仅发布应用源码、构建脚本和必要资源；不包含签名密钥、设备诊断、真机截图或 TikTok APK／反编译文件。
 
 <img src="https://raw.githubusercontent.com/MeiYongAI/Toki/main/docs/assets/toki.svg" align="right" width="96" height="96" alt="Toki 图标">
 
 面向 TikTok 的 LSPosed 模块，让 TikTok 更合你的使用习惯。
 
-[![构建](https://github.com/MeiYongAI/Toki/actions/workflows/build.yml/badge.svg)](https://github.com/MeiYongAI/Toki/actions/workflows/build.yml)
-[![许可证：MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/MeiYongAI/Toki/blob/main/LICENSE)
+[![构建](https://github.com/w0201a/Toki-Subtitle/actions/workflows/build.yml/badge.svg)](https://github.com/w0201a/Toki-Subtitle/actions/workflows/build.yml)
+[![许可证：MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Android 9+](https://img.shields.io/badge/Android-9%2B-3DDC84.svg)](#使用条件)
 
 [English](README.md) · **简体中文**
 
-[下载](https://github.com/MeiYongAI/Toki/releases) ·
-[模块仓库](https://github.com/Xposed-Modules-Repo/io.github.meiyongai.toki) ·
-[更新日志](https://github.com/MeiYongAI/Toki/blob/main/CHANGELOG.md) ·
-[问题反馈](https://github.com/MeiYongAI/Toki/issues/new/choose) ·
-[Telegram 群组](https://t.me/toki_lsposed)
+[下载](https://github.com/w0201a/Toki-Subtitle/releases/latest) ·
+[字幕版仓库](https://github.com/w0201a/Toki-Subtitle) ·
+[原作者／上游仓库](https://github.com/MeiYongAI/Toki) ·
+[更新日志](CHANGELOG.md) ·
+[问题反馈](https://github.com/w0201a/Toki-Subtitle/issues/new/choose) ·
+[上游 Telegram 群组](https://t.me/toki_lsposed)
 
 Toki 提供信息流过滤、播放控制、媒体工具和区域设置，采用 Material 3 界面，
 提供 57 种界面语言选项。
@@ -75,7 +78,7 @@ Toki 需要框架才能对 TikTok 生效。其他 TikTok 版本不在文档所�
 
 ### 启用模块
 
-1. 从 [Releases](https://github.com/MeiYongAI/Toki/releases) 下载并安装 Toki APK。
+1. 从 [Releases](https://github.com/w0201a/Toki-Subtitle/releases/latest) 下载并安装 Toki APK。
 2. 在 LSPosed 中启用 Toki，并在模块作用域中勾选已安装的 TikTok。
 3. 打开 Toki，检查首页的激活状态，并选择需要启用的功能。
 4. 强行停止 TikTok 后重新打开。如果出现方法查找窗口，请等待完成；
@@ -134,10 +137,7 @@ Toki 需要框架才能对 TikTok 生效。其他 TikTok 版本不在文档所�
 
 ## 开发
 
-[MeiYongAI/Toki](https://github.com/MeiYongAI/Toki) 统一维护源码、问题反馈和正式版本。
-[Xposed 模块仓库](https://github.com/Xposed-Modules-Repo/io.github.meiyongai.toki)
-分发同一份已签名 APK，供模块目录收录。维护者发布时请按
-[版本同步说明](https://github.com/MeiYongAI/Toki/blob/main/docs/releasing.md)同步两个仓库。
+[w0201a/Toki-Subtitle](https://github.com/w0201a/Toki-Subtitle) 维护字幕版源码、问题反馈与发行版，由 154Er 与 Gi-Ai154M 维护。原作者为 [MeiYongAI](https://github.com/MeiYongAI/Toki)。[原项目模块目录](https://github.com/Xposed-Modules-Repo/io.github.meiyongai.toki)属于上游，不分发本字幕版 APK。字幕版发布流程见 [RELEASING.md](RELEASING.md)。
 
 ### 开发环境
 
@@ -159,23 +159,23 @@ Toki 需要框架才能对 TikTok 生效。其他 TikTok 版本不在文档所�
 克隆仓库，并安装 CI 使用的 SDK 组件：
 
 ```bash
-git clone https://github.com/MeiYongAI/Toki.git
-cd Toki
+git clone https://github.com/w0201a/Toki-Subtitle.git
+cd Toki-Subtitle
 sdkmanager "platforms;android-37.0" "build-tools;37.0.0"
 ```
 
-构建 Debug APK，并运行与 [CI](https://github.com/MeiYongAI/Toki/blob/main/.github/workflows/build.yml) 一致的检查任务：
+构建 Debug APK，并运行与 [CI](.github/workflows/build.yml) 一致的检查任务：
 
 ```bash
 ./gradlew :app:assembleDebug
-./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleRelease
+./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease
 ```
 
 Windows PowerShell 使用：
 
 ```powershell
 .\gradlew.bat :app:assembleDebug
-.\gradlew.bat :app:testDebugUnitTest :app:lintDebug :app:assembleRelease
+.\gradlew.bat :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease
 ```
 
 如需检查 Release 变体，用 Wrapper 运行 `:app:lintRelease`。
@@ -189,7 +189,7 @@ Release 构建启用 R8 和资源压缩。
 
 ### Release 签名
 
-将 [keystore.properties.example](https://github.com/MeiYongAI/Toki/blob/main/keystore/keystore.properties.example) 复制为
+将 [signing.properties.example](signing.properties.example) 复制为
 `keystore/keystore.properties`，填写自己的密钥路径、别名和凭据。
 密钥路径相对于仓库根目录；没有该配置文件时，Release APK 不签名，签名后才能安装。
 
@@ -197,7 +197,7 @@ Release 构建启用 R8 和资源压缩。
 覆盖更新同一个已安装应用需要使用相同的签名密钥。项目公开的发布证书指纹为：
 
 ```text
-SHA-256 34:22:83:7D:EA:4C:40:EC:06:1F:8E:59:94:70:51:2E:87:23:4A:28:4B:C8:51:E1:A6:EA:87:3A:9E:DE:5D:32
+SHA-256 21:ED:E4:0E:2C:F1:8C:30:C1:9C:B4:1F:89:C0:F6:18:3B:78:05:3E:56:74:26:50:E7:14:CD:E2:A7:26:25:3C
 ```
 
 ### 源码结构与适配机制
@@ -224,8 +224,8 @@ Toki 按启动时的配置选择要安装的功能。全部主功能关闭时，
 
 ## 参与贡献
 
-请通过 [GitHub Issues](https://github.com/MeiYongAI/Toki/issues/new/choose)
-提交错误报告和功能建议，也可以加入 [Telegram 群组](https://t.me/toki_lsposed)交流。
+请通过 [GitHub Issues](https://github.com/w0201a/Toki-Subtitle/issues/new/choose)
+提交错误报告和功能建议，也可以加入 [上游 Telegram 群组](https://t.me/toki_lsposed)交流。
 
 反馈问题时，请提供：
 
@@ -243,8 +243,10 @@ Toki 按启动时的配置选择要安装的功能。全部主功能关闭时，
 ## 支持开发
 
 如果 Toki 对你有帮助，可以通过 [Ko-fi](https://ko-fi.com/meiyongai)
-或[支付宝](https://github.com/MeiYongAI/Toki/blob/main/app/src/main/res/drawable-nodpi/alipay.jpg)支持开发，
-也可在 Toki 首页的「支持开发」中找到赞助入口。赞助完全自愿。
+或[支付宝](https://github.com/MeiYongAI/Toki/blob/main/app/src/main/res/drawable-nodpi/alipay.jpg)支持开发。
+以上为原作者 MeiYongAI 的赞助渠道，保留供自愿支持原作。
+
+字幕版由 154Er 与 Gi-Ai154M 维护，可在首页「赞助字幕版开发」中选择[微信支付](app/src/main/res/drawable-nodpi/sponsor_wechat_154er.jpg)或[支付宝](app/src/main/res/drawable-nodpi/sponsor_alipay_154er.jpg)。所有赞助均为自愿，不影响功能。
 
 <details>
 <summary>USDT · TRC20 / Tron</summary>
@@ -264,5 +266,5 @@ Toki 是独立项目，与 TikTok 或字节跳动不存在隶属或背书关系�
 
 ## 许可证
 
-Copyright © 2026 MeiYongAI。本项目采用 [MIT 许可证](https://github.com/MeiYongAI/Toki/blob/main/LICENSE)，
-依赖许可与致谢见[第三方声明](https://github.com/MeiYongAI/Toki/blob/main/THIRD_PARTY_NOTICES.md)。
+原作者 Copyright © 2026 MeiYongAI；字幕版贡献 © 2026 154Er 与 Gi-Ai154M。本项目采用 [MIT 许可证](LICENSE)，
+依赖许可与致谢见[第三方声明](THIRD_PARTY_NOTICES.md)。

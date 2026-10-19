@@ -4,11 +4,13 @@ Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improv
 
 ## Toki Subtitle edition
 
-An MIT-licensed derivative of [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki). The upstream introduction and community links are retained below.
+An MIT-licensed derivative of [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki). Upstream attribution and community links are retained below; download and issue links target this edition.
 
 This edition adds subtitle drag controls and independent axis locks, subtitle display during clean-screen playback, translation scheduling and feed prefetch improvements, comment poll translation, long-description translation with final-layout rendering, and a home-screen sponsor selector with original WeChat Pay / Alipay images.
 
 Build Debug by default: `./gradlew :app:assembleDebug` (Windows: `gradlew.bat`). Requires Android SDK 37, Build Tools 37.0.0 and JDK 21. Enable the module for TikTok in LSPosed. Internal host interfaces are version-dependent; current validation primarily targets TikTok 47.0.3.
+
+[Recent changes](CHANGELOG.md) · [Issues and fixes](docs/ISSUES_AND_FIXES.md) · [Link destinations](docs/LINKS.md) · [Release guide](RELEASING.md)
 
 Sponsorship is voluntary and does not gate features. The provided payment QR images are public application resources. Signing keys, device diagnostics, screenshots, host APKs and decompiled host files are excluded from this repository.
 
@@ -16,17 +18,18 @@ Sponsorship is voluntary and does not gate features. The provided payment QR ima
 
 An LSPosed module that gives you more control over your TikTok experience.
 
-[![Build](https://github.com/MeiYongAI/Toki/actions/workflows/build.yml/badge.svg)](https://github.com/MeiYongAI/Toki/actions/workflows/build.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/MeiYongAI/Toki/blob/main/LICENSE)
+[![Build](https://github.com/w0201a/Toki-Subtitle/actions/workflows/build.yml/badge.svg)](https://github.com/w0201a/Toki-Subtitle/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Android 9+](https://img.shields.io/badge/Android-9%2B-3DDC84.svg)](#dependencies)
 
 **English** · [简体中文](README.zh-CN.md)
 
-[Download](https://github.com/MeiYongAI/Toki/releases) ·
-[Module repository](https://github.com/Xposed-Modules-Repo/io.github.meiyongai.toki) ·
-[Changelog](https://github.com/MeiYongAI/Toki/blob/main/CHANGELOG.md) ·
-[Report a problem](https://github.com/MeiYongAI/Toki/issues/new/choose) ·
-[Telegram](https://t.me/toki_lsposed)
+[Download](https://github.com/w0201a/Toki-Subtitle/releases/latest) ·
+[Subtitle repository](https://github.com/w0201a/Toki-Subtitle) ·
+[Original author / upstream](https://github.com/MeiYongAI/Toki) ·
+[Changelog](CHANGELOG.md) ·
+[Report a problem](https://github.com/w0201a/Toki-Subtitle/issues/new/choose) ·
+[Upstream Telegram](https://t.me/toki_lsposed)
 
 Toki provides feed filters, playback controls, media tools and region settings
 through a Material 3 interface with 57 language options.
@@ -71,7 +74,7 @@ guarantee that every feature will work.
 ### Enable the module
 
 1. Download and install the Toki APK from
-   [Releases](https://github.com/MeiYongAI/Toki/releases).
+   [Releases](https://github.com/w0201a/Toki-Subtitle/releases/latest).
 2. Enable Toki in LSPosed and select your installed TikTok in the module scope.
 3. Open Toki, check the activation status on Home and choose the features you
    want to enable.
@@ -143,10 +146,7 @@ download source in your report.
 
 ## Development
 
-[MeiYongAI/Toki](https://github.com/MeiYongAI/Toki) maintains the source code, issues and releases.
-The [Xposed module repository](https://github.com/Xposed-Modules-Repo/io.github.meiyongai.toki)
-distributes the same signed APK for the module catalog. Maintainers should follow
-the [release synchronization instructions](https://github.com/MeiYongAI/Toki/blob/main/docs/releasing.md) when publishing.
+[w0201a/Toki-Subtitle](https://github.com/w0201a/Toki-Subtitle) maintains this edition, its issues and releases, with contributions by 154Er and Gi-Ai154M. The original author is [MeiYongAI](https://github.com/MeiYongAI/Toki). The [upstream module catalog](https://github.com/Xposed-Modules-Repo/io.github.meiyongai.toki) distributes upstream builds, not this edition. See [RELEASING.md](RELEASING.md) for this edition’s release process.
 
 ### Environment
 
@@ -169,24 +169,24 @@ JDK to JDK 21, and configure the SDK through `ANDROID_HOME` or a local
 Clone the repository and install the SDK packages used by CI:
 
 ```bash
-git clone https://github.com/MeiYongAI/Toki.git
-cd Toki
+git clone https://github.com/w0201a/Toki-Subtitle.git
+cd Toki-Subtitle
 sdkmanager "platforms;android-37.0" "build-tools;37.0.0"
 ```
 
 Build a debug APK and run the same verification tasks as
-[CI](https://github.com/MeiYongAI/Toki/blob/main/.github/workflows/build.yml):
+[CI](.github/workflows/build.yml):
 
 ```bash
 ./gradlew :app:assembleDebug
-./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleRelease
+./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease
 ```
 
 In Windows PowerShell, use:
 
 ```powershell
 .\gradlew.bat :app:assembleDebug
-.\gradlew.bat :app:testDebugUnitTest :app:lintDebug :app:assembleRelease
+.\gradlew.bat :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease
 ```
 
 For release-specific lint checks, run `:app:lintRelease` with the wrapper.
@@ -200,7 +200,7 @@ Release builds enable R8 and resource shrinking.
 
 ### Sign a release
 
-Copy [keystore.properties.example](https://github.com/MeiYongAI/Toki/blob/main/keystore/keystore.properties.example) to
+Copy [signing.properties.example](signing.properties.example) to
 `keystore/keystore.properties`, then supply your own keystore path, alias and
 credentials. Keystore paths are relative to the repository root. Without this
 file, the release APK is unsigned and must be signed before installation.
@@ -210,7 +210,7 @@ Updates to the same installed app require the same signing key. The project's
 published release certificate fingerprint is:
 
 ```text
-SHA-256 34:22:83:7D:EA:4C:40:EC:06:1F:8E:59:94:70:51:2E:87:23:4A:28:4B:C8:51:E1:A6:EA:87:3A:9E:DE:5D:32
+SHA-256 21:ED:E4:0E:2C:F1:8C:30:C1:9C:B4:1F:89:C0:F6:18:3B:78:05:3E:56:74:26:50:E7:14:CD:E2:A7:26:25:3C
 ```
 
 ### Source layout and adaptation
@@ -241,7 +241,7 @@ Unmatched code is reported as an adaptation failure.
 
 ## Contributing
 
-Use [GitHub Issues](https://github.com/MeiYongAI/Toki/issues/new/choose) for bug
+Use [GitHub Issues](https://github.com/w0201a/Toki-Subtitle/issues/new/choose) for bug
 reports and feature requests, or join the [Telegram group](https://t.me/toki_lsposed)
 for questions and discussion.
 
@@ -265,8 +265,10 @@ build files, local SDK paths and signing credentials out of commits.
 
 If Toki is useful to you, you can support development through
 [Ko-fi](https://ko-fi.com/meiyongai) or
-[Alipay](https://github.com/MeiYongAI/Toki/blob/main/app/src/main/res/drawable-nodpi/alipay.jpg). These options are also
-available in Toki under **Support Toki**. Donations are optional.
+[Alipay](https://github.com/MeiYongAI/Toki/blob/main/app/src/main/res/drawable-nodpi/alipay.jpg). These are
+the original author MeiYongAI’s sponsorship channels, retained to support the upstream work.
+
+For this subtitle edition by 154Er and Gi-Ai154M, use the home-screen sponsor selector: [WeChat Pay](app/src/main/res/drawable-nodpi/sponsor_wechat_154er.jpg) / [Alipay](app/src/main/res/drawable-nodpi/sponsor_alipay_154er.jpg). Sponsorship is optional and does not unlock features.
 
 <details>
 <summary>USDT · TRC20 / Tron</summary>
@@ -287,6 +289,6 @@ or reuse content only with permission.
 
 ## License
 
-Copyright © 2026 MeiYongAI. Licensed under the [MIT License](https://github.com/MeiYongAI/Toki/blob/main/LICENSE).
+Original author: Copyright © 2026 MeiYongAI. Subtitle edition contributions: © 2026 154Er and Gi-Ai154M. Licensed under the [MIT License](LICENSE).
 Dependency credits and licenses are listed in
-[Third-party notices](https://github.com/MeiYongAI/Toki/blob/main/THIRD_PARTY_NOTICES.md).
+[Third-party notices](THIRD_PARTY_NOTICES.md).

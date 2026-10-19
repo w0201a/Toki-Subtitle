@@ -1,5 +1,14 @@
 blank_issues_enabled: false
 contact_links:
-  - name: Telegram group / Telegram 群组
+  - name: Known issues and fixes / 已知问题与修复
+    url: https://github.com/w0201a/Toki-Subtitle/blob/main/docs/ISSUES_AND_FIXES.md
+    about: Check subtitle edition status before reporting / 提交前查看字幕版问题状态
+  - name: Latest subtitle release / 字幕版最新发行版
+    url: https://github.com/w0201a/Toki-Subtitle/releases/latest
+    about: Download the signed release APK / 下载已签名发行包
+  - name: Original author and upstream / 原作者与上游项目
+    url: https://github.com/MeiYongAI/Toki
+    about: Original Toki project by MeiYongAI / MeiYongAI 的 Toki 原项目
+  - name: Upstream Telegram group / 上游 Telegram 群组
     url: https://t.me/toki_lsposed
     about: General discussion and usage help / 日常交流与使用帮助
