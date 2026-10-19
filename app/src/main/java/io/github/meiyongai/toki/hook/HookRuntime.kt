@@ -69,13 +69,17 @@ internal object HookRuntime {
         state("HostSymbols", if (failed.isEmpty()) "适配结果已应用" else "部分适配")
         for ((parent, children) in mapOf(
             "VideoTranslateHook" to listOf("TranslationReverseGate", "CaptionConsumerGate", "CaptionFallback", "SubtitleLanguage", "SubtitleFeature", "SubtitleMenu", "DescriptionNativeTranslation", "DescriptionTranslation", "CaptionMenuGate"),
-            "CommentTranslateHook" to listOf("CommentTranslationGate", "CommentPollTranslation")
+            "CommentTranslateHook" to listOf("CommentTranslationGate", "CommentPollTranslation"),
+            "DownloadHook" to listOf("DownloadSource"),
+            "AutoScrollHook" to listOf("AutoScrollBehavior"),
+            "FeedFilterHook" to listOf("FeedOfflineRecovery", "FeedRepositories", "FeedAdapters"),
+            "LayoutCleanupHook" to features.keySet().filter { it.startsWith("LayoutComponent:") || it in setOf("LayoutRewards", "LayoutTimers") }
         )) {
             if (features.getBundle(parent) == null) continue
             val attempted = children.filter { features.getBundle(it) != null }
             val missing = attempted.filter { it in failed }
             if (missing.isNotEmpty()) {
-                state(parent, if (missing.size == attempted.size) "子功能均未安装" else "部分功能已注册")
+                state(parent, if (missing.size == attempted.size && features.getBundle(parent)?.getInt("registered", 0) == 0) "子功能均未安装" else "部分功能已注册")
                 detail(parent, "独立失败：${missing.joinToString()}；其他子功能保留")
             }
         }

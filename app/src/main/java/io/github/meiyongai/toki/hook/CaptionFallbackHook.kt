@@ -67,8 +67,8 @@ internal object CaptionFallbackHook {
         val strategySkipLoading: Method = loader.adaptiveClass("com.ss.android.ugc.aweme.strategy.CaptionStrategyServiceImpl")
             .adaptiveDeclaredMethod("ii", aweme)
         val serviceClass: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.service.CaptionServiceImpl")
-        val serviceResult: Method = serviceClass.adaptiveDeclaredMethod("LJIIIZ", aweme)
-        val serviceTrackId: Method = serviceClass.adaptiveDeclaredMethod("LJIIJ", aweme)
+        val serviceResult: Method? = runCatching { serviceClass.adaptiveDeclaredMethod("LJIIIZ", aweme) }.getOrNull()
+        val serviceTrackId: Method? = runCatching { serviceClass.adaptiveDeclaredMethod("LJIIJ", aweme) }.getOrNull()
         val cacheResult: Method? = runCatching { loader.adaptiveClass("X.08ZE").adaptiveDeclaredMethod("LIZ", aweme) }.getOrNull()
         val service: Method? = runCatching { loader.adaptiveClass("X.08Zd").adaptiveDeclaredMethod("LIZ") }.getOrNull()
         val keva: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.service.ICaptionKevaService")
@@ -78,7 +78,9 @@ internal object CaptionFallbackHook {
         init {
             check(trackId == null || trackId.returnType == Integer.TYPE) { "字幕轨号读取签名不符" }
             check(result == null || result.returnType == selection) { "字幕选择返回类型不符" }
-            check(serviceTrackId.returnType == Integer.TYPE && serviceResult.returnType == selection)
+            check(serviceTrackId == null || serviceTrackId.returnType == Integer.TYPE)
+            check(serviceResult == null || serviceResult.returnType == selection)
+            check(listOfNotNull(trackId, result, serviceResult, serviceTrackId, cacheResult).isNotEmpty()) { "No verified caption readers" }
             check(subId.type == Integer.TYPE && captionModel.type == model) { "字幕选择字段类型不符" }
         }
     }

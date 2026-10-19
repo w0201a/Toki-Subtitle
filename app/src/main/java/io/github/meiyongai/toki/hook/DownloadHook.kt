@@ -99,7 +99,7 @@ object DownloadHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.TokiModule.onPackageLoaded`: 目标应用包完成加载时触发注册。
      */
     fun init(module: XposedModule, classLoader: ClassLoader) {
-        if (forceDownloadEnabled()) hookDownloadSource(module, classLoader)
+        if (forceDownloadEnabled()) HookRuntime.install("DownloadSource") { hookDownloadSource(module, classLoader) }
         hookAclCommonShare(module, classLoader)
         hookMediaStoreRelativePath(module)
         hookLegacyPublicDirectory(module)
@@ -110,6 +110,14 @@ object DownloadHook {
      * 官方选源可能因 ug_download_remove_play_addr 放弃播放源。只在无水印选源调用内
      * 让空地址 Getter 返回该视频已有的完整播放源，原方法继续生成正确文件名和下载任务。
      */
+    internal fun playbackGetters(videoClass: Class<*>, urlClass: Class<*>): List<java.lang.reflect.Method> {
+        val methods = listOf("getRawPlayAddr\$common_model_release", "getPlayAddr", "getPlayAddrBytevc1")
+            .mapNotNull { name -> try { videoClass.getMethod(name).takeIf { urlClass.isAssignableFrom(it.returnType) } }
+                catch (_: NoSuchMethodException) { null } }
+        check(methods.isNotEmpty()) { "No verified playback address getter" }
+        return methods
+    }
+
     private fun hookDownloadSource(module: XposedModule, loader: ClassLoader) {
         val selector = HostSymbols.resolve(loader, HostSymbol.DOWNLOAD_SOURCE)
         val awemeClass = loader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme")
@@ -120,8 +128,7 @@ object DownloadHook {
         val getUrls = urlClass.getMethod("getUrlList")
         val hasDash = videoUrlClass.getMethod("hasDashBitrate")
         // 原始 H264 Getter 不经过下面的 Hook，避免递归；随后使用宿主实际播放源。
-        val playGetters = listOf("getRawPlayAddr\$common_model_release", "getPlayAddr", "getPlayAddrBytevc1")
-            .map { videoClass.getMethod(it) }
+        val playGetters = playbackGetters(videoClass, urlClass)
         val usable: (Any) -> Boolean = { value ->
             val urls = getUrls.invoke(value) as? List<*>
             urls != null && urls.isNotEmpty() && urls.all { it is String && (it.startsWith("https://") || it.startsWith("http://")) } &&
@@ -130,7 +137,7 @@ object DownloadHook {
         val scope = DownloadSourceScope()
         for (name in listOf("getDownloadNoWatermarkAddr", "getPlayAddrH264")) {
             val getter = videoClass.getMethod(name)
-            module.trackHook("DownloadHook", getter).intercept { chain ->
+            module.trackHook("DownloadSource", getter).intercept { chain ->
                 val original = chain.proceed()
                 if (!forceDownloadEnabled()) return@intercept original
                 scope.resolve(chain.thisObject, original, usable) {
@@ -145,7 +152,7 @@ object DownloadHook {
             awemeClass, Boolean::class.javaPrimitiveType)
         // 选源 Getter 可能已被 ART 内联，确保原方法执行时经过上述拦截。
         module.deoptimize(select)
-        module.trackHook("DownloadHook", select).intercept { chain ->
+        module.trackHook("DownloadSource", select).intercept { chain ->
             if (!forceDownloadEnabled() || chain.args[1] != true) return@intercept chain.proceed()
             scope.selecting(getVideo.invoke(chain.args[0])) { chain.proceed() }
         }

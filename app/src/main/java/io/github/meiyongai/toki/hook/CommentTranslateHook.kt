@@ -16,7 +16,7 @@ object CommentTranslateHook {
             Modifier.isStatic(it.modifiers) && it.returnType == Boolean::class.javaPrimitiveType &&
                 (it.parameterCount == 0 || it.parameterTypes.contentEquals(arrayOf(Boolean::class.javaPrimitiveType)))
         }
-        check(methods.count { it.parameterCount == 0 } == 2 && methods.count { it.parameterCount == 1 } == 1) {
+        check(methods.size >= 2 && methods.any { it.parameterCount == 0 }) {
             "Comment translation gate contract changed"
         }
         methods.forEach { method ->

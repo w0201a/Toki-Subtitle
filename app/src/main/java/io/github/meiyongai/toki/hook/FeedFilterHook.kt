@@ -209,16 +209,18 @@ object FeedFilterHook {
                 interceptResponse(chain, FeedScope.FOR_YOU)
             }
         }
-        val offlineSwitch = HostSymbols.resolve(classLoader, HostSymbol.OFFLINE_RECOVERY)
-            .getDeclaredMethod(HostSymbols.member(HostSymbol.OFFLINE_RECOVERY, "enabled")).apply {
-                check(returnType == Boolean::class.javaPrimitiveType)
-                isAccessible = true
+        HookRuntime.install("FeedOfflineRecovery") {
+            val offlineSwitch = HostSymbols.resolve(classLoader, HostSymbol.OFFLINE_RECOVERY)
+                .getDeclaredMethod(HostSymbols.member(HostSymbol.OFFLINE_RECOVERY, "enabled")).apply {
+                    check(returnType == Boolean::class.javaPrimitiveType)
+                    isAccessible = true
+                }
+            module.trackHook("FeedOfflineRecovery", offlineSwitch).intercept { chain ->
+                if (ConfigClient.getBoolean(KEY_REMOVE_OFFLINE)) false else chain.proceed()
             }
-        module.trackHook("FeedFilterHook", offlineSwitch).intercept { chain ->
-            if (ConfigClient.getBoolean(KEY_REMOVE_OFFLINE)) false else chain.proceed()
         }
-        hookRepositories(module, classLoader, reader)
-        hookAdapter(module, classLoader, reader)
+        HookRuntime.install("FeedRepositories") { hookRepositories(module, classLoader, reader) }
+        HookRuntime.install("FeedAdapters") { hookAdapter(module, classLoader, reader) }
         Log.i(TAG, "信息流过滤已注册：网络、缓存、推荐数据模型与 Adapter 准入")
     }
 
@@ -272,7 +274,7 @@ object FeedFilterHook {
             isAccessible = true
         }
         val activeAdapters = java.util.WeakHashMap<Any, Boolean>()
-        HookRuntime.onDispose("FeedFilterHook") { synchronized(activeAdapters) { activeAdapters.clear() } }
+        HookRuntime.onDispose("FeedAdapters") { synchronized(activeAdapters) { activeAdapters.clear() } }
         val insert = adapter.getDeclaredMethod(HostSymbols.member(HostSymbol.FEED_ADAPTER, "insert"), intType, awemeType)
         val replace = adapter.getDeclaredMethod(HostSymbols.member(HostSymbol.FEED_ADAPTER, "replace"), intType, awemeType)
         val removeAndInsert = adapter.getDeclaredMethod(HostSymbols.member(HostSymbol.FEED_ADAPTER, "removeInsert"), intType, awemeType)
@@ -283,7 +285,7 @@ object FeedFilterHook {
         val notify = adapter.getMethod("notifyDataSetChanged")
         val count = adapter.getMethod("getCount")
         for (constructor in adapter.declaredConstructors) {
-            module.trackHook("FeedFilterHook", constructor).intercept { chain ->
+            module.trackHook("FeedAdapters", constructor).intercept { chain ->
                 val result = chain.proceed()
                 synchronized(activeAdapters) { activeAdapters[checkNotNull(chain.thisObject)] = true }
                 result
@@ -292,7 +294,7 @@ object FeedFilterHook {
         for (method in listOf(setData, insert, replace, removeAndInsert, batch, recommendBatch)) {
             check(method.returnType == Void.TYPE) { "Adapter 准入方法必须返回 void: $method" }
             method.isAccessible = true
-            module.trackHook("FeedFilterHook", method).setExceptionMode(XposedInterface.ExceptionMode.PASSTHROUGH).intercept { chain ->
+            module.trackHook("FeedAdapters", method).setExceptionMode(XposedInterface.ExceptionMode.PASSTHROUGH).intercept { chain ->
                 val instance = checkNotNull(chain.thisObject)
                 synchronized(activeAdapters) { activeAdapters[instance] = true }
                 val scope = FeedScope.fromEventType(eventType.invoke(pageParams.get(instance)) as String?)
@@ -348,7 +350,7 @@ object FeedFilterHook {
                 chain.proceed(args)
             }
         }
-        HookRuntime.subscribe("FeedFilterHook") { snapshot ->
+        HookRuntime.subscribe("FeedAdapters") { snapshot ->
             if (snapshot != null) {
                 val rules = policy(snapshot)
                 val instances = synchronized(activeAdapters) { activeAdapters.keys.toList() }
@@ -383,7 +385,7 @@ object FeedFilterHook {
         }
         hookSharedModelAds(module, listModel, reader)
         val activeModels = java.util.WeakHashMap<Any, Boolean>()
-        HookRuntime.onDispose("FeedFilterHook") { synchronized(activeModels) { activeModels.clear() } }
+        HookRuntime.onDispose("FeedRepositories") { synchronized(activeModels) { activeModels.clear() } }
         val getItems = listModel.getDeclaredMethod("getItems").apply { isAccessible = true }
         val deleteItems = listModel.getDeclaredMethod("deleteItems", List::class.java).apply { isAccessible = true }
         val intType = Int::class.javaPrimitiveType!!
@@ -398,7 +400,7 @@ object FeedFilterHook {
             model.getDeclaredMethod(HostSymbols.member(HostSymbol.RECOMMEND_MODEL, "batch"), intType, intType, List::class.java) to 2
         )
         for (constructor in listModel.declaredConstructors) {
-            module.trackHook("FeedFilterHook", constructor).intercept { chain ->
+            module.trackHook("FeedRepositories", constructor).intercept { chain ->
                 val result = chain.proceed()
                 synchronized(activeModels) { activeModels[checkNotNull(chain.thisObject)] = true }
                 result
@@ -406,7 +408,7 @@ object FeedFilterHook {
         }
         for ((method, argument) in writes) {
             method.isAccessible = true
-            module.trackHook("FeedFilterHook", method).intercept { chain ->
+            module.trackHook("FeedRepositories", method).intercept { chain ->
                 val rules = policy()
                 val items = chain.args[argument] as List<*>?
                 if (items == null || !rules.applies(FeedScope.FOR_YOU)) return@intercept chain.proceed()
@@ -419,7 +421,7 @@ object FeedFilterHook {
                 chain.proceed(args)
             }
         }
-        HookRuntime.subscribe("FeedFilterHook") { snapshot ->
+        HookRuntime.subscribe("FeedRepositories") { snapshot ->
             if (snapshot != null) {
                 val rules = policy(snapshot)
                 val instances = synchronized(activeModels) { activeModels.keys.toList() }
@@ -457,7 +459,7 @@ object FeedFilterHook {
         for (method in listOf(single, batch)) {
             check(method.returnType == Boolean::class.javaPrimitiveType) { "列表模型插入必须返回 boolean: $method" }
             method.isAccessible = true
-            module.trackHook("FeedFilterHook", method).intercept { chain ->
+            module.trackHook("FeedRepositories", method).intercept { chain ->
                 val rules = policy()
                 if (!rules.removeAds) return@intercept chain.proceed()
                 val source = if (method == single) listOf(chain.args[0]) else chain.args[0] as List<*>?

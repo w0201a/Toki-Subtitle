@@ -222,13 +222,11 @@ public final class HostDexIndex {
                 while (entries.hasMoreElements()) {
                     var entry = entries.nextElement();
                     if (!entry.getName().matches("classes(?:[2-9]|[1-9][0-9]+)?\\.dex")) continue;
-                    byte[] bytes;
+                    long size=entry.getSize();
+                    if(size<0 || size>Integer.MAX_VALUE) throw new IOException("Invalid DEX size");
+                    byte[] bytes=new byte[(int)size];
                     try (InputStream stream = apk.getInputStream(entry)) {
-                        ByteArrayOutputStream buffer = new ByteArrayOutputStream((int) entry.getSize());
-                        byte[] chunk = new byte[65536];
-                        int count;
-                        while ((count = stream.read(chunk)) != -1) buffer.write(chunk, 0, count);
-                        bytes = buffer.toByteArray();
+                        new DataInputStream(stream).readFully(bytes);
                     }
                     var dex = new DexBackedDexFile(Opcodes.getDefault(), bytes);
                     var classes = dex.getClasses();

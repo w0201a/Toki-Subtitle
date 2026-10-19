@@ -16,6 +16,7 @@ internal class HostScanPlan(
         stored.getProperty("cache.format") == format)
     val retained: Set<HostSymbol> = if (!sameCode) emptySet() else currentCoverage().filterTo(linkedSetOf()) {
         HostSymbols.cacheComplete(stored, setOf(it), setOf(it)) &&
+            (stored.getProperty("error.${it.name}").isNullOrBlank() || stored.getProperty("cache.recovery") == HostCoreScanner.REVISION) &&
             (exact || stored.getProperty("cache.rule.${it.name}") == fingerprint(it))
     }
     val pending = required - retained
@@ -57,6 +58,7 @@ internal class HostScanPlan(
         putAll(scanned)
         val covered = retained + pending
         check(HostSymbols.cacheComplete(this, covered, covered)) { "补查结果不完整，拒绝发布" }
+        setProperty("cache.recovery", HostCoreScanner.REVISION)
         setProperty("cache.format", format)
         setProperty("cache.identity", identity)
         setProperty("cache.rules", rules)

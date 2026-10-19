@@ -147,36 +147,19 @@ object LayoutCleanupHook {
                 }
                 if (variant != null) put(name, element)
             }
-        }.map { (name, element) ->
-            val type = loader.loadClass(name)
-            Triple(type.getMethod("onViewCreated", View::class.java), type, element)
+        }.mapNotNull { (name, element) ->
+            try {
+                val type = loader.loadClass(name)
+                Triple(type.getMethod("onViewCreated", View::class.java), type, element)
+            } catch (error: ReflectiveOperationException) {
+                HookRuntime.failure("LayoutComponent:$name", error, "组件契约不可用，已撤销")
+                null
+            }
         }
         val componentTypes = components.map { it.second to it.third }
         val avatar = loader.loadClass("com.ss.android.ugc.aweme.feed.assem.avatar.FeedAvatarDefaultAssem")
         val follow = avatar.declaredFields.single { it.type == ViewGroup::class.java }.apply { isAccessible = true }
         val avatarCreated = avatar.getMethod("onViewCreated", View::class.java)
-        val rewardWidget = loader.loadClass("com.bytedance.touchpoint.ui.pendant.SpecActWidget")
-        val rewardBind = rewardWidget.getMethod("bind", ViewGroup::class.java)
-        val rewardView = rewardWidget.getDeclaredField("specActStaticView").apply {
-            check(View::class.java.isAssignableFrom(type))
-            isAccessible = true
-        }
-        val timer = loader.loadClass("com.bytedance.touchpoint.core.pendant.base.BaseTimerPendantManager")
-        val timerBind = timer.declaredMethods.single {
-            it.parameterTypes.contentEquals(arrayOf(android.content.Context::class.java, ViewGroup::class.java)) &&
-                it.returnType == Void.TYPE
-        }.apply { isAccessible = true }
-        val timerView = timer.declaredFields.single {
-            View::class.java.isAssignableFrom(it.type) && !Modifier.isStatic(it.modifiers)
-        }.apply { isAccessible = true }
-        val feedTimers = listOf(
-            "com.bytedance.touchpoint.core.pendant.feed.FeedTimerPendantManger",
-            "com.bytedance.touchpoint.core.pendant.ad.AdFeedTimerPendantManager",
-            "com.bytedance.touchpoint.core.pendant.videodetail.DetailTaskEventPendantManager",
-            "com.bytedance.touchpoint.core.pendant.ad.ADTaskEventPendantManager",
-            "com.bytedance.touchpoint.core.pendant.ad.ADNewStarTimerPendantManager"
-        ).map(loader::loadClass)
-
         val opacityGate = LayoutOpacityGate()
         opacity = opacityGate
         HostViewVisibility.acquire(module, FEATURE)
@@ -244,17 +227,43 @@ object LayoutCleanupHook {
             bind(checkNotNull(follow.get(chain.thisObject) as? View), LayoutElement.FOLLOW)
             result
         }
-        module.trackHook(FEATURE, rewardBind, requiresConfiguration = false).intercept { chain ->
+        HookRuntime.install("LayoutRewards") {
+        val rewardWidget = loader.loadClass("com.bytedance.touchpoint.ui.pendant.SpecActWidget")
+        val rewardBind = rewardWidget.getMethod("bind", ViewGroup::class.java)
+        val rewardView = rewardWidget.getDeclaredField("specActStaticView").apply {
+            check(View::class.java.isAssignableFrom(type))
+            isAccessible = true
+        }
+        module.trackHook("LayoutRewards", rewardBind, requiresConfiguration = false).intercept { chain ->
             val result = chain.proceed()
             (rewardView.get(chain.thisObject) as? View)?.let { bind(it, LayoutElement.REWARDS) }
             result
         }
-        module.trackHook(FEATURE, timerBind, requiresConfiguration = false).intercept { chain ->
+        }
+        HookRuntime.install("LayoutTimers") {
+        val timer = loader.loadClass("com.bytedance.touchpoint.core.pendant.base.BaseTimerPendantManager")
+        val timerBind = timer.declaredMethods.single {
+            it.parameterTypes.contentEquals(arrayOf(android.content.Context::class.java, ViewGroup::class.java)) &&
+                it.returnType == Void.TYPE
+        }.apply { isAccessible = true }
+        val timerView = timer.declaredFields.single {
+            View::class.java.isAssignableFrom(it.type) && !Modifier.isStatic(it.modifiers)
+        }.apply { isAccessible = true }
+        val feedTimers = listOf(
+            "com.bytedance.touchpoint.core.pendant.feed.FeedTimerPendantManger",
+            "com.bytedance.touchpoint.core.pendant.ad.AdFeedTimerPendantManager",
+            "com.bytedance.touchpoint.core.pendant.videodetail.DetailTaskEventPendantManager",
+            "com.bytedance.touchpoint.core.pendant.ad.ADTaskEventPendantManager",
+            "com.bytedance.touchpoint.core.pendant.ad.ADNewStarTimerPendantManager"
+        ).mapNotNull { name -> try { loader.loadClass(name) } catch (_: ClassNotFoundException) { null } }
+
+        module.trackHook("LayoutTimers", timerBind, requiresConfiguration = false).intercept { chain ->
             val result = chain.proceed()
             if (feedTimers.any { it.isInstance(chain.thisObject) }) {
                 (timerView.get(chain.thisObject) as? View)?.let { bind(it, LayoutElement.REWARDS) }
             }
             result
+        }
         }
     }
 }

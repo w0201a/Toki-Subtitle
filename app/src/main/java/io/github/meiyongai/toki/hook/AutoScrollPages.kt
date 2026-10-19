@@ -107,15 +107,15 @@ internal class AutoScrollPages(loader: ClassLoader, private val controller: Clas
 
     /** @param module LSPosed 模块。@return Unit。Callers: AutoScrollHook.init，全部反射契约验证后安装。 */
     fun install(module: XposedModule) {
-        HookRuntime.onDispose("AutoScrollHook") { state.clear() }
-        module.trackHook("AutoScrollHook", configure).intercept { chain ->
+        HookRuntime.onDispose("AutoScrollBehavior") { state.clear() }
+        module.trackHook("AutoScrollBehavior", configure).intercept { chain ->
             val panel = chain.args[0]
             if (enabled() && rootPanel.isInstance(panel)) {
                 register.invoke(null, panel, declaration.newInstance())
             }
             chain.proceed()
         }
-        module.trackHook("AutoScrollHook", created).intercept { chain ->
+        module.trackHook("AutoScrollBehavior", created).intercept { chain ->
             val result = chain.proceed()
             val instance = checkNotNull(chain.thisObject)
             val owner = pageOf(instance)
@@ -124,7 +124,7 @@ internal class AutoScrollPages(loader: ClassLoader, private val controller: Clas
             result
         }
         for ((name, method) in lifecycle + paging) {
-            module.trackHook("AutoScrollHook", method).intercept { chain ->
+            module.trackHook("AutoScrollBehavior", method).intercept { chain ->
                 val instance = checkNotNull(chain.thisObject)
                 when (name) {
                     "onResume" -> state.update(instance, resumed = true)
@@ -136,7 +136,7 @@ internal class AutoScrollPages(loader: ClassLoader, private val controller: Clas
                 chain.proceed()
             }
         }
-        module.trackHook("AutoScrollHook", resolve).intercept { chain ->
+        module.trackHook("AutoScrollBehavior", resolve).intercept { chain ->
             if (!enabled()) return@intercept chain.proceed()
             val expectedPage = menuContext.get()
             val selected = state.current { candidate ->
@@ -146,10 +146,10 @@ internal class AutoScrollPages(loader: ClassLoader, private val controller: Clas
             }
             selected
         }
-        module.trackHook("AutoScrollHook", page).intercept { chain ->
+        module.trackHook("AutoScrollBehavior", page).intercept { chain ->
             if (enabled() && !(chain.args[0] as String?).isNullOrEmpty()) true else chain.proceed()
         }
-        module.trackHook("AutoScrollHook", search).intercept { chain ->
+        module.trackHook("AutoScrollBehavior", search).intercept { chain ->
             if (enabled() && menuContext.get() != null) true else chain.proceed()
         }
     }

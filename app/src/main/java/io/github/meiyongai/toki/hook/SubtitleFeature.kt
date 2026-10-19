@@ -17,14 +17,15 @@ internal object SubtitleFeature {
     }
 
     private fun installLanguage(module: XposedModule, loader: ClassLoader, owner: String) {
-        val language = loader.adaptiveClass("X.08ZO")
-        val target = language.adaptiveDeclaredMethod("LIZLLL")
+        val target = ExtensionSymbols.captionLanguage(loader, true)
+            ?: loader.adaptiveClass("X.08ZO").adaptiveDeclaredMethod("LIZLLL")
         check(target.returnType == String::class.java)
         module.trackHook(owner, target).intercept { chain ->
             val original = chain.proceed()
             if (translating()) "zh-Hans" else original
         }
-        val excluded = language.adaptiveDeclaredMethod("LIZJ")
+        val excluded = ExtensionSymbols.captionLanguage(loader, false)
+            ?: loader.adaptiveClass("X.08ZO").adaptiveDeclaredMethod("LIZJ")
         check(excluded.returnType == Array<String>::class.java)
         module.trackHook(owner, excluded).intercept { chain ->
             val original = chain.proceed() as? Array<*>
@@ -60,8 +61,10 @@ internal object SubtitleFeature {
         }
         val rootField = renderer.adaptiveDeclaredField("LIZJ").apply { isAccessible = true }
         val videoField = renderer.adaptiveDeclaredField("LJI").apply { isAccessible = true }
-        val display = renderer.adaptiveDeclaredMethod("LJIIIZ", String::class.java, loader.adaptiveClass("X.0B17"),
-            String::class.java, loader.adaptiveClass("X.0B18"))
+        val display = ExtensionSymbols.methodByRole(renderer, "LJIIIZ")
+        check(display.returnType == Void.TYPE && display.parameterTypes.size == 4 &&
+            display.parameterTypes[0] == String::class.java && display.parameterTypes[2] == String::class.java &&
+            !display.parameterTypes[1].isPrimitive && !display.parameterTypes[3].isPrimitive) { "Caption display contract changed" }
         val bindings = WeakHashMap<View, WeakReference<SubtitleOverlay>>()
         val verifiedRenderers = WeakHashMap<Any, Boolean>()
         HookRuntime.install("SubtitleMenu") { SubtitleMenu.install(module, loader, "SubtitleMenu") }

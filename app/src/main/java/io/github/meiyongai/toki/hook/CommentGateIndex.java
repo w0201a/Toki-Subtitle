@@ -47,7 +47,7 @@ final class CommentGateIndex {
             if(ExtensionDexIndex.signature(method).equals("()Z")) zero.add(method);
             if(ExtensionDexIndex.signature(method).equals("(Z)Z")) one.add(method);
         }
-        if(zero.size()!=2 || one.size()!=1) return List.of();
+        if(zero.isEmpty()) return List.of();
         List<Method> readers=new ArrayList<>();
         for(Method method:zero) {
             boolean field=false,value=false,unbox=false;
@@ -62,13 +62,27 @@ final class CommentGateIndex {
         if(readers.size()!=1) return List.of();
         Method reader=readers.get(0);
         List<Method> all=new ArrayList<>(zero);all.addAll(one);
-        for(Method method:all) if(method!=reader && calls(method).stream().noneMatch(call->call.getDefiningClass().equals(type.getType()) &&
-            call.getName().equals(reader.getName()) && ExtensionDexIndex.signature(call).equals("()Z"))) return List.of();
+        all.removeIf(method->method!=reader && calls(method).stream().noneMatch(call->call.getDefiningClass().equals(type.getType()) &&
+            call.getName().equals(reader.getName()) && ExtensionDexIndex.signature(call).equals("()Z")));
+        if(all.size()<2) return List.of();
         return all.stream().map(method->method.getName()+ExtensionDexIndex.signature(method)).sorted().collect(java.util.stream.Collectors.toList());
     }
     static void resolve(List<String> paths,Properties result) throws IOException {
         Set<String> suppliers=new HashSet<>();
-        ExtensionDexIndex.visit(paths,type->{if(supplier(type)) suppliers.add(type.getType());});
+        Map<String,List<String>> language=new HashMap<>();
+        ExtensionDexIndex.visit(paths,type->{
+            if(supplier(type)) suppliers.add(type.getType());
+            for(Method method:type.getMethods()) for(boolean target:List.of(true,false)) {
+                if((method.getAccessFlags()&8)==0 || method.getImplementation()==null || !ExtensionDexIndex.signature(method).equals(target?"()Ljava/lang/String;":"()[Ljava/lang/String;")) continue;
+                boolean key=false,read=false;
+                for(var instruction:method.getImplementation().getInstructions()) if(instruction instanceof ReferenceInstruction ref) {
+                    if(ref.getReference() instanceof StringReference str && str.getString().equals(target?"key_selected_translation_language":"key_selected_do_not_translate_language_codes")) key=true;
+                    if(ref.getReference() instanceof MethodReference call && call.getDefiningClass().equals("Lcom/bytedance/keva/Keva;") && call.getName().equals(target?"getString":"getStringArray")) read=true;
+                }
+                if(key&&read) language.computeIfAbsent(target?"target":"excluded",unused->new ArrayList<>()).add(type.getType()+"->"+method.getName());
+            }
+        });
+        for(var entry:language.entrySet()) if(entry.getValue().size()==1) result.setProperty("captionLanguage."+entry.getKey(),entry.getValue().get(0));
         if(suppliers.isEmpty()) { result.setProperty("error.commentGate","preference supplier unavailable");return; }
         Map<String,List<String>> matches=new HashMap<>();
         ExtensionDexIndex.visit(paths,type->{List<String> methods=contract(type,suppliers);if(!methods.isEmpty()) matches.put(type.getType(),methods);});

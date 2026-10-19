@@ -19,7 +19,7 @@ class ExtensionSymbolsTest {
             setProperty("cache.identity", "host")
             setProperty("cache.profile", "profile")
             setProperty("cache.format", ExtensionDexIndex.FORMAT)
-            setProperty("cache.matcher", "relationships-v6")
+            setProperty("cache.matcher", "relationships-v7")
             setProperty("cache.complete", "true")
         }
         assertTrue(ExtensionSymbols.cacheMatches(cache(), "host", "profile"))
@@ -34,7 +34,7 @@ class ExtensionSymbolsTest {
             setProperty("cache.identity", "host")
             setProperty("cache.profile", "profile")
             setProperty("cache.format", ExtensionDexIndex.FORMAT)
-            setProperty("cache.matcher", "relationships-v6")
+            setProperty("cache.matcher", "relationships-v7")
             setProperty("cache.complete", "true")
         }
         assertTrue(ExtensionSymbols.cacheMatches(stored, "host", "profile"))
@@ -42,6 +42,23 @@ class ExtensionSymbolsTest {
         stored.setProperty("cache.retryToken", "new-request")
         assertTrue(ExtensionSymbols.cacheMatches(stored, "host", "profile", "new-request"))
         assertFalse(ExtensionSymbols.cacheMatches(stored, "host", "profile", "another-request"))
+    }
+    class VerifiedRenderer { fun draw(text: String, state: Thread.State, id: String, mode: java.util.Locale) {} }
+    @Test fun verifiedDescriptorDoesNotNeedIndependentMappingsForEveryParameterClass() {
+        val field = ExtensionSymbols::class.java.getDeclaredField("resolved").apply { isAccessible = true }
+        val before = field.get(ExtensionSymbols)
+        val referenceField = ExtensionSymbols::class.java.getDeclaredField("reference\$delegate").apply { isAccessible = true }
+        val profile = (referenceField.get(ExtensionSymbols) as Lazy<*>).value as Properties
+        val role = "${VerifiedRenderer::class.java.name}:method.render(Ljava/lang/String;LX/State;Ljava/lang/String;LX/Mode;)V"
+        profile.setProperty(role, "test-only")
+        try {
+            field.set(ExtensionSymbols, Properties().apply {
+                setProperty(role, "draw(Ljava/lang/String;Ljava/lang/Thread\$State;Ljava/lang/String;Ljava/util/Locale;)V")
+            })
+            assertEquals("draw", ExtensionSymbols.methodByRole(VerifiedRenderer::class.java, "render").name)
+            field.set(ExtensionSymbols, Properties().apply { setProperty(role, "draw()V") })
+            assertThrows(NoSuchElementException::class.java) { ExtensionSymbols.methodByRole(VerifiedRenderer::class.java, "render") }
+        } finally { profile.remove(role); field.set(ExtensionSymbols, before) }
     }
     @Test fun stableFrameworkReflectionRemainsAvailable() {
         assertEquals(String::class.java, javaClass.classLoader!!.adaptiveClass("java.lang.String"))

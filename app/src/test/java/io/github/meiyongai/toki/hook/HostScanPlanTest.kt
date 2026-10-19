@@ -26,6 +26,13 @@ class HostScanPlanTest {
         assertTrue(HostScanPlan(saved, reordered, "host", "format", setOf(a, b)).pending.isEmpty())
     }
 
+    @Test fun failuresFromBeforeIndependentRecoveryAreRecheckedWithoutDiscardingSuccesses() {
+        val old = saved().apply { remove("cache.recovery") }
+        val plan = HostScanPlan(old, rules, "host", "format", setOf(a, b))
+        assertEquals(setOf(a), plan.retained)
+        assertEquals(setOf(b), plan.pending)
+    }
+
     /** 单目标变更只重查该目标，并清除旧错误保留其他角色。无参数、无返回。Callers: JUnit。 */
     @Test fun changedRuleOnlyRescansItsOwnTarget() {
         val plan = HostScanPlan(saved(), rules.replace("second", "changed"), "host", "format", setOf(a, b))

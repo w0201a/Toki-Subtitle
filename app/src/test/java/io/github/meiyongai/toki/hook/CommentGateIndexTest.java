@@ -30,9 +30,16 @@ public class CommentGateIndexTest {
         var one=method("allowed","Z",List.of(new ImmutableMethodParameter("Z",Set.of(),null)),call(OWNER,"read",List.of(),"Z"),new ImmutableInstruction11x(Opcode.RETURN,0));
         return new ImmutableClassDef(OWNER,1,"Ljava/lang/Object;",List.of(),null,Set.of(),List.of(),List.of(init,reader,zero,one));
     }
-    @Test public void renamedGateRequiresPreferenceLazyReaderAndBothCallers() {
+    @Test public void preferenceSupplierWithoutVerifiedCallerRemainsUnavailable() {
+        var source=gate(false,false);
+        var methods=new ArrayList<org.jf.dexlib2.iface.Method>();
+        source.getMethods().forEach(method->{ if(!method.getName().equals("allowed")) methods.add(method); });
+        var isolated=new ImmutableClassDef(OWNER,1,"Ljava/lang/Object;",List.of(),null,Set.of(),List.of(),methods);
+        assertTrue(CommentGateIndex.contract(isolated,Set.of(SUPPLIER)).isEmpty());
+    }
+    @Test public void renamedGateRequiresPreferenceLazyReaderAndIndependentCaller() {
         assertEquals(List.of("allowed(Z)Z","enabled()Z","read()Z"),CommentGateIndex.contract(gate(true,false),Set.of(SUPPLIER)));
-        assertTrue(CommentGateIndex.contract(gate(false,false),Set.of(SUPPLIER)).isEmpty());
+        assertEquals(List.of("allowed(Z)Z","read()Z"),CommentGateIndex.contract(gate(false,false),Set.of(SUPPLIER)));
         assertTrue(CommentGateIndex.contract(gate(true,true),Set.of(SUPPLIER)).isEmpty());
         assertTrue(CommentGateIndex.contract(gate(true,false),Set.of("LX/Other;")).isEmpty());
     }

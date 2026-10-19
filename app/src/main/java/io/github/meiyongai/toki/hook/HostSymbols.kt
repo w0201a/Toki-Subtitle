@@ -123,7 +123,7 @@ internal object HostSymbols {
             HostScanController.session.begin()
             Thread({
                 try {
-                    val scanned = if (targets.isEmpty()) java.util.Properties() else HostNativeIndex.scan(paths, selectedRules) { completed, total ->
+                    val scanned = if (targets.isEmpty()) java.util.Properties() else HostCoreScanner.scan(paths, selectedRules) { completed, total ->
                         HostScanController.session.progress(completed, total)
                     }
                     if (!extensionsReady) {

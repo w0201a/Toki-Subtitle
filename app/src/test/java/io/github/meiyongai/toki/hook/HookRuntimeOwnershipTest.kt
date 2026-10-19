@@ -38,6 +38,22 @@ class HookRuntimeOwnershipTest {
         assertEquals(listOf("subscription", "hook", "state"), released)
     }
 
+    @Test fun independentFailureKeepsRegisteredParentResourcesAndReportsPartial() {
+        var closed = false
+        HookRuntime.install("DownloadHook") {
+            HookRuntime.registered("DownloadHook", handle { closed = true })
+            HookRuntime.install("DownloadSource") { throw NoSuchMethodException("optional source") }
+        }
+        HookRuntime.installationOutcome("complete")
+        assertFalse(closed)
+        assertTrue(HookRuntime.scope("DownloadHook").active)
+        assertFalse(HookRuntime.scope("DownloadSource").active)
+        val snapshot = HookRuntime::class.java.getDeclaredMethod("snapshot").apply { isAccessible = true }.invoke(HookRuntime) as android.os.Bundle
+        val parent = snapshot.getBundle("features")!!.getBundle("DownloadHook")!!
+        assertEquals("部分功能已注册", parent.getString("state"))
+        assertEquals(1, parent.getInt("registered"))
+    }
+
     @Test fun cleanupFailureIsAttachedAndDoesNotPreventOtherResourcesFromClosing() {
         val original = IllegalStateException("registration")
         val cleanup = IllegalStateException("cleanup")

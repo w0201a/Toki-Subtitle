@@ -54,6 +54,13 @@ object AutoScrollHook {
             HostSymbols.member(HostSymbol.SETTINGS, "readInt"),
             HostSymbols.resolve(classLoader, HostSymbol.SEARCH_AUTO_SCROLL),
             HostSymbols.member(HostSymbol.SEARCH_AUTO_SCROLL, "gate"))
+        module.trackHook("AutoScrollHook", contract.reader).intercept { chain ->
+            if (unlocks(ConfigClient.getBoolean(KEY_AUTO_SCROLL_UNLOCK), chain.args[2])) 1 else chain.proceed()
+        }
+        module.trackHook("AutoScrollHook", contract.gate).intercept { chain ->
+            if (ConfigClient.getBoolean(KEY_AUTO_SCROLL_UNLOCK)) true else chain.proceed()
+        }
+        HookRuntime.install("AutoScrollBehavior") {
         val aweme = classLoader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme")
         val adTraffic = classLoader.loadClass("com.ss.android.ugc.aweme.feed.model.AwemeExtKt")
             .getDeclaredMethod("isAdTraffic", aweme).apply {
@@ -83,28 +90,23 @@ object AutoScrollHook {
         val pages = AutoScrollPages(classLoader, controller, menuOwner)
         val adScope = AutoScrollAdScope()
         pages.install(module)
-        module.trackHook("AutoScrollHook", contract.reader).intercept { chain ->
-            if (unlocks(ConfigClient.getBoolean(KEY_AUTO_SCROLL_UNLOCK), chain.args[2])) 1 else chain.proceed()
-        }
-        module.trackHook("AutoScrollHook", contract.gate).intercept { chain ->
-            if (ConfigClient.getBoolean(KEY_AUTO_SCROLL_UNLOCK)) true else chain.proceed()
-        }
-        module.trackHook("AutoScrollHook", adTraffic).intercept { chain ->
+        module.trackHook("AutoScrollBehavior", adTraffic).intercept { chain ->
             val original = chain.proceed() as Boolean
             original && !adScope.contains(chain.args[0])
         }
-        module.trackHook("AutoScrollHook", menu).intercept { chain ->
+        module.trackHook("AutoScrollBehavior", menu).intercept { chain ->
             if (ConfigClient.getBoolean(KEY_AUTO_SCROLL_UNLOCK)) {
                 pages.building(checkNotNull(chain.thisObject)) {
                     adScope.checking(model.get(chain.thisObject)) { chain.proceed() }
                 }
             } else chain.proceed()
         }
-        module.trackHook("AutoScrollHook", canAdvance).intercept { chain ->
+        module.trackHook("AutoScrollBehavior", canAdvance).intercept { chain ->
             if (ConfigClient.getBoolean(KEY_AUTO_SCROLL_UNLOCK)) {
                 adScope.checking(currentVideo.invoke(chain.thisObject)) { chain.proceed() }
             } else chain.proceed()
         }
         Log.i("TokiAutoScroll", "自动滚动入口已注册：推荐=${contract.reader.declaringClass.name}.${contract.reader.name}；搜索=${contract.gate.declaringClass.name}.${contract.gate.name}；菜单=${menuOwner.name}.${menu.name}")
+        }
     }
 }
