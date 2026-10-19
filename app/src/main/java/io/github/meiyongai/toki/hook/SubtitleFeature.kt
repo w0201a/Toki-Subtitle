@@ -66,10 +66,22 @@ internal object SubtitleFeature {
         }
         val rootField = renderer.adaptiveDeclaredField("LIZJ").apply { isAccessible = true }
         val videoField = renderer.adaptiveDeclaredField("LJI").apply { isAccessible = true }
-        val display = ExtensionSymbols.methodByRole(renderer, "LJIIIZ")
-        check(display.returnType == Void.TYPE && display.parameterTypes.size >= 3 &&
-            display.parameterTypes[0] == String::class.java && display.parameterTypes[2] == String::class.java &&
-            !display.parameterTypes[1].isPrimitive) { "Caption display contract changed" }
+        val display = try {
+            ExtensionSymbols.methodByRole(renderer, "LJIIIZ").also {
+                check(it.returnType == Void.TYPE && it.parameterTypes.size >= 3 &&
+                    it.parameterTypes[0] == String::class.java && it.parameterTypes[2] == String::class.java &&
+                    !it.parameterTypes[1].isPrimitive) { "Caption display contract changed" }
+            }
+        } catch (error: ReflectiveOperationException) {
+            HookRuntime.event(owner, "renderer method unavailable; independently verified frame path required")
+            null
+        } catch (error: IllegalStateException) {
+            HookRuntime.event(owner, "renderer method unresolved; independently verified frame path required")
+            null
+        } catch (error: NoSuchElementException) {
+            HookRuntime.event(owner, "renderer method not found; independently verified frame path required")
+            null
+        }
         val bindings = WeakHashMap<View, WeakReference<SubtitleOverlay>>()
         val verifiedRenderers = WeakHashMap<Any, Boolean>()
         val gestures = WeakHashMap<android.app.Activity, SubtitleGesture>()
@@ -149,7 +161,7 @@ internal object SubtitleFeature {
             }
         }
         // SUB-RENDER / SUB-STATE：宿主送达的字幕保持原文，译文仅替换独立显示层。
-        module.trackHook(owner, display).intercept { chain ->
+        if (display != null) module.trackHook(owner, display).intercept { chain ->
             val result = chain.proceed()
             val root = rootField.get(chain.thisObject) as View
             if (!verifiedRenderers.containsKey(chain.thisObject)) {
@@ -166,10 +178,13 @@ internal object SubtitleFeature {
                 videoField.get(chain.thisObject) as? String ?: "")
             result
         }
+        check(display != null || HookRuntime.scope("SubtitleCleanFrames").active) {
+            "Neither a verified renderer method nor a verified frame observer is available"
+        }
         HookRuntime.subscribe(owner) { snapshot ->
             if (snapshot == null || !snapshot.boolean("video_translate_enabled"))
                 translator?.cancel()
         }
-        HookRuntime.detail(owner, "字幕扩展：原生轨优先 / 原生文字翻译${if (translator == null) "不可用" else "已就绪"} / 独立绘制层")
+        HookRuntime.detail(owner, "字幕扩展：原生轨优先 / 原生文字翻译${if (translator == null) "不可用" else "已就绪"} / ${if (display == null) "字幕帧独立驱动" else "渲染与字幕帧"} / 独立绘制层")
     }
 }
