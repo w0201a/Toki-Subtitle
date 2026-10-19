@@ -70,10 +70,10 @@ internal object CaptionFallbackHook {
         val serviceResult: Method = serviceClass.adaptiveDeclaredMethod("LJIIIZ", aweme)
         val serviceTrackId: Method = serviceClass.adaptiveDeclaredMethod("LJIIJ", aweme)
         val cacheResult: Method? = runCatching { loader.adaptiveClass("X.08ZE").adaptiveDeclaredMethod("LIZ", aweme) }.getOrNull()
-        val service: Method = loader.adaptiveClass("X.08Zd").adaptiveDeclaredMethod("LIZ")
+        val service: Method? = runCatching { loader.adaptiveClass("X.08Zd").adaptiveDeclaredMethod("LIZ") }.getOrNull()
         val keva: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.service.ICaptionKevaService")
-        val captionsForNative: Method = keva.adaptiveDeclaredMethod("LIZIZ")
-        val captionsForForeign: Method = keva.adaptiveDeclaredMethod("LJL")
+        val captionsForNative: Method? = runCatching { keva.adaptiveDeclaredMethod("LIZIZ") }.getOrNull()
+        val captionsForForeign: Method? = runCatching { keva.adaptiveDeclaredMethod("LJL") }.getOrNull()
 
         init {
             check(trackId == null || trackId.returnType == Integer.TYPE) { "字幕轨号读取签名不符" }
@@ -153,14 +153,13 @@ internal object CaptionFallbackHook {
         // 到帧前也必须允许有效原字幕，否则基础状态可能先被设为 HIDDEN。
         val hideOriginal = loader.adaptiveClass("X.08ZA").adaptiveDeclaredMethod(
             "LJJIJIIJI", contract.aweme, java.lang.Boolean::class.java)
-        val targetLanguage = loader.adaptiveClass("X.08ZO").adaptiveDeclaredMethod("LIZLLL")
         module.trackHook(feature, hideOriginal).intercept { chain ->
             val hidden = chain.proceed() as Boolean
             if (!hidden || chain.args[1] == false) return@intercept hidden
             guarded(hidden) {
                 val aweme = chain.args[0]
                 val model = modelOf(contract, aweme)
-                val target = targetLanguage.invoke(null)
+                val target = "zh-Hans"
                 val hasTranslation = tracksOf(contract, model).any {
                     contract.itemCode.get(it) == target && usable(contract, it)
                 }
@@ -263,8 +262,8 @@ internal object CaptionFallbackHook {
             instance.javaClass.adaptiveMethod("LLILLIZIL").invoke(instance)
         }
         val toggles = probe {
-            val service = contract.service.invoke(null)
-            "native=${contract.captionsForNative.invoke(service)} foreign=${contract.captionsForForeign.invoke(service)}"
+            val service = contract.service?.invoke(null)
+            "native=${contract.captionsForNative?.invoke(service)} foreign=${if (service != null) contract.captionsForForeign?.invoke(service) else null}"
         }
         val automatic = probe {
             val service = contract.loader.adaptiveClass("X.08aF").adaptiveDeclaredMethod("LIZ").invoke(null)

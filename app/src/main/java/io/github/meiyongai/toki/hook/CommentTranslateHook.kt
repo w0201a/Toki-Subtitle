@@ -28,11 +28,6 @@ object CommentTranslateHook {
             }
         }
         }
-        if (!ConfigClient.getBoolean(VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED) &&
-            !ConfigClient.getBoolean("subtitle_style_enabled")) {
-            HookRuntime.install("CaptionFallback") { CaptionFallbackHook.install(module, loader, "CaptionFallback") }
-            HookRuntime.install("SubtitleFeature") { SubtitleFeature.install(module, loader, "SubtitleFeature") }
-        }
         CommentPollTranslation.install(module, loader)
     }
 }

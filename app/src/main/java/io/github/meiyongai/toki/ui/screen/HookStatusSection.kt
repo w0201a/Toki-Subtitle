@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -90,13 +91,25 @@ internal fun HookStatusSection() {
  */
 @Composable
 internal fun HookStatusContent(sessions: List<HookProcessReport>?, @StringRes communicationError: Int?) {
-    val strings = LocalContext.current.resources
+    val context = LocalContext.current
+    val strings = context.resources
+    var retryRequested by remember { mutableStateOf(false) }
     val current = currentHookSession(sessions.orEmpty())
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(16.dp, 8.dp, 16.dp, 24.dp),
         verticalArrangement = Arrangement.spacedBy(2.dp)
     ) {
+        item(key = "retry-adaptation") {
+            Column {
+                TextButton(onClick = {
+                    ConfigClient.putString(context, "adaptation_retry_token", java.util.UUID.randomUUID().toString())
+                    retryRequested = true
+                }, enabled = !retryRequested) { Text(strings.getString(R.string.adaptation_retry)) }
+                Text(strings.getString(if (retryRequested) R.string.adaptation_retry_saved else R.string.adaptation_retry_hint),
+                    Modifier.padding(horizontal = 8.dp, vertical = 8.dp), style = MaterialTheme.typography.bodySmall)
+            }
+        }
         if (communicationError != null) item(key = "communication-error") {
             StatusNotice(strings.getString(communicationError), error = true)
         }
@@ -121,6 +134,19 @@ internal fun HookStatusContent(sessions: List<HookProcessReport>?, @StringRes co
             }
             itemsIndexed(current.features, key = { _, feature -> feature.definition.id }) { index, feature ->
                 FeatureStatusRow(feature, index, current.features.size)
+            }
+            TranslationPathCatalog.paths.forEach { (id, label) ->
+                current.reports[id]?.let { report ->
+                    item(key = "translation-path-$id") {
+                        Row(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 10.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                            Text(strings.getString(label), Modifier.weight(1f), style = MaterialTheme.typography.bodyMedium)
+                            val state = TranslationPathCatalog.state(report)
+                            Text(strings.getString(state.label), style = MaterialTheme.typography.labelLarge,
+                                color = if (state == HookVisualState.ISSUE) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
             }
             item(key = "report-note") {
                 val time = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT, strings.configuration.locales[0]).format(Date(current.updated))

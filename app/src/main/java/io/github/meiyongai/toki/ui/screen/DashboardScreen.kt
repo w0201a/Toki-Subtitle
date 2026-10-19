@@ -335,6 +335,7 @@ fun DashboardScreen(
     var isStatusBarHidden by remember {
         mutableStateOf(ConfigClient.getBoolean(context, StatusBarHook.KEY_STATUS_BAR_HIDDEN))
     }
+    var captureCompatibility by remember { mutableStateOf(ConfigClient.getBoolean(context, "screen_capture_compatibility")) }
 
     // 22. 长视频时长提示状态
     var isDurationAlertEnabled by remember {
@@ -559,6 +560,19 @@ fun DashboardScreen(
         }
 
         LayoutCleanupSection()
+
+        PreferenceSection(title = strings.getString(R.string.feature_screen_capture)) {
+            SwitchPreferenceItem(
+                shape = getGroupedShape(0, 1),
+                title = strings.getString(R.string.feature_screen_capture),
+                summary = strings.getString(R.string.feature_screen_capture_summary),
+                checked = captureCompatibility,
+                onCheckedChange = { state ->
+                    captureCompatibility = state
+                    ConfigClient.putBoolean(context, "screen_capture_compatibility", state)
+                }
+            )
+        }
 
         // === 分组 3: 内容下载与操作增强 (共 8 项) ===
         PreferenceSection(title = strings.getString(R.string.feature_media_section)) {

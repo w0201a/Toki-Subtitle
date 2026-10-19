@@ -12,6 +12,13 @@ public class GenerateExtensionProfile {
         Set<String> names = new TreeSet<>();
         var pattern = Pattern.compile("adaptiveClass\\(\"([^\"]+)\"\\)");
         Path root = Path.of(args[0]);
+        if (args[0].equals("--relationships-only")) {
+            Properties profile = new Properties();
+            try (var input = Files.newInputStream(Path.of(args[1]))) { profile.load(input); }
+            ExtensionRelationshipIndex.profile(Arrays.asList(args).subList(2, args.length), profile);
+            write(Path.of(args[1]), profile);
+            return;
+        }
         if (args[0].equals("--native-only")) {
             Properties profile = new Properties();
             try (var input = Files.newInputStream(Path.of(args[1]))) { profile.load(input); }

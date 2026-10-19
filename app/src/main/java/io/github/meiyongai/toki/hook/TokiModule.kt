@@ -143,6 +143,7 @@ class TokiModule : XposedModule() {
             "MusicUnlockHook" -> MusicUnlockHook.init(this, loader)
             "StatusBarHook" -> StatusBarHook.init(this, loader)
             "VideoDurationAlertHook" -> VideoDurationAlertHook.init(this, loader)
+            "ScreenCaptureHook" -> ScreenCaptureHook.init(this)
             else -> error("没有功能安装契约：$feature")
         }
     }
@@ -170,22 +171,25 @@ class TokiModule : XposedModule() {
         }
         val info = param.applicationInfo
         val loader = param.classLoader
-        if (HostSymbols.initialize(info, processName == param.packageName, plan.symbols) {
+        if (HostSymbols.initialize(info, processName == param.packageName, plan.symbols,
+                onCorePrepared = { installAdapted(loader, extensions = false) }) {
                 installAdapted(loader)
             }) installAdapted(loader)
     }
 
-    private fun installAdapted(loader: ClassLoader) {
+    private fun installAdapted(loader: ClassLoader, extensions: Boolean = true) {
         // 清屏依赖进度条的安装成功，不能留下半套状态机。
         val ordered = plan.adaptedFeatures.sortedBy { if (it == "ProgressBarHook") 0 else 1 }
         for (feature in ordered) {
+            if (!extensions && feature in setOf("VideoTranslateHook", "CommentTranslateHook")) continue
             if (feature == "AutoCleanModeHook" && "ProgressBarHook" !in installed) {
                 HookRuntime.failure(feature, IllegalStateException("清屏所需的进度条功能未注册"), "注册失败，已撤销")
-            } else if (feature !in installed) install(feature, loader)
+            } else if (feature !in installed && HookRuntime.scope(feature).active) install(feature, loader)
         }
         if (ConfigClient.isReady) {
             application?.let(::refreshConfiguration)
             updateConfigurationStatus(ConfigClient.snapshot())
         }
+        if (extensions) HookRuntime.installationOutcome("功能安装检查完成；代码 ${HostSymbols.codeIdentity()}")
     }
 }

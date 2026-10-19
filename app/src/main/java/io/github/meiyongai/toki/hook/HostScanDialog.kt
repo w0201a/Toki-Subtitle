@@ -109,8 +109,10 @@ internal class HostScanDialog(activity: Activity, moduleResources: ModuleResourc
 private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit) {
     val failed = state.phase == HostScanPhase.FAILED
     val complete = state.phase == HostScanPhase.READY
+    val partial = state.phase == HostScanPhase.PARTIAL
     val contentScroll = key(state.phase) { rememberScrollState() }
     val heading = when {
+        partial -> R.string.host_scan_title_partial
         failed -> R.string.host_scan_title_failed
         complete -> R.string.host_scan_title_complete
         state.phase == HostScanPhase.EXTENSIONS -> R.string.host_scan_title_extensions
@@ -118,6 +120,7 @@ private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit) {
         else -> R.string.host_scan_title_running
     }
     val description = when {
+        partial -> R.string.host_scan_partial_hint
         failed -> R.string.host_scan_failure_hint
         complete -> R.string.host_scan_restart_hint
         state.phase == HostScanPhase.EXTENSIONS -> R.string.host_scan_extensions_hint
@@ -140,9 +143,21 @@ private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit) {
                 Text(stringResource(heading), style = MaterialTheme.typography.headlineSmall)
                 Text(stringResource(description), style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
+                if (state.phase == HostScanPhase.EXTENSIONS && state.extensionStage.isNotEmpty()) {
+                    val stage = when (state.extensionStage) {
+                        "native" -> R.string.host_scan_stage_native
+                        "relationships" -> R.string.host_scan_stage_relationships
+                        "members" -> R.string.host_scan_stage_members
+                        else -> R.string.host_scan_stage_structure
+                    }
+                    Text(stringResource(stage), style = MaterialTheme.typography.bodySmall)
+                    if (state.extensionTotal > 0) Text(
+                        stringResource(R.string.host_scan_dex_progress, state.extensionCompleted, state.extensionTotal),
+                        style = MaterialTheme.typography.bodySmall)
+                }
             }
             Spacer(Modifier.height(16.dp))
-            if (complete || failed) {
+            if (complete || partial || failed) {
                 TextButton(onClick = onResultDismiss, modifier = Modifier.align(Alignment.End)) {
                     Text(stringResource(if (complete) R.string.host_scan_done else R.string.common_close))
                 }

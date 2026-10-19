@@ -5,6 +5,38 @@ import org.junit.Test
 
 /** 拦截边界的异常身份与原始返回值测试，不依赖 Android 或模拟异常堆栈。 */
 class HookInvocationTest {
+    @Test fun callbackFailureAfterHostSuccessDoesNotRunHostTwice() {
+        val call = HookInvocation()
+        var executions = 0
+        val original = Any()
+        call.proceed { executions++; original }
+        assertSame(original, call.recover(IllegalStateException("module")) { executions++; Any() })
+        assertEquals(1, executions)
+    }
+
+    @Test fun callbackFailureBeforeHostInvocationFallsBackExactlyOnce() {
+        val call = HookInvocation()
+        var executions = 0
+        assertEquals(7, call.recover(IllegalStateException("module")) { executions++; 7 })
+        assertEquals(1, executions)
+    }
+
+    @Test fun wrappedHostFailureCannotTriggerASecondInvocation() {
+        val call = HookInvocation()
+        val host = IllegalStateException("host")
+        assertThrows(IllegalStateException::class.java) { call.proceed { throw host } }
+        val wrapper = RuntimeException("module", host)
+        assertSame(wrapper, assertThrows(RuntimeException::class.java) { call.recover(wrapper) { fail("must not rerun host") } })
+    }
+
+    @Test fun aLaterHostFailureCannotReturnAnEarlierSuccessfulResult() {
+        val call = HookInvocation()
+        assertEquals(7, call.proceed { 7 })
+        assertThrows(IllegalStateException::class.java) { call.proceed { throw IllegalStateException("host") } }
+        val failure = RuntimeException("wrapper")
+        assertSame(failure, assertThrows(RuntimeException::class.java) { call.recover(failure) { fail("no retry") } })
+    }
+
     /** 验证返回值与 null 均原样返回。@return Unit。Callers: JUnit。 */
     @Test fun returnValuesAreUnchanged() {
         val call = HookInvocation()

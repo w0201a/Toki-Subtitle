@@ -15,6 +15,15 @@ import org.jf.dexlib2.iface.reference.*;
 public final class ExtensionDexIndex {
     public static final String FORMAT = "extension-structure-v1";
     private ExtensionDexIndex() {}
+    public interface Progress { void update(String stage, int completed, int total); }
+    private static final ThreadLocal<Progress> OBSERVER = new ThreadLocal<>();
+    private static final ThreadLocal<String> PHASE = new ThreadLocal<>();
+    private static void phase(String value) { PHASE.set(value); if(OBSERVER.get()!=null) OBSERVER.get().update(value,0,0); }
+    public static Properties scan(List<String> paths, Properties profile, Set<String> selected, Progress progress) throws IOException {
+        OBSERVER.set(progress);
+        try { phase("structure"); return scan(paths,profile,selected); }
+        finally { OBSERVER.remove(); PHASE.remove(); }
+    }
 
     private static final java.util.regex.Pattern OBFUSCATED_TYPE = java.util.regex.Pattern.compile("LX/[^;]+;");
     private static final java.util.regex.Pattern OBFUSCATED_MEMBER = java.util.regex.Pattern.compile("L[A-Z0-9_]+|[a-zA-Z]{1,2}[0-9]*");
@@ -175,6 +184,7 @@ public final class ExtensionDexIndex {
         Collections.sort(values);
         return digest(type.getAccessFlags()+"|"+normalized(Objects.toString(type.getSuperclass(), ""))+"|"+normalized(String.join("|", values)));
     }
+    static String relationshipHierarchy(ClassDef type) { return hierarchy(type); }
     private static String header(ClassDef type) {
         List<String> parts = new ArrayList<>();
         for (Method method : type.getMethods()) parts.add("m:" + normalized(signature(method)) + ":" + method.getAccessFlags());
@@ -186,13 +196,22 @@ public final class ExtensionDexIndex {
     }
     interface Visitor { void visit(ClassDef type); }
     static void visit(List<String> paths, Visitor visitor) throws IOException {
+        int total=0,completed=0;
+        if(OBSERVER.get()!=null) for(String path:paths) try(ZipFile archive=new ZipFile(path)) {
+            for(var entry:Collections.list(archive.entries())) if(DEX_ENTRY.matcher(entry.getName()).matches()) total++;
+        }
         for (String path : paths) try (ZipFile archive = new ZipFile(path)) {
             for (var entry : Collections.list(archive.entries())) {
                 if (!DEX_ENTRY.matcher(entry.getName()).matches()) continue;
                 try (InputStream stream = new BufferedInputStream(archive.getInputStream(entry))) {
-                    var dex = DexBackedDexFile.fromInputStream(Opcodes.getDefault(), stream);
+                    long size=entry.getSize();
+                    if(size<0 || size>Integer.MAX_VALUE) throw new IOException("Invalid DEX size");
+                    byte[] data=new byte[(int)size];
+                    new DataInputStream(stream).readFully(data);
+                    var dex = new DexBackedDexFile(Opcodes.getDefault(), data);
                     for (ClassDef type : dex.getClasses()) visitor.visit(type);
                 }
+                if(OBSERVER.get()!=null) OBSERVER.get().update(PHASE.get(),++completed,total);
             }
         }
     }
@@ -277,6 +296,7 @@ public final class ExtensionDexIndex {
             for (String key : keys.subList(0, Math.min(8, keys.size()))) result.setProperty(key, role);
         });
         result.setProperty("format", FORMAT);
+        ExtensionRelationshipIndex.profile(paths, result);
         addNativeSelectors(paths, result);
         return result;
     }
@@ -347,7 +367,7 @@ public final class ExtensionDexIndex {
         visit(paths, type -> {
             String actual = type.getType().substring(1, type.getType().length()-1).replace('/', '.');
             if (actual.equals("com.ss.android.ugc.aweme.translation.service.TranslationServiceImpl")) {
-                definitions.put(actual, type);
+                definitions.put(actual, org.jf.dexlib2.immutable.ImmutableClassDef.of(type));
                 for (Method method : type.getMethods()) if (method.getImplementation()!=null) {
                     Set<String> roles=implementationRoles.get(methodFingerprint(method));
                     if (roles!=null) for (String role:roles) implementationHints.computeIfAbsent(role, unused -> new HashSet<>())
@@ -400,7 +420,6 @@ public final class ExtensionDexIndex {
                 }
             }
             if (candidates.isEmpty()) return;
-            definitions.put(actual, type);
             Fingerprint fp = null;
             for (String name : candidates) {
                 if (!name.startsWith("X.") && !name.equals(actual)) continue;
@@ -409,8 +428,12 @@ public final class ExtensionDexIndex {
                     (!name.startsWith("X.") && hierarchy(type).equals(profile.getProperty("hierarchy."+name))) ||
                     (fuzzyBodies.containsKey(name) && hierarchy(type).equals(profile.getProperty("hierarchy."+name)) && overlaps(fuzzyBodies.get(name),
                         fp.members().stringPropertyNames().stream().filter(k -> k.startsWith("method.")).map(fp.members()::getProperty)
-                            .collect(java.util.stream.Collectors.toList()), 8)))
+                            .collect(java.util.stream.Collectors.toList()), 8))) {
+                    // Detach only accepted candidates. DexBackedClassDef retains the entire
+                    // DEX buffer, which is too expensive inside a running Android host.
+                    definitions.computeIfAbsent(actual, unused -> org.jf.dexlib2.immutable.ImmutableClassDef.of(type));
                     matches.computeIfAbsent(name, unused -> new ArrayList<>()).add(new AbstractMap.SimpleImmutableEntry<>(actual, fp));
+                }
             }
         });
         // A call site may also identify its declaring class, still subject to shape validation.
@@ -511,7 +534,15 @@ public final class ExtensionDexIndex {
                 else result.setProperty("error."+key, "member candidates=" + mapped.size());
             }
         }
+        // Full structural fingerprints are no longer needed by the relationship pass.
+        matches.clear(); callHints.clear(); fieldHints.clear(); implementationHints.clear();
+        phase("relationships");
+        ExtensionRelationshipIndex.resolve(paths, profile, result, definitions);
+        phase("members");
         ExtensionSemanticContracts.resolve(definitions, result);
+        ExtensionRelationshipIndex.completeMembers(paths, profile, result, definitions);
+        ExtensionSemanticContracts.resolve(definitions, result);
+        ExtensionRelationshipIndex.completeMembers(paths, profile, result, definitions);
         return result;
     }
     private static void hint(String source, String target, Properties profile, Map<String,Set<String>> hints) {

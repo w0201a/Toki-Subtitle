@@ -58,6 +58,29 @@ internal object HookRuntime {
     /** 更新适配状态。@param value 无敏感数据的状态说明。@return Unit。Callers: HostSymbols。 */
     @Synchronized fun adaptation(value: String) { adaptation = value }
 
+    @Synchronized fun hasInstallationFailures(): Boolean = features.keySet().any {
+        features.getBundle(it)?.getString("state")?.endsWith("已撤销") == true
+    }
+
+    /** An outer feature cannot claim success merely because child transactions swallowed failures. */
+    @Synchronized fun installationOutcome(base: String) {
+        val failed = features.keySet().filter { features.getBundle(it)?.getString("state")?.endsWith("已撤销") == true }.sorted()
+        adaptation = if (failed.isEmpty()) base else "部分功能未适配，已保留可用功能\n${failed.joinToString()}\n$base"
+        state("HostSymbols", if (failed.isEmpty()) "适配结果已应用" else "部分适配")
+        for ((parent, children) in mapOf(
+            "VideoTranslateHook" to listOf("TranslationReverseGate", "CaptionConsumerGate", "CaptionFallback", "SubtitleLanguage", "SubtitleFeature", "SubtitleMenu", "DescriptionNativeTranslation", "DescriptionTranslation", "CaptionMenuGate"),
+            "CommentTranslateHook" to listOf("CommentTranslationGate", "CommentPollTranslation")
+        )) {
+            if (features.getBundle(parent) == null) continue
+            val attempted = children.filter { features.getBundle(it) != null }
+            val missing = attempted.filter { it in failed }
+            if (missing.isNotEmpty()) {
+                state(parent, if (missing.size == attempted.size) "子功能均未安装" else "部分功能已注册")
+                detail(parent, "独立失败：${missing.joinToString()}；其他子功能保留")
+            }
+        }
+    }
+
     /**
      * 独立注册一个功能，失败时撤销该功能的所有已注册方法并保留可见错误。
      * @param feature 功能标识，与 trackHook 一致。
@@ -160,6 +183,12 @@ internal object HookRuntime {
                 Log.e("TokiHookRuntime", "$feature: 撤销资源失败", error)
             }
         }
+    }
+
+    fun disableAfterCallbackFailure(feature: String, error: Throwable) {
+        dispose(feature, error)
+        failure(feature, error, "模块回调失败，已撤销")
+        installationOutcome("运行中已隔离异常功能，其他功能继续运行")
     }
 
     /**
@@ -303,7 +332,7 @@ internal class TrackedHook(
     fun setExceptionMode(mode: XposedInterface.ExceptionMode): TrackedHook = apply { builder.setExceptionMode(mode) }
 
     /**
-     * 注册带计数的拦截器；运行异常记录后原样抛出，不伪造返回值。
+     * 注册带计数的拦截器；模块异常隔离本功能并恢复原调用，宿主异常原样传播。
      * @param hooker 业务拦截逻辑。
      * @return 框架注册句柄。
      * Callers: 业务 Hook。
@@ -323,6 +352,10 @@ internal class TrackedHook(
                     HookRuntime.count(feature, "宿主或后续拦截链异常")
                 } else {
                     HookRuntime.count(feature, "模块异常")
+                    if (error is Exception || error is LinkageError) {
+                        HookRuntime.disableAfterCallbackFailure(feature, error)
+                        return@intercept invocation.recover(error) { chain.proceed() }
+                    }
                     HookRuntime.failure(feature, error, "模块回调异常")
                 }
                 throw error

@@ -25,6 +25,7 @@ object ConfigSchema {
         "DownloadHook" to listOf("download_force_no_watermark", "download_path_enabled"),
         "MusicUnlockHook" to listOf("music_unlock"),
         "StatusBarHook" to listOf("status_bar_hidden"),
+        "ScreenCaptureHook" to listOf("screen_capture_compatibility"),
         "VideoDurationAlertHook" to listOf("video_duration_alert_enabled"),
         "FeedFilterHook" to listOf("feed_remove_ads", "feed_remove_live", "feed_remove_image",
             "feed_filter_views_enabled", "feed_filter_likes_enabled", "feed_filter_duration_enabled",
@@ -36,7 +37,7 @@ object ConfigSchema {
         listOf("language_follow_region", "timezone_follow_region", "gps_follow_region").associateWith { true }
     private val rangePrefixes = listOf("feed_filter_views", "feed_filter_likes", "feed_filter_duration")
     private val stringKeys = setOf("target_region", "sim_operator_code", "sim_operator_name",
-        "custom_language", "custom_timezone", "custom_latitude", "custom_longitude",
+        "adaptation_retry_token", "custom_language", "custom_timezone", "custom_latitude", "custom_longitude",
         "fixed_speed_value", "speed_expand_list", "download_video_path", "download_image_path",
         "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode") +
         rangePrefixes.flatMap { listOf("${it}_min", "${it}_max") } +

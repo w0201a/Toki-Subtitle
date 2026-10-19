@@ -60,9 +60,9 @@ internal object HostSymbols {
      * @return 是否已经存在与完整代码集合及规则一致的缓存。
      * Callers: TokiModule.onPackageReady。
      */
-    fun initialize(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onPrepared: () -> Unit = {}): Boolean {
+    fun initialize(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onCorePrepared: () -> Unit = {}, onPrepared: () -> Unit = {}): Boolean {
         try {
-            return prepare(info, scanAllowed, required, onPrepared)
+            return prepare(info, scanAllowed, required, onCorePrepared, onPrepared)
         } catch (error: Exception) {
             // 同步准备位于框架生命周期内，记录可见状态后仍保留原始异常和严格契约。
             HookRuntime.failure("HostSymbols", error, "适配准备失败")
@@ -78,20 +78,24 @@ internal object HostSymbols {
      * @return 结果是否已可用于当前进程注册。
      * Callers: initialize。
      */
-    private fun prepare(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onPrepared: () -> Unit): Boolean {
+    private fun prepare(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onCorePrepared: () -> Unit, onPrepared: () -> Unit): Boolean {
         require(required.isNotEmpty()) { "无需符号适配的会话不能启动扫描" }
         val paths = listOf(info.sourceDir) + info.splitSourceDirs.orEmpty()
         val identity = HostDexIndex.identity(paths)
         val rulesIdentity = HostDexIndex.digest(rules)
         val key = HostDexIndex.digest("$INDEX_FORMAT\n$identity\n" + rulesIdentity)
         val cache = storageFile(java.io.File(info.dataDir))
-        val local = HostSymbolCache.read(cache)
-        val bundled = if (HostScanPlan(local, rules, identity, INDEX_FORMAT, required).pending.isEmpty()) null
+        val retryToken = if (io.github.meiyongai.toki.subtitle.provider.ConfigClient.isReady)
+            io.github.meiyongai.toki.subtitle.provider.ConfigClient.getString("adaptation_retry_token", "").orEmpty() else ""
+        val previous = HostSymbolCache.read(cache)
+        val retryRequested = previous.getProperty("cache.retryToken", "") != retryToken
+        val local = if (retryRequested) java.util.Properties() else previous
+        val bundled = if (retryRequested || HostScanPlan(local, rules, identity, INDEX_FORMAT, required).pending.isEmpty()) null
             else HostBundledProfiles.load(identity, rules)
         val stored = bundled ?: local
         val plan = HostScanPlan(stored, rules, identity, INDEX_FORMAT, required)
         val needsExtensions = required.any { it in setOf(HostSymbol.CAPTION_CONSUMER, HostSymbol.COMMENT_TRANSLATION) }
-        val extensionsReady = !needsExtensions || ExtensionSymbols.load(identity, checkNotNull(cache.parentFile))
+        val extensionsReady = !needsExtensions || ExtensionSymbols.load(identity, checkNotNull(cache.parentFile), retryToken)
         if (plan.pending.isEmpty() && extensionsReady) {
             if (bundled != null && scanAllowed) HostSymbolCache.write(cache, bundled)
             resolved = if (stored.getProperty("cache.format") == INDEX_FORMAT && stored.getProperty("cache.key") == key) stored else {
@@ -123,13 +127,21 @@ internal object HostSymbols {
                         HostScanController.session.progress(completed, total)
                     }
                     if (!extensionsReady) {
+                        check(HostDexIndex.identity(paths) == identity) { "宿主代码在扫描中发生变化" }
+                        resolved = plan.merge(scanned)
+                        android.os.Handler(android.os.Looper.getMainLooper()).post {
+                            try { onCorePrepared() } catch (error: Exception) {
+                                HookRuntime.failure("HostCoreInstallation", error, "基础功能安装失败")
+                            }
+                        }
                         HostScanController.session.extensions()
                         HookRuntime.event("ExtensionSymbols", "discovering subtitle extension structures for new host")
-                        ExtensionSymbols.scan(paths, identity, checkNotNull(cache.parentFile))
+                        ExtensionSymbols.scan(paths, identity, checkNotNull(cache.parentFile), retryToken)
                     }
                     HostScanController.session.saving()
                     check(HostDexIndex.identity(paths) == identity) { "扫描期间宿主代码集合发生变化，缓存未发布" }
                     val result = plan.merge(scanned)
+                    result.setProperty("cache.retryToken", retryToken)
                     result.setProperty("cache.key", key)
                     result.setProperty("cache.identity", identity)
                     result.setProperty("cache.rules", rulesIdentity)
@@ -145,8 +157,8 @@ internal object HostSymbols {
                     android.os.Handler(android.os.Looper.getMainLooper()).post {
                         try {
                             HostScanController.session.ready(onPrepared)
-                            HookRuntime.adaptation("自动适配完成，已应用到当前进程\n代码标识：$identity\n未匹配目标：${failures.joinToString().ifEmpty { "无" }}")
-                            HookRuntime.state("HostSymbols", "自动适配已应用")
+                            if (HookRuntime.hasInstallationFailures()) HostScanController.session.partial()
+                            HookRuntime.installationOutcome("自动适配结果已应用到当前进程\n代码标识：$identity\n未匹配目标：${failures.joinToString().ifEmpty { "无" }}")
                         } catch (error: Exception) {
                             HookRuntime.failure("HostSymbols", error, "适配结果已保存，功能安装失败")
                             HostScanController.session.fail()
@@ -161,7 +173,7 @@ internal object HostSymbols {
                     HostScanController.session.fail()
                     HostScanController.onScanFinished()
                 }
-            }, "TokiSymbolScan").apply { priority = Thread.MIN_PRIORITY }.start()
+            }, "TokiSymbolScan").apply { priority = Thread.NORM_PRIORITY - 1 }.start()
         }
         return false
     }

@@ -315,4 +315,23 @@
     <string name="host_scan_done" formatted="false">"知道了"</string>
     <string name="video_fit_center" formatted="false">"居中"</string>
     <string name="video_fit_smart" formatted="false">"全屏沉浸"</string>
+    <string name="host_scan_title_partial">"部分功能待适配"</string>
+    <string name="host_scan_partial_hint">"已自动启用可用功能。未匹配功能已独立隔离，可在 Toki 功能状态中查看各条通路。"</string>
+    <string name="feature_screen_capture">"允许投屏和截图"</string>
+    <string name="feature_screen_capture_summary">"允许采集 TikTok 主窗口，避免投屏黑屏。开启后重新打开 TikTok；截图可能包含私人内容。"</string>
+    <string name="adaptation_retry">"重新检测适配"</string>
+    <string name="adaptation_retry_hint">"更新或降级 TikTok 后功能异常，可重新检测。检测在手机内完成。"</string>
+    <string name="adaptation_retry_saved">"请求已保存。请完全关闭并重新打开 TikTok，等待手机完成检测。"</string>
+    <string name="status_path_language">"字幕目标语言"</string>
+    <string name="status_path_tracks">"字幕轨补偿"</string>
+    <string name="status_path_display">"字幕显示与清屏"</string>
+    <string name="status_path_menu">"字幕设置菜单"</string>
+    <string name="status_path_title_native">"标题原生翻译"</string>
+    <string name="status_path_title_display">"标题译文显示"</string>
+    <string name="status_path_poll">"评论投票翻译"</string>
+    <string name="host_scan_stage_native">"正在筛选候选类"</string>
+    <string name="host_scan_stage_structure">"正在分析类与方法结构"</string>
+    <string name="host_scan_stage_relationships">"正在分析业务调用关系"</string>
+    <string name="host_scan_stage_members">"正在核验翻译接口与显示入口"</string>
+    <string name="host_scan_dex_progress">"已处理 %1$d / %2$d 个 DEX（当前阶段）"</string>
 </resources>

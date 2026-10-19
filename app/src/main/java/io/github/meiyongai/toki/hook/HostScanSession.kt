@@ -1,13 +1,16 @@
 package io.github.meiyongai.toki.subtitle.hook
 
 /** 扫描和缓存发布的有序阶段；完成结果等待用户确认。 */
-internal enum class HostScanPhase { IDLE, SCANNING, EXTENSIONS, SAVING, READY, FAILED }
+internal enum class HostScanPhase { IDLE, SCANNING, EXTENSIONS, SAVING, READY, PARTIAL, FAILED }
 
 /** 单次发布的不可变进度；单位表示已处理工作，不表示预计耗时。 */
 internal data class HostScanStatus(
     val phase: HostScanPhase = HostScanPhase.IDLE,
     val completed: Int = 0,
-    val total: Int = 0
+    val total: Int = 0,
+    val extensionStage: String = "",
+    val extensionCompleted: Int = 0,
+    val extensionTotal: Int = 0
 )
 
 /** 统一约束扫描、保存与结果确认顺序，供工作线程和主线程共同使用。 */
@@ -48,6 +51,12 @@ internal class HostScanSession {
         status = HostScanStatus(HostScanPhase.EXTENSIONS)
     }
 
+    @Synchronized fun extensionProgress(stage: String, completed: Int, total: Int) {
+        check(status.phase == HostScanPhase.EXTENSIONS)
+        require(total >= 0 && completed in 0..total)
+        status = status.copy(extensionStage = stage, extensionCompleted = completed, extensionTotal = total)
+    }
+
     /**
      * 在缓存原子保存成功且重新读取核对一致后发布完成提示。
      * @return Unit。
@@ -66,9 +75,14 @@ internal class HostScanSession {
      */
     @Synchronized fun fail() { status = status.copy(phase = HostScanPhase.FAILED) }
 
+    @Synchronized fun partial() {
+        check(status.phase == HostScanPhase.READY)
+        status = status.copy(phase = HostScanPhase.PARTIAL)
+    }
+
     /** 用户关闭结果窗口，不改变缓存和宿主进程。无参数，返回 Unit。Callers: HostScanController、单元测试。 */
     @Synchronized fun dismissResult() {
-        check(status.phase == HostScanPhase.READY || status.phase == HostScanPhase.FAILED)
+        check(status.phase in setOf(HostScanPhase.READY, HostScanPhase.PARTIAL, HostScanPhase.FAILED))
         status = HostScanStatus()
     }
 }

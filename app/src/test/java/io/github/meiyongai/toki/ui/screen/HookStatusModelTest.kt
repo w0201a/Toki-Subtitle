@@ -170,11 +170,18 @@ class HookStatusModelTest {
      * @return Unit；无入参。
      * Callers: JUnit。
      */
+    @Test fun translationPathsExposeIndependentFailuresWithoutClaimingPendingIsReady() {
+        assertTrue(TranslationPathCatalog.paths.containsKey("CommentPollTranslation"))
+        assertTrue(TranslationPathCatalog.paths.containsKey("SubtitleMenu"))
+        assertEquals(HookVisualState.NORMAL, TranslationPathCatalog.state(HookFeatureReport(state = "已注册", registered = 3)))
+        assertEquals(HookVisualState.PENDING, TranslationPathCatalog.state(HookFeatureReport(state = "注册中", registered = 3)))
+        assertEquals(HookVisualState.ISSUE, TranslationPathCatalog.state(HookFeatureReport(state = "注册失败，已撤销")))
+    }
     @Test fun catalogContainsOnlyUserFeaturesExactlyOnce() {
         val expected = ConfigSchema.featureSwitches.keys - "SpeedOptions"
         assertEquals(expected, HookStatusCatalog.features.map { it.id }.toSet())
         assertEquals(expected.size, HookStatusCatalog.features.size)
-        assertEquals(20, process(emptyMap()).features.size)
+        assertEquals(21, process(emptyMap()).features.size)
     }
 
     /**

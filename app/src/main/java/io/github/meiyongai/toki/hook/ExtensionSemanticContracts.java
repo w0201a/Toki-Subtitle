@@ -38,11 +38,15 @@ final class ExtensionSemanticContracts {
         if (cell!=null) poll(cell,result);
         ClassDef renderer=definitions.get(result.getProperty("class.X.09Gd",""));
         if (renderer!=null) description(renderer,result);
+        discoverCaptionRenderer(definitions,result);
         captions(definitions,result);
         menu(definitions,result);
         titleEligibility(definitions,result);
         captionService(definitions,result);
+        translationRequest(definitions,result);
         translationLanguage(definitions,result);
+        reactiveSubscription(definitions,result);
+        captionLanguages(definitions,result);
         ClassDef aweme=definitions.get("com.ss.android.ugc.aweme.feed.model.Aweme");
         if (aweme!=null) for (Method method:aweme.getMethods()) if (method.getName().equals("getVideo") &&
                 ExtensionDexIndex.signature(method).equals("()Lcom/ss/android/ugc/aweme/feed/model/Video;")) {
@@ -53,6 +57,96 @@ final class ExtensionSemanticContracts {
             if (field) accept(result,"com.ss.android.ugc.aweme.feed.model.Aweme:method.getVideo()Lcom/ss/android/ugc/aweme/feed/model/Video;",key(method));
         }
     }
+    private static void captionLanguages(Map<String,ClassDef> definitions,Properties result) {
+        ClassDef helper=definitions.get(result.getProperty("class.X.08ZO",""));if(helper==null) return;
+        for(boolean target:List.of(true,false)) {
+            List<Method> matches=new ArrayList<>();
+            for(Method method:helper.getMethods()) if((method.getAccessFlags()&8)!=0 &&
+                ExtensionDexIndex.signature(method).equals(target?"()Ljava/lang/String;":"()[Ljava/lang/String;")) {
+                boolean key=false,read=false;
+                for(var instruction:code(method)) if(instruction instanceof ReferenceInstruction r) {
+                    if(r.getReference() instanceof StringReference s && s.getString().equals(target?"key_selected_translation_language":"key_selected_do_not_translate_language_codes")) key=true;
+                    if(r.getReference() instanceof MethodReference call && call.getDefiningClass().equals("Lcom/bytedance/keva/Keva;") &&
+                        call.getName().equals(target?"getString":"getStringArray")) read=true;
+                }
+                if(key&&read) matches.add(method);
+            }
+            if(matches.size()==1) accept(result,target?"X.08ZO:method.LIZLLL()Ljava/lang/String;":"X.08ZO:method.LIZJ()[Ljava/lang/String;",key(matches.get(0)));
+        }
+    }
+    private static void reactiveSubscription(Map<String,ClassDef> definitions,Properties result) {
+        ClassDef rx=definitions.get(result.getProperty("class.X.02tQ",""));if(rx==null) return;
+        List<Method> matches=new ArrayList<>();
+        for(Method method:rx.getMethods()) if((method.getAccessFlags()&8)==0 && method.getParameterTypes().size()==2 &&
+            method.getParameterTypes().get(0).toString().equals(method.getParameterTypes().get(1).toString()) && method.getParameterTypes().get(0).toString().startsWith("LX/") &&
+            method.getReturnType().startsWith("LX/")) {
+            for(var call:calls(method)) if(call.getDefiningClass().equals(rx.getType()) && call.getParameterTypes().size()==4 &&
+                call.getParameterTypes().get(0).toString().equals(method.getParameterTypes().get(0).toString()) && call.getParameterTypes().get(1).toString().equals(method.getParameterTypes().get(0).toString()) &&
+                call.getParameterTypes().get(3).toString().equals(method.getParameterTypes().get(0).toString()) && call.getReturnType().equals(method.getReturnType())) matches.add(method);
+        }
+        if(matches.size()!=1) return;
+        Method method=matches.get(0);String consumer=method.getParameterTypes().get(0).toString(),disposable=method.getReturnType();
+        accept(result,"class.X.02u8",consumer.substring(1,consumer.length()-1).replace('/','.'));
+        accept(result,"class.X.02tV",disposable.substring(1,disposable.length()-1).replace('/','.'));
+        accept(result,"X.02tQ:method.LJJZ(LX/02u8;LX/02u8;)LX/02tV;",key(method));
+    }
+    private static void translationRequest(Map<String,ClassDef> definitions,Properties result) {
+        ClassDef service=definitions.get("com.ss.android.ugc.aweme.translation.service.TranslationServiceImpl");
+        String facade=result.getProperty("class.X.03hV"),rx=result.getProperty("class.X.02tQ");
+        if(service==null || facade==null || rx==null) return;
+        String facadeType="L"+facade.replace('.','/')+";",rxType="L"+rx.replace('.','/')+";";
+        List<Method> targets=new ArrayList<>();
+        for(Method method:service.getMethods()) if(ExtensionDexIndex.signature(method).equals("(Ljava/lang/String;)"+rxType) &&
+            calls(method,"Landroid/os/SystemClock;","uptimeMillis","()J")) {
+            boolean network=false,language=false;
+            for(var call:calls(method)) {
+                if(ExtensionDexIndex.signature(call).equals("(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;I)"+rxType)) network=true;
+                if(call.getDefiningClass().equals(facadeType) && ExtensionDexIndex.signature(call).equals("()Ljava/lang/String;")) language=true;
+            }
+            if(network&&language) targets.add(method);
+        }
+        if(targets.size()!=1) return;
+        Method target=targets.get(0);ClassDef wrapper=definitions.get(facade);if(wrapper==null) return;
+        List<Method> wrappers=new ArrayList<>();
+        for(Method method:wrapper.getMethods()) if(ExtensionDexIndex.signature(method).equals(ExtensionDexIndex.signature(target)) &&
+            calls(method,"Lcom/ss/android/ugc/aweme/translation/service/ITranslationService;",target.getName(),ExtensionDexIndex.signature(target))) wrappers.add(method);
+        if(wrappers.size()==1) accept(result,"X.03hV:method.LJIIJ(Ljava/lang/String;)LX/02tQ;",key(wrappers.get(0)));
+    }
+    /** Follow an independently mapped frame into its actual four-argument renderer. */
+    private static void discoverCaptionRenderer(Map<String,ClassDef> definitions,Properties result) {
+        String name="com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2";
+        ClassDef assem=definitions.get(name);String frame=result.getProperty("class.X.0B14"),state=result.getProperty("class.X.0B17");
+        if(assem==null || frame==null || state==null) return;
+        String frameType="L"+frame.replace('.','/')+";",stateType="L"+state.replace('.','/')+";";
+        String text=result.getProperty("X.0B14:field.LIZ"),status=result.getProperty("X.0B14:field.LIZIZ");
+        if(text==null || status==null) return;
+        Map<String,List<String>> candidates=new HashMap<>();
+        for(Method method:assem.getMethods()) if(ExtensionDexIndex.signature(method).equals("("+frameType+")V")) {
+            Set<String> reads=new HashSet<>();Map<String,String> fields=new HashMap<>();
+            for(var instruction:code(method)) if(instruction.getOpcode()==Opcode.IGET_OBJECT && instruction instanceof ReferenceInstruction r && r.getReference() instanceof FieldReference f) {
+                if(f.getDefiningClass().equals(frameType)) reads.add(f.getName());
+                if(f.getDefiningClass().equals(assem.getType())) fields.put(f.getType(),f.getName());
+            }
+            if(!reads.contains(text) || !reads.contains(status)) continue;
+            for(var call:calls(method)) if(call.getParameterTypes().size()==4 && call.getReturnType().equals("V") &&
+                call.getParameterTypes().get(0).toString().equals("Ljava/lang/String;") && call.getParameterTypes().get(1).toString().equals(stateType) &&
+                call.getParameterTypes().get(2).toString().equals("Ljava/lang/String;") && fields.containsKey(call.getDefiningClass())) {
+                String actual=call.getDefiningClass(),mode=call.getParameterTypes().get(3).toString();
+                if(!mode.startsWith("LX/")) continue;
+                candidates.put(actual+":"+key(call),List.of(actual,mode,key(call),key(method),fields.get(actual)));
+            }
+        }
+        if(candidates.size()!=1) return;
+        var evidence=candidates.values().iterator().next();
+        accept(result,"class.X.0B1g",evidence.get(0).substring(1,evidence.get(0).length()-1).replace('/','.'));
+        accept(result,"class.X.0B18",evidence.get(1).substring(1,evidence.get(1).length()-1).replace('/','.'));
+        accept(result,"X.0B1g:method.LJIIIZ(Ljava/lang/String;LX/0B17;Ljava/lang/String;LX/0B18;)V",evidence.get(2));
+        accept(result,name+":method.bs(LX/0B14;)V",evidence.get(3));
+        accept(result,name+":field.LLLLLILLIL",evidence.get(4));
+        List<Method> models=new ArrayList<>();
+        for(Method method:assem.getMethods()) if(ExtensionDexIndex.signature(method).equals("()Lcom/ss/android/ugc/aweme/autocaption/refactor/CLACaptionViewModelV2;")) models.add(method);
+        if(models.size()==1) accept(result,name+":method.Sr()Lcom/ss/android/ugc/aweme/autocaption/refactor/CLACaptionViewModelV2;",key(models.get(0)));
+    }
     private static void translationLanguage(Map<String,ClassDef> definitions, Properties result) {
         ClassDef service=definitions.get("com.ss.android.ugc.aweme.translation.service.TranslationServiceImpl");
         String facade=result.getProperty("class.X.03hV"),request=result.getProperty("X.03hV:method.LJIIJ(Ljava/lang/String;)LX/02tQ;");
@@ -60,7 +154,7 @@ final class ExtensionSemanticContracts {
         String facadeType="L"+facade.replace('.','/')+";";
         Set<String> targets=new HashSet<>();
         for(Method method:service.getMethods()) if(key(method).equals(request)) {
-            for(var call:calls(method)) if(call.getDefiningClass().equals(facadeType) && ExtensionDexIndex.signature(call).equals("()Ljava/lang/String;"))
+            for(var call:calls(method)) if((call.getDefiningClass().equals(facadeType) || call.getDefiningClass().equals(service.getType())) && ExtensionDexIndex.signature(call).equals("()Ljava/lang/String;"))
                 for(Method target:service.getMethods()) if(key(target).equals(key(call)) &&
                     calls(target,"Landroid/text/TextUtils;","isEmpty","(Ljava/lang/CharSequence;)Z")) {
                     boolean language=false;
@@ -268,5 +362,12 @@ final class ExtensionSemanticContracts {
         accept(result,CELL+":method.X5("+POLL+")V",key(update));
         accept(result,CELL+":field.LLJJJIL",titles.iterator().next());
         accept(result,CELL+":field.LLJJJJJIL",lists.iterator().next());
+        // A lifecycle override may evolve while retaining its verified PowerCell boundary.
+        for(Method method:cell.getMethods()) if(method.getName().equals("unBind") && ExtensionDexIndex.signature(method).equals("()V")) {
+            for(var instruction:code(method)) if(instruction.getOpcode()==Opcode.INVOKE_SUPER && instruction instanceof ReferenceInstruction r &&
+                r.getReference() instanceof MethodReference call && call.getDefiningClass().equals("Lcom/bytedance/ies/powerlist/PowerCell;") &&
+                call.getName().equals("unBind") && ExtensionDexIndex.signature(call).equals("()V"))
+                accept(result,CELL+":method.unBind()V",key(method));
+        }
     }
 }

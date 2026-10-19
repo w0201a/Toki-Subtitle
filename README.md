@@ -2,6 +2,8 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
+Version 2.0.18 Debug adds on-device business-reference analysis and independent translation, subtitle, title and poll paths. If features fail after a TikTok update or downgrade, choose **Detect compatibility again** in Toki’s feature status page, fully close and reopen TikTok, and wait for local detection. No computer or app-data clearing is required. Ambiguous contracts remain unavailable; major host rewrites can still require a module update. An optional capture compatibility switch addresses a normal phone display with black mirroring by allowing capture of TikTok’s main window.
+
 ## Toki Subtitle edition
 
 An MIT-licensed derivative of [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki). Upstream attribution and community links are retained below; download and issue links target this edition.

@@ -31,12 +31,14 @@ internal object DescriptionTranslation {
         val facade = loader.adaptiveClass("X.03hV")
         val service = checkNotNull(facade.adaptiveDeclaredField("LIZIZ").get(null))
         val override = facade.adaptiveDeclaredMethod("LJL", String::class.java)
-        val titleLanguage = loader.adaptiveClass("X.0BAx").adaptiveDeclaredMethod("LIZ", aweme)
+        val titleLanguage = runCatching { loader.adaptiveClass("X.0BAx").adaptiveDeclaredMethod("LIZ", aweme) }.getOrNull()
+        val directTitleLanguage = if (titleLanguage == null) aweme.getMethod("getPhotoTitleLanguageCode") else null
         val gate = loader.adaptiveClass("com.ss.android.ugc.aweme.translation.service.CLATranslatabilityServiceImpl")
         fun enabled() = ConfigClient.getBoolean(VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED)
         fun accepts(value: Any, title: Boolean): Boolean = if (title) {
             val info = photo.invoke(value)
-            info != null && eligible(photoTitle.invoke(info) as? String, titleLanguage.invoke(null, value) as? String)
+            info != null && eligible(photoTitle.invoke(info) as? String,
+                (titleLanguage?.invoke(null, value) ?: directTitleLanguage?.invoke(value)) as? String)
         } else eligible(desc.invoke(value) as? String, descLanguage.invoke(value) as? String)
         fun automatic(value: Any): Boolean =
             (override.invoke(service, aid.invoke(value)) as? Enum<*>)?.name != "OVERRIDE_TO_ORIGINAL"

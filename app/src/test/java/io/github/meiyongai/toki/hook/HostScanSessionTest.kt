@@ -5,6 +5,28 @@ import org.junit.Test
 
 /** 验证扫描缓存提交和用户确认提示的完整顺序。 */
 class HostScanSessionTest {
+    @Test fun extensionProgressReportsRealWorkWithoutReusingCorePercent() {
+        val session = HostScanSession()
+        session.begin(); session.progress(10, 10); session.extensions()
+        session.extensionProgress("relationships", 2, 7)
+        assertEquals(0, session.status.total)
+        assertEquals(2, session.status.extensionCompleted)
+        assertEquals(7, session.status.extensionTotal)
+        assertThrows(IllegalArgumentException::class.java) { session.extensionProgress("members", 8, 7) }
+        session.saving()
+        assertThrows(IllegalStateException::class.java) { session.extensionProgress("members", 0, 0) }
+    }
+    @Test fun partialInstallationDoesNotStayReady() {
+        val session = HostScanSession()
+        session.begin()
+        session.extensions()
+        session.saving()
+        session.ready()
+        session.partial()
+        assertEquals(HostScanPhase.PARTIAL, session.status.phase)
+        session.dismissResult()
+        assertEquals(HostScanPhase.IDLE, session.status.phase)
+    }
     @Test fun completedAdaptationInstallsBeforeShowingReadyAndCannotInstallTwice() {
         val session = HostScanSession()
         session.begin()

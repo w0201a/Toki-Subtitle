@@ -33,7 +33,8 @@ internal object HookStatusCatalog {
         HookFeatureDefinition("LocaleHook", R.string.status_feature_language),
         HookFeatureDefinition("TimeZoneHook", R.string.status_feature_timezone),
         HookFeatureDefinition("GpsHook", R.string.status_feature_gps),
-        HookFeatureDefinition("StatusBarHook", R.string.status_feature_bar)
+        HookFeatureDefinition("StatusBarHook", R.string.status_feature_bar),
+        HookFeatureDefinition("ScreenCaptureHook", R.string.feature_screen_capture)
     )
 }
 
@@ -56,7 +57,8 @@ internal data class HookFeatureReport(
     val appliedRevision: Long? = null,
     val restartRequired: Boolean = false,
 ) {
-    val hasError = !error.isNullOrBlank() || !errorStatus.isNullOrBlank() || state == "注册失败，已撤销"
+    val hasError = !error.isNullOrBlank() || !errorStatus.isNullOrBlank() ||
+        state in setOf("注册失败，已撤销", "部分功能已注册", "子功能均未安装")
 }
 
 /** 正常仅表示已就绪且未报告异常，不据此承诺每次业务效果。 */
@@ -134,3 +136,21 @@ internal data class HookProcessReport(
  */
 internal fun currentHookSession(sessions: List<HookProcessReport>): HookProcessReport? =
     sessions.filter { it.isMain }.maxWithOrNull(compareBy<HookProcessReport> { it.updated }.thenBy { it.process })
+
+/** Local results for each translation path; no raw user content or external diagnostics. */
+internal object TranslationPathCatalog {
+    val paths = linkedMapOf(
+        "SubtitleLanguage" to R.string.status_path_language,
+        "CaptionFallback" to R.string.status_path_tracks,
+        "SubtitleFeature" to R.string.status_path_display,
+        "SubtitleMenu" to R.string.status_path_menu,
+        "DescriptionNativeTranslation" to R.string.status_path_title_native,
+        "DescriptionTranslation" to R.string.status_path_title_display,
+        "CommentPollTranslation" to R.string.status_path_poll,
+    )
+    fun state(report: HookFeatureReport): HookVisualState = when {
+        report.hasError -> HookVisualState.ISSUE
+        report.registered > 0 && report.state == "已注册" -> HookVisualState.NORMAL
+        else -> HookVisualState.PENDING
+    }
+}

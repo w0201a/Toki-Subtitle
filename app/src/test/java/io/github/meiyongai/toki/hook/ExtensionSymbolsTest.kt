@@ -19,7 +19,7 @@ class ExtensionSymbolsTest {
             setProperty("cache.identity", "host")
             setProperty("cache.profile", "profile")
             setProperty("cache.format", ExtensionDexIndex.FORMAT)
-            setProperty("cache.matcher", "relationships-v3")
+            setProperty("cache.matcher", "relationships-v5")
             setProperty("cache.complete", "true")
         }
         assertTrue(ExtensionSymbols.cacheMatches(cache(), "host", "profile"))
@@ -28,6 +28,20 @@ class ExtensionSymbolsTest {
         for (key in listOf("cache.identity", "cache.profile", "cache.format", "cache.matcher", "cache.complete")) {
             assertFalse(ExtensionSymbols.cacheMatches(cache().apply { remove(key) }, "host", "profile"))
         }
+    }
+    @Test fun retryRequestInvalidatesOldResultWithoutChangingCodeIdentity() {
+        val stored = Properties().apply {
+            setProperty("cache.identity", "host")
+            setProperty("cache.profile", "profile")
+            setProperty("cache.format", ExtensionDexIndex.FORMAT)
+            setProperty("cache.matcher", "relationships-v5")
+            setProperty("cache.complete", "true")
+        }
+        assertTrue(ExtensionSymbols.cacheMatches(stored, "host", "profile"))
+        assertFalse(ExtensionSymbols.cacheMatches(stored, "host", "profile", "new-request"))
+        stored.setProperty("cache.retryToken", "new-request")
+        assertTrue(ExtensionSymbols.cacheMatches(stored, "host", "profile", "new-request"))
+        assertFalse(ExtensionSymbols.cacheMatches(stored, "host", "profile", "another-request"))
     }
     @Test fun stableFrameworkReflectionRemainsAvailable() {
         assertEquals(String::class.java, javaClass.classLoader!!.adaptiveClass("java.lang.String"))

@@ -65,7 +65,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
 
     companion object {
         val platform = setOf("SimHook", "LocaleHook", "TimeZoneHook", "GpsHook")
-        val directHost = setOf("StatusBarHook", "VideoDurationAlertHook")
+        val directHost = setOf("StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook")
 
         fun enabled(feature: String, snapshot: ConfigSnapshot): Boolean = when (feature) {
             "ProgressBarHook" -> snapshot.boolean("always_show_progress_bar") || snapshot.boolean("clean_mode_on_play")

@@ -315,4 +315,23 @@
     <string name="video_fit_smart" formatted="false">"Celoten zaslon"</string>
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
+    <string name="host_scan_title_partial">"Some features need adaptation"</string>
+    <string name="host_scan_partial_hint">"Available features are active. Unmatched features are isolated; check diagnostics for details."</string>
+    <string name="feature_screen_capture">"Allow screen mirroring and screenshots"</string>
+    <string name="feature_screen_capture_summary">"Allow capture of the TikTok main window to prevent black mirroring. Reopen TikTok after enabling. Screenshots may include private content."</string>
+    <string name="adaptation_retry">"Detect compatibility again"</string>
+    <string name="adaptation_retry_hint">"If features fail after a TikTok update or downgrade, detect again on this phone."</string>
+    <string name="adaptation_retry_saved">"Request saved. Fully close and reopen TikTok, then wait for detection on your phone."</string>
+    <string name="status_path_language">"Subtitle target language"</string>
+    <string name="status_path_tracks">"Subtitle track recovery"</string>
+    <string name="status_path_display">"Subtitle display and clear mode"</string>
+    <string name="status_path_menu">"Subtitle settings menu"</string>
+    <string name="status_path_title_native">"Native title translation"</string>
+    <string name="status_path_title_display">"Title translation display"</string>
+    <string name="status_path_poll">"Comment poll translation"</string>
+    <string name="host_scan_stage_native">"Finding candidate classes"</string>
+    <string name="host_scan_stage_structure">"Analyzing class and method structures"</string>
+    <string name="host_scan_stage_relationships">"Analyzing business call relationships"</string>
+    <string name="host_scan_stage_members">"Verifying translation and display contracts"</string>
+    <string name="host_scan_dex_progress">"Processed %1$d / %2$d DEX files in this phase"</string>
 </resources>

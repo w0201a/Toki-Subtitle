@@ -182,15 +182,17 @@ internal class NativeSubtitleTranslator(
             val facade = loader.adaptiveClass("X.03hV")
             val service = facade.adaptiveDeclaredField("LIZIZ").get(null)
             val override = facade.adaptiveDeclaredMethod("LJL", String::class.java)
-            val holder = loader.adaptiveClass("X.08aF").adaptiveDeclaredMethod("LIZ")
-            val automatic = loader.adaptiveClass("com.ss.android.ugc.aweme.translation.service.ITranslationKevaService")
-                .adaptiveMethod("LIZ")
+            val automaticPreference = runCatching {
+                loader.adaptiveClass("X.08aF").adaptiveDeclaredMethod("LIZ") to
+                    loader.adaptiveClass("com.ss.android.ugc.aweme.translation.service.ITranslationKevaService").adaptiveMethod("LIZ")
+            }.getOrNull()
+            if (automaticPreference == null) HookRuntime.event("NativeSubtitleTranslation", "optional automatic preference unavailable; module switch and per-video override remain active")
             return NativeSubtitleTranslator(enabled = { videoId ->
                 ConfigClient.getBoolean("video_translate_enabled") &&
                     when ((override.invoke(service, videoId) as? Enum<*>)?.name) {
                         "OVERRIDE_TO_ORIGINAL" -> false
                         "OVERRIDE_TO_TRANSLATED" -> true
-                        else -> automatic.invoke(holder.invoke(null)) == true
+                        else -> automaticPreference?.let { (holder, automatic) -> automatic.invoke(holder.invoke(null)) == true } ?: true
                     }
             }, translate = transport(loader), report = { HookRuntime.event("NativeSubtitleTranslation", it) })
         }

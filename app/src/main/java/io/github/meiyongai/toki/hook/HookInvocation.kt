@@ -3,6 +3,9 @@ package io.github.meiyongai.toki.subtitle.hook
 /** 单次同步拦截的异常归属记录；仅以实际调用边界和异常对象身份判断来源。 */
 internal class HookInvocation {
     private var downstreamErrors: MutableSet<Throwable>? = null
+    private var attempted = false
+    private var completed = false
+    private var result: Any? = null
 
     /**
      * 执行后续拦截链或宿主方法，记录其抛出的原始异常后立即原样传播。
@@ -11,7 +14,9 @@ internal class HookInvocation {
      * Callers: ObservedChain 的全部 proceed 重载、HookInvocationTest。
      */
     fun proceed(call: () -> Any?): Any? = try {
-        call()
+        attempted = true
+        completed = false
+        call().also { result = it; completed = true }
     } catch (error: Throwable) {
         val errors = downstreamErrors ?: java.util.Collections.newSetFromMap(
             java.util.IdentityHashMap<Throwable, Boolean>()
@@ -27,4 +32,11 @@ internal class HookInvocation {
      * Callers: TrackedHook.intercept、HookInvocationTest。
      */
     fun fromDownstream(error: Throwable): Boolean = downstreamErrors?.contains(error) == true
+
+    /** Recover module failures without executing a host method twice or hiding a host error. */
+    fun recover(error: Throwable, original: () -> Any?): Any? = when {
+        completed -> result
+        attempted -> throw error
+        else -> proceed(original)
+    }
 }

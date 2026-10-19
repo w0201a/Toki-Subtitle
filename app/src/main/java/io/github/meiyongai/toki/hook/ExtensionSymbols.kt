@@ -7,7 +7,7 @@ import java.util.Properties
 
 /** Independently cached extension contracts. Unknown versions require unique structural matches. */
 internal object ExtensionSymbols {
-    private const val MATCHER_REVISION = "relationships-v3"
+    private const val MATCHER_REVISION = "relationships-v5"
     private val reference: Properties by lazy {
         Properties().apply { checkNotNull(ExtensionSymbols::class.java.getResourceAsStream("/toki-extension-profile.properties")).use(::load) }
     }
@@ -27,31 +27,53 @@ internal object ExtensionSymbols {
         resolved = value
     }
     private fun cache(directory: File) = File(directory, "subtitle-extension-symbols.properties")
-    fun load(identity: String, directory: File): Boolean {
+    fun load(identity: String, directory: File, retryToken: String = ""): Boolean {
         publish(Properties())
-        if (identity in known) {
+        if (identity in known && retryToken.isEmpty()) {
             publish(ExtensionDexIndex.identity(reference))
             HookRuntime.event("ExtensionSymbols", "verified reference build; extension contracts ready")
             return true
         }
         val stored = HostSymbolCache.read(cache(directory))
-        if (!cacheMatches(stored, identity, referenceHash)) return false
+        if (!cacheMatches(stored, identity, referenceHash, retryToken)) return false
         publish(stored)
         report(stored, "cached")
         return true
     }
-    internal fun cacheMatches(stored: Properties, identity: String, profile: String): Boolean =
+    internal fun cacheMatches(stored: Properties, identity: String, profile: String, retryToken: String = ""): Boolean =
+        stored.getProperty("cache.retryToken", "") == retryToken &&
         stored.getProperty("cache.identity") == identity && stored.getProperty("cache.profile") == profile &&
             stored.getProperty("cache.format") == ExtensionDexIndex.FORMAT &&
             stored.getProperty("cache.matcher") == MATCHER_REVISION && stored.getProperty("cache.complete") == "true"
 
     /** Called only on the existing background adaptation worker; never scans on a UI thread. */
-    fun scan(paths: List<String>, identity: String, directory: File) {
-        val result = try { ExtensionDexIndex.scan(paths, reference, HostNativeIndex.extensionCandidates(paths, reference)) } catch (error: Exception) {
+    fun scan(paths: List<String>, identity: String, directory: File, retryToken: String = "") {
+        val session = HostScanController.session
+        val showProgress = session.status.phase == HostScanPhase.EXTENSIONS
+        if (showProgress) session.extensionProgress("native", 0, 0)
+        // The native prefilter is an optimization, not a dependency of local analysis.
+        val candidates = try { HostNativeIndex.extensionCandidates(paths, reference) } catch (error: Exception) {
+            HookRuntime.event("ExtensionSymbols", "native prefilter unavailable=${error.javaClass.simpleName}; using independent local DEX analysis")
+            null
+        } catch (error: OutOfMemoryError) {
+            HookRuntime.event("ExtensionSymbols", "native prefilter exhausted its memory budget; using local DEX analysis")
+            null
+        } catch (error: LinkageError) {
+            HookRuntime.event("ExtensionSymbols", "native prefilter unavailable=${error.javaClass.simpleName}; using independent local DEX analysis")
+            null
+        }
+        val result = try { ExtensionDexIndex.scan(paths, reference, candidates) { stage, completed, total ->
+            if (showProgress) session.extensionProgress(stage, completed, total)
+        } } catch (error: Exception) {
             // A failed optional scanner must not prevent the core feature cache from being published.
             Properties().apply { setProperty("error.scanner", error.javaClass.simpleName) }
+        } catch (error: OutOfMemoryError) {
+            // A bounded scanner allocation failure must terminate the scan UI instead
+            // of leaving it forever on EXTENSIONS. Do not catch unrelated VM errors.
+            Properties().apply { setProperty("error.scanner", "memory-budget-exceeded") }
         }
         check(HostDexIndex.identity(paths) == identity) { "Host changed during extension discovery" }
+        result.setProperty("cache.retryToken", retryToken)
         result.setProperty("cache.identity", identity)
         result.setProperty("cache.profile", referenceHash)
         result.setProperty("cache.format", ExtensionDexIndex.FORMAT)
