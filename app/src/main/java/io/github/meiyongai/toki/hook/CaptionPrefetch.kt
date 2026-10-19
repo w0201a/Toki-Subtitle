@@ -11,9 +11,9 @@ import java.util.concurrent.TimeUnit
 /** 已选字幕文件的只读预取；正文只在内存保存，切换视频使迟到结果失效。 */
 internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator) : AutoCloseable {
     private val main = Handler(Looper.getMainLooper())
-    // 当前文件加后两条文件的有界队列；切换视频清除尚未开始的旧任务。
-    private val worker = ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
-        ArrayBlockingQueue(3), ThreadPoolExecutor.DiscardOldestPolicy())
+    // 当前文件加后四条文件的有界队列；切换视频清除尚未开始的旧任务。
+    private val worker = ThreadPoolExecutor(2, 2, 0, TimeUnit.MILLISECONDS,
+        ArrayBlockingQueue(5), ThreadPoolExecutor.DiscardOldestPolicy())
     private var video = ""
     private var url = ""
     @Volatile private var token = 0L
@@ -23,14 +23,15 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
     private var current: () -> Boolean = { false }
     private var index = -1
     private val timelines = object : LinkedHashMap<String, List<CaptionTimeline.Cue>>(4, .75f, true) {
-        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, List<CaptionTimeline.Cue>>?) = size > 4
+        override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, List<CaptionTimeline.Cue>>?) = size > 6
     }
     private var upcoming = emptyList<FeedCaptionLookAhead.Track>()
     private var checkedAheadAt = 0L
     private val loading = mutableSetOf<String>()
     private val attempted = mutableSetOf<String>()
     @Volatile private var closed = false
-    @Volatile private var connection: HttpURLConnection? = null
+    private val connections = java.util.concurrent.ConcurrentHashMap.newKeySet<HttpURLConnection>()
+    private fun disconnectAll() { connections.toList().forEach { it.disconnect() }; connections.clear() }
 
     fun update(id: String, text: String, valid: () -> Boolean) {
         if (closed) return
@@ -40,7 +41,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         if (video != id || url != trackUrl) {
             video = id; url = trackUrl; cues = emptyList(); normalized = emptyList(); index = -1
             val generation = ++token
-            connection?.disconnect()
+            disconnectAll()
             worker.queue.clear()
             loading.clear()
             attempted.clear()
@@ -75,7 +76,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
     }
     private fun warmUpcoming() {
         if (!current()) return
-        upcoming = try { translator.upcomingTracks(video).take(2) } catch (_: Exception) { emptyList() }
+        upcoming = try { translator.upcomingTracks(video).take(4) } catch (_: Exception) { emptyList() }
         val generation = token
         upcoming.forEach { track ->
             if (track.url in timelines || !attempted.add(track.url) || !loading.add(track.url)) return@forEach
@@ -95,16 +96,15 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         queue()
     }
     private fun queue() {
-        if (cues.isEmpty() || !current()) return
+        if (!current()) return
         val text = CaptionTimeline.normalize(latestText)
-        // 匹配当前帧后只预取后续六句；重复台词优先匹配当前位置附近。
         val found = (maxOf(0, index)..minOf(cues.lastIndex, index + 12)).firstOrNull { normalized[it] == text }
             ?: normalized.indexOf(text).takeIf { it >= 0 }
-            ?: return
-        index = found
+        if (found != null) index = found
         val generation = token
-        val futureTexts = upcoming.flatMap { timelines[it.url].orEmpty().take(3) }.map { it.text }
-        translator.prefetch(cues.subList(found, minOf(cues.size, found + 7)).map { it.text } + futureTexts) {
+        val currentTexts = if (found == null) emptyList() else cues.subList(found, minOf(cues.size, found + 7)).map { it.text }
+        val planned = plan(currentTexts, upcoming.map { timelines[it.url].orEmpty().map { cue -> cue.text } })
+        translator.prefetch(planned) {
             !closed && token == generation && current() && translator.isEnabled(video)
         }
     }
@@ -117,7 +117,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             val host = address.host.lowercase()
             require(domains.any { host == it || host.endsWith(".$it") })
             val request = address.openConnection() as HttpURLConnection
-            connection = request
+            connections.add(request)
             request.connectTimeout = 5000; request.readTimeout = 5000; request.instanceFollowRedirects = false
             try {
                 val code = request.responseCode
@@ -140,12 +140,12 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
                     require(bytes.size <= 1_048_576)
                     return bytes.toString(Charsets.UTF_8)
                 }
-            } finally { request.disconnect(); connection = null }
+            } finally { request.disconnect(); connections.remove(request) }
         }
         error("redirect limit")
     }
     fun cancel() {
-        token++; connection?.disconnect(); worker.queue.clear()
+        token++; disconnectAll(); worker.queue.clear()
         video = ""; url = ""; latestText = ""; index = -1
         cues = emptyList(); normalized = emptyList(); current = { false }
         upcoming = emptyList(); loading.clear(); attempted.clear(); checkedAheadAt = 0L
@@ -153,6 +153,11 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
     override fun close() { closed = true; cancel(); worker.shutdown(); timelines.clear() }
 
     companion object {
+        internal fun plan(current: List<String>, upcoming: List<List<String>>): List<String> {
+            val bounded = upcoming.take(4)
+            val openings = (0 until 6).flatMap { position -> bounded.mapNotNull { it.getOrNull(position) } }
+            return (current.take(3) + openings + current.drop(3).take(4)).distinct().take(32)
+        }
         private val domains = setOf("tiktokcdn.com", "tiktokcdn-us.com", "tiktokcdn-eu.com", "tiktokv.com",
             "byteoversea.com", "ibytedtos.com", "muscdn.com", "tiktok.com", "ibyteimg.com")
         private val tracks = LinkedHashMap<String, String>()

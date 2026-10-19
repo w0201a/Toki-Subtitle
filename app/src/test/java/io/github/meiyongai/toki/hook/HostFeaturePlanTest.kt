@@ -29,7 +29,7 @@ class HostFeaturePlanTest {
     @Test fun captionMenuRequiresAclAndEnableGate() {
         val requested = config("video_translate_enabled" to true)
         val plan = HostFeaturePlan(requested)
-        assertEquals(setOf(HostSymbol.MENU_CAPTION_ACL, HostSymbol.CAPTION_CONSUMER, HostSymbol.TRANSLATION_REVERSE), plan.symbols)
+        assertEquals(setOf(HostSymbol.MENU_CAPTION_ACL, HostSymbol.CAPTION_CONSUMER, HostSymbol.TRANSLATION_REVERSE, HostSymbol.RECOMMEND_MODEL), plan.symbols)
         plan.reject("VideoTranslateHook")
         assertFalse(plan.apply(requested).boolean("video_translate_enabled"))
         assertTrue(HostFeaturePlan(config("video_translate_enabled" to false)).symbols.isEmpty())

@@ -167,13 +167,25 @@ class NativeSubtitleTranslatorTest {
         advance(0)
         val delivered = mutableListOf<String>()
         host.translator.request("current cue", { true }, delivered::add)
-        advance(249)
-        assertEquals(1, host.requests.size)
-        advance(1)
+        advance(0)
         assertEquals(listOf("future cue", "current cue"), host.requests.map { it.first })
         host.requests[1].second("及时译文")
         advance(0)
         assertEquals(listOf("及时译文"), delivered)
+        host.translator.close()
+    }
+
+    @Test fun backgroundRequestDoesNotReserveForegroundDispatchTime() {
+        val host = Host()
+        host.translator.prefetch(listOf("future")) { true }
+        advance(0)
+        host.translator.request("visible", { true }) {}
+        advance(0)
+        assertEquals(listOf("future", "visible"), host.requests.map { it.first })
+        assertEquals(0, host.disposed)
+        host.translator.request("next", { true }) {}
+        advance(249)
+        assertEquals(2, host.requests.size)
         host.translator.close()
     }
 
@@ -241,7 +253,7 @@ class NativeSubtitleTranslatorTest {
         host.translator.request("current cue", { visible }, delivered::add)
         host.requests[0].second("预读第一句")
         advance(250)
-        assertEquals(listOf("ahead one", "current cue"), host.requests.map { it.first })
+        assertEquals(listOf("ahead one", "current cue"), host.requests.take(2).map { it.first })
         host.requests[1].second("当前句")
         advance(500)
         assertEquals(listOf("当前句"), delivered)
@@ -285,6 +297,22 @@ class NativeSubtitleTranslatorTest {
         assertEquals(listOf("slow current", "future one", "future two"), host.requests.map { it.first })
         host.translator.cancel()
         assertEquals(3, host.disposed)
+        host.translator.close()
+    }
+
+    @Test fun severalPreparedVideosSwitchUsingCompletedCacheWithoutNewRequests() {
+        val host = Host()
+        val openings = listOf("video one opening", "video two opening", "video three opening", "video four opening")
+        host.translator.prefetch(openings) { true }
+        advance(0)
+        openings.forEachIndexed { index, _ ->
+            host.requests[index].second("译文$index")
+            advance(250)
+        }
+        val delivered = mutableListOf<String>()
+        openings.forEach { host.translator.request(it, { true }, delivered::add) }
+        assertEquals(listOf("译文0", "译文1", "译文2", "译文3"), delivered)
+        assertEquals(4, host.requests.size)
         host.translator.close()
     }
 

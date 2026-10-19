@@ -93,7 +93,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
             "FeedFilterHook" to setOf(HostSymbol.COLD_FEED, HostSymbol.PRELOADED_FEED, HostSymbol.OFFLINE_RECOVERY,
                 HostSymbol.FEED_ADAPTER, HostSymbol.RECOMMEND_ADAPTER, HostSymbol.RECOMMEND_MODEL),
             "CommentTranslateHook" to setOf(HostSymbol.COMMENT_TRANSLATION),
-            "VideoTranslateHook" to setOf(HostSymbol.MENU_CAPTION_ACL, HostSymbol.CAPTION_CONSUMER, HostSymbol.TRANSLATION_REVERSE),
+            "VideoTranslateHook" to setOf(HostSymbol.MENU_CAPTION_ACL, HostSymbol.CAPTION_CONSUMER, HostSymbol.TRANSLATION_REVERSE, HostSymbol.RECOMMEND_MODEL),
             "BackgroundAudioHook" to setOf(HostSymbol.BACKGROUND_AUDIO),
             "CommentCopyHook" to setOf(HostSymbol.COMMENT_COPY),
             "AuthorLocationHook" to setOf(HostSymbol.AUTHOR_LOCATION),

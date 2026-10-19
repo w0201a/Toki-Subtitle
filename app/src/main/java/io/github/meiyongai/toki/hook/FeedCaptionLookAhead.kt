@@ -4,12 +4,12 @@ import io.github.libxposed.api.XposedModule
 import java.lang.ref.WeakReference
 import java.lang.reflect.Modifier
 
-/** 只读推荐列表：按当前视频在实际列表中的位置读取后两条，不按到达顺序猜测。 */
+/** 只读推荐列表：按当前视频在实际列表中的位置读取后四条，不按到达顺序猜测。 */
 internal class FeedCaptionLookAhead(loader: ClassLoader) {
     companion object {
-        internal fun <T> following(items: List<T>, current: (T) -> Boolean): List<T> {
+        internal fun <T> following(items: List<T>, count: Int = 2, current: (T) -> Boolean): List<T> {
             val index = items.indexOfFirst(current)
-            return if (index < 0) emptyList() else items.drop(index + 1).take(2)
+            return if (index < 0) emptyList() else items.drop(index + 1).take(count.coerceIn(0, 4))
         }
     }
     data class Track(val video: String, val url: String)
@@ -52,8 +52,8 @@ internal class FeedCaptionLookAhead(loader: ClassLoader) {
             val list = (getItems.invoke(instance) as? List<*>)?.toList() ?: continue
             val index = list.indexOfFirst { it != null && aweme.isInstance(it) && aid.invoke(it) == current }
             if (index < 0) continue
-            // 没有字幕的下一条仍计入两条预算，避免越过它预取更远的视频。
-            return following(list) { it != null && aweme.isInstance(it) && aid.invoke(it) == current }.mapNotNull { entry ->
+            // 没有字幕的下一条仍计入四条预算，避免越过它预取更远的视频。
+            return following(list, 4) { it != null && aweme.isInstance(it) && aid.invoke(it) == current }.mapNotNull { entry ->
                 if (entry == null || !aweme.isInstance(entry)) return@mapNotNull null
                 val id = aid.invoke(entry) as? String ?: return@mapNotNull null
                 val data = video.invoke(entry)?.let { caption.invoke(it) } ?: return@mapNotNull null

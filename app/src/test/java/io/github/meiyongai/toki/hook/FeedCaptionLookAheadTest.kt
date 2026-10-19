@@ -12,6 +12,11 @@ class FeedCaptionLookAheadTest {
         assertTrue(FeedCaptionLookAhead.following(items) { it == "missing" }.isEmpty())
     }
 
+    @Test fun rapidSwipingWindowUsesOnlyFourRealFollowingEntries() {
+        val items = listOf("current", "next1", "no-caption", "next3", "next4", "too-far")
+        assertEquals(listOf("next1", "no-caption", "next3", "next4"), FeedCaptionLookAhead.following(items, 4) { it == "current" })
+        assertTrue(FeedCaptionLookAhead.following(items, 4) { it == "missing" }.isEmpty())
+    }
     @Test fun reorderedAndFilteredFeedUsesActualPositions() {
         assertEquals(listOf("b", "a"), FeedCaptionLookAhead.following(listOf("current", "b", "a", "c")) { it == "current" })
         assertEquals(listOf("a", "c"), FeedCaptionLookAhead.following(listOf("current", "a", "c")) { it == "current" })

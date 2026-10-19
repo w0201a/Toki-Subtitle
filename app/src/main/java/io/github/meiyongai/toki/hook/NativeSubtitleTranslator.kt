@@ -7,7 +7,7 @@ import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import java.lang.reflect.Proxy
 import java.util.Locale
 
-/** 当前句与预读各一条请求通道，128 条内存缓存；主线程持有状态，不操作播放器。 */
+/** 当前句与预读各一条请求通道，256 条内存缓存；主线程持有状态，不操作播放器。 */
 internal class NativeSubtitleTranslator(
     private val enabled: (String) -> Boolean,
     private val translate: (String, (String?) -> Unit) -> AutoCloseable,
@@ -23,7 +23,7 @@ internal class NativeSubtitleTranslator(
         var timeout: Runnable? = null
     }
     private val main = Handler(Looper.getMainLooper())
-    private val cache = LinkedHashMap<String, String>(128, .75f, true)
+    private val cache = LinkedHashMap<String, String>(256, .75f, true)
     private var pending: Job? = null
     private var active: Job? = null
     private var background: Job? = null
@@ -31,6 +31,7 @@ internal class NativeSubtitleTranslator(
     private val trackPrefetch = CaptionPrefetch(this)
     var upcomingTracks: (String) -> List<FeedCaptionLookAhead.Track> = { emptyList() }
     private var nextRequestAt = 0L
+    private var nextForegroundAt = 0L
     private var prefetchBackoffAt = 0L
     private var failures = 0
     private var closed = false
@@ -69,7 +70,7 @@ internal class NativeSubtitleTranslator(
         ahead.clear()
         texts.asSequence().filter { it.length in 1..1000 && it.any(Char::isLetter) }
             .map { Job(it, current, {}, foreground = false) }.filter { it.key !in cache && it.key != active?.key && it.key != background?.key }
-            .distinctBy { it.key }.take(13).forEach { ahead += it }
+            .distinctBy { it.key }.take(32).forEach { ahead += it }
         main.removeCallbacks(pump)
         main.post(pump)
     }
@@ -91,7 +92,10 @@ internal class NativeSubtitleTranslator(
             main.post(pump)
             return
         }
-        val wait = maxOf(nextRequestAt, if (foreground) job.retryAt else prefetchBackoffAt) - SystemClock.uptimeMillis()
+        // Prefetch pacing must not reserve the foreground lane. Foreground
+        // requests keep their own 250ms bound, while prefetch yields to both.
+        val wait = maxOf(if (foreground) nextForegroundAt else nextRequestAt,
+            if (foreground) job.retryAt else prefetchBackoffAt) - SystemClock.uptimeMillis()
         if (wait > 0) {
             if (!foreground) ahead.addFirst(job)
             main.postDelayed(pump, wait)
@@ -100,6 +104,7 @@ internal class NativeSubtitleTranslator(
         if (foreground) { pending = null; active = job } else background = job
         job.startedAt = SystemClock.uptimeMillis()
         nextRequestAt = job.startedAt + 250
+        if (foreground) nextForegroundAt = nextRequestAt
         job.timeout = Runnable { finish(job, null, "timeout") }.also { main.postDelayed(it, 6000) }
         report("request lane=${if (foreground) "current" else "prefetch"} chars=${job.text.length}")
         try {
@@ -123,7 +128,7 @@ internal class NativeSubtitleTranslator(
         if (translated != null) {
             failures = 0
             cache[job.key] = translated
-            while (cache.size > 128) cache.remove(cache.keys.first())
+            while (cache.size > 256) cache.remove(cache.keys.first())
             val current = job.current()
             report("success chars=${translated.length} current=$current elapsedMs=${SystemClock.uptimeMillis() - job.startedAt}")
             if (current) job.deliver(translated)
@@ -169,7 +174,7 @@ internal class NativeSubtitleTranslator(
 
     companion object {
         // 来自播放器实际选择结果，仅用于避免重复翻译已选中的中文轨。不保留字幕正文。
-        private val trackLanguages = object : LinkedHashMap<String, String>(128, .75f, true) {
+        private val trackLanguages = object : LinkedHashMap<String, String>(256, .75f, true) {
             override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, String>?) = size > 128
         }
         @Synchronized fun noteTrack(videoId: String, language: String?) {
