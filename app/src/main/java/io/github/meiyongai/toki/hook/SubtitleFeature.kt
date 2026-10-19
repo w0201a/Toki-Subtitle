@@ -9,6 +9,7 @@ import java.util.WeakHashMap
 /** 使用宿主字幕状态与内容；自定义显示层不再受原字幕容器约束。 */
 internal object SubtitleFeature {
     private val identities = setOf(
+        "b3ba776d1e42021c278da5567f0d3666d24efab5ace46bf1a406f6c4e935b796",
         "0259ca5f53357042b72fe6502ca22875aa3035506bfc458fb645146abb19dc16",
         "a104c3b28e2f4ee94292a0dcc464ff114e63f430e760bfd093c434cc6298a129")
     private fun translating() = ConfigClient.getBoolean("video_translate_enabled") ||
@@ -16,21 +17,21 @@ internal object SubtitleFeature {
 
     fun install(module: XposedModule, loader: ClassLoader, owner: String) {
         check(identities.any(HostSymbols::matchesCodeIdentity)) { "字幕扩展尚未适配此宿主代码集合" }
-        val language = loader.loadClass("X.08ZO")
-        val target = language.getDeclaredMethod("LIZLLL")
+        val language = loader.adaptiveClass("X.08ZO")
+        val target = language.adaptiveDeclaredMethod("LIZLLL")
         check(target.returnType == String::class.java)
         module.trackHook(owner, target).intercept { chain ->
             val original = chain.proceed()
             if (translating()) "zh-Hans" else original
         }
-        val excluded = language.getDeclaredMethod("LIZJ")
+        val excluded = language.adaptiveDeclaredMethod("LIZJ")
         check(excluded.returnType == Array<String>::class.java)
         module.trackHook(owner, excluded).intercept { chain ->
             val original = chain.proceed() as? Array<*>
             if (translating()) original?.filterIsInstance<String>()?.let(SubtitlePolicy::includeEnglish) else original
         }
         val translator = try {
-            val serviceTarget = loader.loadClass("X.03hV").getDeclaredMethod("LLILLIZIL")
+            val serviceTarget = loader.adaptiveClass("X.03hV").adaptiveDeclaredMethod("LLILLIZIL")
             check(serviceTarget.returnType == String::class.java)
             val connected = NativeSubtitleTranslator.connect(loader)
             module.trackHook(owner, serviceTarget).intercept { chain ->
@@ -46,7 +47,7 @@ internal object SubtitleFeature {
             HookRuntime.event("NativeSubtitleTranslation", "unavailable contract=${error.javaClass.simpleName}; original retained")
             null
         }
-        val renderer = loader.loadClass("X.0B1g")
+        val renderer = loader.adaptiveClass("X.0B1g")
         if (translator != null) try {
             val upcoming = FeedCaptionLookAhead(loader)
             upcoming.install(module, owner)
@@ -54,20 +55,20 @@ internal object SubtitleFeature {
         } catch (error: Exception) {
             HookRuntime.event("CaptionPrefetch", "next-video contract unavailable=${error.javaClass.simpleName}")
         }
-        val rootField = renderer.getDeclaredField("LIZJ").apply { isAccessible = true }
-        val videoField = renderer.getDeclaredField("LJI").apply { isAccessible = true }
-        val display = renderer.getDeclaredMethod("LJIIIZ", String::class.java, loader.loadClass("X.0B17"),
-            String::class.java, loader.loadClass("X.0B18"))
+        val rootField = renderer.adaptiveDeclaredField("LIZJ").apply { isAccessible = true }
+        val videoField = renderer.adaptiveDeclaredField("LJI").apply { isAccessible = true }
+        val display = renderer.adaptiveDeclaredMethod("LJIIIZ", String::class.java, loader.adaptiveClass("X.0B17"),
+            String::class.java, loader.adaptiveClass("X.0B18"))
         val bindings = WeakHashMap<View, WeakReference<SubtitleOverlay>>()
         try { SubtitleMenu.install(module, loader, owner) }
         catch (error: Exception) { HookRuntime.event("SubtitleMenu", "unavailable=${error.javaClass.simpleName}") }
         val gestures = WeakHashMap<android.app.Activity, SubtitleGesture>()
-        val activity = loader.loadClass("com.ss.android.ugc.aweme.splash.SplashActivity")
-        module.trackHook(owner, android.app.Activity::class.java.getDeclaredMethod("onPause")).intercept { chain ->
+        val activity = loader.adaptiveClass("com.ss.android.ugc.aweme.splash.SplashActivity")
+        module.trackHook(owner, android.app.Activity::class.java.adaptiveDeclaredMethod("onPause")).intercept { chain ->
             gestures.remove(chain.thisObject)?.close()
             chain.proceed()
         }
-        module.trackHook(owner, activity.getMethod("dispatchTouchEvent", android.view.MotionEvent::class.java)).intercept { chain ->
+        module.trackHook(owner, activity.adaptiveMethod("dispatchTouchEvent", android.view.MotionEvent::class.java)).intercept { chain ->
             val screen = chain.thisObject as android.app.Activity
             val event = chain.args[0] as android.view.MotionEvent
             val gesture = gestures.getOrPut(screen) { SubtitleGesture(screen) }
@@ -78,15 +79,15 @@ internal object SubtitleFeature {
         var unknownRootReported = false
         // 原生清屏期间 bs 会因 onBlockUIUpdate 提前返回，渲染器收不到新帧。
         // 直接旁听 VM 已送达的字幕帧，不解除宿主的全局阻塞或改写播放器生命周期。
-        val captionAssem = loader.loadClass("com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2")
-        val captionFrame = loader.loadClass("X.0B14")
-        val rendererField = captionAssem.getDeclaredField("LLLLLILLIL").apply { isAccessible = true }
-        val frameText = captionFrame.getDeclaredField("LIZ").apply { isAccessible = true }
-        val frameState = captionFrame.getDeclaredField("LIZIZ").apply { isAccessible = true }
-        val viewModel = captionAssem.getDeclaredMethod("Sr")
-        val videoKey = loader.loadClass("X.0B1s").getDeclaredMethod("LIZ", loader.loadClass("X.08vj"))
+        val captionAssem = loader.adaptiveClass("com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2")
+        val captionFrame = loader.adaptiveClass("X.0B14")
+        val rendererField = captionAssem.adaptiveDeclaredField("LLLLLILLIL").apply { isAccessible = true }
+        val frameText = captionFrame.adaptiveDeclaredField("LIZ").apply { isAccessible = true }
+        val frameState = captionFrame.adaptiveDeclaredField("LIZIZ").apply { isAccessible = true }
+        val viewModel = captionAssem.adaptiveDeclaredMethod("Sr")
+        val videoKey = loader.adaptiveClass("X.0B1s").adaptiveDeclaredMethod("LIZ", loader.adaptiveClass("X.08vj"))
         check(videoKey.parameterTypes.single().isAssignableFrom(viewModel.returnType))
-        module.trackHook(owner, captionAssem.getDeclaredMethod("bs", captionFrame)).intercept { chain ->
+        module.trackHook(owner, captionAssem.adaptiveDeclaredMethod("bs", captionFrame)).intercept { chain ->
             val instance = checkNotNull(chain.thisObject)
             val previousRoot = rendererField.get(instance)?.let { rootField.get(it) as View }
             val previousBinding = previousRoot?.let { bindings[it]?.get() }

@@ -2,6 +2,8 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
+Version **2.0.26** is based on the **v2.0.15** release and adds an exact-code compatibility profile for **TikTok 47.4.3 (2024704030)**. It retains the baseline feature implementations instead of merging the later automatic adaptation rewrite. Static API verification and build tests do not replace on-device rendering and behavior validation. Different APK/split builds with the same displayed version may have different code identities.
+
 ## Toki Subtitle edition
 
 An MIT-licensed derivative of [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki). The upstream introduction and community links are retained below.

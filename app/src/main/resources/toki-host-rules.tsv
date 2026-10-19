@@ -9,8 +9,6 @@
 #               混淆类型归一化为 L_obfuscated_；成员名与完整签名仍严格校验。
 # 不包含来源、渠道或版本选择字段。注释与空行不参与匹配。
 COMMENT_TRANSLATION	4f5fe783e333373c0e665d7a069fbde9852e805d95546667d9b05d372fe27739	b3abb0127cf6d87423ace22fe464b9ca695e7853a41203d96a589f111006ec12	e4a8f52875cda89e4c282e0fdb2d95f4e052e95523179ecb5e2fc3befa379192	-
-MUTE_INFO	1d53a090c21d6e25b20b7242cff34851c5b4d5f9fd47249a25d98984f27ece51	9b5abeb4c37f71707458be3866a4f8ea21cb21199ab1d1dd8c06951a953f2470	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855	copyright=getIsCopyrightViolation()Z
-MUTE_INFO	c94bbdf4a08ed6e31dd22b751a5e0eb3a359caededd8069601af0142c9d30cfc	cc93af8eac4b301c87dcf37910b97da6727df0bfbce7c20b16827bb8c2a0c78c	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855	copyright=isCopyrightViolation()Z
 DOWNLOAD_SOURCE	method-v1	(Lcom/ss/android/ugc/aweme/feed/model/Aweme;Z)V	string:tag_no_water|call:Lcom/ss/android/ugc/aweme/feed/model/Aweme;->getVideo()Lcom/ss/android/ugc/aweme/feed/model/Video;|call:Lcom/ss/android/ugc/aweme/feed/model/Video;->getDownloadNoWatermarkAddr()Lcom/ss/android/ugc/aweme/base/model/UrlModel;|call:Lcom/ss/android/ugc/aweme/feed/model/Video;->getPlayAddrH264()Lcom/ss/android/ugc/aweme/feed/model/VideoUrlModel;|call:Lcom/ss/android/ugc/aweme/base/model/UrlModel;->getUri()Ljava/lang/String;|write:Lcom/ss/android/ugc/aweme/base/model/UrlModel;|write:Ljava/lang/String;	select
 COLD_FEED	method-v1	()Lcom/ss/android/ugc/aweme/feed/model/FeedItemList;	static|string:filterCacheByUid skip filter, exist empty uid|call:Lcom/ss/android/ugc/aweme/feed/model/FeedItemList;->getItems()Ljava/util/List;	read
 PRELOADED_FEED	method-v1	()Lcom/ss/android/ugc/aweme/feed/model/FeedItemList;	string:feed_response_from_nuj_preload|string:full_feed_thread_switch_cost_2	read
@@ -60,3 +58,11 @@ MENU_CAPTION_ACL	method-v1	(Ljava/lang/String;Ljava/lang/String;Lcom/ss/android/
 BACKGROUND_AUDIO	method-v1	()Ljava/lang/Object;	string:background_play_enable	group
 CAPTION_CONSUMER	method-v1	()V	static|name:<clinit>|string:fixed_caption_v2_consumer_group	initialize
 TRANSLATION_REVERSE	0a2d2d1047c97c507091098f39a3f20f763446242d00e13e85ff2c900da8076f	a50c83d40b20e20b39afb3b4d7a742cc477a20f4edca713d53a7fda62cda5cb2	148dfa3a5e289861c78cea756e23d2850b749b8dcbe5ad12bbbc816ff1f1f657	blocked=LIZ()Z
+
+# Exact class and linked initialization evidence from TikTok 47.4.3.
+COMMENT_TRANSLATION	4f5fe783e333373c0e665d7a069fbde9852e805d95546667d9b05d372fe27739	f4bb08fd66ff2c5790890f5948808e1c57a2761a2cac4506d2522b05afe05268	e4a8f52875cda89e4c282e0fdb2d95f4e052e95523179ecb5e2fc3befa379192	-
+TRANSLATION_REVERSE	0a2d2d1047c97c507091098f39a3f20f763446242d00e13e85ff2c900da8076f	06ea0265f9e6704e0022f0d1541fef8122181943970fd80b19623a00e5b50628	148dfa3a5e289861c78cea756e23d2850b749b8dcbe5ad12bbbc816ff1f1f657	blocked=LIZ()Z
+AUTHOR_LOCATION	method-v1	(Ljava/lang/String;Lcom/ss/android/ugc/aweme/profile/model/User;Lcom/ss/android/ugc/aweme/feed/model/Aweme;)Ljava/lang/String;	instance|owner:Lcom/ss/android/ugc/aweme/service/CommonFeedApiService;|call:Lcom/ss/android/ugc/aweme/feed/model/Aweme;->getAuthor()Lcom/ss/android/ugc/aweme/profile/model/User;|call:Lcom/ss/android/ugc/aweme/profile/model/User;->getNickname()Ljava/lang/String;|call:Lcom/ss/android/ugc/aweme/profile/model/User;->isAdFake()Z|call:Lcom/ss/android/ugc/aweme/feed/model/AwemeRawAd;->getOmVast()Lcom/ss/android/ugc/aweme/commercialize/model/OmVast;	build
+MUTE_INFO	1d53a090c21d6e25b20b7242cff34851c5b4d5f9fd47249a25d98984f27ece51	9b5abeb4c37f71707458be3866a4f8ea21cb21199ab1d1dd8c06951a953f2470	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855	copyright=getIsCopyrightViolation()Z
+MUTE_INFO	c94bbdf4a08ed6e31dd22b751a5e0eb3a359caededd8069601af0142c9d30cfc	cc93af8eac4b301c87dcf37910b97da6727df0bfbce7c20b16827bb8c2a0c78c	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855	copyright=isCopyrightViolation()Z
+MUTE_INFO	c94bbdf4a08ed6e31dd22b751a5e0eb3a359caededd8069601af0142c9d30cfc	9db2f57d8b538166569f4f397c2e6346e8060b1bf1ca738a960c20997bc328bf	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855	copyright=isCopyrightViolation()Z

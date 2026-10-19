@@ -12,23 +12,23 @@ import java.util.WeakHashMap
 internal object SubtitleMenu {
     private const val TITLE = 0x7e010001
     fun install(module: XposedModule, loader: ClassLoader, owner: String) {
-        val factory = loader.loadClass("X.0oWb")
-        val panel = loader.loadClass("X.0oQw")
-        val data = loader.loadClass("X.0oTM")
-        val icon = loader.loadClass("X.03wL")
-        val callback = loader.loadClass("X.0oQA")
-        val callbackBase = loader.loadClass("X.0oQW")
-        val item = loader.loadClass("X.0oTK")
-        val build = factory.getDeclaredMethod("LIZIZ", panel).apply { check(List::class.java.isAssignableFrom(returnType)) }
+        val factory = loader.adaptiveClass("X.0oWb")
+        val panel = loader.adaptiveClass("X.0oQw")
+        val data = loader.adaptiveClass("X.0oTM")
+        val icon = loader.adaptiveClass("X.03wL")
+        val callback = loader.adaptiveClass("X.0oQA")
+        val callbackBase = loader.adaptiveClass("X.0oQW")
+        val item = loader.adaptiveClass("X.0oTK")
+        val build = factory.adaptiveDeclaredMethod("LIZIZ", panel).apply { check(List::class.java.isAssignableFrom(returnType)) }
         val dataConstructor = data.getDeclaredConstructor(icon, Int::class.javaPrimitiveType, Boolean::class.javaPrimitiveType, String::class.java)
         val callbackConstructor = callback.getDeclaredConstructor(factory, panel)
         val itemConstructor = item.getDeclaredConstructor(data, callbackBase, Boolean::class.javaPrimitiveType)
-        val iconField = icon.getDeclaredField("LIZ")
+        val iconField = icon.adaptiveDeclaredField("LIZ")
         val callbacks = WeakHashMap<Any, Boolean>()
-        val click = callback.getDeclaredMethod("LIZIZ", View::class.java)
+        val click = callback.adaptiveDeclaredMethod("LIZIZ", View::class.java)
         // 独立资源 ID 只在本模块新增条目中使用，不覆盖任何原生字符串。
         for (name in listOf("getText", "getString")) {
-            module.trackHook(owner, Resources::class.java.getMethod(name, Int::class.javaPrimitiveType)).intercept { chain ->
+            module.trackHook(owner, Resources::class.java.adaptiveMethod(name, Int::class.javaPrimitiveType)).intercept { chain ->
                 if (chain.args[0] == TITLE) "字幕设置" else chain.proceed()
             }
         }

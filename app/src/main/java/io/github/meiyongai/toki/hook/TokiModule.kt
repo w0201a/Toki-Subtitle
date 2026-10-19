@@ -166,6 +166,7 @@ class TokiModule : XposedModule() {
             if (ConfigClient.isReady) updateConfigurationStatus(ConfigClient.snapshot())
             return
         }
+        ExtensionSymbols.initialize(listOf(param.applicationInfo.sourceDir) + param.applicationInfo.splitSourceDirs.orEmpty())
         if (!HostSymbols.initialize(param.applicationInfo, processName == param.packageName, plan.symbols)) return
         // 清屏依赖进度条的安装成功，不能留下半套状态机。
         val ordered = plan.adaptedFeatures.sortedBy { if (it == "ProgressBarHook") 0 else 1 }

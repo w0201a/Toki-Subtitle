@@ -10,7 +10,7 @@ internal data class PollBindingContract(val bind: Method, val data: Field) {
             fun data(type: Class<*>): Field? {
                 var current: Class<*>? = type
                 while (current != null) {
-                    current.declaredFields.firstOrNull { it.name == "LL" && it.type == poll }?.let {
+                    current.declaredFields.firstOrNull { ExtensionSymbols.fieldNamed(it, "LL") && it.type == poll }?.let {
                         return it.apply { isAccessible = true }
                     }
                     current = current.superclass
@@ -18,7 +18,7 @@ internal data class PollBindingContract(val bind: Method, val data: Field) {
                 return null
             }
             val candidates = cell.declaredMethods.filter {
-                it.name == "s6" && it.parameterCount == 1 && it.returnType == Void.TYPE
+                ExtensionSymbols.methodNamed(it, "s6") && it.parameterCount == 1 && it.returnType == Void.TYPE
             }.mapNotNull { method -> data(method.parameterTypes[0])?.let { PollBindingContract(method, it) } }
             check(candidates.size == 1) { "PollCell DEX s6(PollItem):void contract candidates=${candidates.size}" }
             return candidates.single().also { it.bind.isAccessible = true }

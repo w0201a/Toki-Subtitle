@@ -179,12 +179,12 @@ internal class NativeSubtitleTranslator(
             ?.replace('_', '-')?.let { it == "zh" || it.startsWith("zh-") } == true
 
         fun connect(loader: ClassLoader): NativeSubtitleTranslator {
-            val facade = loader.loadClass("X.03hV")
-            val service = facade.getDeclaredField("LIZIZ").get(null)
-            val override = facade.getDeclaredMethod("LJL", String::class.java)
-            val holder = loader.loadClass("X.08aF").getDeclaredMethod("LIZ")
-            val automatic = loader.loadClass("com.ss.android.ugc.aweme.translation.service.ITranslationKevaService")
-                .getMethod("LIZ")
+            val facade = loader.adaptiveClass("X.03hV")
+            val service = facade.adaptiveDeclaredField("LIZIZ").get(null)
+            val override = facade.adaptiveDeclaredMethod("LJL", String::class.java)
+            val holder = loader.adaptiveClass("X.08aF").adaptiveDeclaredMethod("LIZ")
+            val automatic = loader.adaptiveClass("com.ss.android.ugc.aweme.translation.service.ITranslationKevaService")
+                .adaptiveMethod("LIZ")
             return NativeSubtitleTranslator(enabled = { videoId ->
                 ConfigClient.getBoolean("video_translate_enabled") &&
                     when ((override.invoke(service, videoId) as? Enum<*>)?.name) {
@@ -197,17 +197,17 @@ internal class NativeSubtitleTranslator(
 
         /** 独立请求通道，供评论投票使用；不进入视频字幕的排程或预读队列。 */
         fun transport(loader: ClassLoader): (String, (String?) -> Unit) -> AutoCloseable {
-            val facade = loader.loadClass("X.03hV")
-            val service = facade.getDeclaredField("LIZIZ").get(null)
-            val method = facade.getDeclaredMethod("LJIIJ", String::class.java)
-            val consumer = loader.loadClass("X.02u8")
-            check(consumer.isInterface && consumer.getMethod("accept", Any::class.java).returnType == Void.TYPE)
-            val disposable = loader.loadClass("X.02tV")
-            val dispose = disposable.getMethod("dispose")
-            val subscribe = loader.loadClass("X.02tQ").getMethod("LJJZ", consumer, consumer)
+            val facade = loader.adaptiveClass("X.03hV")
+            val service = facade.adaptiveDeclaredField("LIZIZ").get(null)
+            val method = facade.adaptiveDeclaredMethod("LJIIJ", String::class.java)
+            val consumer = loader.adaptiveClass("X.02u8")
+            check(consumer.isInterface && consumer.adaptiveMethod("accept", Any::class.java).returnType == Void.TYPE)
+            val disposable = loader.adaptiveClass("X.02tV")
+            val dispose = disposable.adaptiveMethod("dispose")
+            val subscribe = loader.adaptiveClass("X.02tQ").adaptiveMethod("LJJZ", consumer, consumer)
             check(disposable.isAssignableFrom(subscribe.returnType))
-            val result = loader.loadClass("com.ss.android.ugc.aweme.translation.model.TranslationResult")
-            val content = result.getField("translatedContent")
+            val result = loader.adaptiveClass("com.ss.android.ugc.aweme.translation.model.TranslationResult")
+            val content = result.adaptiveField("translatedContent")
             check(content.type == String::class.java)
             fun callback(action: (Any?) -> Unit): Any = Proxy.newProxyInstance(loader, arrayOf(consumer)) { proxy, invoked, args ->
                 when (invoked.name) {

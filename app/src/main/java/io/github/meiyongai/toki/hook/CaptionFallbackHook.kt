@@ -18,6 +18,7 @@ internal object CaptionFallbackHook {
     // 两个集合的 base.apk 和主代码分包完全相同；手机另装 line_nonus/font 代码分包。
     // 仍仅接受逐一离线核验的代码集合，不因版本号相同就跳过身份校验。
     private val IDENTITIES = setOf(
+        "b3ba776d1e42021c278da5567f0d3666d24efab5ace46bf1a406f6c4e935b796",
         "0259ca5f53357042b72fe6502ca22875aa3035506bfc458fb645146abb19dc16",
         "a104c3b28e2f4ee94292a0dcc464ff114e63f430e760bfd093c434cc6298a129",
     )
@@ -46,43 +47,43 @@ internal object CaptionFallbackHook {
     /** 一次性解析并校验全部反射契约；任一成员不符即由调用方记录并跳过。 */
     private class Contract(loader: ClassLoader) {
         val loader: ClassLoader = loader
-        val aweme: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme")
-        val model: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.feed.model.CaptionModel")
-        val item: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.feed.model.CaptionItemModel")
-        val selection: Class<*> = loader.loadClass("X.08ZQ")
-        val selector: Class<*> = loader.loadClass("X.061i")
-        val trackId: Method = selector.getDeclaredMethod("LIZLLL", aweme)
-        val result: Method = selector.getDeclaredMethod("LJFF", aweme, String::class.java)
-        val subId: Field = selection.getDeclaredField("LIZIZ").apply { isAccessible = true }
-        val enabled: Field = selection.getDeclaredField("LIZ").apply { isAccessible = true }
+        val aweme: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.feed.model.Aweme")
+        val model: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.feed.model.CaptionModel")
+        val item: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.feed.model.CaptionItemModel")
+        val selection: Class<*> = loader.adaptiveClass("X.08ZQ")
+        val selector: Class<*> = loader.adaptiveClass("X.061i")
+        val trackId: Method = selector.adaptiveDeclaredMethod("LIZLLL", aweme)
+        val result: Method = selector.adaptiveDeclaredMethod("LJFF", aweme, String::class.java)
+        val subId: Field = selection.adaptiveDeclaredField("LIZIZ").apply { isAccessible = true }
+        val enabled: Field = selection.adaptiveDeclaredField("LIZ").apply { isAccessible = true }
         // ICLAPerfETServiceImpl.LJI 明确将 true 映射为 DO_NOT_LOAD，绝非 visible。
-        val skipLoading: Field = selection.getDeclaredField("LIZLLL").apply { isAccessible = true }
-        val captionModel: Field = selection.getDeclaredField("LJFF").apply { isAccessible = true }
+        val skipLoading: Field = selection.adaptiveDeclaredField("LIZLLL").apply { isAccessible = true }
+        val captionModel: Field = selection.adaptiveDeclaredField("LJFF").apply { isAccessible = true }
         val constructor = selection.getDeclaredConstructor(java.lang.Boolean.TYPE, Integer.TYPE,
             java.lang.Boolean.TYPE, model, Integer.TYPE)
-        val extras = listOf("LIZJ", "LJ").map { selection.getDeclaredField(it).apply { isAccessible = true } }
-        val originalLanguage: Field = model.getDeclaredField("originalCaptionLanguage").apply { isAccessible = true }
-        val tracks: Field = model.getDeclaredField("captionList").apply { isAccessible = true }
-        val languageCode: Field = originalLanguage.type.getDeclaredField("languageCode").apply { isAccessible = true }
-        val languageId: Field = originalLanguage.type.getDeclaredField("languageId").apply { isAccessible = true }
-        val realtime: Field = originalLanguage.type.getDeclaredField("canTranslateRealtime").apply { isAccessible = true }
-        val itemCode: Field = item.getDeclaredField("languageCode").apply { isAccessible = true }
-        val itemLanguageId: Field = item.getDeclaredField("languageId").apply { isAccessible = true }
-        val itemSubId: Field = item.getDeclaredField("subId").apply { isAccessible = true }
-        val itemUrl: Field = item.getDeclaredField("url").apply { isAccessible = true }
-        val itemUrls: Field = item.getDeclaredField("urlList").apply { isAccessible = true }
-        val itemRealtime: Field = item.getDeclaredField("isRealtimeTranslated").apply { isAccessible = true }
-        val hostCaptionsEnabled: Method = loader.loadClass("X.08ZA").getDeclaredMethod("LJJ", aweme)
-        val strategySkipLoading: Method = loader.loadClass("com.ss.android.ugc.aweme.strategy.CaptionStrategyServiceImpl")
-            .getDeclaredMethod("ii", aweme)
-        val serviceClass: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.service.CaptionServiceImpl")
-        val serviceResult: Method = serviceClass.getDeclaredMethod("LJIIIZ", aweme)
-        val serviceTrackId: Method = serviceClass.getDeclaredMethod("LJIIJ", aweme)
-        val cacheResult: Method = loader.loadClass("X.08ZE").getDeclaredMethod("LIZ", aweme)
-        val service: Method = loader.loadClass("X.08Zd").getDeclaredMethod("LIZ")
-        val keva: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.service.ICaptionKevaService")
-        val captionsForNative: Method = keva.getDeclaredMethod("LIZIZ")
-        val captionsForForeign: Method = keva.getDeclaredMethod("LJL")
+        val extras = listOf("LIZJ", "LJ").map { selection.adaptiveDeclaredField(it).apply { isAccessible = true } }
+        val originalLanguage: Field = model.adaptiveDeclaredField("originalCaptionLanguage").apply { isAccessible = true }
+        val tracks: Field = model.adaptiveDeclaredField("captionList").apply { isAccessible = true }
+        val languageCode: Field = originalLanguage.type.adaptiveDeclaredField("languageCode").apply { isAccessible = true }
+        val languageId: Field = originalLanguage.type.adaptiveDeclaredField("languageId").apply { isAccessible = true }
+        val realtime: Field = originalLanguage.type.adaptiveDeclaredField("canTranslateRealtime").apply { isAccessible = true }
+        val itemCode: Field = item.adaptiveDeclaredField("languageCode").apply { isAccessible = true }
+        val itemLanguageId: Field = item.adaptiveDeclaredField("languageId").apply { isAccessible = true }
+        val itemSubId: Field = item.adaptiveDeclaredField("subId").apply { isAccessible = true }
+        val itemUrl: Field = item.adaptiveDeclaredField("url").apply { isAccessible = true }
+        val itemUrls: Field = item.adaptiveDeclaredField("urlList").apply { isAccessible = true }
+        val itemRealtime: Field = item.adaptiveDeclaredField("isRealtimeTranslated").apply { isAccessible = true }
+        val hostCaptionsEnabled: Method = loader.adaptiveClass("X.08ZA").adaptiveDeclaredMethod("LJJ", aweme)
+        val strategySkipLoading: Method = loader.adaptiveClass("com.ss.android.ugc.aweme.strategy.CaptionStrategyServiceImpl")
+            .adaptiveDeclaredMethod("ii", aweme)
+        val serviceClass: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.service.CaptionServiceImpl")
+        val serviceResult: Method = serviceClass.adaptiveDeclaredMethod("LJIIIZ", aweme)
+        val serviceTrackId: Method = serviceClass.adaptiveDeclaredMethod("LJIIJ", aweme)
+        val cacheResult: Method = loader.adaptiveClass("X.08ZE").adaptiveDeclaredMethod("LIZ", aweme)
+        val service: Method = loader.adaptiveClass("X.08Zd").adaptiveDeclaredMethod("LIZ")
+        val keva: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.service.ICaptionKevaService")
+        val captionsForNative: Method = keva.adaptiveDeclaredMethod("LIZIZ")
+        val captionsForForeign: Method = keva.adaptiveDeclaredMethod("LJL")
 
         init {
             check(trackId.returnType == Integer.TYPE) { "字幕轨号读取签名不符" }
@@ -163,9 +164,9 @@ internal object CaptionFallbackHook {
         // SUB-TRANSLATE-GATE：译文尚未可用时，宿主的 foreign_original_hidden 会隐藏有效原字幕。
         // true 为原字幕帧，null 为到帧前的基础状态判定；false 为译文帧，始终保留宿主结果。
         // 到帧前也必须允许有效原字幕，否则基础状态可能先被设为 HIDDEN。
-        val hideOriginal = loader.loadClass("X.08ZA").getDeclaredMethod(
+        val hideOriginal = loader.adaptiveClass("X.08ZA").adaptiveDeclaredMethod(
             "LJJIJIIJI", contract.aweme, java.lang.Boolean::class.java)
-        val targetLanguage = loader.loadClass("X.08ZO").getDeclaredMethod("LIZLLL")
+        val targetLanguage = loader.adaptiveClass("X.08ZO").adaptiveDeclaredMethod("LIZLLL")
         module.trackHook(feature, hideOriginal).intercept { chain ->
             val hidden = chain.proceed() as Boolean
             if (!hidden || chain.args[1] == false) return@intercept hidden
@@ -208,8 +209,8 @@ internal object CaptionFallbackHook {
     }
 
     private fun modelOf(contract: Contract, aweme: Any?): Any? = try {
-        val video = aweme?.let { contract.aweme.getMethod("getVideo").invoke(it) }
-        video?.javaClass?.getMethod("getCaptionModel")?.invoke(video)
+        val video = aweme?.let { contract.aweme.adaptiveMethod("getVideo").invoke(it) }
+        video?.javaClass?.adaptiveMethod("getCaptionModel")?.invoke(video)
     } catch (error: Exception) { null }
 
     private fun tracksOf(contract: Contract, model: Any?): List<Any> =
@@ -239,7 +240,7 @@ internal object CaptionFallbackHook {
     /** 每个视频只记录一次完整判定输入，用于定位宿主为何给出空字幕。 */
     private fun explainOnce(contract: Contract, aweme: Any?, selected: Int, path: String, flags: String, model: Any?) {
         val aid = try {
-            contract.aweme.getMethod("getAid").invoke(aweme) as? String ?: "?"
+            contract.aweme.adaptiveMethod("getAid").invoke(aweme) as? String ?: "?"
         } catch (error: Exception) { "?" }
         // 同一视频不同入口和状态变化各保留一条，不能让首个 trackId 查询吞掉显示诊断。
         val key = "$aid:$path:$selected:$flags"
@@ -263,25 +264,25 @@ internal object CaptionFallbackHook {
     }
 
     private fun aidText(contract: Contract, aweme: Any?): String = try {
-        contract.aweme.getMethod("getAid").invoke(aweme) as? String ?: "?"
+        contract.aweme.adaptiveMethod("getAid").invoke(aweme) as? String ?: "?"
     } catch (error: Exception) { "?" }
 
     /** 只读探测宿主的翻译模式与目标语言；失败不影响任何行为。 */
     private fun hostFlags(contract: Contract): String {
-        val reverse = probe { contract.loader.loadClass("X.08a3").getDeclaredMethod("LIZ").invoke(null) }
+        val reverse = probe { contract.loader.adaptiveClass("X.08a3").adaptiveDeclaredMethod("LIZ").invoke(null) }
         val target = probe {
-            val holder = contract.loader.loadClass("X.03hV")
-            val instance = holder.getDeclaredField("LIZIZ").get(null)
-            instance.javaClass.getMethod("LLILLIZIL").invoke(instance)
+            val holder = contract.loader.adaptiveClass("X.03hV")
+            val instance = holder.adaptiveDeclaredField("LIZIZ").get(null)
+            instance.javaClass.adaptiveMethod("LLILLIZIL").invoke(instance)
         }
         val toggles = probe {
             val service = contract.service.invoke(null)
             "native=${contract.captionsForNative.invoke(service)} foreign=${contract.captionsForForeign.invoke(service)}"
         }
         val automatic = probe {
-            val service = contract.loader.loadClass("X.08aF").getDeclaredMethod("LIZ").invoke(null)
-            contract.loader.loadClass("com.ss.android.ugc.aweme.translation.service.ITranslationKevaService")
-                .getMethod("LIZ").invoke(service)
+            val service = contract.loader.adaptiveClass("X.08aF").adaptiveDeclaredMethod("LIZ").invoke(null)
+            contract.loader.adaptiveClass("com.ss.android.ugc.aweme.translation.service.ITranslationKevaService")
+                .adaptiveMethod("LIZ").invoke(service)
         }
         return "reverseEffective=$reverse target=$target autoTranslate=$automatic captions[$toggles]"
     }
