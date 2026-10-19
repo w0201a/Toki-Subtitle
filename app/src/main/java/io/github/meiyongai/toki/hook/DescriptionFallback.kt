@@ -69,6 +69,14 @@ internal object DescriptionFallback {
                 views[view] = WeakReference(target)
             }
             val result = chain.proceed()
+            // The host may create or replace the view during binding, especially
+            // after a host version change. Track the final view as well.
+            (viewField.get(target) as? View)?.let { currentView ->
+                views[currentView] = WeakReference(target)
+                if (currentView !== view) {
+                    view?.let { views.remove(it); originals.remove(it); generated.remove(it) }
+                }
+            }
             source(target)?.let { current ->
                 main.post {
                     if (source(target) == current && show(target)) {

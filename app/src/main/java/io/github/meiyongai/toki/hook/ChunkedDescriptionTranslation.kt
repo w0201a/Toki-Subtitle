@@ -2,7 +2,7 @@ package io.github.meiyongai.toki.subtitle.hook
 
 import java.util.WeakHashMap
 
-/** 长文案分段完成后整体提交，任何一段缺失都保留宿主原显示，避免半篇译文。 */
+/** 长文案按段更新，未完成段保留原文，失败段独立重试一次。 */
 internal class ChunkedDescriptionTranslation(
     translate: (String, (String?) -> Unit) -> AutoCloseable,
     private val ready: (Any) -> Unit,
@@ -15,17 +15,16 @@ internal class ChunkedDescriptionTranslation(
     private val entries = WeakHashMap<Any, Entry>()
     private val queue = PollTranslationQueue(translate, { key, index, value ->
         entries[key]?.let { entry ->
-            if (entry.translated == null) {
+            if (entry.results[index] != value) {
                 entry.results[index] = value
-                if (entry.results.size == entry.chunks.size) {
-                    entry.translated = entry.chunks.indices.joinToString("\n") { entry.results.getValue(it) }
-                    val text = checkNotNull(entry.translated)
-                    report("assembled chars=${text.length} han=${text.count { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.HAN }} cyrillic=${text.count { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.CYRILLIC }}")
-                    ready(key)
-                }
+                // Publish successful segments immediately; retain source for missing
+                // segments and preserve their order, rather than hiding all progress.
+                entry.translated = entry.chunks.indices.joinToString("\n") { entry.results[it] ?: entry.chunks[it] }
+                report("segments completed=${entry.results.size} total=${entry.chunks.size}")
+                ready(key)
             }
         }
-    }, report)
+    }, report, retryFailures = true)
 
     fun request(key: Any, source: String) {
         if (entries[key]?.source != source) {
@@ -38,7 +37,7 @@ internal class ChunkedDescriptionTranslation(
             }
         }
         val entry = entries.getValue(key)
-        if (entry.translated == null) queue.bind(key, entry.chunks)
+        if (entry.results.size < entry.chunks.size) queue.bind(key, entry.chunks)
     }
 
     fun result(key: Any, source: String): String? = entries[key]?.takeIf { it.source == source }?.translated

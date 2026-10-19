@@ -75,12 +75,8 @@ class NativeSubtitleTranslatorTest {
         advance(0)
         host.translator.request("second", { true }, delivered::add)
         advance(6000)
-        assertEquals(1, host.requests.size)
         assertEquals(1, host.disposed)
         assertTrue(delivered.isEmpty())
-        advance(999)
-        assertEquals(1, host.requests.size)
-        advance(1)
         assertEquals(listOf("first", "second"), host.requests.map { it.first })
         host.translator.close()
     }
@@ -97,6 +93,19 @@ class NativeSubtitleTranslatorTest {
         host.requests[1].second(null)
         advance(16000)
         assertEquals(2, host.requests.size)
+        host.translator.close()
+    }
+
+    @Test fun aNewCueDoesNotInheritThePreviousCuesRetryBackoff() {
+        val host = Host()
+        var cue = "first"
+        host.translator.request("first", { cue == "first" }) {}
+        advance(0)
+        host.requests[0].second(null)
+        cue = "second"
+        host.translator.request("second", { cue == "second" }) {}
+        advance(250)
+        assertEquals(listOf("first", "second"), host.requests.map { it.first })
         host.translator.close()
     }
 

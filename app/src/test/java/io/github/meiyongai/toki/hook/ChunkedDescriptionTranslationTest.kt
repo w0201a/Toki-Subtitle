@@ -26,7 +26,7 @@ class ChunkedDescriptionTranslationTest {
         }
     }
 
-    @Test fun publishesOnlyAfterEveryChunkSucceedsAndRestoresCorrectOrder() {
+    @Test fun publishesCompletedChunksWithOriginalForPendingSegmentsAndPreservesOrder() {
         val requests = mutableListOf<Pair<String, (String?) -> Unit>>()
         var ready = 0
         val translator = ChunkedDescriptionTranslation({ text, callback ->
@@ -39,15 +39,37 @@ class ChunkedDescriptionTranslationTest {
         advance()
         requests[0].second("前半部分")
         advance(250)
-        assertNull(translator.result(key, source))
-        assertEquals(0, ready)
+        assertEquals("前半部分\n" + "A".repeat(50), translator.result(key, source))
+        assertEquals(1, ready)
         requests[1].second("后半部分")
         advance(250)
         assertEquals("前半部分\n后半部分", translator.result(key, source))
-        assertEquals(1, ready)
+        assertEquals(2, ready)
         translator.request(key, source)
         advance(500)
         assertEquals(2, requests.size)
+        translator.close()
+    }
+
+    @Test fun failedSegmentRetriesAfterOtherSegmentsWithoutHidingTheirTranslations() {
+        val requests = mutableListOf<Pair<String, (String?) -> Unit>>()
+        val translator = ChunkedDescriptionTranslation({ text, callback ->
+            requests += text to callback
+            AutoCloseable { }
+        }, {})
+        val key = Any()
+        val source = "A".repeat(750)
+        translator.request(key, source)
+        advance()
+        requests[0].second(null)
+        advance(1000)
+        requests[1].second("后半")
+        advance(250)
+        assertEquals("A".repeat(700) + "\n后半", translator.result(key, source))
+        assertEquals(3, requests.size)
+        requests[2].second("前半")
+        advance()
+        assertEquals("前半\n后半", translator.result(key, source))
         translator.close()
     }
 

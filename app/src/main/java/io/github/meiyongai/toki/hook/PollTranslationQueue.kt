@@ -10,12 +10,14 @@ internal class PollTranslationQueue(
     private val translate: (String, (String?) -> Unit) -> AutoCloseable,
     private val render: (Any, Int, String) -> Unit,
     private val report: (String) -> Unit = {},
+    private val retryFailures: Boolean = false,
 ) : AutoCloseable {
     private class Binding(key: Any, val texts: List<String>) {
         val key = WeakReference(key)
         val results = mutableMapOf<Int, String>()
     }
     private class Task(val binding: Binding, val index: Int) {
+        var retries = 0
         var subscription: AutoCloseable? = null
         var timeout: Runnable? = null
     }
@@ -115,6 +117,10 @@ internal class PollTranslationQueue(
                 task.binding.results[task.index] = text
                 renderSafely(it, task.index, text)
             }
+        }
+        if (text == null && retryFailures && task.retries == 0 && current(task) != null) {
+            task.retries++
+            pending.addLast(task)
         }
         report(if (text == null) "unavailable; original retained" else "success")
         main.removeCallbacks(pump)

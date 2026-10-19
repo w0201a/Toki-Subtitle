@@ -18,6 +18,7 @@ internal class NativeSubtitleTranslator(
         val key = CaptionTimeline.normalize(text)
         var subscription: AutoCloseable? = null
         var retries = 0
+        var retryAt = 0L
         var startedAt = 0L
         var timeout: Runnable? = null
     }
@@ -90,7 +91,7 @@ internal class NativeSubtitleTranslator(
             main.post(pump)
             return
         }
-        val wait = maxOf(nextRequestAt, if (foreground) 0L else prefetchBackoffAt) - SystemClock.uptimeMillis()
+        val wait = maxOf(nextRequestAt, if (foreground) job.retryAt else prefetchBackoffAt) - SystemClock.uptimeMillis()
         if (wait > 0) {
             if (!foreground) ahead.addFirst(job)
             main.postDelayed(pump, wait)
@@ -130,7 +131,7 @@ internal class NativeSubtitleTranslator(
             failures = (failures + 1).coerceAtMost(5)
             val delay = (1000L shl (failures - 1)).coerceAtMost(15000L)
             // 预读失败不能让当前字幕跟着等待最多 15 秒。
-            if (job.foreground && job.current()) nextRequestAt = SystemClock.uptimeMillis() + delay
+            if (job.foreground && job.current()) job.retryAt = SystemClock.uptimeMillis() + delay
             else prefetchBackoffAt = SystemClock.uptimeMillis() + delay
             // 短暂网络错误仅为仍在显示的当前句重试一次，不追逐旧句，也不自动重试预读句。
             if (job.foreground && job.retries == 0 && pending == null && job.current()) {
