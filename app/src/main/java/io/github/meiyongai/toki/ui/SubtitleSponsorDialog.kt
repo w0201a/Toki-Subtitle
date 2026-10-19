@@ -22,7 +22,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** 字幕版赞助入口，由 154Er 与 Gi-Ai154M 共同维护；保存用户所选渠道的原始 PNG。 */
+/** 字幕版赞助入口，由 154Er 与 Gi-Ai154M 共同维护；保存用户所选渠道的原始 JPEG。 */
 @Composable
 fun SubtitleSponsorDialog(onDismiss: () -> Unit) {
     val context = LocalContext.current
@@ -32,7 +32,7 @@ fun SubtitleSponsorDialog(onDismiss: () -> Unit) {
     var exportWechat by remember { mutableStateOf(true) }
     var saving by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
-    val saveImage = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("image/png")) { uri ->
+    val saveImage = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("image/jpeg")) { uri ->
         if (uri != null) {
             val resource = if (exportWechat) R.drawable.sponsor_wechat_154er else R.drawable.sponsor_alipay_154er
             saving = true
@@ -80,7 +80,7 @@ fun SubtitleSponsorDialog(onDismiss: () -> Unit) {
                 )
                 TextButton(enabled = !saving, onClick = {
                     exportWechat = wechat
-                    saveImage.launch(if (wechat) "Toki-154Er-WeChat.png" else "Toki-154Er-Alipay.png")
+                    saveImage.launch(if (wechat) "Toki-154Er-WeChat.jpg" else "Toki-154Er-Alipay.jpg")
                 }) {
                     Text(strings.getString(if (saving) R.string.sponsor_saving else R.string.sponsor_save_image))
                 }
