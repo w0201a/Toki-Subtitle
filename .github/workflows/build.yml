@@ -30,5 +30,13 @@ jobs:
           packages: ""
       - name: Install Android SDK
         run: sdkmanager "platforms;android-37.0" "build-tools;37.0.0"
-      - name: Verify and build Debug
-        run: ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug --stacktrace --console=plain
+      - name: Verify and build Debug and Release
+        run: ./gradlew :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleRelease --stacktrace --console=plain
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: Toki-Subtitle-APKs
+          path: |
+            app/build/outputs/apk/debug/*.apk
+            app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
