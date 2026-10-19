@@ -95,7 +95,7 @@ internal object SubtitleFeature {
             val result = chain.proceed()
             rendererField.get(instance)?.let { nativeRenderer ->
                 val root = rootField.get(nativeRenderer) as View
-                if (root.id == 2131366789) {
+                if (root.id == ExtensionSymbols.subtitleRootId()) {
                     val updated = bindings[root]?.get()
                     // 原生渲染已送帧时不重复以 VM 原始内容覆盖；仅补足清屏阻塞的路径。
                     if (updated != null && (updated !== previousBinding || updated.frameRevision != previousRevision))
@@ -115,7 +115,7 @@ internal object SubtitleFeature {
         module.trackHook(owner, display).intercept { chain ->
             val result = chain.proceed()
             val root = rootField.get(chain.thisObject) as View
-            if (root.id != 2131366789) {
+            if (root.id != ExtensionSymbols.subtitleRootId()) {
                 if (!unknownRootReported) {
                     unknownRootReported = true
                     HookRuntime.event("SubtitleOverlay", "未核验字幕容器 id=${root.id}，保留原生显示")

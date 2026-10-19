@@ -44,7 +44,7 @@ internal object SubtitleMenu {
             val original = chain.proceed() as? List<*> ?: return@intercept null
             try {
                 val picture = icon.getDeclaredConstructor().newInstance()
-                iconField.setInt(picture, 2130774938)
+                iconField.setInt(picture, ExtensionSymbols.subtitleMenuIcon())
                 val action = callbackConstructor.newInstance(chain.thisObject, chain.args[0])
                 callbacks[action] = true
                 val model = dataConstructor.newInstance(picture, TITLE, false, "toki_subtitle_settings")

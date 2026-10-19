@@ -18,6 +18,8 @@ internal object ExtensionSymbols {
             it.startsWith("class.") && profile.getProperty(it) != "!unresolved"
         }.associate { profile.getProperty(it) to it.removePrefix("class.") }
     }
+    internal fun subtitleRootId(): Int = if (enabled) 0x7f0a1390 else 0x7f0a1385
+    internal fun subtitleMenuIcon(): Int = if (enabled) 0x7f010bb0 else 0x7f010b9a
     private fun mapped(key: String): String? = if (!enabled) null else profile.getProperty(key)?.takeUnless { it == "!unresolved" }
     private fun baseline(type: Class<*>): String = reverse[type.name] ?: type.name
     fun type(loader: ClassLoader, name: String): Class<*> {

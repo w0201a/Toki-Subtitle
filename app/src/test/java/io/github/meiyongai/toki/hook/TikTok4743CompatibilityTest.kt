@@ -23,7 +23,11 @@ class TikTok4743CompatibilityTest {
         ExtensionSymbols.selectIdentity("0".repeat(64))
         assertEquals(String::class.java, javaClass.classLoader!!.adaptiveClass("java.lang.String"))
         assertEquals("length", String::class.java.adaptiveMethod("length").name)
+        assertEquals(0x7f010b9a, ExtensionSymbols.subtitleMenuIcon())
+        assertEquals(0x7f0a1385, ExtensionSymbols.subtitleRootId())
         ExtensionSymbols.selectIdentity(identity)
+        assertEquals(0x7f010bb0, ExtensionSymbols.subtitleMenuIcon())
+        assertEquals(0x7f0a1390, ExtensionSymbols.subtitleRootId())
         // Missing mappings must fail explicitly, never fall through to old obfuscated names.
         assertThrows(IllegalStateException::class.java) { javaClass.classLoader!!.adaptiveClass("X.08a3") }
         ExtensionSymbols.selectIdentity("0".repeat(64))
