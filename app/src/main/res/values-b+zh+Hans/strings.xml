@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="upstream_author">Toki 原作者：MeiYongAI · 查看上游项目</string>
     <string name="subtitle_sponsor_title">赞助字幕版开发</string>
     <string name="subtitle_sponsor_methods">微信支付 / 支付宝 · 选择赞助码</string>
     <string name="subtitle_sponsor_wechat">微信支付</string>

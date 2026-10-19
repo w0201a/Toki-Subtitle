@@ -128,7 +128,14 @@ fun HomeScreen(
             modifier = Modifier.padding(bottom = 10.dp)
         )
 
-        // 字幕版联合创作：154Er 与 Gi-Ai154M。署名显示在首页版本号下方。
+        // 保留原作者及上游入口，字幕版贡献单独署名。
+        androidx.compose.material3.TextButton(
+            onClick = { openBrowserUrl(context, "https://github.com/MeiYongAI/Toki") }
+        ) {
+            Text(strings.getString(R.string.upstream_author))
+        }
+
+        // 字幕版联合创作：154Er 与 Gi-Ai154M。
         Text(
             text = strings.getString(R.string.subtitle_credits),
             style = MaterialTheme.typography.bodySmall,
