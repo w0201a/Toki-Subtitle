@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Utama"</string>
+    <string name="nav_features" formatted="false">"Ciri"</string>
+    <string name="page_features" formatted="false">"Tetapan"</string>
+    <string name="page_hook_status" formatted="false">"Status ciri"</string>
+    <string name="nav_back" formatted="false">"Kembali"</string>
+    <string name="restart_tiktok" formatted="false">"Mulakan semula TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Sila berikan akses root kepada Toki."</string>
+    <string name="language_title" formatted="false">"Bahasa aplikasi"</string>
+    <string name="language_system" formatted="false">"Ikut sistem"</string>
+    <string name="language_search" formatted="false">"Cari bahasa"</string>
+    <string name="language_clear_search" formatted="false">"Kosongkan carian"</string>
+    <string name="language_no_results" formatted="false">"Tiada bahasa yang sepadan"</string>
+    <string name="common_save" formatted="false">"Simpan"</string>
+    <string name="common_cancel" formatted="false">"Batal"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Tutup"</string>
+    <string name="common_open" formatted="false">"Buka"</string>
+    <string name="common_copy" formatted="false">"Salin"</string>
+    <string name="common_add" formatted="false">"Tambah"</string>
+    <string name="common_delete" formatted="false">"Padam"</string>
+    <string name="common_done" formatted="false">"Selesai"</string>
+    <string name="common_save_apply" formatted="false">"Gunakan"</string>
+    <string name="common_unknown" formatted="false">"Tidak diketahui"</string>
+    <string name="common_custom" formatted="false">"Tersuai"</string>
+    <string name="home_icon_hidden" formatted="false">"Ikon aplikasi disembunyikan"</string>
+    <string name="home_icon_restored" formatted="false">"Ikon aplikasi dipaparkan semula"</string>
+    <string name="home_activated" formatted="false">"Diaktifkan"</string>
+    <string name="home_inactive" formatted="false">"Belum diaktifkan"</string>
+    <string name="home_activation_missing" formatted="false">"Pengaktifan tidak dikesan dalam LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Keserasian TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok yang dipasang"</string>
+    <string name="home_host_missing" formatted="false">"Tiada pemasangan TikTok yang disokong ditemukan pada peranti ini"</string>
+    <string name="home_host_not_installed" formatted="false">"Belum dipasang"</string>
+    <string name="home_supported_versions" formatted="false">"Versi yang disokong"</string>
+    <string name="home_community" formatted="false">"Sumber terbuka dan komuniti"</string>
+    <string name="home_github" formatted="false">"Repositori GitHub"</string>
+    <string name="home_telegram" formatted="false">"Kumpulan Telegram"</string>
+    <string name="home_preferences" formatted="false">"Keutamaan modul"</string>
+    <string name="home_hide_icon" formatted="false">"Sembunyikan ikon aplikasi"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Buka Toki melalui Pengurus LSPosed apabila ikon disembunyikan"</string>
+    <string name="home_support" formatted="false">"Sokong pembangunan"</string>
+    <string name="home_support_summary" formatted="false">"Sokong penyelenggaraan dan penambahbaikan berterusan"</string>
+    <string name="feature_region_section" formatted="false">"Rantau dan peranti"</string>
+    <string name="feature_playback_section" formatted="false">"Main balik"</string>
+    <string name="feature_progress" formatted="false">"Sentiasa papar bar kemajuan"</string>
+    <string name="feature_progress_summary" formatted="false">"Kekalkan paparan bar kemajuan, termasuk pada video pendek"</string>
+    <string name="feature_immersive" formatted="false">"Paparan video"</string>
+    <string name="feature_autoplay" formatted="false">"Tatal automatik dipertingkat"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Buka tatal automatik dalam menu semua video"</string>
+    <string name="feature_status_bar" formatted="false">"Sembunyikan bar status sistem"</string>
+    <string name="feature_media_section" formatted="false">"Muat turun dan tindakan"</string>
+    <string name="feature_download" formatted="false">"Muat turun tanpa tera air"</string>
+    <string name="feature_download_summary" formatted="false">"Simpan video asal tanpa tera air melalui menu tekan lama atau kongsi"</string>
+    <string name="feature_music" formatted="false">"Nyahsekat audio"</string>
+    <string name="feature_music_summary" formatted="false">"Pulihkan main balik audio yang dihadkan oleh lesen atau rantau"</string>
+    <string name="feature_author_region" formatted="false">"Paparkan rantau pencipta"</string>
+    <string name="feature_author_region_summary" formatted="false">"Paparkan bendera dan kod negara atau rantau di sebelah nama pencipta"</string>
+    <string name="feature_copy_comment" formatted="false">"Salin teks sahaja"</string>
+    <string name="feature_video_translation" formatted="false">"Menu sari kata dan terjemahan"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Paparkan pilihan dalam menu tekan lama"</string>
+    <string name="feature_comment_translation" formatted="false">"Terjemah komen"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Tambah butang untuk menterjemahkan komen bahasa asing secara pukal"</string>
+    <string name="feature_filter_section" formatted="false">"Penapisan suapan"</string>
+    <string name="feature_remove_ads" formatted="false">"Alih keluar iklan suapan"</string>
+    <string name="feature_remove_live" formatted="false">"Sembunyikan siaran LIVE"</string>
+    <string name="feature_remove_photos" formatted="false">"Sembunyikan siaran foto"</string>
+    <string name="feature_filter_views" formatted="false">"Penapis bilangan tontonan"</string>
+    <string name="feature_filter_likes" formatted="false">"Penapis bilangan suka"</string>
+    <string name="feature_filter_duration" formatted="false">"Penapis tempoh video"</string>
+    <string name="feature_filter_keywords" formatted="false">"Penapis kata kunci"</string>
+    <string name="feature_block_offline" formatted="false">"Sekat video luar talian"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Cegah penyisipan video luar talian yang dipramuat semasa sambungan lemah"</string>
+    <string name="feature_remove_ai" formatted="false">"Sembunyikan video janaan AI"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Tapis video yang dilabel oleh TikTok sebagai janaan AI"</string>
+    <string name="filter_metric_views" formatted="false">"tontonan"</string>
+    <string name="filter_metric_likes" formatted="false">"suka"</string>
+    <string name="filter_metric_duration" formatted="false">"tempoh"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Julat bilangan tontonan disimpan"</string>
+    <string name="filter_likes_saved" formatted="false">"Julat bilangan suka disimpan"</string>
+    <string name="filter_duration_saved" formatted="false">"Julat tempoh video disimpan"</string>
+    <string name="download_path_saved" formatted="false">"Laluan simpanan tersuai dikemas kini"</string>
+    <string name="region_spoof_title" formatted="false">"Penyamaran rantau dan SIM"</string>
+    <string name="region_current" formatted="false">"Konfigurasi semasa"</string>
+    <string name="region_target" formatted="true">"Rantau sasaran: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Pengendali: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Kod pengendali: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Pratetap"</string>
+    <string name="region_custom_parameters" formatted="false">"Tersuai"</string>
+    <string name="language_spoof" formatted="false">"Penyamaran bahasa"</string>
+    <string name="environment_follow_region" formatted="false">"Ikut rantau"</string>
+    <string name="language_effective" formatted="true">"Bahasa yang digunakan: %1$s"</string>
+    <string name="language_custom" formatted="false">"Bahasa tersuai"</string>
+    <string name="timezone_spoof" formatted="false">"Penyamaran zon waktu"</string>
+    <string name="timezone_effective" formatted="true">"Zon waktu yang digunakan: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Zon waktu tersuai"</string>
+    <string name="gps_spoof" formatted="false">"Penyamaran lokasi"</string>
+    <string name="gps_effective" formatted="true">"Koordinat yang digunakan: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Koordinat tersuai"</string>
+    <string name="speed_fixed" formatted="false">"Kekalkan kelajuan main balik"</string>
+    <string name="speed_fixed_summary" formatted="false">"Kekalkan kelajuan yang dipilih dalam menu tekan lama apabila beralih video"</string>
+    <string name="speed_expand" formatted="false">"Kelajuan tambahan"</string>
+    <string name="speed_options_hint" formatted="false">"Pilihan kelajuan (ketik untuk mengedit atau mengalih keluar)"</string>
+    <string name="speed_add_option" formatted="false">"+ Tambah kelajuan"</string>
+    <string name="speed_restore" formatted="false">"Tetap semula"</string>
+    <string name="clean_on_play" formatted="false">"Sembunyikan kawalan semasa main"</string>
+    <string name="clean_keep_progress" formatted="false">"Kekalkan bar kemajuan"</string>
+    <string name="download_paths" formatted="false">"Folder simpanan"</string>
+    <string name="download_paths_summary" formatted="true">"Video: %1$s · Imej: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Kekalkan video dengan %1$s dari %2$d%4$s hingga %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Kekalkan video dengan %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Kekalkan video dengan %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Tiada julat ditetapkan (ketik untuk menetapkan minimum atau maksimum)"</string>
+    <string name="keyword_unset" formatted="false">"Ketik untuk tambah peraturan"</string>
+    <string name="keyword_summary" formatted="true">"Didayakan: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Kapsyen %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Tanda pagar %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Pencipta %1$d"</string>
+    <string name="keyword_description" formatted="false">"Kapsyen"</string>
+    <string name="keyword_tag" formatted="false">"Tanda pagar"</string>
+    <string name="keyword_author" formatted="false">"Pencipta"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Tiada peraturan %1$s. Tambahkan di atas."</string>
+    <string name="duration_alert_title" formatted="false">"Amaran video panjang"</string>
+    <string name="duration_alert_summary" formatted="true">"Ambang semasa: ≥ %1$s minit"</string>
+    <string name="download_video_path" formatted="false">"Folder video"</string>
+    <string name="download_image_path" formatted="false">"Folder imej"</string>
+    <string name="download_path_hint" formatted="false">"Folder pertama mestilah folder media awam seperti Movies, Pictures atau DCIM. Laluan tidak sah menggunakan tetapan lalai sistem."</string>
+    <string name="views_range_title" formatted="false">"Julat bilangan tontonan"</string>
+    <string name="views_range_min" formatted="false">"Tontonan minimum (0 = tiada had)"</string>
+    <string name="views_range_max" formatted="false">"Tontonan maksimum (0 = tiada had)"</string>
+    <string name="views_range_hint" formatted="false">"Kekalkan hanya video dalam julat bilangan tontonan ini. Tetapkan kedua-dua had kepada 0 supaya tiada video dialih keluar."</string>
+    <string name="likes_range_title" formatted="false">"Julat bilangan suka"</string>
+    <string name="likes_range_min" formatted="false">"Suka minimum (0 = tiada had)"</string>
+    <string name="likes_range_max" formatted="false">"Suka maksimum (0 = tiada had)"</string>
+    <string name="likes_range_hint" formatted="false">"Kekalkan hanya video dalam julat bilangan suka ini. Tetapkan kedua-dua had kepada 0 supaya tiada video dialih keluar."</string>
+    <string name="duration_range_title" formatted="false">"Julat tempoh video"</string>
+    <string name="duration_range_min" formatted="false">"Tempoh minimum (saat; 0 = tiada had)"</string>
+    <string name="duration_range_max" formatted="false">"Tempoh maksimum (saat; 0 = tiada had)"</string>
+    <string name="duration_range_hint" formatted="false">"Kekalkan hanya video disyorkan dalam julat tempoh ini. Tetapkan kedua-dua had kepada 0 supaya tiada video dialih keluar. Siaran foto tidak terjejas."</string>
+    <string name="keyword_manage" formatted="false">"Peraturan penapis"</string>
+    <string name="keyword_description_hint" formatted="false">"Padankan kapsyen dan perihalan video tanpa membezakan huruf besar dengan huruf kecil."</string>
+    <string name="keyword_tag_hint" formatted="false">"Padankan tanda pagar. Jangan sertakan awalan #."</string>
+    <string name="keyword_author_hint" formatted="false">"Padankan nama pencipta dan nama pengguna unik. Jangan sertakan awalan @."</string>
+    <string name="keyword_description_input" formatted="false">"Kata kunci kapsyen"</string>
+    <string name="keyword_tag_input" formatted="false">"Tanda pagar"</string>
+    <string name="keyword_author_input" formatted="false">"Nama atau nama pengguna"</string>
+    <string name="keyword_add" formatted="false">"Tambah peraturan"</string>
+    <string name="keyword_delete" formatted="false">"Padam peraturan"</string>
+    <string name="region_select_title" formatted="false">"Pilih rantau"</string>
+    <string name="region_search" formatted="false">"Nama atau kod negara"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Kod pengendali: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Rantau dan SIM tersuai"</string>
+    <string name="region_custom_hint" formatted="false">"Tetapkan kod negara dan pengendali tersuai tanpa had pratetap."</string>
+    <string name="region_code_input" formatted="false">"Kod negara atau rantau (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Kod pengendali (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Nama pengendali (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Pilih bahasa lazim atau masukkan kod bahasa."</string>
+    <string name="language_code_input" formatted="false">"Kod bahasa (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Bahasa"</string>
+    <string name="timezone_custom_hint" formatted="false">"Pilih zon waktu bandar lazim atau masukkan nama zon waktu."</string>
+    <string name="timezone_input" formatted="false">"Nama zon waktu (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Bandar"</string>
+    <string name="city_tokyo" formatted="false">"Tokyo"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hong Kong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Seoul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapura"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Lokasi tersuai"</string>
+    <string name="gps_custom_hint" formatted="false">"Pilih bandar lazim atau masukkan latitud dan longitud."</string>
+    <string name="gps_latitude" formatted="false">"Latitud (-90.0 hingga 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Longitud (-180.0 hingga 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Bandar"</string>
+    <string name="speed_add_title" formatted="false">"Tambah kelajuan"</string>
+    <string name="speed_input" formatted="false">"Kelajuan"</string>
+    <string name="speed_invalid" formatted="false">"Masukkan nombor yang sah"</string>
+    <string name="speed_out_of_range" formatted="true">"Hanya %1$sx hingga %2$sx disokong"</string>
+    <string name="speed_range" formatted="true">"Julat yang disokong: %1$sx hingga %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Edit kelajuan"</string>
+    <string name="duration_threshold_title" formatted="false">"Amaran video panjang"</string>
+    <string name="duration_threshold_hint" formatted="false">"Apabila video mencapai tempoh ini, mesej ringkas pada permulaan main balik memaklumkan tempohnya dalam minit."</string>
+    <string name="duration_threshold_input" formatted="false">"Ambang tempoh (minit)"</string>
+    <string name="duration_threshold_example" formatted="false">"Contohnya: 3 atau 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Masukkan bilangan minit yang sah dan lebih besar daripada 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Tetapan semasa: amaran untuk video ≥ %1$s minit"</string>
+    <string name="duration_threshold_presets" formatted="false">"Tempoh yang dicadangkan:"</string>
+    <string name="status_feature_feed" formatted="false">"Penapis suapan"</string>
+    <string name="status_feature_speed" formatted="false">"Kelajuan"</string>
+    <string name="status_feature_progress" formatted="false">"Bar kemajuan"</string>
+    <string name="status_feature_clean" formatted="false">"Sembunyi automatik"</string>
+    <string name="status_feature_immersive" formatted="false">"Paparan video"</string>
+    <string name="status_feature_scroll" formatted="false">"Tatal automatik"</string>
+    <string name="status_feature_duration" formatted="false">"Amaran tempoh"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Terjemahan komen"</string>
+    <string name="status_feature_video_translate" formatted="false">"Menu sari kata dan terjemahan"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Salin komen"</string>
+    <string name="status_feature_author" formatted="false">"Rantau pencipta"</string>
+    <string name="status_feature_download" formatted="false">"Simpan video"</string>
+    <string name="status_feature_music" formatted="false">"Sekatan audio"</string>
+    <string name="status_feature_sim" formatted="false">"Rantau dan SIM"</string>
+    <string name="status_feature_language" formatted="false">"Bahasa"</string>
+    <string name="status_feature_timezone" formatted="false">"Zon waktu"</string>
+    <string name="status_feature_gps" formatted="false">"Lokasi"</string>
+    <string name="status_feature_bar" formatted="false">"Bar status"</string>
+    <string name="status_normal" formatted="false">"Berfungsi"</string>
+    <string name="status_issue" formatted="false">"Bermasalah"</string>
+    <string name="status_disabled" formatted="false">"Dimatikan"</string>
+    <string name="status_pending" formatted="false">"Menunggu"</string>
+    <string name="status_problem_disabled" formatted="false">"Dimatikan, dengan ralat direkodkan"</string>
+    <string name="status_problem_unavailable" formatted="false">"Tidak tersedia sementara"</string>
+    <string name="status_problem_runtime" formatted="false">"Ralat semasa berjalan"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Menu kelajuan tidak tersedia"</string>
+    <string name="status_prepare_failed" formatted="false">"Penyediaan ciri gagal. Buka semula TikTok dan semak lagi."</string>
+    <string name="status_preparing" formatted="false">"Sedang menyediakan ciri. Sila tunggu."</string>
+    <string name="status_prepared" formatted="false">"Penyediaan selesai. Sila buka semula TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Status tidak dapat dibaca sekarang. Sila semak lagi kemudian."</string>
+    <string name="status_update_failed" formatted="false">"Status tidak dapat dikemas kini sekarang. Hasil terkini dipaparkan."</string>
+    <string name="status_reading" formatted="false">"Sedang membaca status"</string>
+    <string name="status_empty" formatted="false">"Tiada aktiviti direkodkan. Dayakan Toki dalam LSPosed, kemudian buka TikTok dan semak lagi."</string>
+    <string name="status_report_note" formatted="true">"Laporan terkini: %1$s\n“Berfungsi” bermaksud ciri sudah sedia dan tidak melaporkan ralat."</string>
+    <string name="config_section" formatted="false">"Konfigurasi"</string>
+    <string name="config_import" formatted="false">"Import tetapan"</string>
+    <string name="config_import_summary" formatted="false">"Pulihkan tetapan ciri daripada fail"</string>
+    <string name="config_export" formatted="false">"Eksport tetapan"</string>
+    <string name="config_export_summary" formatted="false">"Simpan tetapan ciri ke fail"</string>
+    <string name="config_exported" formatted="false">"Konfigurasi dieksport ke lokasi yang dipilih. Fail mungkin mengandungi kata kunci, rantau dan tetapan folder. Simpan dengan selamat."</string>
+    <string name="config_import_confirm" formatted="true">"Fail mengandungi %1$d tetapan. Import menggantikan semua tetapan ciri; tetapan yang tiada dikembalikan kepada nilai lalai.\n\nBahasa aplikasi, ikon aplikasi, kebenaran LSPosed dan cache keserasian TikTok tidak berubah. Teruskan?"</string>
+    <string name="config_overwrite" formatted="false">"Ganti"</string>
+    <string name="config_imported" formatted="false">"Konfigurasi diimport dan tetapan ciri dikemas kini. Perubahan yang menyokong kemas kini langsung digunakan serta-merta. Buka semula TikTok untuk mengesahkan perubahan lain."</string>
+    <string name="config_processing" formatted="false">"Memproses…"</string>
+    <string name="config_error_io" formatted="false">"Tidak dapat membaca atau menulis fail. Semak lokasi yang dipilih dan ruang yang tersedia."</string>
+    <string name="config_error_permission" formatted="false">"Kebenaran mengakses fail yang dipilih tidak diberikan. Pilih fail itu semula."</string>
+    <string name="config_error_invalid" formatted="false">"Ini bukan fail konfigurasi Toki yang sah. Tiada tetapan diimport."</string>
+    <string name="config_error_validation" formatted="true">"Pengesahan konfigurasi gagal: %1$s. Tiada tetapan diimport."</string>
+    <string name="config_error_commit" formatted="false">"Perubahan konfigurasi tidak dapat disahkan. Buka semula Toki untuk menyemaknya sebelum mencuba lagi."</string>
+    <string name="sponsor_title" formatted="false">"Sokong pembangun"</string>
+    <string name="sponsor_kofi" formatted="false">"Sokong melalui Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Kod QR pembayaran Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Sedang menyimpan…"</string>
+    <string name="sponsor_save_image" formatted="false">"Simpan imej"</string>
+    <string name="sponsor_image_hint" formatted="false">"Simpan imej asal yang lengkap, kemudian pilih imej itu dalam Alipay untuk mengimbas kod."</string>
+    <string name="sponsor_address_copied" formatted="false">"Alamat USDT disalin"</string>
+    <string name="sponsor_image_saved" formatted="false">"Imej disimpan ke lokasi yang dipilih"</string>
+    <string name="sponsor_error_io" formatted="false">"Gagal menyimpan. Semak lokasi yang dipilih dan ruang yang tersedia, kemudian cuba lagi."</string>
+    <string name="sponsor_error_permission" formatted="false">"Gagal menyimpan. Kebenaran menulis tidak diberikan untuk lokasi ini. Pilih lokasi lain."</string>
+    <string name="feature_filter_topics" formatted="false">"Sembunyikan cadangan topik"</string>
+    <string name="feature_filter_creators" formatted="false">"Sembunyikan cadangan pencipta"</string>
+    <string name="host_scan_title_complete" formatted="false">"Carian selesai"</string>
+    <string name="host_scan_title_failed" formatted="false">"Carian gagal"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Mulakan semula TikTok secara manual untuk menggunakan hasilnya."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Lihat diagnostik ciri dalam Toki."</string>
+    <string name="layout_title" formatted="false">"Susun atur halaman"</string>
+    <string name="layout_summary" formatted="false">"Pilih kawalan yang hendak disembunyikan"</string>
+    <string name="layout_hint" formatted="false">"Hidupkan suis untuk menyembunyikan item"</string>
+    <string name="layout_top" formatted="false">"Bar atas"</string>
+    <string name="layout_bottom" formatted="false">"Bar bawah"</string>
+    <string name="layout_side" formatted="false">"Halaman video"</string>
+    <string name="layout_search" formatted="false">"Cari"</string>
+    <string name="layout_live" formatted="false">"SIARAN LANGSUNG"</string>
+    <string name="layout_friends" formatted="false">"Rakan"</string>
+    <string name="layout_following" formatted="false">"Mengikuti"</string>
+    <string name="layout_shop" formatted="false">"Kedai"</string>
+    <string name="layout_for_you" formatted="false">"Untuk Anda"</string>
+    <string name="layout_nearby" formatted="false">"Berdekatan"</string>
+    <string name="layout_stem" formatted="false">"Sains"</string>
+    <string name="layout_series" formatted="false">"Siri"</string>
+    <string name="layout_home" formatted="false">"Utama"</string>
+    <string name="layout_create" formatted="false">"Cipta"</string>
+    <string name="layout_inbox" formatted="false">"Peti masuk"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Temui"</string>
+    <string name="layout_avatar" formatted="false">"Foto profil"</string>
+    <string name="layout_follow" formatted="false">"Butang Ikut"</string>
+    <string name="layout_like" formatted="false">"Suka"</string>
+    <string name="layout_comment" formatted="false">"Komen"</string>
+    <string name="layout_favorite" formatted="false">"Kegemaran"</string>
+    <string name="layout_share" formatted="false">"Kongsi"</string>
+    <string name="layout_music" formatted="false">"Cakera muzik"</string>
+    <string name="layout_explore" formatted="false">"Teroka"</string>
+    <string name="layout_author" formatted="false">"Maklumat pengarang"</string>
+    <string name="layout_description" formatted="false">"Perihalan"</string>
+    <string name="layout_music_title" formatted="false">"Tajuk muzik"</string>
+    <string name="layout_tags" formatted="false">"Label maklumat"</string>
+    <string name="layout_search_label" formatted="false">"Cadangan carian"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Butang hentikan tatal automatik"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Syiling dan ganjaran"</string>
+    <string name="layout_quick_comment" formatted="false">"Komen pantas"</string>
+    <string name="layout_playlist" formatted="false">"Senarai main"</string>
+    <string name="layout_creation_buttons" formatted="false">"Pintasan ciptaan"</string>
+    <string name="layout_live_notice" formatted="false">"Peringatan LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Kelegapan"</string>
+    <string name="feature_background_audio">"Buka audio latar belakang"</string>
+    <string name="layout_landscape">"Butang skrin penuh"</string>
+    <string name="layout_photo_indicators">"Penunjuk dan petunjuk foto"</string>
+    <string name="layout_quick_message">"Mesej pantas dan sumber perkongsian"</string>
+    <string name="layout_user_card">"Akaun dicadangkan"</string>
+    <string name="layout_survey">"Tinjauan dan maklum balas"</string>
+    <string name="layout_ad_cards">"Kad produk dan iklan"</string>
+    <string name="layout_bottom_banners">"Sepanduk bawah lain"</string>
+    <string name="layout_activities">"Butang acara"</string>
+    <string name="host_scan_title_running" formatted="false">"Mencari kaedah"</string>
+    <string name="host_scan_title_saving" formatted="false">"Menyimpan hasil"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Pastikan TikTok kekal di latar depan."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Sila tunggu."</string>
+    <string name="host_scan_done" formatted="false">"Faham"</string>
+    <string name="video_fit_center" formatted="false">"Di tengah"</string>
+    <string name="video_fit_smart" formatted="false">"Skrin penuh"</string>
+</resources>

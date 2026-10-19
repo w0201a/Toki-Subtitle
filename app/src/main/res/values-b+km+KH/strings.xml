@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"ទំព័រដើម"</string>
+    <string name="nav_features" formatted="false">"មុខងារ"</string>
+    <string name="page_features" formatted="false">"ការកំណត់"</string>
+    <string name="page_hook_status" formatted="false">"ស្ថានភាពមុខងារ"</string>
+    <string name="nav_back" formatted="false">"ត្រឡប់"</string>
+    <string name="restart_tiktok" formatted="false">"ចាប់ផ្តើម TikTok ឡើងវិញ"</string>
+    <string name="restart_root_required" formatted="false">"សូមផ្តល់សិទ្ធិ root ដល់ Toki។"</string>
+    <string name="language_title" formatted="false">"ភាសាកម្មវិធី"</string>
+    <string name="language_system" formatted="false">"តាមប្រព័ន្ធ"</string>
+    <string name="language_search" formatted="false">"ស្វែងរកភាសា"</string>
+    <string name="language_clear_search" formatted="false">"សម្អាតការស្វែងរក"</string>
+    <string name="language_no_results" formatted="false">"រកមិនឃើញភាសាដែលត្រូវគ្នា"</string>
+    <string name="common_save" formatted="false">"រក្សាទុក"</string>
+    <string name="common_cancel" formatted="false">"បោះបង់"</string>
+    <string name="common_confirm" formatted="false">"យល់ព្រម"</string>
+    <string name="common_close" formatted="false">"បិទ"</string>
+    <string name="common_open" formatted="false">"បើក"</string>
+    <string name="common_copy" formatted="false">"ចម្លង"</string>
+    <string name="common_add" formatted="false">"បន្ថែម"</string>
+    <string name="common_delete" formatted="false">"លុប"</string>
+    <string name="common_done" formatted="false">"រួចរាល់"</string>
+    <string name="common_save_apply" formatted="false">"អនុវត្ត"</string>
+    <string name="common_unknown" formatted="false">"មិនស្គាល់"</string>
+    <string name="common_custom" formatted="false">"ផ្ទាល់ខ្លួន"</string>
+    <string name="home_icon_hidden" formatted="false">"បានលាក់រូបតំណាងកម្មវិធី"</string>
+    <string name="home_icon_restored" formatted="false">"បានស្ដាររូបតំណាងកម្មវិធី"</string>
+    <string name="home_activated" formatted="false">"បានធ្វើឱ្យសកម្ម"</string>
+    <string name="home_inactive" formatted="false">"មិនទាន់សកម្ម"</string>
+    <string name="home_activation_missing" formatted="false">"រកមិនឃើញការធ្វើឱ្យសកម្មក្នុង LSPosed"</string>
+    <string name="home_host_section" formatted="false">"ភាពឆបគ្នាជាមួយ TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok ដែលបានដំឡើង"</string>
+    <string name="home_host_missing" formatted="false">"រកមិនឃើញ TikTok ដែលគាំទ្រនៅលើឧបករណ៍នេះ"</string>
+    <string name="home_host_not_installed" formatted="false">"មិនទាន់ដំឡើង"</string>
+    <string name="home_supported_versions" formatted="false">"កំណែដែលគាំទ្រ"</string>
+    <string name="home_community" formatted="false">"សហគមន៍"</string>
+    <string name="home_github" formatted="false">"ឃ្លាំងកូដ GitHub"</string>
+    <string name="home_telegram" formatted="false">"ក្រុម Telegram"</string>
+    <string name="home_preferences" formatted="false">"ការកំណត់"</string>
+    <string name="home_hide_icon" formatted="false">"លាក់រូបតំណាងកម្មវិធី"</string>
+    <string name="home_hide_icon_summary" formatted="false">"ពេលលាក់រូបតំណាង អាចបើក Toki តាមកម្មវិធីគ្រប់គ្រង LSPosed"</string>
+    <string name="home_support" formatted="false">"គាំទ្រការអភិវឌ្ឍ"</string>
+    <string name="home_support_summary" formatted="false">"គាំទ្រការថែទាំ និងការកែលម្អបន្ត"</string>
+    <string name="feature_region_section" formatted="false">"ការក្លែងតំបន់ និងបរិស្ថាន"</string>
+    <string name="feature_playback_section" formatted="false">"ការចាក់"</string>
+    <string name="feature_progress" formatted="false">"បង្ហាញរបារវឌ្ឍនភាពវីដេអូជានិច្ច"</string>
+    <string name="feature_progress_summary" formatted="false">"រក្សារបារវឌ្ឍនភាពឱ្យមើលឃើញ សូម្បីវីដេអូខ្លី"</string>
+    <string name="feature_immersive" formatted="false">"ការបង្ហាញវីដេអូ"</string>
+    <string name="feature_autoplay" formatted="false">"ការរំកិលស្វ័យប្រវត្តិប្រសើរឡើង"</string>
+    <string name="feature_autoplay_summary" formatted="false">"ដោះសោការរំកិលស្វ័យប្រវត្តិក្នុងម៉ឺនុយវីដេអូទាំងអស់"</string>
+    <string name="feature_status_bar" formatted="false">"លាក់របារស្ថានភាពប្រព័ន្ធ"</string>
+    <string name="feature_media_section" formatted="false">"ការទាញយក និងឧបករណ៍"</string>
+    <string name="feature_download" formatted="false">"ទាញយកគ្មានស្នាមទឹក"</string>
+    <string name="feature_download_summary" formatted="false">"រក្សាទុកវីដេអូដើមដោយគ្មានស្នាមទឹក ពីម៉ឺនុយចុចឱ្យជាប់ ឬចែករំលែក"</string>
+    <string name="feature_music" formatted="false">"ដោះសោសំឡេង"</string>
+    <string name="feature_music_summary" formatted="false">"ស្ដារសំឡេងដែលកំណត់ដោយអាជ្ញាបណ្ណ ឬតំបន់"</string>
+    <string name="feature_author_region" formatted="false">"បង្ហាញតំបន់អ្នកបង្កើត"</string>
+    <string name="feature_author_region_summary" formatted="false">"បង្ហាញទង់ជាតិ និងកូដប្រទេសឬតំបន់ ក្បែរឈ្មោះអ្នកបង្កើត"</string>
+    <string name="feature_copy_comment" formatted="false">"ចម្លងតែអត្ថបទ"</string>
+    <string name="feature_video_translation" formatted="false">"ម៉ឺនុយចំណងជើងរង និងការបកប្រែ"</string>
+    <string name="feature_video_translation_summary" formatted="false">"បង្ហាញជម្រើសក្នុងម៉ឺនុយចុចឱ្យជាប់"</string>
+    <string name="feature_comment_translation" formatted="false">"បកប្រែមតិ"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"បន្ថែមប៊ូតុងបកប្រែមតិភាសាបរទេសជាច្រើនក្នុងពេលតែមួយ"</string>
+    <string name="feature_filter_section" formatted="false">"ការច្រោះផ្ទាំងព័ត៌មាន"</string>
+    <string name="feature_remove_ads" formatted="false">"ដកពាណិជ្ជកម្មចេញពីផ្ទាំងព័ត៌មាន"</string>
+    <string name="feature_remove_live" formatted="false">"ច្រោះការផ្សាយផ្ទាល់ដែលបានណែនាំ"</string>
+    <string name="feature_remove_photos" formatted="false">"ច្រោះបង្ហោះរូបថតដែលបានណែនាំ"</string>
+    <string name="feature_filter_views" formatted="false">"តម្រងចំនួនទស្សនា"</string>
+    <string name="feature_filter_likes" formatted="false">"តម្រងចំនួនចូលចិត្ត"</string>
+    <string name="feature_filter_duration" formatted="false">"តម្រងរយៈពេល"</string>
+    <string name="feature_filter_keywords" formatted="false">"តម្រងពាក្យគន្លឹះ"</string>
+    <string name="feature_block_offline" formatted="false">"ទប់ស្កាត់វីដេអូក្រៅបណ្ដាញ"</string>
+    <string name="feature_block_offline_summary" formatted="false">"ទប់ស្កាត់ការបញ្ចូលវីដេអូក្រៅបណ្ដាញដែលផ្ទុកជាមុន ពេលការតភ្ជាប់ខ្សោយ"</string>
+    <string name="feature_remove_ai" formatted="false">"ដកមាតិកាដែលបង្កើតដោយ AI"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"ច្រោះវីដេអូដែល TikTok សម្គាល់ថាបង្កើតដោយ AI"</string>
+    <string name="filter_metric_views" formatted="false">"ការទស្សនា"</string>
+    <string name="filter_metric_likes" formatted="false">"ការចូលចិត្ត"</string>
+    <string name="filter_metric_duration" formatted="false">"រយៈពេល"</string>
+    <string name="filter_unit_seconds" formatted="false">"វិ."</string>
+    <string name="filter_views_saved" formatted="false">"បានរក្សាទុកចន្លោះចំនួនទស្សនា"</string>
+    <string name="filter_likes_saved" formatted="false">"បានរក្សាទុកចន្លោះចំនួនចូលចិត្ត"</string>
+    <string name="filter_duration_saved" formatted="false">"បានរក្សាទុកចន្លោះរយៈពេលវីដេអូ"</string>
+    <string name="download_path_saved" formatted="false">"បានធ្វើបច្ចុប្បន្នភាពផ្លូវរក្សាទុកផ្ទាល់ខ្លួន"</string>
+    <string name="region_spoof_title" formatted="false">"ការក្លែងតំបន់ និង SIM"</string>
+    <string name="region_current" formatted="false">"ការកំណត់បច្ចុប្បន្ន"</string>
+    <string name="region_target" formatted="true">"តំបន់គោលដៅ: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"ប្រតិបត្តិករ: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"កូដប្រតិបត្តិករ: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"ការកំណត់ជាមុន"</string>
+    <string name="region_custom_parameters" formatted="false">"ផ្ទាល់ខ្លួន"</string>
+    <string name="language_spoof" formatted="false">"ការក្លែងភាសា"</string>
+    <string name="environment_follow_region" formatted="false">"តាមតំបន់"</string>
+    <string name="language_effective" formatted="true">"ភាសាដែលកំពុងប្រើ: %1$s"</string>
+    <string name="language_custom" formatted="false">"ភាសាផ្ទាល់ខ្លួន"</string>
+    <string name="timezone_spoof" formatted="false">"ការក្លែងតំបន់ពេលវេលា"</string>
+    <string name="timezone_effective" formatted="true">"តំបន់ពេលវេលាដែលកំពុងប្រើ: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"តំបន់ពេលវេលាផ្ទាល់ខ្លួន"</string>
+    <string name="gps_spoof" formatted="false">"ការក្លែងទីតាំង"</string>
+    <string name="gps_effective" formatted="true">"កូអរដោនេដែលកំពុងប្រើ: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"កូអរដោនេផ្ទាល់ខ្លួន"</string>
+    <string name="speed_fixed" formatted="false">"រក្សាល្បឿន"</string>
+    <string name="speed_fixed_summary" formatted="false">"រក្សាល្បឿនដែលជ្រើសពីម៉ឺនុយចុចឱ្យជាប់ ពេលប្ដូរវីដេអូ"</string>
+    <string name="speed_expand" formatted="false">"ល្បឿនបន្ថែម"</string>
+    <string name="speed_options_hint" formatted="false">"ល្បឿន (ប៉ះដើម្បីកែ ឬលុប)"</string>
+    <string name="speed_add_option" formatted="false">"+ បន្ថែមល្បឿន"</string>
+    <string name="speed_restore" formatted="false">"ស្ដារលំនាំដើម"</string>
+    <string name="clean_on_play" formatted="false">"លាក់ប៊ូតុងបញ្ជាពេលចាក់"</string>
+    <string name="clean_keep_progress" formatted="false">"រក្សារបារវឌ្ឍនភាព"</string>
+    <string name="download_paths" formatted="false">"ថតរក្សាទុក"</string>
+    <string name="download_paths_summary" formatted="true">"វីដេអូ: %1$s · រូបភាព: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"រក្សាវីដេអូដែលមាន %1$s ពី %2$d%4$s ដល់ %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"រក្សាវីដេអូដែលមាន %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"រក្សាវីដេអូដែលមាន %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"មិនទាន់កំណត់ចន្លោះ (ប៉ះដើម្បីកំណត់អប្បបរមា ឬអតិបរមា)"</string>
+    <string name="keyword_unset" formatted="false">"មិនមានច្បាប់តម្រង (ប៉ះដើម្បីគ្រប់គ្រងប្រភេទ)"</string>
+    <string name="keyword_summary" formatted="true">"បានបើក: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"អត្ថបទ %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"ហាសថេក %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"អ្នកបង្កើត %1$d"</string>
+    <string name="keyword_description" formatted="false">"អត្ថបទ"</string>
+    <string name="keyword_tag" formatted="false">"ហាសថេក"</string>
+    <string name="keyword_author" formatted="false">"អ្នកបង្កើត"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"មិនមានច្បាប់សម្រាប់ %1$s។ បន្ថែមនៅខាងលើ។"</string>
+    <string name="duration_alert_title" formatted="false">"ការជូនដំណឹងវីដេអូវែង"</string>
+    <string name="duration_alert_summary" formatted="true">"កម្រិតបច្ចុប្បន្ន: ≥ %1$s នាទី"</string>
+    <string name="download_video_path" formatted="false">"ថតវីដេអូ"</string>
+    <string name="download_image_path" formatted="false">"ថតរូបភាព"</string>
+    <string name="download_path_hint" formatted="false">"ថតដំបូងត្រូវជាថតមេឌៀសាធារណៈ ដូចជា Movies, Pictures ឬ DCIM។ ផ្លូវមិនត្រឹមត្រូវនឹងប្រើលំនាំដើមប្រព័ន្ធ។"</string>
+    <string name="views_range_title" formatted="false">"ចន្លោះចំនួនទស្សនា"</string>
+    <string name="views_range_min" formatted="false">"ចំនួនទស្សនាអប្បបរមា (0 = មិនកំណត់)"</string>
+    <string name="views_range_max" formatted="false">"ចំនួនទស្សនាអតិបរមា (0 = មិនកំណត់)"</string>
+    <string name="views_range_hint" formatted="false">"រក្សាតែវីដេអូដែលមានចំនួនទស្សនាក្នុងចន្លោះនេះ។ បើកំណត់ទាំងពីរជា 0 នោះគ្មានអ្វីត្រូវដកចេញទេ។"</string>
+    <string name="likes_range_title" formatted="false">"ចន្លោះចំនួនចូលចិត្ត"</string>
+    <string name="likes_range_min" formatted="false">"ចំនួនចូលចិត្តអប្បបរមា (0 = មិនកំណត់)"</string>
+    <string name="likes_range_max" formatted="false">"ចំនួនចូលចិត្តអតិបរមា (0 = មិនកំណត់)"</string>
+    <string name="likes_range_hint" formatted="false">"រក្សាតែវីដេអូដែលមានចំនួនចូលចិត្តក្នុងចន្លោះនេះ។ បើកំណត់ទាំងពីរជា 0 នោះគ្មានអ្វីត្រូវដកចេញទេ។"</string>
+    <string name="duration_range_title" formatted="false">"ចន្លោះរយៈពេលវីដេអូ"</string>
+    <string name="duration_range_min" formatted="false">"រយៈពេលអប្បបរមា (វិនាទី; 0 = មិនកំណត់)"</string>
+    <string name="duration_range_max" formatted="false">"រយៈពេលអតិបរមា (វិនាទី; 0 = មិនកំណត់)"</string>
+    <string name="duration_range_hint" formatted="false">"រក្សាតែវីដេអូណែនាំដែលមានរយៈពេលក្នុងចន្លោះនេះ។ បើកំណត់ទាំងពីរជា 0 នោះគ្មានអ្វីត្រូវដកចេញទេ។ មិនប៉ះពាល់ដល់បង្ហោះរូបថត។"</string>
+    <string name="keyword_manage" formatted="false">"ច្បាប់តម្រង"</string>
+    <string name="keyword_description_hint" formatted="false">"ផ្គូផ្គងអត្ថបទ និងការពិពណ៌នាវីដេអូ ដោយមិនប្រកាន់អក្សរធំតូច។"</string>
+    <string name="keyword_tag_hint" formatted="false">"ផ្គូផ្គងហាសថេក។ កុំបញ្ចូលបុព្វបទ #។"</string>
+    <string name="keyword_author_hint" formatted="false">"ផ្គូផ្គងឈ្មោះអ្នកបង្កើត និងឈ្មោះអ្នកប្រើប្រាស់តែមួយគត់។ កុំបញ្ចូលបុព្វបទ @។"</string>
+    <string name="keyword_description_input" formatted="false">"ពាក្យ ឬឃ្លា"</string>
+    <string name="keyword_tag_input" formatted="false">"ហាសថេក"</string>
+    <string name="keyword_author_input" formatted="false">"ឈ្មោះ ឬឈ្មោះអ្នកប្រើ"</string>
+    <string name="keyword_add" formatted="false">"បន្ថែមច្បាប់"</string>
+    <string name="keyword_delete" formatted="false">"លុបច្បាប់"</string>
+    <string name="region_select_title" formatted="false">"ជ្រើសតំបន់"</string>
+    <string name="region_search" formatted="false">"ស្វែងរកតាមឈ្មោះប្រទេស ឈ្មោះជាអង់គ្លេស ឬកូដតំបន់"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · កូដប្រតិបត្តិករ: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"តំបន់ និង SIM ផ្ទាល់ខ្លួន"</string>
+    <string name="region_custom_hint" formatted="false">"កំណត់កូដប្រទេស និងប្រតិបត្តិករ ដោយគ្មានដែនកំណត់នៃការកំណត់ជាមុន។"</string>
+    <string name="region_code_input" formatted="false">"កូដប្រទេស ឬតំបន់ (ឧ. JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"កូដប្រតិបត្តិករ (ឧ. 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"ឈ្មោះប្រតិបត្តិករ (ឧ. NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"ជ្រើសភាសាដែលប្រើញឹកញាប់ ឬបញ្ចូលកូដភាសា។"</string>
+    <string name="language_code_input" formatted="false">"កូដភាសា (ឧ. ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"ភាសាដែលប្រើញឹកញាប់:"</string>
+    <string name="timezone_custom_hint" formatted="false">"ជ្រើសតំបន់ពេលវេលាទីក្រុង ឬបញ្ចូលឈ្មោះតំបន់ពេលវេលា។"</string>
+    <string name="timezone_input" formatted="false">"ឈ្មោះតំបន់ពេលវេលា (ឧ. Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"តំបន់ពេលវេលាទីក្រុងដែលប្រើញឹកញាប់:"</string>
+    <string name="city_tokyo" formatted="false">"តូក្យូ"</string>
+    <string name="city_taipei" formatted="false">"តៃប៉ិ"</string>
+    <string name="city_hong_kong" formatted="false">"ហុងកុង"</string>
+    <string name="city_new_york" formatted="false">"ញូវយ៉ក"</string>
+    <string name="city_london" formatted="false">"ឡុងដ៍"</string>
+    <string name="city_seoul" formatted="false">"សេអ៊ូល"</string>
+    <string name="city_bangkok" formatted="false">"បាងកក"</string>
+    <string name="city_singapore" formatted="false">"សិង្ហបុរី"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"កូអរដោនេទីតាំងផ្ទាល់ខ្លួន"</string>
+    <string name="gps_custom_hint" formatted="false">"ជ្រើសទីក្រុង ឬបញ្ចូលរយៈទទឹង និងរយៈបណ្ដោយ។"</string>
+    <string name="gps_latitude" formatted="false">"រយៈទទឹង (-90.0 ដល់ 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"រយៈបណ្ដោយ (-180.0 ដល់ 180.0)"</string>
+    <string name="gps_presets" formatted="false">"ទីក្រុងដែលប្រើញឹកញាប់:"</string>
+    <string name="speed_add_title" formatted="false">"បន្ថែមល្បឿន"</string>
+    <string name="speed_input" formatted="false">"ល្បឿនចាក់"</string>
+    <string name="speed_invalid" formatted="false">"បញ្ចូលលេខត្រឹមត្រូវ"</string>
+    <string name="speed_out_of_range" formatted="true">"គាំទ្រតែពី %1$sx ដល់ %2$sx"</string>
+    <string name="speed_range" formatted="true">"ចន្លោះដែលគាំទ្រ: %1$sx ដល់ %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"កែល្បឿន"</string>
+    <string name="duration_threshold_title" formatted="false">"ជូនដំណឹងវីដេអូវែង"</string>
+    <string name="duration_threshold_hint" formatted="false">"ពេលវីដេអូមានរយៈពេលដល់កម្រិតនេះ សារខ្លីនៅពេលចាប់ផ្ដើមចាក់នឹងប្រាប់រយៈពេលជានាទី។"</string>
+    <string name="duration_threshold_input" formatted="false">"កម្រិតរយៈពេល (នាទី)"</string>
+    <string name="duration_threshold_example" formatted="false">"ឧទាហរណ៍: 3 ឬ 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"បញ្ចូលចំនួននាទីត្រឹមត្រូវដែលធំជាង 0"</string>
+    <string name="duration_threshold_current" formatted="true">"ការកំណត់បច្ចុប្បន្ន: ជូនដំណឹងសម្រាប់វីដេអូ ≥ %1$s នាទី"</string>
+    <string name="duration_threshold_presets" formatted="false">"រយៈពេលដែលបានណែនាំ:"</string>
+    <string name="status_feature_feed" formatted="false">"ច្រោះផ្ទាំងព័ត៌មាន"</string>
+    <string name="status_feature_speed" formatted="false">"ល្បឿនចាក់"</string>
+    <string name="status_feature_progress" formatted="false">"របារវឌ្ឍនភាព"</string>
+    <string name="status_feature_clean" formatted="false">"លាក់ប៊ូតុងបញ្ជាស្វ័យប្រវត្តិ"</string>
+    <string name="status_feature_immersive" formatted="false">"ការបង្ហាញវីដេអូ"</string>
+    <string name="status_feature_scroll" formatted="false">"រមូរស្វ័យប្រវត្តិ"</string>
+    <string name="status_feature_duration" formatted="false">"ជូនដំណឹងរយៈពេល"</string>
+    <string name="status_feature_comment_translate" formatted="false">"បកប្រែមតិ"</string>
+    <string name="status_feature_video_translate" formatted="false">"ម៉ឺនុយចំណងជើងរង និងការបកប្រែ"</string>
+    <string name="status_feature_comment_copy" formatted="false">"ចម្លងមតិ"</string>
+    <string name="status_feature_author" formatted="false">"តំបន់អ្នកបង្កើត"</string>
+    <string name="status_feature_download" formatted="false">"រក្សាទុកវីដេអូ"</string>
+    <string name="status_feature_music" formatted="false">"ការរឹតបន្តឹងសំឡេង"</string>
+    <string name="status_feature_sim" formatted="false">"SIM និងប្រទេស"</string>
+    <string name="status_feature_language" formatted="false">"ភាសា"</string>
+    <string name="status_feature_timezone" formatted="false">"តំបន់ពេលវេលា"</string>
+    <string name="status_feature_gps" formatted="false">"ទីតាំង"</string>
+    <string name="status_feature_bar" formatted="false">"របារស្ថានភាព"</string>
+    <string name="status_normal" formatted="false">"ដំណើរការ"</string>
+    <string name="status_issue" formatted="false">"មានបញ្ហា"</string>
+    <string name="status_disabled" formatted="false">"បានបិទ"</string>
+    <string name="status_pending" formatted="false">"មិនទាន់បញ្ជាក់"</string>
+    <string name="status_problem_disabled" formatted="false">"បានបិទ និងមានកំណត់ត្រាកំហុស"</string>
+    <string name="status_problem_unavailable" formatted="false">"មិនអាចប្រើបានបណ្ដោះអាសន្ន"</string>
+    <string name="status_problem_runtime" formatted="false">"មានកំហុសពេលប្រើ"</string>
+    <string name="status_problem_speed_menu" formatted="false">"ម៉ឺនុយល្បឿនមិនអាចប្រើបាន"</string>
+    <string name="status_prepare_failed" formatted="false">"ការរៀបចំមុខងារបរាជ័យ។ បើក TikTok ឡើងវិញ ហើយពិនិត្យ។"</string>
+    <string name="status_preparing" formatted="false">"កំពុងរៀបចំមុខងារ។ សូមរង់ចាំ។"</string>
+    <string name="status_prepared" formatted="false">"រៀបចំរួចហើយ។ សូមបើក TikTok ឡើងវិញ។"</string>
+    <string name="status_read_failed" formatted="false">"មិនអាចអានស្ថានភាពឥឡូវនេះ។ សូមពិនិត្យពេលក្រោយ។"</string>
+    <string name="status_update_failed" formatted="false">"មិនអាចធ្វើបច្ចុប្បន្នភាពស្ថានភាពឥឡូវនេះ។ កំពុងបង្ហាញលទ្ធផលចុងក្រោយ។"</string>
+    <string name="status_reading" formatted="false">"កំពុងអានស្ថានភាព"</string>
+    <string name="status_empty" formatted="false">"មិនមានកំណត់ត្រាសកម្មភាព។ បើក Toki ក្នុង LSPosed រួចបើក TikTok ហើយពិនិត្យម្តងទៀត។"</string>
+    <string name="status_report_note" formatted="true">"របាយការណ៍ចុងក្រោយ: %1$s\n“ដំណើរការ” មានន័យថាមុខងាររួចរាល់ និងមិនបានរាយការណ៍កំហុស។"</string>
+    <string name="config_section" formatted="false">"ការកំណត់រចនាសម្ព័ន្ធ"</string>
+    <string name="config_import" formatted="false">"នាំចូលការកំណត់"</string>
+    <string name="config_import_summary" formatted="false">"ស្ដារការកំណត់មុខងារពីឯកសារ"</string>
+    <string name="config_export" formatted="false">"នាំចេញការកំណត់"</string>
+    <string name="config_export_summary" formatted="false">"រក្សាទុកការកំណត់មុខងារជាឯកសារ"</string>
+    <string name="config_exported" formatted="false">"បាននាំចេញការកំណត់ទៅទីតាំងដែលបានជ្រើស។ ឯកសារអាចមានពាក្យគន្លឹះ តំបន់ និងការកំណត់ថត។ សូមរក្សាទុកឱ្យមានសុវត្ថិភាព។"</string>
+    <string name="config_import_confirm" formatted="true">"ឯកសារមានការកំណត់ %1$d។ ការនាំចូលនឹងជំនួសការកំណត់មុខងារទាំងអស់ ហើយការកំណត់ដែលមិនមាននឹងត្រឡប់ទៅលំនាំដើម។\n\nភាសាកម្មវិធី រូបតំណាង សិទ្ធិ LSPosed និងឃ្លាំងសម្ងាត់ភាពឆបគ្នា TikTok នឹងមិនប្ដូរ។ បន្តឬ?"</string>
+    <string name="config_overwrite" formatted="false">"ជំនួស"</string>
+    <string name="config_imported" formatted="false">"បាននាំចូល និងធ្វើបច្ចុប្បន្នភាពការកំណត់។ ការផ្លាស់ប្តូរដែលគាំទ្រការធ្វើបច្ចុប្បន្នភាពពេលកំពុងដំណើរការ អនុវត្តភ្លាមៗ។ បើក TikTok ឡើងវិញដើម្បីពិនិត្យការផ្លាស់ប្តូរផ្សេង។"</string>
+    <string name="config_processing" formatted="false">"កំពុងដំណើរការការកំណត់"</string>
+    <string name="config_error_io" formatted="false">"មិនអាចអាន ឬសរសេរឯកសារ។ ពិនិត្យទីតាំងដែលបានជ្រើស និងទំហំទំនេរ។"</string>
+    <string name="config_error_permission" formatted="false">"មិនមានសិទ្ធិចូលប្រើឯកសារដែលបានជ្រើស។ សូមជ្រើសម្តងទៀត។"</string>
+    <string name="config_error_invalid" formatted="false">"នេះមិនមែនជាឯកសារកំណត់ Toki ត្រឹមត្រូវទេ។ មិនបាននាំចូលការកំណត់ណាមួយ។"</string>
+    <string name="config_error_validation" formatted="true">"ការផ្ទៀងផ្ទាត់ការកំណត់បរាជ័យ: %1$s។ មិនបាននាំចូលការកំណត់ណាមួយ។"</string>
+    <string name="config_error_commit" formatted="false">"មិនអាចបញ្ជាក់ការរក្សាទុកការកំណត់។ បើក Toki ឡើងវិញដើម្បីពិនិត្យ មុនសាកល្បងម្ដងទៀត។"</string>
+    <string name="sponsor_title" formatted="false">"គាំទ្រអ្នកអភិវឌ្ឍ"</string>
+    <string name="sponsor_kofi" formatted="false">"គាំទ្រតាម Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"កូដ QR ទូទាត់ Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"កំពុងរក្សាទុក…"</string>
+    <string name="sponsor_save_image" formatted="false">"រក្សាទុករូបភាព"</string>
+    <string name="sponsor_image_hint" formatted="false">"រក្សាទុករូបភាពដើមពេញលេញ រួចជ្រើសវាក្នុង Alipay ដើម្បីអានកូដ។"</string>
+    <string name="sponsor_address_copied" formatted="false">"បានចម្លងអាសយដ្ឋាន USDT"</string>
+    <string name="sponsor_image_saved" formatted="false">"បានរក្សាទុករូបភាពនៅទីតាំងដែលបានជ្រើស"</string>
+    <string name="sponsor_error_io" formatted="false">"រក្សាទុកបរាជ័យ។ ពិនិត្យទីតាំងដែលបានជ្រើស និងទំហំទំនេរ រួចសាកល្បងម្ដងទៀត។"</string>
+    <string name="sponsor_error_permission" formatted="false">"រក្សាទុកបរាជ័យ។ មិនមានសិទ្ធិសរសេរនៅទីតាំងនេះ។ សូមជ្រើសទីតាំងផ្សេង។"</string>
+    <string name="feature_filter_topics" formatted="false">"លាក់ប្រធានបទដែលបានណែនាំ"</string>
+    <string name="feature_filter_creators" formatted="false">"លាក់អ្នកបង្កើតដែលបានណែនាំ"</string>
+    <string name="host_scan_title_complete" formatted="false">"ការស្វែងរកបានបញ្ចប់"</string>
+    <string name="host_scan_title_failed" formatted="false">"ការស្វែងរកបរាជ័យ"</string>
+    <string name="host_scan_restart_hint" formatted="false">"សូមចាប់ផ្តើម TikTok ឡើងវិញដោយខ្លួនឯង ដើម្បីអនុវត្តលទ្ធផល។"</string>
+    <string name="host_scan_failure_hint" formatted="false">"សូមមើលការវិនិច្ឆ័យមុខងារនៅក្នុង Toki។"</string>
+    <string name="layout_title" formatted="false">"ប្លង់ទំព័រ"</string>
+    <string name="layout_summary" formatted="false">"ជ្រើសរើសប៊ូតុងដែលត្រូវលាក់"</string>
+    <string name="layout_hint" formatted="false">"បើកកុងតាក់ដើម្បីលាក់ធាតុ"</string>
+    <string name="layout_top" formatted="false">"របារខាងលើ"</string>
+    <string name="layout_bottom" formatted="false">"របារខាងក្រោម"</string>
+    <string name="layout_side" formatted="false">"ទំព័រវីដេអូ"</string>
+    <string name="layout_search" formatted="false">"ស្វែងរក"</string>
+    <string name="layout_live" formatted="false">"ផ្សាយផ្ទាល់"</string>
+    <string name="layout_friends" formatted="false">"មិត្តភក្តិ"</string>
+    <string name="layout_following" formatted="false">"កំពុងតាមដាន"</string>
+    <string name="layout_shop" formatted="false">"ហាង"</string>
+    <string name="layout_for_you" formatted="false">"សម្រាប់អ្នក"</string>
+    <string name="layout_nearby" formatted="false">"នៅក្បែរ"</string>
+    <string name="layout_stem" formatted="false">"វិទ្យាសាស្ត្រ"</string>
+    <string name="layout_series" formatted="false">"រឿងភាគ"</string>
+    <string name="layout_home" formatted="false">"ទំព័រដើម"</string>
+    <string name="layout_create" formatted="false">"បង្កើត"</string>
+    <string name="layout_inbox" formatted="false">"ប្រអប់សារ"</string>
+    <string name="layout_profile" formatted="false">"ប្រវត្តិរូប"</string>
+    <string name="layout_discover" formatted="false">"រកឃើញ"</string>
+    <string name="layout_avatar" formatted="false">"រូបប្រវត្តិរូប"</string>
+    <string name="layout_follow" formatted="false">"ប៊ូតុងតាមដាន"</string>
+    <string name="layout_like" formatted="false">"ចូលចិត្ត"</string>
+    <string name="layout_comment" formatted="false">"មតិយោបល់"</string>
+    <string name="layout_favorite" formatted="false">"ចំណូលចិត្ត"</string>
+    <string name="layout_share" formatted="false">"ចែករំលែក"</string>
+    <string name="layout_music" formatted="false">"ថាសតន្ត្រី"</string>
+    <string name="layout_explore" formatted="false">"រុករក"</string>
+    <string name="layout_author" formatted="false">"ព័ត៌មានអ្នកបង្កើត"</string>
+    <string name="layout_description" formatted="false">"ការពិពណ៌នា"</string>
+    <string name="layout_music_title" formatted="false">"ចំណងជើងតន្ត្រី"</string>
+    <string name="layout_tags" formatted="false">"ស្លាកព័ត៌មាន"</string>
+    <string name="layout_search_label" formatted="false">"ការណែនាំស្វែងរក"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"ប៊ូតុងបញ្ឈប់ការរមូរស្វ័យប្រវត្តិ"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"កាក់ និងរង្វាន់"</string>
+    <string name="layout_quick_comment" formatted="false">"មតិរហ័ស"</string>
+    <string name="layout_playlist" formatted="false">"បញ្ជីចាក់"</string>
+    <string name="layout_creation_buttons" formatted="false">"ផ្លូវកាត់បង្កើត"</string>
+    <string name="layout_live_notice" formatted="false">"ការរំលឹក LIVE"</string>
+    <string name="layout_opacity" formatted="false">"ភាពស្រអាប់"</string>
+    <string name="feature_background_audio">"ដោះសោសំឡេងផ្ទៃខាងក្រោយ"</string>
+    <string name="layout_landscape">"ប៊ូតុងពេញអេក្រង់"</string>
+    <string name="layout_photo_indicators">"សូចនាករ និងការណែនាំរូបថត"</string>
+    <string name="layout_quick_message">"សាររហ័ស និងអ្នកចែករំលែក"</string>
+    <string name="layout_user_card">"គណនីដែលបានណែនាំ"</string>
+    <string name="layout_survey">"ការស្ទង់មតិ និងមតិកែលម្អ"</string>
+    <string name="layout_ad_cards">"កាតផលិតផល និងពាណិជ្ជកម្ម"</string>
+    <string name="layout_bottom_banners">"បដាខាងក្រោមផ្សេងទៀត"</string>
+    <string name="layout_activities">"ច្រកចូលព្រឹត្តិការណ៍"</string>
+    <string name="host_scan_title_running" formatted="false">"កំពុងស្វែងរកមេតូត"</string>
+    <string name="host_scan_title_saving" formatted="false">"កំពុងរក្សាទុកលទ្ធផល"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"សូមទុក TikTok ឱ្យបើកនៅផ្ទៃខាងមុខ។"</string>
+    <string name="host_scan_saving_hint" formatted="false">"សូមរង់ចាំ។"</string>
+    <string name="host_scan_done" formatted="false">"យល់ហើយ"</string>
+    <string name="video_fit_center" formatted="false">"នៅកណ្ដាល"</string>
+    <string name="video_fit_smart" formatted="false">"ពេញអេក្រង់"</string>
+</resources>

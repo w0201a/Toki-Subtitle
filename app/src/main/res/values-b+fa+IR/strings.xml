@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"خانه"</string>
+    <string name="nav_features" formatted="false">"قابلیت‌ها"</string>
+    <string name="page_features" formatted="false">"تنظیمات"</string>
+    <string name="page_hook_status" formatted="false">"وضعیت قابلیت‌ها"</string>
+    <string name="nav_back" formatted="false">"بازگشت"</string>
+    <string name="restart_tiktok" formatted="false">"راه‌اندازی دوباره TikTok"</string>
+    <string name="restart_root_required" formatted="false">"لطفاً دسترسی root را به Toki بدهید"</string>
+    <string name="language_title" formatted="false">"زبان برنامه"</string>
+    <string name="language_system" formatted="false">"پیروی از سیستم"</string>
+    <string name="language_search" formatted="false">"جستجوی زبان"</string>
+    <string name="language_clear_search" formatted="false">"پاک کردن جستجو"</string>
+    <string name="language_no_results" formatted="false">"زبان مطابقی پیدا نشد"</string>
+    <string name="common_save" formatted="false">"ذخیره"</string>
+    <string name="common_cancel" formatted="false">"لغو"</string>
+    <string name="common_confirm" formatted="false">"تأیید"</string>
+    <string name="common_close" formatted="false">"بستن"</string>
+    <string name="common_open" formatted="false">"باز کردن"</string>
+    <string name="common_copy" formatted="false">"کپی"</string>
+    <string name="common_add" formatted="false">"افزودن"</string>
+    <string name="common_delete" formatted="false">"حذف"</string>
+    <string name="common_done" formatted="false">"تمام"</string>
+    <string name="common_save_apply" formatted="false">"اعمال"</string>
+    <string name="common_unknown" formatted="false">"نامشخص"</string>
+    <string name="common_custom" formatted="false">"سفارشی"</string>
+    <string name="home_icon_hidden" formatted="false">"نماد برنامه پنهان شد"</string>
+    <string name="home_icon_restored" formatted="false">"نماد برنامه دوباره نمایش داده شد"</string>
+    <string name="home_activated" formatted="false">"فعال"</string>
+    <string name="home_inactive" formatted="false">"غیرفعال"</string>
+    <string name="home_activation_missing" formatted="false">"فعال‌سازی در LSPosed شناسایی نشد"</string>
+    <string name="home_host_section" formatted="false">"سازگاری با TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok نصب‌شده"</string>
+    <string name="home_host_missing" formatted="false">"نسخه پشتیبانی‌شده TikTok روی دستگاه پیدا نشد"</string>
+    <string name="home_host_not_installed" formatted="false">"نصب نشده"</string>
+    <string name="home_supported_versions" formatted="false">"نسخه‌های پشتیبانی‌شده"</string>
+    <string name="home_community" formatted="false">"انجمن"</string>
+    <string name="home_github" formatted="false">"مخزن GitHub"</string>
+    <string name="home_telegram" formatted="false">"گروه Telegram"</string>
+    <string name="home_preferences" formatted="false">"ترجیحات"</string>
+    <string name="home_hide_icon" formatted="false">"پنهان کردن نماد برنامه"</string>
+    <string name="home_hide_icon_summary" formatted="false">"پس از پنهان شدن، Toki را از مدیر LSPosed باز کنید"</string>
+    <string name="home_support" formatted="false">"حمایت از توسعه"</string>
+    <string name="home_support_summary" formatted="false">"حمایت از نگهداری و بهبود مداوم قابلیت‌ها"</string>
+    <string name="feature_region_section" formatted="false">"شبیه‌سازی منطقه و محیط"</string>
+    <string name="feature_playback_section" formatted="false">"پخش"</string>
+    <string name="feature_progress" formatted="false">"نمایش همیشگی نوار پیشرفت"</string>
+    <string name="feature_progress_summary" formatted="false">"نمایش نوار پیشرفت پایین حتی برای ویدئوهای کوتاه"</string>
+    <string name="feature_immersive" formatted="false">"نمایش ویدیو"</string>
+    <string name="feature_autoplay" formatted="false">"پیمایش خودکار پیشرفته"</string>
+    <string name="feature_autoplay_summary" formatted="false">"پیمایش خودکار را در منوی همهٔ ویدئوها در دسترس می‌گذارد"</string>
+    <string name="feature_status_bar" formatted="false">"پنهان کردن نوار وضعیت سیستم"</string>
+    <string name="feature_media_section" formatted="false">"دانلود و ابزارها"</string>
+    <string name="feature_download" formatted="false">"دانلود بدون واترمارک"</string>
+    <string name="feature_download_summary" formatted="false">"ذخیره نسخه اصلی بدون واترمارک از منوی نگه‌داشتن یا اشتراک‌گذاری"</string>
+    <string name="feature_music" formatted="false">"رفع محدودیت صدا"</string>
+    <string name="feature_music_summary" formatted="false">"بازیابی صدای محدودشده به دلیل حق نشر یا منطقه"</string>
+    <string name="feature_author_region" formatted="false">"نمایش منطقه سازنده"</string>
+    <string name="feature_author_region_summary" formatted="false">"نمایش پرچم و کد کشور یا منطقه کنار نام سازنده"</string>
+    <string name="feature_copy_comment" formatted="false">"کپی فقط متن"</string>
+    <string name="feature_video_translation" formatted="false">"منوی زیرنویس و ترجمه"</string>
+    <string name="feature_video_translation_summary" formatted="false">"نمایش گزینه در منوی لمس طولانی"</string>
+    <string name="feature_comment_translation" formatted="false">"ترجمه نظرات"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"افزودن دکمه برای ترجمه گروهی نظرات به زبان‌های دیگر"</string>
+    <string name="feature_filter_section" formatted="false">"فیلتر خوراک"</string>
+    <string name="feature_remove_ads" formatted="false">"حذف تبلیغات خوراک"</string>
+    <string name="feature_remove_live" formatted="false">"فیلتر پخش زنده پیشنهادی"</string>
+    <string name="feature_remove_photos" formatted="false">"فیلتر پست‌های تصویری پیشنهادی"</string>
+    <string name="feature_filter_views" formatted="false">"فیلتر بازدید"</string>
+    <string name="feature_filter_likes" formatted="false">"فیلتر پسند"</string>
+    <string name="feature_filter_duration" formatted="false">"فیلتر مدت"</string>
+    <string name="feature_filter_keywords" formatted="false">"فیلتر کلیدواژه"</string>
+    <string name="feature_block_offline" formatted="false">"مسدود کردن ویدئوی آفلاین"</string>
+    <string name="feature_block_offline_summary" formatted="false">"جلوگیری از درج ویدئوهای ازپیش‌بارگیری‌شده هنگام اتصال ضعیف"</string>
+    <string name="feature_remove_ai" formatted="false">"حذف محتوای تولیدشده با هوش مصنوعی"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"فیلتر ویدئوهایی که TikTok برچسب تولید با هوش مصنوعی زده است"</string>
+    <string name="filter_metric_views" formatted="false">"بازدید"</string>
+    <string name="filter_metric_likes" formatted="false">"پسند"</string>
+    <string name="filter_metric_duration" formatted="false">"مدت"</string>
+    <string name="filter_unit_seconds" formatted="false">"ثانیه"</string>
+    <string name="filter_views_saved" formatted="false">"بازه بازدید ذخیره شد"</string>
+    <string name="filter_likes_saved" formatted="false">"بازه پسند ذخیره شد"</string>
+    <string name="filter_duration_saved" formatted="false">"بازه مدت ذخیره شد"</string>
+    <string name="download_path_saved" formatted="false">"مسیرهای ذخیره به‌روز شدند"</string>
+    <string name="region_spoof_title" formatted="false">"شبیه‌سازی منطقه و SIM"</string>
+    <string name="region_current" formatted="false">"تنظیمات فعلی"</string>
+    <string name="region_target" formatted="true">"منطقه هدف: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"اپراتور: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"کد اپراتور: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"تنظیمات آماده"</string>
+    <string name="region_custom_parameters" formatted="false">"سفارشی"</string>
+    <string name="language_spoof" formatted="false">"شبیه‌سازی زبان"</string>
+    <string name="environment_follow_region" formatted="false">"براساس منطقه"</string>
+    <string name="language_effective" formatted="true">"زبان مؤثر: %1$s"</string>
+    <string name="language_custom" formatted="false">"زبان سفارشی"</string>
+    <string name="timezone_spoof" formatted="false">"شبیه‌سازی منطقه زمانی"</string>
+    <string name="timezone_effective" formatted="true">"منطقه زمانی مؤثر: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"منطقه زمانی سفارشی"</string>
+    <string name="gps_spoof" formatted="false">"شبیه‌سازی مکان"</string>
+    <string name="gps_effective" formatted="true">"مختصات مؤثر: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"مختصات سفارشی"</string>
+    <string name="speed_fixed" formatted="false">"حفظ سرعت"</string>
+    <string name="speed_fixed_summary" formatted="false">"حفظ سرعت انتخاب‌شده در منوی نگه‌داشتن هنگام تعویض ویدئو"</string>
+    <string name="speed_expand" formatted="false">"سرعت‌های بیشتر"</string>
+    <string name="speed_options_hint" formatted="false">"سرعت‌ها (برای ویرایش یا حذف لمس کنید)"</string>
+    <string name="speed_add_option" formatted="false">"+ افزودن سرعت"</string>
+    <string name="speed_restore" formatted="false">"بازنشانی"</string>
+    <string name="clean_on_play" formatted="false">"پنهان کردن کنترل‌ها هنگام پخش"</string>
+    <string name="clean_keep_progress" formatted="false">"حفظ نوار پیشرفت"</string>
+    <string name="download_paths" formatted="false">"پوشه‌های ذخیره"</string>
+    <string name="download_paths_summary" formatted="true">"ویدئوها: %1$s · تصاویر: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"حفظ ویدئوهایی با %1$s از %2$d%4$s تا %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"حفظ ویدئوهایی با %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"حفظ ویدئوهایی با %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"بازه تعیین نشده (برای حداقل یا حداکثر لمس کنید)"</string>
+    <string name="keyword_unset" formatted="false">"قاعده‌ای نیست (برای مدیریت دسته‌ها لمس کنید)"</string>
+    <string name="keyword_summary" formatted="true">"فعال: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"توضیحات %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"هشتگ‌ها %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"سازندگان %1$d"</string>
+    <string name="keyword_description" formatted="false">"توضیحات"</string>
+    <string name="keyword_tag" formatted="false">"هشتگ‌ها"</string>
+    <string name="keyword_author" formatted="false">"سازندگان"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"قاعده‌ای برای %1$s نیست. از بالا اضافه کنید"</string>
+    <string name="duration_alert_title" formatted="false">"هشدار مدت ویدئوی طولانی"</string>
+    <string name="duration_alert_summary" formatted="true">"آستانه فعلی: ≥ %1$s دقیقه"</string>
+    <string name="download_video_path" formatted="false">"پوشه ویدئو"</string>
+    <string name="download_image_path" formatted="false">"پوشه تصویر"</string>
+    <string name="download_path_hint" formatted="false">"پوشه نخست باید پوشه رسانه عمومی مانند Movies، Pictures یا DCIM باشد. مسیرهای نامعتبر از پیش‌فرض سیستم استفاده می‌کنند"</string>
+    <string name="views_range_title" formatted="false">"بازه بازدید"</string>
+    <string name="views_range_min" formatted="false">"حداقل بازدید (0 = بدون محدودیت)"</string>
+    <string name="views_range_max" formatted="false">"حداکثر بازدید (0 = بدون محدودیت)"</string>
+    <string name="views_range_hint" formatted="false">"فقط ویدئوهای با بازدید در این بازه حفظ می‌شوند. اگر هر دو حد 0 باشند، چیزی حذف نمی‌شود"</string>
+    <string name="likes_range_title" formatted="false">"بازه پسند"</string>
+    <string name="likes_range_min" formatted="false">"حداقل پسند (0 = بدون محدودیت)"</string>
+    <string name="likes_range_max" formatted="false">"حداکثر پسند (0 = بدون محدودیت)"</string>
+    <string name="likes_range_hint" formatted="false">"فقط ویدئوهای با تعداد پسند در این بازه حفظ می‌شوند. اگر هر دو حد 0 باشند، چیزی حذف نمی‌شود"</string>
+    <string name="duration_range_title" formatted="false">"بازه مدت ویدئو"</string>
+    <string name="duration_range_min" formatted="false">"حداقل مدت (ثانیه؛ 0 = بدون محدودیت)"</string>
+    <string name="duration_range_max" formatted="false">"حداکثر مدت (ثانیه؛ 0 = بدون محدودیت)"</string>
+    <string name="duration_range_hint" formatted="false">"فقط ویدئوهای پیشنهادی در بازه مدت حفظ می‌شوند. اگر هر دو حد 0 باشند، چیزی حذف نمی‌شود. پست‌های تصویری تحت تأثیر نیستند"</string>
+    <string name="keyword_manage" formatted="false">"قواعد فیلتر"</string>
+    <string name="keyword_description_hint" formatted="false">"تطبیق متن و توضیح ویدئو بدون حساسیت به بزرگی و کوچکی حروف."</string>
+    <string name="keyword_tag_hint" formatted="false">"تطبیق هشتگ‌ها. نیازی به پیشوند # نیست."</string>
+    <string name="keyword_author_hint" formatted="false">"تطبیق نام سازنده و نام کاربری یکتا. نیازی به پیشوند @ نیست."</string>
+    <string name="keyword_description_input" formatted="false">"واژه یا عبارت"</string>
+    <string name="keyword_tag_input" formatted="false">"هشتگ"</string>
+    <string name="keyword_author_input" formatted="false">"نام یا نام کاربری"</string>
+    <string name="keyword_add" formatted="false">"افزودن قاعده"</string>
+    <string name="keyword_delete" formatted="false">"حذف قاعده"</string>
+    <string name="region_select_title" formatted="false">"انتخاب منطقه"</string>
+    <string name="region_search" formatted="false">"جستجو با نام کشور، نام انگلیسی یا کد منطقه"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · کد اپراتور: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"منطقه و SIM سفارشی"</string>
+    <string name="region_custom_hint" formatted="false">"تعیین کد کشور و اطلاعات اپراتور بدون محدودیت تنظیمات آماده."</string>
+    <string name="region_code_input" formatted="false">"کد کشور یا منطقه (مانند JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"کد اپراتور (مانند 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"نام اپراتور (مانند NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"یک زبان رایج انتخاب کنید یا کد زبان را وارد کنید."</string>
+    <string name="language_code_input" formatted="false">"کد زبان (مانند ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"زبان‌های رایج:"</string>
+    <string name="timezone_custom_hint" formatted="false">"منطقه زمانی یک شهر را انتخاب کنید یا نام منطقه زمانی را بنویسید."</string>
+    <string name="timezone_input" formatted="false">"نام منطقه زمانی (مانند Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"منطقه‌های زمانی رایج شهرها:"</string>
+    <string name="city_tokyo" formatted="false">"توکیو"</string>
+    <string name="city_taipei" formatted="false">"تایپه"</string>
+    <string name="city_hong_kong" formatted="false">"هنگ‌کنگ"</string>
+    <string name="city_new_york" formatted="false">"نیویورک"</string>
+    <string name="city_london" formatted="false">"لندن"</string>
+    <string name="city_seoul" formatted="false">"سئول"</string>
+    <string name="city_bangkok" formatted="false">"بانکوک"</string>
+    <string name="city_singapore" formatted="false">"سنگاپور"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"مختصات مکان سفارشی"</string>
+    <string name="gps_custom_hint" formatted="false">"یک شهر انتخاب کنید یا عرض و طول جغرافیایی را وارد کنید."</string>
+    <string name="gps_latitude" formatted="false">"عرض جغرافیایی (-90.0 تا 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"طول جغرافیایی (-180.0 تا 180.0)"</string>
+    <string name="gps_presets" formatted="false">"شهرهای رایج:"</string>
+    <string name="speed_add_title" formatted="false">"افزودن سرعت"</string>
+    <string name="speed_input" formatted="false">"سرعت پخش"</string>
+    <string name="speed_invalid" formatted="false">"یک عدد معتبر وارد کنید"</string>
+    <string name="speed_out_of_range" formatted="true">"فقط %1$sx تا %2$sx پشتیبانی می‌شود"</string>
+    <string name="speed_range" formatted="true">"بازه پشتیبانی‌شده: %1$sx تا %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"ویرایش سرعت"</string>
+    <string name="duration_threshold_title" formatted="false">"هشدار ویدئوی طولانی"</string>
+    <string name="duration_threshold_hint" formatted="false">"وقتی مدت ویدئو به این مقدار برسد، در شروع پخش پیام کوتاهی درباره طول آن برحسب دقیقه نمایش داده می‌شود."</string>
+    <string name="duration_threshold_input" formatted="false">"آستانه مدت (دقیقه)"</string>
+    <string name="duration_threshold_example" formatted="false">"مثلاً: 3 یا 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"تعداد دقیقه معتبر و بزرگ‌تر از 0 وارد کنید"</string>
+    <string name="duration_threshold_current" formatted="true">"تنظیم فعلی: هشدار برای ویدئوهای ≥ %1$s دقیقه"</string>
+    <string name="duration_threshold_presets" formatted="false">"مدت‌های پیشنهادی:"</string>
+    <string name="status_feature_feed" formatted="false">"فیلتر خوراک"</string>
+    <string name="status_feature_speed" formatted="false">"سرعت پخش"</string>
+    <string name="status_feature_progress" formatted="false">"نوار پیشرفت"</string>
+    <string name="status_feature_clean" formatted="false">"پنهان کردن کنترل‌ها هنگام پخش"</string>
+    <string name="status_feature_immersive" formatted="false">"نمایش ویدیو"</string>
+    <string name="status_feature_scroll" formatted="false">"پیمایش خودکار"</string>
+    <string name="status_feature_duration" formatted="false">"هشدار مدت"</string>
+    <string name="status_feature_comment_translate" formatted="false">"ترجمه نظرات"</string>
+    <string name="status_feature_video_translate" formatted="false">"منوی زیرنویس و ترجمه"</string>
+    <string name="status_feature_comment_copy" formatted="false">"کپی نظرات"</string>
+    <string name="status_feature_author" formatted="false">"منطقه سازنده"</string>
+    <string name="status_feature_download" formatted="false">"ذخیره ویدئو"</string>
+    <string name="status_feature_music" formatted="false">"محدودیت‌های صدا"</string>
+    <string name="status_feature_sim" formatted="false">"SIM و کشور"</string>
+    <string name="status_feature_language" formatted="false">"زبان"</string>
+    <string name="status_feature_timezone" formatted="false">"منطقه زمانی"</string>
+    <string name="status_feature_gps" formatted="false">"مکان"</string>
+    <string name="status_feature_bar" formatted="false">"نوار وضعیت"</string>
+    <string name="status_normal" formatted="false">"عادی"</string>
+    <string name="status_issue" formatted="false">"مشکل دارد"</string>
+    <string name="status_disabled" formatted="false">"خاموش"</string>
+    <string name="status_pending" formatted="false">"تأیید نشده"</string>
+    <string name="status_problem_disabled" formatted="false">"خاموش است، اما خطایی ثبت شده"</string>
+    <string name="status_problem_unavailable" formatted="false">"موقتاً در دسترس نیست"</string>
+    <string name="status_problem_runtime" formatted="false">"خطا هنگام استفاده"</string>
+    <string name="status_problem_speed_menu" formatted="false">"منوی سرعت در دسترس نیست"</string>
+    <string name="status_prepare_failed" formatted="false">"آماده‌سازی قابلیت‌ها ناموفق بود. TikTok را دوباره باز و بررسی کنید."</string>
+    <string name="status_preparing" formatted="false">"قابلیت‌ها در حال آماده‌سازی‌اند. منتظر بمانید."</string>
+    <string name="status_prepared" formatted="false">"آماده‌سازی تمام شد. TikTok را دوباره باز کنید."</string>
+    <string name="status_read_failed" formatted="false">"اکنون خواندن وضعیت ممکن نیست. بعداً بررسی کنید."</string>
+    <string name="status_update_failed" formatted="false">"اکنون به‌روزرسانی وضعیت ممکن نیست. آخرین نتیجه نمایش داده می‌شود."</string>
+    <string name="status_reading" formatted="false">"در حال خواندن وضعیت"</string>
+    <string name="status_empty" formatted="false">"سابقه اجرایی وجود ندارد. Toki را در LSPosed فعال کنید، TikTok را باز کنید و دوباره بررسی کنید."</string>
+    <string name="status_report_note" formatted="true">"آخرین گزارش: %1$s\n«عادی» یعنی قابلیت آماده است و خطایی گزارش نکرده است."</string>
+    <string name="config_section" formatted="false">"مدیریت تنظیمات"</string>
+    <string name="config_import" formatted="false">"درون‌ریزی تنظیمات"</string>
+    <string name="config_import_summary" formatted="false">"بازیابی تنظیمات قابلیت‌ها از فایل"</string>
+    <string name="config_export" formatted="false">"برون‌ریزی تنظیمات"</string>
+    <string name="config_export_summary" formatted="false">"ذخیره تنظیمات قابلیت‌ها در فایل"</string>
+    <string name="config_exported" formatted="false">"تنظیمات در محل انتخاب‌شده ذخیره شد. فایل ممکن است شامل کلیدواژه‌ها، منطقه‌ها و مسیرها باشد. آن را ایمن نگه دارید."</string>
+    <string name="config_import_confirm" formatted="true">"تعداد تنظیمات در فایل: %1$d. درون‌ریزی همه تنظیمات قابلیت‌ها را جایگزین می‌کند و مواردی که در فایل نیستند به پیش‌فرض برمی‌گردند.\n\nزبان رابط، نماد برنامه، مجوز LSPosed و حافظه نهان سازگاری TikTok تغییر نمی‌کنند. ادامه می‌دهید؟"</string>
+    <string name="config_overwrite" formatted="false">"جایگزینی"</string>
+    <string name="config_imported" formatted="false">"تنظیمات درون‌ریزی و صفحه قابلیت‌ها به‌روز شد. تغییرات دارای پشتیبانی به‌روزرسانی زنده فوراً اعمال می‌شوند. برای سایر قابلیت‌ها TikTok را دوباره باز کنید."</string>
+    <string name="config_processing" formatted="false">"در حال پردازش تنظیمات"</string>
+    <string name="config_error_io" formatted="false">"خواندن یا نوشتن فایل ناموفق بود. محل و فضای خالی را بررسی کنید."</string>
+    <string name="config_error_permission" formatted="false">"مجوز دسترسی به فایل انتخاب‌شده وجود ندارد. دوباره انتخاب کنید."</string>
+    <string name="config_error_invalid" formatted="false">"این فایل تنظیمات معتبر Toki نیست. هیچ تنظیمی درون‌ریزی نشد."</string>
+    <string name="config_error_validation" formatted="true">"اعتبارسنجی تنظیمات ناموفق بود: %1$s. هیچ تنظیمی درون‌ریزی نشد."</string>
+    <string name="config_error_commit" formatted="false">"اعمال تنظیمات تأیید نشد. پیش از تلاش دوباره Toki را باز و بررسی کنید."</string>
+    <string name="sponsor_title" formatted="false">"حمایت از توسعه‌دهنده"</string>
+    <string name="sponsor_kofi" formatted="false">"حمایت از طریق Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"کد QR پرداخت Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"در حال ذخیره…"</string>
+    <string name="sponsor_save_image" formatted="false">"ذخیره تصویر"</string>
+    <string name="sponsor_image_hint" formatted="false">"تصویر اصلی را ذخیره کنید و در Alipay آن را برای شناسایی کد انتخاب کنید."</string>
+    <string name="sponsor_address_copied" formatted="false">"نشانی USDT کپی شد"</string>
+    <string name="sponsor_image_saved" formatted="false">"تصویر در محل انتخاب‌شده ذخیره شد"</string>
+    <string name="sponsor_error_io" formatted="false">"ذخیره ناموفق بود. محل و فضای خالی را بررسی و دوباره تلاش کنید."</string>
+    <string name="sponsor_error_permission" formatted="false">"ذخیره ناموفق بود: مجوز نوشتن در محل انتخاب‌شده وجود ندارد. دوباره انتخاب کنید."</string>
+    <string name="feature_filter_topics" formatted="false">"پنهان کردن موضوعات پیشنهادی"</string>
+    <string name="feature_filter_creators" formatted="false">"پنهان کردن سازندگان پیشنهادی"</string>
+    <string name="host_scan_title_complete" formatted="false">"جستجو کامل شد"</string>
+    <string name="host_scan_title_failed" formatted="false">"جستجو ناموفق بود"</string>
+    <string name="host_scan_restart_hint" formatted="false">"برای اعمال نتایج، TikTok را به‌صورت دستی دوباره راه‌اندازی کنید."</string>
+    <string name="host_scan_failure_hint" formatted="false">"عیب‌یابی قابلیت‌ها را در Toki ببینید."</string>
+    <string name="layout_title" formatted="false">"چیدمان صفحه"</string>
+    <string name="layout_summary" formatted="false">"دکمه‌هایی را که می‌خواهید پنهان شوند انتخاب کنید"</string>
+    <string name="layout_hint" formatted="false">"برای پنهان کردن هر مورد، کلیدش را روشن کنید"</string>
+    <string name="layout_top" formatted="false">"نوار بالا"</string>
+    <string name="layout_bottom" formatted="false">"نوار پایین"</string>
+    <string name="layout_side" formatted="false">"صفحهٔ ویدئو"</string>
+    <string name="layout_search" formatted="false">"جستجو"</string>
+    <string name="layout_live" formatted="false">"پخش زنده"</string>
+    <string name="layout_friends" formatted="false">"دوستان"</string>
+    <string name="layout_following" formatted="false">"دنبال‌شده‌ها"</string>
+    <string name="layout_shop" formatted="false">"فروشگاه"</string>
+    <string name="layout_for_you" formatted="false">"برای شما"</string>
+    <string name="layout_nearby" formatted="false">"اطراف"</string>
+    <string name="layout_stem" formatted="false">"علم"</string>
+    <string name="layout_series" formatted="false">"مجموعه‌ها"</string>
+    <string name="layout_home" formatted="false">"خانه"</string>
+    <string name="layout_create" formatted="false">"ایجاد"</string>
+    <string name="layout_inbox" formatted="false">"صندوق ورودی"</string>
+    <string name="layout_profile" formatted="false">"نمایه"</string>
+    <string name="layout_discover" formatted="false">"کشف"</string>
+    <string name="layout_avatar" formatted="false">"تصویر نمایه"</string>
+    <string name="layout_follow" formatted="false">"دکمهٔ دنبال کردن"</string>
+    <string name="layout_like" formatted="false">"پسندیدن"</string>
+    <string name="layout_comment" formatted="false">"دیدگاه‌ها"</string>
+    <string name="layout_favorite" formatted="false">"علاقه‌مندی‌ها"</string>
+    <string name="layout_share" formatted="false">"اشتراک‌گذاری"</string>
+    <string name="layout_music" formatted="false">"دیسک موسیقی"</string>
+    <string name="layout_explore" formatted="false">"کاوش"</string>
+    <string name="layout_author" formatted="false">"اطلاعات نویسنده"</string>
+    <string name="layout_description" formatted="false">"توضیحات"</string>
+    <string name="layout_music_title" formatted="false">"عنوان موسیقی"</string>
+    <string name="layout_tags" formatted="false">"برچسب‌های اطلاعات"</string>
+    <string name="layout_search_label" formatted="false">"پیشنهاد جستجو"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"دکمه توقف پیمایش خودکار"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"سکه‌ها و پاداش‌ها"</string>
+    <string name="layout_quick_comment" formatted="false">"نظرهای سریع"</string>
+    <string name="layout_playlist" formatted="false">"فهرست پخش"</string>
+    <string name="layout_creation_buttons" formatted="false">"میان‌برهای ساخت"</string>
+    <string name="layout_live_notice" formatted="false">"یادآورهای پخش زنده"</string>
+    <string name="layout_opacity" formatted="false">"تیرگی"</string>
+    <string name="feature_background_audio">"فعال‌سازی صدای پس‌زمینه"</string>
+    <string name="layout_landscape">"دکمه تمام‌صفحه"</string>
+    <string name="layout_photo_indicators">"نشانگرها و راهنمای عکس"</string>
+    <string name="layout_quick_message">"پیام سریع و منبع اشتراک‌گذاری"</string>
+    <string name="layout_user_card">"حساب‌های پیشنهادی"</string>
+    <string name="layout_survey">"نظرسنجی و بازخورد"</string>
+    <string name="layout_ad_cards">"کارت‌های محصول و تبلیغ"</string>
+    <string name="layout_bottom_banners">"سایر بنرهای پایین"</string>
+    <string name="layout_activities">"ورودی رویدادها"</string>
+    <string name="host_scan_title_running" formatted="false">"در حال جستجوی متدها"</string>
+    <string name="host_scan_title_saving" formatted="false">"در حال ذخیره نتایج"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"TikTok را در پیش‌زمینه نگه دارید."</string>
+    <string name="host_scan_saving_hint" formatted="false">"لطفاً منتظر بمانید."</string>
+    <string name="host_scan_done" formatted="false">"متوجه شدم"</string>
+    <string name="video_fit_center" formatted="false">"وسط‌چین"</string>
+    <string name="video_fit_smart" formatted="false">"تمام‌صفحه"</string>
+</resources>

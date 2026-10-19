@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Hem"</string>
+    <string name="nav_features" formatted="false">"Funktioner"</string>
+    <string name="page_features" formatted="false">"Inställningar"</string>
+    <string name="page_hook_status" formatted="false">"Funktionsstatus"</string>
+    <string name="nav_back" formatted="false">"Tillbaka"</string>
+    <string name="restart_tiktok" formatted="false">"Starta om TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Ge Toki rootåtkomst."</string>
+    <string name="language_title" formatted="false">"Appspråk"</string>
+    <string name="language_system" formatted="false">"Följ systemet"</string>
+    <string name="language_search" formatted="false">"Sök språk"</string>
+    <string name="language_clear_search" formatted="false">"Rensa sökning"</string>
+    <string name="language_no_results" formatted="false">"Inga matchande språk"</string>
+    <string name="common_save" formatted="false">"Spara"</string>
+    <string name="common_cancel" formatted="false">"Avbryt"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Stäng"</string>
+    <string name="common_open" formatted="false">"Öppna"</string>
+    <string name="common_copy" formatted="false">"Kopiera"</string>
+    <string name="common_add" formatted="false">"Lägg till"</string>
+    <string name="common_delete" formatted="false">"Ta bort"</string>
+    <string name="common_done" formatted="false">"Klart"</string>
+    <string name="common_save_apply" formatted="false">"Tillämpa"</string>
+    <string name="common_unknown" formatted="false">"Okänt"</string>
+    <string name="common_custom" formatted="false">"Anpassat"</string>
+    <string name="home_icon_hidden" formatted="false">"Appikonen dold"</string>
+    <string name="home_icon_restored" formatted="false">"Appikonen återställd"</string>
+    <string name="home_activated" formatted="false">"Aktiverad"</string>
+    <string name="home_inactive" formatted="false">"Inte aktiverad"</string>
+    <string name="home_activation_missing" formatted="false">"Ingen aktivering upptäcktes i LSPosed"</string>
+    <string name="home_host_section" formatted="false">"TikTok-kompatibilitet"</string>
+    <string name="home_host_current" formatted="false">"Installerad TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Ingen TikTok-installation som stöds hittades på enheten"</string>
+    <string name="home_host_not_installed" formatted="false">"Inte installerad"</string>
+    <string name="home_supported_versions" formatted="false">"Versioner som stöds"</string>
+    <string name="home_community" formatted="false">"Gemenskap"</string>
+    <string name="home_github" formatted="false">"GitHub-kodarkiv"</string>
+    <string name="home_telegram" formatted="false">"Telegram-grupp"</string>
+    <string name="home_preferences" formatted="false">"Inställningar"</string>
+    <string name="home_hide_icon" formatted="false">"Dölj appikonen"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Öppna Toki via LSPosed Manager när ikonen är dold"</string>
+    <string name="home_support" formatted="false">"Stöd utvecklingen"</string>
+    <string name="home_support_summary" formatted="false">"Stöd löpande underhåll och förbättringar"</string>
+    <string name="feature_region_section" formatted="false">"Simulering av region och miljö"</string>
+    <string name="feature_playback_section" formatted="false">"Uppspelning"</string>
+    <string name="feature_progress" formatted="false">"Visa alltid videoförloppet"</string>
+    <string name="feature_progress_summary" formatted="false">"Håll förloppsindikatorn synlig även i korta videor"</string>
+    <string name="feature_immersive" formatted="false">"Videovisning"</string>
+    <string name="feature_autoplay" formatted="false">"Utökad automatisk rullning"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Lås upp automatisk rullning i alla videomenyer"</string>
+    <string name="feature_status_bar" formatted="false">"Dölj systemets statusfält"</string>
+    <string name="feature_media_section" formatted="false">"Nedladdningar och verktyg"</string>
+    <string name="feature_download" formatted="false">"Ladda ned utan vattenstämpel"</string>
+    <string name="feature_download_summary" formatted="false">"Spara originalvideon utan vattenstämpel via menyn för långtryck eller delning"</string>
+    <string name="feature_music" formatted="false">"Lås upp ljud"</string>
+    <string name="feature_music_summary" formatted="false">"Återställ ljuduppspelning som begränsats av licens eller region"</string>
+    <string name="feature_author_region" formatted="false">"Visa skaparens region"</string>
+    <string name="feature_author_region_summary" formatted="false">"Visa landets eller regionens flagga och kod vid skaparens namn"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopiera bara text"</string>
+    <string name="feature_video_translation" formatted="false">"Meny för undertexter och översättning"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Visa alternativet i menyn vid långt tryck"</string>
+    <string name="feature_comment_translation" formatted="false">"Översätt kommentarer"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Lägg till en knapp för att översätta flera kommentarer på främmande språk"</string>
+    <string name="feature_filter_section" formatted="false">"Filtrering av flödet"</string>
+    <string name="feature_remove_ads" formatted="false">"Ta bort annonser i flödet"</string>
+    <string name="feature_remove_live" formatted="false">"Filtrera rekommenderade livesändningar"</string>
+    <string name="feature_remove_photos" formatted="false">"Filtrera rekommenderade bildinlägg"</string>
+    <string name="feature_filter_views" formatted="false">"Visningsfilter"</string>
+    <string name="feature_filter_likes" formatted="false">"Filter för gillamarkeringar"</string>
+    <string name="feature_filter_duration" formatted="false">"Längdfilter"</string>
+    <string name="feature_filter_keywords" formatted="false">"Nyckelordsfilter"</string>
+    <string name="feature_block_offline" formatted="false">"Blockera offlinevideor"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Hindra att förinlästa offlinevideor infogas vid dålig anslutning"</string>
+    <string name="feature_remove_ai" formatted="false">"Ta bort AI-genererat innehåll"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtrera videor som TikTok märker som AI-genererade"</string>
+    <string name="filter_metric_views" formatted="false">"visningar"</string>
+    <string name="filter_metric_likes" formatted="false">"gillamarkeringar"</string>
+    <string name="filter_metric_duration" formatted="false">"längd"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Visningsintervall sparat"</string>
+    <string name="filter_likes_saved" formatted="false">"Intervall för gillamarkeringar sparat"</string>
+    <string name="filter_duration_saved" formatted="false">"Videolängdsintervall sparat"</string>
+    <string name="download_path_saved" formatted="false">"Anpassade sökvägar uppdaterade"</string>
+    <string name="region_spoof_title" formatted="false">"Simulering av region och SIM"</string>
+    <string name="region_current" formatted="false">"Aktuell konfiguration"</string>
+    <string name="region_target" formatted="true">"Målregion: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operatör: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Operatörskod: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Förinställningar"</string>
+    <string name="region_custom_parameters" formatted="false">"Anpassa"</string>
+    <string name="language_spoof" formatted="false">"Simulering av språk"</string>
+    <string name="environment_follow_region" formatted="false">"Följ vald region"</string>
+    <string name="language_effective" formatted="true">"Aktivt språk: %1$s"</string>
+    <string name="language_custom" formatted="false">"Anpassat språk"</string>
+    <string name="timezone_spoof" formatted="false">"Simulering av tidszon"</string>
+    <string name="timezone_effective" formatted="true">"Aktiv tidszon: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Anpassad tidszon"</string>
+    <string name="gps_spoof" formatted="false">"Simulering av plats"</string>
+    <string name="gps_effective" formatted="true">"Aktiva koordinater: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Anpassade koordinater"</string>
+    <string name="speed_fixed" formatted="false">"Behåll hastighet"</string>
+    <string name="speed_fixed_summary" formatted="false">"Behåll hastigheten vald i långtrycksmenyn när du byter video"</string>
+    <string name="speed_expand" formatted="false">"Fler hastigheter"</string>
+    <string name="speed_options_hint" formatted="false">"Hastigheter (tryck för att ändra eller ta bort)"</string>
+    <string name="speed_add_option" formatted="false">"+ Lägg till hastighet"</string>
+    <string name="speed_restore" formatted="false">"Återställ"</string>
+    <string name="clean_on_play" formatted="false">"Dölj kontroller vid uppspelning"</string>
+    <string name="clean_keep_progress" formatted="false">"Behåll förloppsindikatorn"</string>
+    <string name="download_paths" formatted="false">"Sparmappar"</string>
+    <string name="download_paths_summary" formatted="true">"Videor: %1$s · Bilder: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Behåll videor med %1$s från %2$d%4$s till %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Behåll videor med %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Behåll videor med %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Inget intervall angivet (tryck för att ange minimum eller maximum)"</string>
+    <string name="keyword_unset" formatted="false">"Inga filterregler (tryck för att hantera kategorier)"</string>
+    <string name="keyword_summary" formatted="true">"Aktiverade: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Texter %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Hashtaggar %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Skapare %1$d"</string>
+    <string name="keyword_description" formatted="false">"Texter"</string>
+    <string name="keyword_tag" formatted="false">"Hashtaggar"</string>
+    <string name="keyword_author" formatted="false">"Skapare"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Inga regler för %1$s. Lägg till ovan."</string>
+    <string name="duration_alert_title" formatted="false">"Varning för långa videor"</string>
+    <string name="duration_alert_summary" formatted="true">"Aktuell gräns: ≥ %1$s minuter"</string>
+    <string name="download_video_path" formatted="false">"Videomapp"</string>
+    <string name="download_image_path" formatted="false">"Bildmapp"</string>
+    <string name="download_path_hint" formatted="false">"Första mappen måste vara en offentlig mediemapp, till exempel Movies, Pictures eller DCIM. Ogiltiga sökvägar använder systemets standardvärde."</string>
+    <string name="views_range_title" formatted="false">"Intervall för visningsantal"</string>
+    <string name="views_range_min" formatted="false">"Minsta antal visningar (0 = obegränsat)"</string>
+    <string name="views_range_max" formatted="false">"Största antal visningar (0 = obegränsat)"</string>
+    <string name="views_range_hint" formatted="false">"Behåll bara videor inom detta visningsintervall. Om båda gränserna är 0 tas inget bort."</string>
+    <string name="likes_range_title" formatted="false">"Intervall för gillamarkeringar"</string>
+    <string name="likes_range_min" formatted="false">"Minsta antal gillamarkeringar (0 = obegränsat)"</string>
+    <string name="likes_range_max" formatted="false">"Största antal gillamarkeringar (0 = obegränsat)"</string>
+    <string name="likes_range_hint" formatted="false">"Behåll bara videor inom detta intervall för gillamarkeringar. Om båda gränserna är 0 tas inget bort."</string>
+    <string name="duration_range_title" formatted="false">"Videolängdsintervall"</string>
+    <string name="duration_range_min" formatted="false">"Minsta längd (sekunder; 0 = obegränsat)"</string>
+    <string name="duration_range_max" formatted="false">"Största längd (sekunder; 0 = obegränsat)"</string>
+    <string name="duration_range_hint" formatted="false">"Behåll bara rekommenderade videor inom detta längdintervall. Om båda gränserna är 0 tas inget bort. Bildinlägg påverkas inte."</string>
+    <string name="keyword_manage" formatted="false">"Filterregler"</string>
+    <string name="keyword_description_hint" formatted="false">"Sök i videors texter och beskrivningar utan att skilja på stora och små bokstäver."</string>
+    <string name="keyword_tag_hint" formatted="false">"Sök efter hashtaggar. Ta inte med prefixet #."</string>
+    <string name="keyword_author_hint" formatted="false">"Sök efter skaparnamn och unika användarnamn. Ta inte med prefixet @."</string>
+    <string name="keyword_description_input" formatted="false">"Ord eller fras"</string>
+    <string name="keyword_tag_input" formatted="false">"Hashtagg"</string>
+    <string name="keyword_author_input" formatted="false">"Namn eller användarnamn"</string>
+    <string name="keyword_add" formatted="false">"Lägg till regel"</string>
+    <string name="keyword_delete" formatted="false">"Ta bort regel"</string>
+    <string name="region_select_title" formatted="false">"Välj region"</string>
+    <string name="region_search" formatted="false">"Sök efter landsnamn, engelskt namn eller regionkod"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Operatörskod: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Anpassad region och SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Ange landskod och operatör utan förinställningarnas begränsningar."</string>
+    <string name="region_code_input" formatted="false">"Lands- eller regionkod (t.ex. JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Operatörskod (t.ex. 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Operatörsnamn (t.ex. NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Välj ett vanligt språk eller ange en språkkod."</string>
+    <string name="language_code_input" formatted="false">"Språkkod (t.ex. ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Vanliga språk:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Välj en vanlig stadstidszon eller ange ett tidszonsnamn."</string>
+    <string name="timezone_input" formatted="false">"Tidszonsnamn (t.ex. Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Vanliga stadstidszoner:"</string>
+    <string name="city_tokyo" formatted="false">"Tokyo"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hongkong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Seoul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapore"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Anpassade platskoordinater"</string>
+    <string name="gps_custom_hint" formatted="false">"Välj en vanlig stad eller ange latitud och longitud."</string>
+    <string name="gps_latitude" formatted="false">"Latitud (-90.0 till 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Longitud (-180.0 till 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Vanliga städer:"</string>
+    <string name="speed_add_title" formatted="false">"Lägg till hastighet"</string>
+    <string name="speed_input" formatted="false">"Uppspelningshastighet"</string>
+    <string name="speed_invalid" formatted="false">"Ange ett giltigt tal"</string>
+    <string name="speed_out_of_range" formatted="true">"Endast %1$sx till %2$sx stöds"</string>
+    <string name="speed_range" formatted="true">"Intervall som stöds: %1$sx till %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Ändra hastighet"</string>
+    <string name="duration_threshold_title" formatted="false">"Varning för långa videor"</string>
+    <string name="duration_threshold_hint" formatted="false">"När en video når denna längd visar ett kort meddelande vid uppspelningsstart längden i minuter."</string>
+    <string name="duration_threshold_input" formatted="false">"Längdgräns (minuter)"</string>
+    <string name="duration_threshold_example" formatted="false">"Till exempel: 3 eller 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Ange ett giltigt antal minuter större än 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Aktuell inställning: varning för videor ≥ %1$s minuter"</string>
+    <string name="duration_threshold_presets" formatted="false">"Föreslagna längder:"</string>
+    <string name="status_feature_feed" formatted="false">"Flödesfilter"</string>
+    <string name="status_feature_speed" formatted="false">"Hastighet"</string>
+    <string name="status_feature_progress" formatted="false">"Förloppsindikator"</string>
+    <string name="status_feature_clean" formatted="false">"Dölj kontroller automatiskt"</string>
+    <string name="status_feature_immersive" formatted="false">"Videovisning"</string>
+    <string name="status_feature_scroll" formatted="false">"Automatisk rullning"</string>
+    <string name="status_feature_duration" formatted="false">"Längdvarning"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Översätt kommentarer"</string>
+    <string name="status_feature_video_translate" formatted="false">"Meny för undertexter och översättning"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Kopiera kommentarer"</string>
+    <string name="status_feature_author" formatted="false">"Skaparens region"</string>
+    <string name="status_feature_download" formatted="false">"Spara videor"</string>
+    <string name="status_feature_music" formatted="false">"Ljudbegränsningar"</string>
+    <string name="status_feature_sim" formatted="false">"SIM och land"</string>
+    <string name="status_feature_language" formatted="false">"Språk"</string>
+    <string name="status_feature_timezone" formatted="false">"Tidszon"</string>
+    <string name="status_feature_gps" formatted="false">"Plats"</string>
+    <string name="status_feature_bar" formatted="false">"Statusfält"</string>
+    <string name="status_normal" formatted="false">"Fungerar"</string>
+    <string name="status_issue" formatted="false">"Problem"</string>
+    <string name="status_disabled" formatted="false">"Av"</string>
+    <string name="status_pending" formatted="false">"Obekräftat"</string>
+    <string name="status_problem_disabled" formatted="false">"Av, med ett registrerat fel"</string>
+    <string name="status_problem_unavailable" formatted="false">"Tillfälligt otillgänglig"</string>
+    <string name="status_problem_runtime" formatted="false">"Fel under användning"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Hastighetsmenyn otillgänglig"</string>
+    <string name="status_prepare_failed" formatted="false">"Förberedelsen av funktioner misslyckades. Öppna TikTok igen och kontrollera."</string>
+    <string name="status_preparing" formatted="false">"Förbereder funktioner. Vänta lite."</string>
+    <string name="status_prepared" formatted="false">"Förberedelsen är klar. Öppna TikTok igen."</string>
+    <string name="status_read_failed" formatted="false">"Kan inte läsa status just nu. Kontrollera senare."</string>
+    <string name="status_update_failed" formatted="false">"Kan inte uppdatera status just nu. Visar det senaste resultatet."</string>
+    <string name="status_reading" formatted="false">"Läser status"</string>
+    <string name="status_empty" formatted="false">"Ingen aktivitet registrerad. Aktivera Toki i LSPosed, öppna TikTok och kontrollera igen."</string>
+    <string name="status_report_note" formatted="true">"Senaste rapport: %1$s\n”Fungerar” betyder att funktionen är redo och inte har rapporterat några fel."</string>
+    <string name="config_section" formatted="false">"Konfiguration"</string>
+    <string name="config_import" formatted="false">"Importera konfiguration"</string>
+    <string name="config_import_summary" formatted="false">"Återställ funktionsinställningar från en fil"</string>
+    <string name="config_export" formatted="false">"Exportera konfiguration"</string>
+    <string name="config_export_summary" formatted="false">"Spara funktionsinställningar i en fil"</string>
+    <string name="config_exported" formatted="false">"Konfigurationen exporterades till vald plats. Filen kan innehålla nyckelord, regioner och mappinställningar. Förvara den säkert."</string>
+    <string name="config_import_confirm" formatted="true">"Filen innehåller %1$d inställningar. Importen ersätter alla funktionsinställningar; saknade inställningar återställs till standardvärden.\n\nAppspråk, appikon, LSPosed-behörighet och TikToks kompatibilitetscache ändras inte. Fortsätta?"</string>
+    <string name="config_overwrite" formatted="false">"Ersätt"</string>
+    <string name="config_imported" formatted="false">"Konfiguration importerad och inställningar uppdaterade. Ändringar som stöder uppdatering under användning tillämpas direkt. Öppna TikTok igen för att kontrollera övriga ändringar."</string>
+    <string name="config_processing" formatted="false">"Behandlar konfiguration"</string>
+    <string name="config_error_io" formatted="false">"Kan inte läsa eller skriva filen. Kontrollera vald plats och ledigt utrymme."</string>
+    <string name="config_error_permission" formatted="false">"Åtkomstbehörighet till vald fil saknas. Välj den igen."</string>
+    <string name="config_error_invalid" formatted="false">"Detta är inte en giltig Toki-konfigurationsfil. Inga inställningar importerades."</string>
+    <string name="config_error_validation" formatted="true">"Konfigurationskontrollen misslyckades: %1$s. Inga inställningar importerades."</string>
+    <string name="config_error_commit" formatted="false">"Det gick inte att bekräfta att konfigurationen sparades. Öppna Toki igen och kontrollera innan du försöker på nytt."</string>
+    <string name="sponsor_title" formatted="false">"Stöd utvecklaren"</string>
+    <string name="sponsor_kofi" formatted="false">"Stöd via Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"QR-kod för Alipay-betalning"</string>
+    <string name="sponsor_saving" formatted="false">"Sparar…"</string>
+    <string name="sponsor_save_image" formatted="false">"Spara bild"</string>
+    <string name="sponsor_image_hint" formatted="false">"Spara hela originalbilden och välj den sedan i Alipay för att läsa koden."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT-adress kopierad"</string>
+    <string name="sponsor_image_saved" formatted="false">"Bild sparad på vald plats"</string>
+    <string name="sponsor_error_io" formatted="false">"Det gick inte att spara. Kontrollera vald plats och ledigt utrymme och försök igen."</string>
+    <string name="sponsor_error_permission" formatted="false">"Det gick inte att spara. Skrivbehörighet saknas för platsen. Välj en annan plats."</string>
+    <string name="feature_filter_topics" formatted="false">"Dölj föreslagna ämnen"</string>
+    <string name="feature_filter_creators" formatted="false">"Dölj föreslagna kreatörer"</string>
+    <string name="host_scan_title_complete" formatted="false">"Sökningen är klar"</string>
+    <string name="host_scan_title_failed" formatted="false">"Sökningen misslyckades"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Starta om TikTok manuellt för att tillämpa resultaten."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Visa funktionsdiagnostik i Toki."</string>
+    <string name="layout_title" formatted="false">"Sidlayout"</string>
+    <string name="layout_summary" formatted="false">"Välj vilka knappar som ska döljas"</string>
+    <string name="layout_hint" formatted="false">"Slå på reglaget för att dölja objektet"</string>
+    <string name="layout_top" formatted="false">"Övre fält"</string>
+    <string name="layout_bottom" formatted="false">"Nedre fält"</string>
+    <string name="layout_side" formatted="false">"Videosida"</string>
+    <string name="layout_search" formatted="false">"Sök"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Vänner"</string>
+    <string name="layout_following" formatted="false">"Följer"</string>
+    <string name="layout_shop" formatted="false">"Butik"</string>
+    <string name="layout_for_you" formatted="false">"För dig"</string>
+    <string name="layout_nearby" formatted="false">"I närheten"</string>
+    <string name="layout_stem" formatted="false">"Vetenskap"</string>
+    <string name="layout_series" formatted="false">"Serier"</string>
+    <string name="layout_home" formatted="false">"Hem"</string>
+    <string name="layout_create" formatted="false">"Skapa"</string>
+    <string name="layout_inbox" formatted="false">"Inkorg"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Upptäck"</string>
+    <string name="layout_avatar" formatted="false">"Profilbild"</string>
+    <string name="layout_follow" formatted="false">"Följ-knapp"</string>
+    <string name="layout_like" formatted="false">"Gilla"</string>
+    <string name="layout_comment" formatted="false">"Kommentarer"</string>
+    <string name="layout_favorite" formatted="false">"Favoriter"</string>
+    <string name="layout_share" formatted="false">"Dela"</string>
+    <string name="layout_music" formatted="false">"Musikskiva"</string>
+    <string name="layout_explore" formatted="false">"Utforska"</string>
+    <string name="layout_author" formatted="false">"Upphovsperson"</string>
+    <string name="layout_description" formatted="false">"Beskrivning"</string>
+    <string name="layout_music_title" formatted="false">"Musiktitel"</string>
+    <string name="layout_tags" formatted="false">"Infoetiketter"</string>
+    <string name="layout_search_label" formatted="false">"Sökförslag"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Stoppknapp för automatisk rullning"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Mynt och belöningar"</string>
+    <string name="layout_quick_comment" formatted="false">"Snabbkommentarer"</string>
+    <string name="layout_playlist" formatted="false">"Spellista"</string>
+    <string name="layout_creation_buttons" formatted="false">"Genvägar för skapande"</string>
+    <string name="layout_live_notice" formatted="false">"LIVE-påminnelser"</string>
+    <string name="layout_opacity" formatted="false">"Opacitet"</string>
+    <string name="feature_background_audio">"Lås upp bakgrundsljud"</string>
+    <string name="layout_landscape">"Helskärmsknapp"</string>
+    <string name="layout_photo_indicators">"Fotoindikatorer och tips"</string>
+    <string name="layout_quick_message">"Snabbmeddelanden och delat av"</string>
+    <string name="layout_user_card">"Föreslagna konton"</string>
+    <string name="layout_survey">"Enkäter och feedback"</string>
+    <string name="layout_ad_cards">"Produkt- och annonskort"</string>
+    <string name="layout_bottom_banners">"Andra nedre banderoller"</string>
+    <string name="layout_activities">"Ingång till evenemang"</string>
+    <string name="host_scan_title_running" formatted="false">"Söker efter metoder"</string>
+    <string name="host_scan_title_saving" formatted="false">"Sparar resultat"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Håll TikTok i förgrunden."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Vänta."</string>
+    <string name="host_scan_done" formatted="false">"Jag förstår"</string>
+    <string name="video_fit_center" formatted="false">"Centrerat"</string>
+    <string name="video_fit_smart" formatted="false">"Helskärm"</string>
+</resources>

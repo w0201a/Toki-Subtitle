@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Pradžia"</string>
+    <string name="nav_features" formatted="false">"Funkcijos"</string>
+    <string name="page_features" formatted="false">"Nuostatos"</string>
+    <string name="page_hook_status" formatted="false">"Funkcijų būsena"</string>
+    <string name="nav_back" formatted="false">"Atgal"</string>
+    <string name="restart_tiktok" formatted="false">"Paleisti TikTok iš naujo"</string>
+    <string name="restart_root_required" formatted="false">"Suteikite Toki root prieigą."</string>
+    <string name="language_title" formatted="false">"Sąsajos kalba"</string>
+    <string name="language_system" formatted="false">"Naudoti sistemos kalbą"</string>
+    <string name="language_search" formatted="false">"Ieškoti kalbų"</string>
+    <string name="language_clear_search" formatted="false">"Išvalyti paiešką"</string>
+    <string name="language_no_results" formatted="false">"Atitinkančių kalbų nėra"</string>
+    <string name="common_save" formatted="false">"Išsaugoti"</string>
+    <string name="common_cancel" formatted="false">"Atšaukti"</string>
+    <string name="common_confirm" formatted="false">"Gerai"</string>
+    <string name="common_close" formatted="false">"Užverti"</string>
+    <string name="common_open" formatted="false">"Atverti"</string>
+    <string name="common_copy" formatted="false">"Kopijuoti"</string>
+    <string name="common_add" formatted="false">"Pridėti"</string>
+    <string name="common_delete" formatted="false">"Ištrinti"</string>
+    <string name="common_done" formatted="false">"Atlikta"</string>
+    <string name="common_save_apply" formatted="false">"Taikyti"</string>
+    <string name="common_unknown" formatted="false">"Nežinoma"</string>
+    <string name="common_custom" formatted="false">"Pasirinktinis"</string>
+    <string name="home_icon_hidden" formatted="false">"Programėlės piktograma paslėpta"</string>
+    <string name="home_icon_restored" formatted="false">"Programėlės piktograma atkurta"</string>
+    <string name="home_activated" formatted="false">"Aktyvinta"</string>
+    <string name="home_inactive" formatted="false">"Neaktyvinta"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosed aktyvinimas neaptiktas"</string>
+    <string name="home_host_section" formatted="false">"Suderinamumas su TikTok"</string>
+    <string name="home_host_current" formatted="false">"Įdiegta TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Įrenginyje nerasta palaikoma TikTok versija"</string>
+    <string name="home_host_not_installed" formatted="false">"Neįdiegta"</string>
+    <string name="home_supported_versions" formatted="false">"Palaikomos versijos"</string>
+    <string name="home_community" formatted="false">"Atvirasis kodas ir bendruomenė"</string>
+    <string name="home_github" formatted="false">"GitHub saugykla"</string>
+    <string name="home_telegram" formatted="false">"Telegram grupė"</string>
+    <string name="home_preferences" formatted="false">"Modulio nuostatos"</string>
+    <string name="home_hide_icon" formatted="false">"Slėpti programėlės piktogramą"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Paslėpę piktogramą, Toki atverkite per LSPosed tvarkytuvę"</string>
+    <string name="home_support" formatted="false">"Remti kūrimą"</string>
+    <string name="home_support_summary" formatted="false">"Remkite nuolatinę priežiūrą ir tobulinimą"</string>
+    <string name="feature_region_section" formatted="false">"Regionas ir įrenginys"</string>
+    <string name="feature_playback_section" formatted="false">"Atkūrimas"</string>
+    <string name="feature_progress" formatted="false">"Visada rodyti eigos juostą"</string>
+    <string name="feature_progress_summary" formatted="false">"Rodyti eigos juostą ir trumpuose vaizdo įrašuose"</string>
+    <string name="feature_immersive" formatted="false">"Vaizdo rodymas"</string>
+    <string name="feature_autoplay" formatted="false">"Išplėstas automatinis slinkimas"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Atrakina automatinį slinkimą visų vaizdo įrašų meniu"</string>
+    <string name="feature_status_bar" formatted="false">"Slėpti sistemos būsenos juostą"</string>
+    <string name="feature_media_section" formatted="false">"Atsisiuntimai ir veiksmai"</string>
+    <string name="feature_download" formatted="false">"Siuntimas be vandens ženklo"</string>
+    <string name="feature_download_summary" formatted="false">"Išsaugoti originalų vaizdo įrašą be vandenženklio ilgo paspaudimo arba bendrinimo meniu"</string>
+    <string name="feature_music" formatted="false">"Atrakinti garsą"</string>
+    <string name="feature_music_summary" formatted="false">"Atkurti dėl licencijos ar regiono ribojamą garsą"</string>
+    <string name="feature_author_region" formatted="false">"Rodyti kūrėjo regioną"</string>
+    <string name="feature_author_region_summary" formatted="false">"Šalia kūrėjo vardo rodyti šalies ar regiono vėliavą ir kodą"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopijuoti tik tekstą"</string>
+    <string name="feature_video_translation" formatted="false">"Subtitrų ir vertimo meniu"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Rodyti parinktį ilgo paspaudimo meniu"</string>
+    <string name="feature_comment_translation" formatted="false">"Versti komentarus"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Pridėti mygtuką keliems užsienio kalbos komentarams išversti"</string>
+    <string name="feature_filter_section" formatted="false">"Srauto filtravimas"</string>
+    <string name="feature_remove_ads" formatted="false">"Šalinti srauto reklamas"</string>
+    <string name="feature_remove_live" formatted="false">"Slėpti tiesiogines transliacijas"</string>
+    <string name="feature_remove_photos" formatted="false">"Slėpti nuotraukų įrašus"</string>
+    <string name="feature_filter_views" formatted="false">"Peržiūrų skaičiaus filtras"</string>
+    <string name="feature_filter_likes" formatted="false">"Patiktukų skaičiaus filtras"</string>
+    <string name="feature_filter_duration" formatted="false">"Vaizdo įrašų trukmės filtras"</string>
+    <string name="feature_filter_keywords" formatted="false">"Raktažodžių filtras"</string>
+    <string name="feature_block_offline" formatted="false">"Blokuoti įrašus be interneto"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Neleisti įterpti iš anksto įkeltų vaizdo įrašų, kai ryšys prastas"</string>
+    <string name="feature_remove_ai" formatted="false">"Slėpti DI sukurtus įrašus"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtruoti vaizdo įrašus, TikTok pažymėtus kaip sukurtus DI"</string>
+    <string name="filter_metric_views" formatted="false">"peržiūros"</string>
+    <string name="filter_metric_likes" formatted="false">"patiktukai"</string>
+    <string name="filter_metric_duration" formatted="false">"trukmė"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Peržiūrų intervalas išsaugotas"</string>
+    <string name="filter_likes_saved" formatted="false">"Patiktukų intervalas išsaugotas"</string>
+    <string name="filter_duration_saved" formatted="false">"Vaizdo įrašų trukmės intervalas išsaugotas"</string>
+    <string name="download_path_saved" formatted="false">"Pasirinktiniai išsaugojimo keliai atnaujinti"</string>
+    <string name="region_spoof_title" formatted="false">"Regiono ir SIM imitavimas"</string>
+    <string name="region_current" formatted="false">"Dabartinė konfigūracija"</string>
+    <string name="region_target" formatted="true">"Tikslinis regionas: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operatorius: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Operatoriaus kodas: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Ruošiniai"</string>
+    <string name="region_custom_parameters" formatted="false">"Tinkinti"</string>
+    <string name="language_spoof" formatted="false">"Kalbos imitavimas"</string>
+    <string name="environment_follow_region" formatted="false">"Pagal regioną"</string>
+    <string name="language_effective" formatted="true">"Taikoma kalba: %1$s"</string>
+    <string name="language_custom" formatted="false">"Pasirinktinė kalba"</string>
+    <string name="timezone_spoof" formatted="false">"Laiko juostos imitavimas"</string>
+    <string name="timezone_effective" formatted="true">"Taikoma laiko juosta: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Pasirinktinė laiko juosta"</string>
+    <string name="gps_spoof" formatted="false">"Vietos imitavimas"</string>
+    <string name="gps_effective" formatted="true">"Taikomos koordinatės: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Pasirinktinės koordinatės"</string>
+    <string name="speed_fixed" formatted="false">"Išlaikyti atkūrimo greitį"</string>
+    <string name="speed_fixed_summary" formatted="false">"Keičiant vaizdo įrašus išlaikyti ilgo paspaudimo meniu pasirinktą greitį"</string>
+    <string name="speed_expand" formatted="false">"Daugiau greičių"</string>
+    <string name="speed_options_hint" formatted="false">"Greičio parinktys (palieskite, jei norite keisti ar ištrinti)"</string>
+    <string name="speed_add_option" formatted="false">"+ Pridėti greitį"</string>
+    <string name="speed_restore" formatted="false">"Atkurti"</string>
+    <string name="clean_on_play" formatted="false">"Atkuriant slėpti valdiklius"</string>
+    <string name="clean_keep_progress" formatted="false">"Palikti eigos juostą"</string>
+    <string name="download_paths" formatted="false">"Išsaugojimo aplankai"</string>
+    <string name="download_paths_summary" formatted="true">"Vaizdo įrašai: %1$s · Paveikslai: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Palikti vaizdo įrašus, kurių %1$s nuo %2$d%4$s iki %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Palikti vaizdo įrašus, kurių %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Palikti vaizdo įrašus, kurių %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Intervalas nenustatytas (palieskite minimumui ar maksimumui nustatyti)"</string>
+    <string name="keyword_unset" formatted="false">"Palieskite taisyklei pridėti"</string>
+    <string name="keyword_summary" formatted="true">"Įjungta: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Tekstai %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Grotažymės %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Kūrėjai %1$d"</string>
+    <string name="keyword_description" formatted="false">"Tekstai"</string>
+    <string name="keyword_tag" formatted="false">"Grotažymės"</string>
+    <string name="keyword_author" formatted="false">"Kūrėjai"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Kategorijoje %1$s taisyklių nėra. Pridėkite aukščiau."</string>
+    <string name="duration_alert_title" formatted="false">"Ilgų vaizdo įrašų įspėjimas"</string>
+    <string name="duration_alert_summary" formatted="true">"Dabartinė riba: ≥ %1$s min."</string>
+    <string name="download_video_path" formatted="false">"Vaizdo įrašų aplankas"</string>
+    <string name="download_image_path" formatted="false">"Paveikslų aplankas"</string>
+    <string name="download_path_hint" formatted="false">"Pirmasis aplankas turi būti viešas medijos aplankas, pvz., Movies, Pictures arba DCIM. Neteisingam keliui taikoma sistemos numatytoji reikšmė."</string>
+    <string name="views_range_title" formatted="false">"Peržiūrų skaičiaus intervalas"</string>
+    <string name="views_range_min" formatted="false">"Mažiausiai peržiūrų (0 = be apribojimų)"</string>
+    <string name="views_range_max" formatted="false">"Daugiausiai peržiūrų (0 = be apribojimų)"</string>
+    <string name="views_range_hint" formatted="false">"Palikti tik vaizdo įrašus šiame peržiūrų intervale. Jei abi ribos lygios 0, niekas nešalinama."</string>
+    <string name="likes_range_title" formatted="false">"Patiktukų skaičiaus intervalas"</string>
+    <string name="likes_range_min" formatted="false">"Mažiausiai patiktukų (0 = be apribojimų)"</string>
+    <string name="likes_range_max" formatted="false">"Daugiausiai patiktukų (0 = be apribojimų)"</string>
+    <string name="likes_range_hint" formatted="false">"Palikti tik vaizdo įrašus šiame patiktukų intervale. Jei abi ribos lygios 0, niekas nešalinama."</string>
+    <string name="duration_range_title" formatted="false">"Vaizdo įrašų trukmės intervalas"</string>
+    <string name="duration_range_min" formatted="false">"Mažiausia trukmė (sekundėmis; 0 = be apribojimų)"</string>
+    <string name="duration_range_max" formatted="false">"Didžiausia trukmė (sekundėmis; 0 = be apribojimų)"</string>
+    <string name="duration_range_hint" formatted="false">"Palikti tik rekomenduojamus vaizdo įrašus šiame trukmės intervale. Jei abi ribos lygios 0, niekas nešalinama. Nuotraukų įrašai nefiltruojami."</string>
+    <string name="keyword_manage" formatted="false">"Filtravimo taisyklės"</string>
+    <string name="keyword_description_hint" formatted="false">"Ieškoti vaizdo įrašų tekstuose ir aprašuose neskiriant didžiųjų ir mažųjų raidžių."</string>
+    <string name="keyword_tag_hint" formatted="false">"Ieškoti grotažymių. Neįveskite priešdėlio #."</string>
+    <string name="keyword_author_hint" formatted="false">"Ieškoti kūrėjų vardų ir unikalių naudotojų vardų. Neįveskite priešdėlio @."</string>
+    <string name="keyword_description_input" formatted="false">"Raktažodis tekste"</string>
+    <string name="keyword_tag_input" formatted="false">"Grotažymė"</string>
+    <string name="keyword_author_input" formatted="false">"Vardas arba naudotojo vardas"</string>
+    <string name="keyword_add" formatted="false">"Pridėti taisyklę"</string>
+    <string name="keyword_delete" formatted="false">"Ištrinti taisyklę"</string>
+    <string name="region_select_title" formatted="false">"Pasirinkti regioną"</string>
+    <string name="region_search" formatted="false">"Šalies pavadinimas arba kodas"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Operatoriaus kodas: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Pasirinktinis regionas ir SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Nustatykite šalies kodą ir operatorių be ruošinių apribojimų."</string>
+    <string name="region_code_input" formatted="false">"Šalies ar regiono kodas (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Operatoriaus kodas (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Operatoriaus pavadinimas (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Pasirinkite dažną kalbą arba įveskite kalbos kodą."</string>
+    <string name="language_code_input" formatted="false">"Kalbos kodas (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Kalbos"</string>
+    <string name="timezone_custom_hint" formatted="false">"Pasirinkite miesto laiko juostą arba įveskite laiko juostos pavadinimą."</string>
+    <string name="timezone_input" formatted="false">"Laiko juostos pavadinimas (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Miestai"</string>
+    <string name="city_tokyo" formatted="false">"Tokijas"</string>
+    <string name="city_taipei" formatted="false">"Taipėjus"</string>
+    <string name="city_hong_kong" formatted="false">"Honkongas"</string>
+    <string name="city_new_york" formatted="false">"Niujorkas"</string>
+    <string name="city_london" formatted="false">"Londonas"</string>
+    <string name="city_seoul" formatted="false">"Seulas"</string>
+    <string name="city_bangkok" formatted="false">"Bankokas"</string>
+    <string name="city_singapore" formatted="false">"Singapūras"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Pasirinktinė vieta"</string>
+    <string name="gps_custom_hint" formatted="false">"Pasirinkite miestą arba įveskite platumą ir ilgumą."</string>
+    <string name="gps_latitude" formatted="false">"Platuma (nuo -90.0 iki 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Ilguma (nuo -180.0 iki 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Miestai"</string>
+    <string name="speed_add_title" formatted="false">"Pridėti greitį"</string>
+    <string name="speed_input" formatted="false">"Greitis"</string>
+    <string name="speed_invalid" formatted="false">"Įveskite tinkamą skaičių"</string>
+    <string name="speed_out_of_range" formatted="true">"Palaikoma tik nuo %1$sx iki %2$sx"</string>
+    <string name="speed_range" formatted="true">"Palaikomas intervalas: nuo %1$sx iki %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Keisti greitį"</string>
+    <string name="duration_threshold_title" formatted="false">"Ilgo įrašo įspėjimas"</string>
+    <string name="duration_threshold_hint" formatted="false">"Vaizdo įrašui pasiekus šią trukmę, atkūrimo pradžioje trumpas pranešimas įspės apie jo trukmę minutėmis."</string>
+    <string name="duration_threshold_input" formatted="false">"Trukmės riba (minutėmis)"</string>
+    <string name="duration_threshold_example" formatted="false">"Pavyzdžiui: 3 arba 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Įveskite tinkamą minučių skaičių, didesnį už 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Dabartinė nuostata: įspėti apie vaizdo įrašus ≥ %1$s min."</string>
+    <string name="duration_threshold_presets" formatted="false">"Siūlomos trukmės:"</string>
+    <string name="status_feature_feed" formatted="false">"Srauto filtras"</string>
+    <string name="status_feature_speed" formatted="false">"Greitis"</string>
+    <string name="status_feature_progress" formatted="false">"Eigos juosta"</string>
+    <string name="status_feature_clean" formatted="false">"Automatinis slėpimas"</string>
+    <string name="status_feature_immersive" formatted="false">"Vaizdo rodymas"</string>
+    <string name="status_feature_scroll" formatted="false">"Automatinis slinkimas"</string>
+    <string name="status_feature_duration" formatted="false">"Trukmės įspėjimas"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Komentarų vertimas"</string>
+    <string name="status_feature_video_translate" formatted="false">"Subtitrų ir vertimo meniu"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Komentarų kopijavimas"</string>
+    <string name="status_feature_author" formatted="false">"Kūrėjo regionas"</string>
+    <string name="status_feature_download" formatted="false">"Įrašų išsaugojimas"</string>
+    <string name="status_feature_music" formatted="false">"Garso apribojimai"</string>
+    <string name="status_feature_sim" formatted="false">"Regionas ir SIM"</string>
+    <string name="status_feature_language" formatted="false">"Kalba"</string>
+    <string name="status_feature_timezone" formatted="false">"Laiko juosta"</string>
+    <string name="status_feature_gps" formatted="false">"Vieta"</string>
+    <string name="status_feature_bar" formatted="false">"Būsenos juosta"</string>
+    <string name="status_normal" formatted="false">"Veikia"</string>
+    <string name="status_issue" formatted="false">"Problema"</string>
+    <string name="status_disabled" formatted="false">"Išjungta"</string>
+    <string name="status_pending" formatted="false">"Laukiama"</string>
+    <string name="status_problem_disabled" formatted="false">"Išjungta, užregistruota klaida"</string>
+    <string name="status_problem_unavailable" formatted="false">"Laikinai nepasiekiama"</string>
+    <string name="status_problem_runtime" formatted="false">"Vykdymo klaida"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Greičio meniu nepasiekiamas"</string>
+    <string name="status_prepare_failed" formatted="false">"Funkcijų paruošti nepavyko. Vėl atverkite TikTok ir patikrinkite."</string>
+    <string name="status_preparing" formatted="false">"Ruošiamos funkcijos. Palaukite."</string>
+    <string name="status_prepared" formatted="false">"Paruošimas baigtas. Vėl atverkite TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Dabar negalima nuskaityti būsenos. Patikrinkite vėliau."</string>
+    <string name="status_update_failed" formatted="false">"Dabar negalima atnaujinti būsenos. Rodomas naujausias rezultatas."</string>
+    <string name="status_reading" formatted="false">"Nuskaitoma būsena"</string>
+    <string name="status_empty" formatted="false">"Veiklos įrašų nėra. Įjunkite Toki per LSPosed, atverkite TikTok ir patikrinkite."</string>
+    <string name="status_report_note" formatted="true">"Naujausia ataskaita: %1$s\n„Veikia“ reiškia, kad funkcija paruošta ir nepranešė apie klaidas."</string>
+    <string name="config_section" formatted="false">"Konfigūracija"</string>
+    <string name="config_import" formatted="false">"Importuoti nuostatas"</string>
+    <string name="config_import_summary" formatted="false">"Atkurti funkcijų nuostatas iš failo"</string>
+    <string name="config_export" formatted="false">"Eksportuoti nuostatas"</string>
+    <string name="config_export_summary" formatted="false">"Išsaugoti funkcijų nuostatas faile"</string>
+    <string name="config_exported" formatted="false">"Konfigūracija eksportuota į pasirinktą vietą. Faile gali būti raktažodžių, regionų ir aplankų nuostatų. Saugokite jį saugiai."</string>
+    <string name="config_import_confirm" formatted="true">"Faile yra %1$d nuostatų. Importuojant bus pakeistos visos funkcijų nuostatos; trūkstamoms bus grąžintos numatytosios reikšmės.\n\nSąsajos kalba, programėlės piktograma, LSPosed leidimas ir TikTok suderinamumo podėlis nesikeis. Tęsti?"</string>
+    <string name="config_overwrite" formatted="false">"Pakeisti"</string>
+    <string name="config_imported" formatted="false">"Konfigūracija importuota, nuostatos atnaujintos. Pakeitimai, palaikantys atnaujinimą veikimo metu, taikomi iškart. Kitus patikrinkite vėl atvėrę TikTok."</string>
+    <string name="config_processing" formatted="false">"Apdorojama…"</string>
+    <string name="config_error_io" formatted="false">"Nepavyko nuskaityti ar įrašyti failo. Patikrinkite pasirinktą vietą ir laisvą vietą."</string>
+    <string name="config_error_permission" formatted="false">"Nesuteiktas leidimas pasiekti pasirinktą failą. Pasirinkite jį dar kartą."</string>
+    <string name="config_error_invalid" formatted="false">"Tai nėra tinkamas Toki konfigūracijos failas. Nuostatos neimportuotos."</string>
+    <string name="config_error_validation" formatted="true">"Konfigūracijos patikra nepavyko: %1$s. Nuostatos neimportuotos."</string>
+    <string name="config_error_commit" formatted="false">"Konfigūracijos išsaugojimo nepavyko patvirtinti. Prieš bandydami vėl, atverkite Toki ir patikrinkite."</string>
+    <string name="sponsor_title" formatted="false">"Remti kūrėją"</string>
+    <string name="sponsor_kofi" formatted="false">"Remti per Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay mokėjimo QR kodas"</string>
+    <string name="sponsor_saving" formatted="false">"Išsaugoma…"</string>
+    <string name="sponsor_save_image" formatted="false">"Išsaugoti paveikslą"</string>
+    <string name="sponsor_image_hint" formatted="false">"Išsaugokite visą originalų paveikslą, tada pasirinkite jį Alipay kodui nuskaityti."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT adresas nukopijuotas"</string>
+    <string name="sponsor_image_saved" formatted="false">"Paveikslas išsaugotas pasirinktoje vietoje"</string>
+    <string name="sponsor_error_io" formatted="false">"Išsaugoti nepavyko. Patikrinkite pasirinktą vietą ir laisvą vietą, tada bandykite dar kartą."</string>
+    <string name="sponsor_error_permission" formatted="false">"Išsaugoti nepavyko. Šiai vietai nesuteiktas rašymo leidimas. Pasirinkite kitą vietą."</string>
+    <string name="feature_filter_topics" formatted="false">"Slėpti siūlomas temas"</string>
+    <string name="feature_filter_creators" formatted="false">"Slėpti siūlomus kūrėjus"</string>
+    <string name="host_scan_title_complete" formatted="false">"Paieška baigta"</string>
+    <string name="host_scan_title_failed" formatted="false">"Paieška nepavyko"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Rankiniu būdu paleiskite TikTok iš naujo, kad pritaikytumėte rezultatus."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Peržiūrėkite funkcijų diagnostiką Toki."</string>
+    <string name="layout_title" formatted="false">"Puslapio išdėstymas"</string>
+    <string name="layout_summary" formatted="false">"Pasirinkite, kuriuos valdiklius slėpti"</string>
+    <string name="layout_hint" formatted="false">"Įjunkite jungiklį, kad paslėptumėte elementą"</string>
+    <string name="layout_top" formatted="false">"Viršutinė juosta"</string>
+    <string name="layout_bottom" formatted="false">"Apatinė juosta"</string>
+    <string name="layout_side" formatted="false">"Vaizdo įrašo puslapis"</string>
+    <string name="layout_search" formatted="false">"Paieška"</string>
+    <string name="layout_live" formatted="false">"TIESIOGIAI"</string>
+    <string name="layout_friends" formatted="false">"Draugai"</string>
+    <string name="layout_following" formatted="false">"Sekami"</string>
+    <string name="layout_shop" formatted="false">"Parduotuvė"</string>
+    <string name="layout_for_you" formatted="false">"Jums"</string>
+    <string name="layout_nearby" formatted="false">"Netoliese"</string>
+    <string name="layout_stem" formatted="false">"Mokslas"</string>
+    <string name="layout_series" formatted="false">"Serialai"</string>
+    <string name="layout_home" formatted="false">"Pradžia"</string>
+    <string name="layout_create" formatted="false">"Kurti"</string>
+    <string name="layout_inbox" formatted="false">"Gautieji"</string>
+    <string name="layout_profile" formatted="false">"Profilis"</string>
+    <string name="layout_discover" formatted="false">"Atrasti"</string>
+    <string name="layout_avatar" formatted="false">"Profilio nuotrauka"</string>
+    <string name="layout_follow" formatted="false">"Sekimo mygtukas"</string>
+    <string name="layout_like" formatted="false">"Patinka"</string>
+    <string name="layout_comment" formatted="false">"Komentarai"</string>
+    <string name="layout_favorite" formatted="false">"Mėgstamiausi"</string>
+    <string name="layout_share" formatted="false">"Bendrinti"</string>
+    <string name="layout_music" formatted="false">"Muzikos diskas"</string>
+    <string name="layout_explore" formatted="false">"Naršyti"</string>
+    <string name="layout_author" formatted="false">"Autoriaus informacija"</string>
+    <string name="layout_description" formatted="false">"Aprašymas"</string>
+    <string name="layout_music_title" formatted="false">"Muzikos pavadinimas"</string>
+    <string name="layout_tags" formatted="false">"Informacinės žymos"</string>
+    <string name="layout_search_label" formatted="false">"Paieškos pasiūlymas"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Automatinio slinkimo stabdymo mygtukas"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Monetos ir atlygiai"</string>
+    <string name="layout_quick_comment" formatted="false">"Greitieji komentarai"</string>
+    <string name="layout_playlist" formatted="false">"Grojaraštis"</string>
+    <string name="layout_creation_buttons" formatted="false">"Kūrimo nuorodos"</string>
+    <string name="layout_live_notice" formatted="false">"LIVE priminimai"</string>
+    <string name="layout_opacity" formatted="false">"Nepermatomumas"</string>
+    <string name="feature_background_audio">"Atrakinti foninį garsą"</string>
+    <string name="layout_landscape">"Viso ekrano mygtukas"</string>
+    <string name="layout_photo_indicators">"Nuotraukų indikatoriai ir patarimai"</string>
+    <string name="layout_quick_message">"Greitosios žinutės ir bendrintojas"</string>
+    <string name="layout_user_card">"Siūlomos paskyros"</string>
+    <string name="layout_survey">"Apklausos ir atsiliepimai"</string>
+    <string name="layout_ad_cards">"Produktų ir reklamų kortelės"</string>
+    <string name="layout_bottom_banners">"Kitos apatinės juostos"</string>
+    <string name="layout_activities">"Renginių mygtukas"</string>
+    <string name="host_scan_title_running" formatted="false">"Ieškoma metodų"</string>
+    <string name="host_scan_title_saving" formatted="false">"Išsaugomi rezultatai"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Palikite TikTok pirmame plane."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Palaukite."</string>
+    <string name="host_scan_done" formatted="false">"Supratau"</string>
+    <string name="video_fit_center" formatted="false">"Centre"</string>
+    <string name="video_fit_smart" formatted="false">"Visas ekranas"</string>
+</resources>

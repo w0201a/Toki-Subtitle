@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Inicio"</string>
+    <string name="nav_features" formatted="false">"Funciones"</string>
+    <string name="page_features" formatted="false">"Configuración"</string>
+    <string name="page_hook_status" formatted="false">"Estado de las funciones"</string>
+    <string name="nav_back" formatted="false">"Atrás"</string>
+    <string name="restart_tiktok" formatted="false">"Reiniciar TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Concede acceso root a Toki."</string>
+    <string name="language_title" formatted="false">"Idioma de la aplicación"</string>
+    <string name="language_system" formatted="false">"Usar el idioma del sistema"</string>
+    <string name="language_search" formatted="false">"Buscar idiomas"</string>
+    <string name="language_clear_search" formatted="false">"Borrar búsqueda"</string>
+    <string name="language_no_results" formatted="false">"No se han encontrado idiomas coincidentes"</string>
+    <string name="common_save" formatted="false">"Guardar"</string>
+    <string name="common_cancel" formatted="false">"Cancelar"</string>
+    <string name="common_confirm" formatted="false">"Aceptar"</string>
+    <string name="common_close" formatted="false">"Cerrar"</string>
+    <string name="common_open" formatted="false">"Abrir"</string>
+    <string name="common_copy" formatted="false">"Copiar"</string>
+    <string name="common_add" formatted="false">"Agregar"</string>
+    <string name="common_delete" formatted="false">"Eliminar"</string>
+    <string name="common_done" formatted="false">"Hecho"</string>
+    <string name="common_save_apply" formatted="false">"Aplicar"</string>
+    <string name="common_unknown" formatted="false">"Desconocido"</string>
+    <string name="common_custom" formatted="false">"Personalizado"</string>
+    <string name="home_icon_hidden" formatted="false">"Icono de la aplicación oculto"</string>
+    <string name="home_icon_restored" formatted="false">"Icono de la aplicación restaurado"</string>
+    <string name="home_activated" formatted="false">"Activado"</string>
+    <string name="home_inactive" formatted="false">"No activado"</string>
+    <string name="home_activation_missing" formatted="false">"No se ha detectado la activación en LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Compatibilidad con TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok instalado"</string>
+    <string name="home_host_missing" formatted="false">"No se ha encontrado una instalación de TikTok compatible en este dispositivo"</string>
+    <string name="home_host_not_installed" formatted="false">"No instalado"</string>
+    <string name="home_supported_versions" formatted="false">"Versiones compatibles"</string>
+    <string name="home_community" formatted="false">"Código abierto y comunidad"</string>
+    <string name="home_github" formatted="false">"Repositorio de GitHub"</string>
+    <string name="home_telegram" formatted="false">"Grupo de Telegram"</string>
+    <string name="home_preferences" formatted="false">"Preferencias del módulo"</string>
+    <string name="home_hide_icon" formatted="false">"Ocultar icono de la aplicación"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Cuando esté oculto, abre Toki desde el gestor de LSPosed"</string>
+    <string name="home_support" formatted="false">"Apoyar el desarrollo"</string>
+    <string name="home_support_summary" formatted="false">"Apoya el mantenimiento y las mejoras continuas"</string>
+    <string name="feature_region_section" formatted="false">"Región y dispositivo"</string>
+    <string name="feature_playback_section" formatted="false">"Reproducción"</string>
+    <string name="feature_progress" formatted="false">"Mostrar siempre barra de progreso"</string>
+    <string name="feature_progress_summary" formatted="false">"Mantiene visible la barra de progreso, incluso en videos cortos"</string>
+    <string name="feature_immersive" formatted="false">"Visualización de vídeo"</string>
+    <string name="feature_autoplay" formatted="false">"Desplazamiento automático mejorado"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Desbloquea el desplazamiento automático en el menú de cualquier video"</string>
+    <string name="feature_status_bar" formatted="false">"Ocultar la barra de estado del sistema"</string>
+    <string name="feature_media_section" formatted="false">"Descargas y acciones"</string>
+    <string name="feature_download" formatted="false">"Descargas sin marca de agua"</string>
+    <string name="feature_download_summary" formatted="false">"Guarda el video original sin marca de agua desde el menú de pulsación prolongada o el de compartir"</string>
+    <string name="feature_music" formatted="false">"Desbloquear audio"</string>
+    <string name="feature_music_summary" formatted="false">"Restaura la reproducción de audio restringida por licencias o región"</string>
+    <string name="feature_author_region" formatted="false">"Mostrar región del creador"</string>
+    <string name="feature_author_region_summary" formatted="false">"Muestra la bandera y el código del país o región junto al nombre del creador"</string>
+    <string name="feature_copy_comment" formatted="false">"Copiar solo texto"</string>
+    <string name="feature_video_translation" formatted="false">"Menú de subtítulos y traducción"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Mostrar la opción en el menú de pulsación prolongada"</string>
+    <string name="feature_comment_translation" formatted="false">"Traducir comentarios"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Agrega un botón para traducir en bloque los comentarios en otros idiomas"</string>
+    <string name="feature_filter_section" formatted="false">"Filtrado del feed"</string>
+    <string name="feature_remove_ads" formatted="false">"Eliminar anuncios del feed"</string>
+    <string name="feature_remove_live" formatted="false">"Ocultar transmisiones LIVE"</string>
+    <string name="feature_remove_photos" formatted="false">"Ocultar publicaciones de fotos"</string>
+    <string name="feature_filter_views" formatted="false">"Filtro por visualizaciones"</string>
+    <string name="feature_filter_likes" formatted="false">"Filtro por Me gusta"</string>
+    <string name="feature_filter_duration" formatted="false">"Filtro por duración del video"</string>
+    <string name="feature_filter_keywords" formatted="false">"Filtro por palabras clave"</string>
+    <string name="feature_block_offline" formatted="false">"Bloquear videos sin conexión"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Impide que se inserten videos sin conexión precargados cuando la conexión es deficiente"</string>
+    <string name="feature_remove_ai" formatted="false">"Ocultar videos generados por IA"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtra los videos que TikTok etiqueta como generados por IA"</string>
+    <string name="filter_metric_views" formatted="false">"visualizaciones"</string>
+    <string name="filter_metric_likes" formatted="false">"Me gusta"</string>
+    <string name="filter_metric_duration" formatted="false">"duración"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Intervalo de visualizaciones guardado"</string>
+    <string name="filter_likes_saved" formatted="false">"Intervalo de Me gusta guardado"</string>
+    <string name="filter_duration_saved" formatted="false">"Intervalo de duración del video guardado"</string>
+    <string name="download_path_saved" formatted="false">"Rutas de guardado personalizadas actualizadas"</string>
+    <string name="region_spoof_title" formatted="false">"Simulación de región y SIM"</string>
+    <string name="region_current" formatted="false">"Configuración actual"</string>
+    <string name="region_target" formatted="true">"Región de destino: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operador: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Código del operador: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Preajustes"</string>
+    <string name="region_custom_parameters" formatted="false">"Personalizar"</string>
+    <string name="language_spoof" formatted="false">"Simulación de idioma"</string>
+    <string name="environment_follow_region" formatted="false">"Según la región"</string>
+    <string name="language_effective" formatted="true">"Idioma aplicado: %1$s"</string>
+    <string name="language_custom" formatted="false">"Idioma personalizado"</string>
+    <string name="timezone_spoof" formatted="false">"Simulación de zona horaria"</string>
+    <string name="timezone_effective" formatted="true">"Zona horaria aplicada: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Zona horaria personalizada"</string>
+    <string name="gps_spoof" formatted="false">"Simulación de ubicación"</string>
+    <string name="gps_effective" formatted="true">"Coordenadas aplicadas: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Coordenadas personalizadas"</string>
+    <string name="speed_fixed" formatted="false">"Mantener la velocidad de reproducción"</string>
+    <string name="speed_fixed_summary" formatted="false">"Mantiene la velocidad seleccionada en el menú de pulsación prolongada al cambiar de video"</string>
+    <string name="speed_expand" formatted="false">"Más velocidades"</string>
+    <string name="speed_options_hint" formatted="false">"Opciones de velocidad (toca para editar o eliminar)"</string>
+    <string name="speed_add_option" formatted="false">"+ Agregar velocidad"</string>
+    <string name="speed_restore" formatted="false">"Restablecer"</string>
+    <string name="clean_on_play" formatted="false">"Ocultar controles al reproducir"</string>
+    <string name="clean_keep_progress" formatted="false">"Mantener barra de progreso"</string>
+    <string name="download_paths" formatted="false">"Carpetas de guardado"</string>
+    <string name="download_paths_summary" formatted="true">"Videos: %1$s · Imágenes: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Conservar videos con %1$s entre %2$d%4$s y %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Conservar videos con %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Conservar videos con %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Sin intervalo definido (toca para establecer un mínimo o un máximo)"</string>
+    <string name="keyword_unset" formatted="false">"Toca para agregar reglas"</string>
+    <string name="keyword_summary" formatted="true">"Activado: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Descripciones %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Etiquetas %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Creadores %1$d"</string>
+    <string name="keyword_description" formatted="false">"Descripciones"</string>
+    <string name="keyword_tag" formatted="false">"Etiquetas"</string>
+    <string name="keyword_author" formatted="false">"Creadores"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"No hay reglas de %1$s. Agrega una arriba."</string>
+    <string name="duration_alert_title" formatted="false">"Aviso de videos largos"</string>
+    <string name="duration_alert_summary" formatted="true">"Umbral actual: ≥ %1$s minutos"</string>
+    <string name="download_video_path" formatted="false">"Carpeta de videos"</string>
+    <string name="download_image_path" formatted="false">"Carpeta de imágenes"</string>
+    <string name="download_path_hint" formatted="false">"La primera carpeta debe ser una carpeta multimedia pública, como Movies, Pictures o DCIM. Las rutas no válidas usan el valor predeterminado del sistema."</string>
+    <string name="views_range_title" formatted="false">"Intervalo de visualizaciones"</string>
+    <string name="views_range_min" formatted="false">"Visualizaciones mínimas (0 = sin límite)"</string>
+    <string name="views_range_max" formatted="false">"Visualizaciones máximas (0 = sin límite)"</string>
+    <string name="views_range_hint" formatted="false">"Conserva solo los videos dentro de este intervalo de visualizaciones. Establece ambos límites en 0 para no eliminar ninguno."</string>
+    <string name="likes_range_title" formatted="false">"Intervalo de Me gusta"</string>
+    <string name="likes_range_min" formatted="false">"Mínimo de Me gusta (0 = sin límite)"</string>
+    <string name="likes_range_max" formatted="false">"Máximo de Me gusta (0 = sin límite)"</string>
+    <string name="likes_range_hint" formatted="false">"Conserva solo los videos dentro de este intervalo de Me gusta. Establece ambos límites en 0 para no eliminar ninguno."</string>
+    <string name="duration_range_title" formatted="false">"Intervalo de duración del video"</string>
+    <string name="duration_range_min" formatted="false">"Duración mínima (segundos; 0 = sin límite)"</string>
+    <string name="duration_range_max" formatted="false">"Duración máxima (segundos; 0 = sin límite)"</string>
+    <string name="duration_range_hint" formatted="false">"Conserva solo los videos recomendados dentro de este intervalo de duración. Establece ambos límites en 0 para no eliminar ninguno. No afecta a las publicaciones de fotos."</string>
+    <string name="keyword_manage" formatted="false">"Reglas de filtrado"</string>
+    <string name="keyword_description_hint" formatted="false">"Busca coincidencias en las descripciones de los videos sin distinguir mayúsculas y minúsculas."</string>
+    <string name="keyword_tag_hint" formatted="false">"Busca coincidencias en las etiquetas. No incluyas el prefijo #."</string>
+    <string name="keyword_author_hint" formatted="false">"Busca coincidencias en los nombres de los creadores y sus nombres de usuario únicos. No incluyas el prefijo @."</string>
+    <string name="keyword_description_input" formatted="false">"Palabra clave del texto"</string>
+    <string name="keyword_tag_input" formatted="false">"Etiqueta"</string>
+    <string name="keyword_author_input" formatted="false">"Nombre o usuario"</string>
+    <string name="keyword_add" formatted="false">"Agregar regla"</string>
+    <string name="keyword_delete" formatted="false">"Eliminar regla"</string>
+    <string name="region_select_title" formatted="false">"Elegir región"</string>
+    <string name="region_search" formatted="false">"Nombre o código de país"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Código del operador: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Región y SIM personalizadas"</string>
+    <string name="region_custom_hint" formatted="false">"Establece un código de país y un operador personalizados sin las restricciones de los ajustes predefinidos."</string>
+    <string name="region_code_input" formatted="false">"Código de país o región (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Código del operador (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Nombre del operador (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Elige un idioma habitual o ingresa un código de idioma."</string>
+    <string name="language_code_input" formatted="false">"Código de idioma (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Idiomas"</string>
+    <string name="timezone_custom_hint" formatted="false">"Elige la zona horaria de una ciudad habitual o ingresa un nombre de zona horaria."</string>
+    <string name="timezone_input" formatted="false">"Nombre de la zona horaria (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Ciudades"</string>
+    <string name="city_tokyo" formatted="false">"Tokio"</string>
+    <string name="city_taipei" formatted="false">"Taipéi"</string>
+    <string name="city_hong_kong" formatted="false">"Hong Kong"</string>
+    <string name="city_new_york" formatted="false">"Nueva York"</string>
+    <string name="city_london" formatted="false">"Londres"</string>
+    <string name="city_seoul" formatted="false">"Seúl"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapur"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Ubicación personalizada"</string>
+    <string name="gps_custom_hint" formatted="false">"Elige una ciudad habitual o ingresa la latitud y la longitud."</string>
+    <string name="gps_latitude" formatted="false">"Latitud (-90.0 a 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Longitud (-180.0 a 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Ciudades"</string>
+    <string name="speed_add_title" formatted="false">"Agregar velocidad"</string>
+    <string name="speed_input" formatted="false">"Velocidad"</string>
+    <string name="speed_invalid" formatted="false">"Ingresa un número válido"</string>
+    <string name="speed_out_of_range" formatted="true">"Solo se admite de %1$sx a %2$sx"</string>
+    <string name="speed_range" formatted="true">"Intervalo admitido: %1$sx a %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Editar velocidad"</string>
+    <string name="duration_threshold_title" formatted="false">"Aviso de video largo"</string>
+    <string name="duration_threshold_hint" formatted="false">"Cuando un video alcanza esta duración, un aviso al comenzar la reproducción indica su duración en minutos."</string>
+    <string name="duration_threshold_input" formatted="false">"Umbral de duración (minutos)"</string>
+    <string name="duration_threshold_example" formatted="false">"Por ejemplo: 3 o 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Ingresa un número válido de minutos superior a 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Ajuste actual: avisar en videos de ≥ %1$s minutos"</string>
+    <string name="duration_threshold_presets" formatted="false">"Duraciones sugeridas:"</string>
+    <string name="status_feature_feed" formatted="false">"Filtro del feed"</string>
+    <string name="status_feature_speed" formatted="false">"Velocidad"</string>
+    <string name="status_feature_progress" formatted="false">"Barra de progreso"</string>
+    <string name="status_feature_clean" formatted="false">"Ocultación automática"</string>
+    <string name="status_feature_immersive" formatted="false">"Visualización de vídeo"</string>
+    <string name="status_feature_scroll" formatted="false">"Desplazamiento automático"</string>
+    <string name="status_feature_duration" formatted="false">"Aviso de duración"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Traducir comentarios"</string>
+    <string name="status_feature_video_translate" formatted="false">"Menú de subtítulos y traducción"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Copiar comentarios"</string>
+    <string name="status_feature_author" formatted="false">"Región del creador"</string>
+    <string name="status_feature_download" formatted="false">"Guardar videos"</string>
+    <string name="status_feature_music" formatted="false">"Límites de audio"</string>
+    <string name="status_feature_sim" formatted="false">"Región y SIM"</string>
+    <string name="status_feature_language" formatted="false">"Idioma"</string>
+    <string name="status_feature_timezone" formatted="false">"Zona horaria"</string>
+    <string name="status_feature_gps" formatted="false">"Ubicación"</string>
+    <string name="status_feature_bar" formatted="false">"Barra de estado"</string>
+    <string name="status_normal" formatted="false">"Funciona"</string>
+    <string name="status_issue" formatted="false">"Hay un problema"</string>
+    <string name="status_disabled" formatted="false">"Desactivado"</string>
+    <string name="status_pending" formatted="false">"Pendiente"</string>
+    <string name="status_problem_disabled" formatted="false">"Desactivado, con un error registrado"</string>
+    <string name="status_problem_unavailable" formatted="false">"No disponible ahora"</string>
+    <string name="status_problem_runtime" formatted="false">"Error de ejecución"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Menú de velocidad no disponible"</string>
+    <string name="status_prepare_failed" formatted="false">"La preparación de las funciones ha fallado. Vuelve a abrir TikTok y compruébalo."</string>
+    <string name="status_preparing" formatted="false">"Preparando funciones. Espera."</string>
+    <string name="status_prepared" formatted="false">"Preparación completada. Vuelve a abrir TikTok."</string>
+    <string name="status_read_failed" formatted="false">"No se puede leer el estado ahora. Compruébalo más tarde."</string>
+    <string name="status_update_failed" formatted="false">"No se puede actualizar el estado ahora. Se muestra el resultado más reciente."</string>
+    <string name="status_reading" formatted="false">"Leyendo el estado"</string>
+    <string name="status_empty" formatted="false">"No hay actividad registrada. Activa Toki en LSPosed, abre TikTok y vuelve a comprobarlo."</string>
+    <string name="status_report_note" formatted="true">"Último informe: %1$s\n«Funciona» significa que la función está lista y no ha notificado errores."</string>
+    <string name="config_section" formatted="false">"Configuración"</string>
+    <string name="config_import" formatted="false">"Importar ajustes"</string>
+    <string name="config_import_summary" formatted="false">"Restaura la configuración de funciones desde un archivo"</string>
+    <string name="config_export" formatted="false">"Exportar ajustes"</string>
+    <string name="config_export_summary" formatted="false">"Guarda la configuración de funciones en un archivo"</string>
+    <string name="config_exported" formatted="false">"Configuración exportada a la ubicación seleccionada. El archivo puede contener palabras clave, regiones y ajustes de carpetas. Guárdalo de forma segura."</string>
+    <string name="config_import_confirm" formatted="true">"El archivo contiene %1$d ajustes. La importación sustituye toda la configuración de funciones; los ajustes que falten volverán a sus valores predeterminados.\n\nEl idioma de la aplicación, el icono, la autorización de LSPosed y la caché de compatibilidad con TikTok no cambiarán. ¿Continuar?"</string>
+    <string name="config_overwrite" formatted="false">"Reemplazar"</string>
+    <string name="config_imported" formatted="false">"Configuración importada y ajustes de funciones actualizados. Los cambios compatibles con actualizaciones en tiempo real se aplican de inmediato. Vuelve a abrir TikTok para verificar los demás cambios."</string>
+    <string name="config_processing" formatted="false">"Procesando…"</string>
+    <string name="config_error_io" formatted="false">"No se puede leer o escribir el archivo. Comprueba la ubicación seleccionada y el espacio disponible."</string>
+    <string name="config_error_permission" formatted="false">"No se ha concedido permiso para acceder al archivo seleccionado. Selecciónalo de nuevo."</string>
+    <string name="config_error_invalid" formatted="false">"Este archivo de configuración de Toki no es válido. No se ha importado ningún ajuste."</string>
+    <string name="config_error_validation" formatted="true">"La validación de la configuración ha fallado: %1$s. No se ha importado ningún ajuste."</string>
+    <string name="config_error_commit" formatted="false">"No se han podido confirmar los cambios de configuración. Vuelve a abrir Toki para comprobarlos antes de intentarlo de nuevo."</string>
+    <string name="sponsor_title" formatted="false">"Apoyar al desarrollador"</string>
+    <string name="sponsor_kofi" formatted="false">"Apoyar en Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Código QR de pago de Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Guardando…"</string>
+    <string name="sponsor_save_image" formatted="false">"Guardar imagen"</string>
+    <string name="sponsor_image_hint" formatted="false">"Guarda la imagen original completa y selecciónala en Alipay para escanear el código."</string>
+    <string name="sponsor_address_copied" formatted="false">"Dirección USDT copiada"</string>
+    <string name="sponsor_image_saved" formatted="false">"Imagen guardada en la ubicación seleccionada"</string>
+    <string name="sponsor_error_io" formatted="false">"No se ha podido guardar. Comprueba la ubicación seleccionada y el espacio disponible e inténtalo de nuevo."</string>
+    <string name="sponsor_error_permission" formatted="false">"No se ha podido guardar. No se ha concedido permiso de escritura en esta ubicación. Selecciona otra."</string>
+    <string name="feature_filter_topics" formatted="false">"Ocultar temas sugeridos"</string>
+    <string name="feature_filter_creators" formatted="false">"Ocultar creadores sugeridos"</string>
+    <string name="host_scan_title_complete" formatted="false">"Búsqueda completada"</string>
+    <string name="host_scan_title_failed" formatted="false">"La búsqueda falló"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Reinicia TikTok manualmente para aplicar los resultados."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Consulta el diagnóstico de funciones en Toki."</string>
+    <string name="layout_title" formatted="false">"Diseño de página"</string>
+    <string name="layout_summary" formatted="false">"Elige qué controles ocultar"</string>
+    <string name="layout_hint" formatted="false">"Activa el interruptor para ocultar el elemento"</string>
+    <string name="layout_top" formatted="false">"Barra superior"</string>
+    <string name="layout_bottom" formatted="false">"Barra inferior"</string>
+    <string name="layout_side" formatted="false">"Página del video"</string>
+    <string name="layout_search" formatted="false">"Buscar"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Amigos"</string>
+    <string name="layout_following" formatted="false">"Siguiendo"</string>
+    <string name="layout_shop" formatted="false">"Tienda"</string>
+    <string name="layout_for_you" formatted="false">"Para ti"</string>
+    <string name="layout_nearby" formatted="false">"Cerca"</string>
+    <string name="layout_stem" formatted="false">"Ciencia"</string>
+    <string name="layout_series" formatted="false">"Series"</string>
+    <string name="layout_home" formatted="false">"Inicio"</string>
+    <string name="layout_create" formatted="false">"Crear"</string>
+    <string name="layout_inbox" formatted="false">"Bandeja de entrada"</string>
+    <string name="layout_profile" formatted="false">"Perfil"</string>
+    <string name="layout_discover" formatted="false">"Descubrir"</string>
+    <string name="layout_avatar" formatted="false">"Avatar"</string>
+    <string name="layout_follow" formatted="false">"Botón Seguir"</string>
+    <string name="layout_like" formatted="false">"Me gusta"</string>
+    <string name="layout_comment" formatted="false">"Comentarios"</string>
+    <string name="layout_favorite" formatted="false">"Favoritos"</string>
+    <string name="layout_share" formatted="false">"Compartir"</string>
+    <string name="layout_music" formatted="false">"Disco de música"</string>
+    <string name="layout_explore" formatted="false">"Explorar"</string>
+    <string name="layout_author" formatted="false">"Información del autor"</string>
+    <string name="layout_description" formatted="false">"Descripción"</string>
+    <string name="layout_music_title" formatted="false">"Título de la música"</string>
+    <string name="layout_tags" formatted="false">"Etiquetas informativas"</string>
+    <string name="layout_search_label" formatted="false">"Sugerencia de búsqueda"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Botón para detener el desplazamiento automático"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Monedas y recompensas"</string>
+    <string name="layout_quick_comment" formatted="false">"Comentarios rápidos"</string>
+    <string name="layout_playlist" formatted="false">"Lista de reproducción"</string>
+    <string name="layout_creation_buttons" formatted="false">"Atajos de creación"</string>
+    <string name="layout_live_notice" formatted="false">"Recordatorios de LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Opacidad"</string>
+    <string name="feature_background_audio">"Desbloquear audio en segundo plano"</string>
+    <string name="layout_landscape">"Botón de pantalla completa"</string>
+    <string name="layout_photo_indicators">"Indicadores y pistas de fotos"</string>
+    <string name="layout_quick_message">"Mensajes rápidos y origen compartido"</string>
+    <string name="layout_user_card">"Cuentas sugeridas"</string>
+    <string name="layout_survey">"Encuestas y comentarios"</string>
+    <string name="layout_ad_cards">"Tarjetas de productos y anuncios"</string>
+    <string name="layout_bottom_banners">"Otros banners inferiores"</string>
+    <string name="layout_activities">"Acceso a eventos"</string>
+    <string name="host_scan_title_running" formatted="false">"Buscando métodos"</string>
+    <string name="host_scan_title_saving" formatted="false">"Guardando resultados"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Mantén TikTok en primer plano."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Espera un momento."</string>
+    <string name="host_scan_done" formatted="false">"Entendido"</string>
+    <string name="video_fit_center" formatted="false">"Centrado"</string>
+    <string name="video_fit_smart" formatted="false">"Pantalla completa"</string>
+</resources>

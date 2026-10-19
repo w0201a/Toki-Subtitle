@@ -1,0 +1,290 @@
+package io.github.meiyongai.toki.subtitle.hook
+
+import io.github.libxposed.api.XposedModule
+import io.github.meiyongai.toki.subtitle.provider.ConfigClient
+import java.lang.reflect.Field
+import java.lang.reflect.Method
+
+/**
+ * TikTok 47.0.3 已核验分包的定点实验补丁；其他代码集合只使用正常翻译解锁。
+ *
+ * 同时覆盖播放器、字幕服务与显示策略。仅修改返回值，不写字幕缓存和翻译偏好。
+ * 有效译文轨优先保留；普通文件轨缺少地址或轨号不可用时补回可读取的原字幕。
+ * 实时字幕可能通过独立通道传输，不能仅凭 URL 为空就认定它无效。
+ *
+ * 实验补丁保持故障开放：契约不匹配只记录并跳过，不能让翻译功能整体注册失败。
+ */
+internal object CaptionFallbackHook {
+    // 两个集合的 base.apk 和主代码分包完全相同；手机另装 line_nonus/font 代码分包。
+    // 仍仅接受逐一离线核验的代码集合，不因版本号相同就跳过身份校验。
+    private val IDENTITIES = setOf(
+        "0259ca5f53357042b72fe6502ca22875aa3035506bfc458fb645146abb19dc16",
+        "a104c3b28e2f4ee94292a0dcc464ff114e63f430e760bfd093c434cc6298a129",
+    )
+    private const val TAG = "TokiCaptionFallback"
+    private const val EXPLAINED_LIMIT = 64
+
+    /** 每个视频只详细解释一次，避免刷屏；无用户内容以外的新增数据。 */
+    private val explained = LinkedHashMap<String, Boolean>()
+    private val runtimeError = java.util.concurrent.atomic.AtomicBoolean()
+
+    private fun <T> guarded(original: T, block: () -> T): T = try { block() } catch (error: Exception) {
+        if (runtimeError.compareAndSet(false, true))
+            HookRuntime.event(TAG, "trial-5 runtime fallback error=${error.javaClass.simpleName}")
+        original
+    }
+
+    fun install(module: XposedModule, loader: ClassLoader, feature: String = "VideoTranslateHook") {
+        try { installVerified(module, loader, feature) }
+        catch (error: Throwable) {
+            // LinkageError 等致命错误仍向上传播，普通契约不匹配只跳过实验补丁。
+            if (error !is Exception && error !is LinkageError) throw error
+            HookRuntime.event(TAG, "trial-5 skipped error=${error.javaClass.name} detail=${error.message?.take(160)}")
+        }
+    }
+
+    /** 一次性解析并校验全部反射契约；任一成员不符即由调用方记录并跳过。 */
+    private class Contract(loader: ClassLoader) {
+        val loader: ClassLoader = loader
+        val aweme: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme")
+        val model: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.feed.model.CaptionModel")
+        val item: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.feed.model.CaptionItemModel")
+        val selection: Class<*> = loader.loadClass("X.08ZQ")
+        val selector: Class<*> = loader.loadClass("X.061i")
+        val trackId: Method = selector.getDeclaredMethod("LIZLLL", aweme)
+        val result: Method = selector.getDeclaredMethod("LJFF", aweme, String::class.java)
+        val subId: Field = selection.getDeclaredField("LIZIZ").apply { isAccessible = true }
+        val enabled: Field = selection.getDeclaredField("LIZ").apply { isAccessible = true }
+        // ICLAPerfETServiceImpl.LJI 明确将 true 映射为 DO_NOT_LOAD，绝非 visible。
+        val skipLoading: Field = selection.getDeclaredField("LIZLLL").apply { isAccessible = true }
+        val captionModel: Field = selection.getDeclaredField("LJFF").apply { isAccessible = true }
+        val constructor = selection.getDeclaredConstructor(java.lang.Boolean.TYPE, Integer.TYPE,
+            java.lang.Boolean.TYPE, model, Integer.TYPE)
+        val extras = listOf("LIZJ", "LJ").map { selection.getDeclaredField(it).apply { isAccessible = true } }
+        val originalLanguage: Field = model.getDeclaredField("originalCaptionLanguage").apply { isAccessible = true }
+        val tracks: Field = model.getDeclaredField("captionList").apply { isAccessible = true }
+        val languageCode: Field = originalLanguage.type.getDeclaredField("languageCode").apply { isAccessible = true }
+        val languageId: Field = originalLanguage.type.getDeclaredField("languageId").apply { isAccessible = true }
+        val realtime: Field = originalLanguage.type.getDeclaredField("canTranslateRealtime").apply { isAccessible = true }
+        val itemCode: Field = item.getDeclaredField("languageCode").apply { isAccessible = true }
+        val itemLanguageId: Field = item.getDeclaredField("languageId").apply { isAccessible = true }
+        val itemSubId: Field = item.getDeclaredField("subId").apply { isAccessible = true }
+        val itemUrl: Field = item.getDeclaredField("url").apply { isAccessible = true }
+        val itemUrls: Field = item.getDeclaredField("urlList").apply { isAccessible = true }
+        val itemRealtime: Field = item.getDeclaredField("isRealtimeTranslated").apply { isAccessible = true }
+        val hostCaptionsEnabled: Method = loader.loadClass("X.08ZA").getDeclaredMethod("LJJ", aweme)
+        val strategySkipLoading: Method = loader.loadClass("com.ss.android.ugc.aweme.strategy.CaptionStrategyServiceImpl")
+            .getDeclaredMethod("ii", aweme)
+        val serviceClass: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.service.CaptionServiceImpl")
+        val serviceResult: Method = serviceClass.getDeclaredMethod("LJIIIZ", aweme)
+        val serviceTrackId: Method = serviceClass.getDeclaredMethod("LJIIJ", aweme)
+        val cacheResult: Method = loader.loadClass("X.08ZE").getDeclaredMethod("LIZ", aweme)
+        val service: Method = loader.loadClass("X.08Zd").getDeclaredMethod("LIZ")
+        val keva: Class<*> = loader.loadClass("com.ss.android.ugc.aweme.service.ICaptionKevaService")
+        val captionsForNative: Method = keva.getDeclaredMethod("LIZIZ")
+        val captionsForForeign: Method = keva.getDeclaredMethod("LJL")
+
+        init {
+            check(trackId.returnType == Integer.TYPE) { "字幕轨号读取签名不符" }
+            check(result.returnType == selection) { "字幕选择返回类型不符" }
+            check(subId.type == Integer.TYPE && captionModel.type == model) { "字幕选择字段类型不符" }
+        }
+    }
+
+    private fun installVerified(module: XposedModule, loader: ClassLoader, feature: String) {
+        if (IDENTITIES.none { HostSymbols.matchesCodeIdentity(it) }) {
+            HookRuntime.event(TAG, "trial-5 unsupported code identity=${HostSymbols.codeIdentity()}; fallback not installed")
+            return
+        }
+        val contract = Contract(loader)
+
+        for (method in listOf(contract.trackId, contract.serviceTrackId)) {
+        module.trackHook(feature, method).intercept { chain ->
+            val reported = chain.proceed() as Int
+            guarded(reported) {
+            val aweme = chain.args[0]
+            // 正轨号可能来自服务缓存中新增的译文轨，不能用 Aweme 的旧模型否定它。
+            val chosen = if (reported != -1) reported else decide(contract, aweme, reported, modelOf(contract, aweme))
+            if (chosen != reported) {
+                HookRuntime.count(feature, "trackIdFallback")
+            }
+            chosen
+            }
+        }
+        }
+
+        for (method in listOf(contract.result, contract.serviceResult, contract.cacheResult)) {
+        module.trackHook(feature, method).intercept { chain ->
+            val original = chain.proceed()
+            guarded(original) {
+            val aweme = chain.args[0]
+            val reported = original?.let { contract.subId.getInt(it) } ?: -1
+            // 宿主结果可能包含刚到达的译文轨，必须优先使用它，不能换回 Aweme 上的旧模型。
+            val model = original?.let { contract.captionModel.get(it) } ?: modelOf(contract, aweme)
+            val chosen = decide(contract, aweme, reported, model)
+            val active = active(contract, aweme)
+            val load = active && hasTrack(contract, model, chosen)
+            val wasSkipped = original?.let { contract.skipLoading.getBoolean(it) } ?: false
+            val wasEnabled = original?.let { contract.enabled.getBoolean(it) } ?: false
+            NativeSubtitleTranslator.noteTrack(aidText(contract, aweme), tracksOf(contract, model)
+                .firstOrNull { contract.itemSubId.getInt(it) == chosen }?.let { contract.itemCode.get(it) as? String })
+            CaptionPrefetch.note(aidText(contract, aweme), tracksOf(contract, model)
+                .firstOrNull { contract.itemSubId.getInt(it) == chosen }?.let {
+                    (contract.itemUrl.get(it) as? String)?.takeIf(String::isNotBlank)
+                        ?: (contract.itemUrls.get(it) as? List<*>)?.filterIsInstance<String>()?.firstOrNull(String::isNotBlank)
+                })
+            explainOnce(contract, aweme, reported, "${method.declaringClass.simpleName}.${method.name}",
+                "chosen=$chosen active=$active enabled=$wasEnabled skipLoading=$wasSkipped load=$load", model)
+            if (!active || model == null || (chosen == reported && (!load || (!wasSkipped && wasEnabled)))) original
+            else {
+                HookRuntime.count(feature, "selectionFallback")
+                val replacement = contract.constructor.newInstance(wasEnabled || load, chosen, wasSkipped && !load, model, 20)
+                // 构造器默认清空事件附加信息；已有结果必须保留，避免破坏播放事件统计。
+                if (original != null) contract.extras.forEach { it.set(replacement, it.get(original)) }
+                replacement
+            }
+            }
+        }
+        }
+
+        module.trackHook(feature, contract.strategySkipLoading).intercept { chain ->
+            val skipped = chain.proceed() as Boolean
+            guarded(skipped) {
+            val aweme = chain.args[0]
+            val model = modelOf(contract, aweme)
+            val active = active(contract, aweme)
+            val recover = skipped && active && originalTrackId(contract, model) != null
+            if (recover) HookRuntime.count(feature, "loadSkipFallback")
+            explainOnce(contract, aweme, -1, "strategy.ii", "active=$active skipLoading=$skipped recovered=$recover", model)
+            skipped && !recover
+            }
+        }
+
+        // SUB-TRANSLATE-GATE：译文尚未可用时，宿主的 foreign_original_hidden 会隐藏有效原字幕。
+        // true 为原字幕帧，null 为到帧前的基础状态判定；false 为译文帧，始终保留宿主结果。
+        // 到帧前也必须允许有效原字幕，否则基础状态可能先被设为 HIDDEN。
+        val hideOriginal = loader.loadClass("X.08ZA").getDeclaredMethod(
+            "LJJIJIIJI", contract.aweme, java.lang.Boolean::class.java)
+        val targetLanguage = loader.loadClass("X.08ZO").getDeclaredMethod("LIZLLL")
+        module.trackHook(feature, hideOriginal).intercept { chain ->
+            val hidden = chain.proceed() as Boolean
+            if (!hidden || chain.args[1] == false) return@intercept hidden
+            guarded(hidden) {
+                val aweme = chain.args[0]
+                val model = modelOf(contract, aweme)
+                val target = targetLanguage.invoke(null)
+                val hasTranslation = tracksOf(contract, model).any {
+                    contract.itemCode.get(it) == target && usable(contract, it)
+                }
+                if (active(contract, aweme) &&
+                    originalTrackId(contract, model) != null && !hasTranslation) {
+                    HookRuntime.count(feature, "originalVisibleWhileTranslationUnavailable")
+                    false
+                } else hidden
+            }
+        }
+
+        HookRuntime.event(TAG, "trial-6 installed owner=$feature player + service + cache readers + load-policy identity=${HostSymbols.codeIdentity()}")
+    }
+
+    private fun decide(contract: Contract, aweme: Any?, selected: Int, model: Any?): Int {
+        if (!active(contract, aweme)) return selected
+        val items = tracksOf(contract, model)
+        val selectedItem = items.firstOrNull { contract.itemSubId.getInt(it) == selected }
+        // 实时轨不要求文件地址；宿主在其他通道提供数据时必须保持选择。
+        val usable = selectedItem?.let { usable(contract, it) } ?: false
+        return CaptionFallbackPolicy.choose(selected, originalTrackId(contract, model), usable)
+    }
+
+    private fun active(contract: Contract, aweme: Any?): Boolean = aweme != null &&
+        (ConfigClient.getBoolean(VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED) ||
+            ConfigClient.getBoolean(CommentTranslateHook.KEY_COMMENT_TRANSLATE_ENABLED)) && captionsEnabled(contract, aweme)
+
+    /** 按当前视频的原语言选取开关；不能用 native OR foreign 覆盖用户对某类视频的关闭。 */
+    private fun captionsEnabled(contract: Contract, aweme: Any?): Boolean = try {
+        contract.hostCaptionsEnabled.invoke(null, aweme) as Boolean
+    } catch (error: Exception) {
+        false
+    }
+
+    private fun modelOf(contract: Contract, aweme: Any?): Any? = try {
+        val video = aweme?.let { contract.aweme.getMethod("getVideo").invoke(it) }
+        video?.javaClass?.getMethod("getCaptionModel")?.invoke(video)
+    } catch (error: Exception) { null }
+
+    private fun tracksOf(contract: Contract, model: Any?): List<Any> =
+        (model?.let { contract.tracks.get(it) } as? List<*>)?.filterNotNull().orEmpty()
+
+    private fun hasTrack(contract: Contract, model: Any?, id: Int): Boolean = id != -1 &&
+        tracksOf(contract, model).any { contract.itemSubId.getInt(it) == id && usable(contract, it) }
+
+    private fun usable(contract: Contract, item: Any): Boolean =
+        !(contract.itemUrl.get(item) as? String).isNullOrBlank() ||
+            (contract.itemUrls.get(item) as? List<*>)?.any { it is String && it.isNotBlank() } == true ||
+            contract.itemRealtime.get(item) == true
+
+    /** 先按原语言标识匹配字幕项，再按原语言代码匹配；两者都缺失则不改结果。 */
+    private fun originalTrackId(contract: Contract, model: Any?): Int? {
+        if (model == null) return null
+        val language = contract.originalLanguage.get(model) ?: return null
+        val tracks = tracksOf(contract, model).filter { usable(contract, it) && contract.itemSubId.getInt(it) != -1 }
+        if (tracks.isEmpty()) return null
+        val identity = contract.languageId.getLong(language)
+        tracks.firstOrNull { contract.itemLanguageId.getLong(it) == identity }
+            ?.let { return contract.itemSubId.getInt(it) }
+        val code = contract.languageCode.get(language) as? String ?: return null
+        return tracks.firstOrNull { code == contract.itemCode.get(it) }?.let { contract.itemSubId.getInt(it) }
+    }
+
+    /** 每个视频只记录一次完整判定输入，用于定位宿主为何给出空字幕。 */
+    private fun explainOnce(contract: Contract, aweme: Any?, selected: Int, path: String, flags: String, model: Any?) {
+        val aid = try {
+            contract.aweme.getMethod("getAid").invoke(aweme) as? String ?: "?"
+        } catch (error: Exception) { "?" }
+        // 同一视频不同入口和状态变化各保留一条，不能让首个 trackId 查询吞掉显示诊断。
+        val key = "$aid:$path:$selected:$flags"
+        val first = synchronized(explained) {
+            if (explained.containsKey(key)) false
+            else {
+                explained[key] = true
+                while (explained.size > EXPLAINED_LIMIT) explained.remove(explained.keys.first())
+                true
+            }
+        }
+        if (first) HookRuntime.event(TAG, "trial-5 $path $flags " + describe(contract, aweme, selected, model))
+    }
+
+    private fun describe(contract: Contract, aweme: Any?, selected: Int, model: Any?): String {
+        val language = model?.let { contract.originalLanguage.get(it) }
+        val tracks = (model?.let { contract.tracks.get(it) } as? List<*>)?.filterNotNull().orEmpty()
+        val texts = tracks.joinToString(",") { "${contract.itemCode.get(it)}#${contract.itemSubId.getInt(it)}:usable=${usable(contract, it)}:rt=${contract.itemRealtime.get(it)}" }
+        return "aid=${aidText(contract, aweme)} selected=$selected original=${language?.let { contract.languageCode.get(it) }}" +
+            " realtime=${language?.let { contract.realtime.get(it) }} tracks=[$texts] ${hostFlags(contract)}"
+    }
+
+    private fun aidText(contract: Contract, aweme: Any?): String = try {
+        contract.aweme.getMethod("getAid").invoke(aweme) as? String ?: "?"
+    } catch (error: Exception) { "?" }
+
+    /** 只读探测宿主的翻译模式与目标语言；失败不影响任何行为。 */
+    private fun hostFlags(contract: Contract): String {
+        val reverse = probe { contract.loader.loadClass("X.08a3").getDeclaredMethod("LIZ").invoke(null) }
+        val target = probe {
+            val holder = contract.loader.loadClass("X.03hV")
+            val instance = holder.getDeclaredField("LIZIZ").get(null)
+            instance.javaClass.getMethod("LLILLIZIL").invoke(instance)
+        }
+        val toggles = probe {
+            val service = contract.service.invoke(null)
+            "native=${contract.captionsForNative.invoke(service)} foreign=${contract.captionsForForeign.invoke(service)}"
+        }
+        val automatic = probe {
+            val service = contract.loader.loadClass("X.08aF").getDeclaredMethod("LIZ").invoke(null)
+            contract.loader.loadClass("com.ss.android.ugc.aweme.translation.service.ITranslationKevaService")
+                .getMethod("LIZ").invoke(service)
+        }
+        return "reverseEffective=$reverse target=$target autoTranslate=$automatic captions[$toggles]"
+    }
+
+    private fun probe(block: () -> Any?): Any? = try { block() } catch (error: Exception) { "?" }
+}

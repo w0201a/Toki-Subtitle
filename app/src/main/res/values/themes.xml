@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 启动画面专用主题：系统从用户点击桌面图标第一毫秒开始呈现，彻底消灭黑屏空白 -->
+    <style name="Theme.Toki.Starting" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/splash_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_toki_foreground</item>
+        <item name="postSplashScreenTheme">@style/Theme.Toki</item>
+    </style>
+
+    <!-- 应用运行期主主题 -->
+    <style name="Theme.Toki" parent="android:Theme.DeviceDefault.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowBackground">?android:attr/colorBackground</item>
+    </style>
+    <style name="Theme.Toki.SubtitleDialog" parent="Theme.Toki">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDisablePreview">true</item>
+    </style>
+</resources>

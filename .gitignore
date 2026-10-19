@@ -1,0 +1,45 @@
+# Android and Gradle generated files
+.gradle/
+.kotlin/
+**/build/
+local.properties
+.idea/
+*.iml
+.externalNativeBuild/
+.cxx/
+captures/
+.DS_Store
+
+# Private signing material
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+*.idsig
+keystore/*.properties
+signing.properties
+.env
+.env.*
+
+# Local analysis, device captures and design experiments
+/work/
+/.codex/
+/scratch_*
+/preview_logos.html
+/toki_*.svg
+/toki_m3e_canvas.json
+*.apk
+*.apks
+*.xapk
+*.aab
+
+# Local diagnostics and reverse-engineering artifacts (never publish)
+/docs/host/
+/docs/tools/
+/docs/dev*
+/docs/build-*
+*.log
+*.dex
+/keystore/
+/SHA256SUMS-release*.txt

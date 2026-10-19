@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Toki 品牌固定主色调（高级深炭灰底 + 明亮淡紫丁香 T 标志） -->
+    <!-- 图标与启动画面背景底板：沉稳高级深炭灰 #303338 -->
+    <color name="splash_background">#303338</color>
+    <color name="splash_icon_background">#303338</color>
+    <!-- 图标标志 T 字母前景色：Material 3 深色模式高亮紫丁香主色 #D0BCFF -->
+    <color name="ic_toki_foreground_color">#D0BCFF</color>
+</resources>

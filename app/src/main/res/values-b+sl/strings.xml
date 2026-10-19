@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Domov"</string>
+    <string name="nav_features" formatted="false">"Funkcije"</string>
+    <string name="page_features" formatted="false">"Nastavitve"</string>
+    <string name="page_hook_status" formatted="false">"Stanje funkcij"</string>
+    <string name="nav_back" formatted="false">"Nazaj"</string>
+    <string name="restart_tiktok" formatted="false">"Znova zaženi TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Dodelite Tokiju korenski dostop."</string>
+    <string name="language_title" formatted="false">"Jezik aplikacije"</string>
+    <string name="language_system" formatted="false">"Sledi sistemu"</string>
+    <string name="language_search" formatted="false">"Išči jezike"</string>
+    <string name="language_clear_search" formatted="false">"Počisti iskanje"</string>
+    <string name="language_no_results" formatted="false">"Ni ujemajočih se jezikov"</string>
+    <string name="common_save" formatted="false">"Shrani"</string>
+    <string name="common_cancel" formatted="false">"Prekliči"</string>
+    <string name="common_confirm" formatted="false">"V redu"</string>
+    <string name="common_close" formatted="false">"Zapri"</string>
+    <string name="common_open" formatted="false">"Odpri"</string>
+    <string name="common_copy" formatted="false">"Kopiraj"</string>
+    <string name="common_add" formatted="false">"Dodaj"</string>
+    <string name="common_delete" formatted="false">"Izbriši"</string>
+    <string name="common_done" formatted="false">"Končano"</string>
+    <string name="common_save_apply" formatted="false">"Uporabi"</string>
+    <string name="common_unknown" formatted="false">"Neznano"</string>
+    <string name="common_custom" formatted="false">"Po meri"</string>
+    <string name="home_icon_hidden" formatted="false">"Ikona aplikacije je skrita"</string>
+    <string name="home_icon_restored" formatted="false">"Ikona aplikacije je obnovljena"</string>
+    <string name="home_activated" formatted="false">"Aktivirano"</string>
+    <string name="home_inactive" formatted="false">"Ni aktivirano"</string>
+    <string name="home_activation_missing" formatted="false">"Aktivacija v LSPosed ni bila zaznana"</string>
+    <string name="home_host_section" formatted="false">"Združljivost s TikTokom"</string>
+    <string name="home_host_current" formatted="false">"Nameščeni TikTok"</string>
+    <string name="home_host_missing" formatted="false">"V napravi ni podprte namestitve TikToka"</string>
+    <string name="home_host_not_installed" formatted="false">"Ni nameščeno"</string>
+    <string name="home_supported_versions" formatted="false">"Podprte različice"</string>
+    <string name="home_community" formatted="false">"Skupnost"</string>
+    <string name="home_github" formatted="false">"Repozitorij GitHub"</string>
+    <string name="home_telegram" formatted="false">"Skupina Telegram"</string>
+    <string name="home_preferences" formatted="false">"Nastavitve"</string>
+    <string name="home_hide_icon" formatted="false">"Skrij ikono aplikacije"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Ko je ikona skrita, odprite Toki prek upravljalnika LSPosed"</string>
+    <string name="home_support" formatted="false">"Podpri razvoj"</string>
+    <string name="home_support_summary" formatted="false">"Podprite redno vzdrževanje in izboljšave"</string>
+    <string name="feature_region_section" formatted="false">"Posnemanje regije in okolja"</string>
+    <string name="feature_playback_section" formatted="false">"Predvajanje"</string>
+    <string name="feature_progress" formatted="false">"Vedno pokaži napredek videa"</string>
+    <string name="feature_progress_summary" formatted="false">"Vrstica napredka naj bo vidna tudi pri kratkih videih"</string>
+    <string name="feature_immersive" formatted="false">"Prikaz videa"</string>
+    <string name="feature_autoplay" formatted="false">"Izboljšano samodejno pomikanje"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Odklene samodejno pomikanje v meniju vseh videov"</string>
+    <string name="feature_status_bar" formatted="false">"Skrij sistemsko vrstico stanja"</string>
+    <string name="feature_media_section" formatted="false">"Prenosi in orodja"</string>
+    <string name="feature_download" formatted="false">"Prenosi brez vodnega žiga"</string>
+    <string name="feature_download_summary" formatted="false">"Shrani izvirni video brez vodnega žiga iz menija dolgega pritiska ali deljenja"</string>
+    <string name="feature_music" formatted="false">"Odkleni zvok"</string>
+    <string name="feature_music_summary" formatted="false">"Obnovi predvajanje zvoka, omejenega z licenco ali regijo"</string>
+    <string name="feature_author_region" formatted="false">"Pokaži regijo ustvarjalca"</string>
+    <string name="feature_author_region_summary" formatted="false">"Ob imenu ustvarjalca pokaži zastavo in kodo države ali regije"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopiraj le besedilo"</string>
+    <string name="feature_video_translation" formatted="false">"Meni podnapisov in prevoda"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Prikaži možnost v meniju dolgega pritiska"</string>
+    <string name="feature_comment_translation" formatted="false">"Prevedi komentarje"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Dodaj gumb za skupinski prevod tujejezičnih komentarjev"</string>
+    <string name="feature_filter_section" formatted="false">"Filtriranje vira"</string>
+    <string name="feature_remove_ads" formatted="false">"Odstrani oglase iz vira"</string>
+    <string name="feature_remove_live" formatted="false">"Filtriraj priporočene prenose v živo"</string>
+    <string name="feature_remove_photos" formatted="false">"Filtriraj priporočene fotoobjave"</string>
+    <string name="feature_filter_views" formatted="false">"Filter ogledov"</string>
+    <string name="feature_filter_likes" formatted="false">"Filter všečkov"</string>
+    <string name="feature_filter_duration" formatted="false">"Filter dolžine"</string>
+    <string name="feature_filter_keywords" formatted="false">"Filter ključnih besed"</string>
+    <string name="feature_block_offline" formatted="false">"Blokiraj videe brez povezave"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Prepreči vstavljanje vnaprej naloženih videov brez povezave ob slabi povezavi"</string>
+    <string name="feature_remove_ai" formatted="false">"Odstrani vsebino, ustvarjeno z UI"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtriraj videe, ki jih TikTok označi kot ustvarjene z UI"</string>
+    <string name="filter_metric_views" formatted="false">"ogledi"</string>
+    <string name="filter_metric_likes" formatted="false">"všečki"</string>
+    <string name="filter_metric_duration" formatted="false">"dolžina"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Razpon ogledov shranjen"</string>
+    <string name="filter_likes_saved" formatted="false">"Razpon všečkov shranjen"</string>
+    <string name="filter_duration_saved" formatted="false">"Razpon dolžine videov shranjen"</string>
+    <string name="download_path_saved" formatted="false">"Poti shranjevanja po meri posodobljene"</string>
+    <string name="region_spoof_title" formatted="false">"Posnemanje regije in kartice SIM"</string>
+    <string name="region_current" formatted="false">"Trenutna konfiguracija"</string>
+    <string name="region_target" formatted="true">"Ciljna regija: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operater: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Koda operaterja: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Prednastavitve"</string>
+    <string name="region_custom_parameters" formatted="false">"Po meri"</string>
+    <string name="language_spoof" formatted="false">"Posnemanje jezika"</string>
+    <string name="environment_follow_region" formatted="false">"Po regiji"</string>
+    <string name="language_effective" formatted="true">"Veljavni jezik: %1$s"</string>
+    <string name="language_custom" formatted="false">"Jezik po meri"</string>
+    <string name="timezone_spoof" formatted="false">"Posnemanje časovnega pasu"</string>
+    <string name="timezone_effective" formatted="true">"Veljavni časovni pas: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Časovni pas po meri"</string>
+    <string name="gps_spoof" formatted="false">"Posnemanje lokacije"</string>
+    <string name="gps_effective" formatted="true">"Veljavne koordinate: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Koordinate po meri"</string>
+    <string name="speed_fixed" formatted="false">"Ohrani hitrost"</string>
+    <string name="speed_fixed_summary" formatted="false">"Ob menjavi videa ohrani hitrost, izbrano v meniju dolgega pritiska"</string>
+    <string name="speed_expand" formatted="false">"Več hitrosti"</string>
+    <string name="speed_options_hint" formatted="false">"Hitrosti (dotaknite se za urejanje ali brisanje)"</string>
+    <string name="speed_add_option" formatted="false">"+ Dodaj hitrost"</string>
+    <string name="speed_restore" formatted="false">"Ponastavi"</string>
+    <string name="clean_on_play" formatted="false">"Skrij kontrolnike med predvajanjem"</string>
+    <string name="clean_keep_progress" formatted="false">"Ohrani vrstico napredka"</string>
+    <string name="download_paths" formatted="false">"Mape za shranjevanje"</string>
+    <string name="download_paths_summary" formatted="true">"Videi: %1$s · Slike: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Ohrani videe, kjer je %1$s od %2$d%4$s do %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Ohrani videe, kjer je %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Ohrani videe, kjer je %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Razpon ni nastavljen (dotaknite se za spodnjo ali zgornjo mejo)"</string>
+    <string name="keyword_unset" formatted="false">"Ni pravil filtriranja (dotaknite se za upravljanje kategorij)"</string>
+    <string name="keyword_summary" formatted="true">"Vklopljeno: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Besedila %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Ključniki %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Ustvarjalci %1$d"</string>
+    <string name="keyword_description" formatted="false">"Besedila"</string>
+    <string name="keyword_tag" formatted="false">"Ključniki"</string>
+    <string name="keyword_author" formatted="false">"Ustvarjalci"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Ni pravil za %1$s. Dodajte jih zgoraj."</string>
+    <string name="duration_alert_title" formatted="false">"Opozorilo za dolge videe"</string>
+    <string name="duration_alert_summary" formatted="true">"Trenutni prag: ≥ %1$s min"</string>
+    <string name="download_video_path" formatted="false">"Mapa za videe"</string>
+    <string name="download_image_path" formatted="false">"Mapa za slike"</string>
+    <string name="download_path_hint" formatted="false">"Prva mapa mora biti javna predstavnostna mapa, na primer Movies, Pictures ali DCIM. Neveljavne poti uporabijo sistemsko privzeto vrednost."</string>
+    <string name="views_range_title" formatted="false">"Razpon števila ogledov"</string>
+    <string name="views_range_min" formatted="false">"Najmanj ogledov (0 = brez omejitve)"</string>
+    <string name="views_range_max" formatted="false">"Največ ogledov (0 = brez omejitve)"</string>
+    <string name="views_range_hint" formatted="false">"Ohrani samo videe v tem razponu ogledov. Če sta obe meji 0, se nič ne odstrani."</string>
+    <string name="likes_range_title" formatted="false">"Razpon števila všečkov"</string>
+    <string name="likes_range_min" formatted="false">"Najmanj všečkov (0 = brez omejitve)"</string>
+    <string name="likes_range_max" formatted="false">"Največ všečkov (0 = brez omejitve)"</string>
+    <string name="likes_range_hint" formatted="false">"Ohrani samo videe v tem razponu všečkov. Če sta obe meji 0, se nič ne odstrani."</string>
+    <string name="duration_range_title" formatted="false">"Razpon dolžine videov"</string>
+    <string name="duration_range_min" formatted="false">"Najmanjša dolžina (sekunde; 0 = brez omejitve)"</string>
+    <string name="duration_range_max" formatted="false">"Največja dolžina (sekunde; 0 = brez omejitve)"</string>
+    <string name="duration_range_hint" formatted="false">"Ohrani samo priporočene videe v tem razponu dolžine. Če sta obe meji 0, se nič ne odstrani. Na fotografske objave ne vpliva."</string>
+    <string name="keyword_manage" formatted="false">"Pravila filtriranja"</string>
+    <string name="keyword_description_hint" formatted="false">"Išči v besedilih in opisih videov brez razlikovanja velikih in malih črk."</string>
+    <string name="keyword_tag_hint" formatted="false">"Išči ključnike. Ne vnesite predpone #."</string>
+    <string name="keyword_author_hint" formatted="false">"Išči imena ustvarjalcev in enolična uporabniška imena. Ne vnesite predpone @."</string>
+    <string name="keyword_description_input" formatted="false">"Beseda ali besedna zveza"</string>
+    <string name="keyword_tag_input" formatted="false">"Ključnik"</string>
+    <string name="keyword_author_input" formatted="false">"Ime ali uporabniško ime"</string>
+    <string name="keyword_add" formatted="false">"Dodaj pravilo"</string>
+    <string name="keyword_delete" formatted="false">"Izbriši pravilo"</string>
+    <string name="region_select_title" formatted="false">"Izberi regijo"</string>
+    <string name="region_search" formatted="false">"Išči po imenu države, angleškem imenu ali kodi regije"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Koda operaterja: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Regija in SIM po meri"</string>
+    <string name="region_custom_hint" formatted="false">"Nastavite kodo države in operaterja brez omejitev prednastavitev."</string>
+    <string name="region_code_input" formatted="false">"Koda države ali regije (npr. JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Koda operaterja (npr. 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Ime operaterja (npr. NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Izberite pogost jezik ali vnesite kodo jezika."</string>
+    <string name="language_code_input" formatted="false">"Koda jezika (npr. ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Pogosti jeziki:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Izberite časovni pas mesta ali vnesite ime časovnega pasu."</string>
+    <string name="timezone_input" formatted="false">"Ime časovnega pasu (npr. Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Pogosti mestni časovni pasovi:"</string>
+    <string name="city_tokyo" formatted="false">"Tokio"</string>
+    <string name="city_taipei" formatted="false">"Tajpej"</string>
+    <string name="city_hong_kong" formatted="false">"Hongkong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Seul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapur"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Koordinate lokacije po meri"</string>
+    <string name="gps_custom_hint" formatted="false">"Izberite mesto ali vnesite zemljepisno širino in dolžino."</string>
+    <string name="gps_latitude" formatted="false">"Zemljepisna širina (-90.0 do 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Zemljepisna dolžina (-180.0 do 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Pogosta mesta:"</string>
+    <string name="speed_add_title" formatted="false">"Dodaj hitrost"</string>
+    <string name="speed_input" formatted="false">"Hitrost predvajanja"</string>
+    <string name="speed_invalid" formatted="false">"Vnesite veljavno število"</string>
+    <string name="speed_out_of_range" formatted="true">"Podprto je samo od %1$sx do %2$sx"</string>
+    <string name="speed_range" formatted="true">"Podprti razpon: %1$sx do %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Uredi hitrost"</string>
+    <string name="duration_threshold_title" formatted="false">"Opozorilo za dolge videe"</string>
+    <string name="duration_threshold_hint" formatted="false">"Ko video doseže to dolžino, kratko sporočilo ob začetku predvajanja opozori na njegovo dolžino v minutah."</string>
+    <string name="duration_threshold_input" formatted="false">"Prag dolžine (minute)"</string>
+    <string name="duration_threshold_example" formatted="false">"Na primer: 3 ali 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Vnesite veljavno število minut, večje od 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Trenutna nastavitev: opozorilo za videe ≥ %1$s min"</string>
+    <string name="duration_threshold_presets" formatted="false">"Predlagane dolžine:"</string>
+    <string name="status_feature_feed" formatted="false">"Filtriranje vira"</string>
+    <string name="status_feature_speed" formatted="false">"Hitrost"</string>
+    <string name="status_feature_progress" formatted="false">"Vrstica napredka"</string>
+    <string name="status_feature_clean" formatted="false">"Skrij kontrolnike med predvajanjem"</string>
+    <string name="status_feature_immersive" formatted="false">"Prikaz videa"</string>
+    <string name="status_feature_scroll" formatted="false">"Samodejno pomikanje"</string>
+    <string name="status_feature_duration" formatted="false">"Opozorilo o dolžini"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Prevajanje komentarjev"</string>
+    <string name="status_feature_video_translate" formatted="false">"Meni podnapisov in prevoda"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Kopiranje komentarjev"</string>
+    <string name="status_feature_author" formatted="false">"Regija ustvarjalca"</string>
+    <string name="status_feature_download" formatted="false">"Shranjevanje videov"</string>
+    <string name="status_feature_music" formatted="false">"Omejitve zvoka"</string>
+    <string name="status_feature_sim" formatted="false">"SIM in država"</string>
+    <string name="status_feature_language" formatted="false">"Jezik"</string>
+    <string name="status_feature_timezone" formatted="false">"Časovni pas"</string>
+    <string name="status_feature_gps" formatted="false">"Lokacija"</string>
+    <string name="status_feature_bar" formatted="false">"Vrstica stanja"</string>
+    <string name="status_normal" formatted="false">"Deluje"</string>
+    <string name="status_issue" formatted="false">"Težava"</string>
+    <string name="status_disabled" formatted="false">"Izklopljeno"</string>
+    <string name="status_pending" formatted="false">"Nepotrjeno"</string>
+    <string name="status_problem_disabled" formatted="false">"Izklopljeno, z zabeleženo napako"</string>
+    <string name="status_problem_unavailable" formatted="false">"Začasno ni na voljo"</string>
+    <string name="status_problem_runtime" formatted="false">"Napaka med uporabo"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Meni hitrosti ni na voljo"</string>
+    <string name="status_prepare_failed" formatted="false">"Priprava funkcij ni uspela. Znova odprite TikTok in preverite."</string>
+    <string name="status_preparing" formatted="false">"Pripravljanje funkcij. Počakajte."</string>
+    <string name="status_prepared" formatted="false">"Priprava je končana. Znova odprite TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Stanja trenutno ni mogoče prebrati. Preverite pozneje."</string>
+    <string name="status_update_failed" formatted="false">"Stanja trenutno ni mogoče posodobiti. Prikazan je najnovejši rezultat."</string>
+    <string name="status_reading" formatted="false">"Branje stanja"</string>
+    <string name="status_empty" formatted="false">"Ni zabeležene dejavnosti. Vklopite Toki v LSPosed, odprite TikTok in znova preverite."</string>
+    <string name="status_report_note" formatted="true">"Najnovejše poročilo: %1$s\n»Deluje« pomeni, da je funkcija pripravljena in ni sporočila napak."</string>
+    <string name="config_section" formatted="false">"Konfiguracija"</string>
+    <string name="config_import" formatted="false">"Uvozi konfiguracijo"</string>
+    <string name="config_import_summary" formatted="false">"Obnovi nastavitve funkcij iz datoteke"</string>
+    <string name="config_export" formatted="false">"Izvozi konfiguracijo"</string>
+    <string name="config_export_summary" formatted="false">"Shrani nastavitve funkcij v datoteko"</string>
+    <string name="config_exported" formatted="false">"Konfiguracija izvožena na izbrano mesto. Datoteka lahko vsebuje ključne besede, regije in nastavitve map. Varno jo shranite."</string>
+    <string name="config_import_confirm" formatted="true">"Datoteka vsebuje %1$d nastavitev. Uvoz zamenja vse nastavitve funkcij; manjkajoče se povrnejo na privzete vrednosti.\n\nJezik aplikacije, ikona, dovoljenje LSPosed in predpomnilnik združljivosti TikTok se ne spremenijo. Nadaljujem?"</string>
+    <string name="config_overwrite" formatted="false">"Zamenjaj"</string>
+    <string name="config_imported" formatted="false">"Konfiguracija uvožena in nastavitve posodobljene. Spremembe s podporo posodabljanju med delovanjem veljajo takoj. Druge preverite tako, da znova odprete TikTok."</string>
+    <string name="config_processing" formatted="false">"Obdelava konfiguracije"</string>
+    <string name="config_error_io" formatted="false">"Datoteke ni mogoče brati ali zapisati. Preverite izbrano mesto in prosti prostor."</string>
+    <string name="config_error_permission" formatted="false">"Dovoljenje za dostop do izbrane datoteke ni bilo odobreno. Izberite jo znova."</string>
+    <string name="config_error_invalid" formatted="false">"To ni veljavna konfiguracijska datoteka Toki. Nobena nastavitev ni bila uvožena."</string>
+    <string name="config_error_validation" formatted="true">"Preverjanje konfiguracije ni uspelo: %1$s. Nobena nastavitev ni bila uvožena."</string>
+    <string name="config_error_commit" formatted="false">"Shranjevanja konfiguracije ni bilo mogoče potrditi. Pred ponovnim poskusom odprite Toki in preverite."</string>
+    <string name="sponsor_title" formatted="false">"Podpri razvijalca"</string>
+    <string name="sponsor_kofi" formatted="false">"Podpri prek Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Plačilna koda QR Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Shranjevanje…"</string>
+    <string name="sponsor_save_image" formatted="false">"Shrani sliko"</string>
+    <string name="sponsor_image_hint" formatted="false">"Shranite celotno izvirno sliko, nato jo izberite v Alipay za branje kode."</string>
+    <string name="sponsor_address_copied" formatted="false">"Naslov USDT kopiran"</string>
+    <string name="sponsor_image_saved" formatted="false">"Slika shranjena na izbrano mesto"</string>
+    <string name="sponsor_error_io" formatted="false">"Shranjevanje ni uspelo. Preverite izbrano mesto in prosti prostor ter poskusite znova."</string>
+    <string name="sponsor_error_permission" formatted="false">"Shranjevanje ni uspelo. Za to mesto ni dovoljenja za pisanje. Izberite drugo mesto."</string>
+    <string name="feature_filter_topics" formatted="false">"Skrij predlagane teme"</string>
+    <string name="feature_filter_creators" formatted="false">"Skrij predlagane ustvarjalce"</string>
+    <string name="host_scan_title_complete" formatted="false">"Iskanje končano"</string>
+    <string name="host_scan_title_failed" formatted="false">"Iskanje ni uspelo"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Ročno znova zaženi TikTok, da uveljaviš rezultate."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Oglej si diagnostiko funkcij v Toki."</string>
+    <string name="layout_title" formatted="false">"Postavitev strani"</string>
+    <string name="layout_summary" formatted="false">"Izberite gumbe, ki jih želite skriti"</string>
+    <string name="layout_hint" formatted="false">"Vklopite stikalo, da skrijete element"</string>
+    <string name="layout_top" formatted="false">"Zgornja vrstica"</string>
+    <string name="layout_bottom" formatted="false">"Spodnja vrstica"</string>
+    <string name="layout_side" formatted="false">"Stran videa"</string>
+    <string name="layout_search" formatted="false">"Iskanje"</string>
+    <string name="layout_live" formatted="false">"V ŽIVO"</string>
+    <string name="layout_friends" formatted="false">"Prijatelji"</string>
+    <string name="layout_following" formatted="false">"Sledim"</string>
+    <string name="layout_shop" formatted="false">"Trgovina"</string>
+    <string name="layout_for_you" formatted="false">"Zate"</string>
+    <string name="layout_nearby" formatted="false">"V bližini"</string>
+    <string name="layout_stem" formatted="false">"Znanost"</string>
+    <string name="layout_series" formatted="false">"Serije"</string>
+    <string name="layout_home" formatted="false">"Domov"</string>
+    <string name="layout_create" formatted="false">"Ustvari"</string>
+    <string name="layout_inbox" formatted="false">"Prejeto"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Odkrij"</string>
+    <string name="layout_avatar" formatted="false">"Profilna slika"</string>
+    <string name="layout_follow" formatted="false">"Gumb za sledenje"</string>
+    <string name="layout_like" formatted="false">"Všeček"</string>
+    <string name="layout_comment" formatted="false">"Komentarji"</string>
+    <string name="layout_favorite" formatted="false">"Priljubljeno"</string>
+    <string name="layout_share" formatted="false">"Deli"</string>
+    <string name="layout_music" formatted="false">"Glasbena plošča"</string>
+    <string name="layout_explore" formatted="false">"Razišči"</string>
+    <string name="layout_author" formatted="false">"Podatki o avtorju"</string>
+    <string name="layout_description" formatted="false">"Opis"</string>
+    <string name="layout_music_title" formatted="false">"Naslov glasbe"</string>
+    <string name="layout_tags" formatted="false">"Informacijske oznake"</string>
+    <string name="layout_search_label" formatted="false">"Predlog iskanja"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Gumb za ustavitev samodejnega pomikanja"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Kovanci in nagrade"</string>
+    <string name="layout_quick_comment" formatted="false">"Hitri komentarji"</string>
+    <string name="layout_playlist" formatted="false">"Seznam predvajanja"</string>
+    <string name="layout_creation_buttons" formatted="false">"Bližnjice za ustvarjanje"</string>
+    <string name="layout_live_notice" formatted="false">"Opomniki za LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Neprosojnost"</string>
+    <string name="feature_background_audio">"Odkleni zvok v ozadju"</string>
+    <string name="layout_landscape">"Gumb za celoten zaslon"</string>
+    <string name="layout_photo_indicators">"Kazalniki in namigi za fotografije"</string>
+    <string name="layout_quick_message">"Hitra sporočila in vir deljenja"</string>
+    <string name="layout_user_card">"Predlagani računi"</string>
+    <string name="layout_survey">"Ankete in povratne informacije"</string>
+    <string name="layout_ad_cards">"Kartice izdelkov in oglasov"</string>
+    <string name="layout_bottom_banners">"Druge spodnje pasice"</string>
+    <string name="layout_activities">"Vstop v dogodke"</string>
+    <string name="host_scan_title_running" formatted="false">"Iskanje metod"</string>
+    <string name="host_scan_title_saving" formatted="false">"Shranjevanje rezultatov"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Pusti TikTok v ospredju."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Počakaj."</string>
+    <string name="host_scan_done" formatted="false">"Razumem"</string>
+    <string name="video_fit_center" formatted="false">"Na sredini"</string>
+    <string name="video_fit_smart" formatted="false">"Celoten zaslon"</string>
+</resources>

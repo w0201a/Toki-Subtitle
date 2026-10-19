@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Головна"</string>
+    <string name="nav_features" formatted="false">"Функції"</string>
+    <string name="page_features" formatted="false">"Налаштування"</string>
+    <string name="page_hook_status" formatted="false">"Стан функцій"</string>
+    <string name="nav_back" formatted="false">"Назад"</string>
+    <string name="restart_tiktok" formatted="false">"Перезапустити TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Надайте Toki права root"</string>
+    <string name="language_title" formatted="false">"Мова інтерфейсу"</string>
+    <string name="language_system" formatted="false">"Як у системі"</string>
+    <string name="language_search" formatted="false">"Пошук мови"</string>
+    <string name="language_clear_search" formatted="false">"Очистити пошук"</string>
+    <string name="language_no_results" formatted="false">"Відповідних мов немає"</string>
+    <string name="common_save" formatted="false">"Зберегти"</string>
+    <string name="common_cancel" formatted="false">"Скасувати"</string>
+    <string name="common_confirm" formatted="false">"ОК"</string>
+    <string name="common_close" formatted="false">"Закрити"</string>
+    <string name="common_open" formatted="false">"Відкрити"</string>
+    <string name="common_copy" formatted="false">"Копіювати"</string>
+    <string name="common_add" formatted="false">"Додати"</string>
+    <string name="common_delete" formatted="false">"Видалити"</string>
+    <string name="common_done" formatted="false">"Готово"</string>
+    <string name="common_save_apply" formatted="false">"Застосувати"</string>
+    <string name="common_unknown" formatted="false">"Невідомо"</string>
+    <string name="common_custom" formatted="false">"Власний варіант"</string>
+    <string name="home_icon_hidden" formatted="false">"Піктограму приховано"</string>
+    <string name="home_icon_restored" formatted="false">"Піктограму знову показано"</string>
+    <string name="home_activated" formatted="false">"Активовано"</string>
+    <string name="home_inactive" formatted="false">"Не активовано"</string>
+    <string name="home_activation_missing" formatted="false">"Активацію в LSPosed не виявлено"</string>
+    <string name="home_host_section" formatted="false">"Сумісність із TikTok"</string>
+    <string name="home_host_current" formatted="false">"Установлений TikTok"</string>
+    <string name="home_host_missing" formatted="false">"На пристрої не знайдено підтримуваної версії TikTok"</string>
+    <string name="home_host_not_installed" formatted="false">"Не встановлено"</string>
+    <string name="home_supported_versions" formatted="false">"Підтримувані версії"</string>
+    <string name="home_community" formatted="false">"Спільнота"</string>
+    <string name="home_github" formatted="false">"Репозиторій GitHub"</string>
+    <string name="home_telegram" formatted="false">"Група Telegram"</string>
+    <string name="home_preferences" formatted="false">"Налаштування"</string>
+    <string name="home_hide_icon" formatted="false">"Приховати піктограму застосунку"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Після приховування Toki можна відкрити через менеджер LSPosed"</string>
+    <string name="home_support" formatted="false">"Підтримати розробку"</string>
+    <string name="home_support_summary" formatted="false">"Підтримайте подальше обслуговування й покращення функцій"</string>
+    <string name="feature_region_section" formatted="false">"Підміна регіону та середовища"</string>
+    <string name="feature_playback_section" formatted="false">"Відтворення"</string>
+    <string name="feature_progress" formatted="false">"Завжди показувати прогрес"</string>
+    <string name="feature_progress_summary" formatted="false">"Показувати нижню смугу прогресу навіть у коротких відео"</string>
+    <string name="feature_immersive" formatted="false">"Відображення відео"</string>
+    <string name="feature_autoplay" formatted="false">"Розширене автопрокручування"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Відкриває автопрокручування в меню всіх відео"</string>
+    <string name="feature_status_bar" formatted="false">"Приховати системний рядок стану"</string>
+    <string name="feature_media_section" formatted="false">"Завантаження й інструменти"</string>
+    <string name="feature_download" formatted="false">"Завантаження без водяного знака"</string>
+    <string name="feature_download_summary" formatted="false">"Зберігайте оригінал без водяного знака через довге натискання або меню поширення"</string>
+    <string name="feature_music" formatted="false">"Розблокувати звук"</string>
+    <string name="feature_music_summary" formatted="false">"Відновити звук, обмежений авторськими правами чи регіоном"</string>
+    <string name="feature_author_region" formatted="false">"Показувати регіон автора"</string>
+    <string name="feature_author_region_summary" formatted="false">"Показувати прапор і код країни або регіону біля імені автора"</string>
+    <string name="feature_copy_comment" formatted="false">"Копіювати лише текст"</string>
+    <string name="feature_video_translation" formatted="false">"Меню субтитрів і перекладу"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Показати пункт у меню довгого натискання"</string>
+    <string name="feature_comment_translation" formatted="false">"Переклад коментарів"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Додати кнопку для масового перекладу іншомовних коментарів"</string>
+    <string name="feature_filter_section" formatted="false">"Фільтрація стрічки"</string>
+    <string name="feature_remove_ads" formatted="false">"Видаляти рекламу зі стрічки"</string>
+    <string name="feature_remove_live" formatted="false">"Приховувати рекомендовані трансляції"</string>
+    <string name="feature_remove_photos" formatted="false">"Фільтр рекомендованих фото"</string>
+    <string name="feature_filter_views" formatted="false">"Фільтр за переглядами"</string>
+    <string name="feature_filter_likes" formatted="false">"Фільтр за вподобаннями"</string>
+    <string name="feature_filter_duration" formatted="false">"Фільтр за тривалістю"</string>
+    <string name="feature_filter_keywords" formatted="false">"Фільтр за ключовими словами"</string>
+    <string name="feature_block_offline" formatted="false">"Блокувати офлайн-відео"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Не вставляти попередньо завантажені відео за поганого з\'єднання"</string>
+    <string name="feature_remove_ai" formatted="false">"Видаляти вміст, створений ШІ"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Приховувати відео, позначені TikTok як створені ШІ"</string>
+    <string name="filter_metric_views" formatted="false">"перегляди"</string>
+    <string name="filter_metric_likes" formatted="false">"вподобання"</string>
+    <string name="filter_metric_duration" formatted="false">"тривалість"</string>
+    <string name="filter_unit_seconds" formatted="false">"с"</string>
+    <string name="filter_views_saved" formatted="false">"Діапазон переглядів збережено"</string>
+    <string name="filter_likes_saved" formatted="false">"Діапазон уподобань збережено"</string>
+    <string name="filter_duration_saved" formatted="false">"Діапазон тривалості збережено"</string>
+    <string name="download_path_saved" formatted="false">"Шляхи збереження оновлено"</string>
+    <string name="region_spoof_title" formatted="false">"Підміна регіону та SIM"</string>
+    <string name="region_current" formatted="false">"Поточні налаштування"</string>
+    <string name="region_target" formatted="true">"Цільовий регіон: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Оператор: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Код оператора: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Шаблони"</string>
+    <string name="region_custom_parameters" formatted="false">"Налаштувати"</string>
+    <string name="language_spoof" formatted="false">"Підміна мови"</string>
+    <string name="environment_follow_region" formatted="false">"За регіоном"</string>
+    <string name="language_effective" formatted="true">"Дійсна мова: %1$s"</string>
+    <string name="language_custom" formatted="false">"Власна мова"</string>
+    <string name="timezone_spoof" formatted="false">"Підміна часового поясу"</string>
+    <string name="timezone_effective" formatted="true">"Дійсний часовий пояс: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Власний часовий пояс"</string>
+    <string name="gps_spoof" formatted="false">"Підміна місцеположення"</string>
+    <string name="gps_effective" formatted="true">"Дійсні координати: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Власні координати"</string>
+    <string name="speed_fixed" formatted="false">"Пам\'ятати швидкість"</string>
+    <string name="speed_fixed_summary" formatted="false">"Зберігати вибрану в меню швидкість під час перемикання відео"</string>
+    <string name="speed_expand" formatted="false">"Більше швидкостей"</string>
+    <string name="speed_options_hint" formatted="false">"Швидкості (натисніть, щоб змінити чи видалити)"</string>
+    <string name="speed_add_option" formatted="false">"+ Додати швидкість"</string>
+    <string name="speed_restore" formatted="false">"Скинути"</string>
+    <string name="clean_on_play" formatted="false">"Ховати керування під час відтворення"</string>
+    <string name="clean_keep_progress" formatted="false">"Залишати смугу прогресу"</string>
+    <string name="download_paths" formatted="false">"Папки збереження"</string>
+    <string name="download_paths_summary" formatted="true">"Відео: %1$s · Зображення: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Залишати відео, де %1$s: від %2$d%4$s до %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Залишати відео, де %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Залишати відео, де %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Діапазон не задано (натисніть для налаштування меж)"</string>
+    <string name="keyword_unset" formatted="false">"Правил немає (натисніть для керування категоріями)"</string>
+    <string name="keyword_summary" formatted="true">"Увімкнено: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Описи: %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Хештеги: %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Автори: %1$d"</string>
+    <string name="keyword_description" formatted="false">"Описи"</string>
+    <string name="keyword_tag" formatted="false">"Хештеги"</string>
+    <string name="keyword_author" formatted="false">"Автори"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Немає правил у категорії «%1$s». Додайте їх вище"</string>
+    <string name="duration_alert_title" formatted="false">"Сповіщати про довгі відео"</string>
+    <string name="duration_alert_summary" formatted="true">"Поточний поріг: ≥ %1$s хв"</string>
+    <string name="download_video_path" formatted="false">"Папка для відео"</string>
+    <string name="download_image_path" formatted="false">"Папка для зображень"</string>
+    <string name="download_path_hint" formatted="false">"Першою папкою має бути спільна медіапапка, наприклад Movies, Pictures або DCIM. Для недійсних шляхів використовується системне значення"</string>
+    <string name="views_range_title" formatted="false">"Діапазон переглядів"</string>
+    <string name="views_range_min" formatted="false">"Мінімум переглядів (0 = без обмеження)"</string>
+    <string name="views_range_max" formatted="false">"Максимум переглядів (0 = без обмеження)"</string>
+    <string name="views_range_hint" formatted="false">"Залишати лише відео з кількістю переглядів у діапазоні. Якщо обидві межі дорівнюють 0, нічого не видаляється"</string>
+    <string name="likes_range_title" formatted="false">"Діапазон уподобань"</string>
+    <string name="likes_range_min" formatted="false">"Мінімум уподобань (0 = без обмеження)"</string>
+    <string name="likes_range_max" formatted="false">"Максимум уподобань (0 = без обмеження)"</string>
+    <string name="likes_range_hint" formatted="false">"Залишати лише відео з кількістю вподобань у діапазоні. Якщо обидві межі дорівнюють 0, нічого не видаляється"</string>
+    <string name="duration_range_title" formatted="false">"Діапазон тривалості"</string>
+    <string name="duration_range_min" formatted="false">"Мінімальна тривалість (секунди; 0 = без обмеження)"</string>
+    <string name="duration_range_max" formatted="false">"Максимальна тривалість (секунди; 0 = без обмеження)"</string>
+    <string name="duration_range_hint" formatted="false">"Залишати рекомендовані відео в межах тривалості. Якщо обидві межі дорівнюють 0, нічого не видаляється. Фотодописи не зачіпаються"</string>
+    <string name="keyword_manage" formatted="false">"Правила фільтра"</string>
+    <string name="keyword_description_hint" formatted="false">"Пошук у тексті й описі відео без урахування регістру."</string>
+    <string name="keyword_tag_hint" formatted="false">"Пошук за хештегами. Знак # вводити не потрібно."</string>
+    <string name="keyword_author_hint" formatted="false">"Пошук за іменем автора й унікальним іменем користувача. Знак @ вводити не потрібно."</string>
+    <string name="keyword_description_input" formatted="false">"Слово або фраза"</string>
+    <string name="keyword_tag_input" formatted="false">"Хештег"</string>
+    <string name="keyword_author_input" formatted="false">"Ім\'я або ім\'я користувача"</string>
+    <string name="keyword_add" formatted="false">"Додати правило"</string>
+    <string name="keyword_delete" formatted="false">"Видалити правило"</string>
+    <string name="region_select_title" formatted="false">"Вибір регіону"</string>
+    <string name="region_search" formatted="false">"Пошук за назвою країни, англійською назвою або кодом"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Код оператора: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Власний регіон і SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Укажіть код країни й дані оператора без обмежень шаблона."</string>
+    <string name="region_code_input" formatted="false">"Код країни або регіону (наприклад, JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Код оператора (наприклад, 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Назва оператора (наприклад, NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Виберіть мову або введіть її код."</string>
+    <string name="language_code_input" formatted="false">"Код мови (наприклад, ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Поширені мови:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Виберіть часовий пояс міста або введіть його назву."</string>
+    <string name="timezone_input" formatted="false">"Часовий пояс (наприклад, Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Часові пояси міст:"</string>
+    <string name="city_tokyo" formatted="false">"Токіо"</string>
+    <string name="city_taipei" formatted="false">"Тайбей"</string>
+    <string name="city_hong_kong" formatted="false">"Гонконг"</string>
+    <string name="city_new_york" formatted="false">"Нью-Йорк"</string>
+    <string name="city_london" formatted="false">"Лондон"</string>
+    <string name="city_seoul" formatted="false">"Сеул"</string>
+    <string name="city_bangkok" formatted="false">"Бангкок"</string>
+    <string name="city_singapore" formatted="false">"Сінгапур"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Власні координати місцеположення"</string>
+    <string name="gps_custom_hint" formatted="false">"Виберіть місто або введіть широту й довготу."</string>
+    <string name="gps_latitude" formatted="false">"Широта (від -90.0 до 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Довгота (від -180.0 до 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Поширені міста:"</string>
+    <string name="speed_add_title" formatted="false">"Додати швидкість"</string>
+    <string name="speed_input" formatted="false">"Швидкість відтворення"</string>
+    <string name="speed_invalid" formatted="false">"Введіть коректне число"</string>
+    <string name="speed_out_of_range" formatted="true">"Підтримується лише %1$sx–%2$sx"</string>
+    <string name="speed_range" formatted="true">"Допустимий діапазон: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Змінити швидкість"</string>
+    <string name="duration_threshold_title" formatted="false">"Довгі відео"</string>
+    <string name="duration_threshold_hint" formatted="false">"Якщо тривалість відео досягає цього значення, на початку відтворення з\'явиться коротке сповіщення з тривалістю у хвилинах."</string>
+    <string name="duration_threshold_input" formatted="false">"Поріг тривалості (хвилини)"</string>
+    <string name="duration_threshold_example" formatted="false">"Наприклад: 3 або 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Введіть допустиму кількість хвилин більшу за 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Поточне налаштування: сповіщати за тривалості ≥ %1$s хв"</string>
+    <string name="duration_threshold_presets" formatted="false">"Рекомендована тривалість:"</string>
+    <string name="status_feature_feed" formatted="false">"Фільтр стрічки"</string>
+    <string name="status_feature_speed" formatted="false">"Швидкість"</string>
+    <string name="status_feature_progress" formatted="false">"Смуга прогресу"</string>
+    <string name="status_feature_clean" formatted="false">"Автоприховування керування"</string>
+    <string name="status_feature_immersive" formatted="false">"Відображення відео"</string>
+    <string name="status_feature_scroll" formatted="false">"Автопрокручування"</string>
+    <string name="status_feature_duration" formatted="false">"Нагадування про довжину"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Переклад коментарів"</string>
+    <string name="status_feature_video_translate" formatted="false">"Меню субтитрів і перекладу"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Копіювання коментарів"</string>
+    <string name="status_feature_author" formatted="false">"Регіон автора"</string>
+    <string name="status_feature_download" formatted="false">"Збереження відео"</string>
+    <string name="status_feature_music" formatted="false">"Обмеження аудіо"</string>
+    <string name="status_feature_sim" formatted="false">"SIM і країна"</string>
+    <string name="status_feature_language" formatted="false">"Мова"</string>
+    <string name="status_feature_timezone" formatted="false">"Часовий пояс"</string>
+    <string name="status_feature_gps" formatted="false">"Місцеположення"</string>
+    <string name="status_feature_bar" formatted="false">"Рядок стану"</string>
+    <string name="status_normal" formatted="false">"Працює"</string>
+    <string name="status_issue" formatted="false">"Є проблема"</string>
+    <string name="status_disabled" formatted="false">"Вимкнено"</string>
+    <string name="status_pending" formatted="false">"Очікування"</string>
+    <string name="status_problem_disabled" formatted="false">"Вимкнено, але є запис про помилку"</string>
+    <string name="status_problem_unavailable" formatted="false">"Тимчасово недоступно"</string>
+    <string name="status_problem_runtime" formatted="false">"Помилка в роботі"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Меню швидкості недоступне"</string>
+    <string name="status_prepare_failed" formatted="false">"Не вдалося підготувати функції. Відкрийте TikTok знову й перевірте."</string>
+    <string name="status_preparing" formatted="false">"Підготовка функцій. Зачекайте."</string>
+    <string name="status_prepared" formatted="false">"Підготовку завершено. Відкрийте TikTok знову."</string>
+    <string name="status_read_failed" formatted="false">"Зараз не вдається прочитати стан. Перевірте пізніше."</string>
+    <string name="status_update_failed" formatted="false">"Зараз не вдається оновити стан. Показано останній результат."</string>
+    <string name="status_reading" formatted="false">"Читання стану"</string>
+    <string name="status_empty" formatted="false">"Записів про роботу немає. Увімкніть Toki в LSPosed, відкрийте TikTok і перевірте знову."</string>
+    <string name="status_report_note" formatted="true">"Останній звіт: %1$s\n«Працює» означає, що функція готова й не повідомляла про помилки."</string>
+    <string name="config_section" formatted="false">"Керування налаштуваннями"</string>
+    <string name="config_import" formatted="false">"Імпорт налаштувань"</string>
+    <string name="config_import_summary" formatted="false">"Відновити налаштування функцій із файлу"</string>
+    <string name="config_export" formatted="false">"Експорт налаштувань"</string>
+    <string name="config_export_summary" formatted="false">"Зберегти налаштування функцій у файл"</string>
+    <string name="config_exported" formatted="false">"Налаштування експортовано у вибране місце. Файл може містити ключові слова, регіони та шляхи. Зберігайте його безпечно."</string>
+    <string name="config_import_confirm" formatted="true">"Налаштувань у файлі: %1$d. Імпорт замінить усі налаштування функцій, а відсутні повернуться до типових значень.\n\nМова інтерфейсу, піктограма застосунку, дозволи LSPosed і кеш сумісності TikTok не зміняться. Продовжити?"</string>
+    <string name="config_overwrite" formatted="false">"Замінити"</string>
+    <string name="config_imported" formatted="false">"Налаштування імпортовано, сторінку функцій оновлено. Підтримувані зміни застосовуються відразу. Для решти відкрийте TikTok знову й перевірте."</string>
+    <string name="config_processing" formatted="false">"Обробка налаштувань"</string>
+    <string name="config_error_io" formatted="false">"Помилка читання або запису файлу. Перевірте вибране місце й вільний простір."</string>
+    <string name="config_error_permission" formatted="false">"Немає доступу до вибраного файлу. Виберіть його знову."</string>
+    <string name="config_error_invalid" formatted="false">"Це недійсний файл налаштувань Toki. Налаштування не імпортовано."</string>
+    <string name="config_error_validation" formatted="true">"Перевірку налаштувань не пройдено: %1$s. Налаштування не імпортовано."</string>
+    <string name="config_error_commit" formatted="false">"Застосування налаштувань не підтверджено. Відкрийте Toki знову, перевірте та повторіть."</string>
+    <string name="sponsor_title" formatted="false">"Підтримати розробника"</string>
+    <string name="sponsor_kofi" formatted="false">"Підтримати через Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Платіжний QR-код Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Збереження…"</string>
+    <string name="sponsor_save_image" formatted="false">"Зберегти зображення"</string>
+    <string name="sponsor_image_hint" formatted="false">"Збережіть оригінальне зображення та виберіть його в Alipay для розпізнавання коду."</string>
+    <string name="sponsor_address_copied" formatted="false">"Адресу USDT скопійовано"</string>
+    <string name="sponsor_image_saved" formatted="false">"Зображення збережено у вибране місце"</string>
+    <string name="sponsor_error_io" formatted="false">"Не вдалося зберегти файл. Перевірте вибране місце й вільний простір, потім повторіть."</string>
+    <string name="sponsor_error_permission" formatted="false">"Не вдалося зберегти: немає дозволу на запис у вибране місце. Виберіть його знову."</string>
+    <string name="feature_filter_topics" formatted="false">"Приховувати рекомендовані теми"</string>
+    <string name="feature_filter_creators" formatted="false">"Приховувати рекомендованих авторів"</string>
+    <string name="host_scan_title_complete" formatted="false">"Пошук завершено"</string>
+    <string name="host_scan_title_failed" formatted="false">"Пошук не вдався"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Перезапустіть TikTok вручну, щоб застосувати результати."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Перегляньте діагностику функцій у Toki."</string>
+    <string name="layout_title" formatted="false">"Оформлення сторінок"</string>
+    <string name="layout_summary" formatted="false">"Виберіть елементи для приховування"</string>
+    <string name="layout_hint" formatted="false">"Увімкніть перемикач, щоб приховати елемент"</string>
+    <string name="layout_top" formatted="false">"Верхня панель"</string>
+    <string name="layout_bottom" formatted="false">"Нижня панель"</string>
+    <string name="layout_side" formatted="false">"Сторінка відео"</string>
+    <string name="layout_search" formatted="false">"Пошук"</string>
+    <string name="layout_live" formatted="false">"Ефіри"</string>
+    <string name="layout_friends" formatted="false">"Друзі"</string>
+    <string name="layout_following" formatted="false">"Підписки"</string>
+    <string name="layout_shop" formatted="false">"Магазин"</string>
+    <string name="layout_for_you" formatted="false">"Для вас"</string>
+    <string name="layout_nearby" formatted="false">"Поруч"</string>
+    <string name="layout_stem" formatted="false">"Наука"</string>
+    <string name="layout_series" formatted="false">"Серіали"</string>
+    <string name="layout_home" formatted="false">"Головна"</string>
+    <string name="layout_create" formatted="false">"Створити"</string>
+    <string name="layout_inbox" formatted="false">"Вхідні"</string>
+    <string name="layout_profile" formatted="false">"Профіль"</string>
+    <string name="layout_discover" formatted="false">"Цікаве"</string>
+    <string name="layout_avatar" formatted="false">"Аватар"</string>
+    <string name="layout_follow" formatted="false">"Кнопка підписки"</string>
+    <string name="layout_like" formatted="false">"Вподобання"</string>
+    <string name="layout_comment" formatted="false">"Коментарі"</string>
+    <string name="layout_favorite" formatted="false">"Обране"</string>
+    <string name="layout_share" formatted="false">"Поділитися"</string>
+    <string name="layout_music" formatted="false">"Музична платівка"</string>
+    <string name="layout_explore" formatted="false">"Огляд"</string>
+    <string name="layout_author" formatted="false">"Інформація про автора"</string>
+    <string name="layout_description" formatted="false">"Опис"</string>
+    <string name="layout_music_title" formatted="false">"Назва музики"</string>
+    <string name="layout_tags" formatted="false">"Інформаційні мітки"</string>
+    <string name="layout_search_label" formatted="false">"Пошукова підказка"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Кнопка зупинки автопрокрутки"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Монети й нагороди"</string>
+    <string name="layout_quick_comment" formatted="false">"Швидкі коментарі"</string>
+    <string name="layout_playlist" formatted="false">"Список відтворення"</string>
+    <string name="layout_creation_buttons" formatted="false">"Кнопки створення"</string>
+    <string name="layout_live_notice" formatted="false">"Нагадування про ефіри"</string>
+    <string name="layout_opacity" formatted="false">"Непрозорість"</string>
+    <string name="feature_background_audio">"Розблокувати фонове аудіо"</string>
+    <string name="layout_landscape">"Кнопка повного екрана"</string>
+    <string name="layout_photo_indicators">"Індикатори фото й підказки"</string>
+    <string name="layout_quick_message">"Швидкі повідомлення й автор поширення"</string>
+    <string name="layout_user_card">"Рекомендовані акаунти"</string>
+    <string name="layout_survey">"Опитування та відгуки"</string>
+    <string name="layout_ad_cards">"Картки товарів і реклами"</string>
+    <string name="layout_bottom_banners">"Інші нижні банери"</string>
+    <string name="layout_activities">"Вхід до подій"</string>
+    <string name="host_scan_title_running" formatted="false">"Пошук методів"</string>
+    <string name="host_scan_title_saving" formatted="false">"Збереження результатів"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Залиште TikTok на передньому плані."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Зачекайте."</string>
+    <string name="host_scan_done" formatted="false">"Зрозуміло"</string>
+    <string name="video_fit_center" formatted="false">"По центру"</string>
+    <string name="video_fit_smart" formatted="false">"Повний екран"</string>
+</resources>

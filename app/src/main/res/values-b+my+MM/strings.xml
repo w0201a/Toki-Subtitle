@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"ပင်မ"</string>
+    <string name="nav_features" formatted="false">"လုပ်ဆောင်ချက်များ"</string>
+    <string name="page_features" formatted="false">"ဆက်တင်များ"</string>
+    <string name="page_hook_status" formatted="false">"လုပ်ဆောင်ချက် အခြေအနေ"</string>
+    <string name="nav_back" formatted="false">"နောက်သို့"</string>
+    <string name="restart_tiktok" formatted="false">"TikTok ကို ပြန်စပါ"</string>
+    <string name="restart_root_required" formatted="false">"Toki ကို root ခွင့်ပြုချက်ပေးပါ။"</string>
+    <string name="language_title" formatted="false">"အက်ပ်ဘာသာစကား"</string>
+    <string name="language_system" formatted="false">"စနစ်အတိုင်း"</string>
+    <string name="language_search" formatted="false">"ဘာသာစကား ရှာရန်"</string>
+    <string name="language_clear_search" formatted="false">"ရှာဖွေမှု ရှင်းရန်"</string>
+    <string name="language_no_results" formatted="false">"ကိုက်ညီသော ဘာသာစကား မတွေ့ပါ"</string>
+    <string name="common_save" formatted="false">"သိမ်းရန်"</string>
+    <string name="common_cancel" formatted="false">"ပယ်ဖျက်ရန်"</string>
+    <string name="common_confirm" formatted="false">"အိုကေ"</string>
+    <string name="common_close" formatted="false">"ပိတ်ရန်"</string>
+    <string name="common_open" formatted="false">"ဖွင့်ရန်"</string>
+    <string name="common_copy" formatted="false">"ကူးယူရန်"</string>
+    <string name="common_add" formatted="false">"ထည့်ရန်"</string>
+    <string name="common_delete" formatted="false">"ဖျက်ရန်"</string>
+    <string name="common_done" formatted="false">"ပြီးပြီ"</string>
+    <string name="common_save_apply" formatted="false">"အသုံးပြုရန်"</string>
+    <string name="common_unknown" formatted="false">"မသိပါ"</string>
+    <string name="common_custom" formatted="false">"စိတ်ကြိုက်"</string>
+    <string name="home_icon_hidden" formatted="false">"အက်ပ်အိုင်ကွန်ကို ဖျောက်ထားသည်"</string>
+    <string name="home_icon_restored" formatted="false">"အက်ပ်အိုင်ကွန် ပြန်ပေါ်လာပြီ"</string>
+    <string name="home_activated" formatted="false">"အသက်သွင်းပြီး"</string>
+    <string name="home_inactive" formatted="false">"အသက်မသွင်းရသေး"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosed တွင် အသက်သွင်းထားမှု မတွေ့ပါ"</string>
+    <string name="home_host_section" formatted="false">"TikTok နှင့် ကိုက်ညီမှု"</string>
+    <string name="home_host_current" formatted="false">"ထည့်သွင်းထားသော TikTok"</string>
+    <string name="home_host_missing" formatted="false">"ဤစက်တွင် ပံ့ပိုးထားသော TikTok မတွေ့ပါ"</string>
+    <string name="home_host_not_installed" formatted="false">"မထည့်သွင်းရသေး"</string>
+    <string name="home_supported_versions" formatted="false">"ပံ့ပိုးထားသော ဗားရှင်းများ"</string>
+    <string name="home_community" formatted="false">"အသိုင်းအဝိုင်း"</string>
+    <string name="home_github" formatted="false">"GitHub ကုဒ်သိုလှောင်ရာ"</string>
+    <string name="home_telegram" formatted="false">"Telegram အဖွဲ့"</string>
+    <string name="home_preferences" formatted="false">"ဆက်တင်များ"</string>
+    <string name="home_hide_icon" formatted="false">"အက်ပ်အိုင်ကွန် ဖျောက်ရန်"</string>
+    <string name="home_hide_icon_summary" formatted="false">"အိုင်ကွန်ဖျောက်ထားလျှင် LSPosed မန်နေဂျာမှ Toki ကို ဖွင့်ပါ"</string>
+    <string name="home_support" formatted="false">"ဖွံ့ဖြိုးရေးကို ပံ့ပိုးရန်"</string>
+    <string name="home_support_summary" formatted="false">"ဆက်လက်ထိန်းသိမ်းမှုနှင့် တိုးတက်မှုများကို ပံ့ပိုးပါ"</string>
+    <string name="feature_region_section" formatted="false">"ဒေသနှင့် ပတ်ဝန်းကျင် အယောင်ဆောင်မှု"</string>
+    <string name="feature_playback_section" formatted="false">"ဖွင့်ခြင်း"</string>
+    <string name="feature_progress" formatted="false">"ဗီဒီယိုတိုးတက်မှုဘား အမြဲပြရန်"</string>
+    <string name="feature_progress_summary" formatted="false">"ဗီဒီယိုတိုများတွင်လည်း တိုးတက်မှုဘားကို ပြထားရန်"</string>
+    <string name="feature_immersive" formatted="false">"ဗီဒီယိုပြသမှု"</string>
+    <string name="feature_autoplay" formatted="false">"အဆင့်မြှင့် အလိုအလျောက်ရွှေ့ခြင်း"</string>
+    <string name="feature_autoplay_summary" formatted="false">"ဗီဒီယိုအားလုံး၏ မီနူးတွင် အလိုအလျောက်ရွှေ့ခြင်းကို ဖွင့်ပေးသည်"</string>
+    <string name="feature_status_bar" formatted="false">"စနစ်အခြေအနေဘား ဖျောက်ရန်"</string>
+    <string name="feature_media_section" formatted="false">"ဒေါင်းလုဒ်နှင့် ကိရိယာများ"</string>
+    <string name="feature_download" formatted="false">"ရေစာမပါဘဲ ဒေါင်းလုဒ်"</string>
+    <string name="feature_download_summary" formatted="false">"ဖိထားသည့်မီနူး သို့မဟုတ် မျှဝေမီနူးမှ ရေစာမပါသော မူရင်းဗီဒီယိုကို သိမ်းရန်"</string>
+    <string name="feature_music" formatted="false">"အသံကန့်သတ်မှု ဖယ်ရန်"</string>
+    <string name="feature_music_summary" formatted="false">"လိုင်စင် သို့မဟုတ် ဒေသကြောင့် ကန့်သတ်ထားသောအသံ ပြန်ဖွင့်ရန်"</string>
+    <string name="feature_author_region" formatted="false">"ဖန်တီးသူ၏ဒေသ ပြရန်"</string>
+    <string name="feature_author_region_summary" formatted="false">"ဖန်တီးသူအမည်ဘေးတွင် နိုင်ငံ/ဒေသ အလံနှင့်ကုဒ် ပြရန်"</string>
+    <string name="feature_copy_comment" formatted="false">"စာသားသာ ကူးရန်"</string>
+    <string name="feature_video_translation" formatted="false">"စာတန်းထိုးနှင့် ဘာသာပြန် မီနူး"</string>
+    <string name="feature_video_translation_summary" formatted="false">"ဖိထားသည့်အခါ ပေါ်လာသောမီနူးတွင် ရွေးချယ်စရာကို ပြပါ"</string>
+    <string name="feature_comment_translation" formatted="false">"မှတ်ချက် ဘာသာပြန်ရန်"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"နိုင်ငံခြားဘာသာ မှတ်ချက်များကို တစ်ပြိုင်နက် ဘာသာပြန်သည့်ခလုတ် ထည့်ရန်"</string>
+    <string name="feature_filter_section" formatted="false">"ပို့စ်စီးကြောင်း စစ်ထုတ်ခြင်း"</string>
+    <string name="feature_remove_ads" formatted="false">"ပို့စ်စီးကြောင်းမှ ကြော်ငြာများ ဖယ်ရန်"</string>
+    <string name="feature_remove_live" formatted="false">"အကြံပြုတိုက်ရိုက်ထုတ်လွှင့်မှုများ စစ်ထုတ်ရန်"</string>
+    <string name="feature_remove_photos" formatted="false">"အကြံပြုဓာတ်ပုံပို့စ်များ စစ်ထုတ်ရန်"</string>
+    <string name="feature_filter_views" formatted="false">"ကြည့်ရှုမှု စစ်ထုတ်ရန်"</string>
+    <string name="feature_filter_likes" formatted="false">"နှစ်သက်မှု စစ်ထုတ်ရန်"</string>
+    <string name="feature_filter_duration" formatted="false">"ကြာချိန် စစ်ထုတ်ရန်"</string>
+    <string name="feature_filter_keywords" formatted="false">"သော့ချက်စကားလုံး စစ်ထုတ်ခြင်း"</string>
+    <string name="feature_block_offline" formatted="false">"အော့ဖ်လိုင်းဗီဒီယို ပိတ်ရန်"</string>
+    <string name="feature_block_offline_summary" formatted="false">"ချိတ်ဆက်မှုအားနည်းလျှင် ကြိုတင်တင်ထားသော အော့ဖ်လိုင်းဗီဒီယိုများ ဝင်လာခြင်းကို တားရန်"</string>
+    <string name="feature_remove_ai" formatted="false">"AI ဖန်တီးထားသော အကြောင်းအရာ ဖယ်ရန်"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"TikTok က AI ဖန်တီးသည်ဟု မှတ်သားထားသော ဗီဒီယိုများ စစ်ထုတ်ရန်"</string>
+    <string name="filter_metric_views" formatted="false">"ကြည့်ရှုမှု"</string>
+    <string name="filter_metric_likes" formatted="false">"နှစ်သက်မှု"</string>
+    <string name="filter_metric_duration" formatted="false">"ကြာချိန်"</string>
+    <string name="filter_unit_seconds" formatted="false">"စက္ကန့်"</string>
+    <string name="filter_views_saved" formatted="false">"ကြည့်ရှုမှုအပိုင်းအခြား သိမ်းပြီး"</string>
+    <string name="filter_likes_saved" formatted="false">"နှစ်သက်မှုအပိုင်းအခြား သိမ်းပြီး"</string>
+    <string name="filter_duration_saved" formatted="false">"ဗီဒီယိုကြာချိန်အပိုင်းအခြား သိမ်းပြီး"</string>
+    <string name="download_path_saved" formatted="false">"စိတ်ကြိုက်သိမ်းဆည်းလမ်းကြောင်းများ ပြင်ဆင်ပြီး"</string>
+    <string name="region_spoof_title" formatted="false">"ဒေသနှင့် SIM အယောင်ဆောင်မှု"</string>
+    <string name="region_current" formatted="false">"လက်ရှိဆက်တင်များ"</string>
+    <string name="region_target" formatted="true">"ပစ်မှတ်ဒေသ: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"ဆက်သွယ်ရေးကုမ္ပဏီ: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"ဆက်သွယ်ရေးကုမ္ပဏီကုဒ်: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"ကြိုတင်ဆက်တင်"</string>
+    <string name="region_custom_parameters" formatted="false">"စိတ်ကြိုက်"</string>
+    <string name="language_spoof" formatted="false">"ဘာသာစကား အယောင်ဆောင်မှု"</string>
+    <string name="environment_follow_region" formatted="false">"ဒေသအတိုင်း"</string>
+    <string name="language_effective" formatted="true">"အသုံးပြုနေသောဘာသာစကား: %1$s"</string>
+    <string name="language_custom" formatted="false">"စိတ်ကြိုက်ဘာသာစကား"</string>
+    <string name="timezone_spoof" formatted="false">"အချိန်ဇုန် အယောင်ဆောင်မှု"</string>
+    <string name="timezone_effective" formatted="true">"အသုံးပြုနေသောအချိန်ဇုန်: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"စိတ်ကြိုက်အချိန်ဇုန်"</string>
+    <string name="gps_spoof" formatted="false">"တည်နေရာ အယောင်ဆောင်မှု"</string>
+    <string name="gps_effective" formatted="true">"အသုံးပြုနေသောကိုဩဒိနိတ်: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"စိတ်ကြိုက်ကိုဩဒိနိတ်"</string>
+    <string name="speed_fixed" formatted="false">"ဖွင့်နှုန်း ထိန်းရန်"</string>
+    <string name="speed_fixed_summary" formatted="false">"ဗီဒီယိုပြောင်းလျှင် ဖိထားသည့်မီနူးတွင် ရွေးထားသောဖွင့်နှုန်းကို ထိန်းထားရန်"</string>
+    <string name="speed_expand" formatted="false">"နောက်ထပ်ဖွင့်နှုန်း"</string>
+    <string name="speed_options_hint" formatted="false">"ဖွင့်နှုန်းများ (ပြင်ရန် သို့မဟုတ် ဖျက်ရန် နှိပ်ပါ)"</string>
+    <string name="speed_add_option" formatted="false">"+ ဖွင့်နှုန်း ထည့်ရန်"</string>
+    <string name="speed_restore" formatted="false">"မူလအတိုင်း"</string>
+    <string name="clean_on_play" formatted="false">"ဖွင့်နေစဉ် ခလုတ်များဖျောက်ရန်"</string>
+    <string name="clean_keep_progress" formatted="false">"တိုးတက်မှုဘား ပြထားရန်"</string>
+    <string name="download_paths" formatted="false">"သိမ်းမည့်ဖိုင်တွဲ"</string>
+    <string name="download_paths_summary" formatted="true">"ဗီဒီယို: %1$s · ပုံ: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"%1$s သည် %2$d%4$s မှ %3$d%4$s အတွင်းရှိသော ဗီဒီယိုများကို ထားရန်"</string>
+    <string name="filter_range_min" formatted="true">"%1$s ≥ %2$d%3$s ဖြစ်သော ဗီဒီယိုများကို ထားရန်"</string>
+    <string name="filter_range_max" formatted="true">"%1$s ≤ %2$d%3$s ဖြစ်သော ဗီဒီယိုများကို ထားရန်"</string>
+    <string name="filter_range_unset" formatted="false">"အပိုင်းအခြား မသတ်မှတ်ရသေး (အနည်းဆုံး/အများဆုံး သတ်မှတ်ရန် နှိပ်ပါ)"</string>
+    <string name="keyword_unset" formatted="false">"စစ်ထုတ်စည်းမျဉ်း မရှိ (အမျိုးအစားများ စီမံရန် နှိပ်ပါ)"</string>
+    <string name="keyword_summary" formatted="true">"ဖွင့်ထားသည်: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"စာသား %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"ဟက်ရှ်တက် %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"ဖန်တီးသူ %1$d"</string>
+    <string name="keyword_description" formatted="false">"စာသား"</string>
+    <string name="keyword_tag" formatted="false">"ဟက်ရှ်တက်"</string>
+    <string name="keyword_author" formatted="false">"ဖန်တီးသူ"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"%1$s အတွက် စည်းမျဉ်းမရှိပါ။ အထက်တွင် ထည့်ပါ။"</string>
+    <string name="duration_alert_title" formatted="false">"ဗီဒီယိုရှည် သတိပေးချက်"</string>
+    <string name="duration_alert_summary" formatted="true">"လက်ရှိသတ်မှတ်ချက်: ≥ %1$s မိနစ်"</string>
+    <string name="download_video_path" formatted="false">"ဗီဒီယိုဖိုင်တွဲ"</string>
+    <string name="download_image_path" formatted="false">"ပုံဖိုင်တွဲ"</string>
+    <string name="download_path_hint" formatted="false">"ပထမဖိုင်တွဲသည် Movies၊ Pictures သို့မဟုတ် DCIM ကဲ့သို့ အများသုံးမီဒီယာဖိုင်တွဲ ဖြစ်ရမည်။ လမ်းကြောင်းမမှန်လျှင် စနစ်မူလတန်ဖိုးကို သုံးမည်။"</string>
+    <string name="views_range_title" formatted="false">"ကြည့်ရှုမှုအရေအတွက် အပိုင်းအခြား"</string>
+    <string name="views_range_min" formatted="false">"အနည်းဆုံးကြည့်ရှုမှု (0 = အကန့်အသတ်မရှိ)"</string>
+    <string name="views_range_max" formatted="false">"အများဆုံးကြည့်ရှုမှု (0 = အကန့်အသတ်မရှိ)"</string>
+    <string name="views_range_hint" formatted="false">"ကြည့်ရှုမှု ဤအပိုင်းအခြားအတွင်းရှိသော ဗီဒီယိုများကိုသာ ထားမည်။ နှစ်ဖက်လုံး 0 ဆိုလျှင် မည်သည့်ဗီဒီယိုမျှ မဖယ်ပါ။"</string>
+    <string name="likes_range_title" formatted="false">"နှစ်သက်မှုအရေအတွက် အပိုင်းအခြား"</string>
+    <string name="likes_range_min" formatted="false">"အနည်းဆုံးနှစ်သက်မှု (0 = အကန့်အသတ်မရှိ)"</string>
+    <string name="likes_range_max" formatted="false">"အများဆုံးနှစ်သက်မှု (0 = အကန့်အသတ်မရှိ)"</string>
+    <string name="likes_range_hint" formatted="false">"နှစ်သက်မှု ဤအပိုင်းအခြားအတွင်းရှိသော ဗီဒီယိုများကိုသာ ထားမည်။ နှစ်ဖက်လုံး 0 ဆိုလျှင် မည်သည့်ဗီဒီယိုမျှ မဖယ်ပါ။"</string>
+    <string name="duration_range_title" formatted="false">"ဗီဒီယိုကြာချိန် အပိုင်းအခြား"</string>
+    <string name="duration_range_min" formatted="false">"အနည်းဆုံးကြာချိန် (စက္ကန့်; 0 = အကန့်အသတ်မရှိ)"</string>
+    <string name="duration_range_max" formatted="false">"အများဆုံးကြာချိန် (စက္ကန့်; 0 = အကန့်အသတ်မရှိ)"</string>
+    <string name="duration_range_hint" formatted="false">"ကြာချိန် ဤအပိုင်းအခြားအတွင်းရှိသော အကြံပြုဗီဒီယိုများကိုသာ ထားမည်။ နှစ်ဖက်လုံး 0 ဆိုလျှင် မည်သည့်ဗီဒီယိုမျှ မဖယ်ပါ။ ဓာတ်ပုံပို့စ်များကို မသက်ရောက်ပါ။"</string>
+    <string name="keyword_manage" formatted="false">"စစ်ထုတ်စည်းမျဉ်းများ"</string>
+    <string name="keyword_description_hint" formatted="false">"ဗီဒီယိုစာသားနှင့် ဖော်ပြချက်များကို အက္ခရာအကြီးအသေးမခွဲဘဲ တိုက်စစ်သည်။"</string>
+    <string name="keyword_tag_hint" formatted="false">"ဟက်ရှ်တက်များကို တိုက်စစ်သည်။ # ရှေ့ဆက်ကို မထည့်ပါနှင့်။"</string>
+    <string name="keyword_author_hint" formatted="false">"ဖန်တီးသူအမည်နှင့် တစ်ဦးတည်းပိုင်အသုံးပြုသူအမည်ကို တိုက်စစ်သည်။ @ ရှေ့ဆက်ကို မထည့်ပါနှင့်။"</string>
+    <string name="keyword_description_input" formatted="false">"စကားလုံး သို့မဟုတ် စကားစု"</string>
+    <string name="keyword_tag_input" formatted="false">"ဟက်ရှ်တက်"</string>
+    <string name="keyword_author_input" formatted="false">"အမည် သို့မဟုတ် အသုံးပြုသူအမည်"</string>
+    <string name="keyword_add" formatted="false">"စည်းမျဉ်း ထည့်ရန်"</string>
+    <string name="keyword_delete" formatted="false">"စည်းမျဉ်း ဖျက်ရန်"</string>
+    <string name="region_select_title" formatted="false">"ဒေသ ရွေးရန်"</string>
+    <string name="region_search" formatted="false">"နိုင်ငံအမည်၊ အင်္ဂလိပ်အမည် သို့မဟုတ် ဒေသကုဒ်ဖြင့် ရှာပါ"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · ဆက်သွယ်ရေးကုမ္ပဏီကုဒ်: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"စိတ်ကြိုက်ဒေသနှင့် SIM"</string>
+    <string name="region_custom_hint" formatted="false">"ကြိုတင်သတ်မှတ်ချက်များ၏ ကန့်သတ်မှုမရှိဘဲ နိုင်ငံကုဒ်နှင့် ဆက်သွယ်ရေးကုမ္ပဏီကို သတ်မှတ်ပါ။"</string>
+    <string name="region_code_input" formatted="false">"နိုင်ငံ/ဒေသကုဒ် (ဥပမာ JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"ဆက်သွယ်ရေးကုမ္ပဏီကုဒ် (ဥပမာ 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"ဆက်သွယ်ရေးကုမ္ပဏီအမည် (ဥပမာ NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"အသုံးများသောဘာသာစကား ရွေးပါ သို့မဟုတ် ဘာသာစကားကုဒ် ထည့်ပါ။"</string>
+    <string name="language_code_input" formatted="false">"ဘာသာစကားကုဒ် (ဥပမာ ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"အသုံးများသောဘာသာစကားများ:"</string>
+    <string name="timezone_custom_hint" formatted="false">"အသုံးများသောမြို့၏ အချိန်ဇုန် ရွေးပါ သို့မဟုတ် အချိန်ဇုန်အမည် ထည့်ပါ။"</string>
+    <string name="timezone_input" formatted="false">"အချိန်ဇုန်အမည် (ဥပမာ Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"အသုံးများသောမြို့ အချိန်ဇုန်များ:"</string>
+    <string name="city_tokyo" formatted="false">"တိုကျို"</string>
+    <string name="city_taipei" formatted="false">"တိုင်ပေ"</string>
+    <string name="city_hong_kong" formatted="false">"ဟောင်ကောင်"</string>
+    <string name="city_new_york" formatted="false">"နယူးယောက်"</string>
+    <string name="city_london" formatted="false">"လန်ဒန်"</string>
+    <string name="city_seoul" formatted="false">"ဆိုးလ်"</string>
+    <string name="city_bangkok" formatted="false">"ဘန်ကောက်"</string>
+    <string name="city_singapore" formatted="false">"စင်ကာပူ"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"စိတ်ကြိုက်တည်နေရာကိုဩဒိနိတ်"</string>
+    <string name="gps_custom_hint" formatted="false">"မြို့ကို ရွေးပါ သို့မဟုတ် လတ္တီတွဒ်နှင့် လောင်ဂျီတွဒ် ထည့်ပါ။"</string>
+    <string name="gps_latitude" formatted="false">"လတ္တီတွဒ် (-90.0 မှ 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"လောင်ဂျီတွဒ် (-180.0 မှ 180.0)"</string>
+    <string name="gps_presets" formatted="false">"အသုံးများသောမြို့များ:"</string>
+    <string name="speed_add_title" formatted="false">"ဖွင့်နှုန်း ထည့်ရန်"</string>
+    <string name="speed_input" formatted="false">"ဖွင့်နှုန်း"</string>
+    <string name="speed_invalid" formatted="false">"မှန်ကန်သောကိန်းဂဏန်း ထည့်ပါ"</string>
+    <string name="speed_out_of_range" formatted="true">"%1$sx မှ %2$sx အထိသာ ပံ့ပိုးသည်"</string>
+    <string name="speed_range" formatted="true">"ပံ့ပိုးသောအပိုင်းအခြား: %1$sx မှ %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"ဖွင့်နှုန်း ပြင်ရန်"</string>
+    <string name="duration_threshold_title" formatted="false">"ဗီဒီယိုရှည် သတိပေးချက်"</string>
+    <string name="duration_threshold_hint" formatted="false">"ဗီဒီယိုကြာချိန် ဤတန်ဖိုးသို့ရောက်လျှင် ဖွင့်စတွင် မိနစ်ကြာချိန်ကို သတိပေးစာတို ပြမည်။"</string>
+    <string name="duration_threshold_input" formatted="false">"ကြာချိန်အကန့်အသတ် (မိနစ်)"</string>
+    <string name="duration_threshold_example" formatted="false">"ဥပမာ: 3 သို့မဟုတ် 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"0 ထက်ကြီးသော မှန်ကန်သည့်မိနစ်အရေအတွက် ထည့်ပါ"</string>
+    <string name="duration_threshold_current" formatted="true">"လက်ရှိဆက်တင်: ≥ %1$s မိနစ်ကြာသော ဗီဒီယိုများကို သတိပေးမည်"</string>
+    <string name="duration_threshold_presets" formatted="false">"အကြံပြုကြာချိန်များ:"</string>
+    <string name="status_feature_feed" formatted="false">"ပို့စ်စီးကြောင်း စစ်ထုတ်ခြင်း"</string>
+    <string name="status_feature_speed" formatted="false">"ဖွင့်နှုန်း"</string>
+    <string name="status_feature_progress" formatted="false">"တိုးတက်မှုဘား"</string>
+    <string name="status_feature_clean" formatted="false">"ဖွင့်နေစဉ် ခလုတ်ဖျောက်ခြင်း"</string>
+    <string name="status_feature_immersive" formatted="false">"ဗီဒီယိုပြသမှု"</string>
+    <string name="status_feature_scroll" formatted="false">"အလိုအလျောက်ရွှေ့ခြင်း"</string>
+    <string name="status_feature_duration" formatted="false">"ကြာချိန်သတိပေးချက်"</string>
+    <string name="status_feature_comment_translate" formatted="false">"မှတ်ချက်ဘာသာပြန်ခြင်း"</string>
+    <string name="status_feature_video_translate" formatted="false">"စာတန်းထိုးနှင့် ဘာသာပြန် မီနူး"</string>
+    <string name="status_feature_comment_copy" formatted="false">"မှတ်ချက်ကူးခြင်း"</string>
+    <string name="status_feature_author" formatted="false">"ဖန်တီးသူ၏ဒေသ"</string>
+    <string name="status_feature_download" formatted="false">"ဗီဒီယိုသိမ်းခြင်း"</string>
+    <string name="status_feature_music" formatted="false">"အသံကန့်သတ်မှုများ"</string>
+    <string name="status_feature_sim" formatted="false">"SIM နှင့် နိုင်ငံ"</string>
+    <string name="status_feature_language" formatted="false">"ဘာသာစကား"</string>
+    <string name="status_feature_timezone" formatted="false">"အချိန်ဇုန်"</string>
+    <string name="status_feature_gps" formatted="false">"တည်နေရာ"</string>
+    <string name="status_feature_bar" formatted="false">"အခြေအနေဘား"</string>
+    <string name="status_normal" formatted="false">"အလုပ်လုပ်သည်"</string>
+    <string name="status_issue" formatted="false">"ပြဿနာရှိသည်"</string>
+    <string name="status_disabled" formatted="false">"ပိတ်ထားသည်"</string>
+    <string name="status_pending" formatted="false">"အတည်မပြုရသေး"</string>
+    <string name="status_problem_disabled" formatted="false">"ပိတ်ထားပြီး အမှားမှတ်တမ်းရှိသည်"</string>
+    <string name="status_problem_unavailable" formatted="false">"ယာယီမရနိုင်ပါ"</string>
+    <string name="status_problem_runtime" formatted="false">"အသုံးပြုစဉ် အမှား"</string>
+    <string name="status_problem_speed_menu" formatted="false">"ဖွင့်နှုန်းမီနူး မရနိုင်ပါ"</string>
+    <string name="status_prepare_failed" formatted="false">"လုပ်ဆောင်ချက်ပြင်ဆင်မှု မအောင်မြင်ပါ။ TikTok ကို ပြန်ဖွင့်၍ စစ်ဆေးပါ။"</string>
+    <string name="status_preparing" formatted="false">"လုပ်ဆောင်ချက်များ ပြင်ဆင်နေသည်။ ခဏစောင့်ပါ။"</string>
+    <string name="status_prepared" formatted="false">"ပြင်ဆင်ပြီးပြီ။ TikTok ကို ပြန်ဖွင့်ပါ။"</string>
+    <string name="status_read_failed" formatted="false">"ယခု အခြေအနေကို မဖတ်နိုင်ပါ။ နောက်မှ စစ်ဆေးပါ။"</string>
+    <string name="status_update_failed" formatted="false">"ယခု အခြေအနေကို မပြင်ဆင်နိုင်ပါ။ နောက်ဆုံးရလဒ်ကို ပြထားသည်။"</string>
+    <string name="status_reading" formatted="false">"အခြေအနေ ဖတ်နေသည်"</string>
+    <string name="status_empty" formatted="false">"အလုပ်လုပ်မှုမှတ်တမ်း မရှိပါ။ LSPosed တွင် Toki ကို ဖွင့်ပြီး TikTok ကိုဖွင့်ကာ ပြန်စစ်ပါ။"</string>
+    <string name="status_report_note" formatted="true">"နောက်ဆုံးအစီရင်ခံစာ: %1$s\n“အလုပ်လုပ်သည်” ဆိုသည်မှာ လုပ်ဆောင်ချက်အဆင်သင့်ဖြစ်ပြီး အမှားမတင်ပြထားခြင်း ဖြစ်သည်။"</string>
+    <string name="config_section" formatted="false">"ဆက်တင်စီမံမှု"</string>
+    <string name="config_import" formatted="false">"ဆက်တင် တင်သွင်းရန်"</string>
+    <string name="config_import_summary" formatted="false">"ဖိုင်မှ လုပ်ဆောင်ချက်ဆက်တင်များ ပြန်ယူရန်"</string>
+    <string name="config_export" formatted="false">"ဆက်တင် တင်ပို့ရန်"</string>
+    <string name="config_export_summary" formatted="false">"လုပ်ဆောင်ချက်ဆက်တင်များကို ဖိုင်အဖြစ်သိမ်းရန်"</string>
+    <string name="config_exported" formatted="false">"ရွေးထားသောနေရာသို့ ဆက်တင်တင်ပို့ပြီးပြီ။ ဖိုင်တွင် သော့ချက်စကားလုံး၊ ဒေသနှင့် ဖိုင်တွဲဆက်တင်များ ပါနိုင်သည်။ လုံခြုံစွာ သိမ်းပါ။"</string>
+    <string name="config_import_confirm" formatted="true">"ဖိုင်တွင် ဆက်တင် %1$d ခု ပါသည်။ တင်သွင်းလျှင် လုပ်ဆောင်ချက်ဆက်တင်အားလုံးကို အစားထိုးပြီး မပါသောဆက်တင်များကို မူလတန်ဖိုး ပြန်ထားမည်။\n\nအက်ပ်ဘာသာစကား၊ အိုင်ကွန်၊ LSPosed ခွင့်ပြုချက်နှင့် TikTok ကိုက်ညီမှု ကက်ရှ်တို့ မပြောင်းပါ။ ဆက်လုပ်မလား။"</string>
+    <string name="config_overwrite" formatted="false">"အစားထိုးရန်"</string>
+    <string name="config_imported" formatted="false">"ဆက်တင်များ တင်သွင်းပြီး ပြင်ဆင်ပြီးပြီ။ အလုပ်လုပ်နေစဉ် အပ်ဒိတ်ပံ့ပိုးသော ပြောင်းလဲမှုများ ချက်ချင်းသက်ရောက်မည်။ အခြားပြောင်းလဲမှုများကို TikTok ပြန်ဖွင့်၍ စစ်ဆေးပါ။"</string>
+    <string name="config_processing" formatted="false">"ဆက်တင်များ ဆောင်ရွက်နေသည်"</string>
+    <string name="config_error_io" formatted="false">"ဖိုင်ကို မဖတ်နိုင် သို့မဟုတ် မရေးနိုင်ပါ။ ရွေးထားသောနေရာနှင့် နေရာလွတ်ကို စစ်ဆေးပါ။"</string>
+    <string name="config_error_permission" formatted="false">"ရွေးထားသောဖိုင်ကို ဝင်ရောက်ခွင့် မရှိပါ။ ပြန်ရွေးပါ။"</string>
+    <string name="config_error_invalid" formatted="false">"ဤဖိုင်သည် မှန်ကန်သော Toki ဆက်တင်ဖိုင် မဟုတ်ပါ။ ဆက်တင်တစ်ခုမျှ မတင်သွင်းခဲ့ပါ။"</string>
+    <string name="config_error_validation" formatted="true">"ဆက်တင်စစ်ဆေးမှု မအောင်မြင်ပါ: %1$s။ ဆက်တင်တစ်ခုမျှ မတင်သွင်းခဲ့ပါ။"</string>
+    <string name="config_error_commit" formatted="false">"ဆက်တင်သိမ်းမှုကို အတည်မပြုနိုင်ပါ။ ပြန်မကြိုးစားမီ Toki ကို ပြန်ဖွင့်၍ စစ်ဆေးပါ။"</string>
+    <string name="sponsor_title" formatted="false">"Toki ကို ပံ့ပိုးရန်"</string>
+    <string name="sponsor_kofi" formatted="false">"Ko-fi မှ ပံ့ပိုးရန်"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay ငွေပေးချေမှု QR ကုဒ်"</string>
+    <string name="sponsor_saving" formatted="false">"သိမ်းနေသည်…"</string>
+    <string name="sponsor_save_image" formatted="false">"ပုံ သိမ်းရန်"</string>
+    <string name="sponsor_image_hint" formatted="false">"မူရင်းပုံအပြည့်ကို သိမ်းပြီး ကုဒ်ဖတ်ရန် Alipay တွင် ထိုပုံကို ရွေးပါ။"</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT လိပ်စာ ကူးပြီးပြီ"</string>
+    <string name="sponsor_image_saved" formatted="false">"ရွေးထားသောနေရာတွင် ပုံသိမ်းပြီးပြီ"</string>
+    <string name="sponsor_error_io" formatted="false">"သိမ်းခြင်း မအောင်မြင်ပါ။ ရွေးထားသောနေရာနှင့် နေရာလွတ်ကို စစ်ဆေးပြီး ပြန်ကြိုးစားပါ။"</string>
+    <string name="sponsor_error_permission" formatted="false">"သိမ်းခြင်း မအောင်မြင်ပါ။ ဤနေရာတွင် ရေးခွင့်မရှိပါ။ အခြားနေရာ ရွေးပါ။"</string>
+    <string name="feature_filter_topics" formatted="false">"အကြံပြုထားသော ခေါင်းစဉ်များ ဖျောက်ရန်"</string>
+    <string name="feature_filter_creators" formatted="false">"အကြံပြုဖန်တီးသူများ ဖျောက်ရန်"</string>
+    <string name="host_scan_title_complete" formatted="false">"ရှာဖွေမှု ပြီးဆုံးပြီ"</string>
+    <string name="host_scan_title_failed" formatted="false">"ရှာဖွေမှု မအောင်မြင်ပါ"</string>
+    <string name="host_scan_restart_hint" formatted="false">"ရလဒ်များကို အသုံးပြုရန် TikTok ကို ကိုယ်တိုင် ပြန်လည်စတင်ပါ။"</string>
+    <string name="host_scan_failure_hint" formatted="false">"Toki တွင် လုပ်ဆောင်ချက် စစ်ဆေးမှုကို ကြည့်ပါ။"</string>
+    <string name="layout_title" formatted="false">"စာမျက်နှာ အပြင်အဆင်"</string>
+    <string name="layout_summary" formatted="false">"ဖျောက်လိုသည့် ခလုတ်များကို ရွေးပါ"</string>
+    <string name="layout_hint" formatted="false">"ပစ္စည်းကို ဖျောက်ရန် ခလုတ်ကို ဖွင့်ပါ"</string>
+    <string name="layout_top" formatted="false">"အပေါ်ဘား"</string>
+    <string name="layout_bottom" formatted="false">"အောက်ဘား"</string>
+    <string name="layout_side" formatted="false">"ဗီဒီယိုစာမျက်နှာ"</string>
+    <string name="layout_search" formatted="false">"ရှာဖွေရန်"</string>
+    <string name="layout_live" formatted="false">"တိုက်ရိုက်"</string>
+    <string name="layout_friends" formatted="false">"သူငယ်ချင်းများ"</string>
+    <string name="layout_following" formatted="false">"လိုက်ကြည့်နေသည်"</string>
+    <string name="layout_shop" formatted="false">"ဆိုင်"</string>
+    <string name="layout_for_you" formatted="false">"သင့်အတွက်"</string>
+    <string name="layout_nearby" formatted="false">"အနီးအနား"</string>
+    <string name="layout_stem" formatted="false">"သိပ္ပံ"</string>
+    <string name="layout_series" formatted="false">"ဇာတ်လမ်းတွဲများ"</string>
+    <string name="layout_home" formatted="false">"ပင်မ"</string>
+    <string name="layout_create" formatted="false">"ဖန်တီးရန်"</string>
+    <string name="layout_inbox" formatted="false">"စာအဝင်"</string>
+    <string name="layout_profile" formatted="false">"ပရိုဖိုင်"</string>
+    <string name="layout_discover" formatted="false">"ရှာဖွေတွေ့ရှိရန်"</string>
+    <string name="layout_avatar" formatted="false">"ပရိုဖိုင်ပုံ"</string>
+    <string name="layout_follow" formatted="false">"လိုက်ကြည့်ရန် ခလုတ်"</string>
+    <string name="layout_like" formatted="false">"နှစ်သက်"</string>
+    <string name="layout_comment" formatted="false">"မှတ်ချက်များ"</string>
+    <string name="layout_favorite" formatted="false">"အကြိုက်ဆုံးများ"</string>
+    <string name="layout_share" formatted="false">"မျှဝေရန်"</string>
+    <string name="layout_music" formatted="false">"တေးဂီတအခွေ"</string>
+    <string name="layout_explore" formatted="false">"လေ့လာရန်"</string>
+    <string name="layout_author" formatted="false">"ဖန်တီးသူ အချက်အလက်"</string>
+    <string name="layout_description" formatted="false">"ဖော်ပြချက်"</string>
+    <string name="layout_music_title" formatted="false">"တေးဂီတ ခေါင်းစဉ်"</string>
+    <string name="layout_tags" formatted="false">"အချက်အလက် အညွှန်းများ"</string>
+    <string name="layout_search_label" formatted="false">"ရှာဖွေမှု အကြံပြုချက်"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"အလိုအလျောက်ရွှေ့ခြင်း ရပ်ရန်ခလုတ်"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"အကြွေစေ့နှင့် ဆုများ"</string>
+    <string name="layout_quick_comment" formatted="false">"အမြန်မှတ်ချက်"</string>
+    <string name="layout_playlist" formatted="false">"ဖွင့်ရန်စာရင်း"</string>
+    <string name="layout_creation_buttons" formatted="false">"ဖန်တီးမှု ဖြတ်လမ်းများ"</string>
+    <string name="layout_live_notice" formatted="false">"LIVE သတိပေးချက်များ"</string>
+    <string name="layout_opacity" formatted="false">"အလင်းပိတ်မှု"</string>
+    <string name="feature_background_audio">"နောက်ခံအသံ ဖွင့်ခွင့်ပြုရန်"</string>
+    <string name="layout_landscape">"မျက်နှာပြင်အပြည့် ခလုတ်"</string>
+    <string name="layout_photo_indicators">"ဓာတ်ပုံအညွှန်းနှင့် အကြံပြုချက်များ"</string>
+    <string name="layout_quick_message">"အမြန်စာတိုနှင့် မျှဝေသူ"</string>
+    <string name="layout_user_card">"အကြံပြုအကောင့်များ"</string>
+    <string name="layout_survey">"စစ်တမ်းနှင့် တုံ့ပြန်ချက်"</string>
+    <string name="layout_ad_cards">"ကုန်ပစ္စည်းနှင့် ကြော်ငြာကတ်များ"</string>
+    <string name="layout_bottom_banners">"အခြားအောက်ခြေဘန်နာများ"</string>
+    <string name="layout_activities">"ပွဲအစီအစဉ် ဝင်ပေါက်"</string>
+    <string name="host_scan_title_running" formatted="false">"မက်သဒ်များကို ရှာဖွေနေသည်"</string>
+    <string name="host_scan_title_saving" formatted="false">"ရလဒ်များကို သိမ်းဆည်းနေသည်"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"TikTok ကို ရှေ့မျက်နှာပြင်တွင် ဖွင့်ထားပါ။"</string>
+    <string name="host_scan_saving_hint" formatted="false">"ခဏစောင့်ပါ။"</string>
+    <string name="host_scan_done" formatted="false">"နားလည်ပါပြီ"</string>
+    <string name="video_fit_center" formatted="false">"အလယ်တွင်"</string>
+    <string name="video_fit_smart" formatted="false">"မျက်နှာပြင်အပြည့်"</string>
+</resources>

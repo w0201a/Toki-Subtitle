@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"ホーム"</string>
+    <string name="nav_features" formatted="false">"機能"</string>
+    <string name="page_features" formatted="false">"設定"</string>
+    <string name="page_hook_status" formatted="false">"機能の状態"</string>
+    <string name="nav_back" formatted="false">"戻る"</string>
+    <string name="restart_tiktok" formatted="false">"TikTok を再起動"</string>
+    <string name="restart_root_required" formatted="false">"Toki に root 権限を付与してください"</string>
+    <string name="language_title" formatted="false">"表示言語"</string>
+    <string name="language_system" formatted="false">"システム設定に従う"</string>
+    <string name="language_search" formatted="false">"言語を検索"</string>
+    <string name="language_clear_search" formatted="false">"検索をクリア"</string>
+    <string name="language_no_results" formatted="false">"一致する言語がありません"</string>
+    <string name="common_save" formatted="false">"保存"</string>
+    <string name="common_cancel" formatted="false">"キャンセル"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"閉じる"</string>
+    <string name="common_open" formatted="false">"開く"</string>
+    <string name="common_copy" formatted="false">"コピー"</string>
+    <string name="common_add" formatted="false">"追加"</string>
+    <string name="common_delete" formatted="false">"削除"</string>
+    <string name="common_done" formatted="false">"完了"</string>
+    <string name="common_save_apply" formatted="false">"適用"</string>
+    <string name="common_unknown" formatted="false">"不明"</string>
+    <string name="common_custom" formatted="false">"カスタム"</string>
+    <string name="home_icon_hidden" formatted="false">"アイコンを非表示にしました"</string>
+    <string name="home_icon_restored" formatted="false">"アイコンを再表示しました"</string>
+    <string name="home_activated" formatted="false">"有効"</string>
+    <string name="home_inactive" formatted="false">"無効"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosed での有効化が確認できません"</string>
+    <string name="home_host_section" formatted="false">"TikTok の対応状況"</string>
+    <string name="home_host_current" formatted="false">"インストール済みの TikTok"</string>
+    <string name="home_host_missing" formatted="false">"対応する TikTok が端末にインストールされていません"</string>
+    <string name="home_host_not_installed" formatted="false">"未インストール"</string>
+    <string name="home_supported_versions" formatted="false">"対応バージョン"</string>
+    <string name="home_community" formatted="false">"コミュニティ"</string>
+    <string name="home_github" formatted="false">"GitHub リポジトリ"</string>
+    <string name="home_telegram" formatted="false">"Telegram グループ"</string>
+    <string name="home_preferences" formatted="false">"設定"</string>
+    <string name="home_hide_icon" formatted="false">"ホーム画面のアイコンを隠す"</string>
+    <string name="home_hide_icon_summary" formatted="false">"非表示後は LSPosed マネージャーから開けます"</string>
+    <string name="home_support" formatted="false">"開発を支援"</string>
+    <string name="home_support_summary" formatted="false">"継続的な保守と機能改善を支援します"</string>
+    <string name="feature_region_section" formatted="false">"地域と環境の偽装"</string>
+    <string name="feature_playback_section" formatted="false">"再生"</string>
+    <string name="feature_progress" formatted="false">"シークバーを常に表示"</string>
+    <string name="feature_progress_summary" formatted="false">"短い動画でも下部のシークバーを表示します"</string>
+    <string name="feature_immersive" formatted="false">"動画の表示"</string>
+    <string name="feature_autoplay" formatted="false">"自動スクロールの拡張"</string>
+    <string name="feature_autoplay_summary" formatted="false">"すべての動画で、長押しメニューの自動スクロールを解放"</string>
+    <string name="feature_status_bar" formatted="false">"システムのステータスバーを隠す"</string>
+    <string name="feature_media_section" formatted="false">"保存・ツール"</string>
+    <string name="feature_download" formatted="false">"透かしなしで保存"</string>
+    <string name="feature_download_summary" formatted="false">"長押しまたは共有メニューから透かしなしの元動画を保存します"</string>
+    <string name="feature_music" formatted="false">"音声の制限を解除"</string>
+    <string name="feature_music_summary" formatted="false">"著作権や地域による制限を解除して音声を再生します"</string>
+    <string name="feature_author_region" formatted="false">"投稿者の地域を表示"</string>
+    <string name="feature_author_region_summary" formatted="false">"投稿者名の横に国・地域の旗とコードを表示します"</string>
+    <string name="feature_copy_comment" formatted="false">"本文のみコピー"</string>
+    <string name="feature_video_translation" formatted="false">"字幕と翻訳のメニュー"</string>
+    <string name="feature_video_translation_summary" formatted="false">"長押しメニューに項目を表示"</string>
+    <string name="feature_comment_translation" formatted="false">"コメントを翻訳"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"コメント欄に翻訳ボタンを追加し、外国語のコメントをまとめて翻訳します"</string>
+    <string name="feature_filter_section" formatted="false">"フィードのフィルター"</string>
+    <string name="feature_remove_ads" formatted="false">"フィードの広告を除去"</string>
+    <string name="feature_remove_live" formatted="false">"おすすめの LIVE を除外"</string>
+    <string name="feature_remove_photos" formatted="false">"おすすめの写真投稿を除外"</string>
+    <string name="feature_filter_views" formatted="false">"再生数フィルター"</string>
+    <string name="feature_filter_likes" formatted="false">"いいね数フィルター"</string>
+    <string name="feature_filter_duration" formatted="false">"長さフィルター"</string>
+    <string name="feature_filter_keywords" formatted="false">"キーワードフィルター"</string>
+    <string name="feature_block_offline" formatted="false">"オフライン動画をブロック"</string>
+    <string name="feature_block_offline_summary" formatted="false">"接続が不安定なときに事前読み込み済みの動画が挿入されるのを防ぎます"</string>
+    <string name="feature_remove_ai" formatted="false">"AI 生成コンテンツを除外"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"TikTok が AI 生成と表示した動画を除外します"</string>
+    <string name="filter_metric_views" formatted="false">"再生数"</string>
+    <string name="filter_metric_likes" formatted="false">"いいね数"</string>
+    <string name="filter_metric_duration" formatted="false">"長さ"</string>
+    <string name="filter_unit_seconds" formatted="false">"秒"</string>
+    <string name="filter_views_saved" formatted="false">"再生数の範囲を保存しました"</string>
+    <string name="filter_likes_saved" formatted="false">"いいね数の範囲を保存しました"</string>
+    <string name="filter_duration_saved" formatted="false">"動画の長さの範囲を保存しました"</string>
+    <string name="download_path_saved" formatted="false">"保存先を更新しました"</string>
+    <string name="region_spoof_title" formatted="false">"地域と SIM の偽装"</string>
+    <string name="region_current" formatted="false">"現在の設定"</string>
+    <string name="region_target" formatted="true">"対象地域：%1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"通信事業者：%1$s"</string>
+    <string name="region_operator_code" formatted="true">"通信事業者コード：%1$s"</string>
+    <string name="region_select_preset" formatted="false">"プリセット"</string>
+    <string name="region_custom_parameters" formatted="false">"カスタム"</string>
+    <string name="language_spoof" formatted="false">"言語の偽装"</string>
+    <string name="environment_follow_region" formatted="false">"地域に合わせる"</string>
+    <string name="language_effective" formatted="true">"適用される言語：%1$s"</string>
+    <string name="language_custom" formatted="false">"言語を指定"</string>
+    <string name="timezone_spoof" formatted="false">"タイムゾーンの偽装"</string>
+    <string name="timezone_effective" formatted="true">"適用されるタイムゾーン：%1$s"</string>
+    <string name="timezone_custom" formatted="false">"タイムゾーンを指定"</string>
+    <string name="gps_spoof" formatted="false">"位置情報の偽装"</string>
+    <string name="gps_effective" formatted="true">"適用される座標：%1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"緯度と経度を指定"</string>
+    <string name="speed_fixed" formatted="false">"再生速度を維持"</string>
+    <string name="speed_fixed_summary" formatted="false">"長押しメニューで選んだ速度を、動画を切り替えても維持します"</string>
+    <string name="speed_expand" formatted="false">"速度の選択肢を追加"</string>
+    <string name="speed_options_hint" formatted="false">"再生速度（タップして編集・削除）"</string>
+    <string name="speed_add_option" formatted="false">"+ 再生速度を追加"</string>
+    <string name="speed_restore" formatted="false">"初期値に戻す"</string>
+    <string name="clean_on_play" formatted="false">"再生中は操作表示を隠す"</string>
+    <string name="clean_keep_progress" formatted="false">"シークバーを残す"</string>
+    <string name="download_paths" formatted="false">"保存先"</string>
+    <string name="download_paths_summary" formatted="true">"動画：%1$s · 画像：%2$s"</string>
+    <string name="filter_range_both" formatted="true">"%1$sが %2$d%4$s～%3$d%4$s の動画を残す"</string>
+    <string name="filter_range_min" formatted="true">"%1$sが %2$d%3$s 以上の動画を残す"</string>
+    <string name="filter_range_max" formatted="true">"%1$sが %2$d%3$s 以下の動画を残す"</string>
+    <string name="filter_range_unset" formatted="false">"範囲未設定（タップして下限・上限を設定）"</string>
+    <string name="keyword_unset" formatted="false">"ルール未設定（タップして分類別に管理）"</string>
+    <string name="keyword_summary" formatted="true">"有効：%1$s"</string>
+    <string name="keyword_description_count" formatted="true">"説明文 %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"ハッシュタグ %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"投稿者 %1$d"</string>
+    <string name="keyword_description" formatted="false">"説明文"</string>
+    <string name="keyword_tag" formatted="false">"ハッシュタグ"</string>
+    <string name="keyword_author" formatted="false">"投稿者"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"%1$sのルールはありません。上の欄から追加してください"</string>
+    <string name="duration_alert_title" formatted="false">"長い動画の長さを通知"</string>
+    <string name="duration_alert_summary" formatted="true">"現在のしきい値：%1$s 分以上"</string>
+    <string name="download_video_path" formatted="false">"動画の保存先"</string>
+    <string name="download_image_path" formatted="false">"画像の保存先"</string>
+    <string name="download_path_hint" formatted="false">"最上位のフォルダには Movies、Pictures、DCIM などの共有メディアフォルダを指定してください。無効なパスはシステムの初期値に戻ります"</string>
+    <string name="views_range_title" formatted="false">"再生数の範囲"</string>
+    <string name="views_range_min" formatted="false">"再生数の下限（0 = 制限なし）"</string>
+    <string name="views_range_max" formatted="false">"再生数の上限（0 = 制限なし）"</string>
+    <string name="views_range_hint" formatted="false">"範囲内の再生数の動画のみ残します。両方を 0 にすると除外しません"</string>
+    <string name="likes_range_title" formatted="false">"いいね数の範囲"</string>
+    <string name="likes_range_min" formatted="false">"いいね数の下限（0 = 制限なし）"</string>
+    <string name="likes_range_max" formatted="false">"いいね数の上限（0 = 制限なし）"</string>
+    <string name="likes_range_hint" formatted="false">"範囲内のいいね数の動画のみ残します。両方を 0 にすると除外しません"</string>
+    <string name="duration_range_title" formatted="false">"動画の長さの範囲"</string>
+    <string name="duration_range_min" formatted="false">"長さの下限（秒、0 = 制限なし）"</string>
+    <string name="duration_range_max" formatted="false">"長さの上限（秒、0 = 制限なし）"</string>
+    <string name="duration_range_hint" formatted="false">"指定した長さのおすすめ動画のみ残します。両方を 0 にすると除外しません。写真投稿は対象外です"</string>
+    <string name="keyword_manage" formatted="false">"フィルタールール"</string>
+    <string name="keyword_description_hint" formatted="false">"動画の説明文に一致する語句を除外します。大文字と小文字は区別しません。"</string>
+    <string name="keyword_tag_hint" formatted="false">"ハッシュタグに一致させます。先頭の # は不要です。"</string>
+    <string name="keyword_author_hint" formatted="false">"投稿者の表示名または固有のユーザー名に一致させます。先頭の @ は不要です。"</string>
+    <string name="keyword_description_input" formatted="false">"単語・フレーズ"</string>
+    <string name="keyword_tag_input" formatted="false">"ハッシュタグ"</string>
+    <string name="keyword_author_input" formatted="false">"表示名・ユーザー名"</string>
+    <string name="keyword_add" formatted="false">"ルールを追加"</string>
+    <string name="keyword_delete" formatted="false">"ルールを削除"</string>
+    <string name="region_select_title" formatted="false">"地域を選択"</string>
+    <string name="region_search" formatted="false">"国名、英語名、地域コードで検索"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · 通信事業者コード：%2$s"</string>
+    <string name="region_custom_title" formatted="false">"地域と SIM を指定"</string>
+    <string name="region_custom_hint" formatted="false">"プリセットに制限されず、国コードと通信事業者情報を指定します。"</string>
+    <string name="region_code_input" formatted="false">"国・地域コード（例：JP, US, TH）"</string>
+    <string name="region_operator_code_input" formatted="false">"通信事業者コード（例：44010, 52001）"</string>
+    <string name="region_operator_name_input" formatted="false">"通信事業者名（例：NTT DOCOMO, AIS）"</string>
+    <string name="language_custom_hint" formatted="false">"よく使う言語を選択するか、言語コードを入力してください。"</string>
+    <string name="language_code_input" formatted="false">"言語コード（例：ja-JP, en-US）"</string>
+    <string name="language_presets" formatted="false">"よく使う言語："</string>
+    <string name="timezone_custom_hint" formatted="false">"都市のタイムゾーンを選択するか、タイムゾーン名を入力してください。"</string>
+    <string name="timezone_input" formatted="false">"タイムゾーン名（例：Asia/Tokyo）"</string>
+    <string name="timezone_presets" formatted="false">"よく使う都市のタイムゾーン："</string>
+    <string name="city_tokyo" formatted="false">"東京"</string>
+    <string name="city_taipei" formatted="false">"台北"</string>
+    <string name="city_hong_kong" formatted="false">"香港"</string>
+    <string name="city_new_york" formatted="false">"ニューヨーク"</string>
+    <string name="city_london" formatted="false">"ロンドン"</string>
+    <string name="city_seoul" formatted="false">"ソウル"</string>
+    <string name="city_bangkok" formatted="false">"バンコク"</string>
+    <string name="city_singapore" formatted="false">"シンガポール"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"位置の座標を指定"</string>
+    <string name="gps_custom_hint" formatted="false">"都市を選択するか、緯度と経度を入力してください。"</string>
+    <string name="gps_latitude" formatted="false">"緯度（-90.0～90.0）"</string>
+    <string name="gps_longitude" formatted="false">"経度（-180.0～180.0）"</string>
+    <string name="gps_presets" formatted="false">"よく使う都市："</string>
+    <string name="speed_add_title" formatted="false">"速度を追加"</string>
+    <string name="speed_input" formatted="false">"再生速度"</string>
+    <string name="speed_invalid" formatted="false">"有効な数値を入力してください"</string>
+    <string name="speed_out_of_range" formatted="true">"%1$sx～%2$sx のみ対応"</string>
+    <string name="speed_range" formatted="true">"対応範囲：%1$sx～%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"速度を編集"</string>
+    <string name="duration_threshold_title" formatted="false">"長い動画の通知"</string>
+    <string name="duration_threshold_hint" formatted="false">"動画の長さがこの値以上の場合、再生開始時に動画の長さを分単位で通知します。"</string>
+    <string name="duration_threshold_input" formatted="false">"長さのしきい値（分）"</string>
+    <string name="duration_threshold_example" formatted="false">"例：3 または 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"0 より大きい有効な分数を入力してください"</string>
+    <string name="duration_threshold_current" formatted="true">"現在の設定：動画が %1$s 分以上の場合に通知"</string>
+    <string name="duration_threshold_presets" formatted="false">"おすすめの長さ："</string>
+    <string name="status_feature_feed" formatted="false">"フィードフィルター"</string>
+    <string name="status_feature_speed" formatted="false">"再生速度"</string>
+    <string name="status_feature_progress" formatted="false">"シークバー"</string>
+    <string name="status_feature_clean" formatted="false">"操作表示を自動で隠す"</string>
+    <string name="status_feature_immersive" formatted="false">"動画の表示"</string>
+    <string name="status_feature_scroll" formatted="false">"自動スクロール"</string>
+    <string name="status_feature_duration" formatted="false">"長さの通知"</string>
+    <string name="status_feature_comment_translate" formatted="false">"コメント翻訳"</string>
+    <string name="status_feature_video_translate" formatted="false">"字幕と翻訳のメニュー"</string>
+    <string name="status_feature_comment_copy" formatted="false">"コメントコピー"</string>
+    <string name="status_feature_author" formatted="false">"投稿者の地域"</string>
+    <string name="status_feature_download" formatted="false">"動画保存"</string>
+    <string name="status_feature_music" formatted="false">"音声の制限"</string>
+    <string name="status_feature_sim" formatted="false">"SIM・国"</string>
+    <string name="status_feature_language" formatted="false">"言語"</string>
+    <string name="status_feature_timezone" formatted="false">"タイムゾーン"</string>
+    <string name="status_feature_gps" formatted="false">"位置情報"</string>
+    <string name="status_feature_bar" formatted="false">"ステータスバー"</string>
+    <string name="status_normal" formatted="false">"正常"</string>
+    <string name="status_issue" formatted="false">"問題あり"</string>
+    <string name="status_disabled" formatted="false">"オフ"</string>
+    <string name="status_pending" formatted="false">"未確認"</string>
+    <string name="status_problem_disabled" formatted="false">"オフですが、エラーの記録があります"</string>
+    <string name="status_problem_unavailable" formatted="false">"一時的に利用不可"</string>
+    <string name="status_problem_runtime" formatted="false">"実行時エラー"</string>
+    <string name="status_problem_speed_menu" formatted="false">"速度メニューが利用不可"</string>
+    <string name="status_prepare_failed" formatted="false">"機能の準備に失敗しました。TikTok を開き直して確認してください。"</string>
+    <string name="status_preparing" formatted="false">"機能を準備しています。しばらくお待ちください。"</string>
+    <string name="status_prepared" formatted="false">"準備が完了しました。TikTok を開き直してください。"</string>
+    <string name="status_read_failed" formatted="false">"現在状態を読み取れません。後でもう一度確認してください。"</string>
+    <string name="status_update_failed" formatted="false">"現在状態を更新できません。直近の結果を表示しています。"</string>
+    <string name="status_reading" formatted="false">"状態を読み込み中"</string>
+    <string name="status_empty" formatted="false">"実行記録がありません。LSPosed で Toki を有効にし、TikTok を開いてから確認してください。"</string>
+    <string name="status_report_note" formatted="true">"最新の報告：%1$s\n「正常」は機能の準備が完了し、エラーが報告されていない状態です。"</string>
+    <string name="config_section" formatted="false">"設定の管理"</string>
+    <string name="config_import" formatted="false">"設定をインポート"</string>
+    <string name="config_import_summary" formatted="false">"ファイルから機能設定を復元"</string>
+    <string name="config_export" formatted="false">"設定をエクスポート"</string>
+    <string name="config_export_summary" formatted="false">"機能設定をファイルに保存"</string>
+    <string name="config_exported" formatted="false">"選択した場所に設定をエクスポートしました。キーワード、地域、フォルダ設定が含まれる場合があるため、大切に保管してください。"</string>
+    <string name="config_import_confirm" formatted="true">"ファイル内の設定数：%1$d。インポートするとすべての機能設定が置き換わり、含まれない項目は初期値に戻ります。\n\n表示言語、アプリアイコン、LSPosed の認証、TikTok の互換性キャッシュは変更しません。続行しますか？"</string>
+    <string name="config_overwrite" formatted="false">"置き換える"</string>
+    <string name="config_imported" formatted="false">"設定をインポートし、機能ページに反映しました。即時更新に対応した機能には直ちに適用されます。ほかの機能は TikTok を開き直して確認してください。"</string>
+    <string name="config_processing" formatted="false">"設定を処理中"</string>
+    <string name="config_error_io" formatted="false">"ファイルの読み書きに失敗しました。保存先と空き容量を確認してください。"</string>
+    <string name="config_error_permission" formatted="false">"選択したファイルへのアクセス権がありません。選択し直してください。"</string>
+    <string name="config_error_invalid" formatted="false">"有効な Toki 設定ファイルではありません。設定はインポートされていません。"</string>
+    <string name="config_error_validation" formatted="true">"設定の検証に失敗しました：%1$s。設定はインポートされていません。"</string>
+    <string name="config_error_commit" formatted="false">"設定の適用を確認できません。Toki を開き直して確認してから再試行してください。"</string>
+    <string name="sponsor_title" formatted="false">"開発者を支援"</string>
+    <string name="sponsor_kofi" formatted="false">"Ko-fi で支援"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay の支払い用 QR コード"</string>
+    <string name="sponsor_saving" formatted="false">"保存中…"</string>
+    <string name="sponsor_save_image" formatted="false">"画像を保存"</string>
+    <string name="sponsor_image_hint" formatted="false">"元画像を保存し、Alipay アプリで保存した画像を選択して読み取れます。"</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT アドレスをコピーしました"</string>
+    <string name="sponsor_image_saved" formatted="false">"選択した場所に画像を保存しました"</string>
+    <string name="sponsor_error_io" formatted="false">"保存に失敗しました。保存先と空き容量を確認して再試行してください。"</string>
+    <string name="sponsor_error_permission" formatted="false">"保存に失敗しました。この場所への書き込み権限がありません。選択し直してください。"</string>
+    <string name="feature_filter_topics" formatted="false">"おすすめ話題を非表示"</string>
+    <string name="feature_filter_creators" formatted="false">"おすすめ投稿者を非表示"</string>
+    <string name="host_scan_title_complete" formatted="false">"検索完了"</string>
+    <string name="host_scan_title_failed" formatted="false">"検索失敗"</string>
+    <string name="host_scan_restart_hint" formatted="false">"結果を適用するには、TikTok を手動で再起動してください。"</string>
+    <string name="host_scan_failure_hint" formatted="false">"Toki で機能の診断を確認してください。"</string>
+    <string name="layout_title" formatted="false">"画面レイアウト"</string>
+    <string name="layout_summary" formatted="false">"非表示にする項目を選択"</string>
+    <string name="layout_hint" formatted="false">"スイッチをオンにすると項目を非表示にします"</string>
+    <string name="layout_top" formatted="false">"上部バー"</string>
+    <string name="layout_bottom" formatted="false">"下部バー"</string>
+    <string name="layout_side" formatted="false">"動画ページ"</string>
+    <string name="layout_search" formatted="false">"検索"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"友達"</string>
+    <string name="layout_following" formatted="false">"フォロー中"</string>
+    <string name="layout_shop" formatted="false">"ショップ"</string>
+    <string name="layout_for_you" formatted="false">"おすすめ"</string>
+    <string name="layout_nearby" formatted="false">"近く"</string>
+    <string name="layout_stem" formatted="false">"科学"</string>
+    <string name="layout_series" formatted="false">"シリーズ"</string>
+    <string name="layout_home" formatted="false">"ホーム"</string>
+    <string name="layout_create" formatted="false">"投稿"</string>
+    <string name="layout_inbox" formatted="false">"メッセージ"</string>
+    <string name="layout_profile" formatted="false">"プロフィール"</string>
+    <string name="layout_discover" formatted="false">"見つける"</string>
+    <string name="layout_avatar" formatted="false">"アバター"</string>
+    <string name="layout_follow" formatted="false">"フォローボタン"</string>
+    <string name="layout_like" formatted="false">"いいね"</string>
+    <string name="layout_comment" formatted="false">"コメント"</string>
+    <string name="layout_favorite" formatted="false">"セーブ"</string>
+    <string name="layout_share" formatted="false">"シェア"</string>
+    <string name="layout_music" formatted="false">"楽曲アイコン"</string>
+    <string name="layout_explore" formatted="false">"探索"</string>
+    <string name="layout_author" formatted="false">"投稿者情報"</string>
+    <string name="layout_description" formatted="false">"説明文"</string>
+    <string name="layout_music_title" formatted="false">"楽曲情報"</string>
+    <string name="layout_tags" formatted="false">"情報ラベル"</string>
+    <string name="layout_search_label" formatted="false">"検索候補"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"自動スクロール停止ボタン"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"コイン・報酬"</string>
+    <string name="layout_quick_comment" formatted="false">"クイックコメント"</string>
+    <string name="layout_playlist" formatted="false">"プレイリスト"</string>
+    <string name="layout_creation_buttons" formatted="false">"作成ショートカット"</string>
+    <string name="layout_live_notice" formatted="false">"LIVEリマインダー"</string>
+    <string name="layout_opacity" formatted="false">"不透明度"</string>
+    <string name="feature_background_audio">"バックグラウンド音声を解放"</string>
+    <string name="layout_landscape">"全画面ボタン"</string>
+    <string name="layout_photo_indicators">"写真の表示位置・スワイプ案内"</string>
+    <string name="layout_quick_message">"クイックメッセージ・共有元"</string>
+    <string name="layout_user_card">"おすすめユーザーカード"</string>
+    <string name="layout_survey">"アンケート・フィードバック"</string>
+    <string name="layout_ad_cards">"商品・広告カード"</string>
+    <string name="layout_bottom_banners">"その他の下部バナー"</string>
+    <string name="layout_activities">"イベントへの入口"</string>
+    <string name="host_scan_title_running" formatted="false">"メソッドを検索中"</string>
+    <string name="host_scan_title_saving" formatted="false">"結果を保存中"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"TikTok を前面に表示したままにしてください。"</string>
+    <string name="host_scan_saving_hint" formatted="false">"お待ちください。"</string>
+    <string name="host_scan_done" formatted="false">"わかりました"</string>
+    <string name="video_fit_center" formatted="false">"中央表示"</string>
+    <string name="video_fit_smart" formatted="false">"全画面表示"</string>
+</resources>

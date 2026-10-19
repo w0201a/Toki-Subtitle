@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Kreu"</string>
+    <string name="nav_features" formatted="false">"Veçoritë"</string>
+    <string name="page_features" formatted="false">"Cilësimet"</string>
+    <string name="page_hook_status" formatted="false">"Gjendja e veçorive"</string>
+    <string name="nav_back" formatted="false">"Prapa"</string>
+    <string name="restart_tiktok" formatted="false">"Rinis TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Jepi Toki qasje root."</string>
+    <string name="language_title" formatted="false">"Gjuha e aplikacionit"</string>
+    <string name="language_system" formatted="false">"Ndiq sistemin"</string>
+    <string name="language_search" formatted="false">"Kërko gjuhë"</string>
+    <string name="language_clear_search" formatted="false">"Pastro kërkimin"</string>
+    <string name="language_no_results" formatted="false">"Nuk u gjet gjuhë përkatëse"</string>
+    <string name="common_save" formatted="false">"Ruaj"</string>
+    <string name="common_cancel" formatted="false">"Anulo"</string>
+    <string name="common_confirm" formatted="false">"Në rregull"</string>
+    <string name="common_close" formatted="false">"Mbyll"</string>
+    <string name="common_open" formatted="false">"Hap"</string>
+    <string name="common_copy" formatted="false">"Kopjo"</string>
+    <string name="common_add" formatted="false">"Shto"</string>
+    <string name="common_delete" formatted="false">"Fshi"</string>
+    <string name="common_done" formatted="false">"U krye"</string>
+    <string name="common_save_apply" formatted="false">"Zbato"</string>
+    <string name="common_unknown" formatted="false">"E panjohur"</string>
+    <string name="common_custom" formatted="false">"E personalizuar"</string>
+    <string name="home_icon_hidden" formatted="false">"Ikona e aplikacionit u fsheh"</string>
+    <string name="home_icon_restored" formatted="false">"Ikona e aplikacionit u rikthye"</string>
+    <string name="home_activated" formatted="false">"Aktivizuar"</string>
+    <string name="home_inactive" formatted="false">"Jo i aktivizuar"</string>
+    <string name="home_activation_missing" formatted="false">"Nuk u zbulua aktivizim në LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Përputhshmëria me TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok i instaluar"</string>
+    <string name="home_host_missing" formatted="false">"Nuk u gjet një instalim i mbështetur i TikTok në pajisje"</string>
+    <string name="home_host_not_installed" formatted="false">"Jo i instaluar"</string>
+    <string name="home_supported_versions" formatted="false">"Versionet e mbështetura"</string>
+    <string name="home_community" formatted="false">"Komuniteti"</string>
+    <string name="home_github" formatted="false">"Depoja GitHub"</string>
+    <string name="home_telegram" formatted="false">"Grupi Telegram"</string>
+    <string name="home_preferences" formatted="false">"Preferencat"</string>
+    <string name="home_hide_icon" formatted="false">"Fshih ikonën e aplikacionit"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Kur ikona është e fshehur, hape Toki përmes menaxherit LSPosed"</string>
+    <string name="home_support" formatted="false">"Mbështet zhvillimin"</string>
+    <string name="home_support_summary" formatted="false">"Mbështet mirëmbajtjen dhe përmirësimet e vazhdueshme"</string>
+    <string name="feature_region_section" formatted="false">"Simulimi i rajonit dhe mjedisit"</string>
+    <string name="feature_playback_section" formatted="false">"Luajtja"</string>
+    <string name="feature_progress" formatted="false">"Shfaq gjithmonë shiritin e ecurisë"</string>
+    <string name="feature_progress_summary" formatted="false">"Mbaje shiritin e ecurisë të dukshëm edhe në video të shkurtra"</string>
+    <string name="feature_immersive" formatted="false">"Shfaqja e videos"</string>
+    <string name="feature_autoplay" formatted="false">"Lëvizje automatike e përmirësuar"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Zhbllokon lëvizjen automatike në menynë e çdo videoje"</string>
+    <string name="feature_status_bar" formatted="false">"Fshih shiritin e gjendjes së sistemit"</string>
+    <string name="feature_media_section" formatted="false">"Shkarkime dhe mjete"</string>
+    <string name="feature_download" formatted="false">"Shkarkime pa shenjë uji"</string>
+    <string name="feature_download_summary" formatted="false">"Ruaj videon origjinale pa shenjë uji nga menyja e shtypjes së gjatë ose e ndarjes"</string>
+    <string name="feature_music" formatted="false">"Zhblloko audion"</string>
+    <string name="feature_music_summary" formatted="false">"Rikthe luajtjen e audios të kufizuar nga licencimi ose rajoni"</string>
+    <string name="feature_author_region" formatted="false">"Shfaq rajonin e krijuesit"</string>
+    <string name="feature_author_region_summary" formatted="false">"Shfaq flamurin dhe kodin e shtetit ose rajonit pranë emrit të krijuesit"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopjo vetëm tekstin"</string>
+    <string name="feature_video_translation" formatted="false">"Menyja e titrave dhe përkthimit"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Shfaq opsionin në menynë e shtypjes së gjatë"</string>
+    <string name="feature_comment_translation" formatted="false">"Përkthe komentet"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Shto një buton për të përkthyer së bashku komentet në gjuhë të huaja"</string>
+    <string name="feature_filter_section" formatted="false">"Filtrimi i rrjedhës"</string>
+    <string name="feature_remove_ads" formatted="false">"Hiq reklamat nga rrjedha"</string>
+    <string name="feature_remove_live" formatted="false">"Filtro transmetime live të rekomanduara"</string>
+    <string name="feature_remove_photos" formatted="false">"Filtro fotot e rekomanduara"</string>
+    <string name="feature_filter_views" formatted="false">"Filtër shikimesh"</string>
+    <string name="feature_filter_likes" formatted="false">"Filtër pëlqimesh"</string>
+    <string name="feature_filter_duration" formatted="false">"Filtër kohëzgjatjeje"</string>
+    <string name="feature_filter_keywords" formatted="false">"Filtër fjalësh kyçe"</string>
+    <string name="feature_block_offline" formatted="false">"Blloko videot jashtë linje"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Pengon futjen e videove të parangarkuara jashtë linje kur lidhja është e dobët"</string>
+    <string name="feature_remove_ai" formatted="false">"Hiq përmbajtjen e krijuar nga IA"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtro videot që TikTok i shënon si të krijuara nga IA"</string>
+    <string name="filter_metric_views" formatted="false">"shikime"</string>
+    <string name="filter_metric_likes" formatted="false">"pëlqime"</string>
+    <string name="filter_metric_duration" formatted="false">"kohëzgjatje"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Intervali i shikimeve u ruajt"</string>
+    <string name="filter_likes_saved" formatted="false">"Intervali i pëlqimeve u ruajt"</string>
+    <string name="filter_duration_saved" formatted="false">"Intervali i kohëzgjatjes u ruajt"</string>
+    <string name="download_path_saved" formatted="false">"Shtigjet e personalizuara të ruajtjes u përditësuan"</string>
+    <string name="region_spoof_title" formatted="false">"Simulimi i rajonit dhe SIM"</string>
+    <string name="region_current" formatted="false">"Konfigurimi aktual"</string>
+    <string name="region_target" formatted="true">"Rajoni i synuar: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operatori: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Kodi i operatorit: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Paracaktime"</string>
+    <string name="region_custom_parameters" formatted="false">"Personalizo"</string>
+    <string name="language_spoof" formatted="false">"Simulimi i gjuhës"</string>
+    <string name="environment_follow_region" formatted="false">"Sipas rajonit"</string>
+    <string name="language_effective" formatted="true">"Gjuha në përdorim: %1$s"</string>
+    <string name="language_custom" formatted="false">"Gjuhë e personalizuar"</string>
+    <string name="timezone_spoof" formatted="false">"Simulimi i zonës kohore"</string>
+    <string name="timezone_effective" formatted="true">"Zona kohore në përdorim: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Zonë kohore e personalizuar"</string>
+    <string name="gps_spoof" formatted="false">"Simulimi i vendndodhjes"</string>
+    <string name="gps_effective" formatted="true">"Koordinatat në përdorim: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Koordinata të personalizuara"</string>
+    <string name="speed_fixed" formatted="false">"Mbaj shpejtësinë"</string>
+    <string name="speed_fixed_summary" formatted="false">"Mbaj shpejtësinë e zgjedhur në menynë e shtypjes së gjatë kur ndërron video"</string>
+    <string name="speed_expand" formatted="false">"Më shumë shpejtësi"</string>
+    <string name="speed_options_hint" formatted="false">"Shpejtësitë (prek për të ndryshuar ose fshirë)"</string>
+    <string name="speed_add_option" formatted="false">"+ Shto shpejtësi"</string>
+    <string name="speed_restore" formatted="false">"Rivendos"</string>
+    <string name="clean_on_play" formatted="false">"Fshih kontrollet gjatë luajtjes"</string>
+    <string name="clean_keep_progress" formatted="false">"Mbaj shiritin e ecurisë"</string>
+    <string name="download_paths" formatted="false">"Dosjet e ruajtjes"</string>
+    <string name="download_paths_summary" formatted="true">"Video: %1$s · Imazhe: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Mbaj videot me %1$s nga %2$d%4$s deri në %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Mbaj videot me %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Mbaj videot me %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Nuk ka interval (prek për të caktuar minimumin ose maksimumin)"</string>
+    <string name="keyword_unset" formatted="false">"Nuk ka rregulla filtrimi (prek për të menaxhuar kategoritë)"</string>
+    <string name="keyword_summary" formatted="true">"Aktivizuar: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Tekste %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Etiketa %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Krijues %1$d"</string>
+    <string name="keyword_description" formatted="false">"Tekste"</string>
+    <string name="keyword_tag" formatted="false">"Etiketa"</string>
+    <string name="keyword_author" formatted="false">"Krijues"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Nuk ka rregulla për %1$s. Shto një më sipër."</string>
+    <string name="duration_alert_title" formatted="false">"Paralajmërim për video të gjata"</string>
+    <string name="duration_alert_summary" formatted="true">"Pragu aktual: ≥ %1$s minuta"</string>
+    <string name="download_video_path" formatted="false">"Dosja e videove"</string>
+    <string name="download_image_path" formatted="false">"Dosja e imazheve"</string>
+    <string name="download_path_hint" formatted="false">"Dosja e parë duhet të jetë dosje publike mediash, si Movies, Pictures ose DCIM. Shtigjet e pavlefshme përdorin parazgjedhjen e sistemit."</string>
+    <string name="views_range_title" formatted="false">"Intervali i shikimeve"</string>
+    <string name="views_range_min" formatted="false">"Shikime minimale (0 = pa kufi)"</string>
+    <string name="views_range_max" formatted="false">"Shikime maksimale (0 = pa kufi)"</string>
+    <string name="views_range_hint" formatted="false">"Mbaj vetëm videot brenda këtij intervali shikimesh. Me të dy kufijtë 0, asgjë nuk hiqet."</string>
+    <string name="likes_range_title" formatted="false">"Intervali i pëlqimeve"</string>
+    <string name="likes_range_min" formatted="false">"Pëlqime minimale (0 = pa kufi)"</string>
+    <string name="likes_range_max" formatted="false">"Pëlqime maksimale (0 = pa kufi)"</string>
+    <string name="likes_range_hint" formatted="false">"Mbaj vetëm videot brenda këtij intervali pëlqimesh. Me të dy kufijtë 0, asgjë nuk hiqet."</string>
+    <string name="duration_range_title" formatted="false">"Intervali i kohëzgjatjes së videove"</string>
+    <string name="duration_range_min" formatted="false">"Kohëzgjatja minimale (sekonda; 0 = pa kufi)"</string>
+    <string name="duration_range_max" formatted="false">"Kohëzgjatja maksimale (sekonda; 0 = pa kufi)"</string>
+    <string name="duration_range_hint" formatted="false">"Mbaj vetëm videot e rekomanduara brenda këtij intervali kohëzgjatjeje. Me të dy kufijtë 0, asgjë nuk hiqet. Postimet fotografike nuk preken."</string>
+    <string name="keyword_manage" formatted="false">"Rregullat e filtrimit"</string>
+    <string name="keyword_description_hint" formatted="false">"Kërko në tekstet dhe përshkrimet e videove pa dalluar shkronjat e mëdha nga të voglat."</string>
+    <string name="keyword_tag_hint" formatted="false">"Kërko etiketa. Mos përfshi parashtesën #."</string>
+    <string name="keyword_author_hint" formatted="false">"Kërko emra krijuesish dhe emra unikë përdoruesish. Mos përfshi parashtesën @."</string>
+    <string name="keyword_description_input" formatted="false">"Fjalë ose frazë"</string>
+    <string name="keyword_tag_input" formatted="false">"Etiketa"</string>
+    <string name="keyword_author_input" formatted="false">"Emër ose përdorues"</string>
+    <string name="keyword_add" formatted="false">"Shto rregull"</string>
+    <string name="keyword_delete" formatted="false">"Fshi rregullin"</string>
+    <string name="region_select_title" formatted="false">"Zgjidh rajonin"</string>
+    <string name="region_search" formatted="false">"Kërko sipas emrit të shtetit, emrit në anglisht ose kodit të rajonit"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Kodi i operatorit: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Rajon dhe SIM të personalizuar"</string>
+    <string name="region_custom_hint" formatted="false">"Cakto kodin e shtetit dhe operatorin pa kufizimet e paracaktimeve."</string>
+    <string name="region_code_input" formatted="false">"Kodi i shtetit ose rajonit (p.sh. JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Kodi i operatorit (p.sh. 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Emri i operatorit (p.sh. NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Zgjidh një gjuhë të zakonshme ose shkruaj kodin e gjuhës."</string>
+    <string name="language_code_input" formatted="false">"Kodi i gjuhës (p.sh. ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Gjuhë të zakonshme:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Zgjidh zonën kohore të një qyteti ose shkruaj emrin e zonës kohore."</string>
+    <string name="timezone_input" formatted="false">"Emri i zonës kohore (p.sh. Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Zona kohore qytetesh të zakonshme:"</string>
+    <string name="city_tokyo" formatted="false">"Tokio"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hong Kong"</string>
+    <string name="city_new_york" formatted="false">"Nju-Jork"</string>
+    <string name="city_london" formatted="false">"Londër"</string>
+    <string name="city_seoul" formatted="false">"Seul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapor"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Koordinata të personalizuara vendndodhjeje"</string>
+    <string name="gps_custom_hint" formatted="false">"Zgjidh një qytet ose shkruaj gjerësinë dhe gjatësinë gjeografike."</string>
+    <string name="gps_latitude" formatted="false">"Gjerësia gjeografike (-90.0 deri në 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Gjatësia gjeografike (-180.0 deri në 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Qytete të zakonshme:"</string>
+    <string name="speed_add_title" formatted="false">"Shto shpejtësi"</string>
+    <string name="speed_input" formatted="false">"Shpejtësia e luajtjes"</string>
+    <string name="speed_invalid" formatted="false">"Shkruaj një numër të vlefshëm"</string>
+    <string name="speed_out_of_range" formatted="true">"Mbështetet vetëm nga %1$sx deri në %2$sx"</string>
+    <string name="speed_range" formatted="true">"Intervali i mbështetur: %1$sx deri në %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Ndrysho shpejtësinë"</string>
+    <string name="duration_threshold_title" formatted="false">"Paralajmërim për video të gjata"</string>
+    <string name="duration_threshold_hint" formatted="false">"Kur një video arrin këtë kohëzgjatje, një mesazh i shkurtër në nisje të luajtjes njofton gjatësinë e saj në minuta."</string>
+    <string name="duration_threshold_input" formatted="false">"Pragu i kohëzgjatjes (minuta)"</string>
+    <string name="duration_threshold_example" formatted="false">"Për shembull: 3 ose 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Shkruaj një numër të vlefshëm minutash më të madh se 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Cilësimi aktual: paralajmërim për video ≥ %1$s minuta"</string>
+    <string name="duration_threshold_presets" formatted="false">"Kohëzgjatje të sugjeruara:"</string>
+    <string name="status_feature_feed" formatted="false">"Filtrim i rrjedhës"</string>
+    <string name="status_feature_speed" formatted="false">"Shpejtësia"</string>
+    <string name="status_feature_progress" formatted="false">"Shiriti i ecurisë"</string>
+    <string name="status_feature_clean" formatted="false">"Fshih kontrollet gjatë luajtjes"</string>
+    <string name="status_feature_immersive" formatted="false">"Shfaqja e videos"</string>
+    <string name="status_feature_scroll" formatted="false">"Lëvizje automatike"</string>
+    <string name="status_feature_duration" formatted="false">"Njoftim për kohëzgjatjen"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Përkthim komentesh"</string>
+    <string name="status_feature_video_translate" formatted="false">"Menyja e titrave dhe përkthimit"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Kopjim komentesh"</string>
+    <string name="status_feature_author" formatted="false">"Rajoni i krijuesit"</string>
+    <string name="status_feature_download" formatted="false">"Ruajtje videosh"</string>
+    <string name="status_feature_music" formatted="false">"Kufizimet e audios"</string>
+    <string name="status_feature_sim" formatted="false">"SIM dhe shteti"</string>
+    <string name="status_feature_language" formatted="false">"Gjuha"</string>
+    <string name="status_feature_timezone" formatted="false">"Zona kohore"</string>
+    <string name="status_feature_gps" formatted="false">"Vendndodhja"</string>
+    <string name="status_feature_bar" formatted="false">"Shiriti i gjendjes"</string>
+    <string name="status_normal" formatted="false">"Funksionon"</string>
+    <string name="status_issue" formatted="false">"Problem"</string>
+    <string name="status_disabled" formatted="false">"Çaktivizuar"</string>
+    <string name="status_pending" formatted="false">"E pakonfirmuar"</string>
+    <string name="status_problem_disabled" formatted="false">"Çaktivizuar, me një gabim të regjistruar"</string>
+    <string name="status_problem_unavailable" formatted="false">"Përkohësisht e padisponueshme"</string>
+    <string name="status_problem_runtime" formatted="false">"Gabim gjatë përdorimit"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Meny shpejtësie e padisponueshme"</string>
+    <string name="status_prepare_failed" formatted="false">"Përgatitja e veçorive dështoi. Rihap TikTok dhe kontrollo."</string>
+    <string name="status_preparing" formatted="false">"Po përgatiten veçoritë. Prit pak."</string>
+    <string name="status_prepared" formatted="false">"Përgatitja përfundoi. Rihap TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Gjendja nuk mund të lexohet tani. Kontrollo më vonë."</string>
+    <string name="status_update_failed" formatted="false">"Gjendja nuk mund të përditësohet tani. Shfaqet rezultati më i fundit."</string>
+    <string name="status_reading" formatted="false">"Po lexohet gjendja"</string>
+    <string name="status_empty" formatted="false">"Nuk ka veprimtari të regjistruar. Aktivizo Toki në LSPosed, hap TikTok dhe kontrollo sërish."</string>
+    <string name="status_report_note" formatted="true">"Raporti më i fundit: %1$s\n“Funksionon” do të thotë se veçoria është gati dhe nuk ka raportuar gabime."</string>
+    <string name="config_section" formatted="false">"Konfigurimi"</string>
+    <string name="config_import" formatted="false">"Importo konfigurimin"</string>
+    <string name="config_import_summary" formatted="false">"Rikthe cilësimet e veçorive nga një skedar"</string>
+    <string name="config_export" formatted="false">"Eksporto konfigurimin"</string>
+    <string name="config_export_summary" formatted="false">"Ruaj cilësimet e veçorive në një skedar"</string>
+    <string name="config_exported" formatted="false">"Konfigurimi u eksportua në vendin e zgjedhur. Skedari mund të përmbajë fjalë kyçe, rajone dhe cilësime dosjesh. Ruaje me kujdes."</string>
+    <string name="config_import_confirm" formatted="true">"Skedari përmban %1$d cilësime. Importimi zëvendëson të gjitha cilësimet e veçorive; ato që mungojnë kthehen në parazgjedhje.\n\nGjuha e aplikacionit, ikona, autorizimi LSPosed dhe memoria e përkohshme e përputhshmërisë TikTok nuk ndryshojnë. Të vazhdohet?"</string>
+    <string name="config_overwrite" formatted="false">"Zëvendëso"</string>
+    <string name="config_imported" formatted="false">"Konfigurimi u importua dhe cilësimet u përditësuan. Ndryshimet që mbështesin përditësimin gjatë përdorimit zbatohen menjëherë. Rihap TikTok për të kontrolluar të tjerat."</string>
+    <string name="config_processing" formatted="false">"Po përpunohet konfigurimi"</string>
+    <string name="config_error_io" formatted="false">"Skedari nuk mund të lexohet ose shkruhet. Kontrollo vendin e zgjedhur dhe hapësirën e lirë."</string>
+    <string name="config_error_permission" formatted="false">"Nuk është dhënë leje qasjeje te skedari i zgjedhur. Zgjidhe përsëri."</string>
+    <string name="config_error_invalid" formatted="false">"Ky nuk është skedar i vlefshëm konfigurimi Toki. Nuk u importua asnjë cilësim."</string>
+    <string name="config_error_validation" formatted="true">"Vërtetimi i konfigurimit dështoi: %1$s. Nuk u importua asnjë cilësim."</string>
+    <string name="config_error_commit" formatted="false">"Ruajtja e konfigurimit nuk u konfirmua. Rihap Toki për ta kontrolluar para se të provosh përsëri."</string>
+    <string name="sponsor_title" formatted="false">"Mbështet zhvilluesin"</string>
+    <string name="sponsor_kofi" formatted="false">"Mbështet në Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Kodi QR i pagesës Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Po ruhet…"</string>
+    <string name="sponsor_save_image" formatted="false">"Ruaj imazhin"</string>
+    <string name="sponsor_image_hint" formatted="false">"Ruaj imazhin e plotë origjinal dhe zgjidhe në Alipay për të lexuar kodin."</string>
+    <string name="sponsor_address_copied" formatted="false">"Adresa USDT u kopjua"</string>
+    <string name="sponsor_image_saved" formatted="false">"Imazhi u ruajt në vendin e zgjedhur"</string>
+    <string name="sponsor_error_io" formatted="false">"Ruajtja dështoi. Kontrollo vendin e zgjedhur dhe hapësirën e lirë, pastaj provo përsëri."</string>
+    <string name="sponsor_error_permission" formatted="false">"Ruajtja dështoi. Nuk është dhënë leje shkrimi për këtë vend. Zgjidh një tjetër."</string>
+    <string name="feature_filter_topics" formatted="false">"Fshih temat e sugjeruara"</string>
+    <string name="feature_filter_creators" formatted="false">"Fshih krijuesit e sugjeruar"</string>
+    <string name="host_scan_title_complete" formatted="false">"Kërkimi përfundoi"</string>
+    <string name="host_scan_title_failed" formatted="false">"Kërkimi dështoi"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Rinis TikTok manualisht për të zbatuar rezultatet."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Shiko diagnostikimin e funksioneve në Toki."</string>
+    <string name="layout_title" formatted="false">"Paraqitja e faqes"</string>
+    <string name="layout_summary" formatted="false">"Zgjidh kontrollet që do të fshihen"</string>
+    <string name="layout_hint" formatted="false">"Aktivizo çelësin për të fshehur elementin"</string>
+    <string name="layout_top" formatted="false">"Shiriti sipër"</string>
+    <string name="layout_bottom" formatted="false">"Shiriti poshtë"</string>
+    <string name="layout_side" formatted="false">"Faqja e videos"</string>
+    <string name="layout_search" formatted="false">"Kërko"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Miqtë"</string>
+    <string name="layout_following" formatted="false">"Ndjek"</string>
+    <string name="layout_shop" formatted="false">"Dyqani"</string>
+    <string name="layout_for_you" formatted="false">"Për ty"</string>
+    <string name="layout_nearby" formatted="false">"Pranë"</string>
+    <string name="layout_stem" formatted="false">"Shkencë"</string>
+    <string name="layout_series" formatted="false">"Seriale"</string>
+    <string name="layout_home" formatted="false">"Kreu"</string>
+    <string name="layout_create" formatted="false">"Krijo"</string>
+    <string name="layout_inbox" formatted="false">"Kutia hyrëse"</string>
+    <string name="layout_profile" formatted="false">"Profili"</string>
+    <string name="layout_discover" formatted="false">"Zbulo"</string>
+    <string name="layout_avatar" formatted="false">"Fotoja e profilit"</string>
+    <string name="layout_follow" formatted="false">"Butoni Ndiq"</string>
+    <string name="layout_like" formatted="false">"Pëlqim"</string>
+    <string name="layout_comment" formatted="false">"Komente"</string>
+    <string name="layout_favorite" formatted="false">"Të preferuarat"</string>
+    <string name="layout_share" formatted="false">"Ndaj"</string>
+    <string name="layout_music" formatted="false">"Disku i muzikës"</string>
+    <string name="layout_explore" formatted="false">"Eksploro"</string>
+    <string name="layout_author" formatted="false">"Informacioni i autorit"</string>
+    <string name="layout_description" formatted="false">"Përshkrimi"</string>
+    <string name="layout_music_title" formatted="false">"Titulli i muzikës"</string>
+    <string name="layout_tags" formatted="false">"Etiketa informuese"</string>
+    <string name="layout_search_label" formatted="false">"Sugjerim kërkimi"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Butoni i ndalimit të lëvizjes automatike"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Monedha dhe shpërblime"</string>
+    <string name="layout_quick_comment" formatted="false">"Komente të shpejta"</string>
+    <string name="layout_playlist" formatted="false">"Lista e luajtjes"</string>
+    <string name="layout_creation_buttons" formatted="false">"Shkurtore krijimi"</string>
+    <string name="layout_live_notice" formatted="false">"Kujtesa për LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Patejdukshmëria"</string>
+    <string name="feature_background_audio">"Zhblloko audion në sfond"</string>
+    <string name="layout_landscape">"Butoni i ekranit të plotë"</string>
+    <string name="layout_photo_indicators">"Treguesit dhe këshillat e fotove"</string>
+    <string name="layout_quick_message">"Mesazhe të shpejta dhe burimi i ndarjes"</string>
+    <string name="layout_user_card">"Llogari të sugjeruara"</string>
+    <string name="layout_survey">"Sondazhe dhe komente"</string>
+    <string name="layout_ad_cards">"Kartat e produkteve dhe reklamave"</string>
+    <string name="layout_bottom_banners">"Banderola të tjera poshtë"</string>
+    <string name="layout_activities">"Hyrja në ngjarje"</string>
+    <string name="host_scan_title_running" formatted="false">"Po kërkohen metodat"</string>
+    <string name="host_scan_title_saving" formatted="false">"Po ruhen rezultatet"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Mbaje TikTok në plan të parë."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Të lutem prit."</string>
+    <string name="host_scan_done" formatted="false">"E kuptova"</string>
+    <string name="video_fit_center" formatted="false">"Në qendër"</string>
+    <string name="video_fit_smart" formatted="false">"Ekran i plotë"</string>
+</resources>

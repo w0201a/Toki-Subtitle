@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Kezdőlap"</string>
+    <string name="nav_features" formatted="false">"Funkciók"</string>
+    <string name="page_features" formatted="false">"Beállítások"</string>
+    <string name="page_hook_status" formatted="false">"Funkciók állapota"</string>
+    <string name="nav_back" formatted="false">"Vissza"</string>
+    <string name="restart_tiktok" formatted="false">"TikTok újraindítása"</string>
+    <string name="restart_root_required" formatted="false">"Adj root-hozzáférést a Tokinak."</string>
+    <string name="language_title" formatted="false">"Felület nyelve"</string>
+    <string name="language_system" formatted="false">"Rendszernyelv használata"</string>
+    <string name="language_search" formatted="false">"Nyelvek keresése"</string>
+    <string name="language_clear_search" formatted="false">"Keresés törlése"</string>
+    <string name="language_no_results" formatted="false">"Nincs megfelelő nyelv"</string>
+    <string name="common_save" formatted="false">"Mentés"</string>
+    <string name="common_cancel" formatted="false">"Mégse"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Bezárás"</string>
+    <string name="common_open" formatted="false">"Megnyitás"</string>
+    <string name="common_copy" formatted="false">"Másolás"</string>
+    <string name="common_add" formatted="false">"Hozzáadás"</string>
+    <string name="common_delete" formatted="false">"Törlés"</string>
+    <string name="common_done" formatted="false">"Kész"</string>
+    <string name="common_save_apply" formatted="false">"Alkalmazás"</string>
+    <string name="common_unknown" formatted="false">"Ismeretlen"</string>
+    <string name="common_custom" formatted="false">"Egyéni"</string>
+    <string name="home_icon_hidden" formatted="false">"Alkalmazásikon elrejtve"</string>
+    <string name="home_icon_restored" formatted="false">"Alkalmazásikon visszaállítva"</string>
+    <string name="home_activated" formatted="false">"Aktiválva"</string>
+    <string name="home_inactive" formatted="false">"Nincs aktiválva"</string>
+    <string name="home_activation_missing" formatted="false">"Az LSPosedben nem található aktiválás"</string>
+    <string name="home_host_section" formatted="false">"TikTok-kompatibilitás"</string>
+    <string name="home_host_current" formatted="false">"Telepített TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Nem található támogatott TikTok-telepítés az eszközön"</string>
+    <string name="home_host_not_installed" formatted="false">"Nincs telepítve"</string>
+    <string name="home_supported_versions" formatted="false">"Támogatott verziók"</string>
+    <string name="home_community" formatted="false">"Nyílt forráskód és közösség"</string>
+    <string name="home_github" formatted="false">"GitHub-tároló"</string>
+    <string name="home_telegram" formatted="false">"Telegram-csoport"</string>
+    <string name="home_preferences" formatted="false">"Modulbeállítások"</string>
+    <string name="home_hide_icon" formatted="false">"Alkalmazásikon elrejtése"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Elrejtés után a Toki az LSPosed-kezelőből nyitható meg"</string>
+    <string name="home_support" formatted="false">"Fejlesztés támogatása"</string>
+    <string name="home_support_summary" formatted="false">"A folyamatos karbantartás és fejlesztés támogatása"</string>
+    <string name="feature_region_section" formatted="false">"Régió és eszköz"</string>
+    <string name="feature_playback_section" formatted="false">"Lejátszás"</string>
+    <string name="feature_progress" formatted="false">"Folyamatjelző állandó megjelenítése"</string>
+    <string name="feature_progress_summary" formatted="false">"A folyamatjelző rövid videóknál is látható marad"</string>
+    <string name="feature_immersive" formatted="false">"Videó megjelenítése"</string>
+    <string name="feature_autoplay" formatted="false">"Bővített automatikus görgetés"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Feloldja az automatikus görgetést minden videó menüjében"</string>
+    <string name="feature_status_bar" formatted="false">"Rendszerállapotsáv elrejtése"</string>
+    <string name="feature_media_section" formatted="false">"Letöltés és műveletek"</string>
+    <string name="feature_download" formatted="false">"Letöltés vízjel nélkül"</string>
+    <string name="feature_download_summary" formatted="false">"Eredeti videó mentése vízjel nélkül a hosszú megnyomás vagy megosztás menüjéből"</string>
+    <string name="feature_music" formatted="false">"Hang feloldása"</string>
+    <string name="feature_music_summary" formatted="false">"Licenc vagy régió miatt korlátozott hanglejátszás visszaállítása"</string>
+    <string name="feature_author_region" formatted="false">"Alkotó régiójának megjelenítése"</string>
+    <string name="feature_author_region_summary" formatted="false">"Ország- vagy régiózászló és kód megjelenítése az alkotó neve mellett"</string>
+    <string name="feature_copy_comment" formatted="false">"Csak szöveg másolása"</string>
+    <string name="feature_video_translation" formatted="false">"Feliratok és fordítás menü"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Bejegyzés megjelenítése a hosszú megnyomás menüjében"</string>
+    <string name="feature_comment_translation" formatted="false">"Hozzászólások fordítása"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Gomb hozzáadása idegen nyelvű hozzászólások csoportos fordításához"</string>
+    <string name="feature_filter_section" formatted="false">"Hírfolyam szűrése"</string>
+    <string name="feature_remove_ads" formatted="false">"Hírfolyam-hirdetések eltávolítása"</string>
+    <string name="feature_remove_live" formatted="false">"Élő adások elrejtése"</string>
+    <string name="feature_remove_photos" formatted="false">"Fényképes bejegyzések elrejtése"</string>
+    <string name="feature_filter_views" formatted="false">"Megtekintésszám-szűrő"</string>
+    <string name="feature_filter_likes" formatted="false">"Kedvelésszám-szűrő"</string>
+    <string name="feature_filter_duration" formatted="false">"Videóhossz-szűrő"</string>
+    <string name="feature_filter_keywords" formatted="false">"Kulcsszószűrő"</string>
+    <string name="feature_block_offline" formatted="false">"Offline videók tiltása"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Előre betöltött offline videók beszúrásának megakadályozása gyenge kapcsolatnál"</string>
+    <string name="feature_remove_ai" formatted="false">"MI-vel készült videók elrejtése"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"A TikTok által MI-generáltnak jelölt videók szűrése"</string>
+    <string name="filter_metric_views" formatted="false">"megtekintés"</string>
+    <string name="filter_metric_likes" formatted="false">"kedvelés"</string>
+    <string name="filter_metric_duration" formatted="false">"hossz"</string>
+    <string name="filter_unit_seconds" formatted="false">"mp"</string>
+    <string name="filter_views_saved" formatted="false">"Megtekintési tartomány mentve"</string>
+    <string name="filter_likes_saved" formatted="false">"Kedvelési tartomány mentve"</string>
+    <string name="filter_duration_saved" formatted="false">"Videóhossz-tartomány mentve"</string>
+    <string name="download_path_saved" formatted="false">"Egyéni mentési útvonalak frissítve"</string>
+    <string name="region_spoof_title" formatted="false">"Régió és SIM szimulálása"</string>
+    <string name="region_current" formatted="false">"Jelenlegi beállítások"</string>
+    <string name="region_target" formatted="true">"Célrégió: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Szolgáltató: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Szolgáltatókód: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Előbeállítások"</string>
+    <string name="region_custom_parameters" formatted="false">"Egyéni"</string>
+    <string name="language_spoof" formatted="false">"Nyelv szimulálása"</string>
+    <string name="environment_follow_region" formatted="false">"Régió szerint"</string>
+    <string name="language_effective" formatted="true">"Érvényes nyelv: %1$s"</string>
+    <string name="language_custom" formatted="false">"Egyéni nyelv"</string>
+    <string name="timezone_spoof" formatted="false">"Időzóna szimulálása"</string>
+    <string name="timezone_effective" formatted="true">"Érvényes időzóna: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Egyéni időzóna"</string>
+    <string name="gps_spoof" formatted="false">"Hely szimulálása"</string>
+    <string name="gps_effective" formatted="true">"Érvényes koordináták: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Egyéni koordináták"</string>
+    <string name="speed_fixed" formatted="false">"Lejátszási sebesség megtartása"</string>
+    <string name="speed_fixed_summary" formatted="false">"A hosszú megnyomás menüjében kiválasztott sebesség megtartása videóváltáskor"</string>
+    <string name="speed_expand" formatted="false">"További sebességek"</string>
+    <string name="speed_options_hint" formatted="false">"Sebességek (érintéssel módosíthatók vagy törölhetők)"</string>
+    <string name="speed_add_option" formatted="false">"+ Sebesség hozzáadása"</string>
+    <string name="speed_restore" formatted="false">"Visszaállítás"</string>
+    <string name="clean_on_play" formatted="false">"Vezérlők elrejtése lejátszáskor"</string>
+    <string name="clean_keep_progress" formatted="false">"Folyamatjelző megtartása"</string>
+    <string name="download_paths" formatted="false">"Mentési mappák"</string>
+    <string name="download_paths_summary" formatted="true">"Videók: %1$s · Képek: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Videók megtartása, ha %1$s: %2$d%4$s–%3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Videók megtartása, ha %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Videók megtartása, ha %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Nincs tartomány (érintsd meg minimum vagy maximum beállításához)"</string>
+    <string name="keyword_unset" formatted="false">"Érintsd meg szabály hozzáadásához"</string>
+    <string name="keyword_summary" formatted="true">"Bekapcsolva: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Szövegek %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Hashtagek %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Alkotók %1$d"</string>
+    <string name="keyword_description" formatted="false">"Szövegek"</string>
+    <string name="keyword_tag" formatted="false">"Hashtagek"</string>
+    <string name="keyword_author" formatted="false">"Alkotók"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Nincs szabály ebben a kategóriában: %1$s. Adj hozzá fent."</string>
+    <string name="duration_alert_title" formatted="false">"Hosszú videókra figyelmeztetés"</string>
+    <string name="duration_alert_summary" formatted="true">"Jelenlegi küszöb: ≥ %1$s perc"</string>
+    <string name="download_video_path" formatted="false">"Videómappa"</string>
+    <string name="download_image_path" formatted="false">"Képmappa"</string>
+    <string name="download_path_hint" formatted="false">"Az első mappa nyilvános médiamappa legyen, például Movies, Pictures vagy DCIM. Érvénytelen útvonalnál a rendszer alapértéke érvényesül."</string>
+    <string name="views_range_title" formatted="false">"Megtekintésszám-tartomány"</string>
+    <string name="views_range_min" formatted="false">"Minimális megtekintés (0 = korlátlan)"</string>
+    <string name="views_range_max" formatted="false">"Maximális megtekintés (0 = korlátlan)"</string>
+    <string name="views_range_hint" formatted="false">"Csak a megtekintési tartományba eső videók maradnak meg. Ha mindkét határ 0, semmi nem lesz eltávolítva."</string>
+    <string name="likes_range_title" formatted="false">"Kedvelésszám-tartomány"</string>
+    <string name="likes_range_min" formatted="false">"Minimális kedvelés (0 = korlátlan)"</string>
+    <string name="likes_range_max" formatted="false">"Maximális kedvelés (0 = korlátlan)"</string>
+    <string name="likes_range_hint" formatted="false">"Csak a kedvelési tartományba eső videók maradnak meg. Ha mindkét határ 0, semmi nem lesz eltávolítva."</string>
+    <string name="duration_range_title" formatted="false">"Videóhossz-tartomány"</string>
+    <string name="duration_range_min" formatted="false">"Minimális hossz (másodperc; 0 = korlátlan)"</string>
+    <string name="duration_range_max" formatted="false">"Maximális hossz (másodperc; 0 = korlátlan)"</string>
+    <string name="duration_range_hint" formatted="false">"Csak az ajánlott, megadott hosszúságú videók maradnak meg. Ha mindkét határ 0, semmi nem lesz eltávolítva. A fényképes bejegyzésekre nem vonatkozik."</string>
+    <string name="keyword_manage" formatted="false">"Szűrési szabályok"</string>
+    <string name="keyword_description_hint" formatted="false">"Keresés a videók szövegében és leírásában, kis- és nagybetűk megkülönböztetése nélkül."</string>
+    <string name="keyword_tag_hint" formatted="false">"Hashtagek keresése. A # előtagot ne add meg."</string>
+    <string name="keyword_author_hint" formatted="false">"Alkotónevek és egyedi felhasználónevek keresése. A @ előtagot ne add meg."</string>
+    <string name="keyword_description_input" formatted="false">"Kulcsszó a szövegben"</string>
+    <string name="keyword_tag_input" formatted="false">"Hashtag"</string>
+    <string name="keyword_author_input" formatted="false">"Név vagy felhasználónév"</string>
+    <string name="keyword_add" formatted="false">"Szabály hozzáadása"</string>
+    <string name="keyword_delete" formatted="false">"Szabály törlése"</string>
+    <string name="region_select_title" formatted="false">"Régió kiválasztása"</string>
+    <string name="region_search" formatted="false">"Országnév vagy országkód"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Szolgáltatókód: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Egyéni régió és SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Országkód és szolgáltató beállítása az előbeállítások korlátai nélkül."</string>
+    <string name="region_code_input" formatted="false">"Ország- vagy régiókód (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Szolgáltatókód (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Szolgáltató neve (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Válassz gyakori nyelvet, vagy írj be nyelvkódot."</string>
+    <string name="language_code_input" formatted="false">"Nyelvkód (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Nyelvek"</string>
+    <string name="timezone_custom_hint" formatted="false">"Válassz városi időzónát, vagy írd be az időzóna nevét."</string>
+    <string name="timezone_input" formatted="false">"Időzóna neve (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Városok"</string>
+    <string name="city_tokyo" formatted="false">"Tokió"</string>
+    <string name="city_taipei" formatted="false">"Tajpej"</string>
+    <string name="city_hong_kong" formatted="false">"Hongkong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Szöul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Szingapúr"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Egyéni hely"</string>
+    <string name="gps_custom_hint" formatted="false">"Válassz várost, vagy írj be szélességi és hosszúsági koordinátákat."</string>
+    <string name="gps_latitude" formatted="false">"Szélesség (-90.0 és 90.0 között)"</string>
+    <string name="gps_longitude" formatted="false">"Hosszúság (-180.0 és 180.0 között)"</string>
+    <string name="gps_presets" formatted="false">"Városok"</string>
+    <string name="speed_add_title" formatted="false">"Sebesség hozzáadása"</string>
+    <string name="speed_input" formatted="false">"Sebesség"</string>
+    <string name="speed_invalid" formatted="false">"Érvényes számot adj meg"</string>
+    <string name="speed_out_of_range" formatted="true">"Csak %1$sx és %2$sx közötti érték támogatott"</string>
+    <string name="speed_range" formatted="true">"Támogatott tartomány: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Sebesség módosítása"</string>
+    <string name="duration_threshold_title" formatted="false">"Hosszú videó figyelmeztetése"</string>
+    <string name="duration_threshold_hint" formatted="false">"Ha a videó hossza eléri ezt az értéket, a lejátszás elején rövid üzenet jelzi a hosszát percekben."</string>
+    <string name="duration_threshold_input" formatted="false">"Hosszküszöb (perc)"</string>
+    <string name="duration_threshold_example" formatted="false">"Például: 3 vagy 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Érvényes, 0-nál nagyobb percszámot adj meg"</string>
+    <string name="duration_threshold_current" formatted="true">"Jelenlegi beállítás: figyelmeztetés ≥ %1$s perces videóknál"</string>
+    <string name="duration_threshold_presets" formatted="false">"Javasolt hosszak:"</string>
+    <string name="status_feature_feed" formatted="false">"Hírfolyamszűrés"</string>
+    <string name="status_feature_speed" formatted="false">"Sebesség"</string>
+    <string name="status_feature_progress" formatted="false">"Folyamatjelző"</string>
+    <string name="status_feature_clean" formatted="false">"Automatikus elrejtés"</string>
+    <string name="status_feature_immersive" formatted="false">"Videó megjelenítése"</string>
+    <string name="status_feature_scroll" formatted="false">"Automatikus görgetés"</string>
+    <string name="status_feature_duration" formatted="false">"Hosszjelzés"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Hozzászólás fordítása"</string>
+    <string name="status_feature_video_translate" formatted="false">"Feliratok és fordítás menü"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Hozzászólás másolása"</string>
+    <string name="status_feature_author" formatted="false">"Alkotó régiója"</string>
+    <string name="status_feature_download" formatted="false">"Videómentés"</string>
+    <string name="status_feature_music" formatted="false">"Hangkorlátozások"</string>
+    <string name="status_feature_sim" formatted="false">"Régió és SIM"</string>
+    <string name="status_feature_language" formatted="false">"Nyelv"</string>
+    <string name="status_feature_timezone" formatted="false">"Időzóna"</string>
+    <string name="status_feature_gps" formatted="false">"Hely"</string>
+    <string name="status_feature_bar" formatted="false">"Állapotsáv"</string>
+    <string name="status_normal" formatted="false">"Működik"</string>
+    <string name="status_issue" formatted="false">"Probléma"</string>
+    <string name="status_disabled" formatted="false">"Kikapcsolva"</string>
+    <string name="status_pending" formatted="false">"Függőben"</string>
+    <string name="status_problem_disabled" formatted="false">"Kikapcsolva, rögzített hibával"</string>
+    <string name="status_problem_unavailable" formatted="false">"Most nem elérhető"</string>
+    <string name="status_problem_runtime" formatted="false">"Futásidejű hiba"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Sebességmenü nem elérhető"</string>
+    <string name="status_prepare_failed" formatted="false">"A funkciók előkészítése sikertelen. Nyisd meg újra a TikTokot, és ellenőrizd."</string>
+    <string name="status_preparing" formatted="false">"Funkciók előkészítése. Kérlek, várj."</string>
+    <string name="status_prepared" formatted="false">"Előkészítés kész. Nyisd meg újra a TikTokot."</string>
+    <string name="status_read_failed" formatted="false">"Az állapot most nem olvasható. Ellenőrizd később."</string>
+    <string name="status_update_failed" formatted="false">"Az állapot most nem frissíthető. A legutóbbi eredmény látható."</string>
+    <string name="status_reading" formatted="false">"Állapot olvasása"</string>
+    <string name="status_empty" formatted="false">"Nincs működési bejegyzés. Engedélyezd a Tokit az LSPosedben, majd nyisd meg a TikTokot és ellenőrizd."</string>
+    <string name="status_report_note" formatted="true">"Legutóbbi jelentés: %1$s\nA „Működik” azt jelenti, hogy a funkció készen áll és nem jelzett hibát."</string>
+    <string name="config_section" formatted="false">"Konfiguráció"</string>
+    <string name="config_import" formatted="false">"Beállítások importálása"</string>
+    <string name="config_import_summary" formatted="false">"Funkcióbeállítások visszaállítása fájlból"</string>
+    <string name="config_export" formatted="false">"Beállítások exportálása"</string>
+    <string name="config_export_summary" formatted="false">"Funkcióbeállítások mentése fájlba"</string>
+    <string name="config_exported" formatted="false">"A konfiguráció a kiválasztott helyre exportálva. A fájl kulcsszavakat, régiókat és mappabeállításokat tartalmazhat. Őrizd biztonságosan."</string>
+    <string name="config_import_confirm" formatted="true">"A fájl %1$d beállítást tartalmaz. Az importálás az összes funkcióbeállítást felülírja; a hiányzók az alapértékre állnak vissza.\n\nA felület nyelve, az alkalmazásikon, az LSPosed-engedély és a TikTok-kompatibilitási gyorsítótár nem változik. Folytatod?"</string>
+    <string name="config_overwrite" formatted="false">"Felülírás"</string>
+    <string name="config_imported" formatted="false">"Konfiguráció importálva, beállítások frissítve. A menet közbeni frissítést támogató változások azonnal érvényesülnek. A többi ellenőrzéséhez nyisd meg újra a TikTokot."</string>
+    <string name="config_processing" formatted="false">"Feldolgozás…"</string>
+    <string name="config_error_io" formatted="false">"A fájl nem olvasható vagy írható. Ellenőrizd a kiválasztott helyet és a szabad tárhelyet."</string>
+    <string name="config_error_permission" formatted="false">"Nincs hozzáférési engedély a kiválasztott fájlhoz. Válaszd ki újra."</string>
+    <string name="config_error_invalid" formatted="false">"Ez nem érvényes Toki-konfigurációs fájl. Nem lett beállítás importálva."</string>
+    <string name="config_error_validation" formatted="true">"A konfiguráció ellenőrzése sikertelen: %1$s. Nem lett beállítás importálva."</string>
+    <string name="config_error_commit" formatted="false">"A konfiguráció mentése nem igazolható. Újrapróbálás előtt nyisd meg a Tokit, és ellenőrizd."</string>
+    <string name="sponsor_title" formatted="false">"Fejlesztő támogatása"</string>
+    <string name="sponsor_kofi" formatted="false">"Támogatás Ko-fi-on"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay fizetési QR-kód"</string>
+    <string name="sponsor_saving" formatted="false">"Mentés…"</string>
+    <string name="sponsor_save_image" formatted="false">"Kép mentése"</string>
+    <string name="sponsor_image_hint" formatted="false">"Mentsd el a teljes eredeti képet, majd válaszd ki az Alipayben a kód beolvasásához."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT-cím másolva"</string>
+    <string name="sponsor_image_saved" formatted="false">"Kép mentve a kiválasztott helyre"</string>
+    <string name="sponsor_error_io" formatted="false">"Sikertelen mentés. Ellenőrizd a kiválasztott helyet és a szabad tárhelyet, majd próbáld újra."</string>
+    <string name="sponsor_error_permission" formatted="false">"Sikertelen mentés. Nincs írási engedély ehhez a helyhez. Válassz másikat."</string>
+    <string name="feature_filter_topics" formatted="false">"Ajánlott témák elrejtése"</string>
+    <string name="feature_filter_creators" formatted="false">"Ajánlott alkotók elrejtése"</string>
+    <string name="host_scan_title_complete" formatted="false">"Keresés befejezve"</string>
+    <string name="host_scan_title_failed" formatted="false">"A keresés sikertelen"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Az eredmények alkalmazásához indítsd újra kézzel a TikTok alkalmazást."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Nézd meg a funkciók diagnosztikáját a Toki alkalmazásban."</string>
+    <string name="layout_title" formatted="false">"Oldalelrendezés"</string>
+    <string name="layout_summary" formatted="false">"Válaszd ki az elrejtendő elemeket"</string>
+    <string name="layout_hint" formatted="false">"Kapcsold be az elem elrejtéséhez"</string>
+    <string name="layout_top" formatted="false">"Felső sáv"</string>
+    <string name="layout_bottom" formatted="false">"Alsó sáv"</string>
+    <string name="layout_side" formatted="false">"Videóoldal"</string>
+    <string name="layout_search" formatted="false">"Keresés"</string>
+    <string name="layout_live" formatted="false">"ÉLŐ"</string>
+    <string name="layout_friends" formatted="false">"Ismerősök"</string>
+    <string name="layout_following" formatted="false">"Követések"</string>
+    <string name="layout_shop" formatted="false">"Bolt"</string>
+    <string name="layout_for_you" formatted="false">"Neked"</string>
+    <string name="layout_nearby" formatted="false">"A közelben"</string>
+    <string name="layout_stem" formatted="false">"Tudomány"</string>
+    <string name="layout_series" formatted="false">"Sorozatok"</string>
+    <string name="layout_home" formatted="false">"Kezdőlap"</string>
+    <string name="layout_create" formatted="false">"Létrehozás"</string>
+    <string name="layout_inbox" formatted="false">"Bejövő üzenetek"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Felfedezés"</string>
+    <string name="layout_avatar" formatted="false">"Profilkép"</string>
+    <string name="layout_follow" formatted="false">"Követés gomb"</string>
+    <string name="layout_like" formatted="false">"Kedvelés"</string>
+    <string name="layout_comment" formatted="false">"Hozzászólások"</string>
+    <string name="layout_favorite" formatted="false">"Kedvencek"</string>
+    <string name="layout_share" formatted="false">"Megosztás"</string>
+    <string name="layout_music" formatted="false">"Zenelemez"</string>
+    <string name="layout_explore" formatted="false">"Böngészés"</string>
+    <string name="layout_author" formatted="false">"Szerző adatai"</string>
+    <string name="layout_description" formatted="false">"Leírás"</string>
+    <string name="layout_music_title" formatted="false">"Zene címe"</string>
+    <string name="layout_tags" formatted="false">"Információs címkék"</string>
+    <string name="layout_search_label" formatted="false">"Keresési javaslat"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Automatikus görgetés leállítógombja"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Érmék és jutalmak"</string>
+    <string name="layout_quick_comment" formatted="false">"Gyors hozzászólások"</string>
+    <string name="layout_playlist" formatted="false">"Lejátszási lista"</string>
+    <string name="layout_creation_buttons" formatted="false">"Létrehozási parancsikonok"</string>
+    <string name="layout_live_notice" formatted="false">"LIVE-emlékeztetők"</string>
+    <string name="layout_opacity" formatted="false">"Átlátszatlanság"</string>
+    <string name="feature_background_audio">"Háttérhang feloldása"</string>
+    <string name="layout_landscape">"Teljes képernyő gomb"</string>
+    <string name="layout_photo_indicators">"Fotójelzők és tippek"</string>
+    <string name="layout_quick_message">"Gyorsüzenetek és megosztó"</string>
+    <string name="layout_user_card">"Ajánlott fiókok"</string>
+    <string name="layout_survey">"Felmérések és visszajelzés"</string>
+    <string name="layout_ad_cards">"Termék- és hirdetéskártyák"</string>
+    <string name="layout_bottom_banners">"Egyéb alsó szalaghirdetések"</string>
+    <string name="layout_activities">"Események gombja"</string>
+    <string name="host_scan_title_running" formatted="false">"Metódusok keresése"</string>
+    <string name="host_scan_title_saving" formatted="false">"Eredmények mentése"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Tartsd a TikTok alkalmazást az előtérben."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Kérlek, várj."</string>
+    <string name="host_scan_done" formatted="false">"Értem"</string>
+    <string name="video_fit_center" formatted="false">"Középre"</string>
+    <string name="video_fit_smart" formatted="false">"Teljes képernyő"</string>
+</resources>

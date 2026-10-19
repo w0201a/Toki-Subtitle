@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Главная"</string>
+    <string name="nav_features" formatted="false">"Функции"</string>
+    <string name="page_features" formatted="false">"Настройки"</string>
+    <string name="page_hook_status" formatted="false">"Состояние функций"</string>
+    <string name="nav_back" formatted="false">"Назад"</string>
+    <string name="restart_tiktok" formatted="false">"Перезапустить TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Предоставьте Toki права root"</string>
+    <string name="language_title" formatted="false">"Язык интерфейса"</string>
+    <string name="language_system" formatted="false">"Как в системе"</string>
+    <string name="language_search" formatted="false">"Поиск языка"</string>
+    <string name="language_clear_search" formatted="false">"Очистить поиск"</string>
+    <string name="language_no_results" formatted="false">"Подходящих языков нет"</string>
+    <string name="common_save" formatted="false">"Сохранить"</string>
+    <string name="common_cancel" formatted="false">"Отмена"</string>
+    <string name="common_confirm" formatted="false">"ОК"</string>
+    <string name="common_close" formatted="false">"Закрыть"</string>
+    <string name="common_open" formatted="false">"Открыть"</string>
+    <string name="common_copy" formatted="false">"Копировать"</string>
+    <string name="common_add" formatted="false">"Добавить"</string>
+    <string name="common_delete" formatted="false">"Удалить"</string>
+    <string name="common_done" formatted="false">"Готово"</string>
+    <string name="common_save_apply" formatted="false">"Применить"</string>
+    <string name="common_unknown" formatted="false">"Неизвестно"</string>
+    <string name="common_custom" formatted="false">"Свой вариант"</string>
+    <string name="home_icon_hidden" formatted="false">"Значок скрыт"</string>
+    <string name="home_icon_restored" formatted="false">"Значок снова виден"</string>
+    <string name="home_activated" formatted="false">"Активирован"</string>
+    <string name="home_inactive" formatted="false">"Не активирован"</string>
+    <string name="home_activation_missing" formatted="false">"Активация в LSPosed не обнаружена"</string>
+    <string name="home_host_section" formatted="false">"Совместимость с TikTok"</string>
+    <string name="home_host_current" formatted="false">"Установленный TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Поддерживаемая версия TikTok на устройстве не найдена"</string>
+    <string name="home_host_not_installed" formatted="false">"Не установлен"</string>
+    <string name="home_supported_versions" formatted="false">"Поддерживаемые версии"</string>
+    <string name="home_community" formatted="false">"Сообщество"</string>
+    <string name="home_github" formatted="false">"Репозиторий GitHub"</string>
+    <string name="home_telegram" formatted="false">"Группа Telegram"</string>
+    <string name="home_preferences" formatted="false">"Настройки"</string>
+    <string name="home_hide_icon" formatted="false">"Скрыть значок приложения"</string>
+    <string name="home_hide_icon_summary" formatted="false">"После скрытия Toki можно открыть через менеджер LSPosed"</string>
+    <string name="home_support" formatted="false">"Поддержать разработку"</string>
+    <string name="home_support_summary" formatted="false">"Помогите поддерживать и улучшать модуль"</string>
+    <string name="feature_region_section" formatted="false">"Подмена региона и окружения"</string>
+    <string name="feature_playback_section" formatted="false">"Воспроизведение"</string>
+    <string name="feature_progress" formatted="false">"Всегда показывать прогресс"</string>
+    <string name="feature_progress_summary" formatted="false">"Показывать нижнюю полосу прогресса даже в коротких видео"</string>
+    <string name="feature_immersive" formatted="false">"Отображение видео"</string>
+    <string name="feature_autoplay" formatted="false">"Расширенная автопрокрутка"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Открывает автопрокрутку в меню всех видео"</string>
+    <string name="feature_status_bar" formatted="false">"Скрыть системную строку состояния"</string>
+    <string name="feature_media_section" formatted="false">"Загрузки и инструменты"</string>
+    <string name="feature_download" formatted="false">"Скачивание без водяного знака"</string>
+    <string name="feature_download_summary" formatted="false">"Сохраняйте оригинал без водяного знака через долгое нажатие или меню «Поделиться»"</string>
+    <string name="feature_music" formatted="false">"Разблокировать звук"</string>
+    <string name="feature_music_summary" formatted="false">"Восстановить звук, ограниченный правами или регионом"</string>
+    <string name="feature_author_region" formatted="false">"Показывать регион автора"</string>
+    <string name="feature_author_region_summary" formatted="false">"Флаг и код страны или региона рядом с именем автора"</string>
+    <string name="feature_copy_comment" formatted="false">"Копировать только текст"</string>
+    <string name="feature_video_translation" formatted="false">"Меню субтитров и перевода"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Показать пункт в меню долгого нажатия"</string>
+    <string name="feature_comment_translation" formatted="false">"Перевод комментариев"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Добавить кнопку для массового перевода иностранных комментариев"</string>
+    <string name="feature_filter_section" formatted="false">"Фильтрация ленты"</string>
+    <string name="feature_remove_ads" formatted="false">"Удалять рекламу из ленты"</string>
+    <string name="feature_remove_live" formatted="false">"Скрывать рекомендуемые трансляции"</string>
+    <string name="feature_remove_photos" formatted="false">"Фильтр рекомендуемых фото"</string>
+    <string name="feature_filter_views" formatted="false">"Фильтр по просмотрам"</string>
+    <string name="feature_filter_likes" formatted="false">"Фильтр по лайкам"</string>
+    <string name="feature_filter_duration" formatted="false">"Фильтр по длительности"</string>
+    <string name="feature_filter_keywords" formatted="false">"Фильтр по ключевым словам"</string>
+    <string name="feature_block_offline" formatted="false">"Блокировать офлайн-видео"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Не вставлять заранее загруженные видео при плохом соединении"</string>
+    <string name="feature_remove_ai" formatted="false">"Удалять контент, созданный ИИ"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Скрывать видео, помеченные TikTok как созданные ИИ"</string>
+    <string name="filter_metric_views" formatted="false">"просмотры"</string>
+    <string name="filter_metric_likes" formatted="false">"отметки «Нравится»"</string>
+    <string name="filter_metric_duration" formatted="false">"длительность"</string>
+    <string name="filter_unit_seconds" formatted="false">"с"</string>
+    <string name="filter_views_saved" formatted="false">"Диапазон просмотров сохранён"</string>
+    <string name="filter_likes_saved" formatted="false">"Диапазон отметок «Нравится» сохранён"</string>
+    <string name="filter_duration_saved" formatted="false">"Диапазон длительности сохранён"</string>
+    <string name="download_path_saved" formatted="false">"Пути сохранения обновлены"</string>
+    <string name="region_spoof_title" formatted="false">"Подмена региона и SIM"</string>
+    <string name="region_current" formatted="false">"Текущие настройки"</string>
+    <string name="region_target" formatted="true">"Целевой регион: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Оператор: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Код оператора: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Шаблоны"</string>
+    <string name="region_custom_parameters" formatted="false">"Настроить"</string>
+    <string name="language_spoof" formatted="false">"Подмена языка"</string>
+    <string name="environment_follow_region" formatted="false">"По региону"</string>
+    <string name="language_effective" formatted="true">"Действующий язык: %1$s"</string>
+    <string name="language_custom" formatted="false">"Свой язык"</string>
+    <string name="timezone_spoof" formatted="false">"Подмена часового пояса"</string>
+    <string name="timezone_effective" formatted="true">"Действующий часовой пояс: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Свой часовой пояс"</string>
+    <string name="gps_spoof" formatted="false">"Подмена местоположения"</string>
+    <string name="gps_effective" formatted="true">"Действующие координаты: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Свои координаты"</string>
+    <string name="speed_fixed" formatted="false">"Запоминать скорость"</string>
+    <string name="speed_fixed_summary" formatted="false">"Сохранять выбранную в меню скорость при смене видео"</string>
+    <string name="speed_expand" formatted="false">"Больше скоростей"</string>
+    <string name="speed_options_hint" formatted="false">"Скорости (нажмите для изменения или удаления)"</string>
+    <string name="speed_add_option" formatted="false">"+ Добавить скорость"</string>
+    <string name="speed_restore" formatted="false">"Сбросить"</string>
+    <string name="clean_on_play" formatted="false">"Скрывать управление при просмотре"</string>
+    <string name="clean_keep_progress" formatted="false">"Оставлять полосу прогресса"</string>
+    <string name="download_paths" formatted="false">"Папки сохранения"</string>
+    <string name="download_paths_summary" formatted="true">"Видео: %1$s · Изображения: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Оставлять видео, где %1$s: от %2$d%4$s до %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Оставлять видео, где %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Оставлять видео, где %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Диапазон не задан (нажмите для настройки границ)"</string>
+    <string name="keyword_unset" formatted="false">"Нет правил (нажмите для управления категориями)"</string>
+    <string name="keyword_summary" formatted="true">"Включено: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Описания: %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Хештеги: %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Авторы: %1$d"</string>
+    <string name="keyword_description" formatted="false">"Описания"</string>
+    <string name="keyword_tag" formatted="false">"Хештеги"</string>
+    <string name="keyword_author" formatted="false">"Авторы"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Нет правил в категории «%1$s». Добавьте их выше"</string>
+    <string name="duration_alert_title" formatted="false">"Уведомлять о длинных видео"</string>
+    <string name="duration_alert_summary" formatted="true">"Текущий порог: ≥ %1$s мин"</string>
+    <string name="download_video_path" formatted="false">"Папка для видео"</string>
+    <string name="download_image_path" formatted="false">"Папка для изображений"</string>
+    <string name="download_path_hint" formatted="false">"Первая папка должна быть общей медиапапкой, например Movies, Pictures или DCIM. Для недопустимых путей используется системное значение"</string>
+    <string name="views_range_title" formatted="false">"Диапазон просмотров"</string>
+    <string name="views_range_min" formatted="false">"Минимум просмотров (0 = без ограничения)"</string>
+    <string name="views_range_max" formatted="false">"Максимум просмотров (0 = без ограничения)"</string>
+    <string name="views_range_hint" formatted="false">"Оставлять только видео с числом просмотров в диапазоне. Если обе границы равны 0, ничего не удаляется"</string>
+    <string name="likes_range_title" formatted="false">"Диапазон отметок «Нравится»"</string>
+    <string name="likes_range_min" formatted="false">"Минимум отметок (0 = без ограничения)"</string>
+    <string name="likes_range_max" formatted="false">"Максимум отметок (0 = без ограничения)"</string>
+    <string name="likes_range_hint" formatted="false">"Оставлять только видео с числом отметок в диапазоне. Если обе границы равны 0, ничего не удаляется"</string>
+    <string name="duration_range_title" formatted="false">"Диапазон длительности"</string>
+    <string name="duration_range_min" formatted="false">"Минимум длительности (секунды; 0 = без ограничения)"</string>
+    <string name="duration_range_max" formatted="false">"Максимум длительности (секунды; 0 = без ограничения)"</string>
+    <string name="duration_range_hint" formatted="false">"Оставлять рекомендуемые видео указанной длительности. Если обе границы равны 0, ничего не удаляется. Фотопубликации не затрагиваются"</string>
+    <string name="keyword_manage" formatted="false">"Правила фильтра"</string>
+    <string name="keyword_description_hint" formatted="false">"Поиск в тексте и описании видео без учёта регистра."</string>
+    <string name="keyword_tag_hint" formatted="false">"Поиск по хештегам. Знак # вводить не нужно."</string>
+    <string name="keyword_author_hint" formatted="false">"Поиск по имени автора и уникальному имени пользователя. Знак @ вводить не нужно."</string>
+    <string name="keyword_description_input" formatted="false">"Слово или фраза"</string>
+    <string name="keyword_tag_input" formatted="false">"Хештег"</string>
+    <string name="keyword_author_input" formatted="false">"Имя или имя пользователя"</string>
+    <string name="keyword_add" formatted="false">"Добавить правило"</string>
+    <string name="keyword_delete" formatted="false">"Удалить правило"</string>
+    <string name="region_select_title" formatted="false">"Выбор региона"</string>
+    <string name="region_search" formatted="false">"Поиск по названию страны, английскому названию или коду"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Код оператора: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Свой регион и SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Укажите код страны и данные оператора без ограничений шаблона."</string>
+    <string name="region_code_input" formatted="false">"Код страны или региона (например, JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Код оператора (например, 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Название оператора (например, NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Выберите язык или введите его код."</string>
+    <string name="language_code_input" formatted="false">"Код языка (например, ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Часто используемые языки:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Выберите часовой пояс города или введите его название."</string>
+    <string name="timezone_input" formatted="false">"Часовой пояс (например, Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Часовые пояса городов:"</string>
+    <string name="city_tokyo" formatted="false">"Токио"</string>
+    <string name="city_taipei" formatted="false">"Тайбэй"</string>
+    <string name="city_hong_kong" formatted="false">"Гонконг"</string>
+    <string name="city_new_york" formatted="false">"Нью-Йорк"</string>
+    <string name="city_london" formatted="false">"Лондон"</string>
+    <string name="city_seoul" formatted="false">"Сеул"</string>
+    <string name="city_bangkok" formatted="false">"Бангкок"</string>
+    <string name="city_singapore" formatted="false">"Сингапур"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Свои координаты местоположения"</string>
+    <string name="gps_custom_hint" formatted="false">"Выберите город или введите широту и долготу."</string>
+    <string name="gps_latitude" formatted="false">"Широта (от -90.0 до 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Долгота (от -180.0 до 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Часто используемые города:"</string>
+    <string name="speed_add_title" formatted="false">"Добавить скорость"</string>
+    <string name="speed_input" formatted="false">"Скорость воспроизведения"</string>
+    <string name="speed_invalid" formatted="false">"Введите корректное число"</string>
+    <string name="speed_out_of_range" formatted="true">"Поддерживается только %1$sx–%2$sx"</string>
+    <string name="speed_range" formatted="true">"Допустимый диапазон: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Изменить скорость"</string>
+    <string name="duration_threshold_title" formatted="false">"Длинные видео"</string>
+    <string name="duration_threshold_hint" formatted="false">"Если длительность видео достигает этого значения, при начале воспроизведения появится краткое уведомление с длительностью в минутах."</string>
+    <string name="duration_threshold_input" formatted="false">"Порог длительности (минуты)"</string>
+    <string name="duration_threshold_example" formatted="false">"Например: 3 или 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Введите допустимое число минут больше 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Текущая настройка: уведомлять при длительности ≥ %1$s мин"</string>
+    <string name="duration_threshold_presets" formatted="false">"Рекомендуемая длительность:"</string>
+    <string name="status_feature_feed" formatted="false">"Фильтр ленты"</string>
+    <string name="status_feature_speed" formatted="false">"Скорость"</string>
+    <string name="status_feature_progress" formatted="false">"Полоса прогресса"</string>
+    <string name="status_feature_clean" formatted="false">"Автоскрытие управления"</string>
+    <string name="status_feature_immersive" formatted="false">"Отображение видео"</string>
+    <string name="status_feature_scroll" formatted="false">"Автопрокрутка"</string>
+    <string name="status_feature_duration" formatted="false">"Напоминание о длине"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Перевод комментариев"</string>
+    <string name="status_feature_video_translate" formatted="false">"Меню субтитров и перевода"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Копирование комментариев"</string>
+    <string name="status_feature_author" formatted="false">"Регион автора"</string>
+    <string name="status_feature_download" formatted="false">"Сохранение видео"</string>
+    <string name="status_feature_music" formatted="false">"Ограничения аудио"</string>
+    <string name="status_feature_sim" formatted="false">"SIM и страна"</string>
+    <string name="status_feature_language" formatted="false">"Язык"</string>
+    <string name="status_feature_timezone" formatted="false">"Часовой пояс"</string>
+    <string name="status_feature_gps" formatted="false">"Местоположение"</string>
+    <string name="status_feature_bar" formatted="false">"Строка состояния"</string>
+    <string name="status_normal" formatted="false">"Работает"</string>
+    <string name="status_issue" formatted="false">"Есть проблема"</string>
+    <string name="status_disabled" formatted="false">"Выключено"</string>
+    <string name="status_pending" formatted="false">"Ожидание"</string>
+    <string name="status_problem_disabled" formatted="false">"Выключено, но есть запись об ошибке"</string>
+    <string name="status_problem_unavailable" formatted="false">"Временно недоступно"</string>
+    <string name="status_problem_runtime" formatted="false">"Ошибка при работе"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Меню скорости недоступно"</string>
+    <string name="status_prepare_failed" formatted="false">"Не удалось подготовить функции. Откройте TikTok заново и проверьте."</string>
+    <string name="status_preparing" formatted="false">"Подготовка функций. Подождите."</string>
+    <string name="status_prepared" formatted="false">"Подготовка завершена. Откройте TikTok заново."</string>
+    <string name="status_read_failed" formatted="false">"Сейчас не удаётся прочитать состояние. Проверьте позже."</string>
+    <string name="status_update_failed" formatted="false">"Сейчас не удаётся обновить состояние. Показан последний результат."</string>
+    <string name="status_reading" formatted="false">"Чтение состояния"</string>
+    <string name="status_empty" formatted="false">"Записей о работе нет. Включите Toki в LSPosed, откройте TikTok и проверьте снова."</string>
+    <string name="status_report_note" formatted="true">"Последний отчёт: %1$s\n«Работает» означает, что функция готова и не сообщала об ошибках."</string>
+    <string name="config_section" formatted="false">"Управление настройками"</string>
+    <string name="config_import" formatted="false">"Импорт настроек"</string>
+    <string name="config_import_summary" formatted="false">"Восстановить настройки функций из файла"</string>
+    <string name="config_export" formatted="false">"Экспорт настроек"</string>
+    <string name="config_export_summary" formatted="false">"Сохранить настройки функций в файл"</string>
+    <string name="config_exported" formatted="false">"Настройки экспортированы в выбранное место. Файл может содержать ключевые слова, регионы и пути. Храните его безопасно."</string>
+    <string name="config_import_confirm" formatted="true">"Настроек в файле: %1$d. Импорт заменит все настройки функций, а отсутствующие вернутся к значениям по умолчанию.\n\nЯзык интерфейса, значок приложения, разрешения LSPosed и кеш совместимости TikTok не изменятся. Продолжить?"</string>
+    <string name="config_overwrite" formatted="false">"Заменить"</string>
+    <string name="config_imported" formatted="false">"Настройки импортированы, страница функций обновлена. Поддерживаемые изменения применяются сразу. Для остальных откройте TikTok заново и проверьте."</string>
+    <string name="config_processing" formatted="false">"Обработка настроек"</string>
+    <string name="config_error_io" formatted="false">"Ошибка чтения или записи файла. Проверьте выбранное место и свободное пространство."</string>
+    <string name="config_error_permission" formatted="false">"Нет доступа к выбранному файлу. Выберите его заново."</string>
+    <string name="config_error_invalid" formatted="false">"Это недопустимый файл настроек Toki. Настройки не импортированы."</string>
+    <string name="config_error_validation" formatted="true">"Проверка настроек не пройдена: %1$s. Настройки не импортированы."</string>
+    <string name="config_error_commit" formatted="false">"Применение настроек не подтверждено. Откройте Toki заново, проверьте и повторите."</string>
+    <string name="sponsor_title" formatted="false">"Поддержать разработчика"</string>
+    <string name="sponsor_kofi" formatted="false">"Поддержать через Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Платёжный QR-код Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Сохранение…"</string>
+    <string name="sponsor_save_image" formatted="false">"Сохранить изображение"</string>
+    <string name="sponsor_image_hint" formatted="false">"Сохраните исходное изображение и выберите его в Alipay для распознавания кода."</string>
+    <string name="sponsor_address_copied" formatted="false">"Адрес USDT скопирован"</string>
+    <string name="sponsor_image_saved" formatted="false">"Изображение сохранено в выбранное место"</string>
+    <string name="sponsor_error_io" formatted="false">"Не удалось сохранить файл. Проверьте выбранное место и свободное пространство, затем повторите."</string>
+    <string name="sponsor_error_permission" formatted="false">"Не удалось сохранить: нет разрешения на запись в выбранное место. Выберите его заново."</string>
+    <string name="feature_filter_topics" formatted="false">"Скрывать рекомендуемые темы"</string>
+    <string name="feature_filter_creators" formatted="false">"Скрывать рекомендуемых авторов"</string>
+    <string name="host_scan_title_complete" formatted="false">"Поиск завершён"</string>
+    <string name="host_scan_title_failed" formatted="false">"Поиск не удался"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Перезапустите TikTok вручную, чтобы применить результаты."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Посмотрите диагностику функций в Toki."</string>
+    <string name="layout_title" formatted="false">"Оформление страниц"</string>
+    <string name="layout_summary" formatted="false">"Выберите элементы для скрытия"</string>
+    <string name="layout_hint" formatted="false">"Включите переключатель, чтобы скрыть элемент"</string>
+    <string name="layout_top" formatted="false">"Верхняя панель"</string>
+    <string name="layout_bottom" formatted="false">"Нижняя панель"</string>
+    <string name="layout_side" formatted="false">"Страница видео"</string>
+    <string name="layout_search" formatted="false">"Поиск"</string>
+    <string name="layout_live" formatted="false">"Эфиры"</string>
+    <string name="layout_friends" formatted="false">"Друзья"</string>
+    <string name="layout_following" formatted="false">"Подписки"</string>
+    <string name="layout_shop" formatted="false">"Магазин"</string>
+    <string name="layout_for_you" formatted="false">"Рекомендации"</string>
+    <string name="layout_nearby" formatted="false">"Рядом"</string>
+    <string name="layout_stem" formatted="false">"Наука"</string>
+    <string name="layout_series" formatted="false">"Сериалы"</string>
+    <string name="layout_home" formatted="false">"Главная"</string>
+    <string name="layout_create" formatted="false">"Создать"</string>
+    <string name="layout_inbox" formatted="false">"Входящие"</string>
+    <string name="layout_profile" formatted="false">"Профиль"</string>
+    <string name="layout_discover" formatted="false">"Интересное"</string>
+    <string name="layout_avatar" formatted="false">"Аватар"</string>
+    <string name="layout_follow" formatted="false">"Кнопка подписки"</string>
+    <string name="layout_like" formatted="false">"Лайк"</string>
+    <string name="layout_comment" formatted="false">"Комментарии"</string>
+    <string name="layout_favorite" formatted="false">"Избранное"</string>
+    <string name="layout_share" formatted="false">"Поделиться"</string>
+    <string name="layout_music" formatted="false">"Музыкальная пластинка"</string>
+    <string name="layout_explore" formatted="false">"Обзор"</string>
+    <string name="layout_author" formatted="false">"Информация об авторе"</string>
+    <string name="layout_description" formatted="false">"Описание"</string>
+    <string name="layout_music_title" formatted="false">"Название музыки"</string>
+    <string name="layout_tags" formatted="false">"Информационные метки"</string>
+    <string name="layout_search_label" formatted="false">"Поисковая подсказка"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Кнопка остановки автопрокрутки"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Монеты и награды"</string>
+    <string name="layout_quick_comment" formatted="false">"Быстрые комментарии"</string>
+    <string name="layout_playlist" formatted="false">"Плейлист"</string>
+    <string name="layout_creation_buttons" formatted="false">"Кнопки создания"</string>
+    <string name="layout_live_notice" formatted="false">"Напоминания об эфирах"</string>
+    <string name="layout_opacity" formatted="false">"Непрозрачность"</string>
+    <string name="feature_background_audio">"Разблокировать фоновое аудио"</string>
+    <string name="layout_landscape">"Кнопка полного экрана"</string>
+    <string name="layout_photo_indicators">"Индикаторы фото и подсказки"</string>
+    <string name="layout_quick_message">"Быстрые сообщения и автор репоста"</string>
+    <string name="layout_user_card">"Рекомендуемые аккаунты"</string>
+    <string name="layout_survey">"Опросы и отзывы"</string>
+    <string name="layout_ad_cards">"Карточки товаров и рекламы"</string>
+    <string name="layout_bottom_banners">"Другие нижние баннеры"</string>
+    <string name="layout_activities">"Вход в события"</string>
+    <string name="host_scan_title_running" formatted="false">"Поиск методов"</string>
+    <string name="host_scan_title_saving" formatted="false">"Сохранение результатов"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Оставьте TikTok на переднем плане."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Подождите."</string>
+    <string name="host_scan_done" formatted="false">"Понятно"</string>
+    <string name="video_fit_center" formatted="false">"По центру"</string>
+    <string name="video_fit_smart" formatted="false">"Полный экран"</string>
+</resources>

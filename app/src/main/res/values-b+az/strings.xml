@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Ana səhifə"</string>
+    <string name="nav_features" formatted="false">"Funksiyalar"</string>
+    <string name="page_features" formatted="false">"Ayarlar"</string>
+    <string name="page_hook_status" formatted="false">"Funksiyaların vəziyyəti"</string>
+    <string name="nav_back" formatted="false">"Geri"</string>
+    <string name="restart_tiktok" formatted="false">"TikTok-u yenidən başladın"</string>
+    <string name="restart_root_required" formatted="false">"Toki-yə root girişi verin."</string>
+    <string name="language_title" formatted="false">"Tətbiqin dili"</string>
+    <string name="language_system" formatted="false">"Sistemə uyğun"</string>
+    <string name="language_search" formatted="false">"Dil axtarın"</string>
+    <string name="language_clear_search" formatted="false">"Axtarışı təmizləyin"</string>
+    <string name="language_no_results" formatted="false">"Uyğun dil tapılmadı"</string>
+    <string name="common_save" formatted="false">"Yadda saxlayın"</string>
+    <string name="common_cancel" formatted="false">"Ləğv edin"</string>
+    <string name="common_confirm" formatted="false">"Oldu"</string>
+    <string name="common_close" formatted="false">"Bağlayın"</string>
+    <string name="common_open" formatted="false">"Açın"</string>
+    <string name="common_copy" formatted="false">"Kopyalayın"</string>
+    <string name="common_add" formatted="false">"Əlavə edin"</string>
+    <string name="common_delete" formatted="false">"Silin"</string>
+    <string name="common_done" formatted="false">"Hazırdır"</string>
+    <string name="common_save_apply" formatted="false">"Tətbiq edin"</string>
+    <string name="common_unknown" formatted="false">"Naməlum"</string>
+    <string name="common_custom" formatted="false">"Fərdi"</string>
+    <string name="home_icon_hidden" formatted="false">"Tətbiq nişanı gizlədildi"</string>
+    <string name="home_icon_restored" formatted="false">"Tətbiq nişanı bərpa edildi"</string>
+    <string name="home_activated" formatted="false">"Aktivləşdirilib"</string>
+    <string name="home_inactive" formatted="false">"Aktivləşdirilməyib"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosed-də aktivləşdirmə aşkarlanmadı"</string>
+    <string name="home_host_section" formatted="false">"TikTok uyğunluğu"</string>
+    <string name="home_host_current" formatted="false">"Quraşdırılmış TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Bu cihazda dəstəklənən TikTok quraşdırılması tapılmadı"</string>
+    <string name="home_host_not_installed" formatted="false">"Quraşdırılmayıb"</string>
+    <string name="home_supported_versions" formatted="false">"Dəstəklənən versiyalar"</string>
+    <string name="home_community" formatted="false">"Açıq mənbə və icma"</string>
+    <string name="home_github" formatted="false">"GitHub repozitoriyası"</string>
+    <string name="home_telegram" formatted="false">"Telegram qrupu"</string>
+    <string name="home_preferences" formatted="false">"Modul tərcihləri"</string>
+    <string name="home_hide_icon" formatted="false">"Tətbiq nişanını gizlədin"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Nişan gizli olduqda Toki-ni LSPosed meneceri vasitəsilə açın"</string>
+    <string name="home_support" formatted="false">"İnkişafı dəstəkləyin"</string>
+    <string name="home_support_summary" formatted="false">"Davamlı texniki xidmət və təkmilləşdirmələri dəstəkləyin"</string>
+    <string name="feature_region_section" formatted="false">"Region və cihaz"</string>
+    <string name="feature_playback_section" formatted="false">"Oxutma"</string>
+    <string name="feature_progress" formatted="false">"Gedişat çubuğunu həmişə göstər"</string>
+    <string name="feature_progress_summary" formatted="false">"Qısa videolarda da gedişat çubuğunu görünən saxlayır"</string>
+    <string name="feature_immersive" formatted="false">"Video görünüşü"</string>
+    <string name="feature_autoplay" formatted="false">"Təkmil avtomatik sürüşdürmə"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Bütün video menyularında avtomatik sürüşdürməni açır"</string>
+    <string name="feature_status_bar" formatted="false">"Sistemin vəziyyət çubuğunu gizlədin"</string>
+    <string name="feature_media_section" formatted="false">"Endirmələr və əməliyyatlar"</string>
+    <string name="feature_download" formatted="false">"Su nişansız endirmə"</string>
+    <string name="feature_download_summary" formatted="false">"Uzun basma və ya paylaşma menyusundan orijinal videonu su nişanı olmadan saxlayır"</string>
+    <string name="feature_music" formatted="false">"Səsi aç"</string>
+    <string name="feature_music_summary" formatted="false">"Lisenziya və ya regionla məhdudlaşdırılmış səsin oxudulmasını bərpa edir"</string>
+    <string name="feature_author_region" formatted="false">"Müəllifin regionunu göstərin"</string>
+    <string name="feature_author_region_summary" formatted="false">"Müəllif adının yanında ölkə və ya region bayrağını və kodunu göstərir"</string>
+    <string name="feature_copy_comment" formatted="false">"Yalnız mətni kopyala"</string>
+    <string name="feature_video_translation" formatted="false">"Altyazı və tərcümə menyusu"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Uzun basma menyusunda girişi göstər"</string>
+    <string name="feature_comment_translation" formatted="false">"Şərhləri tərcümə et"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Xarici dildəki şərhləri toplu tərcümə etmək üçün düymə əlavə edir"</string>
+    <string name="feature_filter_section" formatted="false">"Lentin süzgəcdən keçirilməsi"</string>
+    <string name="feature_remove_ads" formatted="false">"Lent reklamlarını silin"</string>
+    <string name="feature_remove_live" formatted="false">"Canlı yayımları gizlət"</string>
+    <string name="feature_remove_photos" formatted="false">"Foto paylaşımlarını gizlət"</string>
+    <string name="feature_filter_views" formatted="false">"Baxış sayı süzgəci"</string>
+    <string name="feature_filter_likes" formatted="false">"Bəyənmə sayı süzgəci"</string>
+    <string name="feature_filter_duration" formatted="false">"Video müddəti süzgəci"</string>
+    <string name="feature_filter_keywords" formatted="false">"Açar söz süzgəci"</string>
+    <string name="feature_block_offline" formatted="false">"Oflayn videoları blokla"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Zəif bağlantıda əvvəlcədən yüklənmiş oflayn videoların əlavə edilməsinin qarşısını alır"</string>
+    <string name="feature_remove_ai" formatted="false">"Süni intellektin yaratdığı videoları gizlət"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"TikTok-un süni intellektlə yaradılmış kimi işarələdiyi videoları süzgəcdən keçirir"</string>
+    <string name="filter_metric_views" formatted="false">"baxış sayı"</string>
+    <string name="filter_metric_likes" formatted="false">"bəyənmə sayı"</string>
+    <string name="filter_metric_duration" formatted="false">"müddət"</string>
+    <string name="filter_unit_seconds" formatted="false">"san"</string>
+    <string name="filter_views_saved" formatted="false">"Baxış sayı aralığı saxlanıldı"</string>
+    <string name="filter_likes_saved" formatted="false">"Bəyənmə sayı aralığı saxlanıldı"</string>
+    <string name="filter_duration_saved" formatted="false">"Video müddəti aralığı saxlanıldı"</string>
+    <string name="download_path_saved" formatted="false">"Fərdi saxlama yolları yeniləndi"</string>
+    <string name="region_spoof_title" formatted="false">"Region və SIM təqlidi"</string>
+    <string name="region_current" formatted="false">"Cari konfiqurasiya"</string>
+    <string name="region_target" formatted="true">"Hədəf region: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operator: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Operator kodu: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Hazır ayarlar"</string>
+    <string name="region_custom_parameters" formatted="false">"Fərdi"</string>
+    <string name="language_spoof" formatted="false">"Dil təqlidi"</string>
+    <string name="environment_follow_region" formatted="false">"Regiona uyğun"</string>
+    <string name="language_effective" formatted="true">"Tətbiq olunan dil: %1$s"</string>
+    <string name="language_custom" formatted="false">"Fərdi dil"</string>
+    <string name="timezone_spoof" formatted="false">"Saat qurşağı təqlidi"</string>
+    <string name="timezone_effective" formatted="true">"Tətbiq olunan saat qurşağı: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Fərdi saat qurşağı"</string>
+    <string name="gps_spoof" formatted="false">"Məkan təqlidi"</string>
+    <string name="gps_effective" formatted="true">"Tətbiq olunan koordinatlar: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Fərdi koordinatlar"</string>
+    <string name="speed_fixed" formatted="false">"Oxutma sürətini saxlayın"</string>
+    <string name="speed_fixed_summary" formatted="false">"Video dəyişdikdə uzun basma menyusunda seçilmiş sürəti saxlayır"</string>
+    <string name="speed_expand" formatted="false">"Əlavə sürətlər"</string>
+    <string name="speed_options_hint" formatted="false">"Sürət seçimləri (dəyişmək və ya silmək üçün toxunun)"</string>
+    <string name="speed_add_option" formatted="false">"+ Sürət əlavə edin"</string>
+    <string name="speed_restore" formatted="false">"Sıfırla"</string>
+    <string name="clean_on_play" formatted="false">"Oxutma zamanı idarələri gizlət"</string>
+    <string name="clean_keep_progress" formatted="false">"Gedişat çubuğunu saxla"</string>
+    <string name="download_paths" formatted="false">"Saxlama qovluqları"</string>
+    <string name="download_paths_summary" formatted="true">"Videolar: %1$s · Şəkillər: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"%1$s göstəricisi %2$d%4$s ilə %3$d%4$s arasında olan videoları saxlayın"</string>
+    <string name="filter_range_min" formatted="true">"%1$s göstəricisi ≥ %2$d%3$s olan videoları saxlayın"</string>
+    <string name="filter_range_max" formatted="true">"%1$s göstəricisi ≤ %2$d%3$s olan videoları saxlayın"</string>
+    <string name="filter_range_unset" formatted="false">"Aralıq təyin edilməyib (minimum və ya maksimumu təyin etmək üçün toxunun)"</string>
+    <string name="keyword_unset" formatted="false">"Qayda əlavə etmək üçün toxun"</string>
+    <string name="keyword_summary" formatted="true">"Aktivdir: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Təsvirlər %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Heşteqlər %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Müəlliflər %1$d"</string>
+    <string name="keyword_description" formatted="false">"Təsvirlər"</string>
+    <string name="keyword_tag" formatted="false">"Heşteqlər"</string>
+    <string name="keyword_author" formatted="false">"Müəlliflər"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"%1$s üçün qayda yoxdur. Yuxarıda əlavə edin."</string>
+    <string name="duration_alert_title" formatted="false">"Uzun video xəbərdarlığı"</string>
+    <string name="duration_alert_summary" formatted="true">"Cari hədd: ≥ %1$s dəqiqə"</string>
+    <string name="download_video_path" formatted="false">"Video qovluğu"</string>
+    <string name="download_image_path" formatted="false">"Şəkil qovluğu"</string>
+    <string name="download_path_hint" formatted="false">"İlk qovluq Movies, Pictures və ya DCIM kimi ümumi media qovluğu olmalıdır. Etibarsız yollar üçün sistemin standart yolu istifadə olunur."</string>
+    <string name="views_range_title" formatted="false">"Baxış sayı aralığı"</string>
+    <string name="views_range_min" formatted="false">"Minimum baxış sayı (0 = məhdudiyyətsiz)"</string>
+    <string name="views_range_max" formatted="false">"Maksimum baxış sayı (0 = məhdudiyyətsiz)"</string>
+    <string name="views_range_hint" formatted="false">"Yalnız bu baxış sayı aralığında olan videoları saxlayır. Heç nə silinməsin deyə hər iki həddi 0 edin."</string>
+    <string name="likes_range_title" formatted="false">"Bəyənmə sayı aralığı"</string>
+    <string name="likes_range_min" formatted="false">"Minimum bəyənmə sayı (0 = məhdudiyyətsiz)"</string>
+    <string name="likes_range_max" formatted="false">"Maksimum bəyənmə sayı (0 = məhdudiyyətsiz)"</string>
+    <string name="likes_range_hint" formatted="false">"Yalnız bu bəyənmə sayı aralığında olan videoları saxlayır. Heç nə silinməsin deyə hər iki həddi 0 edin."</string>
+    <string name="duration_range_title" formatted="false">"Video müddəti aralığı"</string>
+    <string name="duration_range_min" formatted="false">"Minimum müddət (saniyə; 0 = məhdudiyyətsiz)"</string>
+    <string name="duration_range_max" formatted="false">"Maksimum müddət (saniyə; 0 = məhdudiyyətsiz)"</string>
+    <string name="duration_range_hint" formatted="false">"Yalnız bu müddət aralığında olan tövsiyə edilmiş videoları saxlayır. Heç nə silinməsin deyə hər iki həddi 0 edin. Foto paylaşımlarına təsir etmir."</string>
+    <string name="keyword_manage" formatted="false">"Süzgəc qaydaları"</string>
+    <string name="keyword_description_hint" formatted="false">"Video mətnlərini və təsvirlərini böyük və kiçik hərf fərqini nəzərə almadan uyğunlaşdırır."</string>
+    <string name="keyword_tag_hint" formatted="false">"Heşteqləri uyğunlaşdırır. # prefiksini daxil etməyin."</string>
+    <string name="keyword_author_hint" formatted="false">"Müəllif adlarını və unikal istifadəçi adlarını uyğunlaşdırır. @ prefiksini daxil etməyin."</string>
+    <string name="keyword_description_input" formatted="false">"Təsvirdə açar söz"</string>
+    <string name="keyword_tag_input" formatted="false">"Heşteq"</string>
+    <string name="keyword_author_input" formatted="false">"Ad və ya istifadəçi adı"</string>
+    <string name="keyword_add" formatted="false">"Qayda əlavə edin"</string>
+    <string name="keyword_delete" formatted="false">"Qaydanı silin"</string>
+    <string name="region_select_title" formatted="false">"Region seç"</string>
+    <string name="region_search" formatted="false">"Ölkə adı və ya kodu"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Operator kodu: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Fərdi region və SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Hazır ayarlarla məhdudlaşmadan fərdi ölkə kodu və operator təyin edin."</string>
+    <string name="region_code_input" formatted="false">"Ölkə və ya region kodu (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Operator kodu (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Operator adı (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Geniş istifadə olunan dili seçin və ya dil kodunu daxil edin."</string>
+    <string name="language_code_input" formatted="false">"Dil kodu (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Dillər"</string>
+    <string name="timezone_custom_hint" formatted="false">"Geniş istifadə olunan şəhərin saat qurşağını seçin və ya saat qurşağının adını daxil edin."</string>
+    <string name="timezone_input" formatted="false">"Saat qurşağının adı (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Şəhərlər"</string>
+    <string name="city_tokyo" formatted="false">"Tokio"</string>
+    <string name="city_taipei" formatted="false">"Taypey"</string>
+    <string name="city_hong_kong" formatted="false">"Honkonq"</string>
+    <string name="city_new_york" formatted="false">"Nyu-York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Seul"</string>
+    <string name="city_bangkok" formatted="false">"Banqkok"</string>
+    <string name="city_singapore" formatted="false">"Sinqapur"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Fərdi məkan"</string>
+    <string name="gps_custom_hint" formatted="false">"Geniş istifadə olunan şəhəri seçin və ya enlik və uzunluğu daxil edin."</string>
+    <string name="gps_latitude" formatted="false">"Enlik (-90.0 ilə 90.0 arası)"</string>
+    <string name="gps_longitude" formatted="false">"Uzunluq (-180.0 ilə 180.0 arası)"</string>
+    <string name="gps_presets" formatted="false">"Şəhərlər"</string>
+    <string name="speed_add_title" formatted="false">"Sürət əlavə et"</string>
+    <string name="speed_input" formatted="false">"Sürət"</string>
+    <string name="speed_invalid" formatted="false">"Etibarlı rəqəm daxil edin"</string>
+    <string name="speed_out_of_range" formatted="true">"Yalnız %1$sx ilə %2$sx arası dəstəklənir"</string>
+    <string name="speed_range" formatted="true">"Dəstəklənən aralıq: %1$sx ilə %2$sx arası"</string>
+    <string name="speed_edit_title" formatted="false">"Sürəti dəyiş"</string>
+    <string name="duration_threshold_title" formatted="false">"Uzun video xəbərdarlığı"</string>
+    <string name="duration_threshold_hint" formatted="false">"Video bu müddətə çatdıqda, oxutmanın əvvəlində qısa bildiriş onun dəqiqə ilə uzunluğunu göstərir."</string>
+    <string name="duration_threshold_input" formatted="false">"Müddət həddi (dəqiqə)"</string>
+    <string name="duration_threshold_example" formatted="false">"Məsələn: 3 və ya 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"0-dan böyük etibarlı dəqiqə sayı daxil edin"</string>
+    <string name="duration_threshold_current" formatted="true">"Cari ayar: ≥ %1$s dəqiqəlik videolar üçün xəbərdarlıq"</string>
+    <string name="duration_threshold_presets" formatted="false">"Tövsiyə olunan müddətlər:"</string>
+    <string name="status_feature_feed" formatted="false">"Lent süzgəci"</string>
+    <string name="status_feature_speed" formatted="false">"Sürət"</string>
+    <string name="status_feature_progress" formatted="false">"Gedişat çubuğu"</string>
+    <string name="status_feature_clean" formatted="false">"Avtomatik gizlətmə"</string>
+    <string name="status_feature_immersive" formatted="false">"Video görünüşü"</string>
+    <string name="status_feature_scroll" formatted="false">"Avtomatik sürüşdürmə"</string>
+    <string name="status_feature_duration" formatted="false">"Müddət xəbərdarlığı"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Şərh tərcüməsi"</string>
+    <string name="status_feature_video_translate" formatted="false">"Altyazı və tərcümə menyusu"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Şərhləri kopyalama"</string>
+    <string name="status_feature_author" formatted="false">"Müəllif regionu"</string>
+    <string name="status_feature_download" formatted="false">"Video saxlama"</string>
+    <string name="status_feature_music" formatted="false">"Səs məhdudiyyəti"</string>
+    <string name="status_feature_sim" formatted="false">"Region və SIM"</string>
+    <string name="status_feature_language" formatted="false">"Dil"</string>
+    <string name="status_feature_timezone" formatted="false">"Saat qurşağı"</string>
+    <string name="status_feature_gps" formatted="false">"Məkan"</string>
+    <string name="status_feature_bar" formatted="false">"Vəziyyət çubuğu"</string>
+    <string name="status_normal" formatted="false">"İşləyir"</string>
+    <string name="status_issue" formatted="false">"Problem var"</string>
+    <string name="status_disabled" formatted="false">"Söndürülüb"</string>
+    <string name="status_pending" formatted="false">"Gözlənilir"</string>
+    <string name="status_problem_disabled" formatted="false">"Söndürülüb, xəta qeydə alınıb"</string>
+    <string name="status_problem_unavailable" formatted="false">"Hazırda əlçatan deyil"</string>
+    <string name="status_problem_runtime" formatted="false">"İşləmə xətası"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Sürət menyusu əlçatan deyil"</string>
+    <string name="status_prepare_failed" formatted="false">"Funksiyaların hazırlanması alınmadı. TikTok-u yenidən açın və yoxlayın."</string>
+    <string name="status_preparing" formatted="false">"Funksiyalar hazırlanır. Gözləyin."</string>
+    <string name="status_prepared" formatted="false">"Hazırlıq tamamlandı. TikTok-u yenidən açın."</string>
+    <string name="status_read_failed" formatted="false">"Vəziyyəti hazırda oxumaq mümkün deyil. Sonra yenidən yoxlayın."</string>
+    <string name="status_update_failed" formatted="false">"Vəziyyəti hazırda yeniləmək mümkün deyil. Ən son nəticə göstərilir."</string>
+    <string name="status_reading" formatted="false">"Vəziyyət oxunur"</string>
+    <string name="status_empty" formatted="false">"Fəaliyyət qeydi yoxdur. LSPosed-də Toki-ni aktiv edin, TikTok-u açın və yenidən yoxlayın."</string>
+    <string name="status_report_note" formatted="true">"Son hesabat: %1$s\n“İşləyir” funksiyanın hazır olduğunu və xəta bildirmədiyini göstərir."</string>
+    <string name="config_section" formatted="false">"Konfiqurasiya"</string>
+    <string name="config_import" formatted="false">"Ayarları idxal et"</string>
+    <string name="config_import_summary" formatted="false">"Funksiya ayarlarını fayldan bərpa edin"</string>
+    <string name="config_export" formatted="false">"Ayarları ixrac et"</string>
+    <string name="config_export_summary" formatted="false">"Funksiya ayarlarını fayla saxlayın"</string>
+    <string name="config_exported" formatted="false">"Konfiqurasiya seçilmiş yerə ixrac edildi. Faylda açar sözlər, regionlar və qovluq ayarları ola bilər. Onu təhlükəsiz saxlayın."</string>
+    <string name="config_import_confirm" formatted="true">"Faylda %1$d ayar var. İdxal bütün funksiya ayarlarını əvəz edir; çatışmayan ayarlar standart dəyərlərə qaytarılır.\n\nTətbiqin dili, nişanı, LSPosed icazəsi və TikTok uyğunluq keşi dəyişməyəcək. Davam edilsin?"</string>
+    <string name="config_overwrite" formatted="false">"Əvəz et"</string>
+    <string name="config_imported" formatted="false">"Konfiqurasiya idxal edildi və funksiya ayarları yeniləndi. İşləmə zamanı yenilənməni dəstəkləyən dəyişikliklər dərhal tətbiq edilir. Digər dəyişiklikləri yoxlamaq üçün TikTok-u yenidən açın."</string>
+    <string name="config_processing" formatted="false">"İşlənir…"</string>
+    <string name="config_error_io" formatted="false">"Faylı oxumaq və ya yazmaq mümkün deyil. Seçilmiş yeri və boş sahəni yoxlayın."</string>
+    <string name="config_error_permission" formatted="false">"Seçilmiş fayla giriş icazəsi verilməyib. Onu yenidən seçin."</string>
+    <string name="config_error_invalid" formatted="false">"Bu, etibarlı Toki konfiqurasiya faylı deyil. Heç bir ayar idxal edilmədi."</string>
+    <string name="config_error_validation" formatted="true">"Konfiqurasiyanın yoxlanması alınmadı: %1$s. Heç bir ayar idxal edilmədi."</string>
+    <string name="config_error_commit" formatted="false">"Konfiqurasiya dəyişikliklərini təsdiqləmək mümkün olmadı. Yenidən cəhd etməzdən əvvəl Toki-ni açıb onları yoxlayın."</string>
+    <string name="sponsor_title" formatted="false">"Tərtibatçını dəstəkləyin"</string>
+    <string name="sponsor_kofi" formatted="false">"Ko-fi vasitəsilə dəstəkləyin"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay ödəniş QR kodu"</string>
+    <string name="sponsor_saving" formatted="false">"Saxlanılır…"</string>
+    <string name="sponsor_save_image" formatted="false">"Şəkli saxla"</string>
+    <string name="sponsor_image_hint" formatted="false">"Tam orijinal şəkli saxlayın, sonra kodu skan etmək üçün onu Alipay-da seçin."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT ünvanı kopyalandı"</string>
+    <string name="sponsor_image_saved" formatted="false">"Şəkil seçilmiş yerə saxlanıldı"</string>
+    <string name="sponsor_error_io" formatted="false">"Saxlama alınmadı. Seçilmiş yeri və boş sahəni yoxlayıb yenidən cəhd edin."</string>
+    <string name="sponsor_error_permission" formatted="false">"Saxlama alınmadı. Bu yerə yazma icazəsi verilməyib. Başqa yer seçin."</string>
+    <string name="feature_filter_topics" formatted="false">"Təklif olunan mövzuları gizlət"</string>
+    <string name="feature_filter_creators" formatted="false">"Tövsiyə olunan yaradıcıları gizlət"</string>
+    <string name="host_scan_title_complete" formatted="false">"Axtarış tamamlandı"</string>
+    <string name="host_scan_title_failed" formatted="false">"Axtarış alınmadı"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Nəticələri tətbiq etmək üçün TikTok-u əl ilə yenidən başladın."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Toki-də funksiya diaqnostikasına baxın."</string>
+    <string name="layout_title" formatted="false">"Səhifə görünüşü"</string>
+    <string name="layout_summary" formatted="false">"Gizlədiləcək elementləri seçin"</string>
+    <string name="layout_hint" formatted="false">"Elementi gizlətmək üçün açarı aktiv edin"</string>
+    <string name="layout_top" formatted="false">"Üst panel"</string>
+    <string name="layout_bottom" formatted="false">"Alt panel"</string>
+    <string name="layout_side" formatted="false">"Video səhifəsi"</string>
+    <string name="layout_search" formatted="false">"Axtarış"</string>
+    <string name="layout_live" formatted="false">"Canlı yayım"</string>
+    <string name="layout_friends" formatted="false">"Dostlar"</string>
+    <string name="layout_following" formatted="false">"İzlənilənlər"</string>
+    <string name="layout_shop" formatted="false">"Mağaza"</string>
+    <string name="layout_for_you" formatted="false">"Sizin üçün"</string>
+    <string name="layout_nearby" formatted="false">"Yaxınlıqda"</string>
+    <string name="layout_stem" formatted="false">"Elm"</string>
+    <string name="layout_series" formatted="false">"Seriallar"</string>
+    <string name="layout_home" formatted="false">"Əsas səhifə"</string>
+    <string name="layout_create" formatted="false">"Yarat"</string>
+    <string name="layout_inbox" formatted="false">"Gələnlər"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Kəşf et"</string>
+    <string name="layout_avatar" formatted="false">"Profil şəkli"</string>
+    <string name="layout_follow" formatted="false">"İzlə düyməsi"</string>
+    <string name="layout_like" formatted="false">"Bəyən"</string>
+    <string name="layout_comment" formatted="false">"Şərhlər"</string>
+    <string name="layout_favorite" formatted="false">"Seçilmişlər"</string>
+    <string name="layout_share" formatted="false">"Paylaş"</string>
+    <string name="layout_music" formatted="false">"Musiqi diski"</string>
+    <string name="layout_explore" formatted="false">"Araşdır"</string>
+    <string name="layout_author" formatted="false">"Müəllif məlumatı"</string>
+    <string name="layout_description" formatted="false">"Təsvir"</string>
+    <string name="layout_music_title" formatted="false">"Musiqi adı"</string>
+    <string name="layout_tags" formatted="false">"Məlumat etiketləri"</string>
+    <string name="layout_search_label" formatted="false">"Axtarış təklifi"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Avtomatik sürüşdürməni dayandırma düyməsi"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Sikkələr və mükafatlar"</string>
+    <string name="layout_quick_comment" formatted="false">"Sürətli şərhlər"</string>
+    <string name="layout_playlist" formatted="false">"Pleylist"</string>
+    <string name="layout_creation_buttons" formatted="false">"Yaratma qısayolları"</string>
+    <string name="layout_live_notice" formatted="false">"Canlı yayım xatırlatmaları"</string>
+    <string name="layout_opacity" formatted="false">"Qeyri-şəffaflıq"</string>
+    <string name="feature_background_audio">"Fon səsini aç"</string>
+    <string name="layout_landscape">"Tam ekran düyməsi"</string>
+    <string name="layout_photo_indicators">"Foto göstəriciləri və ipucları"</string>
+    <string name="layout_quick_message">"Sürətli mesajlar və paylaşan"</string>
+    <string name="layout_user_card">"Tövsiyə olunan hesablar"</string>
+    <string name="layout_survey">"Sorğular və rəylər"</string>
+    <string name="layout_ad_cards">"Məhsul və reklam kartları"</string>
+    <string name="layout_bottom_banners">"Digər alt bannerlər"</string>
+    <string name="layout_activities">"Tədbir girişi"</string>
+    <string name="host_scan_title_running" formatted="false">"Metodlar axtarılır"</string>
+    <string name="host_scan_title_saving" formatted="false">"Nəticələr saxlanılır"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"TikTok-u ön planda saxlayın."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Zəhmət olmasa, gözləyin."</string>
+    <string name="host_scan_done" formatted="false">"Aydındır"</string>
+    <string name="video_fit_center" formatted="false">"Mərkəzdə"</string>
+    <string name="video_fit_smart" formatted="false">"Tam ekran"</string>
+</resources>

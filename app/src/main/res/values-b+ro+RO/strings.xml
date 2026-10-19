@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Acasă"</string>
+    <string name="nav_features" formatted="false">"Funcții"</string>
+    <string name="page_features" formatted="false">"Setări"</string>
+    <string name="page_hook_status" formatted="false">"Starea funcțiilor"</string>
+    <string name="nav_back" formatted="false">"Înapoi"</string>
+    <string name="restart_tiktok" formatted="false">"Repornește TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Acordă acces root pentru Toki."</string>
+    <string name="language_title" formatted="false">"Limba aplicației"</string>
+    <string name="language_system" formatted="false">"Urmează sistemul"</string>
+    <string name="language_search" formatted="false">"Caută limbi"</string>
+    <string name="language_clear_search" formatted="false">"Șterge căutarea"</string>
+    <string name="language_no_results" formatted="false">"Nicio limbă corespunzătoare"</string>
+    <string name="common_save" formatted="false">"Salvează"</string>
+    <string name="common_cancel" formatted="false">"Anulează"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Închide"</string>
+    <string name="common_open" formatted="false">"Deschide"</string>
+    <string name="common_copy" formatted="false">"Copiază"</string>
+    <string name="common_add" formatted="false">"Adaugă"</string>
+    <string name="common_delete" formatted="false">"Șterge"</string>
+    <string name="common_done" formatted="false">"Gata"</string>
+    <string name="common_save_apply" formatted="false">"Aplică"</string>
+    <string name="common_unknown" formatted="false">"Necunoscut"</string>
+    <string name="common_custom" formatted="false">"Personalizat"</string>
+    <string name="home_icon_hidden" formatted="false">"Pictograma aplicației este ascunsă"</string>
+    <string name="home_icon_restored" formatted="false">"Pictograma aplicației a fost restabilită"</string>
+    <string name="home_activated" formatted="false">"Activat"</string>
+    <string name="home_inactive" formatted="false">"Neactivat"</string>
+    <string name="home_activation_missing" formatted="false">"Nu s-a detectat activarea în LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Compatibilitate TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok instalat"</string>
+    <string name="home_host_missing" formatted="false">"Nu s-a găsit o instalare TikTok acceptată pe dispozitiv"</string>
+    <string name="home_host_not_installed" formatted="false">"Neinstalat"</string>
+    <string name="home_supported_versions" formatted="false">"Versiuni acceptate"</string>
+    <string name="home_community" formatted="false">"Comunitate"</string>
+    <string name="home_github" formatted="false">"Depozit GitHub"</string>
+    <string name="home_telegram" formatted="false">"Grup Telegram"</string>
+    <string name="home_preferences" formatted="false">"Preferințe"</string>
+    <string name="home_hide_icon" formatted="false">"Ascunde pictograma aplicației"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Când pictograma este ascunsă, deschide Toki prin managerul LSPosed"</string>
+    <string name="home_support" formatted="false">"Susține dezvoltarea"</string>
+    <string name="home_support_summary" formatted="false">"Susține întreținerea și îmbunătățirile continue"</string>
+    <string name="feature_region_section" formatted="false">"Simularea regiunii și mediului"</string>
+    <string name="feature_playback_section" formatted="false">"Redare"</string>
+    <string name="feature_progress" formatted="false">"Arată mereu bara de progres"</string>
+    <string name="feature_progress_summary" formatted="false">"Menține bara de progres vizibilă, inclusiv la videoclipurile scurte"</string>
+    <string name="feature_immersive" formatted="false">"Afișare video"</string>
+    <string name="feature_autoplay" formatted="false">"Derulare automată extinsă"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Deblochează derularea automată în meniul oricărui videoclip"</string>
+    <string name="feature_status_bar" formatted="false">"Ascunde bara de stare a sistemului"</string>
+    <string name="feature_media_section" formatted="false">"Descărcări și instrumente"</string>
+    <string name="feature_download" formatted="false">"Descărcări fără filigran"</string>
+    <string name="feature_download_summary" formatted="false">"Salvează videoclipul original fără filigran din meniul de apăsare lungă sau distribuire"</string>
+    <string name="feature_music" formatted="false">"Deblochează sunetul"</string>
+    <string name="feature_music_summary" formatted="false">"Restabilește sunetul restricționat de licențe sau regiune"</string>
+    <string name="feature_author_region" formatted="false">"Arată regiunea creatorului"</string>
+    <string name="feature_author_region_summary" formatted="false">"Arată steagul și codul țării sau regiunii lângă numele creatorului"</string>
+    <string name="feature_copy_comment" formatted="false">"Copiază doar textul"</string>
+    <string name="feature_video_translation" formatted="false">"Meniu de subtitrări și traducere"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Afișează opțiunea în meniul de apăsare lungă"</string>
+    <string name="feature_comment_translation" formatted="false">"Tradu comentariile"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Adaugă un buton pentru traducerea în bloc a comentariilor în limbi străine"</string>
+    <string name="feature_filter_section" formatted="false">"Filtrarea fluxului"</string>
+    <string name="feature_remove_ads" formatted="false">"Elimină reclamele din flux"</string>
+    <string name="feature_remove_live" formatted="false">"Filtrează live-urile recomandate"</string>
+    <string name="feature_remove_photos" formatted="false">"Filtrează postările foto recomandate"</string>
+    <string name="feature_filter_views" formatted="false">"Filtru de vizualizări"</string>
+    <string name="feature_filter_likes" formatted="false">"Filtru de aprecieri"</string>
+    <string name="feature_filter_duration" formatted="false">"Filtru de durată"</string>
+    <string name="feature_filter_keywords" formatted="false">"Filtru de cuvinte-cheie"</string>
+    <string name="feature_block_offline" formatted="false">"Blochează videoclipurile offline"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Împiedică inserarea videoclipurilor offline preîncărcate când conexiunea este slabă"</string>
+    <string name="feature_remove_ai" formatted="false">"Elimină conținutul generat de IA"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtrează videoclipurile etichetate de TikTok ca generate de IA"</string>
+    <string name="filter_metric_views" formatted="false">"vizualizări"</string>
+    <string name="filter_metric_likes" formatted="false">"aprecieri"</string>
+    <string name="filter_metric_duration" formatted="false">"durată"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Intervalul de vizualizări a fost salvat"</string>
+    <string name="filter_likes_saved" formatted="false">"Intervalul de aprecieri a fost salvat"</string>
+    <string name="filter_duration_saved" formatted="false">"Intervalul duratei a fost salvat"</string>
+    <string name="download_path_saved" formatted="false">"Căile personalizate de salvare au fost actualizate"</string>
+    <string name="region_spoof_title" formatted="false">"Simularea regiunii și cartelei SIM"</string>
+    <string name="region_current" formatted="false">"Configurația curentă"</string>
+    <string name="region_target" formatted="true">"Regiune țintă: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operator: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Cod operator: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Presetări"</string>
+    <string name="region_custom_parameters" formatted="false">"Personalizează"</string>
+    <string name="language_spoof" formatted="false">"Simularea limbii"</string>
+    <string name="environment_follow_region" formatted="false">"După regiune"</string>
+    <string name="language_effective" formatted="true">"Limbă aplicată: %1$s"</string>
+    <string name="language_custom" formatted="false">"Limbă personalizată"</string>
+    <string name="timezone_spoof" formatted="false">"Simularea fusului orar"</string>
+    <string name="timezone_effective" formatted="true">"Fus orar aplicat: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Fus orar personalizat"</string>
+    <string name="gps_spoof" formatted="false">"Simularea locației"</string>
+    <string name="gps_effective" formatted="true">"Coordonate aplicate: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Coordonate personalizate"</string>
+    <string name="speed_fixed" formatted="false">"Păstrează viteza"</string>
+    <string name="speed_fixed_summary" formatted="false">"Păstrează viteza aleasă din meniul de apăsare lungă când schimbi videoclipul"</string>
+    <string name="speed_expand" formatted="false">"Mai multe viteze"</string>
+    <string name="speed_options_hint" formatted="false">"Viteze (atinge pentru editare sau ștergere)"</string>
+    <string name="speed_add_option" formatted="false">"+ Adaugă viteză"</string>
+    <string name="speed_restore" formatted="false">"Resetează"</string>
+    <string name="clean_on_play" formatted="false">"Ascunde comenzile la redare"</string>
+    <string name="clean_keep_progress" formatted="false">"Păstrează bara de progres"</string>
+    <string name="download_paths" formatted="false">"Dosare de salvare"</string>
+    <string name="download_paths_summary" formatted="true">"Videoclipuri: %1$s · Imagini: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Păstrează videoclipurile cu %1$s între %2$d%4$s și %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Păstrează videoclipurile cu %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Păstrează videoclipurile cu %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Niciun interval (atinge pentru a seta minimul sau maximul)"</string>
+    <string name="keyword_unset" formatted="false">"Nicio regulă de filtrare (atinge pentru gestionarea categoriilor)"</string>
+    <string name="keyword_summary" formatted="true">"Activate: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Texte %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Hashtaguri %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Creatori %1$d"</string>
+    <string name="keyword_description" formatted="false">"Texte"</string>
+    <string name="keyword_tag" formatted="false">"Hashtaguri"</string>
+    <string name="keyword_author" formatted="false">"Creatori"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Nicio regulă pentru %1$s. Adaugă una mai sus."</string>
+    <string name="duration_alert_title" formatted="false">"Alertă pentru videoclipuri lungi"</string>
+    <string name="duration_alert_summary" formatted="true">"Prag curent: ≥ %1$s minute"</string>
+    <string name="download_video_path" formatted="false">"Dosar pentru videoclipuri"</string>
+    <string name="download_image_path" formatted="false">"Dosar pentru imagini"</string>
+    <string name="download_path_hint" formatted="false">"Primul dosar trebuie să fie un dosar media public, precum Movies, Pictures sau DCIM. Căile nevalide folosesc valoarea implicită a sistemului."</string>
+    <string name="views_range_title" formatted="false">"Interval de vizualizări"</string>
+    <string name="views_range_min" formatted="false">"Vizualizări minime (0 = fără limită)"</string>
+    <string name="views_range_max" formatted="false">"Vizualizări maxime (0 = fără limită)"</string>
+    <string name="views_range_hint" formatted="false">"Păstrează doar videoclipurile din acest interval de vizualizări. Cu ambele limite la 0 nu se elimină nimic."</string>
+    <string name="likes_range_title" formatted="false">"Interval de aprecieri"</string>
+    <string name="likes_range_min" formatted="false">"Aprecieri minime (0 = fără limită)"</string>
+    <string name="likes_range_max" formatted="false">"Aprecieri maxime (0 = fără limită)"</string>
+    <string name="likes_range_hint" formatted="false">"Păstrează doar videoclipurile din acest interval de aprecieri. Cu ambele limite la 0 nu se elimină nimic."</string>
+    <string name="duration_range_title" formatted="false">"Interval de durată a videoclipurilor"</string>
+    <string name="duration_range_min" formatted="false">"Durată minimă (secunde; 0 = fără limită)"</string>
+    <string name="duration_range_max" formatted="false">"Durată maximă (secunde; 0 = fără limită)"</string>
+    <string name="duration_range_hint" formatted="false">"Păstrează doar videoclipurile recomandate din acest interval de durată. Cu ambele limite la 0 nu se elimină nimic. Postările foto nu sunt afectate."</string>
+    <string name="keyword_manage" formatted="false">"Reguli de filtrare"</string>
+    <string name="keyword_description_hint" formatted="false">"Caută în textele și descrierile videoclipurilor fără a distinge majusculele de minuscule."</string>
+    <string name="keyword_tag_hint" formatted="false">"Caută hashtaguri. Nu include prefixul #."</string>
+    <string name="keyword_author_hint" formatted="false">"Caută numele creatorilor și numele de utilizator unice. Nu include prefixul @."</string>
+    <string name="keyword_description_input" formatted="false">"Cuvânt sau expresie"</string>
+    <string name="keyword_tag_input" formatted="false">"Hashtag"</string>
+    <string name="keyword_author_input" formatted="false">"Nume sau utilizator"</string>
+    <string name="keyword_add" formatted="false">"Adaugă regulă"</string>
+    <string name="keyword_delete" formatted="false">"Șterge regula"</string>
+    <string name="region_select_title" formatted="false">"Alege regiunea"</string>
+    <string name="region_search" formatted="false">"Caută după numele țării, numele în engleză sau codul regiunii"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Cod operator: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Regiune și SIM personalizate"</string>
+    <string name="region_custom_hint" formatted="false">"Setează codul țării și operatorul fără restricțiile presetărilor."</string>
+    <string name="region_code_input" formatted="false">"Cod de țară sau regiune (de ex. JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Cod operator (de ex. 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Nume operator (de ex. NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Alege o limbă uzuală sau introdu un cod de limbă."</string>
+    <string name="language_code_input" formatted="false">"Cod de limbă (de ex. ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Limbi uzuale:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Alege fusul orar al unui oraș uzual sau introdu numele unui fus orar."</string>
+    <string name="timezone_input" formatted="false">"Numele fusului orar (de ex. Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Fusuri orare ale orașelor uzuale:"</string>
+    <string name="city_tokyo" formatted="false">"Tokyo"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hong Kong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"Londra"</string>
+    <string name="city_seoul" formatted="false">"Seul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapore"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Coordonate personalizate ale locației"</string>
+    <string name="gps_custom_hint" formatted="false">"Alege un oraș uzual sau introdu latitudinea și longitudinea."</string>
+    <string name="gps_latitude" formatted="false">"Latitudine (de la -90.0 la 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Longitudine (de la -180.0 la 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Orașe uzuale:"</string>
+    <string name="speed_add_title" formatted="false">"Adaugă viteză"</string>
+    <string name="speed_input" formatted="false">"Viteză de redare"</string>
+    <string name="speed_invalid" formatted="false">"Introdu un număr valid"</string>
+    <string name="speed_out_of_range" formatted="true">"Sunt acceptate doar valori între %1$sx și %2$sx"</string>
+    <string name="speed_range" formatted="true">"Interval acceptat: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Editează viteza"</string>
+    <string name="duration_threshold_title" formatted="false">"Alertă pentru videoclipuri lungi"</string>
+    <string name="duration_threshold_hint" formatted="false">"Când un videoclip atinge această durată, un mesaj scurt la începutul redării anunță durata sa în minute."</string>
+    <string name="duration_threshold_input" formatted="false">"Prag de durată (minute)"</string>
+    <string name="duration_threshold_example" formatted="false">"De exemplu: 3 sau 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Introdu un număr valid de minute mai mare decât 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Setare curentă: alertă pentru videoclipuri ≥ %1$s minute"</string>
+    <string name="duration_threshold_presets" formatted="false">"Durate sugerate:"</string>
+    <string name="status_feature_feed" formatted="false">"Filtrare flux"</string>
+    <string name="status_feature_speed" formatted="false">"Viteză"</string>
+    <string name="status_feature_progress" formatted="false">"Bară de progres"</string>
+    <string name="status_feature_clean" formatted="false">"Ascunde comenzile la redare"</string>
+    <string name="status_feature_immersive" formatted="false">"Afișare video"</string>
+    <string name="status_feature_scroll" formatted="false">"Derulare automată"</string>
+    <string name="status_feature_duration" formatted="false">"Alertă de durată"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Traducere comentarii"</string>
+    <string name="status_feature_video_translate" formatted="false">"Meniu de subtitrări și traducere"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Copiere comentarii"</string>
+    <string name="status_feature_author" formatted="false">"Regiunea creatorului"</string>
+    <string name="status_feature_download" formatted="false">"Salvare video"</string>
+    <string name="status_feature_music" formatted="false">"Restricții audio"</string>
+    <string name="status_feature_sim" formatted="false">"SIM și țară"</string>
+    <string name="status_feature_language" formatted="false">"Limbă"</string>
+    <string name="status_feature_timezone" formatted="false">"Fus orar"</string>
+    <string name="status_feature_gps" formatted="false">"Locație"</string>
+    <string name="status_feature_bar" formatted="false">"Bară de stare"</string>
+    <string name="status_normal" formatted="false">"Funcționează"</string>
+    <string name="status_issue" formatted="false">"Problemă"</string>
+    <string name="status_disabled" formatted="false">"Dezactivat"</string>
+    <string name="status_pending" formatted="false">"Neconfirmat"</string>
+    <string name="status_problem_disabled" formatted="false">"Dezactivat, cu o eroare înregistrată"</string>
+    <string name="status_problem_unavailable" formatted="false">"Temporar indisponibilă"</string>
+    <string name="status_problem_runtime" formatted="false">"Eroare în timpul utilizării"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Meniu viteză indisponibil"</string>
+    <string name="status_prepare_failed" formatted="false">"Pregătirea funcțiilor a eșuat. Redeschide TikTok și verifică."</string>
+    <string name="status_preparing" formatted="false">"Se pregătesc funcțiile. Așteaptă."</string>
+    <string name="status_prepared" formatted="false">"Pregătire încheiată. Redeschide TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Starea nu poate fi citită acum. Verifică mai târziu."</string>
+    <string name="status_update_failed" formatted="false">"Starea nu poate fi actualizată acum. Se afișează cel mai recent rezultat."</string>
+    <string name="status_reading" formatted="false">"Se citește starea"</string>
+    <string name="status_empty" formatted="false">"Nicio activitate înregistrată. Activează Toki în LSPosed, apoi deschide TikTok și verifică."</string>
+    <string name="status_report_note" formatted="true">"Cel mai recent raport: %1$s\n„Funcționează” înseamnă că funcția este pregătită și nu a raportat erori."</string>
+    <string name="config_section" formatted="false">"Configurație"</string>
+    <string name="config_import" formatted="false">"Importă configurația"</string>
+    <string name="config_import_summary" formatted="false">"Restabilește setările funcțiilor dintr-un fișier"</string>
+    <string name="config_export" formatted="false">"Exportă configurația"</string>
+    <string name="config_export_summary" formatted="false">"Salvează setările funcțiilor într-un fișier"</string>
+    <string name="config_exported" formatted="false">"Configurația a fost exportată în locația selectată. Fișierul poate conține cuvinte-cheie, regiuni și setări de dosare. Păstrează-l în siguranță."</string>
+    <string name="config_import_confirm" formatted="true">"Fișierul conține %1$d setări. Importul înlocuiește toate setările funcțiilor; cele lipsă revin la valorile implicite.\n\nLimba aplicației, pictograma, autorizarea LSPosed și memoria cache de compatibilitate TikTok nu se schimbă. Continui?"</string>
+    <string name="config_overwrite" formatted="false">"Înlocuiește"</string>
+    <string name="config_imported" formatted="false">"Configurația a fost importată, iar setările au fost actualizate. Modificările ce permit actualizarea în timpul funcționării se aplică imediat. Redeschide TikTok pentru a le verifica pe celelalte."</string>
+    <string name="config_processing" formatted="false">"Se procesează configurația"</string>
+    <string name="config_error_io" formatted="false">"Fișierul nu poate fi citit sau scris. Verifică locația selectată și spațiul disponibil."</string>
+    <string name="config_error_permission" formatted="false">"Nu există permisiune de acces la fișierul selectat. Selectează-l din nou."</string>
+    <string name="config_error_invalid" formatted="false">"Acesta nu este un fișier de configurație Toki valid. Nu s-a importat nicio setare."</string>
+    <string name="config_error_validation" formatted="true">"Validarea configurației a eșuat: %1$s. Nu s-a importat nicio setare."</string>
+    <string name="config_error_commit" formatted="false">"Salvarea configurației nu a putut fi confirmată. Redeschide Toki pentru verificare înainte de a reîncerca."</string>
+    <string name="sponsor_title" formatted="false">"Susține dezvoltatorul"</string>
+    <string name="sponsor_kofi" formatted="false">"Susține prin Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Cod QR de plată Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Se salvează…"</string>
+    <string name="sponsor_save_image" formatted="false">"Salvează imaginea"</string>
+    <string name="sponsor_image_hint" formatted="false">"Salvează imaginea originală completă, apoi selecteaz-o în Alipay pentru a citi codul."</string>
+    <string name="sponsor_address_copied" formatted="false">"Adresa USDT a fost copiată"</string>
+    <string name="sponsor_image_saved" formatted="false">"Imaginea a fost salvată în locația selectată"</string>
+    <string name="sponsor_error_io" formatted="false">"Salvarea a eșuat. Verifică locația selectată și spațiul disponibil, apoi reîncearcă."</string>
+    <string name="sponsor_error_permission" formatted="false">"Salvarea a eșuat. Nu există permisiune de scriere în această locație. Selectează alta."</string>
+    <string name="feature_filter_topics" formatted="false">"Ascunde subiectele sugerate"</string>
+    <string name="feature_filter_creators" formatted="false">"Ascunde creatorii sugerați"</string>
+    <string name="host_scan_title_complete" formatted="false">"Căutare finalizată"</string>
+    <string name="host_scan_title_failed" formatted="false">"Căutarea a eșuat"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Repornește TikTok manual pentru a aplica rezultatele."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Vezi diagnosticarea funcțiilor în Toki."</string>
+    <string name="layout_title" formatted="false">"Aspectul paginii"</string>
+    <string name="layout_summary" formatted="false">"Alege comenzile de ascuns"</string>
+    <string name="layout_hint" formatted="false">"Activează comutatorul pentru a ascunde elementul"</string>
+    <string name="layout_top" formatted="false">"Bara de sus"</string>
+    <string name="layout_bottom" formatted="false">"Bara de jos"</string>
+    <string name="layout_side" formatted="false">"Pagina videoclipului"</string>
+    <string name="layout_search" formatted="false">"Căutare"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Prieteni"</string>
+    <string name="layout_following" formatted="false">"Urmărești"</string>
+    <string name="layout_shop" formatted="false">"Magazin"</string>
+    <string name="layout_for_you" formatted="false">"Pentru tine"</string>
+    <string name="layout_nearby" formatted="false">"În apropiere"</string>
+    <string name="layout_stem" formatted="false">"Știință"</string>
+    <string name="layout_series" formatted="false">"Seriale"</string>
+    <string name="layout_home" formatted="false">"Acasă"</string>
+    <string name="layout_create" formatted="false">"Creează"</string>
+    <string name="layout_inbox" formatted="false">"Mesaje primite"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Descoperă"</string>
+    <string name="layout_avatar" formatted="false">"Avatar"</string>
+    <string name="layout_follow" formatted="false">"Buton de urmărire"</string>
+    <string name="layout_like" formatted="false">"Apreciere"</string>
+    <string name="layout_comment" formatted="false">"Comentarii"</string>
+    <string name="layout_favorite" formatted="false">"Favorite"</string>
+    <string name="layout_share" formatted="false">"Distribuie"</string>
+    <string name="layout_music" formatted="false">"Disc muzical"</string>
+    <string name="layout_explore" formatted="false">"Explorează"</string>
+    <string name="layout_author" formatted="false">"Informații despre autor"</string>
+    <string name="layout_description" formatted="false">"Descriere"</string>
+    <string name="layout_music_title" formatted="false">"Titlul muzicii"</string>
+    <string name="layout_tags" formatted="false">"Etichete informative"</string>
+    <string name="layout_search_label" formatted="false">"Sugestie de căutare"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Buton de oprire a derulării automate"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Monede și recompense"</string>
+    <string name="layout_quick_comment" formatted="false">"Comentarii rapide"</string>
+    <string name="layout_playlist" formatted="false">"Listă de redare"</string>
+    <string name="layout_creation_buttons" formatted="false">"Scurtături de creare"</string>
+    <string name="layout_live_notice" formatted="false">"Mementouri LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Opacitate"</string>
+    <string name="feature_background_audio">"Deblochează sunetul în fundal"</string>
+    <string name="layout_landscape">"Buton ecran complet"</string>
+    <string name="layout_photo_indicators">"Indicatori și indicii pentru fotografii"</string>
+    <string name="layout_quick_message">"Mesaje rapide și sursa distribuirii"</string>
+    <string name="layout_user_card">"Conturi sugerate"</string>
+    <string name="layout_survey">"Sondaje și feedback"</string>
+    <string name="layout_ad_cards">"Carduri de produse și reclame"</string>
+    <string name="layout_bottom_banners">"Alte bannere inferioare"</string>
+    <string name="layout_activities">"Acces la evenimente"</string>
+    <string name="host_scan_title_running" formatted="false">"Se caută metode"</string>
+    <string name="host_scan_title_saving" formatted="false">"Se salvează rezultatele"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Menține TikTok în prim-plan."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Te rugăm să aștepți."</string>
+    <string name="host_scan_done" formatted="false">"Am înțeles"</string>
+    <string name="video_fit_center" formatted="false">"Centrat"</string>
+    <string name="video_fit_smart" formatted="false">"Ecran complet"</string>
+</resources>

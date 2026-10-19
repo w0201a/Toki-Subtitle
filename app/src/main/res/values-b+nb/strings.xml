@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Hjem"</string>
+    <string name="nav_features" formatted="false">"Funksjoner"</string>
+    <string name="page_features" formatted="false">"Innstillinger"</string>
+    <string name="page_hook_status" formatted="false">"Funksjonsstatus"</string>
+    <string name="nav_back" formatted="false">"Tilbake"</string>
+    <string name="restart_tiktok" formatted="false">"Start TikTok på nytt"</string>
+    <string name="restart_root_required" formatted="false">"Gi Toki root-tilgang."</string>
+    <string name="language_title" formatted="false">"Appspråk"</string>
+    <string name="language_system" formatted="false">"Følg systemet"</string>
+    <string name="language_search" formatted="false">"Søk etter språk"</string>
+    <string name="language_clear_search" formatted="false">"Tøm søk"</string>
+    <string name="language_no_results" formatted="false">"Ingen samsvarende språk"</string>
+    <string name="common_save" formatted="false">"Lagre"</string>
+    <string name="common_cancel" formatted="false">"Avbryt"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Lukk"</string>
+    <string name="common_open" formatted="false">"Åpne"</string>
+    <string name="common_copy" formatted="false">"Kopier"</string>
+    <string name="common_add" formatted="false">"Legg til"</string>
+    <string name="common_delete" formatted="false">"Slett"</string>
+    <string name="common_done" formatted="false">"Ferdig"</string>
+    <string name="common_save_apply" formatted="false">"Bruk"</string>
+    <string name="common_unknown" formatted="false">"Ukjent"</string>
+    <string name="common_custom" formatted="false">"Egendefinert"</string>
+    <string name="home_icon_hidden" formatted="false">"Appikon skjult"</string>
+    <string name="home_icon_restored" formatted="false">"Appikon gjenopprettet"</string>
+    <string name="home_activated" formatted="false">"Aktivert"</string>
+    <string name="home_inactive" formatted="false">"Ikke aktivert"</string>
+    <string name="home_activation_missing" formatted="false">"Ingen aktivering funnet i LSPosed"</string>
+    <string name="home_host_section" formatted="false">"TikTok-kompatibilitet"</string>
+    <string name="home_host_current" formatted="false">"Installert TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Ingen støttet TikTok-installasjon funnet på enheten"</string>
+    <string name="home_host_not_installed" formatted="false">"Ikke installert"</string>
+    <string name="home_supported_versions" formatted="false">"Støttede versjoner"</string>
+    <string name="home_community" formatted="false">"Åpen kildekode og fellesskap"</string>
+    <string name="home_github" formatted="false">"GitHub-kodelager"</string>
+    <string name="home_telegram" formatted="false">"Telegram-gruppe"</string>
+    <string name="home_preferences" formatted="false">"Modulinnstillinger"</string>
+    <string name="home_hide_icon" formatted="false">"Skjul appikon"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Åpne Toki via LSPosed Manager når ikonet er skjult"</string>
+    <string name="home_support" formatted="false">"Støtt utviklingen"</string>
+    <string name="home_support_summary" formatted="false">"Støtt videre vedlikehold og forbedringer"</string>
+    <string name="feature_region_section" formatted="false">"Region og enhet"</string>
+    <string name="feature_playback_section" formatted="false">"Avspilling"</string>
+    <string name="feature_progress" formatted="false">"Vis alltid fremdriftslinjen"</string>
+    <string name="feature_progress_summary" formatted="false">"Hold fremdriftslinjen synlig, også i korte videoer"</string>
+    <string name="feature_immersive" formatted="false">"Videovisning"</string>
+    <string name="feature_autoplay" formatted="false">"Utvidet automatisk rulling"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Lås opp automatisk rulling i alle videomenyer"</string>
+    <string name="feature_status_bar" formatted="false">"Skjul systemets statuslinje"</string>
+    <string name="feature_media_section" formatted="false">"Nedlastinger og handlinger"</string>
+    <string name="feature_download" formatted="false">"Nedlasting uten vannmerke"</string>
+    <string name="feature_download_summary" formatted="false">"Lagre originalvideoen uten vannmerke fra menyen for langt trykk eller deling"</string>
+    <string name="feature_music" formatted="false">"Opphev lydsperre"</string>
+    <string name="feature_music_summary" formatted="false">"Gjenopprett lydavspilling begrenset av lisens eller region"</string>
+    <string name="feature_author_region" formatted="false">"Vis skaperens region"</string>
+    <string name="feature_author_region_summary" formatted="false">"Vis flagg og kode for land eller region ved skaperens navn"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopier bare tekst"</string>
+    <string name="feature_video_translation" formatted="false">"Meny for undertekster og oversettelse"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Vis valget i menyen ved langt trykk"</string>
+    <string name="feature_comment_translation" formatted="false">"Oversett kommentarer"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Legg til en knapp for å oversette flere fremmedspråklige kommentarer"</string>
+    <string name="feature_filter_section" formatted="false">"Filtrering av strømmen"</string>
+    <string name="feature_remove_ads" formatted="false">"Fjern annonser i strømmen"</string>
+    <string name="feature_remove_live" formatted="false">"Skjul direktesendinger"</string>
+    <string name="feature_remove_photos" formatted="false">"Skjul bildeinnlegg"</string>
+    <string name="feature_filter_views" formatted="false">"Filter for visninger"</string>
+    <string name="feature_filter_likes" formatted="false">"Filter for likerklikk"</string>
+    <string name="feature_filter_duration" formatted="false">"Filter for videolengde"</string>
+    <string name="feature_filter_keywords" formatted="false">"Nøkkelordfilter"</string>
+    <string name="feature_block_offline" formatted="false">"Blokker frakoblede videoer"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Hindre innsetting av forhåndslastede frakoblede videoer ved dårlig forbindelse"</string>
+    <string name="feature_remove_ai" formatted="false">"Skjul KI-genererte videoer"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtrer videoer som TikTok merker som KI-genererte"</string>
+    <string name="filter_metric_views" formatted="false">"visninger"</string>
+    <string name="filter_metric_likes" formatted="false">"likerklikk"</string>
+    <string name="filter_metric_duration" formatted="false">"lengde"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Visningsintervall lagret"</string>
+    <string name="filter_likes_saved" formatted="false">"Likerklikkintervall lagret"</string>
+    <string name="filter_duration_saved" formatted="false">"Videolengdeintervall lagret"</string>
+    <string name="download_path_saved" formatted="false">"Egendefinerte lagringsbaner oppdatert"</string>
+    <string name="region_spoof_title" formatted="false">"Simulering av region og SIM"</string>
+    <string name="region_current" formatted="false">"Gjeldende oppsett"</string>
+    <string name="region_target" formatted="true">"Målregion: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operatør: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Operatørkode: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Forhåndsvalg"</string>
+    <string name="region_custom_parameters" formatted="false">"Tilpass"</string>
+    <string name="language_spoof" formatted="false">"Simulering av språk"</string>
+    <string name="environment_follow_region" formatted="false">"Følg region"</string>
+    <string name="language_effective" formatted="true">"Aktivt språk: %1$s"</string>
+    <string name="language_custom" formatted="false">"Egendefinert språk"</string>
+    <string name="timezone_spoof" formatted="false">"Simulering av tidssone"</string>
+    <string name="timezone_effective" formatted="true">"Aktiv tidssone: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Egendefinert tidssone"</string>
+    <string name="gps_spoof" formatted="false">"Simulering av posisjon"</string>
+    <string name="gps_effective" formatted="true">"Aktive koordinater: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Egendefinerte koordinater"</string>
+    <string name="speed_fixed" formatted="false">"Behold avspillingshastighet"</string>
+    <string name="speed_fixed_summary" formatted="false">"Behold hastigheten valgt i menyen for langt trykk når du bytter video"</string>
+    <string name="speed_expand" formatted="false">"Flere hastigheter"</string>
+    <string name="speed_options_hint" formatted="false">"Hastigheter (trykk for å endre eller slette)"</string>
+    <string name="speed_add_option" formatted="false">"+ Legg til hastighet"</string>
+    <string name="speed_restore" formatted="false">"Tilbakestill"</string>
+    <string name="clean_on_play" formatted="false">"Skjul kontroller under avspilling"</string>
+    <string name="clean_keep_progress" formatted="false">"Behold fremdriftslinjen"</string>
+    <string name="download_paths" formatted="false">"Lagringsmapper"</string>
+    <string name="download_paths_summary" formatted="true">"Videoer: %1$s · Bilder: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Behold videoer med %1$s fra %2$d%4$s til %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Behold videoer med %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Behold videoer med %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Intet intervall angitt (trykk for å angi minimum eller maksimum)"</string>
+    <string name="keyword_unset" formatted="false">"Trykk for å legge til regler"</string>
+    <string name="keyword_summary" formatted="true">"På: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Tekster %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Emneknagger %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Skapere %1$d"</string>
+    <string name="keyword_description" formatted="false">"Tekster"</string>
+    <string name="keyword_tag" formatted="false">"Emneknagger"</string>
+    <string name="keyword_author" formatted="false">"Skapere"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Ingen regler for %1$s. Legg til ovenfor."</string>
+    <string name="duration_alert_title" formatted="false">"Varsel om lange videoer"</string>
+    <string name="duration_alert_summary" formatted="true">"Gjeldende terskel: ≥ %1$s minutter"</string>
+    <string name="download_video_path" formatted="false">"Videomappe"</string>
+    <string name="download_image_path" formatted="false">"Bildemappe"</string>
+    <string name="download_path_hint" formatted="false">"Første mappe må være en offentlig mediemappe som Movies, Pictures eller DCIM. Ugyldige baner bruker systemets standard."</string>
+    <string name="views_range_title" formatted="false">"Visningsintervall"</string>
+    <string name="views_range_min" formatted="false">"Minste antall visninger (0 = ubegrenset)"</string>
+    <string name="views_range_max" formatted="false">"Største antall visninger (0 = ubegrenset)"</string>
+    <string name="views_range_hint" formatted="false">"Behold bare videoer innenfor dette visningsintervallet. Med begge grenser satt til 0 fjernes ingenting."</string>
+    <string name="likes_range_title" formatted="false">"Likerklikkintervall"</string>
+    <string name="likes_range_min" formatted="false">"Minste antall likerklikk (0 = ubegrenset)"</string>
+    <string name="likes_range_max" formatted="false">"Største antall likerklikk (0 = ubegrenset)"</string>
+    <string name="likes_range_hint" formatted="false">"Behold bare videoer innenfor dette likerklikkintervallet. Med begge grenser satt til 0 fjernes ingenting."</string>
+    <string name="duration_range_title" formatted="false">"Videolengdeintervall"</string>
+    <string name="duration_range_min" formatted="false">"Minste lengde (sekunder; 0 = ubegrenset)"</string>
+    <string name="duration_range_max" formatted="false">"Største lengde (sekunder; 0 = ubegrenset)"</string>
+    <string name="duration_range_hint" formatted="false">"Behold bare anbefalte videoer innenfor dette lengdeintervallet. Med begge grenser satt til 0 fjernes ingenting. Bildeinnlegg påvirkes ikke."</string>
+    <string name="keyword_manage" formatted="false">"Filterregler"</string>
+    <string name="keyword_description_hint" formatted="false">"Søk i videotekster og beskrivelser uten å skille mellom store og små bokstaver."</string>
+    <string name="keyword_tag_hint" formatted="false">"Søk etter emneknagger. Ikke ta med prefikset #."</string>
+    <string name="keyword_author_hint" formatted="false">"Søk etter skapernavn og unike brukernavn. Ikke ta med prefikset @."</string>
+    <string name="keyword_description_input" formatted="false">"Nøkkelord i tekst"</string>
+    <string name="keyword_tag_input" formatted="false">"Emneknagg"</string>
+    <string name="keyword_author_input" formatted="false">"Navn eller brukernavn"</string>
+    <string name="keyword_add" formatted="false">"Legg til regel"</string>
+    <string name="keyword_delete" formatted="false">"Slett regel"</string>
+    <string name="region_select_title" formatted="false">"Velg region"</string>
+    <string name="region_search" formatted="false">"Landsnavn eller -kode"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Operatørkode: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Egendefinert region og SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Angi landskode og operatør uten begrensningene i forhåndsinnstillingene."</string>
+    <string name="region_code_input" formatted="false">"Land- eller regionkode (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Operatørkode (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Operatørnavn (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Velg et vanlig språk eller skriv inn en språkkode."</string>
+    <string name="language_code_input" formatted="false">"Språkkode (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Språk"</string>
+    <string name="timezone_custom_hint" formatted="false">"Velg en vanlig bytidssone eller skriv inn et tidssonenavn."</string>
+    <string name="timezone_input" formatted="false">"Tidssonenavn (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Byer"</string>
+    <string name="city_tokyo" formatted="false">"Tokyo"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hongkong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Seoul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapore"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Tilpasset plassering"</string>
+    <string name="gps_custom_hint" formatted="false">"Velg en vanlig by eller skriv inn bredde- og lengdegrad."</string>
+    <string name="gps_latitude" formatted="false">"Breddegrad (-90.0 til 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Lengdegrad (-180.0 til 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Byer"</string>
+    <string name="speed_add_title" formatted="false">"Legg til hastighet"</string>
+    <string name="speed_input" formatted="false">"Hastighet"</string>
+    <string name="speed_invalid" formatted="false">"Skriv inn et gyldig tall"</string>
+    <string name="speed_out_of_range" formatted="true">"Bare %1$sx til %2$sx støttes"</string>
+    <string name="speed_range" formatted="true">"Støttet intervall: %1$sx til %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Endre hastighet"</string>
+    <string name="duration_threshold_title" formatted="false">"Varsel om lange videoer"</string>
+    <string name="duration_threshold_hint" formatted="false">"Når en video når denne lengden, viser en kort melding ved avspillingsstart lengden i minutter."</string>
+    <string name="duration_threshold_input" formatted="false">"Lengdeterskel (minutter)"</string>
+    <string name="duration_threshold_example" formatted="false">"For eksempel: 3 eller 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Skriv inn et gyldig antall minutter større enn 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Gjeldende innstilling: varsel for videoer ≥ %1$s minutter"</string>
+    <string name="duration_threshold_presets" formatted="false">"Foreslåtte lengder:"</string>
+    <string name="status_feature_feed" formatted="false">"Strømfilter"</string>
+    <string name="status_feature_speed" formatted="false">"Hastighet"</string>
+    <string name="status_feature_progress" formatted="false">"Fremdriftslinje"</string>
+    <string name="status_feature_clean" formatted="false">"Skjul automatisk"</string>
+    <string name="status_feature_immersive" formatted="false">"Videovisning"</string>
+    <string name="status_feature_scroll" formatted="false">"Automatisk rulling"</string>
+    <string name="status_feature_duration" formatted="false">"Lengdevarsel"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Oversett kommentarer"</string>
+    <string name="status_feature_video_translate" formatted="false">"Meny for undertekster og oversettelse"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Kopier kommentarer"</string>
+    <string name="status_feature_author" formatted="false">"Skaperens region"</string>
+    <string name="status_feature_download" formatted="false">"Lagre videoer"</string>
+    <string name="status_feature_music" formatted="false">"Lydbegrensninger"</string>
+    <string name="status_feature_sim" formatted="false">"Region og SIM"</string>
+    <string name="status_feature_language" formatted="false">"Språk"</string>
+    <string name="status_feature_timezone" formatted="false">"Tidssone"</string>
+    <string name="status_feature_gps" formatted="false">"Posisjon"</string>
+    <string name="status_feature_bar" formatted="false">"Statuslinje"</string>
+    <string name="status_normal" formatted="false">"Fungerer"</string>
+    <string name="status_issue" formatted="false">"Problem"</string>
+    <string name="status_disabled" formatted="false">"Av"</string>
+    <string name="status_pending" formatted="false">"Venter"</string>
+    <string name="status_problem_disabled" formatted="false">"Av, med en registrert feil"</string>
+    <string name="status_problem_unavailable" formatted="false">"Midlertidig utilgjengelig"</string>
+    <string name="status_problem_runtime" formatted="false">"Feil under bruk"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Hastighetsmeny utilgjengelig"</string>
+    <string name="status_prepare_failed" formatted="false">"Klargjøring av funksjoner mislyktes. Åpne TikTok på nytt og kontroller."</string>
+    <string name="status_preparing" formatted="false">"Klargjør funksjoner. Vent litt."</string>
+    <string name="status_prepared" formatted="false">"Klargjøring fullført. Åpne TikTok på nytt."</string>
+    <string name="status_read_failed" formatted="false">"Kan ikke lese status nå. Kontroller senere."</string>
+    <string name="status_update_failed" formatted="false">"Kan ikke oppdatere status nå. Viser nyeste resultat."</string>
+    <string name="status_reading" formatted="false">"Leser status"</string>
+    <string name="status_empty" formatted="false">"Ingen aktivitet registrert. Aktiver Toki i LSPosed, åpne TikTok og kontroller igjen."</string>
+    <string name="status_report_note" formatted="true">"Nyeste rapport: %1$s\n«Fungerer» betyr at funksjonen er klar og ikke har rapportert feil."</string>
+    <string name="config_section" formatted="false">"Konfigurasjon"</string>
+    <string name="config_import" formatted="false">"Importer innstillinger"</string>
+    <string name="config_import_summary" formatted="false">"Gjenopprett funksjonsinnstillinger fra en fil"</string>
+    <string name="config_export" formatted="false">"Eksporter innstillinger"</string>
+    <string name="config_export_summary" formatted="false">"Lagre funksjonsinnstillinger i en fil"</string>
+    <string name="config_exported" formatted="false">"Konfigurasjon eksportert til valgt sted. Filen kan inneholde nøkkelord, regioner og mappeinnstillinger. Oppbevar den sikkert."</string>
+    <string name="config_import_confirm" formatted="true">"Filen inneholder %1$d innstillinger. Import erstatter alle funksjonsinnstillinger; manglende innstillinger tilbakestilles til standardverdier.\n\nAppspråk, appikon, LSPosed-autorisasjon og TikTok-kompatibilitetsbuffer endres ikke. Fortsette?"</string>
+    <string name="config_overwrite" formatted="false">"Erstatt"</string>
+    <string name="config_imported" formatted="false">"Konfigurasjon importert og innstillinger oppdatert. Endringer som støtter direkte oppdatering, tas i bruk straks. Åpne TikTok på nytt for å kontrollere andre endringer."</string>
+    <string name="config_processing" formatted="false">"Behandler…"</string>
+    <string name="config_error_io" formatted="false">"Kan ikke lese eller skrive filen. Kontroller valgt sted og ledig plass."</string>
+    <string name="config_error_permission" formatted="false">"Mangler tilgangstillatelse til valgt fil. Velg den på nytt."</string>
+    <string name="config_error_invalid" formatted="false">"Dette er ikke en gyldig Toki-konfigurasjonsfil. Ingen innstillinger ble importert."</string>
+    <string name="config_error_validation" formatted="true">"Konfigurasjonskontroll mislyktes: %1$s. Ingen innstillinger ble importert."</string>
+    <string name="config_error_commit" formatted="false">"Lagring av konfigurasjonen kunne ikke bekreftes. Åpne Toki på nytt og kontroller før du prøver igjen."</string>
+    <string name="sponsor_title" formatted="false">"Støtt utvikleren"</string>
+    <string name="sponsor_kofi" formatted="false">"Støtt på Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay-betalingskode"</string>
+    <string name="sponsor_saving" formatted="false">"Lagrer…"</string>
+    <string name="sponsor_save_image" formatted="false">"Lagre bilde"</string>
+    <string name="sponsor_image_hint" formatted="false">"Lagre hele originalbildet, og velg det deretter i Alipay for å lese koden."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT-adresse kopiert"</string>
+    <string name="sponsor_image_saved" formatted="false">"Bilde lagret på valgt sted"</string>
+    <string name="sponsor_error_io" formatted="false">"Lagring mislyktes. Kontroller valgt sted og ledig plass, og prøv igjen."</string>
+    <string name="sponsor_error_permission" formatted="false">"Lagring mislyktes. Skrivetilgang til stedet ble ikke gitt. Velg et annet sted."</string>
+    <string name="feature_filter_topics" formatted="false">"Skjul foreslåtte emner"</string>
+    <string name="feature_filter_creators" formatted="false">"Skjul foreslåtte skapere"</string>
+    <string name="host_scan_title_complete" formatted="false">"Søk fullført"</string>
+    <string name="host_scan_title_failed" formatted="false">"Søk mislyktes"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Start TikTok på nytt manuelt for å ta i bruk resultatene."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Se funksjonsdiagnostikk i Toki."</string>
+    <string name="layout_title" formatted="false">"Sideoppsett"</string>
+    <string name="layout_summary" formatted="false">"Velg hvilke knapper som skal skjules"</string>
+    <string name="layout_hint" formatted="false">"Slå på bryteren for å skjule elementet"</string>
+    <string name="layout_top" formatted="false">"Øvre felt"</string>
+    <string name="layout_bottom" formatted="false">"Nedre felt"</string>
+    <string name="layout_side" formatted="false">"Videoside"</string>
+    <string name="layout_search" formatted="false">"Søk"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Venner"</string>
+    <string name="layout_following" formatted="false">"Følger"</string>
+    <string name="layout_shop" formatted="false">"Butikk"</string>
+    <string name="layout_for_you" formatted="false">"For deg"</string>
+    <string name="layout_nearby" formatted="false">"I nærheten"</string>
+    <string name="layout_stem" formatted="false">"Vitenskap"</string>
+    <string name="layout_series" formatted="false">"Serier"</string>
+    <string name="layout_home" formatted="false">"Hjem"</string>
+    <string name="layout_create" formatted="false">"Opprett"</string>
+    <string name="layout_inbox" formatted="false">"Innboks"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Oppdag"</string>
+    <string name="layout_avatar" formatted="false">"Profilbilde"</string>
+    <string name="layout_follow" formatted="false">"Følg-knapp"</string>
+    <string name="layout_like" formatted="false">"Lik"</string>
+    <string name="layout_comment" formatted="false">"Kommentarer"</string>
+    <string name="layout_favorite" formatted="false">"Favoritter"</string>
+    <string name="layout_share" formatted="false">"Del"</string>
+    <string name="layout_music" formatted="false">"Musikkplate"</string>
+    <string name="layout_explore" formatted="false">"Utforsk"</string>
+    <string name="layout_author" formatted="false">"Forfatterinfo"</string>
+    <string name="layout_description" formatted="false">"Beskrivelse"</string>
+    <string name="layout_music_title" formatted="false">"Musikktittel"</string>
+    <string name="layout_tags" formatted="false">"Infoetiketter"</string>
+    <string name="layout_search_label" formatted="false">"Søkeforslag"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Stoppknapp for automatisk rulling"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Mynter og belønninger"</string>
+    <string name="layout_quick_comment" formatted="false">"Hurtigkommentarer"</string>
+    <string name="layout_playlist" formatted="false">"Spilleliste"</string>
+    <string name="layout_creation_buttons" formatted="false">"Snarveier for oppretting"</string>
+    <string name="layout_live_notice" formatted="false">"LIVE-påminnelser"</string>
+    <string name="layout_opacity" formatted="false">"Ugjennomsiktighet"</string>
+    <string name="feature_background_audio">"Lås opp bakgrunnslyd"</string>
+    <string name="layout_landscape">"Fullskjermknapp"</string>
+    <string name="layout_photo_indicators">"Bildeindikatorer og tips"</string>
+    <string name="layout_quick_message">"Hurtigmeldinger og delt av"</string>
+    <string name="layout_user_card">"Foreslåtte kontoer"</string>
+    <string name="layout_survey">"Spørreundersøkelser og tilbakemeldinger"</string>
+    <string name="layout_ad_cards">"Produkt- og annonsekort"</string>
+    <string name="layout_bottom_banners">"Andre bannere nederst"</string>
+    <string name="layout_activities">"Inngang til arrangementer"</string>
+    <string name="host_scan_title_running" formatted="false">"Finner metoder"</string>
+    <string name="host_scan_title_saving" formatted="false">"Lagrer resultater"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Hold TikTok i forgrunnen."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Vennligst vent."</string>
+    <string name="host_scan_done" formatted="false">"Forstått"</string>
+    <string name="video_fit_center" formatted="false">"Midtstilt"</string>
+    <string name="video_fit_smart" formatted="false">"Fullskjerm"</string>
+</resources>

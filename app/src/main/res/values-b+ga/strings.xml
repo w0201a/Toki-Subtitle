@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Baile"</string>
+    <string name="nav_features" formatted="false">"Gnéithe"</string>
+    <string name="page_features" formatted="false">"Socruithe"</string>
+    <string name="page_hook_status" formatted="false">"Stádas na ngnéithe"</string>
+    <string name="nav_back" formatted="false">"Ar ais"</string>
+    <string name="restart_tiktok" formatted="false">"Atosaigh TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Tabhair rochtain root do Toki."</string>
+    <string name="language_title" formatted="false">"Teanga na haipe"</string>
+    <string name="language_system" formatted="false">"Lean an córas"</string>
+    <string name="language_search" formatted="false">"Cuardaigh teangacha"</string>
+    <string name="language_clear_search" formatted="false">"Glan an cuardach"</string>
+    <string name="language_no_results" formatted="false">"Níor aimsíodh aon teanga mheaitseála"</string>
+    <string name="common_save" formatted="false">"Sábháil"</string>
+    <string name="common_cancel" formatted="false">"Cealaigh"</string>
+    <string name="common_confirm" formatted="false">"Ceart go leor"</string>
+    <string name="common_close" formatted="false">"Dún"</string>
+    <string name="common_open" formatted="false">"Oscail"</string>
+    <string name="common_copy" formatted="false">"Cóipeáil"</string>
+    <string name="common_add" formatted="false">"Cuir leis"</string>
+    <string name="common_delete" formatted="false">"Scrios"</string>
+    <string name="common_done" formatted="false">"Déanta"</string>
+    <string name="common_save_apply" formatted="false">"Cuir i bhfeidhm"</string>
+    <string name="common_unknown" formatted="false">"Anaithnid"</string>
+    <string name="common_custom" formatted="false">"Saincheaptha"</string>
+    <string name="home_icon_hidden" formatted="false">"Deilbhín na haipe folaithe"</string>
+    <string name="home_icon_restored" formatted="false">"Deilbhín na haipe athchóirithe"</string>
+    <string name="home_activated" formatted="false">"Gníomhachtaithe"</string>
+    <string name="home_inactive" formatted="false">"Gan ghníomhachtú"</string>
+    <string name="home_activation_missing" formatted="false">"Níor braitheadh gníomhachtú in LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Comhoiriúnacht TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok suiteáilte"</string>
+    <string name="home_host_missing" formatted="false">"Níor aimsíodh suiteáil TikTok a dtacaítear léi ar an ngléas seo"</string>
+    <string name="home_host_not_installed" formatted="false">"Gan suiteáil"</string>
+    <string name="home_supported_versions" formatted="false">"Leaganacha a dtacaítear leo"</string>
+    <string name="home_community" formatted="false">"Foinse oscailte agus pobal"</string>
+    <string name="home_github" formatted="false">"Stór GitHub"</string>
+    <string name="home_telegram" formatted="false">"Grúpa Telegram"</string>
+    <string name="home_preferences" formatted="false">"Sainroghanna an mhodúil"</string>
+    <string name="home_hide_icon" formatted="false">"Folaigh deilbhín na haipe"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Oscail Toki trí Bhainisteoir LSPosed nuair atá an deilbhín folaithe"</string>
+    <string name="home_support" formatted="false">"Tacaigh leis an bhforbairt"</string>
+    <string name="home_support_summary" formatted="false">"Tacaigh le cothabháil agus feabhsúcháin leanúnacha"</string>
+    <string name="feature_region_section" formatted="false">"Réigiún agus gléas"</string>
+    <string name="feature_playback_section" formatted="false">"Athsheinm"</string>
+    <string name="feature_progress" formatted="false">"Taispeáin dul chun cinn i gcónaí"</string>
+    <string name="feature_progress_summary" formatted="false">"Coinníonn sé an barra dul chun cinn infheicthe, fiú ar fhíseáin ghearra"</string>
+    <string name="feature_immersive" formatted="false">"Taispeáint físeáin"</string>
+    <string name="feature_autoplay" formatted="false">"Scrollú uathoibríoch feabhsaithe"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Díghlasáil scrollú uathoibríoch i roghchlár gach físeáin"</string>
+    <string name="feature_status_bar" formatted="false">"Folaigh barra stádais an chórais"</string>
+    <string name="feature_media_section" formatted="false">"Íoslódálacha agus gníomhartha"</string>
+    <string name="feature_download" formatted="false">"Íoslódálacha gan comhartha uisce"</string>
+    <string name="feature_download_summary" formatted="false">"Sábháil an bunfhíseán gan comhartha uisce ón roghchlár brú fada nó comhroinnte"</string>
+    <string name="feature_music" formatted="false">"Díbhlocáil fuaim"</string>
+    <string name="feature_music_summary" formatted="false">"Athchóirigh athsheinm fuaime atá srianta de bharr ceadúnais nó réigiúin"</string>
+    <string name="feature_author_region" formatted="false">"Taispeáin réigiún an chruthaitheora"</string>
+    <string name="feature_author_region_summary" formatted="false">"Taispeáin bratach agus cód na tíre nó an réigiúin in aice le hainm an chruthaitheora"</string>
+    <string name="feature_copy_comment" formatted="false">"Cóipeáil téacs amháin"</string>
+    <string name="feature_video_translation" formatted="false">"Roghchlár fotheideal agus aistriúcháin"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Taispeáin an rogha sa roghchlár brú fada"</string>
+    <string name="feature_comment_translation" formatted="false">"Aistrigh nótaí tráchta"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Cuir cnaipe leis chun nótaí tráchta i dteangacha eile a aistriú i mbaisceanna"</string>
+    <string name="feature_filter_section" formatted="false">"Scagadh an fhotha"</string>
+    <string name="feature_remove_ads" formatted="false">"Bain fógraí den fhotha"</string>
+    <string name="feature_remove_live" formatted="false">"Folaigh craoltaí beo"</string>
+    <string name="feature_remove_photos" formatted="false">"Folaigh postálacha grianghraf"</string>
+    <string name="feature_filter_views" formatted="false">"Scagaire líon na n-amharc"</string>
+    <string name="feature_filter_likes" formatted="false">"Scagaire líon na marcanna ‘Is maith liom’"</string>
+    <string name="feature_filter_duration" formatted="false">"Scagaire fhad an fhíseáin"</string>
+    <string name="feature_filter_keywords" formatted="false">"Scagaire eochairfhocal"</string>
+    <string name="feature_block_offline" formatted="false">"Blocáil físeáin as líne"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Cosc ar fhíseáin as líne réamhluchtaithe a chur isteach nuair atá an nasc lag"</string>
+    <string name="feature_remove_ai" formatted="false">"Bain ábhar a ghin IS"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Scag físeáin a mharcálann TikTok mar fhíseáin a ghin intleacht shaorga"</string>
+    <string name="filter_metric_views" formatted="false">"amharcanna"</string>
+    <string name="filter_metric_likes" formatted="false">"marcanna ‘Is maith liom’"</string>
+    <string name="filter_metric_duration" formatted="false">"fad"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Raon líon na n-amharc sábháilte"</string>
+    <string name="filter_likes_saved" formatted="false">"Raon líon na marcanna ‘Is maith liom’ sábháilte"</string>
+    <string name="filter_duration_saved" formatted="false">"Raon fhad an fhíseáin sábháilte"</string>
+    <string name="download_path_saved" formatted="false">"Conairí sábhála saincheaptha nuashonraithe"</string>
+    <string name="region_spoof_title" formatted="false">"Insamhladh réigiúin agus SIM"</string>
+    <string name="region_current" formatted="false">"Cumraíocht reatha"</string>
+    <string name="region_target" formatted="true">"Spriocréigiún: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Oibreoir: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Cód an oibreora: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Réamhshocruithe"</string>
+    <string name="region_custom_parameters" formatted="false">"Saincheap"</string>
+    <string name="language_spoof" formatted="false">"Insamhladh teanga"</string>
+    <string name="environment_follow_region" formatted="false">"De réir réigiúin"</string>
+    <string name="language_effective" formatted="true">"Teanga i bhfeidhm: %1$s"</string>
+    <string name="language_custom" formatted="false">"Teanga shaincheaptha"</string>
+    <string name="timezone_spoof" formatted="false">"Insamhladh crios ama"</string>
+    <string name="timezone_effective" formatted="true">"Crios ama i bhfeidhm: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Crios ama saincheaptha"</string>
+    <string name="gps_spoof" formatted="false">"Insamhladh suímh"</string>
+    <string name="gps_effective" formatted="true">"Comhordanáidí i bhfeidhm: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Comhordanáidí saincheaptha"</string>
+    <string name="speed_fixed" formatted="false">"Coinnigh luas athsheinm"</string>
+    <string name="speed_fixed_summary" formatted="false">"Coinnigh an luas a roghnaíodh sa roghchlár brú fada nuair a athraítear físeáin"</string>
+    <string name="speed_expand" formatted="false">"Tuilleadh luasanna"</string>
+    <string name="speed_options_hint" formatted="false">"Roghanna luais (tapáil chun eagarthóireacht a dhéanamh nó a bhaint)"</string>
+    <string name="speed_add_option" formatted="false">"+ Cuir luas leis"</string>
+    <string name="speed_restore" formatted="false">"Athshocraigh"</string>
+    <string name="clean_on_play" formatted="false">"Folaigh rialtáin le linn seinm"</string>
+    <string name="clean_keep_progress" formatted="false">"Coinnigh an barra dul chun cinn"</string>
+    <string name="download_paths" formatted="false">"Fillteáin sábhála"</string>
+    <string name="download_paths_summary" formatted="true">"Físeáin: %1$s · Íomhánna: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Coinnigh físeáin a bhfuil %1$s acu ó %2$d%4$s go %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Coinnigh físeáin a bhfuil %1$s ≥ %2$d%3$s acu"</string>
+    <string name="filter_range_max" formatted="true">"Coinnigh físeáin a bhfuil %1$s ≤ %2$d%3$s acu"</string>
+    <string name="filter_range_unset" formatted="false">"Níl raon socraithe (tapáil chun íosmhéid nó uasmhéid a shocrú)"</string>
+    <string name="keyword_unset" formatted="false">"Tapáil chun rialacha a chur leis"</string>
+    <string name="keyword_summary" formatted="true">"Cumasaithe: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Tuairiscí %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Clibeanna %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Cruthaitheoirí %1$d"</string>
+    <string name="keyword_description" formatted="false">"Tuairiscí"</string>
+    <string name="keyword_tag" formatted="false">"Clibeanna"</string>
+    <string name="keyword_author" formatted="false">"Cruthaitheoirí"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Níl rialacha ann do %1$s. Cuir ceann leis thuas."</string>
+    <string name="duration_alert_title" formatted="false">"Foláireamh faoi fhíseán fada"</string>
+    <string name="duration_alert_summary" formatted="true">"Tairseach reatha: ≥ %1$s nóiméad"</string>
+    <string name="download_video_path" formatted="false">"Fillteán físeán"</string>
+    <string name="download_image_path" formatted="false">"Fillteán íomhánna"</string>
+    <string name="download_path_hint" formatted="false">"Caithfidh an chéad fhillteán a bheith ina fhillteán poiblí meán, mar shampla Movies, Pictures nó DCIM. Úsáidtear réamhshocrú an chórais do chonairí neamhbhailí."</string>
+    <string name="views_range_title" formatted="false">"Raon líon na n-amharc"</string>
+    <string name="views_range_min" formatted="false">"Íoslíon amharc (0 = gan teorainn)"</string>
+    <string name="views_range_max" formatted="false">"Uaslíon amharc (0 = gan teorainn)"</string>
+    <string name="views_range_hint" formatted="false">"Coinnigh físeáin laistigh den raon amharc seo amháin. Socraigh an dá theorainn go 0 chun gan aon rud a bhaint."</string>
+    <string name="likes_range_title" formatted="false">"Raon líon na marcanna ‘Is maith liom’"</string>
+    <string name="likes_range_min" formatted="false">"Íoslíon marcanna ‘Is maith liom’ (0 = gan teorainn)"</string>
+    <string name="likes_range_max" formatted="false">"Uaslíon marcanna ‘Is maith liom’ (0 = gan teorainn)"</string>
+    <string name="likes_range_hint" formatted="false">"Coinnigh físeáin laistigh den raon seo de mharcanna ‘Is maith liom’ amháin. Socraigh an dá theorainn go 0 chun gan aon rud a bhaint."</string>
+    <string name="duration_range_title" formatted="false">"Raon fhad an fhíseáin"</string>
+    <string name="duration_range_min" formatted="false">"Íosfhad (soicindí; 0 = gan teorainn)"</string>
+    <string name="duration_range_max" formatted="false">"Uasfhad (soicindí; 0 = gan teorainn)"</string>
+    <string name="duration_range_hint" formatted="false">"Coinnigh físeáin mholta laistigh den raon faid seo amháin. Socraigh an dá theorainn go 0 chun gan aon rud a bhaint. Ní dhéantar difear do phostálacha grianghraf."</string>
+    <string name="keyword_manage" formatted="false">"Rialacha scagtha"</string>
+    <string name="keyword_description_hint" formatted="false">"Meaitseáil téacs agus tuairiscí físeán gan idirdhealú idir cás uachtair agus cás íochtair."</string>
+    <string name="keyword_tag_hint" formatted="false">"Meaitseáil haischlibeanna. Ná cuir an réimír # san áireamh."</string>
+    <string name="keyword_author_hint" formatted="false">"Meaitseáil ainmneacha cruthaitheoirí agus ainmneacha úsáideora uathúla. Ná cuir an réimír @ san áireamh."</string>
+    <string name="keyword_description_input" formatted="false">"Eochairfhocal sa téacs"</string>
+    <string name="keyword_tag_input" formatted="false">"Haischlib"</string>
+    <string name="keyword_author_input" formatted="false">"Ainm nó ainm úsáideora"</string>
+    <string name="keyword_add" formatted="false">"Cuir riail leis"</string>
+    <string name="keyword_delete" formatted="false">"Scrios riail"</string>
+    <string name="region_select_title" formatted="false">"Roghnaigh réigiún"</string>
+    <string name="region_search" formatted="false">"Ainm nó cód tíre"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Cód an oibreora: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Réigiún agus SIM saincheaptha"</string>
+    <string name="region_custom_hint" formatted="false">"Socraigh cód tíre agus oibreoir saincheaptha gan srianta réamhshocruithe."</string>
+    <string name="region_code_input" formatted="false">"Cód tíre nó réigiúin (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Cód oibreora (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Ainm oibreora (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Roghnaigh teanga choitianta nó iontráil cód teanga."</string>
+    <string name="language_code_input" formatted="false">"Cód teanga (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Teangacha"</string>
+    <string name="timezone_custom_hint" formatted="false">"Roghnaigh crios ama cathrach coitianta nó iontráil ainm crios ama."</string>
+    <string name="timezone_input" formatted="false">"Ainm crios ama (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Cathracha"</string>
+    <string name="city_tokyo" formatted="false">"Tóiceo"</string>
+    <string name="city_taipei" formatted="false">"Taipéi"</string>
+    <string name="city_hong_kong" formatted="false">"Hong Cong"</string>
+    <string name="city_new_york" formatted="false">"Nua-Eabhrac"</string>
+    <string name="city_london" formatted="false">"Londain"</string>
+    <string name="city_seoul" formatted="false">"Súl"</string>
+    <string name="city_bangkok" formatted="false">"Bancác"</string>
+    <string name="city_singapore" formatted="false">"Singeapór"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Suíomh saincheaptha"</string>
+    <string name="gps_custom_hint" formatted="false">"Roghnaigh cathair choitianta nó iontráil domhanleithead agus domhanfhad."</string>
+    <string name="gps_latitude" formatted="false">"Domhanleithead (-90.0 go 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Domhanfhad (-180.0 go 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Cathracha"</string>
+    <string name="speed_add_title" formatted="false">"Cuir luas leis"</string>
+    <string name="speed_input" formatted="false">"Luas"</string>
+    <string name="speed_invalid" formatted="false">"Iontráil uimhir bhailí"</string>
+    <string name="speed_out_of_range" formatted="true">"Ní thacaítear ach le %1$sx go %2$sx"</string>
+    <string name="speed_range" formatted="true">"Raon tacaithe: %1$sx go %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Cuir luas in eagar"</string>
+    <string name="duration_threshold_title" formatted="false">"Foláireamh faoi fhíseán fada"</string>
+    <string name="duration_threshold_hint" formatted="false">"Nuair a shroicheann físeán an fad seo, tugann teachtaireacht ghearr ag tús an athsheinm foláireamh faoina fhad i nóiméid."</string>
+    <string name="duration_threshold_input" formatted="false">"Tairseach faid (nóiméid)"</string>
+    <string name="duration_threshold_example" formatted="false">"Mar shampla: 3 nó 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Iontráil líon bailí nóiméad atá níos mó ná 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Socrú reatha: foláireamh d’fhíseáin ≥ %1$s nóiméad"</string>
+    <string name="duration_threshold_presets" formatted="false">"Faid mholta:"</string>
+    <string name="status_feature_feed" formatted="false">"Scagaire fotha"</string>
+    <string name="status_feature_speed" formatted="false">"Luas"</string>
+    <string name="status_feature_progress" formatted="false">"Barra dul chun cinn"</string>
+    <string name="status_feature_clean" formatted="false">"Folú uathoibríoch"</string>
+    <string name="status_feature_immersive" formatted="false">"Taispeáint físeáin"</string>
+    <string name="status_feature_scroll" formatted="false">"Scrollú uathoibríoch"</string>
+    <string name="status_feature_duration" formatted="false">"Foláireamh faid"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Aistriú nótaí tráchta"</string>
+    <string name="status_feature_video_translate" formatted="false">"Roghchlár fotheideal agus aistriúcháin"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Cóipeáil nótaí tráchta"</string>
+    <string name="status_feature_author" formatted="false">"Réigiún an chruthaitheora"</string>
+    <string name="status_feature_download" formatted="false">"Sábháil físeán"</string>
+    <string name="status_feature_music" formatted="false">"Srianta fuaime"</string>
+    <string name="status_feature_sim" formatted="false">"Réigiún agus SIM"</string>
+    <string name="status_feature_language" formatted="false">"Teanga"</string>
+    <string name="status_feature_timezone" formatted="false">"Crios ama"</string>
+    <string name="status_feature_gps" formatted="false">"Suíomh"</string>
+    <string name="status_feature_bar" formatted="false">"Barra stádais"</string>
+    <string name="status_normal" formatted="false">"Ag obair"</string>
+    <string name="status_issue" formatted="false">"Fadhb"</string>
+    <string name="status_disabled" formatted="false">"Múchta"</string>
+    <string name="status_pending" formatted="false">"Ar feitheamh"</string>
+    <string name="status_problem_disabled" formatted="false">"Múchta, le hearráid taifeadta"</string>
+    <string name="status_problem_unavailable" formatted="false">"Níl ar fáil faoi láthair"</string>
+    <string name="status_problem_runtime" formatted="false">"Earráid le linn úsáide"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Roghchlár luais gan fáil"</string>
+    <string name="status_prepare_failed" formatted="false">"Theip ar ullmhú na ngnéithe. Oscail TikTok arís agus seiceáil arís."</string>
+    <string name="status_preparing" formatted="false">"Na gnéithe á n-ullmhú. Fan go fóill."</string>
+    <string name="status_prepared" formatted="false">"Ullmhúchán críochnaithe. Oscail TikTok arís."</string>
+    <string name="status_read_failed" formatted="false">"Ní féidir an stádas a léamh faoi láthair. Seiceáil arís ar ball."</string>
+    <string name="status_update_failed" formatted="false">"Ní féidir an stádas a nuashonrú faoi láthair. Tá an toradh is déanaí á thaispeáint."</string>
+    <string name="status_reading" formatted="false">"Stádas á léamh"</string>
+    <string name="status_empty" formatted="false">"Níl aon ghníomhaíocht taifeadta. Cumasaigh Toki in LSPosed, oscail TikTok agus seiceáil arís."</string>
+    <string name="status_report_note" formatted="true">"Tuairisc is déanaí: %1$s\nCiallaíonn “Ag obair” go bhfuil an ghné réidh agus nár thuairiscigh sí aon earráid."</string>
+    <string name="config_section" formatted="false">"Cumraíocht"</string>
+    <string name="config_import" formatted="false">"Iompórtáil socruithe"</string>
+    <string name="config_import_summary" formatted="false">"Athchóirigh socruithe gnéithe ó chomhad"</string>
+    <string name="config_export" formatted="false">"Easpórtáil socruithe"</string>
+    <string name="config_export_summary" formatted="false">"Sábháil socruithe gnéithe i gcomhad"</string>
+    <string name="config_exported" formatted="false">"Easpórtáladh an chumraíocht chuig an suíomh roghnaithe. D’fhéadfadh eochairfhocail, réigiúin agus socruithe fillteán a bheith sa chomhad. Coinnigh slán é."</string>
+    <string name="config_import_confirm" formatted="true">"Tá %1$d socrú sa chomhad. Cuirfidh an t-iompórtáil socruithe nua in ionad na socruithe gnéithe go léir; athshocrófar socruithe atá in easnamh go dtí a luachanna réamhshocraithe.\n\nNí athrófar teanga na haipe, deilbhín na haipe, údarú LSPosed ná taisce comhoiriúnachta TikTok. Lean ar aghaidh?"</string>
+    <string name="config_overwrite" formatted="false">"Ionadaigh"</string>
+    <string name="config_imported" formatted="false">"Iompórtáladh an chumraíocht agus nuashonraíodh socruithe na ngnéithe. Cuirtear athruithe a thacaíonn le nuashonrú beo i bhfeidhm láithreach. Oscail TikTok arís chun athruithe eile a dheimhniú."</string>
+    <string name="config_processing" formatted="false">"Á phróiseáil…"</string>
+    <string name="config_error_io" formatted="false">"Ní féidir an comhad a léamh ná a scríobh. Seiceáil an suíomh roghnaithe agus an spás atá ar fáil."</string>
+    <string name="config_error_permission" formatted="false">"Níor deonaíodh cead rochtana ar an gcomhad roghnaithe. Roghnaigh arís é."</string>
+    <string name="config_error_invalid" formatted="false">"Ní comhad cumraíochta bailí Toki é seo. Níor iompórtáladh aon socrú."</string>
+    <string name="config_error_validation" formatted="true">"Theip ar bhailíochtú na cumraíochta: %1$s. Níor iompórtáladh aon socrú."</string>
+    <string name="config_error_commit" formatted="false">"Níorbh fhéidir na hathruithe cumraíochta a dhearbhú. Oscail Toki arís chun iad a sheiceáil sula ndéanfaidh tú iarracht eile."</string>
+    <string name="sponsor_title" formatted="false">"Tacaigh leis an bhforbróir"</string>
+    <string name="sponsor_kofi" formatted="false">"Tacaigh ar Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Cód QR íocaíochta Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Á shábháil…"</string>
+    <string name="sponsor_save_image" formatted="false">"Sábháil íomhá"</string>
+    <string name="sponsor_image_hint" formatted="false">"Sábháil an bhuníomhá iomlán, ansin roghnaigh in Alipay í chun an cód a scanadh."</string>
+    <string name="sponsor_address_copied" formatted="false">"Seoladh USDT cóipeáilte"</string>
+    <string name="sponsor_image_saved" formatted="false">"Íomhá sábháilte chuig an suíomh roghnaithe"</string>
+    <string name="sponsor_error_io" formatted="false">"Theip ar shábháil. Seiceáil an suíomh roghnaithe agus an spás atá ar fáil, ansin bain triail eile as."</string>
+    <string name="sponsor_error_permission" formatted="false">"Theip ar shábháil. Níor deonaíodh cead scríofa don suíomh seo. Roghnaigh suíomh eile."</string>
+    <string name="feature_filter_topics" formatted="false">"Folaigh ábhair mholta"</string>
+    <string name="feature_filter_creators" formatted="false">"Folaigh cruthaitheoirí molta"</string>
+    <string name="host_scan_title_complete" formatted="false">"Cuardach críochnaithe"</string>
+    <string name="host_scan_title_failed" formatted="false">"Theip ar an gcuardach"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Atosaigh TikTok de láimh chun na torthaí a chur i bhfeidhm."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Féach ar dhiagnóisic na ngnéithe in Toki."</string>
+    <string name="layout_title" formatted="false">"Leagan amach"</string>
+    <string name="layout_summary" formatted="false">"Roghnaigh na rialtáin le cur i bhfolach"</string>
+    <string name="layout_hint" formatted="false">"Cuir an lasc ar siúl chun an mhír a cheilt"</string>
+    <string name="layout_top" formatted="false">"Barra uachtair"</string>
+    <string name="layout_bottom" formatted="false">"Barra íochtair"</string>
+    <string name="layout_side" formatted="false">"Leathanach físe"</string>
+    <string name="layout_search" formatted="false">"Cuardaigh"</string>
+    <string name="layout_live" formatted="false">"BEO"</string>
+    <string name="layout_friends" formatted="false">"Cairde"</string>
+    <string name="layout_following" formatted="false">"Á leanúint"</string>
+    <string name="layout_shop" formatted="false">"Siopa"</string>
+    <string name="layout_for_you" formatted="false">"Duitse"</string>
+    <string name="layout_nearby" formatted="false">"In aice láimhe"</string>
+    <string name="layout_stem" formatted="false">"Eolaíocht"</string>
+    <string name="layout_series" formatted="false">"Sraitheanna"</string>
+    <string name="layout_home" formatted="false">"Baile"</string>
+    <string name="layout_create" formatted="false">"Cruthaigh"</string>
+    <string name="layout_inbox" formatted="false">"Bosca isteach"</string>
+    <string name="layout_profile" formatted="false">"Próifíl"</string>
+    <string name="layout_discover" formatted="false">"Aimsigh"</string>
+    <string name="layout_avatar" formatted="false">"Pictiúr próifíle"</string>
+    <string name="layout_follow" formatted="false">"Cnaipe Lean"</string>
+    <string name="layout_like" formatted="false">"Is maith liom"</string>
+    <string name="layout_comment" formatted="false">"Nótaí tráchta"</string>
+    <string name="layout_favorite" formatted="false">"Ceanáin"</string>
+    <string name="layout_share" formatted="false">"Comhroinn"</string>
+    <string name="layout_music" formatted="false">"Diosca ceoil"</string>
+    <string name="layout_explore" formatted="false">"Fiosraigh"</string>
+    <string name="layout_author" formatted="false">"Eolas faoin údar"</string>
+    <string name="layout_description" formatted="false">"Cur síos"</string>
+    <string name="layout_music_title" formatted="false">"Teideal ceoil"</string>
+    <string name="layout_tags" formatted="false">"Lipéid eolais"</string>
+    <string name="layout_search_label" formatted="false">"Moladh cuardaigh"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Cnaipe chun uathscrollú a stopadh"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Boinn agus luaíochtaí"</string>
+    <string name="layout_quick_comment" formatted="false">"Tráchtanna tapa"</string>
+    <string name="layout_playlist" formatted="false">"Seinmliosta"</string>
+    <string name="layout_creation_buttons" formatted="false">"Aicearraí cruthaithe"</string>
+    <string name="layout_live_notice" formatted="false">"Meabhrúcháin bheo"</string>
+    <string name="layout_opacity" formatted="false">"Teimhneacht"</string>
+    <string name="feature_background_audio">"Díghlasáil fuaim chúlra"</string>
+    <string name="layout_landscape">"Cnaipe lánscáileáin"</string>
+    <string name="layout_photo_indicators">"Táscairí agus leideanna grianghraf"</string>
+    <string name="layout_quick_message">"Teachtaireachtaí tapa agus foinse comhroinnte"</string>
+    <string name="layout_user_card">"Cuntais mholta"</string>
+    <string name="layout_survey">"Suirbhéanna agus aiseolas"</string>
+    <string name="layout_ad_cards">"Cártaí táirgí agus fógraí"</string>
+    <string name="layout_bottom_banners">"Meirgí íochtaracha eile"</string>
+    <string name="layout_activities">"Rochtain ar imeachtaí"</string>
+    <string name="host_scan_title_running" formatted="false">"Modhanna á lorg"</string>
+    <string name="host_scan_title_saving" formatted="false">"Torthaí á sábháil"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Coinnigh TikTok sa tulra."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Fan go fóill."</string>
+    <string name="host_scan_done" formatted="false">"Tuigim"</string>
+    <string name="video_fit_center" formatted="false">"Láraithe"</string>
+    <string name="video_fit_smart" formatted="false">"Lánscáileán"</string>
+</resources>

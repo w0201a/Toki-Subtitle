@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Bosh sahifa"</string>
+    <string name="nav_features" formatted="false">"Funksiyalar"</string>
+    <string name="page_features" formatted="false">"Sozlamalar"</string>
+    <string name="page_hook_status" formatted="false">"Funksiyalar holati"</string>
+    <string name="nav_back" formatted="false">"Ortga"</string>
+    <string name="restart_tiktok" formatted="false">"TikTokni qayta ishga tushirish"</string>
+    <string name="restart_root_required" formatted="false">"Toki uchun root ruxsatini bering."</string>
+    <string name="language_title" formatted="false">"Ilova tili"</string>
+    <string name="language_system" formatted="false">"Tizim tilidan foydalanish"</string>
+    <string name="language_search" formatted="false">"Tillarni qidirish"</string>
+    <string name="language_clear_search" formatted="false">"Qidiruvni tozalash"</string>
+    <string name="language_no_results" formatted="false">"Mos til topilmadi"</string>
+    <string name="common_save" formatted="false">"Saqlash"</string>
+    <string name="common_cancel" formatted="false">"Bekor qilish"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Yopish"</string>
+    <string name="common_open" formatted="false">"Ochish"</string>
+    <string name="common_copy" formatted="false">"Nusxalash"</string>
+    <string name="common_add" formatted="false">"Qoʻshish"</string>
+    <string name="common_delete" formatted="false">"Oʻchirish"</string>
+    <string name="common_done" formatted="false">"Tayyor"</string>
+    <string name="common_save_apply" formatted="false">"Qoʻllash"</string>
+    <string name="common_unknown" formatted="false">"Nomaʼlum"</string>
+    <string name="common_custom" formatted="false">"Maxsus"</string>
+    <string name="home_icon_hidden" formatted="false">"Ilova belgisi yashirildi"</string>
+    <string name="home_icon_restored" formatted="false">"Ilova belgisi tiklandi"</string>
+    <string name="home_activated" formatted="false">"Faollashtirilgan"</string>
+    <string name="home_inactive" formatted="false">"Faollashtirilmagan"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosed orqali faollashtirish aniqlanmadi"</string>
+    <string name="home_host_section" formatted="false">"TikTok bilan moslik"</string>
+    <string name="home_host_current" formatted="false">"Oʻrnatilgan TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Qurilmada qoʻllab-quvvatlanadigan TikTok topilmadi"</string>
+    <string name="home_host_not_installed" formatted="false">"Oʻrnatilmagan"</string>
+    <string name="home_supported_versions" formatted="false">"Qoʻllab-quvvatlanadigan versiyalar"</string>
+    <string name="home_community" formatted="false">"Ochiq kod va hamjamiyat"</string>
+    <string name="home_github" formatted="false">"GitHub repozitoriysi"</string>
+    <string name="home_telegram" formatted="false">"Telegram guruhi"</string>
+    <string name="home_preferences" formatted="false">"Modul sozlamalari"</string>
+    <string name="home_hide_icon" formatted="false">"Ilova belgisini yashirish"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Belgi yashirilganda Tokini LSPosed boshqaruvchisidan oching"</string>
+    <string name="home_support" formatted="false">"Ishlab chiqishni qoʻllab-quvvatlash"</string>
+    <string name="home_support_summary" formatted="false">"Doimiy xizmat va takomillashtirishni qoʻllab-quvvatlash"</string>
+    <string name="feature_region_section" formatted="false">"Hudud va qurilma"</string>
+    <string name="feature_playback_section" formatted="false">"Ijro"</string>
+    <string name="feature_progress" formatted="false">"Ijro chizigʻini doim koʻrsatish"</string>
+    <string name="feature_progress_summary" formatted="false">"Qisqa videolarda ham ijro chizigʻini koʻrsatish"</string>
+    <string name="feature_immersive" formatted="false">"Video ko‘rinishi"</string>
+    <string name="feature_autoplay" formatted="false">"Kengaytirilgan avtomatik aylantirish"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Barcha video menyularida avtomatik aylantirishni ochadi"</string>
+    <string name="feature_status_bar" formatted="false">"Tizim holat panelini yashirish"</string>
+    <string name="feature_media_section" formatted="false">"Yuklab olish va amallar"</string>
+    <string name="feature_download" formatted="false">"Suv belgisiz yuklash"</string>
+    <string name="feature_download_summary" formatted="false">"Bosib turish yoki ulashish menyusidan asl videoni suv belgisiz saqlash"</string>
+    <string name="feature_music" formatted="false">"Audioni ochish"</string>
+    <string name="feature_music_summary" formatted="false">"Litsenziya yoki hudud sabab cheklangan audio ijrosini tiklash"</string>
+    <string name="feature_author_region" formatted="false">"Muallif hududini koʻrsatish"</string>
+    <string name="feature_author_region_summary" formatted="false">"Muallif nomi yonida mamlakat yoki hudud bayrogʻi va kodini koʻrsatish"</string>
+    <string name="feature_copy_comment" formatted="false">"Faqat matnni nusxalash"</string>
+    <string name="feature_video_translation" formatted="false">"Subtitr va tarjima menyusi"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Uzoq bosish menyusida bandni ko‘rsatish"</string>
+    <string name="feature_comment_translation" formatted="false">"Izohlarni tarjima qilish"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Chet tilidagi izohlarni birgalikda tarjima qiluvchi tugma qoʻshish"</string>
+    <string name="feature_filter_section" formatted="false">"Tasma filtrlari"</string>
+    <string name="feature_remove_ads" formatted="false">"Tasmadagi reklamalarni olib tashlash"</string>
+    <string name="feature_remove_live" formatted="false">"Jonli efirlarni yashirish"</string>
+    <string name="feature_remove_photos" formatted="false">"Rasmli postlarni yashirish"</string>
+    <string name="feature_filter_views" formatted="false">"Koʻrishlar soni filtri"</string>
+    <string name="feature_filter_likes" formatted="false">"Yoqtirishlar soni filtri"</string>
+    <string name="feature_filter_duration" formatted="false">"Video davomiyligi filtri"</string>
+    <string name="feature_filter_keywords" formatted="false">"Kalit soʻzlar filtri"</string>
+    <string name="feature_block_offline" formatted="false">"Oflayn videolarni bloklash"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Aloqa sust boʻlganda oldindan yuklangan oflayn videolar kiritilishini oldini olish"</string>
+    <string name="feature_remove_ai" formatted="false">"Sunʼiy intellekt yaratgan videolarni yashirish"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"TikTok sunʼiy intellekt yaratgan deb belgilagan videolarni filtrlash"</string>
+    <string name="filter_metric_views" formatted="false">"koʻrishlar"</string>
+    <string name="filter_metric_likes" formatted="false">"yoqtirishlar"</string>
+    <string name="filter_metric_duration" formatted="false">"davomiylik"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Koʻrishlar oraligʻi saqlandi"</string>
+    <string name="filter_likes_saved" formatted="false">"Yoqtirishlar oraligʻi saqlandi"</string>
+    <string name="filter_duration_saved" formatted="false">"Video davomiyligi oraligʻi saqlandi"</string>
+    <string name="download_path_saved" formatted="false">"Maxsus saqlash yoʻllari yangilandi"</string>
+    <string name="region_spoof_title" formatted="false">"Hudud va SIMni taqlid qilish"</string>
+    <string name="region_current" formatted="false">"Joriy sozlamalar"</string>
+    <string name="region_target" formatted="true">"Maqsadli hudud: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operator: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Operator kodi: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Tayyor sozlamalar"</string>
+    <string name="region_custom_parameters" formatted="false">"Maxsus"</string>
+    <string name="language_spoof" formatted="false">"Tilni taqlid qilish"</string>
+    <string name="environment_follow_region" formatted="false">"Hududga mos"</string>
+    <string name="language_effective" formatted="true">"Amaldagi til: %1$s"</string>
+    <string name="language_custom" formatted="false">"Maxsus til"</string>
+    <string name="timezone_spoof" formatted="false">"Vaqt mintaqasini taqlid qilish"</string>
+    <string name="timezone_effective" formatted="true">"Amaldagi vaqt mintaqasi: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Maxsus vaqt mintaqasi"</string>
+    <string name="gps_spoof" formatted="false">"Joylashuvni taqlid qilish"</string>
+    <string name="gps_effective" formatted="true">"Amaldagi koordinatalar: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Maxsus koordinatalar"</string>
+    <string name="speed_fixed" formatted="false">"Ijro tezligini saqlash"</string>
+    <string name="speed_fixed_summary" formatted="false">"Video almashtirilganda bosib turish menyusida tanlangan tezlikni saqlash"</string>
+    <string name="speed_expand" formatted="false">"Koʻproq tezliklar"</string>
+    <string name="speed_options_hint" formatted="false">"Tezliklar (tahrirlash yoki oʻchirish uchun bosing)"</string>
+    <string name="speed_add_option" formatted="false">"+ Tezlik qoʻshish"</string>
+    <string name="speed_restore" formatted="false">"Tiklash"</string>
+    <string name="clean_on_play" formatted="false">"Ijroda boshqaruvlarni yashirish"</string>
+    <string name="clean_keep_progress" formatted="false">"Ijro chizigʻini saqlash"</string>
+    <string name="download_paths" formatted="false">"Saqlash jildlari"</string>
+    <string name="download_paths_summary" formatted="true">"Videolar: %1$s · Rasmlar: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"%1$s qiymati %2$d%4$s dan %3$d%4$s gacha boʻlgan videolarni qoldirish"</string>
+    <string name="filter_range_min" formatted="true">"%1$s ≥ %2$d%3$s boʻlgan videolarni qoldirish"</string>
+    <string name="filter_range_max" formatted="true">"%1$s ≤ %2$d%3$s boʻlgan videolarni qoldirish"</string>
+    <string name="filter_range_unset" formatted="false">"Oraliq belgilanmagan (pastki yoki yuqori chegarani belgilash uchun bosing)"</string>
+    <string name="keyword_unset" formatted="false">"Qoida qoʻshish uchun bosing"</string>
+    <string name="keyword_summary" formatted="true">"Yoqilgan: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Matnlar %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Heshteglar %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Mualliflar %1$d"</string>
+    <string name="keyword_description" formatted="false">"Matnlar"</string>
+    <string name="keyword_tag" formatted="false">"Heshteglar"</string>
+    <string name="keyword_author" formatted="false">"Mualliflar"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"%1$s uchun qoidalar yoʻq. Yuqorida qoʻshing."</string>
+    <string name="duration_alert_title" formatted="false">"Uzun video ogohlantirishi"</string>
+    <string name="duration_alert_summary" formatted="true">"Joriy chegara: ≥ %1$s daqiqa"</string>
+    <string name="download_video_path" formatted="false">"Video jildi"</string>
+    <string name="download_image_path" formatted="false">"Rasm jildi"</string>
+    <string name="download_path_hint" formatted="false">"Birinchi jild Movies, Pictures yoki DCIM kabi umumiy media jildi boʻlishi kerak. Notoʻgʻri yoʻl uchun tizimning standart qiymati ishlatiladi."</string>
+    <string name="views_range_title" formatted="false">"Koʻrishlar soni oraligʻi"</string>
+    <string name="views_range_min" formatted="false">"Eng kam koʻrishlar (0 = cheklovsiz)"</string>
+    <string name="views_range_max" formatted="false">"Eng koʻp koʻrishlar (0 = cheklovsiz)"</string>
+    <string name="views_range_hint" formatted="false">"Faqat koʻrishlar soni shu oraliqdagi videolarni qoldirish. Ikkala chegara 0 boʻlsa, hech narsa olib tashlanmaydi."</string>
+    <string name="likes_range_title" formatted="false">"Yoqtirishlar soni oraligʻi"</string>
+    <string name="likes_range_min" formatted="false">"Eng kam yoqtirishlar (0 = cheklovsiz)"</string>
+    <string name="likes_range_max" formatted="false">"Eng koʻp yoqtirishlar (0 = cheklovsiz)"</string>
+    <string name="likes_range_hint" formatted="false">"Faqat yoqtirishlar soni shu oraliqdagi videolarni qoldirish. Ikkala chegara 0 boʻlsa, hech narsa olib tashlanmaydi."</string>
+    <string name="duration_range_title" formatted="false">"Video davomiyligi oraligʻi"</string>
+    <string name="duration_range_min" formatted="false">"Eng qisqa davomiylik (soniya; 0 = cheklovsiz)"</string>
+    <string name="duration_range_max" formatted="false">"Eng uzun davomiylik (soniya; 0 = cheklovsiz)"</string>
+    <string name="duration_range_hint" formatted="false">"Faqat davomiyligi shu oraliqdagi tavsiya videolarini qoldirish. Ikkala chegara 0 boʻlsa, hech narsa olib tashlanmaydi. Rasmli postlarga taʼsir qilmaydi."</string>
+    <string name="keyword_manage" formatted="false">"Filtr qoidalari"</string>
+    <string name="keyword_description_hint" formatted="false">"Video matni va tavsifini katta-kichik harflarni ajratmasdan tekshirish."</string>
+    <string name="keyword_tag_hint" formatted="false">"Heshteglarni tekshirish. # belgisini kiritmang."</string>
+    <string name="keyword_author_hint" formatted="false">"Muallif nomi va noyob foydalanuvchi nomini tekshirish. @ belgisini kiritmang."</string>
+    <string name="keyword_description_input" formatted="false">"Matndagi kalit soʻz"</string>
+    <string name="keyword_tag_input" formatted="false">"Heshteg"</string>
+    <string name="keyword_author_input" formatted="false">"Ism yoki foydalanuvchi nomi"</string>
+    <string name="keyword_add" formatted="false">"Qoida qoʻshish"</string>
+    <string name="keyword_delete" formatted="false">"Qoidani oʻchirish"</string>
+    <string name="region_select_title" formatted="false">"Hududni tanlash"</string>
+    <string name="region_search" formatted="false">"Mamlakat nomi yoki kodi"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Operator kodi: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Maxsus hudud va SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Mamlakat kodi va operatorni tayyor sozlamalar cheklovisiz belgilang."</string>
+    <string name="region_code_input" formatted="false">"Mamlakat yoki hudud kodi (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Operator kodi (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Operator nomi (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Koʻp ishlatiladigan tilni tanlang yoki til kodini kiriting."</string>
+    <string name="language_code_input" formatted="false">"Til kodi (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Tillar"</string>
+    <string name="timezone_custom_hint" formatted="false">"Shahar vaqt mintaqasini tanlang yoki vaqt mintaqasi nomini kiriting."</string>
+    <string name="timezone_input" formatted="false">"Vaqt mintaqasi nomi (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Shaharlar"</string>
+    <string name="city_tokyo" formatted="false">"Tokio"</string>
+    <string name="city_taipei" formatted="false">"Taypey"</string>
+    <string name="city_hong_kong" formatted="false">"Gonkong"</string>
+    <string name="city_new_york" formatted="false">"Nyu-York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Seul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapur"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Maxsus joylashuv"</string>
+    <string name="gps_custom_hint" formatted="false">"Shaharni tanlang yoki kenglik va uzunlikni kiriting."</string>
+    <string name="gps_latitude" formatted="false">"Kenglik (-90.0 dan 90.0 gacha)"</string>
+    <string name="gps_longitude" formatted="false">"Uzunlik (-180.0 dan 180.0 gacha)"</string>
+    <string name="gps_presets" formatted="false">"Shaharlar"</string>
+    <string name="speed_add_title" formatted="false">"Tezlik qoʻshish"</string>
+    <string name="speed_input" formatted="false">"Tezlik"</string>
+    <string name="speed_invalid" formatted="false">"Yaroqli raqam kiriting"</string>
+    <string name="speed_out_of_range" formatted="true">"Faqat %1$sx dan %2$sx gacha qoʻllab-quvvatlanadi"</string>
+    <string name="speed_range" formatted="true">"Ruxsat etilgan oraliq: %1$sx dan %2$sx gacha"</string>
+    <string name="speed_edit_title" formatted="false">"Tezlikni tahrirlash"</string>
+    <string name="duration_threshold_title" formatted="false">"Uzun video ogohlantirishi"</string>
+    <string name="duration_threshold_hint" formatted="false">"Video shu davomiylikka yetsa, ijro boshida qisqa xabar uning necha daqiqaligini bildiradi."</string>
+    <string name="duration_threshold_input" formatted="false">"Davomiylik chegarasi (daqiqa)"</string>
+    <string name="duration_threshold_example" formatted="false">"Masalan: 3 yoki 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"0 dan katta yaroqli daqiqalar sonini kiriting"</string>
+    <string name="duration_threshold_current" formatted="true">"Joriy sozlama: ≥ %1$s daqiqali videolar uchun ogohlantirish"</string>
+    <string name="duration_threshold_presets" formatted="false">"Tavsiya etilgan davomiyliklar:"</string>
+    <string name="status_feature_feed" formatted="false">"Tasma filtri"</string>
+    <string name="status_feature_speed" formatted="false">"Tezlik"</string>
+    <string name="status_feature_progress" formatted="false">"Ijro chizigʻi"</string>
+    <string name="status_feature_clean" formatted="false">"Avtomatik yashirish"</string>
+    <string name="status_feature_immersive" formatted="false">"Video ko‘rinishi"</string>
+    <string name="status_feature_scroll" formatted="false">"Avtomatik aylantirish"</string>
+    <string name="status_feature_duration" formatted="false">"Uzunlik ogohlantirishi"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Izohlar tarjimasi"</string>
+    <string name="status_feature_video_translate" formatted="false">"Subtitr va tarjima menyusi"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Izohlarni nusxalash"</string>
+    <string name="status_feature_author" formatted="false">"Muallif hududi"</string>
+    <string name="status_feature_download" formatted="false">"Video saqlash"</string>
+    <string name="status_feature_music" formatted="false">"Audio cheklovlari"</string>
+    <string name="status_feature_sim" formatted="false">"Hudud va SIM"</string>
+    <string name="status_feature_language" formatted="false">"Til"</string>
+    <string name="status_feature_timezone" formatted="false">"Vaqt mintaqasi"</string>
+    <string name="status_feature_gps" formatted="false">"Joylashuv"</string>
+    <string name="status_feature_bar" formatted="false">"Holat paneli"</string>
+    <string name="status_normal" formatted="false">"Ishlayapti"</string>
+    <string name="status_issue" formatted="false">"Muammo"</string>
+    <string name="status_disabled" formatted="false">"Oʻchiq"</string>
+    <string name="status_pending" formatted="false">"Kutilmoqda"</string>
+    <string name="status_problem_disabled" formatted="false">"Oʻchiq, xato qayd etilgan"</string>
+    <string name="status_problem_unavailable" formatted="false">"Hozircha mavjud emas"</string>
+    <string name="status_problem_runtime" formatted="false">"Ishlash xatosi"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Tezlik menyusi mavjud emas"</string>
+    <string name="status_prepare_failed" formatted="false">"Funksiyalarni tayyorlash amalga oshmadi. TikTokni qayta ochib tekshiring."</string>
+    <string name="status_preparing" formatted="false">"Funksiyalar tayyorlanmoqda. Kuting."</string>
+    <string name="status_prepared" formatted="false">"Tayyorlash tugadi. TikTokni qayta oching."</string>
+    <string name="status_read_failed" formatted="false">"Hozir holatni oʻqib boʻlmaydi. Keyinroq tekshiring."</string>
+    <string name="status_update_failed" formatted="false">"Hozir holatni yangilab boʻlmaydi. Oxirgi natija koʻrsatilmoqda."</string>
+    <string name="status_reading" formatted="false">"Holat oʻqilmoqda"</string>
+    <string name="status_empty" formatted="false">"Faoliyat qaydi yoʻq. LSPosedda Tokini yoqing, soʻng TikTokni ochib tekshiring."</string>
+    <string name="status_report_note" formatted="true">"Oxirgi hisobot: %1$s\n“Ishlayapti” funksiya tayyorligini va xato bildirmaganini anglatadi."</string>
+    <string name="config_section" formatted="false">"Sozlamalarni boshqarish"</string>
+    <string name="config_import" formatted="false">"Sozlamalarni import qilish"</string>
+    <string name="config_import_summary" formatted="false">"Funksiya sozlamalarini fayldan tiklash"</string>
+    <string name="config_export" formatted="false">"Sozlamalarni eksport qilish"</string>
+    <string name="config_export_summary" formatted="false">"Funksiya sozlamalarini faylga saqlash"</string>
+    <string name="config_exported" formatted="false">"Sozlamalar tanlangan joyga eksport qilindi. Faylda kalit soʻzlar, hududlar va jild sozlamalari boʻlishi mumkin. Uni xavfsiz saqlang."</string>
+    <string name="config_import_confirm" formatted="true">"Faylda %1$d ta sozlama bor. Import barcha funksiya sozlamalarini almashtiradi; faylda yoʻqlari standart qiymatga qaytadi.\n\nIlova tili, ilova belgisi, LSPosed ruxsati va TikTok moslik keshi oʻzgarmaydi. Davom etilsinmi?"</string>
+    <string name="config_overwrite" formatted="false">"Almashtirish"</string>
+    <string name="config_imported" formatted="false">"Sozlamalar import qilindi va yangilandi. Ishlash vaqtida yangilanishni qoʻllaydigan oʻzgarishlar darhol kuchga kiradi. Boshqalarini tekshirish uchun TikTokni qayta oching."</string>
+    <string name="config_processing" formatted="false">"Qayta ishlanmoqda…"</string>
+    <string name="config_error_io" formatted="false">"Faylni oʻqish yoki yozish amalga oshmadi. Tanlangan joy va boʻsh joyni tekshiring."</string>
+    <string name="config_error_permission" formatted="false">"Tanlangan faylga kirish ruxsati berilmagan. Uni qayta tanlang."</string>
+    <string name="config_error_invalid" formatted="false">"Bu yaroqli Toki sozlamalar fayli emas. Hech qanday sozlama import qilinmadi."</string>
+    <string name="config_error_validation" formatted="true">"Sozlamalarni tekshirish amalga oshmadi: %1$s. Hech qanday sozlama import qilinmadi."</string>
+    <string name="config_error_commit" formatted="false">"Sozlamalar saqlanganini tasdiqlab boʻlmadi. Qayta urinishdan oldin Tokini qayta ochib tekshiring."</string>
+    <string name="sponsor_title" formatted="false">"Dasturchini qoʻllab-quvvatlash"</string>
+    <string name="sponsor_kofi" formatted="false">"Ko-fi orqali qoʻllab-quvvatlash"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay toʻlov QR kodi"</string>
+    <string name="sponsor_saving" formatted="false">"Saqlanmoqda…"</string>
+    <string name="sponsor_save_image" formatted="false">"Rasmni saqlash"</string>
+    <string name="sponsor_image_hint" formatted="false">"Toʻliq asl rasmni saqlang, soʻng kodni oʻqish uchun uni Alipayda tanlang."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT manzili nusxalandi"</string>
+    <string name="sponsor_image_saved" formatted="false">"Rasm tanlangan joyga saqlandi"</string>
+    <string name="sponsor_error_io" formatted="false">"Saqlash amalga oshmadi. Tanlangan joy va boʻsh joyni tekshirib, qayta urining."</string>
+    <string name="sponsor_error_permission" formatted="false">"Saqlash amalga oshmadi. Bu joyga yozish ruxsati berilmagan. Boshqa joyni tanlang."</string>
+    <string name="feature_filter_topics" formatted="false">"Tavsiya etilgan mavzularni yashirish"</string>
+    <string name="feature_filter_creators" formatted="false">"Tavsiya etilgan ijodkorlarni yashirish"</string>
+    <string name="host_scan_title_complete" formatted="false">"Qidiruv tugallandi"</string>
+    <string name="host_scan_title_failed" formatted="false">"Qidiruv amalga oshmadi"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Natijalarni qoʻllash uchun TikTok ilovasini qoʻlda qayta ishga tushiring."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Toki ilovasida funksiyalar diagnostikasini koʻring."</string>
+    <string name="layout_title" formatted="false">"Sahifa tartibi"</string>
+    <string name="layout_summary" formatted="false">"Yashiriladigan tugmalarni tanlang"</string>
+    <string name="layout_hint" formatted="false">"Elementni yashirish uchun kalitni yoqing"</string>
+    <string name="layout_top" formatted="false">"Yuqori panel"</string>
+    <string name="layout_bottom" formatted="false">"Pastki panel"</string>
+    <string name="layout_side" formatted="false">"Video sahifasi"</string>
+    <string name="layout_search" formatted="false">"Qidirish"</string>
+    <string name="layout_live" formatted="false">"JONLI"</string>
+    <string name="layout_friends" formatted="false">"Do‘stlar"</string>
+    <string name="layout_following" formatted="false">"Kuzatilmoqda"</string>
+    <string name="layout_shop" formatted="false">"Do‘kon"</string>
+    <string name="layout_for_you" formatted="false">"Siz uchun"</string>
+    <string name="layout_nearby" formatted="false">"Yaqin atrofda"</string>
+    <string name="layout_stem" formatted="false">"Fan"</string>
+    <string name="layout_series" formatted="false">"Seriallar"</string>
+    <string name="layout_home" formatted="false">"Bosh sahifa"</string>
+    <string name="layout_create" formatted="false">"Yaratish"</string>
+    <string name="layout_inbox" formatted="false">"Kiruvchi xabarlar"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Kashf qilish"</string>
+    <string name="layout_avatar" formatted="false">"Profil rasmi"</string>
+    <string name="layout_follow" formatted="false">"Kuzatish tugmasi"</string>
+    <string name="layout_like" formatted="false">"Yoqtirish"</string>
+    <string name="layout_comment" formatted="false">"Izohlar"</string>
+    <string name="layout_favorite" formatted="false">"Sevimlilar"</string>
+    <string name="layout_share" formatted="false">"Ulashish"</string>
+    <string name="layout_music" formatted="false">"Musiqa diski"</string>
+    <string name="layout_explore" formatted="false">"Ko‘rib chiqish"</string>
+    <string name="layout_author" formatted="false">"Muallif haqida"</string>
+    <string name="layout_description" formatted="false">"Tavsif"</string>
+    <string name="layout_music_title" formatted="false">"Musiqa nomi"</string>
+    <string name="layout_tags" formatted="false">"Ma’lumot yorliqlari"</string>
+    <string name="layout_search_label" formatted="false">"Qidiruv taklifi"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Avtomatik aylantirishni to‘xtatish tugmasi"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Tangalar va mukofotlar"</string>
+    <string name="layout_quick_comment" formatted="false">"Tezkor izohlar"</string>
+    <string name="layout_playlist" formatted="false">"Pleylist"</string>
+    <string name="layout_creation_buttons" formatted="false">"Yaratish yorliqlari"</string>
+    <string name="layout_live_notice" formatted="false">"Jonli efir eslatmalari"</string>
+    <string name="layout_opacity" formatted="false">"Xiralik"</string>
+    <string name="feature_background_audio">"Fondagi audioni ochish"</string>
+    <string name="layout_landscape">"Toʻliq ekran tugmasi"</string>
+    <string name="layout_photo_indicators">"Surat koʻrsatkichlari va maslahatlar"</string>
+    <string name="layout_quick_message">"Tezkor xabarlar va ulashgan shaxs"</string>
+    <string name="layout_user_card">"Tavsiya etilgan hisoblar"</string>
+    <string name="layout_survey">"Soʻrovnomalar va fikrlar"</string>
+    <string name="layout_ad_cards">"Mahsulot va reklama kartalari"</string>
+    <string name="layout_bottom_banners">"Boshqa pastki bannerlar"</string>
+    <string name="layout_activities">"Tadbirga kirish"</string>
+    <string name="host_scan_title_running" formatted="false">"Metodlar qidirilmoqda"</string>
+    <string name="host_scan_title_saving" formatted="false">"Natijalar saqlanmoqda"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"TikTok ilovasini old planda saqlang."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Iltimos, kuting."</string>
+    <string name="host_scan_done" formatted="false">"Tushunarli"</string>
+    <string name="video_fit_center" formatted="false">"Markazda"</string>
+    <string name="video_fit_smart" formatted="false">"To‘liq ekran"</string>
+</resources>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Pangunahing pahina"</string>
+    <string name="nav_features" formatted="false">"Mga tampok"</string>
+    <string name="page_features" formatted="false">"Mga setting"</string>
+    <string name="page_hook_status" formatted="false">"Katayuan ng mga tampok"</string>
+    <string name="nav_back" formatted="false">"Bumalik"</string>
+    <string name="restart_tiktok" formatted="false">"I-restart ang TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Bigyan ng root access ang Toki."</string>
+    <string name="language_title" formatted="false">"Wika ng app"</string>
+    <string name="language_system" formatted="false">"Sundin ang sistema"</string>
+    <string name="language_search" formatted="false">"Maghanap ng wika"</string>
+    <string name="language_clear_search" formatted="false">"Burahin ang paghahanap"</string>
+    <string name="language_no_results" formatted="false">"Walang katugmang wika"</string>
+    <string name="common_save" formatted="false">"I-save"</string>
+    <string name="common_cancel" formatted="false">"Kanselahin"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Isara"</string>
+    <string name="common_open" formatted="false">"Buksan"</string>
+    <string name="common_copy" formatted="false">"Kopyahin"</string>
+    <string name="common_add" formatted="false">"Idagdag"</string>
+    <string name="common_delete" formatted="false">"Burahin"</string>
+    <string name="common_done" formatted="false">"Tapos na"</string>
+    <string name="common_save_apply" formatted="false">"Ilapat"</string>
+    <string name="common_unknown" formatted="false">"Hindi alam"</string>
+    <string name="common_custom" formatted="false">"Pasadya"</string>
+    <string name="home_icon_hidden" formatted="false">"Nakatago ang icon ng app"</string>
+    <string name="home_icon_restored" formatted="false">"Naibalik ang icon ng app"</string>
+    <string name="home_activated" formatted="false">"Na-activate"</string>
+    <string name="home_inactive" formatted="false">"Hindi na-activate"</string>
+    <string name="home_activation_missing" formatted="false">"Walang natukoy na activation sa LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Pagiging tugma sa TikTok"</string>
+    <string name="home_host_current" formatted="false">"Naka-install na TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Walang nakitang suportadong TikTok na naka-install sa device na ito"</string>
+    <string name="home_host_not_installed" formatted="false">"Hindi naka-install"</string>
+    <string name="home_supported_versions" formatted="false">"Mga suportadong bersyon"</string>
+    <string name="home_community" formatted="false">"Bukas na source code at komunidad"</string>
+    <string name="home_github" formatted="false">"Repositoryo sa GitHub"</string>
+    <string name="home_telegram" formatted="false">"Grupo sa Telegram"</string>
+    <string name="home_preferences" formatted="false">"Mga kagustuhan ng module"</string>
+    <string name="home_hide_icon" formatted="false">"Itago ang icon ng app"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Buksan ang Toki sa pamamagitan ng LSPosed Manager kapag nakatago ang icon"</string>
+    <string name="home_support" formatted="false">"Suportahan ang pagbuo"</string>
+    <string name="home_support_summary" formatted="false">"Suportahan ang patuloy na pagpapanatili at pagpapahusay"</string>
+    <string name="feature_region_section" formatted="false">"Rehiyon at device"</string>
+    <string name="feature_playback_section" formatted="false">"Pag-play"</string>
+    <string name="feature_progress" formatted="false">"Laging ipakita ang progress bar"</string>
+    <string name="feature_progress_summary" formatted="false">"Panatilihing nakikita ang progress bar, kahit sa maiikling video"</string>
+    <string name="feature_immersive" formatted="false">"Pagpapakita ng video"</string>
+    <string name="feature_autoplay" formatted="false">"Pinahusay na auto-scroll"</string>
+    <string name="feature_autoplay_summary" formatted="false">"I-unlock ang auto-scroll sa menu ng lahat ng video"</string>
+    <string name="feature_status_bar" formatted="false">"Itago ang status bar ng sistema"</string>
+    <string name="feature_media_section" formatted="false">"Mga pag-download at aksyon"</string>
+    <string name="feature_download" formatted="false">"Download na walang watermark"</string>
+    <string name="feature_download_summary" formatted="false">"I-save ang orihinal na video nang walang watermark mula sa menu ng matagal na pagpindot o pagbabahagi"</string>
+    <string name="feature_music" formatted="false">"I-unblock ang audio"</string>
+    <string name="feature_music_summary" formatted="false">"Ibalik ang pag-play ng audio na pinaghihigpitan ng lisensya o rehiyon"</string>
+    <string name="feature_author_region" formatted="false">"Ipakita ang rehiyon ng tagalikha"</string>
+    <string name="feature_author_region_summary" formatted="false">"Ipakita ang bandila at code ng bansa o rehiyon sa tabi ng pangalan ng tagalikha"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopyahin lang ang teksto"</string>
+    <string name="feature_video_translation" formatted="false">"Menu ng subtitle at pagsasalin"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Ipakita ang opsyon sa menu ng matagal na pagpindot"</string>
+    <string name="feature_comment_translation" formatted="false">"Isalin ang mga komento"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Magdagdag ng button para sabay-sabay na isalin ang mga komento sa ibang wika"</string>
+    <string name="feature_filter_section" formatted="false">"Pagsala ng feed"</string>
+    <string name="feature_remove_ads" formatted="false">"Alisin ang mga patalastas sa feed"</string>
+    <string name="feature_remove_live" formatted="false">"Itago ang mga LIVE"</string>
+    <string name="feature_remove_photos" formatted="false">"Itago ang mga post na larawan"</string>
+    <string name="feature_filter_views" formatted="false">"Filter ayon sa dami ng panonood"</string>
+    <string name="feature_filter_likes" formatted="false">"Filter ayon sa dami ng like"</string>
+    <string name="feature_filter_duration" formatted="false">"Filter ayon sa haba ng video"</string>
+    <string name="feature_filter_keywords" formatted="false">"Filter ng mga keyword"</string>
+    <string name="feature_block_offline" formatted="false">"Harangan ang offline na video"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Pigilan ang pagsingit ng mga paunang na-load na offline na video kapag mahina ang koneksyon"</string>
+    <string name="feature_remove_ai" formatted="false">"Itago ang video na gawa ng AI"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Salain ang mga video na minarkahan ng TikTok bilang ginawa ng AI"</string>
+    <string name="filter_metric_views" formatted="false">"panonood"</string>
+    <string name="filter_metric_likes" formatted="false">"like"</string>
+    <string name="filter_metric_duration" formatted="false">"haba"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Na-save ang saklaw ng dami ng panonood"</string>
+    <string name="filter_likes_saved" formatted="false">"Na-save ang saklaw ng dami ng like"</string>
+    <string name="filter_duration_saved" formatted="false">"Na-save ang saklaw ng haba ng video"</string>
+    <string name="download_path_saved" formatted="false">"Na-update ang mga pasadyang path ng pag-save"</string>
+    <string name="region_spoof_title" formatted="false">"Pagpapanggap ng rehiyon at SIM"</string>
+    <string name="region_current" formatted="false">"Kasalukuyang configuration"</string>
+    <string name="region_target" formatted="true">"Target na rehiyon: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operator: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Code ng operator: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Mga preset"</string>
+    <string name="region_custom_parameters" formatted="false">"Pasadya"</string>
+    <string name="language_spoof" formatted="false">"Pagpapanggap ng wika"</string>
+    <string name="environment_follow_region" formatted="false">"Sundin ang rehiyon"</string>
+    <string name="language_effective" formatted="true">"Inilapat na wika: %1$s"</string>
+    <string name="language_custom" formatted="false">"Pasadyang wika"</string>
+    <string name="timezone_spoof" formatted="false">"Pagpapanggap ng time zone"</string>
+    <string name="timezone_effective" formatted="true">"Inilapat na time zone: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Pasadyang time zone"</string>
+    <string name="gps_spoof" formatted="false">"Pagpapanggap ng lokasyon"</string>
+    <string name="gps_effective" formatted="true">"Inilapat na mga coordinate: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Mga pasadyang coordinate"</string>
+    <string name="speed_fixed" formatted="false">"Panatilihin ang bilis ng pag-play"</string>
+    <string name="speed_fixed_summary" formatted="false">"Panatilihin ang bilis na pinili sa menu ng matagal na pagpindot kapag nagpapalit ng video"</string>
+    <string name="speed_expand" formatted="false">"Iba pang bilis"</string>
+    <string name="speed_options_hint" formatted="false">"Mga opsyon sa bilis (i-tap para i-edit o alisin)"</string>
+    <string name="speed_add_option" formatted="false">"+ Magdagdag ng bilis"</string>
+    <string name="speed_restore" formatted="false">"I-reset"</string>
+    <string name="clean_on_play" formatted="false">"Itago ang kontrol habang nagpe-play"</string>
+    <string name="clean_keep_progress" formatted="false">"Panatilihin ang progress bar"</string>
+    <string name="download_paths" formatted="false">"Mga folder ng pag-save"</string>
+    <string name="download_paths_summary" formatted="true">"Mga video: %1$s · Mga larawan: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Panatilihin ang mga video na may %1$s mula %2$d%4$s hanggang %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Panatilihin ang mga video na may %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Panatilihin ang mga video na may %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Walang itinakdang saklaw (i-tap para magtakda ng minimum o maximum)"</string>
+    <string name="keyword_unset" formatted="false">"I-tap para magdagdag ng panuntunan"</string>
+    <string name="keyword_summary" formatted="true">"Pinagana: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Paglalarawan %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Hashtag %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Tagalikha %1$d"</string>
+    <string name="keyword_description" formatted="false">"Paglalarawan"</string>
+    <string name="keyword_tag" formatted="false">"Hashtag"</string>
+    <string name="keyword_author" formatted="false">"Tagalikha"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Walang mga panuntunan para sa %1$s. Magdagdag sa itaas."</string>
+    <string name="duration_alert_title" formatted="false">"Babala sa mahabang video"</string>
+    <string name="duration_alert_summary" formatted="true">"Kasalukuyang hangganan: ≥ %1$s minuto"</string>
+    <string name="download_video_path" formatted="false">"Folder ng video"</string>
+    <string name="download_image_path" formatted="false">"Folder ng larawan"</string>
+    <string name="download_path_hint" formatted="false">"Ang unang folder ay dapat pampublikong media folder gaya ng Movies, Pictures, o DCIM. Gagamitin ang default ng sistema para sa mga di-wastong path."</string>
+    <string name="views_range_title" formatted="false">"Saklaw ng dami ng panonood"</string>
+    <string name="views_range_min" formatted="false">"Minimum na panonood (0 = walang limitasyon)"</string>
+    <string name="views_range_max" formatted="false">"Maximum na panonood (0 = walang limitasyon)"</string>
+    <string name="views_range_hint" formatted="false">"Panatilihin lang ang mga video sa saklaw na ito ng dami ng panonood. Itakda ang parehong limitasyon sa 0 para walang maalis."</string>
+    <string name="likes_range_title" formatted="false">"Saklaw ng dami ng like"</string>
+    <string name="likes_range_min" formatted="false">"Minimum na like (0 = walang limitasyon)"</string>
+    <string name="likes_range_max" formatted="false">"Maximum na like (0 = walang limitasyon)"</string>
+    <string name="likes_range_hint" formatted="false">"Panatilihin lang ang mga video sa saklaw na ito ng dami ng like. Itakda ang parehong limitasyon sa 0 para walang maalis."</string>
+    <string name="duration_range_title" formatted="false">"Saklaw ng haba ng video"</string>
+    <string name="duration_range_min" formatted="false">"Minimum na haba (segundo; 0 = walang limitasyon)"</string>
+    <string name="duration_range_max" formatted="false">"Maximum na haba (segundo; 0 = walang limitasyon)"</string>
+    <string name="duration_range_hint" formatted="false">"Panatilihin lang ang mga inirerekomendang video sa saklaw na ito ng haba. Itakda ang parehong limitasyon sa 0 para walang maalis. Hindi apektado ang mga post na larawan."</string>
+    <string name="keyword_manage" formatted="false">"Mga panuntunan sa pagsala"</string>
+    <string name="keyword_description_hint" formatted="false">"Itugma sa teksto at paglalarawan ng video nang hindi isinasaalang-alang ang laki ng titik."</string>
+    <string name="keyword_tag_hint" formatted="false">"Itugma sa mga hashtag. Huwag isama ang unlaping #."</string>
+    <string name="keyword_author_hint" formatted="false">"Itugma sa mga pangalan ng tagalikha at natatanging username. Huwag isama ang unlaping @."</string>
+    <string name="keyword_description_input" formatted="false">"Keyword sa paglalarawan"</string>
+    <string name="keyword_tag_input" formatted="false">"Hashtag"</string>
+    <string name="keyword_author_input" formatted="false">"Pangalan o username"</string>
+    <string name="keyword_add" formatted="false">"Magdagdag ng panuntunan"</string>
+    <string name="keyword_delete" formatted="false">"Burahin ang panuntunan"</string>
+    <string name="region_select_title" formatted="false">"Piliin ang rehiyon"</string>
+    <string name="region_search" formatted="false">"Pangalan o code ng bansa"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Code ng operator: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Pasadyang rehiyon at SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Magtakda ng pasadyang code ng bansa at operator nang walang mga limitasyon ng paunang setting."</string>
+    <string name="region_code_input" formatted="false">"Code ng bansa o rehiyon (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Code ng operator (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Pangalan ng operator (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Pumili ng karaniwang wika o maglagay ng code ng wika."</string>
+    <string name="language_code_input" formatted="false">"Code ng wika (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Mga wika"</string>
+    <string name="timezone_custom_hint" formatted="false">"Pumili ng time zone ng karaniwang lungsod o maglagay ng pangalan ng time zone."</string>
+    <string name="timezone_input" formatted="false">"Pangalan ng time zone (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Mga lungsod"</string>
+    <string name="city_tokyo" formatted="false">"Tokyo"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hong Kong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Seoul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapore"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Pasadyang lokasyon"</string>
+    <string name="gps_custom_hint" formatted="false">"Pumili ng karaniwang lungsod o maglagay ng latitude at longitude."</string>
+    <string name="gps_latitude" formatted="false">"Latitude (-90.0 hanggang 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Longitude (-180.0 hanggang 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Mga lungsod"</string>
+    <string name="speed_add_title" formatted="false">"Magdagdag ng bilis"</string>
+    <string name="speed_input" formatted="false">"Bilis"</string>
+    <string name="speed_invalid" formatted="false">"Maglagay ng wastong numero"</string>
+    <string name="speed_out_of_range" formatted="true">"%1$sx hanggang %2$sx lang ang sinusuportahan"</string>
+    <string name="speed_range" formatted="true">"Suportadong saklaw: %1$sx hanggang %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"I-edit ang bilis"</string>
+    <string name="duration_threshold_title" formatted="false">"Babala sa mahabang video"</string>
+    <string name="duration_threshold_hint" formatted="false">"Kapag umabot ang video sa habàng ito, ipapaalam ng maikling mensahe sa simula ng pag-play ang haba nito sa minuto."</string>
+    <string name="duration_threshold_input" formatted="false">"Hangganan ng haba (minuto)"</string>
+    <string name="duration_threshold_example" formatted="false">"Halimbawa: 3 o 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Maglagay ng wastong bilang ng minuto na higit sa 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Kasalukuyang setting: babala para sa mga video na ≥ %1$s minuto"</string>
+    <string name="duration_threshold_presets" formatted="false">"Mga iminumungkahing haba:"</string>
+    <string name="status_feature_feed" formatted="false">"Filter ng feed"</string>
+    <string name="status_feature_speed" formatted="false">"Bilis"</string>
+    <string name="status_feature_progress" formatted="false">"Progress bar"</string>
+    <string name="status_feature_clean" formatted="false">"Awtomatikong pagtatago"</string>
+    <string name="status_feature_immersive" formatted="false">"Pagpapakita ng video"</string>
+    <string name="status_feature_scroll" formatted="false">"Awtomatikong pag-scroll"</string>
+    <string name="status_feature_duration" formatted="false">"Babala sa haba"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Salin ng komento"</string>
+    <string name="status_feature_video_translate" formatted="false">"Menu ng subtitle at pagsasalin"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Kopya ng komento"</string>
+    <string name="status_feature_author" formatted="false">"Rehiyon ng tagalikha"</string>
+    <string name="status_feature_download" formatted="false">"Pag-save ng video"</string>
+    <string name="status_feature_music" formatted="false">"Limitasyon sa audio"</string>
+    <string name="status_feature_sim" formatted="false">"Rehiyon at SIM"</string>
+    <string name="status_feature_language" formatted="false">"Wika"</string>
+    <string name="status_feature_timezone" formatted="false">"Time zone"</string>
+    <string name="status_feature_gps" formatted="false">"Lokasyon"</string>
+    <string name="status_feature_bar" formatted="false">"Status bar"</string>
+    <string name="status_normal" formatted="false">"Gumagana"</string>
+    <string name="status_issue" formatted="false">"May problema"</string>
+    <string name="status_disabled" formatted="false">"Naka-off"</string>
+    <string name="status_pending" formatted="false">"Naghihintay"</string>
+    <string name="status_problem_disabled" formatted="false">"Naka-off, may naitalang error"</string>
+    <string name="status_problem_unavailable" formatted="false">"Hindi magamit ngayon"</string>
+    <string name="status_problem_runtime" formatted="false">"Error sa paggamit"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Hindi magamit ang menu ng bilis"</string>
+    <string name="status_prepare_failed" formatted="false">"Nabigo ang paghahanda ng mga tampok. Buksang muli ang TikTok at suriin ulit."</string>
+    <string name="status_preparing" formatted="false">"Inihahanda ang mga tampok. Maghintay."</string>
+    <string name="status_prepared" formatted="false">"Tapos na ang paghahanda. Buksang muli ang TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Hindi mabasa ang katayuan ngayon. Suriin ulit sa ibang pagkakataon."</string>
+    <string name="status_update_failed" formatted="false">"Hindi ma-update ang katayuan ngayon. Ipinapakita ang pinakahuling resulta."</string>
+    <string name="status_reading" formatted="false">"Binabasa ang katayuan"</string>
+    <string name="status_empty" formatted="false">"Walang naitalang aktibidad. Paganahin ang Toki sa LSPosed, buksan ang TikTok, at suriin ulit."</string>
+    <string name="status_report_note" formatted="true">"Pinakahuling ulat: %1$s\nAng “Gumagana” ay nangangahulugang handa na ang tampok at walang iniulat na error."</string>
+    <string name="config_section" formatted="false">"Configuration"</string>
+    <string name="config_import" formatted="false">"Mag-import ng setting"</string>
+    <string name="config_import_summary" formatted="false">"Ibalik ang mga setting ng tampok mula sa file"</string>
+    <string name="config_export" formatted="false">"Mag-export ng setting"</string>
+    <string name="config_export_summary" formatted="false">"I-save ang mga setting ng tampok sa file"</string>
+    <string name="config_exported" formatted="false">"Na-export ang configuration sa napiling lokasyon. Maaaring naglalaman ang file ng mga keyword, rehiyon, at setting ng folder. Panatilihin itong ligtas."</string>
+    <string name="config_import_confirm" formatted="true">"May %1$d setting ang file. Papalitan ng pag-import ang lahat ng setting ng tampok; ibabalik sa default ang mga setting na wala sa file.\n\nHindi magbabago ang wika ng app, icon, pahintulot sa LSPosed, at cache ng pagiging tugma sa TikTok. Magpatuloy?"</string>
+    <string name="config_overwrite" formatted="false">"Palitan"</string>
+    <string name="config_imported" formatted="false">"Na-import ang configuration at na-update ang mga setting ng tampok. Agad na ilalapat ang mga pagbabagong sumusuporta sa live na pag-update. Buksang muli ang TikTok para suriin ang iba pang pagbabago."</string>
+    <string name="config_processing" formatted="false">"Pinoproseso…"</string>
+    <string name="config_error_io" formatted="false">"Hindi mabasa o masulatan ang file. Suriin ang napiling lokasyon at available na espasyo."</string>
+    <string name="config_error_permission" formatted="false">"Hindi ipinagkaloob ang pahintulot na ma-access ang napiling file. Piliin itong muli."</string>
+    <string name="config_error_invalid" formatted="false">"Hindi ito wastong configuration file ng Toki. Walang na-import na setting."</string>
+    <string name="config_error_validation" formatted="true">"Nabigo ang pagpapatunay ng configuration: %1$s. Walang na-import na setting."</string>
+    <string name="config_error_commit" formatted="false">"Hindi makumpirma ang mga pagbabago sa configuration. Buksang muli ang Toki para suriin ang mga ito bago subukan ulit."</string>
+    <string name="sponsor_title" formatted="false">"Suportahan ang developer"</string>
+    <string name="sponsor_kofi" formatted="false">"Sumuporta sa Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"QR code sa pagbabayad ng Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Sine-save…"</string>
+    <string name="sponsor_save_image" formatted="false">"I-save ang larawan"</string>
+    <string name="sponsor_image_hint" formatted="false">"I-save ang buong orihinal na larawan, pagkatapos ay piliin ito sa Alipay para i-scan ang code."</string>
+    <string name="sponsor_address_copied" formatted="false">"Nakopya ang USDT address"</string>
+    <string name="sponsor_image_saved" formatted="false">"Na-save ang larawan sa napiling lokasyon"</string>
+    <string name="sponsor_error_io" formatted="false">"Hindi na-save. Suriin ang napiling lokasyon at available na espasyo, pagkatapos ay subukan ulit."</string>
+    <string name="sponsor_error_permission" formatted="false">"Hindi na-save. Walang ipinagkaloob na pahintulot na sumulat sa lokasyong ito. Pumili ng iba."</string>
+    <string name="feature_filter_topics" formatted="false">"Itago ang mga mungkahing paksa"</string>
+    <string name="feature_filter_creators" formatted="false">"Itago ang mga mungkahing creator"</string>
+    <string name="host_scan_title_complete" formatted="false">"Tapos na ang paghahanap"</string>
+    <string name="host_scan_title_failed" formatted="false">"Nabigo ang paghahanap"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Manu-manong i-restart ang TikTok upang mailapat ang mga resulta."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Tingnan ang mga diagnostic ng feature sa Toki."</string>
+    <string name="layout_title" formatted="false">"Ayos ng pahina"</string>
+    <string name="layout_summary" formatted="false">"Piliin ang mga kontrol na itatago"</string>
+    <string name="layout_hint" formatted="false">"I-on ang switch para itago ang item"</string>
+    <string name="layout_top" formatted="false">"Bar sa itaas"</string>
+    <string name="layout_bottom" formatted="false">"Bar sa ibaba"</string>
+    <string name="layout_side" formatted="false">"Pahina ng video"</string>
+    <string name="layout_search" formatted="false">"Maghanap"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Mga kaibigan"</string>
+    <string name="layout_following" formatted="false">"Sinusundan"</string>
+    <string name="layout_shop" formatted="false">"Tindahan"</string>
+    <string name="layout_for_you" formatted="false">"Para sa iyo"</string>
+    <string name="layout_nearby" formatted="false">"Malapit"</string>
+    <string name="layout_stem" formatted="false">"STEM"</string>
+    <string name="layout_series" formatted="false">"Mga serye"</string>
+    <string name="layout_home" formatted="false">"Home"</string>
+    <string name="layout_create" formatted="false">"Gumawa"</string>
+    <string name="layout_inbox" formatted="false">"Inbox"</string>
+    <string name="layout_profile" formatted="false">"Profile"</string>
+    <string name="layout_discover" formatted="false">"Tuklasin"</string>
+    <string name="layout_avatar" formatted="false">"Larawan sa profile"</string>
+    <string name="layout_follow" formatted="false">"Button na Sundan"</string>
+    <string name="layout_like" formatted="false">"Like"</string>
+    <string name="layout_comment" formatted="false">"Mga komento"</string>
+    <string name="layout_favorite" formatted="false">"Mga paborito"</string>
+    <string name="layout_share" formatted="false">"Ibahagi"</string>
+    <string name="layout_music" formatted="false">"Disc ng musika"</string>
+    <string name="layout_explore" formatted="false">"Mag-explore"</string>
+    <string name="layout_author" formatted="false">"Impormasyon ng may-akda"</string>
+    <string name="layout_description" formatted="false">"Paglalarawan"</string>
+    <string name="layout_music_title" formatted="false">"Pamagat ng musika"</string>
+    <string name="layout_tags" formatted="false">"Mga label ng impormasyon"</string>
+    <string name="layout_search_label" formatted="false">"Mungkahi sa paghahanap"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Button na ihinto ang auto scroll"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Mga coin at reward"</string>
+    <string name="layout_quick_comment" formatted="false">"Mabilis na komento"</string>
+    <string name="layout_playlist" formatted="false">"Playlist"</string>
+    <string name="layout_creation_buttons" formatted="false">"Mga shortcut sa paggawa"</string>
+    <string name="layout_live_notice" formatted="false">"Mga paalala sa LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Opacity"</string>
+    <string name="feature_background_audio">"I-unlock ang background audio"</string>
+    <string name="layout_landscape">"Button ng buong screen"</string>
+    <string name="layout_photo_indicators">"Mga indicator at tip ng larawan"</string>
+    <string name="layout_quick_message">"Mabilis na mensahe at nagbahagi"</string>
+    <string name="layout_user_card">"Mga iminungkahing account"</string>
+    <string name="layout_survey">"Mga survey at feedback"</string>
+    <string name="layout_ad_cards">"Mga card ng produkto at ad"</string>
+    <string name="layout_bottom_banners">"Iba pang banner sa ibaba"</string>
+    <string name="layout_activities">"Pasukan sa mga event"</string>
+    <string name="host_scan_title_running" formatted="false">"Naghahanap ng mga method"</string>
+    <string name="host_scan_title_saving" formatted="false">"Sine-save ang mga resulta"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Panatilihin ang TikTok sa foreground."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Mangyaring maghintay."</string>
+    <string name="host_scan_done" formatted="false">"Naintindihan ko"</string>
+    <string name="video_fit_center" formatted="false">"Nakasentro"</string>
+    <string name="video_fit_smart" formatted="false">"Buong screen"</string>
+</resources>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Etusivu"</string>
+    <string name="nav_features" formatted="false">"Toiminnot"</string>
+    <string name="page_features" formatted="false">"Asetukset"</string>
+    <string name="page_hook_status" formatted="false">"Toimintojen tila"</string>
+    <string name="nav_back" formatted="false">"Takaisin"</string>
+    <string name="restart_tiktok" formatted="false">"Käynnistä TikTok uudelleen"</string>
+    <string name="restart_root_required" formatted="false">"Myönnä Tokille root-oikeudet."</string>
+    <string name="language_title" formatted="false">"Sovelluksen kieli"</string>
+    <string name="language_system" formatted="false">"Käytä järjestelmän kieltä"</string>
+    <string name="language_search" formatted="false">"Hae kieliä"</string>
+    <string name="language_clear_search" formatted="false">"Tyhjennä haku"</string>
+    <string name="language_no_results" formatted="false">"Vastaavia kieliä ei löytynyt"</string>
+    <string name="common_save" formatted="false">"Tallenna"</string>
+    <string name="common_cancel" formatted="false">"Peruuta"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Sulje"</string>
+    <string name="common_open" formatted="false">"Avaa"</string>
+    <string name="common_copy" formatted="false">"Kopioi"</string>
+    <string name="common_add" formatted="false">"Lisää"</string>
+    <string name="common_delete" formatted="false">"Poista"</string>
+    <string name="common_done" formatted="false">"Valmis"</string>
+    <string name="common_save_apply" formatted="false">"Käytä"</string>
+    <string name="common_unknown" formatted="false">"Tuntematon"</string>
+    <string name="common_custom" formatted="false">"Mukautettu"</string>
+    <string name="home_icon_hidden" formatted="false">"Sovelluskuvake piilotettu"</string>
+    <string name="home_icon_restored" formatted="false">"Sovelluskuvake palautettu"</string>
+    <string name="home_activated" formatted="false">"Aktivoitu"</string>
+    <string name="home_inactive" formatted="false">"Ei aktivoitu"</string>
+    <string name="home_activation_missing" formatted="false">"Aktivointia ei havaittu LSPosedissa"</string>
+    <string name="home_host_section" formatted="false">"TikTok-yhteensopivuus"</string>
+    <string name="home_host_current" formatted="false">"Asennettu TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Laitteesta ei löytynyt tuettua TikTok-asennusta"</string>
+    <string name="home_host_not_installed" formatted="false">"Ei asennettu"</string>
+    <string name="home_supported_versions" formatted="false">"Tuetut versiot"</string>
+    <string name="home_community" formatted="false">"Yhteisö"</string>
+    <string name="home_github" formatted="false">"GitHub-koodivarasto"</string>
+    <string name="home_telegram" formatted="false">"Telegram-ryhmä"</string>
+    <string name="home_preferences" formatted="false">"Asetukset"</string>
+    <string name="home_hide_icon" formatted="false">"Piilota sovelluskuvake"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Kun kuvake on piilotettu, avaa Toki LSPosed-hallinnasta"</string>
+    <string name="home_support" formatted="false">"Tue kehitystä"</string>
+    <string name="home_support_summary" formatted="false">"Tue jatkuvaa ylläpitoa ja parannuksia"</string>
+    <string name="feature_region_section" formatted="false">"Alueen ja ympäristön simulointi"</string>
+    <string name="feature_playback_section" formatted="false">"Toisto"</string>
+    <string name="feature_progress" formatted="false">"Näytä videon etenemispalkki aina"</string>
+    <string name="feature_progress_summary" formatted="false">"Pidä etenemispalkki näkyvissä myös lyhyissä videoissa"</string>
+    <string name="feature_immersive" formatted="false">"Videon näyttö"</string>
+    <string name="feature_autoplay" formatted="false">"Laajennettu automaattivieritys"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Avaa automaattivierityksen kaikkien videoiden valikkoon"</string>
+    <string name="feature_status_bar" formatted="false">"Piilota järjestelmän tilapalkki"</string>
+    <string name="feature_media_section" formatted="false">"Lataukset ja työkalut"</string>
+    <string name="feature_download" formatted="false">"Lataa ilman vesileimaa"</string>
+    <string name="feature_download_summary" formatted="false">"Tallenna alkuperäinen video ilman vesileimaa pitkän painalluksen tai jakamisen valikosta"</string>
+    <string name="feature_music" formatted="false">"Vapauta ääni"</string>
+    <string name="feature_music_summary" formatted="false">"Palauta lisenssin tai alueen rajoittama äänentoisto"</string>
+    <string name="feature_author_region" formatted="false">"Näytä tekijän alue"</string>
+    <string name="feature_author_region_summary" formatted="false">"Näytä maan tai alueen lippu ja tunnus tekijän nimen vieressä"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopioi vain teksti"</string>
+    <string name="feature_video_translation" formatted="false">"Tekstitys- ja käännösvalikko"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Näytä kohta pitkän painalluksen valikossa"</string>
+    <string name="feature_comment_translation" formatted="false">"Käännä kommentit"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Lisää painike vieraskielisten kommenttien joukkokääntämiseen"</string>
+    <string name="feature_filter_section" formatted="false">"Syötteen suodatus"</string>
+    <string name="feature_remove_ads" formatted="false">"Poista syötteen mainokset"</string>
+    <string name="feature_remove_live" formatted="false">"Suodata suositellut suorat lähetykset"</string>
+    <string name="feature_remove_photos" formatted="false">"Suodata suositellut kuvat"</string>
+    <string name="feature_filter_views" formatted="false">"Katselukertasuodatin"</string>
+    <string name="feature_filter_likes" formatted="false">"Tykkäyssuodatin"</string>
+    <string name="feature_filter_duration" formatted="false">"Kestosuodatin"</string>
+    <string name="feature_filter_keywords" formatted="false">"Avainsanasuodatin"</string>
+    <string name="feature_block_offline" formatted="false">"Estä offline-videot"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Estä esiladattujen offline-videoiden lisääminen heikolla yhteydellä"</string>
+    <string name="feature_remove_ai" formatted="false">"Poista tekoälyn luoma sisältö"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Suodata videot, jotka TikTok merkitsee tekoälyn luomiksi"</string>
+    <string name="filter_metric_views" formatted="false">"katselukerrat"</string>
+    <string name="filter_metric_likes" formatted="false">"tykkäykset"</string>
+    <string name="filter_metric_duration" formatted="false">"kesto"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Katselukertojen vaihteluväli tallennettu"</string>
+    <string name="filter_likes_saved" formatted="false">"Tykkäysten vaihteluväli tallennettu"</string>
+    <string name="filter_duration_saved" formatted="false">"Videoiden kestoväli tallennettu"</string>
+    <string name="download_path_saved" formatted="false">"Mukautetut tallennuspolut päivitetty"</string>
+    <string name="region_spoof_title" formatted="false">"Alueen ja SIM-kortin simulointi"</string>
+    <string name="region_current" formatted="false">"Nykyiset asetukset"</string>
+    <string name="region_target" formatted="true">"Kohdealue: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operaattori: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Operaattorin tunnus: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Esiasetukset"</string>
+    <string name="region_custom_parameters" formatted="false">"Mukauta"</string>
+    <string name="language_spoof" formatted="false">"Kielen simulointi"</string>
+    <string name="environment_follow_region" formatted="false">"Alueen mukaan"</string>
+    <string name="language_effective" formatted="true">"Käytössä oleva kieli: %1$s"</string>
+    <string name="language_custom" formatted="false">"Mukautettu kieli"</string>
+    <string name="timezone_spoof" formatted="false">"Aikavyöhykkeen simulointi"</string>
+    <string name="timezone_effective" formatted="true">"Käytössä oleva aikavyöhyke: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Mukautettu aikavyöhyke"</string>
+    <string name="gps_spoof" formatted="false">"Sijainnin simulointi"</string>
+    <string name="gps_effective" formatted="true">"Käytössä olevat koordinaatit: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Mukautetut koordinaatit"</string>
+    <string name="speed_fixed" formatted="false">"Säilytä nopeus"</string>
+    <string name="speed_fixed_summary" formatted="false">"Säilytä pitkän painalluksen valikosta valittu nopeus videota vaihdettaessa"</string>
+    <string name="speed_expand" formatted="false">"Lisää nopeuksia"</string>
+    <string name="speed_options_hint" formatted="false">"Nopeudet (muokkaa tai poista napauttamalla)"</string>
+    <string name="speed_add_option" formatted="false">"+ Lisää nopeus"</string>
+    <string name="speed_restore" formatted="false">"Palauta"</string>
+    <string name="clean_on_play" formatted="false">"Piilota ohjaimet toistettaessa"</string>
+    <string name="clean_keep_progress" formatted="false">"Säilytä etenemispalkki"</string>
+    <string name="download_paths" formatted="false">"Tallennuskansiot"</string>
+    <string name="download_paths_summary" formatted="true">"Videot: %1$s · Kuvat: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Säilytä videot, joiden %1$s on välillä %2$d%4$s–%3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Säilytä videot, joiden %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Säilytä videot, joiden %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Väliä ei asetettu (aseta ala- tai yläraja napauttamalla)"</string>
+    <string name="keyword_unset" formatted="false">"Ei suodatussääntöjä (hallitse luokkia napauttamalla)"</string>
+    <string name="keyword_summary" formatted="true">"Käytössä: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Tekstit %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Aihetunnisteet %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Tekijät %1$d"</string>
+    <string name="keyword_description" formatted="false">"Tekstit"</string>
+    <string name="keyword_tag" formatted="false">"Aihetunnisteet"</string>
+    <string name="keyword_author" formatted="false">"Tekijät"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Ei sääntöjä luokalle %1$s. Lisää sääntö yllä."</string>
+    <string name="duration_alert_title" formatted="false">"Pitkien videoiden ilmoitus"</string>
+    <string name="duration_alert_summary" formatted="true">"Nykyinen raja: ≥ %1$s minuuttia"</string>
+    <string name="download_video_path" formatted="false">"Videokansio"</string>
+    <string name="download_image_path" formatted="false">"Kuvakansio"</string>
+    <string name="download_path_hint" formatted="false">"Ensimmäisen kansion on oltava julkinen mediakansio, kuten Movies, Pictures tai DCIM. Virheellinen polku käyttää järjestelmän oletusta."</string>
+    <string name="views_range_title" formatted="false">"Katselukertojen vaihteluväli"</string>
+    <string name="views_range_min" formatted="false">"Vähimmäiskatselukerrat (0 = ei rajaa)"</string>
+    <string name="views_range_max" formatted="false">"Enimmäiskatselukerrat (0 = ei rajaa)"</string>
+    <string name="views_range_hint" formatted="false">"Säilytä vain videot, joiden katselukerrat ovat tällä välillä. Jos molemmat rajat ovat 0, mitään ei poisteta."</string>
+    <string name="likes_range_title" formatted="false">"Tykkäysten vaihteluväli"</string>
+    <string name="likes_range_min" formatted="false">"Vähimmäistykkäykset (0 = ei rajaa)"</string>
+    <string name="likes_range_max" formatted="false">"Enimmäistykkäykset (0 = ei rajaa)"</string>
+    <string name="likes_range_hint" formatted="false">"Säilytä vain videot, joiden tykkäykset ovat tällä välillä. Jos molemmat rajat ovat 0, mitään ei poisteta."</string>
+    <string name="duration_range_title" formatted="false">"Videoiden kestoväli"</string>
+    <string name="duration_range_min" formatted="false">"Vähimmäiskesto (sekunteina; 0 = ei rajaa)"</string>
+    <string name="duration_range_max" formatted="false">"Enimmäiskesto (sekunteina; 0 = ei rajaa)"</string>
+    <string name="duration_range_hint" formatted="false">"Säilytä vain suositellut videot, joiden kesto on tällä välillä. Jos molemmat rajat ovat 0, mitään ei poisteta. Kuvajulkaisuihin ei vaikuteta."</string>
+    <string name="keyword_manage" formatted="false">"Suodatussäännöt"</string>
+    <string name="keyword_description_hint" formatted="false">"Etsi videoiden teksteistä ja kuvauksista kirjainkoosta riippumatta."</string>
+    <string name="keyword_tag_hint" formatted="false">"Etsi aihetunnisteita. Älä lisää #-etuliitettä."</string>
+    <string name="keyword_author_hint" formatted="false">"Etsi tekijöiden nimiä ja yksilöllisiä käyttäjänimiä. Älä lisää @-etuliitettä."</string>
+    <string name="keyword_description_input" formatted="false">"Sana tai lauseke"</string>
+    <string name="keyword_tag_input" formatted="false">"Aihetunniste"</string>
+    <string name="keyword_author_input" formatted="false">"Nimi tai käyttäjänimi"</string>
+    <string name="keyword_add" formatted="false">"Lisää sääntö"</string>
+    <string name="keyword_delete" formatted="false">"Poista sääntö"</string>
+    <string name="region_select_title" formatted="false">"Valitse alue"</string>
+    <string name="region_search" formatted="false">"Hae maan nimellä, englanninkielisellä nimellä tai aluetunnuksella"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Operaattorin tunnus: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Mukautettu alue ja SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Aseta maatunnus ja operaattori ilman esiasetusten rajoituksia."</string>
+    <string name="region_code_input" formatted="false">"Maa- tai aluetunnus (esim. JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Operaattorin tunnus (esim. 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Operaattorin nimi (esim. NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Valitse yleinen kieli tai kirjoita kielitunnus."</string>
+    <string name="language_code_input" formatted="false">"Kielitunnus (esim. ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Yleiset kielet:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Valitse kaupungin aikavyöhyke tai kirjoita aikavyöhykkeen nimi."</string>
+    <string name="timezone_input" formatted="false">"Aikavyöhykkeen nimi (esim. Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Yleiset kaupunkien aikavyöhykkeet:"</string>
+    <string name="city_tokyo" formatted="false">"Tokio"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hongkong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"Lontoo"</string>
+    <string name="city_seoul" formatted="false">"Soul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapore"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Mukautetut sijaintikoordinaatit"</string>
+    <string name="gps_custom_hint" formatted="false">"Valitse kaupunki tai kirjoita leveys- ja pituusaste."</string>
+    <string name="gps_latitude" formatted="false">"Leveysaste (-90.0–90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Pituusaste (-180.0–180.0)"</string>
+    <string name="gps_presets" formatted="false">"Yleiset kaupungit:"</string>
+    <string name="speed_add_title" formatted="false">"Lisää nopeus"</string>
+    <string name="speed_input" formatted="false">"Toistonopeus"</string>
+    <string name="speed_invalid" formatted="false">"Kirjoita kelvollinen luku"</string>
+    <string name="speed_out_of_range" formatted="true">"Vain %1$sx–%2$sx on tuettu"</string>
+    <string name="speed_range" formatted="true">"Tuettu väli: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Muokkaa nopeutta"</string>
+    <string name="duration_threshold_title" formatted="false">"Pitkien videoiden ilmoitus"</string>
+    <string name="duration_threshold_hint" formatted="false">"Kun video saavuttaa tämän keston, toiston alussa näkyvä lyhyt viesti ilmoittaa sen pituuden minuutteina."</string>
+    <string name="duration_threshold_input" formatted="false">"Kestoraja (minuutteina)"</string>
+    <string name="duration_threshold_example" formatted="false">"Esimerkiksi: 3 tai 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Kirjoita kelvollinen minuuttimäärä, joka on suurempi kuin 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Nykyinen asetus: ilmoita videoista, joiden kesto ≥ %1$s minuuttia"</string>
+    <string name="duration_threshold_presets" formatted="false">"Ehdotetut kestot:"</string>
+    <string name="status_feature_feed" formatted="false">"Syötteen suodatus"</string>
+    <string name="status_feature_speed" formatted="false">"Toistonopeus"</string>
+    <string name="status_feature_progress" formatted="false">"Etenemispalkki"</string>
+    <string name="status_feature_clean" formatted="false">"Piilota ohjaimet toistettaessa"</string>
+    <string name="status_feature_immersive" formatted="false">"Videon näyttö"</string>
+    <string name="status_feature_scroll" formatted="false">"Automaattinen vieritys"</string>
+    <string name="status_feature_duration" formatted="false">"Kestoilmoitus"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Kommenttien käännös"</string>
+    <string name="status_feature_video_translate" formatted="false">"Tekstitys- ja käännösvalikko"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Kommenttien kopiointi"</string>
+    <string name="status_feature_author" formatted="false">"Tekijän alue"</string>
+    <string name="status_feature_download" formatted="false">"Videoiden tallennus"</string>
+    <string name="status_feature_music" formatted="false">"Äänirajoitukset"</string>
+    <string name="status_feature_sim" formatted="false">"SIM ja maa"</string>
+    <string name="status_feature_language" formatted="false">"Kieli"</string>
+    <string name="status_feature_timezone" formatted="false">"Aikavyöhyke"</string>
+    <string name="status_feature_gps" formatted="false">"Sijainti"</string>
+    <string name="status_feature_bar" formatted="false">"Tilapalkki"</string>
+    <string name="status_normal" formatted="false">"Toimii"</string>
+    <string name="status_issue" formatted="false">"Ongelma"</string>
+    <string name="status_disabled" formatted="false">"Pois käytöstä"</string>
+    <string name="status_pending" formatted="false">"Odottaa"</string>
+    <string name="status_problem_disabled" formatted="false">"Pois käytöstä, virhe kirjattu"</string>
+    <string name="status_problem_unavailable" formatted="false">"Tilapäisesti poissa käytöstä"</string>
+    <string name="status_problem_runtime" formatted="false">"Virhe käytön aikana"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Nopeusvalikko ei käytettävissä"</string>
+    <string name="status_prepare_failed" formatted="false">"Toimintojen valmistelu epäonnistui. Avaa TikTok uudelleen ja tarkista."</string>
+    <string name="status_preparing" formatted="false">"Valmistellaan toimintoja. Odota hetki."</string>
+    <string name="status_prepared" formatted="false">"Valmistelu valmis. Avaa TikTok uudelleen."</string>
+    <string name="status_read_failed" formatted="false">"Tilaa ei voi lukea nyt. Tarkista myöhemmin."</string>
+    <string name="status_update_failed" formatted="false">"Tilaa ei voi päivittää nyt. Näytetään uusin tulos."</string>
+    <string name="status_reading" formatted="false">"Luetaan tilaa"</string>
+    <string name="status_empty" formatted="false">"Ei kirjattua toimintaa. Ota Toki käyttöön LSPosedissa, avaa TikTok ja tarkista uudelleen."</string>
+    <string name="status_report_note" formatted="true">"Uusin raportti: %1$s\n”Toimii” tarkoittaa, että toiminto on valmis eikä ole ilmoittanut virheistä."</string>
+    <string name="config_section" formatted="false">"Asetusten hallinta"</string>
+    <string name="config_import" formatted="false">"Tuo asetukset"</string>
+    <string name="config_import_summary" formatted="false">"Palauta toimintojen asetukset tiedostosta"</string>
+    <string name="config_export" formatted="false">"Vie asetukset"</string>
+    <string name="config_export_summary" formatted="false">"Tallenna toimintojen asetukset tiedostoon"</string>
+    <string name="config_exported" formatted="false">"Asetukset viety valittuun sijaintiin. Tiedosto voi sisältää avainsanoja, alueita ja kansioasetuksia. Säilytä se turvallisesti."</string>
+    <string name="config_import_confirm" formatted="true">"Tiedosto sisältää %1$d asetusta. Tuonti korvaa kaikki toimintojen asetukset; puuttuvat asetukset palautuvat oletusarvoihin.\n\nSovelluksen kieli, kuvake, LSPosed-valtuutus ja TikTok-yhteensopivuuden välimuisti eivät muutu. Jatketaanko?"</string>
+    <string name="config_overwrite" formatted="false">"Korvaa"</string>
+    <string name="config_imported" formatted="false">"Asetukset tuotu ja toimintojen asetukset päivitetty. Käytönaikaista päivitystä tukevat muutokset tulevat voimaan heti. Tarkista muut avaamalla TikTok uudelleen."</string>
+    <string name="config_processing" formatted="false">"Käsitellään asetuksia"</string>
+    <string name="config_error_io" formatted="false">"Tiedostoa ei voi lukea tai kirjoittaa. Tarkista valittu sijainti ja vapaa tila."</string>
+    <string name="config_error_permission" formatted="false">"Valitun tiedoston käyttöoikeutta ei myönnetty. Valitse tiedosto uudelleen."</string>
+    <string name="config_error_invalid" formatted="false">"Tämä ei ole kelvollinen Tokin asetustiedosto. Asetuksia ei tuotu."</string>
+    <string name="config_error_validation" formatted="true">"Asetusten tarkistus epäonnistui: %1$s. Asetuksia ei tuotu."</string>
+    <string name="config_error_commit" formatted="false">"Asetusten tallennusta ei voitu vahvistaa. Avaa Toki uudelleen ja tarkista ennen uutta yritystä."</string>
+    <string name="sponsor_title" formatted="false">"Tue kehittäjää"</string>
+    <string name="sponsor_kofi" formatted="false">"Tue Ko-fissa"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipayn maksun QR-koodi"</string>
+    <string name="sponsor_saving" formatted="false">"Tallennetaan…"</string>
+    <string name="sponsor_save_image" formatted="false">"Tallenna kuva"</string>
+    <string name="sponsor_image_hint" formatted="false">"Tallenna koko alkuperäinen kuva ja valitse se Alipayssa koodin lukemista varten."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT-osoite kopioitu"</string>
+    <string name="sponsor_image_saved" formatted="false">"Kuva tallennettu valittuun sijaintiin"</string>
+    <string name="sponsor_error_io" formatted="false">"Tallennus epäonnistui. Tarkista valittu sijainti ja vapaa tila ja yritä uudelleen."</string>
+    <string name="sponsor_error_permission" formatted="false">"Tallennus epäonnistui. Sijainnille ei myönnetty kirjoitusoikeutta. Valitse toinen sijainti."</string>
+    <string name="feature_filter_topics" formatted="false">"Piilota aihe-ehdotukset"</string>
+    <string name="feature_filter_creators" formatted="false">"Piilota tekijäsuositukset"</string>
+    <string name="host_scan_title_complete" formatted="false">"Haku valmis"</string>
+    <string name="host_scan_title_failed" formatted="false">"Haku epäonnistui"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Käynnistä TikTok uudelleen käsin, jotta tulokset tulevat voimaan."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Katso toimintojen diagnostiikka Toki-sovelluksessa."</string>
+    <string name="layout_title" formatted="false">"Sivun asettelu"</string>
+    <string name="layout_summary" formatted="false">"Valitse piilotettavat painikkeet"</string>
+    <string name="layout_hint" formatted="false">"Piilota kohde kytkemällä valinta päälle"</string>
+    <string name="layout_top" formatted="false">"Yläpalkki"</string>
+    <string name="layout_bottom" formatted="false">"Alapalkki"</string>
+    <string name="layout_side" formatted="false">"Videosivu"</string>
+    <string name="layout_search" formatted="false">"Haku"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Kaverit"</string>
+    <string name="layout_following" formatted="false">"Seuratut"</string>
+    <string name="layout_shop" formatted="false">"Kauppa"</string>
+    <string name="layout_for_you" formatted="false">"Sinulle"</string>
+    <string name="layout_nearby" formatted="false">"Lähistöllä"</string>
+    <string name="layout_stem" formatted="false">"Tiede"</string>
+    <string name="layout_series" formatted="false">"Sarjat"</string>
+    <string name="layout_home" formatted="false">"Koti"</string>
+    <string name="layout_create" formatted="false">"Luo"</string>
+    <string name="layout_inbox" formatted="false">"Saapuneet"</string>
+    <string name="layout_profile" formatted="false">"Profiili"</string>
+    <string name="layout_discover" formatted="false">"Löydä"</string>
+    <string name="layout_avatar" formatted="false">"Profiilikuva"</string>
+    <string name="layout_follow" formatted="false">"Seuraa-painike"</string>
+    <string name="layout_like" formatted="false">"Tykkäys"</string>
+    <string name="layout_comment" formatted="false">"Kommentit"</string>
+    <string name="layout_favorite" formatted="false">"Suosikit"</string>
+    <string name="layout_share" formatted="false">"Jaa"</string>
+    <string name="layout_music" formatted="false">"Musiikkilevy"</string>
+    <string name="layout_explore" formatted="false">"Tutustu"</string>
+    <string name="layout_author" formatted="false">"Tekijän tiedot"</string>
+    <string name="layout_description" formatted="false">"Kuvaus"</string>
+    <string name="layout_music_title" formatted="false">"Musiikin nimi"</string>
+    <string name="layout_tags" formatted="false">"Tietotunnisteet"</string>
+    <string name="layout_search_label" formatted="false">"Hakuehdotus"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Automaattisen vierityksen pysäytyspainike"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Kolikot ja palkinnot"</string>
+    <string name="layout_quick_comment" formatted="false">"Pikakommentit"</string>
+    <string name="layout_playlist" formatted="false">"Soittolista"</string>
+    <string name="layout_creation_buttons" formatted="false">"Luomisen pikavalinnat"</string>
+    <string name="layout_live_notice" formatted="false">"LIVE-muistutukset"</string>
+    <string name="layout_opacity" formatted="false">"Peittävyys"</string>
+    <string name="feature_background_audio">"Avaa taustaääni"</string>
+    <string name="layout_landscape">"Koko näytön painike"</string>
+    <string name="layout_photo_indicators">"Kuvien ilmaisimet ja vihjeet"</string>
+    <string name="layout_quick_message">"Pikaviestit ja jakaja"</string>
+    <string name="layout_user_card">"Ehdotetut tilit"</string>
+    <string name="layout_survey">"Kyselyt ja palaute"</string>
+    <string name="layout_ad_cards">"Tuote- ja mainoskortit"</string>
+    <string name="layout_bottom_banners">"Muut alapalkit"</string>
+    <string name="layout_activities">"Tapahtumapainike"</string>
+    <string name="host_scan_title_running" formatted="false">"Etsitään metodeja"</string>
+    <string name="host_scan_title_saving" formatted="false">"Tallennetaan tuloksia"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Pidä TikTok etualalla."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Odota hetki."</string>
+    <string name="host_scan_done" formatted="false">"Selvä"</string>
+    <string name="video_fit_center" formatted="false">"Keskitetty"</string>
+    <string name="video_fit_smart" formatted="false">"Koko näyttö"</string>
+</resources>

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Kaca ngarep"</string>
+    <string name="nav_features" formatted="false">"Fitur"</string>
+    <string name="page_features" formatted="false">"Setelan"</string>
+    <string name="page_hook_status" formatted="false">"Status fitur"</string>
+    <string name="nav_back" formatted="false">"Bali"</string>
+    <string name="restart_tiktok" formatted="false">"Wiwiti maneh TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Wenehi akses root kanggo Toki."</string>
+    <string name="language_title" formatted="false">"Basa aplikasi"</string>
+    <string name="language_system" formatted="false">"Manut sistem"</string>
+    <string name="language_search" formatted="false">"Goleki basa"</string>
+    <string name="language_clear_search" formatted="false">"Busak telusuran"</string>
+    <string name="language_no_results" formatted="false">"Ora ana basa sing cocog"</string>
+    <string name="common_save" formatted="false">"Simpen"</string>
+    <string name="common_cancel" formatted="false">"Batal"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Tutup"</string>
+    <string name="common_open" formatted="false">"Bukak"</string>
+    <string name="common_copy" formatted="false">"Salin"</string>
+    <string name="common_add" formatted="false">"Tambah"</string>
+    <string name="common_delete" formatted="false">"Busak"</string>
+    <string name="common_done" formatted="false">"Rampung"</string>
+    <string name="common_save_apply" formatted="false">"Terapake"</string>
+    <string name="common_unknown" formatted="false">"Ora dingerteni"</string>
+    <string name="common_custom" formatted="false">"Kustom"</string>
+    <string name="home_icon_hidden" formatted="false">"Ikon aplikasi didhelikake"</string>
+    <string name="home_icon_restored" formatted="false">"Ikon aplikasi ditampilake maneh"</string>
+    <string name="home_activated" formatted="false">"Diaktifake"</string>
+    <string name="home_inactive" formatted="false">"Durung diaktifake"</string>
+    <string name="home_activation_missing" formatted="false">"Aktivasi ora kadeteksi ing LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Kompatibilitas TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok sing dipasang"</string>
+    <string name="home_host_missing" formatted="false">"Ora ditemokake TikTok sing didhukung ing piranti iki"</string>
+    <string name="home_host_not_installed" formatted="false">"Durung dipasang"</string>
+    <string name="home_supported_versions" formatted="false">"Versi sing didhukung"</string>
+    <string name="home_community" formatted="false">"Sumber kabuka lan komunitas"</string>
+    <string name="home_github" formatted="false">"Repositori GitHub"</string>
+    <string name="home_telegram" formatted="false">"Grup Telegram"</string>
+    <string name="home_preferences" formatted="false">"Preferensi modul"</string>
+    <string name="home_hide_icon" formatted="false">"Dhelikake ikon aplikasi"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Bukak Toki liwat Pangatur LSPosed nalika ikon didhelikake"</string>
+    <string name="home_support" formatted="false">"Dhukung pangembangan"</string>
+    <string name="home_support_summary" formatted="false">"Dhukung pangopènan lan panyempurnaan sing terus ditindakake"</string>
+    <string name="feature_region_section" formatted="false">"Wilayah lan piranti"</string>
+    <string name="feature_playback_section" formatted="false">"Puteran"</string>
+    <string name="feature_progress" formatted="false">"Tansah tampilake bar kemajuan"</string>
+    <string name="feature_progress_summary" formatted="false">"Bar kemajuan tetep katon, kalebu ing video cendhak"</string>
+    <string name="feature_immersive" formatted="false">"Tampilan video"</string>
+    <string name="feature_autoplay" formatted="false">"Gulir otomatis luwih apik"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Mbukak gulir otomatis ing menu kabeh video"</string>
+    <string name="feature_status_bar" formatted="false">"Dhelikake bar status sistem"</string>
+    <string name="feature_media_section" formatted="false">"Undhuhan lan tumindak"</string>
+    <string name="feature_download" formatted="false">"Undhuhan tanpa tandha banyu"</string>
+    <string name="feature_download_summary" formatted="false">"Simpen video asli tanpa tandha banyu saka menu pencet suwé utawa menu nuduhake"</string>
+    <string name="feature_music" formatted="false">"Bukak audio"</string>
+    <string name="feature_music_summary" formatted="false">"Mulihake puteran audio sing diwatesi lisensi utawa wilayah"</string>
+    <string name="feature_author_region" formatted="false">"Tampilake wilayah pangripta"</string>
+    <string name="feature_author_region_summary" formatted="false">"Tampilake gendera lan kode negara utawa wilayah ing jejere jeneng pangripta"</string>
+    <string name="feature_copy_comment" formatted="false">"Mung salin teks"</string>
+    <string name="feature_video_translation" formatted="false">"Menu subtitel lan terjemahan"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Tampilake pilihan ing menu penet suwe"</string>
+    <string name="feature_comment_translation" formatted="false">"Terjemahake komentar"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Tambah tombol kanggo nerjemahake komentar basa manca bebarengan"</string>
+    <string name="feature_filter_section" formatted="false">"Nyaring linimasa"</string>
+    <string name="feature_remove_ads" formatted="false">"Busak iklan linimasa"</string>
+    <string name="feature_remove_live" formatted="false">"Dhelikake siaran langsung"</string>
+    <string name="feature_remove_photos" formatted="false">"Dhelikake kiriman foto"</string>
+    <string name="feature_filter_views" formatted="false">"Panyaring cacah tontonan"</string>
+    <string name="feature_filter_likes" formatted="false">"Panyaring cacah seneng"</string>
+    <string name="feature_filter_duration" formatted="false">"Panyaring suwene video"</string>
+    <string name="feature_filter_keywords" formatted="false">"Panyaring tembung kunci"</string>
+    <string name="feature_block_offline" formatted="false">"Blokir video offline"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Nyegah video offline sing wis dimuat disisipake nalika sambungan ala"</string>
+    <string name="feature_remove_ai" formatted="false">"Dhelikake video gaweyan AI"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Saring video sing diwenehi tandha TikTok minangka gaweyan AI"</string>
+    <string name="filter_metric_views" formatted="false">"tontonan"</string>
+    <string name="filter_metric_likes" formatted="false">"seneng"</string>
+    <string name="filter_metric_duration" formatted="false">"suwene"</string>
+    <string name="filter_unit_seconds" formatted="false">"dtk"</string>
+    <string name="filter_views_saved" formatted="false">"Rentang cacah tontonan disimpen"</string>
+    <string name="filter_likes_saved" formatted="false">"Rentang cacah seneng disimpen"</string>
+    <string name="filter_duration_saved" formatted="false">"Rentang suwene video disimpen"</string>
+    <string name="download_path_saved" formatted="false">"Jalur panyimpenan kustom dianyari"</string>
+    <string name="region_spoof_title" formatted="false">"Panyamaran wilayah lan SIM"</string>
+    <string name="region_current" formatted="false">"Konfigurasi saiki"</string>
+    <string name="region_target" formatted="true">"Wilayah tujuan: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operator: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Kode operator: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Prasetel"</string>
+    <string name="region_custom_parameters" formatted="false">"Kustom"</string>
+    <string name="language_spoof" formatted="false">"Panyamaran basa"</string>
+    <string name="environment_follow_region" formatted="false">"Manut wilayah"</string>
+    <string name="language_effective" formatted="true">"Basa sing ditrapake: %1$s"</string>
+    <string name="language_custom" formatted="false">"Basa kustom"</string>
+    <string name="timezone_spoof" formatted="false">"Panyamaran zona wektu"</string>
+    <string name="timezone_effective" formatted="true">"Zona wektu sing ditrapake: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Zona wektu kustom"</string>
+    <string name="gps_spoof" formatted="false">"Panyamaran panggonan"</string>
+    <string name="gps_effective" formatted="true">"Koordinat sing ditrapake: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Koordinat kustom"</string>
+    <string name="speed_fixed" formatted="false">"Tetepake kacepetan puteran"</string>
+    <string name="speed_fixed_summary" formatted="false">"Tetepake kacepetan sing dipilih ing menu pencet suwé nalika ganti video"</string>
+    <string name="speed_expand" formatted="false">"Kacepetan liyane"</string>
+    <string name="speed_options_hint" formatted="false">"Pilihan kacepetan (tutul kanggo ngowahi utawa mbusak)"</string>
+    <string name="speed_add_option" formatted="false">"+ Tambah kacepetan"</string>
+    <string name="speed_restore" formatted="false">"Setel ulang"</string>
+    <string name="clean_on_play" formatted="false">"Dhelikake kontrol nalika muter"</string>
+    <string name="clean_keep_progress" formatted="false">"Tetepake bar kemajuan"</string>
+    <string name="download_paths" formatted="false">"Folder panyimpenan"</string>
+    <string name="download_paths_summary" formatted="true">"Video: %1$s · Gambar: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Tetepake video kanthi %1$s saka %2$d%4$s nganti %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Tetepake video kanthi %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Tetepake video kanthi %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Rentang durung disetel (tutul kanggo nyetel wates ngisor utawa ndhuwur)"</string>
+    <string name="keyword_unset" formatted="false">"Tutul kanggo nambah aturan"</string>
+    <string name="keyword_summary" formatted="true">"Diaktifake: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Katrangan %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Tagar %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Pangripta %1$d"</string>
+    <string name="keyword_description" formatted="false">"Katrangan"</string>
+    <string name="keyword_tag" formatted="false">"Tagar"</string>
+    <string name="keyword_author" formatted="false">"Pangripta"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Durung ana aturan %1$s. Tambahake ing ndhuwur."</string>
+    <string name="duration_alert_title" formatted="false">"Pangeling video dawa"</string>
+    <string name="duration_alert_summary" formatted="true">"Ambang saiki: ≥ %1$s menit"</string>
+    <string name="download_video_path" formatted="false">"Folder video"</string>
+    <string name="download_image_path" formatted="false">"Folder gambar"</string>
+    <string name="download_path_hint" formatted="false">"Folder pisanan kudu folder media umum kayata Movies, Pictures, utawa DCIM. Jalur sing ora sah nggunakake setelan gawan sistem."</string>
+    <string name="views_range_title" formatted="false">"Rentang cacah tontonan"</string>
+    <string name="views_range_min" formatted="false">"Tontonan paling sithik (0 = tanpa wates)"</string>
+    <string name="views_range_max" formatted="false">"Tontonan paling akeh (0 = tanpa wates)"</string>
+    <string name="views_range_hint" formatted="false">"Mung tetepake video ing rentang cacah tontonan iki. Setel loro watese dadi 0 supaya ora ana sing dibusak."</string>
+    <string name="likes_range_title" formatted="false">"Rentang cacah seneng"</string>
+    <string name="likes_range_min" formatted="false">"Seneng paling sithik (0 = tanpa wates)"</string>
+    <string name="likes_range_max" formatted="false">"Seneng paling akeh (0 = tanpa wates)"</string>
+    <string name="likes_range_hint" formatted="false">"Mung tetepake video ing rentang cacah seneng iki. Setel loro watese dadi 0 supaya ora ana sing dibusak."</string>
+    <string name="duration_range_title" formatted="false">"Rentang suwene video"</string>
+    <string name="duration_range_min" formatted="false">"Wektu paling cendhak (detik; 0 = tanpa wates)"</string>
+    <string name="duration_range_max" formatted="false">"Wektu paling dawa (detik; 0 = tanpa wates)"</string>
+    <string name="duration_range_hint" formatted="false">"Mung tetepake video sing disaranake ing rentang wektu iki. Setel loro watese dadi 0 supaya ora ana sing dibusak. Kiriman foto ora kena pengaruh."</string>
+    <string name="keyword_manage" formatted="false">"Aturan panyaring"</string>
+    <string name="keyword_description_hint" formatted="false">"Cocogake teks lan katrangan video tanpa mbedakake aksara gedhe lan cilik."</string>
+    <string name="keyword_tag_hint" formatted="false">"Cocogake tagar. Aja nganggo ater-ater #."</string>
+    <string name="keyword_author_hint" formatted="false">"Cocogake jeneng pangripta lan jeneng panganggo unik. Aja nganggo ater-ater @."</string>
+    <string name="keyword_description_input" formatted="false">"Tembung kunci katrangan"</string>
+    <string name="keyword_tag_input" formatted="false">"Tagar"</string>
+    <string name="keyword_author_input" formatted="false">"Jeneng utawa jeneng panganggo"</string>
+    <string name="keyword_add" formatted="false">"Tambah aturan"</string>
+    <string name="keyword_delete" formatted="false">"Busak aturan"</string>
+    <string name="region_select_title" formatted="false">"Pilih wilayah"</string>
+    <string name="region_search" formatted="false">"Jeneng utawa kode negara"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Kode operator: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Wilayah lan SIM kustom"</string>
+    <string name="region_custom_hint" formatted="false">"Setel kode negara lan operator kustom tanpa watesan prasetel."</string>
+    <string name="region_code_input" formatted="false">"Kode negara utawa wilayah (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Kode operator (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Jeneng operator (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Pilih basa umum utawa lebokake kode basa."</string>
+    <string name="language_code_input" formatted="false">"Kode basa (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Basa"</string>
+    <string name="timezone_custom_hint" formatted="false">"Pilih zona wektu kutha umum utawa lebokake jeneng zona wektu."</string>
+    <string name="timezone_input" formatted="false">"Jeneng zona wektu (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Kutha"</string>
+    <string name="city_tokyo" formatted="false">"Tokyo"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hong Kong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Seoul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapura"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Panggonan kustom"</string>
+    <string name="gps_custom_hint" formatted="false">"Pilih kutha umum utawa lebokake garis lintang lan garis bujur."</string>
+    <string name="gps_latitude" formatted="false">"Garis lintang (-90.0 nganti 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Garis bujur (-180.0 nganti 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Kutha"</string>
+    <string name="speed_add_title" formatted="false">"Tambah kacepetan"</string>
+    <string name="speed_input" formatted="false">"Kacepetan"</string>
+    <string name="speed_invalid" formatted="false">"Lebokake angka sing sah"</string>
+    <string name="speed_out_of_range" formatted="true">"Mung %1$sx nganti %2$sx sing didhukung"</string>
+    <string name="speed_range" formatted="true">"Rentang sing didhukung: %1$sx nganti %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Owahi kacepetan"</string>
+    <string name="duration_threshold_title" formatted="false">"Pangeling video dawa"</string>
+    <string name="duration_threshold_hint" formatted="false">"Nalika video tekan wektu iki, pesen cekak nalika wiwitan puteran bakal ngandhani suwene video ing menit."</string>
+    <string name="duration_threshold_input" formatted="false">"Ambang wektu (menit)"</string>
+    <string name="duration_threshold_example" formatted="false">"Tuladhane: 3 utawa 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Lebokake cacah menit sing sah lan luwih saka 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Setelan saiki: pangeling kanggo video ≥ %1$s menit"</string>
+    <string name="duration_threshold_presets" formatted="false">"Wektu sing disaranake:"</string>
+    <string name="status_feature_feed" formatted="false">"Panyaring linimasa"</string>
+    <string name="status_feature_speed" formatted="false">"Kacepetan"</string>
+    <string name="status_feature_progress" formatted="false">"Bar kemajuan"</string>
+    <string name="status_feature_clean" formatted="false">"Ndhelik otomatis"</string>
+    <string name="status_feature_immersive" formatted="false">"Tampilan video"</string>
+    <string name="status_feature_scroll" formatted="false">"Gulung otomatis"</string>
+    <string name="status_feature_duration" formatted="false">"Pangeling wektu"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Terjemahan komentar"</string>
+    <string name="status_feature_video_translate" formatted="false">"Menu subtitel lan terjemahan"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Nyalin komentar"</string>
+    <string name="status_feature_author" formatted="false">"Wilayah pangripta"</string>
+    <string name="status_feature_download" formatted="false">"Nyimpen video"</string>
+    <string name="status_feature_music" formatted="false">"Watesan audio"</string>
+    <string name="status_feature_sim" formatted="false">"Wilayah lan SIM"</string>
+    <string name="status_feature_language" formatted="false">"Basa"</string>
+    <string name="status_feature_timezone" formatted="false">"Zona wektu"</string>
+    <string name="status_feature_gps" formatted="false">"Panggonan"</string>
+    <string name="status_feature_bar" formatted="false">"Bar status"</string>
+    <string name="status_normal" formatted="false">"Mlaku"</string>
+    <string name="status_issue" formatted="false">"Ana masalah"</string>
+    <string name="status_disabled" formatted="false">"Dipatèni"</string>
+    <string name="status_pending" formatted="false">"Ngenteni"</string>
+    <string name="status_problem_disabled" formatted="false">"Dipatèni, ana kesalahan sing kacathet"</string>
+    <string name="status_problem_unavailable" formatted="false">"Sauntara ora kasedhiya"</string>
+    <string name="status_problem_runtime" formatted="false">"Kesalahan nalika mlaku"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Menu kacepetan ora kasedhiya"</string>
+    <string name="status_prepare_failed" formatted="false">"Nyiyapake fitur gagal. Bukak maneh TikTok banjur priksa maneh."</string>
+    <string name="status_preparing" formatted="false">"Lagi nyiyapake fitur. Enteni sedhela."</string>
+    <string name="status_prepared" formatted="false">"Persiyapan rampung. Bukak maneh TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Status durung bisa diwaca saiki. Priksa maneh mengko."</string>
+    <string name="status_update_failed" formatted="false">"Status durung bisa dianyari saiki. Nampilake asil paling anyar."</string>
+    <string name="status_reading" formatted="false">"Lagi maca status"</string>
+    <string name="status_empty" formatted="false">"Durung ana kagiyatan sing kacathet. Aktifake Toki ing LSPosed, bukak TikTok, banjur priksa maneh."</string>
+    <string name="status_report_note" formatted="true">"Laporan paling anyar: %1$s\n“Mlaku” ateges fitur wis siyap lan ora nglaporake kesalahan."</string>
+    <string name="config_section" formatted="false">"Konfigurasi"</string>
+    <string name="config_import" formatted="false">"Impor setelan"</string>
+    <string name="config_import_summary" formatted="false">"Mulihake setelan fitur saka berkas"</string>
+    <string name="config_export" formatted="false">"Ekspor setelan"</string>
+    <string name="config_export_summary" formatted="false">"Simpen setelan fitur menyang berkas"</string>
+    <string name="config_exported" formatted="false">"Konfigurasi diekspor menyang panggonan sing dipilih. Berkas bisa ngemot tembung kunci, wilayah, lan setelan folder. Simpen kanthi aman."</string>
+    <string name="config_import_confirm" formatted="true">"Berkas ngemot %1$d setelan. Impor ngganti kabeh setelan fitur; setelan sing ora ana dibalekake menyang setelan gawan.\n\nBasa aplikasi, ikon aplikasi, wewenang LSPosed, lan cache kompatibilitas TikTok ora bakal owah. Terusake?"</string>
+    <string name="config_overwrite" formatted="false">"Ganti"</string>
+    <string name="config_imported" formatted="false">"Konfigurasi diimpor lan setelan fitur dianyari. Owah-owahan sing ndhukung nganyari langsung ditrapake sanalika. Bukak maneh TikTok kanggo mriksa owah-owahan liyane."</string>
+    <string name="config_processing" formatted="false">"Lagi ngolah…"</string>
+    <string name="config_error_io" formatted="false">"Ora bisa maca utawa nulis berkas. Priksa panggonan sing dipilih lan papan kosong sing kasedhiya."</string>
+    <string name="config_error_permission" formatted="false">"Idin ngakses berkas sing dipilih durung diwenehake. Pilih berkas kasebut maneh."</string>
+    <string name="config_error_invalid" formatted="false">"Iki dudu berkas konfigurasi Toki sing sah. Ora ana setelan sing diimpor."</string>
+    <string name="config_error_validation" formatted="true">"Validasi konfigurasi gagal: %1$s. Ora ana setelan sing diimpor."</string>
+    <string name="config_error_commit" formatted="false">"Owah-owahan konfigurasi durung bisa dikonfirmasi. Bukak maneh Toki kanggo mriksa sadurunge nyoba maneh."</string>
+    <string name="sponsor_title" formatted="false">"Dhukung pangembang"</string>
+    <string name="sponsor_kofi" formatted="false">"Dhukung liwat Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Kode QR pambayaran Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Lagi nyimpen…"</string>
+    <string name="sponsor_save_image" formatted="false">"Simpen gambar"</string>
+    <string name="sponsor_image_hint" formatted="false">"Simpen gambar asli kanthi wutuh, banjur pilih ing Alipay kanggo mindhai kode."</string>
+    <string name="sponsor_address_copied" formatted="false">"Alamat USDT disalin"</string>
+    <string name="sponsor_image_saved" formatted="false">"Gambar disimpen menyang panggonan sing dipilih"</string>
+    <string name="sponsor_error_io" formatted="false">"Gagal nyimpen. Priksa panggonan sing dipilih lan papan kosong sing kasedhiya, banjur coba maneh."</string>
+    <string name="sponsor_error_permission" formatted="false">"Gagal nyimpen. Idin nulis ing panggonan iki durung diwenehake. Pilih panggonan liyane."</string>
+    <string name="feature_filter_topics" formatted="false">"Dhelikake saran topik"</string>
+    <string name="feature_filter_creators" formatted="false">"Dhelikake saran kreator"</string>
+    <string name="host_scan_title_complete" formatted="false">"Panelusuran rampung"</string>
+    <string name="host_scan_title_failed" formatted="false">"Panelusuran gagal"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Wiwiti maneh TikTok kanthi manual kanggo ngetrapake asil."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Delengen diagnostik fitur ing Toki."</string>
+    <string name="layout_title" formatted="false">"Tata kaca"</string>
+    <string name="layout_summary" formatted="false">"Pilih kontrol sing arep didhelikake"</string>
+    <string name="layout_hint" formatted="false">"Uripake saklar kanggo ndhelikake item"</string>
+    <string name="layout_top" formatted="false">"Bar ndhuwur"</string>
+    <string name="layout_bottom" formatted="false">"Bar ngisor"</string>
+    <string name="layout_side" formatted="false">"Kaca video"</string>
+    <string name="layout_search" formatted="false">"Goleki"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Kanca"</string>
+    <string name="layout_following" formatted="false">"Ngetutake"</string>
+    <string name="layout_shop" formatted="false">"Toko"</string>
+    <string name="layout_for_you" formatted="false">"Kanggo sampeyan"</string>
+    <string name="layout_nearby" formatted="false">"Cedhak"</string>
+    <string name="layout_stem" formatted="false">"Sains"</string>
+    <string name="layout_series" formatted="false">"Seri"</string>
+    <string name="layout_home" formatted="false">"Ngarep"</string>
+    <string name="layout_create" formatted="false">"Gawe"</string>
+    <string name="layout_inbox" formatted="false">"Kothak mlebu"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Temokake"</string>
+    <string name="layout_avatar" formatted="false">"Foto profil"</string>
+    <string name="layout_follow" formatted="false">"Tombol Tututi"</string>
+    <string name="layout_like" formatted="false">"Seneng"</string>
+    <string name="layout_comment" formatted="false">"Komentar"</string>
+    <string name="layout_favorite" formatted="false">"Favorit"</string>
+    <string name="layout_share" formatted="false">"Bagi"</string>
+    <string name="layout_music" formatted="false">"Piringan musik"</string>
+    <string name="layout_explore" formatted="false">"Jelajahi"</string>
+    <string name="layout_author" formatted="false">"Info pangripta"</string>
+    <string name="layout_description" formatted="false">"Katrangan"</string>
+    <string name="layout_music_title" formatted="false">"Judhul musik"</string>
+    <string name="layout_tags" formatted="false">"Label informasi"</string>
+    <string name="layout_search_label" formatted="false">"Saran telusuran"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Tombol mandheg gulir otomatis"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Koin lan hadiah"</string>
+    <string name="layout_quick_comment" formatted="false">"Komentar cepet"</string>
+    <string name="layout_playlist" formatted="false">"Dhaptar puter"</string>
+    <string name="layout_creation_buttons" formatted="false">"Trabasan nggawe"</string>
+    <string name="layout_live_notice" formatted="false">"Pangeling LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Opasitas"</string>
+    <string name="feature_background_audio">"Bukak audio latar mburi"</string>
+    <string name="layout_landscape">"Tombol layar kebak"</string>
+    <string name="layout_photo_indicators">"Indikator lan pituduh foto"</string>
+    <string name="layout_quick_message">"Pesen cepet lan sing nuduhake"</string>
+    <string name="layout_user_card">"Akun sing disaranake"</string>
+    <string name="layout_survey">"Survei lan tanggapan"</string>
+    <string name="layout_ad_cards">"Kertu produk lan iklan"</string>
+    <string name="layout_bottom_banners">"Banner ngisor liyane"</string>
+    <string name="layout_activities">"Tombol acara"</string>
+    <string name="host_scan_title_running" formatted="false">"Nggoleki metode"</string>
+    <string name="host_scan_title_saving" formatted="false">"Nyimpen asil"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Tetep bukak TikTok ing latar ngarep."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Enteni sedhela."</string>
+    <string name="host_scan_done" formatted="false">"Ngerti"</string>
+    <string name="video_fit_center" formatted="false">"Ing tengah"</string>
+    <string name="video_fit_smart" formatted="false">"Layar kebak"</string>
+</resources>

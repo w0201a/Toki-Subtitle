@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Басты бет"</string>
+    <string name="nav_features" formatted="false">"Мүмкіндіктер"</string>
+    <string name="page_features" formatted="false">"Параметрлер"</string>
+    <string name="page_hook_status" formatted="false">"Мүмкіндіктер күйі"</string>
+    <string name="nav_back" formatted="false">"Артқа"</string>
+    <string name="restart_tiktok" formatted="false">"TikTok-ты қайта іске қосу"</string>
+    <string name="restart_root_required" formatted="false">"Toki-ге root рұқсатын беріңіз"</string>
+    <string name="language_title" formatted="false">"Қолданба тілі"</string>
+    <string name="language_system" formatted="false">"Жүйе тілі"</string>
+    <string name="language_search" formatted="false">"Тілді іздеу"</string>
+    <string name="language_clear_search" formatted="false">"Іздеуді тазалау"</string>
+    <string name="language_no_results" formatted="false">"Сәйкес тіл табылмады"</string>
+    <string name="common_save" formatted="false">"Сақтау"</string>
+    <string name="common_cancel" formatted="false">"Бас тарту"</string>
+    <string name="common_confirm" formatted="false">"ОК"</string>
+    <string name="common_close" formatted="false">"Жабу"</string>
+    <string name="common_open" formatted="false">"Ашу"</string>
+    <string name="common_copy" formatted="false">"Көшіру"</string>
+    <string name="common_add" formatted="false">"Қосу"</string>
+    <string name="common_delete" formatted="false">"Жою"</string>
+    <string name="common_done" formatted="false">"Дайын"</string>
+    <string name="common_save_apply" formatted="false">"Қолдану"</string>
+    <string name="common_unknown" formatted="false">"Белгісіз"</string>
+    <string name="common_custom" formatted="false">"Теңшелген"</string>
+    <string name="home_icon_hidden" formatted="false">"Қолданба белгішесі жасырылды"</string>
+    <string name="home_icon_restored" formatted="false">"Қолданба белгішесі қайта көрсетілді"</string>
+    <string name="home_activated" formatted="false">"Белсендірілген"</string>
+    <string name="home_inactive" formatted="false">"Белсендірілмеген"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosed жүйесінде белсендіру анықталмады"</string>
+    <string name="home_host_section" formatted="false">"TikTok үйлесімділігі"</string>
+    <string name="home_host_current" formatted="false">"Орнатылған TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Құрылғыда қолдау көрсетілетін TikTok нұсқасы табылмады"</string>
+    <string name="home_host_not_installed" formatted="false">"Орнатылмаған"</string>
+    <string name="home_supported_versions" formatted="false">"Қолдау көрсетілетін нұсқалар"</string>
+    <string name="home_community" formatted="false">"Қауымдастық"</string>
+    <string name="home_github" formatted="false">"GitHub репозиторийі"</string>
+    <string name="home_telegram" formatted="false">"Telegram тобы"</string>
+    <string name="home_preferences" formatted="false">"Параметрлер"</string>
+    <string name="home_hide_icon" formatted="false">"Қолданба белгішесін жасыру"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Жасырылғаннан кейін Toki-ді LSPosed менеджері арқылы ашуға болады"</string>
+    <string name="home_support" formatted="false">"Әзірлеуді қолдау"</string>
+    <string name="home_support_summary" formatted="false">"Тұрақты қызмет көрсету мен мүмкіндіктерді жақсартуды қолдаңыз"</string>
+    <string name="feature_region_section" formatted="false">"Аймақ пен ортаны алмастыру"</string>
+    <string name="feature_playback_section" formatted="false">"Ойнату"</string>
+    <string name="feature_progress" formatted="false">"Орындалу жолағын үнемі көрсету"</string>
+    <string name="feature_progress_summary" formatted="false">"Қысқа бейнелерде де төменгі орындалу жолағын көрсету"</string>
+    <string name="feature_immersive" formatted="false">"Бейнені көрсету"</string>
+    <string name="feature_autoplay" formatted="false">"Жетілдірілген автоайналдыру"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Барлық видео мәзірінде автоайналдыруды ашады"</string>
+    <string name="feature_status_bar" formatted="false">"Жүйенің күй жолағын жасыру"</string>
+    <string name="feature_media_section" formatted="false">"Жүктеу және құралдар"</string>
+    <string name="feature_download" formatted="false">"Су таңбасынсыз жүктеу"</string>
+    <string name="feature_download_summary" formatted="false">"Басып ұстау не бөлісу мәзірінен су таңбасынсыз түпнұсқаны сақтау"</string>
+    <string name="feature_music" formatted="false">"Дыбысты бұғаттан шығару"</string>
+    <string name="feature_music_summary" formatted="false">"Авторлық құқық немесе аймақ бойынша шектелген дыбысты қалпына келтіру"</string>
+    <string name="feature_author_region" formatted="false">"Автор аймағын көрсету"</string>
+    <string name="feature_author_region_summary" formatted="false">"Автор атының жанында елдің немесе аймақтың туы мен кодын көрсету"</string>
+    <string name="feature_copy_comment" formatted="false">"Тек мәтінді көшіру"</string>
+    <string name="feature_video_translation" formatted="false">"Субтитрлер мен аударма мәзірі"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Ұзақ басу мәзірінде тармақты көрсету"</string>
+    <string name="feature_comment_translation" formatted="false">"Пікірлерді аудару"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Шет тіліндегі пікірлерді бірге аударуға арналған түйме қосу"</string>
+    <string name="feature_filter_section" formatted="false">"Таспаны сүзу"</string>
+    <string name="feature_remove_ads" formatted="false">"Таспа жарнамаларын жою"</string>
+    <string name="feature_remove_live" formatted="false">"Ұсынылған тікелей эфирлерді сүзу"</string>
+    <string name="feature_remove_photos" formatted="false">"Ұсынылған фото жазбаларды сүзу"</string>
+    <string name="feature_filter_views" formatted="false">"Қаралым сүзгісі"</string>
+    <string name="feature_filter_likes" formatted="false">"Лайк сүзгісі"</string>
+    <string name="feature_filter_duration" formatted="false">"Ұзақтық сүзгісі"</string>
+    <string name="feature_filter_keywords" formatted="false">"Кілт сөздер сүзгісі"</string>
+    <string name="feature_block_offline" formatted="false">"Офлайн бейнелерді бұғаттау"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Байланыс нашарлағанда алдын ала жүктелген бейнелерді кірістіруге жол бермеу"</string>
+    <string name="feature_remove_ai" formatted="false">"ЖИ жасаған мазмұнды жою"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"TikTok ЖИ жасаған деп белгілеген бейнелерді сүзу"</string>
+    <string name="filter_metric_views" formatted="false">"қаралым"</string>
+    <string name="filter_metric_likes" formatted="false">"лайк"</string>
+    <string name="filter_metric_duration" formatted="false">"ұзақтық"</string>
+    <string name="filter_unit_seconds" formatted="false">"с"</string>
+    <string name="filter_views_saved" formatted="false">"Қаралым ауқымы сақталды"</string>
+    <string name="filter_likes_saved" formatted="false">"Лайк ауқымы сақталды"</string>
+    <string name="filter_duration_saved" formatted="false">"Ұзақтық ауқымы сақталды"</string>
+    <string name="download_path_saved" formatted="false">"Сақтау жолдары жаңартылды"</string>
+    <string name="region_spoof_title" formatted="false">"Аймақ пен SIM алмастыру"</string>
+    <string name="region_current" formatted="false">"Ағымдағы параметрлер"</string>
+    <string name="region_target" formatted="true">"Мақсатты аймақ: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Оператор: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Оператор коды: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Дайын үлгілер"</string>
+    <string name="region_custom_parameters" formatted="false">"Баптау"</string>
+    <string name="language_spoof" formatted="false">"Тілді алмастыру"</string>
+    <string name="environment_follow_region" formatted="false">"Аймаққа сәйкес"</string>
+    <string name="language_effective" formatted="true">"Қолданылатын тіл: %1$s"</string>
+    <string name="language_custom" formatted="false">"Жеке тіл"</string>
+    <string name="timezone_spoof" formatted="false">"Уақыт белдеуін алмастыру"</string>
+    <string name="timezone_effective" formatted="true">"Қолданылатын уақыт белдеуі: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Жеке уақыт белдеуі"</string>
+    <string name="gps_spoof" formatted="false">"Орналасуды алмастыру"</string>
+    <string name="gps_effective" formatted="true">"Қолданылатын координаттар: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Жеке координаттар"</string>
+    <string name="speed_fixed" formatted="false">"Жылдамдықты сақтау"</string>
+    <string name="speed_fixed_summary" formatted="false">"Мәзірде таңдалған жылдамдықты бейне ауысқанда сақтау"</string>
+    <string name="speed_expand" formatted="false">"Басқа жылдамдықтар"</string>
+    <string name="speed_options_hint" formatted="false">"Жылдамдықтар (өзгерту не жою үшін түртіңіз)"</string>
+    <string name="speed_add_option" formatted="false">"+ Жылдамдық қосу"</string>
+    <string name="speed_restore" formatted="false">"Қалпына келтіру"</string>
+    <string name="clean_on_play" formatted="false">"Ойнатқанда басқару элементтерін жасыру"</string>
+    <string name="clean_keep_progress" formatted="false">"Орындалу жолағын қалдыру"</string>
+    <string name="download_paths" formatted="false">"Сақтау қалталары"</string>
+    <string name="download_paths_summary" formatted="true">"Бейнелер: %1$s · Суреттер: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"%1$s мәні %2$d%4$s–%3$d%4$s аралығындағы бейнелерді қалдыру"</string>
+    <string name="filter_range_min" formatted="true">"%1$s ≥ %2$d%3$s болатын бейнелерді қалдыру"</string>
+    <string name="filter_range_max" formatted="true">"%1$s ≤ %2$d%3$s болатын бейнелерді қалдыру"</string>
+    <string name="filter_range_unset" formatted="false">"Ауқым белгіленбеген (төменгі/жоғарғы шекті орнату үшін түртіңіз)"</string>
+    <string name="keyword_unset" formatted="false">"Ереже жоқ (санаттарды басқару үшін түртіңіз)"</string>
+    <string name="keyword_summary" formatted="true">"Қосылған: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Сипаттамалар %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Хэштегтер %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Авторлар %1$d"</string>
+    <string name="keyword_description" formatted="false">"Сипаттамалар"</string>
+    <string name="keyword_tag" formatted="false">"Хэштегтер"</string>
+    <string name="keyword_author" formatted="false">"Авторлар"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"%1$s санатында ереже жоқ. Жоғарыдан қосыңыз"</string>
+    <string name="duration_alert_title" formatted="false">"Ұзақ бейне туралы ескерту"</string>
+    <string name="duration_alert_summary" formatted="true">"Ағымдағы шек: ≥ %1$s минут"</string>
+    <string name="download_video_path" formatted="false">"Бейнелер қалтасы"</string>
+    <string name="download_image_path" formatted="false">"Суреттер қалтасы"</string>
+    <string name="download_path_hint" formatted="false">"Бірінші қалта Movies, Pictures немесе DCIM сияқты ортақ медиа қалтасы болуы керек. Жарамсыз жол үшін жүйенің әдепкі мәні қолданылады"</string>
+    <string name="views_range_title" formatted="false">"Қаралым ауқымы"</string>
+    <string name="views_range_min" formatted="false">"Ең аз қаралым (0 = шектеусіз)"</string>
+    <string name="views_range_max" formatted="false">"Ең көп қаралым (0 = шектеусіз)"</string>
+    <string name="views_range_hint" formatted="false">"Қаралым саны ауқымға кіретін бейнелер ғана қалады. Екі шек те 0 болса, ештеңе жойылмайды"</string>
+    <string name="likes_range_title" formatted="false">"Лайк ауқымы"</string>
+    <string name="likes_range_min" formatted="false">"Ең аз лайк (0 = шектеусіз)"</string>
+    <string name="likes_range_max" formatted="false">"Ең көп лайк (0 = шектеусіз)"</string>
+    <string name="likes_range_hint" formatted="false">"Лайк саны ауқымға кіретін бейнелер ғана қалады. Екі шек те 0 болса, ештеңе жойылмайды"</string>
+    <string name="duration_range_title" formatted="false">"Бейне ұзақтығының ауқымы"</string>
+    <string name="duration_range_min" formatted="false">"Ең қысқа ұзақтық (секунд; 0 = шектеусіз)"</string>
+    <string name="duration_range_max" formatted="false">"Ең ұзақ ұзақтық (секунд; 0 = шектеусіз)"</string>
+    <string name="duration_range_hint" formatted="false">"Ұзақтығы ауқымға кіретін ұсынылған бейнелер қалады. Екі шек те 0 болса, ештеңе жойылмайды. Фото жазбаларға әсер етпейді"</string>
+    <string name="keyword_manage" formatted="false">"Сүзгі ережелері"</string>
+    <string name="keyword_description_hint" formatted="false">"Бейне мәтіні мен сипаттамасын әріп регистрін ескермей сәйкестендіреді."</string>
+    <string name="keyword_tag_hint" formatted="false">"Хэштегтерді сәйкестендіреді. # таңбасын енгізу қажет емес."</string>
+    <string name="keyword_author_hint" formatted="false">"Автор аты мен бірегей пайдаланушы атын сәйкестендіреді. @ таңбасын енгізу қажет емес."</string>
+    <string name="keyword_description_input" formatted="false">"Сөз немесе тіркес"</string>
+    <string name="keyword_tag_input" formatted="false">"Хэштег"</string>
+    <string name="keyword_author_input" formatted="false">"Аты не пайдаланушы аты"</string>
+    <string name="keyword_add" formatted="false">"Ереже қосу"</string>
+    <string name="keyword_delete" formatted="false">"Ережені жою"</string>
+    <string name="region_select_title" formatted="false">"Аймақты таңдау"</string>
+    <string name="region_search" formatted="false">"Ел атауы, ағылшынша атау не аймақ коды бойынша іздеу"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Оператор коды: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Жеке аймақ және SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Дайын параметрлермен шектелмей, ел коды мен оператор деректерін орнатыңыз."</string>
+    <string name="region_code_input" formatted="false">"Ел немесе аймақ коды (мысалы, JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Оператор коды (мысалы, 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Оператор атауы (мысалы, NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Тілді таңдаңыз немесе тіл кодын енгізіңіз."</string>
+    <string name="language_code_input" formatted="false">"Тіл коды (мысалы, ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Жиі қолданылатын тілдер:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Қаланың уақыт белдеуін таңдаңыз немесе белдеу атауын енгізіңіз."</string>
+    <string name="timezone_input" formatted="false">"Уақыт белдеуі (мысалы, Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Қалалардың уақыт белдеулері:"</string>
+    <string name="city_tokyo" formatted="false">"Токио"</string>
+    <string name="city_taipei" formatted="false">"Тайбэй"</string>
+    <string name="city_hong_kong" formatted="false">"Гонконг"</string>
+    <string name="city_new_york" formatted="false">"Нью-Йорк"</string>
+    <string name="city_london" formatted="false">"Лондон"</string>
+    <string name="city_seoul" formatted="false">"Сеул"</string>
+    <string name="city_bangkok" formatted="false">"Бангкок"</string>
+    <string name="city_singapore" formatted="false">"Сингапур"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Жеке орналасу координаттары"</string>
+    <string name="gps_custom_hint" formatted="false">"Қаланы таңдаңыз немесе ендік пен бойлықты енгізіңіз."</string>
+    <string name="gps_latitude" formatted="false">"Ендік (-90.0–90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Бойлық (-180.0–180.0)"</string>
+    <string name="gps_presets" formatted="false">"Жиі таңдалатын қалалар:"</string>
+    <string name="speed_add_title" formatted="false">"Жылдамдық қосу"</string>
+    <string name="speed_input" formatted="false">"Ойнату жылдамдығы"</string>
+    <string name="speed_invalid" formatted="false">"Жарамды сан енгізіңіз"</string>
+    <string name="speed_out_of_range" formatted="true">"Тек %1$sx–%2$sx қолдау көрсетіледі"</string>
+    <string name="speed_range" formatted="true">"Қолдау көрсетілетін ауқым: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Жылдамдықты өзгерту"</string>
+    <string name="duration_threshold_title" formatted="false">"Ұзақ бейне ескертуі"</string>
+    <string name="duration_threshold_hint" formatted="false">"Бейне ұзақтығы осы мәнге жетсе, ойнату басталғанда минутпен көрсетілген ұзақтығы туралы қысқа хабарлама шығады."</string>
+    <string name="duration_threshold_input" formatted="false">"Ұзақтық шегі (минут)"</string>
+    <string name="duration_threshold_example" formatted="false">"Мысалы: 3 немесе 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"0-ден үлкен жарамды минут санын енгізіңіз"</string>
+    <string name="duration_threshold_current" formatted="true">"Ағымдағы параметр: ұзақтығы ≥ %1$s минут болса ескерту"</string>
+    <string name="duration_threshold_presets" formatted="false">"Ұсынылған ұзақтықтар:"</string>
+    <string name="status_feature_feed" formatted="false">"Таспаны сүзу"</string>
+    <string name="status_feature_speed" formatted="false">"Жылдамдық"</string>
+    <string name="status_feature_progress" formatted="false">"Орындалу жолағы"</string>
+    <string name="status_feature_clean" formatted="false">"Ойнатқанда басқаруды жасыру"</string>
+    <string name="status_feature_immersive" formatted="false">"Бейнені көрсету"</string>
+    <string name="status_feature_scroll" formatted="false">"Автоматты айналдыру"</string>
+    <string name="status_feature_duration" formatted="false">"Ұзақтық ескертуі"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Пікірлер аудармасы"</string>
+    <string name="status_feature_video_translate" formatted="false">"Субтитрлер мен аударма мәзірі"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Пікірлерді көшіру"</string>
+    <string name="status_feature_author" formatted="false">"Автор аймағы"</string>
+    <string name="status_feature_download" formatted="false">"Бейнені сақтау"</string>
+    <string name="status_feature_music" formatted="false">"Дыбыс шектеулері"</string>
+    <string name="status_feature_sim" formatted="false">"SIM және ел"</string>
+    <string name="status_feature_language" formatted="false">"Тіл"</string>
+    <string name="status_feature_timezone" formatted="false">"Уақыт белдеуі"</string>
+    <string name="status_feature_gps" formatted="false">"Орналасу"</string>
+    <string name="status_feature_bar" formatted="false">"Күй жолағы"</string>
+    <string name="status_normal" formatted="false">"Қалыпты"</string>
+    <string name="status_issue" formatted="false">"Мәселе бар"</string>
+    <string name="status_disabled" formatted="false">"Өшірулі"</string>
+    <string name="status_pending" formatted="false">"Расталмаған"</string>
+    <string name="status_problem_disabled" formatted="false">"Өшірулі, бірақ қате жазбасы бар"</string>
+    <string name="status_problem_unavailable" formatted="false">"Уақытша қолжетімсіз"</string>
+    <string name="status_problem_runtime" formatted="false">"Жұмыс кезіндегі қате"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Жылдамдық мәзірі қолжетімсіз"</string>
+    <string name="status_prepare_failed" formatted="false">"Мүмкіндіктерді дайындау сәтсіз. TikTok-ты қайта ашып тексеріңіз."</string>
+    <string name="status_preparing" formatted="false">"Мүмкіндіктер дайындалып жатыр. Күтіңіз."</string>
+    <string name="status_prepared" formatted="false">"Дайындау аяқталды. TikTok-ты қайта ашыңыз."</string>
+    <string name="status_read_failed" formatted="false">"Қазір күйді оқу мүмкін емес. Кейін тексеріңіз."</string>
+    <string name="status_update_failed" formatted="false">"Қазір күйді жаңарту мүмкін емес. Соңғы нәтиже көрсетіліп тұр."</string>
+    <string name="status_reading" formatted="false">"Күй оқылып жатыр"</string>
+    <string name="status_empty" formatted="false">"Жұмыс жазбасы жоқ. Toki-ді LSPosed ішінде қосып, TikTok-ты ашқаннан кейін тексеріңіз."</string>
+    <string name="status_report_note" formatted="true">"Соңғы есеп: %1$s\n«Қалыпты» мүмкіндіктің дайын екенін және қате хабарламағанын білдіреді."</string>
+    <string name="config_section" formatted="false">"Параметрлерді басқару"</string>
+    <string name="config_import" formatted="false">"Параметрлерді импорттау"</string>
+    <string name="config_import_summary" formatted="false">"Мүмкіндік параметрлерін файлдан қалпына келтіру"</string>
+    <string name="config_export" formatted="false">"Параметрлерді экспорттау"</string>
+    <string name="config_export_summary" formatted="false">"Мүмкіндік параметрлерін файлға сақтау"</string>
+    <string name="config_exported" formatted="false">"Параметрлер таңдалған орынға экспортталды. Файлда кілт сөздер, аймақтар және қалта жолдары болуы мүмкін. Оны қауіпсіз сақтаңыз."</string>
+    <string name="config_import_confirm" formatted="true">"Файлдағы параметрлер саны: %1$d. Импорт барлық мүмкіндік параметрлерін ауыстырады; жетіспейтіндері әдепкі мәндерге қайтады.\n\nИнтерфейс тілі, белгіше, LSPosed рұқсаттары және TikTok үйлесімділік кэші өзгермейді. Жалғастыру керек пе?"</string>
+    <string name="config_overwrite" formatted="false">"Ауыстыру"</string>
+    <string name="config_imported" formatted="false">"Параметрлер импортталып, мүмкіндіктер беті жаңартылды. Жедел жаңартуды қолдайтын өзгерістер бірден қолданылады. Қалғанын TikTok-ты қайта ашып тексеріңіз."</string>
+    <string name="config_processing" formatted="false">"Параметрлер өңделіп жатыр"</string>
+    <string name="config_error_io" formatted="false">"Файлды оқу не жазу сәтсіз. Орын мен бос кеңістікті тексеріңіз."</string>
+    <string name="config_error_permission" formatted="false">"Таңдалған файлға кіру рұқсаты жоқ. Қайта таңдаңыз."</string>
+    <string name="config_error_invalid" formatted="false">"Бұл жарамды Toki параметрлер файлы емес. Ешбір параметр импортталмады."</string>
+    <string name="config_error_validation" formatted="true">"Параметрлерді тексеру сәтсіз: %1$s. Ешбір параметр импортталмады."</string>
+    <string name="config_error_commit" formatted="false">"Параметрлердің қолданылуы расталмады. Toki-ді қайта ашып тексергеннен кейін қайталаңыз."</string>
+    <string name="sponsor_title" formatted="false">"Әзірлеушіні қолдау"</string>
+    <string name="sponsor_kofi" formatted="false">"Ko-fi арқылы қолдау"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay төлем QR коды"</string>
+    <string name="sponsor_saving" formatted="false">"Сақталып жатыр…"</string>
+    <string name="sponsor_save_image" formatted="false">"Суретті сақтау"</string>
+    <string name="sponsor_image_hint" formatted="false">"Түпнұсқа суретті сақтап, кодты тану үшін Alipay ішінде таңдаңыз."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT мекенжайы көшірілді"</string>
+    <string name="sponsor_image_saved" formatted="false">"Сурет таңдалған орынға сақталды"</string>
+    <string name="sponsor_error_io" formatted="false">"Сақтау сәтсіз. Орын мен бос кеңістікті тексеріп, қайта көріңіз."</string>
+    <string name="sponsor_error_permission" formatted="false">"Сақтау сәтсіз: таңдалған орынға жазу рұқсаты жоқ. Қайта таңдаңыз."</string>
+    <string name="feature_filter_topics" formatted="false">"Ұсынылған тақырыптарды жасыру"</string>
+    <string name="feature_filter_creators" formatted="false">"Ұсынылған авторларды жасыру"</string>
+    <string name="host_scan_title_complete" formatted="false">"Іздеу аяқталды"</string>
+    <string name="host_scan_title_failed" formatted="false">"Іздеу сәтсіз аяқталды"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Нәтижелерді қолдану үшін TikTok қолданбасын қолмен қайта іске қосыңыз."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Toki ішіндегі функциялар диагностикасын қараңыз."</string>
+    <string name="layout_title" formatted="false">"Бет орналасуы"</string>
+    <string name="layout_summary" formatted="false">"Жасырылатын басқару элементтерін таңдаңыз"</string>
+    <string name="layout_hint" formatted="false">"Элементті жасыру үшін қосқышты қосыңыз"</string>
+    <string name="layout_top" formatted="false">"Жоғарғы жолақ"</string>
+    <string name="layout_bottom" formatted="false">"Төменгі жолақ"</string>
+    <string name="layout_side" formatted="false">"Видео беті"</string>
+    <string name="layout_search" formatted="false">"Іздеу"</string>
+    <string name="layout_live" formatted="false">"Тікелей эфир"</string>
+    <string name="layout_friends" formatted="false">"Достар"</string>
+    <string name="layout_following" formatted="false">"Жазылымдар"</string>
+    <string name="layout_shop" formatted="false">"Дүкен"</string>
+    <string name="layout_for_you" formatted="false">"Сіз үшін"</string>
+    <string name="layout_nearby" formatted="false">"Жақын жерде"</string>
+    <string name="layout_stem" formatted="false">"Ғылым"</string>
+    <string name="layout_series" formatted="false">"Сериалдар"</string>
+    <string name="layout_home" formatted="false">"Басты бет"</string>
+    <string name="layout_create" formatted="false">"Жасау"</string>
+    <string name="layout_inbox" formatted="false">"Кіріс жәшігі"</string>
+    <string name="layout_profile" formatted="false">"Профиль"</string>
+    <string name="layout_discover" formatted="false">"Табу"</string>
+    <string name="layout_avatar" formatted="false">"Аватар"</string>
+    <string name="layout_follow" formatted="false">"Жазылу түймесі"</string>
+    <string name="layout_like" formatted="false">"Ұнату"</string>
+    <string name="layout_comment" formatted="false">"Пікірлер"</string>
+    <string name="layout_favorite" formatted="false">"Таңдаулылар"</string>
+    <string name="layout_share" formatted="false">"Бөлісу"</string>
+    <string name="layout_music" formatted="false">"Музыка дискісі"</string>
+    <string name="layout_explore" formatted="false">"Шолу"</string>
+    <string name="layout_author" formatted="false">"Автор туралы ақпарат"</string>
+    <string name="layout_description" formatted="false">"Сипаттама"</string>
+    <string name="layout_music_title" formatted="false">"Музыка атауы"</string>
+    <string name="layout_tags" formatted="false">"Ақпарат белгілері"</string>
+    <string name="layout_search_label" formatted="false">"Іздеу ұсынысы"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Автоматты айналдыруды тоқтату түймесі"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Монеталар мен сыйақылар"</string>
+    <string name="layout_quick_comment" formatted="false">"Жылдам пікірлер"</string>
+    <string name="layout_playlist" formatted="false">"Ойнату тізімі"</string>
+    <string name="layout_creation_buttons" formatted="false">"Жасау таңбашалары"</string>
+    <string name="layout_live_notice" formatted="false">"Тікелей эфир еске салғыштары"</string>
+    <string name="layout_opacity" formatted="false">"Мөлдір еместік"</string>
+    <string name="feature_background_audio">"Фондық аудионы ашу"</string>
+    <string name="layout_landscape">"Толық экран түймесі"</string>
+    <string name="layout_photo_indicators">"Фото көрсеткіштері мен кеңестер"</string>
+    <string name="layout_quick_message">"Жылдам хабарлар және бөліскен адам"</string>
+    <string name="layout_user_card">"Ұсынылған аккаунттар"</string>
+    <string name="layout_survey">"Сауалнамалар мен пікірлер"</string>
+    <string name="layout_ad_cards">"Тауар және жарнама карталары"</string>
+    <string name="layout_bottom_banners">"Басқа төменгі баннерлер"</string>
+    <string name="layout_activities">"Іс-шараларға кіру"</string>
+    <string name="host_scan_title_running" formatted="false">"Әдістер ізделуде"</string>
+    <string name="host_scan_title_saving" formatted="false">"Нәтижелер сақталуда"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"TikTok қолданбасын алдыңғы қатарда ұстаңыз."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Күте тұрыңыз."</string>
+    <string name="host_scan_done" formatted="false">"Түсіндім"</string>
+    <string name="video_fit_center" formatted="false">"Ортада"</string>
+    <string name="video_fit_smart" formatted="false">"Толық экран"</string>
+</resources>

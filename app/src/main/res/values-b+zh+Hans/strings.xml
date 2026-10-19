@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subtitle_sponsor_title">赞助字幕版开发</string>
+    <string name="subtitle_sponsor_methods">微信支付 / 支付宝 · 选择赞助码</string>
+    <string name="subtitle_sponsor_wechat">微信支付</string>
+    <string name="subtitle_sponsor_hint">自愿赞助，不影响功能使用。请选择收款码，可保存原图后在对应支付软件中扫码。</string>
+    <string name="subtitle_credits" formatted="false">字幕版联合创作 · 154Er · Gi-Ai154M</string>
+    <string name="nav_home" formatted="false">"首页"</string>
+    <string name="nav_features" formatted="false">"功能"</string>
+    <string name="page_features" formatted="false">"功能配置"</string>
+    <string name="page_hook_status" formatted="false">"功能状态监控"</string>
+    <string name="nav_back" formatted="false">"返回"</string>
+    <string name="restart_tiktok" formatted="false">"重启 TikTok"</string>
+    <string name="restart_root_required" formatted="false">"请确认已授予 Toki root权限"</string>
+    <string name="language_title" formatted="false">"界面语言"</string>
+    <string name="language_system" formatted="false">"跟随系统"</string>
+    <string name="language_search" formatted="false">"搜索语言"</string>
+    <string name="language_clear_search" formatted="false">"清除搜索"</string>
+    <string name="language_no_results" formatted="false">"未找到匹配的语言"</string>
+    <string name="common_save" formatted="false">"保存"</string>
+    <string name="common_cancel" formatted="false">"取消"</string>
+    <string name="common_confirm" formatted="false">"确定"</string>
+    <string name="common_close" formatted="false">"关闭"</string>
+    <string name="common_open" formatted="false">"打开"</string>
+    <string name="common_copy" formatted="false">"复制"</string>
+    <string name="common_add" formatted="false">"添加"</string>
+    <string name="common_delete" formatted="false">"删除"</string>
+    <string name="common_done" formatted="false">"完成"</string>
+    <string name="common_save_apply" formatted="false">"保存并应用"</string>
+    <string name="common_unknown" formatted="false">"未知"</string>
+    <string name="common_custom" formatted="false">"自定义"</string>
+    <string name="home_icon_hidden" formatted="false">"图标已隐藏"</string>
+    <string name="home_icon_restored" formatted="false">"图标已恢复显示"</string>
+    <string name="home_activated" formatted="false">"已激活"</string>
+    <string name="home_inactive" formatted="false">"未激活"</string>
+    <string name="home_activation_missing" formatted="false">"未在 LSPosed 框架中检测到激活绑定"</string>
+    <string name="home_host_section" formatted="false">"宿主应用适配"</string>
+    <string name="home_host_current" formatted="false">"当前 TikTok 宿主"</string>
+    <string name="home_host_missing" formatted="false">"未在设备上检测到已安装的受支持 TikTok"</string>
+    <string name="home_host_not_installed" formatted="false">"未安装"</string>
+    <string name="home_supported_versions" formatted="false">"已适配支持版本"</string>
+    <string name="home_community" formatted="false">"开源与社区"</string>
+    <string name="home_github" formatted="false">"GitHub 项目仓库"</string>
+    <string name="home_telegram" formatted="false">"Telegram 群组"</string>
+    <string name="home_preferences" formatted="false">"模块偏好设置"</string>
+    <string name="home_hide_icon" formatted="false">"隐藏桌面图标"</string>
+    <string name="home_hide_icon_summary" formatted="false">"隐藏后可通过 LSPosed 管理器打开"</string>
+    <string name="home_support" formatted="false">"支持开发"</string>
+    <string name="home_support_summary" formatted="false">"赞助开发者持续维护与功能迭代"</string>
+    <string name="feature_region_section" formatted="false">"地区与环境伪装"</string>
+    <string name="feature_playback_section" formatted="false">"播放与交互体验"</string>
+    <string name="feature_progress" formatted="false">"总是显示视频进度条"</string>
+    <string name="feature_progress_summary" formatted="false">"短视频也常驻显示底部播放进度条"</string>
+    <string name="feature_immersive" formatted="false">"视频显示"</string>
+    <string name="feature_autoplay" formatted="false">"自动连播增强"</string>
+    <string name="feature_autoplay_summary" formatted="false">"解锁所有视频页的长按连播入口"</string>
+    <string name="feature_status_bar" formatted="false">"隐藏系统状态栏"</string>
+    <string name="feature_media_section" formatted="false">"内容下载与操作增强"</string>
+    <string name="feature_download" formatted="false">"强制无水印下载"</string>
+    <string name="feature_download_summary" formatted="false">"长按或分享菜单直接保存无水印原片"</string>
+    <string name="feature_music" formatted="false">"音频限制解锁"</string>
+    <string name="feature_music_summary" formatted="false">"解除版权与地区下架限制，恢复音频播放"</string>
+    <string name="feature_author_region" formatted="false">"显示作者位置"</string>
+    <string name="feature_author_region_summary" formatted="false">"在作者昵称旁显示国家/地区旗帜与代号"</string>
+    <string name="feature_copy_comment" formatted="false">"复制评论仅复制正文"</string>
+    <string name="feature_video_translation" formatted="false">"字幕和翻译入口"</string>
+    <string name="feature_video_translation_summary" formatted="false">"解锁长按菜单中的“字幕和翻译”入口"</string>
+    <string name="feature_comment_translation" formatted="false">"评论区一键翻译"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"在评论区添加翻译按钮，批量翻译外语评论"</string>
+    <string name="feature_filter_section" formatted="false">"动态流与精准过滤"</string>
+    <string name="feature_remove_ads" formatted="false">"移除信息流广告"</string>
+    <string name="feature_remove_live" formatted="false">"过滤推荐直播"</string>
+    <string name="feature_remove_photos" formatted="false">"过滤推荐图文"</string>
+    <string name="feature_filter_views" formatted="false">"浏览数过滤"</string>
+    <string name="feature_filter_likes" formatted="false">"点赞数过滤"</string>
+    <string name="feature_filter_duration" formatted="false">"视频时长过滤"</string>
+    <string name="feature_filter_keywords" formatted="false">"关键词过滤"</string>
+    <string name="feature_block_offline" formatted="false">"禁止插入离线视频"</string>
+    <string name="feature_block_offline_summary" formatted="false">"阻止网络不佳时插播预载的离线视频"</string>
+    <string name="feature_remove_ai" formatted="false">"移除AI生成内容"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"过滤TikTok标记为AI生成的视频"</string>
+    <string name="filter_metric_views" formatted="false">"播放数"</string>
+    <string name="filter_metric_likes" formatted="false">"点赞数"</string>
+    <string name="filter_metric_duration" formatted="false">"时长"</string>
+    <string name="filter_unit_seconds" formatted="false">"秒"</string>
+    <string name="filter_views_saved" formatted="false">"浏览数范围已保存"</string>
+    <string name="filter_likes_saved" formatted="false">"点赞数范围已保存"</string>
+    <string name="filter_duration_saved" formatted="false">"视频时长范围已保存"</string>
+    <string name="download_path_saved" formatted="false">"自定义保存路径已更新"</string>
+    <string name="region_spoof_title" formatted="false">"地区与 SIM 卡伪装"</string>
+    <string name="region_current" formatted="false">"当前配置"</string>
+    <string name="region_target" formatted="true">"目标地区: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"运营商: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"运营商代码: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"选择预设"</string>
+    <string name="region_custom_parameters" formatted="false">"自定义参数"</string>
+    <string name="language_spoof" formatted="false">"语言伪装"</string>
+    <string name="environment_follow_region" formatted="false">"跟随所选地区"</string>
+    <string name="language_effective" formatted="true">"生效语言: %1$s"</string>
+    <string name="language_custom" formatted="false">"自定义语言"</string>
+    <string name="timezone_spoof" formatted="false">"时区伪装"</string>
+    <string name="timezone_effective" formatted="true">"生效时区: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"自定义时区"</string>
+    <string name="gps_spoof" formatted="false">"位置定位伪装"</string>
+    <string name="gps_effective" formatted="true">"生效坐标: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"自定义经纬度"</string>
+    <string name="speed_fixed" formatted="false">"固定播放倍速"</string>
+    <string name="speed_fixed_summary" formatted="false">"长按菜单调节倍速后自动保持，切换视频不重置"</string>
+    <string name="speed_expand" formatted="false">"倍速选项拓展"</string>
+    <string name="speed_options_hint" formatted="false">"倍速档位（点击可修改或删除）"</string>
+    <string name="speed_add_option" formatted="false">"+ 添加倍速"</string>
+    <string name="speed_restore" formatted="false">"恢复默认"</string>
+    <string name="clean_on_play" formatted="false">"播放时自动清屏"</string>
+    <string name="clean_keep_progress" formatted="false">"保留进度条显示"</string>
+    <string name="download_paths" formatted="false">"自定义保存路径"</string>
+    <string name="download_paths_summary" formatted="true">"视频：%1$s · 图片：%2$s"</string>
+    <string name="filter_range_both" formatted="true">"保留%1$s %2$d%4$s ~ %3$d%4$s 的视频"</string>
+    <string name="filter_range_min" formatted="true">"保留%1$s ≥ %2$d%3$s 的视频"</string>
+    <string name="filter_range_max" formatted="true">"保留%1$s ≤ %2$d%3$s 的视频"</string>
+    <string name="filter_range_unset" formatted="false">"未设置范围（点击设置下限 / 上限）"</string>
+    <string name="keyword_unset" formatted="false">"未配置过滤规则（点击进入分类管理）"</string>
+    <string name="keyword_summary" formatted="true">"已启用：%1$s"</string>
+    <string name="keyword_description_count" formatted="true">"文案 %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"标签 %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"作者 %1$d"</string>
+    <string name="keyword_description" formatted="false">"文案"</string>
+    <string name="keyword_tag" formatted="false">"标签"</string>
+    <string name="keyword_author" formatted="false">"作者"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"暂无%1$s过滤规则，在上方输入添加"</string>
+    <string name="duration_alert_title" formatted="false">"长视频时长提示"</string>
+    <string name="duration_alert_summary" formatted="true">"当前阈值：≥ %1$s 分钟"</string>
+    <string name="download_video_path" formatted="false">"视频保存相对路径"</string>
+    <string name="download_image_path" formatted="false">"图片保存相对路径"</string>
+    <string name="download_path_hint" formatted="false">"一级目录须为公共媒体目录（如 Movies、Pictures、DCIM 等），非法输入将自动回退为系统默认值"</string>
+    <string name="views_range_title" formatted="false">"浏览数过滤范围"</string>
+    <string name="views_range_min" formatted="false">"播放数下限（0 = 不限制）"</string>
+    <string name="views_range_max" formatted="false">"播放数上限（0 = 不限制）"</string>
+    <string name="views_range_hint" formatted="false">"仅保留播放数在区间内的视频；两端均设 0 时该过滤不产生任何移除"</string>
+    <string name="likes_range_title" formatted="false">"点赞数过滤范围"</string>
+    <string name="likes_range_min" formatted="false">"点赞数下限（0 = 不限制）"</string>
+    <string name="likes_range_max" formatted="false">"点赞数上限（0 = 不限制）"</string>
+    <string name="likes_range_hint" formatted="false">"仅保留点赞数在区间内的视频；两端均设 0 时该过滤不产生任何移除"</string>
+    <string name="duration_range_title" formatted="false">"视频时长过滤范围"</string>
+    <string name="duration_range_min" formatted="false">"时长下限（秒，0 = 不限制）"</string>
+    <string name="duration_range_max" formatted="false">"时长上限（秒，0 = 不限制）"</string>
+    <string name="duration_range_hint" formatted="false">"仅保留推荐流中时长在区间内的视频；两端均设 0 时该过滤不产生任何移除；纯图文条目不受此时长限制影响"</string>
+    <string name="keyword_manage" formatted="false">"管理过滤规则"</string>
+    <string name="keyword_description_hint" formatted="false">"匹配视频正文文案与描述，忽略大小写。"</string>
+    <string name="keyword_tag_hint" formatted="false">"匹配话题标签（Hashtag），无需输入 # 前缀。"</string>
+    <string name="keyword_author_hint" formatted="false">"匹配作者昵称与唯一用户名，无需输入 @ 前缀。"</string>
+    <string name="keyword_description_input" formatted="false">"输入要过滤的文案短语"</string>
+    <string name="keyword_tag_input" formatted="false">"输入要过滤的话题标签"</string>
+    <string name="keyword_author_input" formatted="false">"输入作者昵称或唯一用户名"</string>
+    <string name="keyword_add" formatted="false">"添加规则"</string>
+    <string name="keyword_delete" formatted="false">"删除规则"</string>
+    <string name="region_select_title" formatted="false">"选择目标国家 / 地区"</string>
+    <string name="region_search" formatted="false">"搜索国家名称、英文或地区代码"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · 运营商代码: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"自定义地区与 SIM 卡"</string>
+    <string name="region_custom_hint" formatted="false">"自定义设置目标国家代码与运营商信息，不受预设限制。"</string>
+    <string name="region_code_input" formatted="false">"国家 / 地区代码 (如 JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"运营商代码 (如 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"运营商名称 (如 NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"选择常用语言，或手动输入目标语言代码。"</string>
+    <string name="language_code_input" formatted="false">"语言代码 (如 ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"常用语言快捷选择："</string>
+    <string name="timezone_custom_hint" formatted="false">"选择常用城市时区，或手动输入目标时区名称。"</string>
+    <string name="timezone_input" formatted="false">"时区名称 (如 Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"常用城市时区快捷选择："</string>
+    <string name="city_tokyo" formatted="false">"东京"</string>
+    <string name="city_taipei" formatted="false">"台北"</string>
+    <string name="city_hong_kong" formatted="false">"香港"</string>
+    <string name="city_new_york" formatted="false">"纽约"</string>
+    <string name="city_london" formatted="false">"伦敦"</string>
+    <string name="city_seoul" formatted="false">"首尔"</string>
+    <string name="city_bangkok" formatted="false">"曼谷"</string>
+    <string name="city_singapore" formatted="false">"新加坡"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"自定义位置坐标"</string>
+    <string name="gps_custom_hint" formatted="false">"选择常用城市定位，或手动输入经纬度坐标。"</string>
+    <string name="gps_latitude" formatted="false">"纬度 (-90.0 ~ 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"经度 (-180.0 ~ 180.0)"</string>
+    <string name="gps_presets" formatted="false">"常用城市快捷选择："</string>
+    <string name="speed_add_title" formatted="false">"添加倍速"</string>
+    <string name="speed_input" formatted="false">"倍速数值"</string>
+    <string name="speed_invalid" formatted="false">"请输入有效的数字"</string>
+    <string name="speed_out_of_range" formatted="true">"仅支持 %1$sx ~ %2$sx"</string>
+    <string name="speed_range" formatted="true">"支持范围：%1$sx ~ %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"修改倍速"</string>
+    <string name="duration_threshold_title" formatted="false">"设置时长提示阈值"</string>
+    <string name="duration_threshold_hint" formatted="false">"当视频时长达到此设定值时，将在视频切入起播时通过 Toast 提示“请注意！此视频时长xx分钟！”。"</string>
+    <string name="duration_threshold_input" formatted="false">"时长阈值（单位：分钟）"</string>
+    <string name="duration_threshold_example" formatted="false">"例如：3 或 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"请输入大于 0 的有效分钟数"</string>
+    <string name="duration_threshold_current" formatted="true">"当前设置：视频时长 ≥ %1$s 分钟时触发提醒"</string>
+    <string name="duration_threshold_presets" formatted="false">"常用推荐时长快捷填入："</string>
+    <string name="status_feature_feed" formatted="false">"信息流过滤"</string>
+    <string name="status_feature_speed" formatted="false">"播放倍速"</string>
+    <string name="status_feature_progress" formatted="false">"进度条"</string>
+    <string name="status_feature_clean" formatted="false">"自动清屏"</string>
+    <string name="status_feature_immersive" formatted="false">"视频显示"</string>
+    <string name="status_feature_scroll" formatted="false">"自动滚动"</string>
+    <string name="status_feature_duration" formatted="false">"时长提示"</string>
+    <string name="status_feature_comment_translate" formatted="false">"评论翻译"</string>
+    <string name="status_feature_video_translate" formatted="false">"字幕和翻译入口"</string>
+    <string name="status_feature_comment_copy" formatted="false">"评论复制"</string>
+    <string name="status_feature_author" formatted="false">"作者地区"</string>
+    <string name="status_feature_download" formatted="false">"视频保存"</string>
+    <string name="status_feature_music" formatted="false">"音频限制"</string>
+    <string name="status_feature_sim" formatted="false">"SIM 与国家代码"</string>
+    <string name="status_feature_language" formatted="false">"语言"</string>
+    <string name="status_feature_timezone" formatted="false">"时区"</string>
+    <string name="status_feature_gps" formatted="false">"定位"</string>
+    <string name="status_feature_bar" formatted="false">"状态栏"</string>
+    <string name="status_normal" formatted="false">"正常"</string>
+    <string name="status_issue" formatted="false">"有问题"</string>
+    <string name="status_disabled" formatted="false">"未开启"</string>
+    <string name="status_pending" formatted="false">"待确认"</string>
+    <string name="status_problem_disabled" formatted="false">"当前未开启，有异常记录"</string>
+    <string name="status_problem_unavailable" formatted="false">"功能暂不可用"</string>
+    <string name="status_problem_runtime" formatted="false">"运行时出现异常"</string>
+    <string name="status_problem_speed_menu" formatted="false">"倍速菜单暂不可用"</string>
+    <string name="status_prepare_failed" formatted="false">"功能准备失败，请重新打开 TikTok 后查看。"</string>
+    <string name="status_preparing" formatted="false">"正在准备功能，请稍候。"</string>
+    <string name="status_prepared" formatted="false">"准备已完成，请重新打开 TikTok。"</string>
+    <string name="status_read_failed" formatted="false">"暂时无法读取状态，请稍后查看。"</string>
+    <string name="status_update_failed" formatted="false">"暂时无法更新状态，当前显示的是最近一次结果。"</string>
+    <string name="status_reading" formatted="false">"正在读取状态"</string>
+    <string name="status_empty" formatted="false">"暂无运行记录，请在 LSPosed 中启用 Toki 并打开 TikTok 后查看。"</string>
+    <string name="status_report_note" formatted="true">"最近报告：%1$s\n“正常”表示功能已就绪且未报告异常。"</string>
+    <string name="config_section" formatted="false">"配置管理"</string>
+    <string name="config_import" formatted="false">"导入配置"</string>
+    <string name="config_import_summary" formatted="false">"从文件恢复功能设置"</string>
+    <string name="config_export" formatted="false">"导出配置"</string>
+    <string name="config_export_summary" formatted="false">"将功能设置保存为文件"</string>
+    <string name="config_exported" formatted="false">"配置已导出到所选位置。文件可能包含关键词、地区和目录设置，请妥善保管。"</string>
+    <string name="config_import_confirm" formatted="true">"文件包含 %1$d 项设置。导入将覆盖全部功能配置，未包含的项目恢复默认值。\n\n界面语言、桌面图标、LSPosed 授权和 TikTok 适配缓存不会改变。是否继续？"</string>
+    <string name="config_overwrite" formatted="false">"确认覆盖"</string>
+    <string name="config_imported" formatted="false">"配置已导入，功能页已同步。支持热更新的功能立即应用；其他功能请重新打开 TikTok 后验证。"</string>
+    <string name="config_processing" formatted="false">"正在处理配置"</string>
+    <string name="config_error_io" formatted="false">"文件读写失败，请检查所选位置和可用空间。"</string>
+    <string name="config_error_permission" formatted="false">"没有访问所选文件的权限，请重新选择。"</string>
+    <string name="config_error_invalid" formatted="false">"文件不是有效的 Toki 配置，未导入任何设置。"</string>
+    <string name="config_error_validation" formatted="true">"配置校验失败：%1$s。未导入任何设置。"</string>
+    <string name="config_error_commit" formatted="false">"配置提交未确认成功，请重新打开 Toki 核查后重试。"</string>
+    <string name="sponsor_title" formatted="false">"支持作者"</string>
+    <string name="sponsor_kofi" formatted="false">"Ko-fi 赞助"</string>
+    <string name="sponsor_alipay" formatted="false">"支付宝"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"支付宝收款码"</string>
+    <string name="sponsor_saving" formatted="false">"正在保存…"</string>
+    <string name="sponsor_save_image" formatted="false">"保存图片到本地"</string>
+    <string name="sponsor_image_hint" formatted="false">"提示：可保存完整原图，在支付宝 App 中选择已保存的图片识别"</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT 地址已复制"</string>
+    <string name="sponsor_image_saved" formatted="false">"图片已保存到所选位置"</string>
+    <string name="sponsor_error_io" formatted="false">"保存失败：无法完成文件写入，请检查所选位置和可用空间后重试。"</string>
+    <string name="sponsor_error_permission" formatted="false">"保存失败：所选位置未授予写入权限，请重新选择。"</string>
+    <string name="feature_filter_topics" formatted="false">"过滤话题推荐"</string>
+    <string name="feature_filter_creators" formatted="false">"过滤创作者推荐"</string>
+    <string name="host_scan_title_complete" formatted="false">"查找完成"</string>
+    <string name="host_scan_title_failed" formatted="false">"查找未完成"</string>
+    <string name="host_scan_restart_hint" formatted="false">"请手动重启 TikTok 以应用结果。"</string>
+    <string name="host_scan_failure_hint" formatted="false">"请在 Toki 查看功能诊断。"</string>
+    <string name="layout_title" formatted="false">"页面布局净化"</string>
+    <string name="layout_summary" formatted="false">"分区选择需要隐藏的控件"</string>
+    <string name="layout_hint" formatted="false">"开启开关即可隐藏对应控件"</string>
+    <string name="layout_top" formatted="false">"顶部导航"</string>
+    <string name="layout_bottom" formatted="false">"底部导航"</string>
+    <string name="layout_side" formatted="false">"视频页面"</string>
+    <string name="layout_search" formatted="false">"搜索入口"</string>
+    <string name="layout_live" formatted="false">"直播入口"</string>
+    <string name="layout_friends" formatted="false">"好友"</string>
+    <string name="layout_following" formatted="false">"关注"</string>
+    <string name="layout_shop" formatted="false">"商城"</string>
+    <string name="layout_for_you" formatted="false">"推荐"</string>
+    <string name="layout_nearby" formatted="false">"附近"</string>
+    <string name="layout_stem" formatted="false">"科普"</string>
+    <string name="layout_series" formatted="false">"短剧"</string>
+    <string name="layout_home" formatted="false">"首页"</string>
+    <string name="layout_create" formatted="false">"发布"</string>
+    <string name="layout_inbox" formatted="false">"收件箱"</string>
+    <string name="layout_profile" formatted="false">"主页"</string>
+    <string name="layout_discover" formatted="false">"发现"</string>
+    <string name="layout_avatar" formatted="false">"作者头像"</string>
+    <string name="layout_follow" formatted="false">"头像关注按钮"</string>
+    <string name="layout_like" formatted="false">"点赞"</string>
+    <string name="layout_comment" formatted="false">"评论"</string>
+    <string name="layout_favorite" formatted="false">"收藏"</string>
+    <string name="layout_share" formatted="false">"转发"</string>
+    <string name="layout_music" formatted="false">"音乐唱片"</string>
+    <string name="layout_explore" formatted="false">"社区"</string>
+    <string name="layout_author" formatted="false">"作者信息"</string>
+    <string name="layout_description" formatted="false">"文案内容"</string>
+    <string name="layout_music_title" formatted="false">"音乐信息"</string>
+    <string name="layout_tags" formatted="false">"信息标签"</string>
+    <string name="layout_search_label" formatted="false">"搜索标签"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"停止连播按钮"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"金币与奖励"</string>
+    <string name="layout_quick_comment" formatted="false">"快捷评论"</string>
+    <string name="layout_playlist" formatted="false">"合集入口"</string>
+    <string name="layout_creation_buttons" formatted="false">"创作快捷按钮"</string>
+    <string name="layout_live_notice" formatted="false">"直播预约"</string>
+    <string name="layout_opacity" formatted="false">"不透明度"</string>
+    <string name="feature_background_audio">"解锁背景音频"</string>
+    <string name="layout_landscape">"全屏入口"</string>
+    <string name="layout_photo_indicators">"图集指示与滑动提示"</string>
+    <string name="layout_quick_message">"快捷私信与分享来源"</string>
+    <string name="layout_user_card">"推荐用户卡片"</string>
+    <string name="layout_survey">"问卷与反馈"</string>
+    <string name="layout_ad_cards">"商品与广告卡片"</string>
+    <string name="layout_bottom_banners">"其他底部横幅"</string>
+    <string name="layout_activities">"活动入口"</string>
+    <string name="host_scan_title_running" formatted="false">"正在查找方法"</string>
+    <string name="host_scan_title_saving" formatted="false">"正在保存结果"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"保持 TikTok 在前台。"</string>
+    <string name="host_scan_saving_hint" formatted="false">"请稍候。"</string>
+    <string name="host_scan_done" formatted="false">"知道了"</string>
+    <string name="video_fit_center" formatted="false">"居中"</string>
+    <string name="video_fit_smart" formatted="false">"全屏沉浸"</string>
+</resources>

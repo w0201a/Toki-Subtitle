@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Sākums"</string>
+    <string name="nav_features" formatted="false">"Funkcijas"</string>
+    <string name="page_features" formatted="false">"Iestatījumi"</string>
+    <string name="page_hook_status" formatted="false">"Funkciju statuss"</string>
+    <string name="nav_back" formatted="false">"Atpakaļ"</string>
+    <string name="restart_tiktok" formatted="false">"Restartēt TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Piešķiriet Toki root piekļuvi."</string>
+    <string name="language_title" formatted="false">"Saskarnes valoda"</string>
+    <string name="language_system" formatted="false">"Izmantot sistēmas valodu"</string>
+    <string name="language_search" formatted="false">"Meklēt valodas"</string>
+    <string name="language_clear_search" formatted="false">"Notīrīt meklēšanu"</string>
+    <string name="language_no_results" formatted="false">"Nav atbilstošu valodu"</string>
+    <string name="common_save" formatted="false">"Saglabāt"</string>
+    <string name="common_cancel" formatted="false">"Atcelt"</string>
+    <string name="common_confirm" formatted="false">"Labi"</string>
+    <string name="common_close" formatted="false">"Aizvērt"</string>
+    <string name="common_open" formatted="false">"Atvērt"</string>
+    <string name="common_copy" formatted="false">"Kopēt"</string>
+    <string name="common_add" formatted="false">"Pievienot"</string>
+    <string name="common_delete" formatted="false">"Dzēst"</string>
+    <string name="common_done" formatted="false">"Gatavs"</string>
+    <string name="common_save_apply" formatted="false">"Lietot"</string>
+    <string name="common_unknown" formatted="false">"Nezināms"</string>
+    <string name="common_custom" formatted="false">"Pielāgots"</string>
+    <string name="home_icon_hidden" formatted="false">"Lietotnes ikona paslēpta"</string>
+    <string name="home_icon_restored" formatted="false">"Lietotnes ikona atjaunota"</string>
+    <string name="home_activated" formatted="false">"Aktivizēts"</string>
+    <string name="home_inactive" formatted="false">"Nav aktivizēts"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosed aktivizācija nav konstatēta"</string>
+    <string name="home_host_section" formatted="false">"TikTok saderība"</string>
+    <string name="home_host_current" formatted="false">"Instalētais TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Ierīcē nav atrasta atbalstīta TikTok instalācija"</string>
+    <string name="home_host_not_installed" formatted="false">"Nav instalēts"</string>
+    <string name="home_supported_versions" formatted="false">"Atbalstītās versijas"</string>
+    <string name="home_community" formatted="false">"Atvērtais pirmkods un kopiena"</string>
+    <string name="home_github" formatted="false">"GitHub repozitorijs"</string>
+    <string name="home_telegram" formatted="false">"Telegram grupa"</string>
+    <string name="home_preferences" formatted="false">"Moduļa preferences"</string>
+    <string name="home_hide_icon" formatted="false">"Paslēpt lietotnes ikonu"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Kad ikona paslēpta, atveriet Toki ar LSPosed pārvaldnieku"</string>
+    <string name="home_support" formatted="false">"Atbalstīt izstrādi"</string>
+    <string name="home_support_summary" formatted="false">"Atbalstiet turpmāku uzturēšanu un uzlabojumus"</string>
+    <string name="feature_region_section" formatted="false">"Reģions un ierīce"</string>
+    <string name="feature_playback_section" formatted="false">"Atskaņošana"</string>
+    <string name="feature_progress" formatted="false">"Vienmēr rādīt norises joslu"</string>
+    <string name="feature_progress_summary" formatted="false">"Rādīt norises joslu arī īsos video"</string>
+    <string name="feature_immersive" formatted="false">"Video attēlojums"</string>
+    <string name="feature_autoplay" formatted="false">"Uzlabota automātiskā ritināšana"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Atbloķē automātisko ritināšanu visu video izvēlnēs"</string>
+    <string name="feature_status_bar" formatted="false">"Paslēpt sistēmas statusa joslu"</string>
+    <string name="feature_media_section" formatted="false">"Lejupielādes un darbības"</string>
+    <string name="feature_download" formatted="false">"Lejupielāde bez ūdenszīmes"</string>
+    <string name="feature_download_summary" formatted="false">"Saglabāt oriģinālo video bez ūdenszīmes ilgās nospiešanas vai kopīgošanas izvēlnē"</string>
+    <string name="feature_music" formatted="false">"Atbloķēt audio"</string>
+    <string name="feature_music_summary" formatted="false">"Atjaunot licenču vai reģiona ierobežoto audio atskaņošanu"</string>
+    <string name="feature_author_region" formatted="false">"Rādīt autora reģionu"</string>
+    <string name="feature_author_region_summary" formatted="false">"Blakus autora vārdam rādīt valsts vai reģiona karogu un kodu"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopēt tikai tekstu"</string>
+    <string name="feature_video_translation" formatted="false">"Subtitru un tulkošanas izvēlne"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Rādīt opciju ilgā nospiediena izvēlnē"</string>
+    <string name="feature_comment_translation" formatted="false">"Tulkot komentārus"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Pievienot pogu vairāku svešvalodas komentāru tulkošanai"</string>
+    <string name="feature_filter_section" formatted="false">"Plūsmas filtrēšana"</string>
+    <string name="feature_remove_ads" formatted="false">"Noņemt reklāmas plūsmā"</string>
+    <string name="feature_remove_live" formatted="false">"Slēpt tiešraides"</string>
+    <string name="feature_remove_photos" formatted="false">"Slēpt foto ierakstus"</string>
+    <string name="feature_filter_views" formatted="false">"Skatījumu skaita filtrs"</string>
+    <string name="feature_filter_likes" formatted="false">"Atzīmju Patīk skaita filtrs"</string>
+    <string name="feature_filter_duration" formatted="false">"Video ilguma filtrs"</string>
+    <string name="feature_filter_keywords" formatted="false">"Atslēgvārdu filtrs"</string>
+    <string name="feature_block_offline" formatted="false">"Bloķēt bezsaistes video"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Neļaut ievietot iepriekš ielādētus bezsaistes video vāja savienojuma laikā"</string>
+    <string name="feature_remove_ai" formatted="false">"Slēpt MI ģenerētus video"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtrēt video, ko TikTok atzīmē kā MI ģenerētus"</string>
+    <string name="filter_metric_views" formatted="false">"skatījumi"</string>
+    <string name="filter_metric_likes" formatted="false">"atzīmes Patīk"</string>
+    <string name="filter_metric_duration" formatted="false">"ilgums"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Skatījumu diapazons saglabāts"</string>
+    <string name="filter_likes_saved" formatted="false">"Atzīmju Patīk diapazons saglabāts"</string>
+    <string name="filter_duration_saved" formatted="false">"Video ilguma diapazons saglabāts"</string>
+    <string name="download_path_saved" formatted="false">"Pielāgotie saglabāšanas ceļi atjaunināti"</string>
+    <string name="region_spoof_title" formatted="false">"Reģiona un SIM imitācija"</string>
+    <string name="region_current" formatted="false">"Pašreizējā konfigurācija"</string>
+    <string name="region_target" formatted="true">"Mērķa reģions: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operators: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Operatora kods: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Sākumiestatījumi"</string>
+    <string name="region_custom_parameters" formatted="false">"Pielāgot"</string>
+    <string name="language_spoof" formatted="false">"Valodas imitācija"</string>
+    <string name="environment_follow_region" formatted="false">"Pēc reģiona"</string>
+    <string name="language_effective" formatted="true">"Aktīvā valoda: %1$s"</string>
+    <string name="language_custom" formatted="false">"Pielāgota valoda"</string>
+    <string name="timezone_spoof" formatted="false">"Laika joslas imitācija"</string>
+    <string name="timezone_effective" formatted="true">"Aktīvā laika josla: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Pielāgota laika josla"</string>
+    <string name="gps_spoof" formatted="false">"Atrašanās vietas imitācija"</string>
+    <string name="gps_effective" formatted="true">"Aktīvās koordinātas: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Pielāgotas koordinātas"</string>
+    <string name="speed_fixed" formatted="false">"Saglabāt atskaņošanas ātrumu"</string>
+    <string name="speed_fixed_summary" formatted="false">"Mainot video, saglabāt ilgās nospiešanas izvēlnē izvēlēto ātrumu"</string>
+    <string name="speed_expand" formatted="false">"Vairāk ātrumu"</string>
+    <string name="speed_options_hint" formatted="false">"Ātruma opcijas (pieskarieties, lai mainītu vai dzēstu)"</string>
+    <string name="speed_add_option" formatted="false">"+ Pievienot ātrumu"</string>
+    <string name="speed_restore" formatted="false">"Atiestatīt"</string>
+    <string name="clean_on_play" formatted="false">"Atskaņojot paslēpt vadīklas"</string>
+    <string name="clean_keep_progress" formatted="false">"Paturēt norises joslu"</string>
+    <string name="download_paths" formatted="false">"Saglabāšanas mapes"</string>
+    <string name="download_paths_summary" formatted="true">"Video: %1$s · Attēli: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Saglabāt video, kam %1$s ir no %2$d%4$s līdz %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Saglabāt video, kam %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Saglabāt video, kam %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Diapazons nav iestatīts (pieskarieties, lai iestatītu minimumu vai maksimumu)"</string>
+    <string name="keyword_unset" formatted="false">"Pieskarieties, lai pievienotu kārtulu"</string>
+    <string name="keyword_summary" formatted="true">"Ieslēgts: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Teksti %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Tēmturi %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Autori %1$d"</string>
+    <string name="keyword_description" formatted="false">"Teksti"</string>
+    <string name="keyword_tag" formatted="false">"Tēmturi"</string>
+    <string name="keyword_author" formatted="false">"Autori"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Kategorijā %1$s nav kārtulu. Pievienojiet augstāk."</string>
+    <string name="duration_alert_title" formatted="false">"Brīdinājums par gariem video"</string>
+    <string name="duration_alert_summary" formatted="true">"Pašreizējais slieksnis: ≥ %1$s minūtes"</string>
+    <string name="download_video_path" formatted="false">"Video mape"</string>
+    <string name="download_image_path" formatted="false">"Attēlu mape"</string>
+    <string name="download_path_hint" formatted="false">"Pirmajai mapei jābūt publiskai multivides mapei, piemēram, Movies, Pictures vai DCIM. Nederīgiem ceļiem izmanto sistēmas noklusējumu."</string>
+    <string name="views_range_title" formatted="false">"Skatījumu skaita diapazons"</string>
+    <string name="views_range_min" formatted="false">"Minimālie skatījumi (0 = bez ierobežojuma)"</string>
+    <string name="views_range_max" formatted="false">"Maksimālie skatījumi (0 = bez ierobežojuma)"</string>
+    <string name="views_range_hint" formatted="false">"Saglabāt tikai video šajā skatījumu diapazonā. Ja abas robežas ir 0, nekas netiek noņemts."</string>
+    <string name="likes_range_title" formatted="false">"Atzīmju Patīk skaita diapazons"</string>
+    <string name="likes_range_min" formatted="false">"Minimālās atzīmes Patīk (0 = bez ierobežojuma)"</string>
+    <string name="likes_range_max" formatted="false">"Maksimālās atzīmes Patīk (0 = bez ierobežojuma)"</string>
+    <string name="likes_range_hint" formatted="false">"Saglabāt tikai video šajā atzīmju Patīk diapazonā. Ja abas robežas ir 0, nekas netiek noņemts."</string>
+    <string name="duration_range_title" formatted="false">"Video ilguma diapazons"</string>
+    <string name="duration_range_min" formatted="false">"Minimālais ilgums (sekundes; 0 = bez ierobežojuma)"</string>
+    <string name="duration_range_max" formatted="false">"Maksimālais ilgums (sekundes; 0 = bez ierobežojuma)"</string>
+    <string name="duration_range_hint" formatted="false">"Saglabāt tikai ieteiktos video šajā ilguma diapazonā. Ja abas robežas ir 0, nekas netiek noņemts. Fotoieraksti netiek ietekmēti."</string>
+    <string name="keyword_manage" formatted="false">"Filtrēšanas kārtulas"</string>
+    <string name="keyword_description_hint" formatted="false">"Meklēt video tekstos un aprakstos neatkarīgi no burtu reģistra."</string>
+    <string name="keyword_tag_hint" formatted="false">"Meklēt tēmturus. Neievadiet prefiksu #."</string>
+    <string name="keyword_author_hint" formatted="false">"Meklēt autoru vārdus un unikālos lietotājvārdus. Neievadiet prefiksu @."</string>
+    <string name="keyword_description_input" formatted="false">"Atslēgvārds tekstā"</string>
+    <string name="keyword_tag_input" formatted="false">"Tēmturis"</string>
+    <string name="keyword_author_input" formatted="false">"Vārds vai lietotājvārds"</string>
+    <string name="keyword_add" formatted="false">"Pievienot kārtulu"</string>
+    <string name="keyword_delete" formatted="false">"Dzēst kārtulu"</string>
+    <string name="region_select_title" formatted="false">"Izvēlēties reģionu"</string>
+    <string name="region_search" formatted="false">"Valsts nosaukums vai kods"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Operatora kods: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Pielāgots reģions un SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Iestatiet valsts kodu un operatoru bez sākotnējo iestatījumu ierobežojumiem."</string>
+    <string name="region_code_input" formatted="false">"Valsts vai reģiona kods (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Operatora kods (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Operatora nosaukums (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Izvēlieties bieži lietotu valodu vai ievadiet valodas kodu."</string>
+    <string name="language_code_input" formatted="false">"Valodas kods (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Valodas"</string>
+    <string name="timezone_custom_hint" formatted="false">"Izvēlieties bieži lietotas pilsētas laika joslu vai ievadiet laika joslas nosaukumu."</string>
+    <string name="timezone_input" formatted="false">"Laika joslas nosaukums (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Pilsētas"</string>
+    <string name="city_tokyo" formatted="false">"Tokija"</string>
+    <string name="city_taipei" formatted="false">"Taipeja"</string>
+    <string name="city_hong_kong" formatted="false">"Honkonga"</string>
+    <string name="city_new_york" formatted="false">"Ņujorka"</string>
+    <string name="city_london" formatted="false">"Londona"</string>
+    <string name="city_seoul" formatted="false">"Seula"</string>
+    <string name="city_bangkok" formatted="false">"Bangkoka"</string>
+    <string name="city_singapore" formatted="false">"Singapūra"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Pielāgota vieta"</string>
+    <string name="gps_custom_hint" formatted="false">"Izvēlieties pilsētu vai ievadiet platumu un garumu."</string>
+    <string name="gps_latitude" formatted="false">"Platums (no -90.0 līdz 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Garums (no -180.0 līdz 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Pilsētas"</string>
+    <string name="speed_add_title" formatted="false">"Pievienot ātrumu"</string>
+    <string name="speed_input" formatted="false">"Ātrums"</string>
+    <string name="speed_invalid" formatted="false">"Ievadiet derīgu skaitli"</string>
+    <string name="speed_out_of_range" formatted="true">"Atbalstīts tikai no %1$sx līdz %2$sx"</string>
+    <string name="speed_range" formatted="true">"Atbalstītais diapazons: no %1$sx līdz %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Mainīt ātrumu"</string>
+    <string name="duration_threshold_title" formatted="false">"Gara video brīdinājums"</string>
+    <string name="duration_threshold_hint" formatted="false">"Kad video sasniedz šo ilgumu, atskaņošanas sākumā īss paziņojums brīdina par tā ilgumu minūtēs."</string>
+    <string name="duration_threshold_input" formatted="false">"Ilguma slieksnis (minūtes)"</string>
+    <string name="duration_threshold_example" formatted="false">"Piemēram: 3 vai 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Ievadiet derīgu minūšu skaitu, kas lielāks par 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Pašreizējais iestatījums: brīdināt par video ≥ %1$s minūtes"</string>
+    <string name="duration_threshold_presets" formatted="false">"Ieteicamie ilgumi:"</string>
+    <string name="status_feature_feed" formatted="false">"Plūsmas filtrs"</string>
+    <string name="status_feature_speed" formatted="false">"Ātrums"</string>
+    <string name="status_feature_progress" formatted="false">"Norises josla"</string>
+    <string name="status_feature_clean" formatted="false">"Automātiska slēpšana"</string>
+    <string name="status_feature_immersive" formatted="false">"Video attēlojums"</string>
+    <string name="status_feature_scroll" formatted="false">"Automātiska ritināšana"</string>
+    <string name="status_feature_duration" formatted="false">"Ilguma brīdinājums"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Komentāru tulkojums"</string>
+    <string name="status_feature_video_translate" formatted="false">"Subtitru un tulkošanas izvēlne"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Komentāru kopēšana"</string>
+    <string name="status_feature_author" formatted="false">"Autora reģions"</string>
+    <string name="status_feature_download" formatted="false">"Video saglabāšana"</string>
+    <string name="status_feature_music" formatted="false">"Audio ierobežojumi"</string>
+    <string name="status_feature_sim" formatted="false">"Reģions un SIM"</string>
+    <string name="status_feature_language" formatted="false">"Valoda"</string>
+    <string name="status_feature_timezone" formatted="false">"Laika josla"</string>
+    <string name="status_feature_gps" formatted="false">"Vieta"</string>
+    <string name="status_feature_bar" formatted="false">"Statusa josla"</string>
+    <string name="status_normal" formatted="false">"Darbojas"</string>
+    <string name="status_issue" formatted="false">"Problēma"</string>
+    <string name="status_disabled" formatted="false">"Izslēgts"</string>
+    <string name="status_pending" formatted="false">"Gaida"</string>
+    <string name="status_problem_disabled" formatted="false">"Izslēgts, reģistrēta kļūda"</string>
+    <string name="status_problem_unavailable" formatted="false">"Pašlaik nav pieejams"</string>
+    <string name="status_problem_runtime" formatted="false">"Darbības kļūda"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Ātruma izvēlne nav pieejama"</string>
+    <string name="status_prepare_failed" formatted="false">"Funkciju sagatavošana neizdevās. Atveriet TikTok vēlreiz un pārbaudiet."</string>
+    <string name="status_preparing" formatted="false">"Notiek funkciju sagatavošana. Lūdzu, uzgaidiet."</string>
+    <string name="status_prepared" formatted="false">"Sagatavošana pabeigta. Atveriet TikTok vēlreiz."</string>
+    <string name="status_read_failed" formatted="false">"Pašlaik nevar nolasīt statusu. Pārbaudiet vēlāk."</string>
+    <string name="status_update_failed" formatted="false">"Pašlaik nevar atjaunināt statusu. Tiek rādīts jaunākais rezultāts."</string>
+    <string name="status_reading" formatted="false">"Nolasa statusu"</string>
+    <string name="status_empty" formatted="false">"Nav darbības ierakstu. Ieslēdziet Toki LSPosed, atveriet TikTok un pārbaudiet vēlreiz."</string>
+    <string name="status_report_note" formatted="true">"Jaunākais ziņojums: %1$s\n“Darbojas” nozīmē, ka funkcija ir gatava un nav ziņojusi par kļūdām."</string>
+    <string name="config_section" formatted="false">"Konfigurācija"</string>
+    <string name="config_import" formatted="false">"Importēt iestatījumus"</string>
+    <string name="config_import_summary" formatted="false">"Atjaunot funkciju iestatījumus no faila"</string>
+    <string name="config_export" formatted="false">"Eksportēt iestatījumus"</string>
+    <string name="config_export_summary" formatted="false">"Saglabāt funkciju iestatījumus failā"</string>
+    <string name="config_exported" formatted="false">"Konfigurācija eksportēta izvēlētajā vietā. Failā var būt atslēgvārdi, reģioni un mapju iestatījumi. Glabājiet to droši."</string>
+    <string name="config_import_confirm" formatted="true">"Failā ir %1$d iestatījumi. Importēšana aizstās visus funkciju iestatījumus; trūkstošie tiks atiestatīti uz noklusējumu.\n\nSaskarnes valoda, lietotnes ikona, LSPosed atļauja un TikTok saderības kešatmiņa nemainīsies. Turpināt?"</string>
+    <string name="config_overwrite" formatted="false">"Aizstāt"</string>
+    <string name="config_imported" formatted="false">"Konfigurācija importēta, iestatījumi atjaunināti. Izmaiņas, kas atbalsta atjaunināšanu darbības laikā, stājas spēkā uzreiz. Pārējās pārbaudiet, atkārtoti atverot TikTok."</string>
+    <string name="config_processing" formatted="false">"Apstrāde…"</string>
+    <string name="config_error_io" formatted="false">"Nevar nolasīt vai ierakstīt failu. Pārbaudiet izvēlēto vietu un brīvo vietu."</string>
+    <string name="config_error_permission" formatted="false">"Nav atļaujas piekļūt izvēlētajam failam. Izvēlieties to vēlreiz."</string>
+    <string name="config_error_invalid" formatted="false">"Šis nav derīgs Toki konfigurācijas fails. Nekādi iestatījumi netika importēti."</string>
+    <string name="config_error_validation" formatted="true">"Konfigurācijas pārbaude neizdevās: %1$s. Nekādi iestatījumi netika importēti."</string>
+    <string name="config_error_commit" formatted="false">"Konfigurācijas saglabāšanu nevarēja apstiprināt. Pirms atkārtošanas atveriet Toki un pārbaudiet."</string>
+    <string name="sponsor_title" formatted="false">"Atbalstīt izstrādātāju"</string>
+    <string name="sponsor_kofi" formatted="false">"Atbalstīt vietnē Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay maksājuma QR kods"</string>
+    <string name="sponsor_saving" formatted="false">"Saglabā…"</string>
+    <string name="sponsor_save_image" formatted="false">"Saglabāt attēlu"</string>
+    <string name="sponsor_image_hint" formatted="false">"Saglabājiet pilnu oriģinālo attēlu, tad izvēlieties to Alipay, lai nolasītu kodu."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT adrese nokopēta"</string>
+    <string name="sponsor_image_saved" formatted="false">"Attēls saglabāts izvēlētajā vietā"</string>
+    <string name="sponsor_error_io" formatted="false">"Saglabāšana neizdevās. Pārbaudiet izvēlēto vietu un brīvo vietu, tad mēģiniet vēlreiz."</string>
+    <string name="sponsor_error_permission" formatted="false">"Saglabāšana neizdevās. Šajā vietā nav rakstīšanas atļaujas. Izvēlieties citu vietu."</string>
+    <string name="feature_filter_topics" formatted="false">"Slēpt ieteiktās tēmas"</string>
+    <string name="feature_filter_creators" formatted="false">"Slēpt ieteiktos veidotājus"</string>
+    <string name="host_scan_title_complete" formatted="false">"Meklēšana pabeigta"</string>
+    <string name="host_scan_title_failed" formatted="false">"Meklēšana neizdevās"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Manuāli restartējiet TikTok, lai lietotu rezultātus."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Skatiet funkciju diagnostiku lietotnē Toki."</string>
+    <string name="layout_title" formatted="false">"Lapas izkārtojums"</string>
+    <string name="layout_summary" formatted="false">"Izvēlieties slēpjamos elementus"</string>
+    <string name="layout_hint" formatted="false">"Ieslēdziet slēdzi, lai paslēptu elementu"</string>
+    <string name="layout_top" formatted="false">"Augšējā josla"</string>
+    <string name="layout_bottom" formatted="false">"Apakšējā josla"</string>
+    <string name="layout_side" formatted="false">"Video lapa"</string>
+    <string name="layout_search" formatted="false">"Meklēt"</string>
+    <string name="layout_live" formatted="false">"TIEŠRAIDE"</string>
+    <string name="layout_friends" formatted="false">"Draugi"</string>
+    <string name="layout_following" formatted="false">"Sekoju"</string>
+    <string name="layout_shop" formatted="false">"Veikals"</string>
+    <string name="layout_for_you" formatted="false">"Jums"</string>
+    <string name="layout_nearby" formatted="false">"Tuvumā"</string>
+    <string name="layout_stem" formatted="false">"Zinātne"</string>
+    <string name="layout_series" formatted="false">"Seriāli"</string>
+    <string name="layout_home" formatted="false">"Sākums"</string>
+    <string name="layout_create" formatted="false">"Izveidot"</string>
+    <string name="layout_inbox" formatted="false">"Iesūtne"</string>
+    <string name="layout_profile" formatted="false">"Profils"</string>
+    <string name="layout_discover" formatted="false">"Atklāt"</string>
+    <string name="layout_avatar" formatted="false">"Profila attēls"</string>
+    <string name="layout_follow" formatted="false">"Sekošanas poga"</string>
+    <string name="layout_like" formatted="false">"Patīk"</string>
+    <string name="layout_comment" formatted="false">"Komentāri"</string>
+    <string name="layout_favorite" formatted="false">"Izlase"</string>
+    <string name="layout_share" formatted="false">"Kopīgot"</string>
+    <string name="layout_music" formatted="false">"Mūzikas disks"</string>
+    <string name="layout_explore" formatted="false">"Pārlūkot"</string>
+    <string name="layout_author" formatted="false">"Autora informācija"</string>
+    <string name="layout_description" formatted="false">"Apraksts"</string>
+    <string name="layout_music_title" formatted="false">"Mūzikas nosaukums"</string>
+    <string name="layout_tags" formatted="false">"Informācijas etiķetes"</string>
+    <string name="layout_search_label" formatted="false">"Meklēšanas ieteikums"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Automātiskās ritināšanas apturēšanas poga"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Monētas un atlīdzības"</string>
+    <string name="layout_quick_comment" formatted="false">"Ātrie komentāri"</string>
+    <string name="layout_playlist" formatted="false">"Atskaņošanas saraksts"</string>
+    <string name="layout_creation_buttons" formatted="false">"Izveides saīsnes"</string>
+    <string name="layout_live_notice" formatted="false">"LIVE atgādinājumi"</string>
+    <string name="layout_opacity" formatted="false">"Necaurspīdīgums"</string>
+    <string name="feature_background_audio">"Atbloķēt fona audio"</string>
+    <string name="layout_landscape">"Pilnekrāna poga"</string>
+    <string name="layout_photo_indicators">"Foto indikatori un padomi"</string>
+    <string name="layout_quick_message">"Ātrās ziņas un kopīgotājs"</string>
+    <string name="layout_user_card">"Ieteiktie konti"</string>
+    <string name="layout_survey">"Aptaujas un atsauksmes"</string>
+    <string name="layout_ad_cards">"Produktu un reklāmu kartītes"</string>
+    <string name="layout_bottom_banners">"Citi apakšējie baneri"</string>
+    <string name="layout_activities">"Pasākumu poga"</string>
+    <string name="host_scan_title_running" formatted="false">"Metožu meklēšana"</string>
+    <string name="host_scan_title_saving" formatted="false">"Rezultātu saglabāšana"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Atstājiet TikTok priekšplānā."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Lūdzu, uzgaidiet."</string>
+    <string name="host_scan_done" formatted="false">"Sapratu"</string>
+    <string name="video_fit_center" formatted="false">"Centrēts"</string>
+    <string name="video_fit_smart" formatted="false">"Pilnekrāns"</string>
+</resources>

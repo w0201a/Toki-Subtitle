@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"首頁"</string>
+    <string name="nav_features" formatted="false">"功能"</string>
+    <string name="page_features" formatted="false">"功能設定"</string>
+    <string name="page_hook_status" formatted="false">"功能狀態監控"</string>
+    <string name="nav_back" formatted="false">"返回"</string>
+    <string name="restart_tiktok" formatted="false">"重新啟動 TikTok"</string>
+    <string name="restart_root_required" formatted="false">"請確認已授予 Toki root 權限"</string>
+    <string name="language_title" formatted="false">"介面語言"</string>
+    <string name="language_system" formatted="false">"依照系統設定"</string>
+    <string name="language_search" formatted="false">"搜尋語言"</string>
+    <string name="language_clear_search" formatted="false">"清除搜尋"</string>
+    <string name="language_no_results" formatted="false">"找不到符合的語言"</string>
+    <string name="common_save" formatted="false">"儲存"</string>
+    <string name="common_cancel" formatted="false">"取消"</string>
+    <string name="common_confirm" formatted="false">"確定"</string>
+    <string name="common_close" formatted="false">"關閉"</string>
+    <string name="common_open" formatted="false">"開啟"</string>
+    <string name="common_copy" formatted="false">"複製"</string>
+    <string name="common_add" formatted="false">"新增"</string>
+    <string name="common_delete" formatted="false">"刪除"</string>
+    <string name="common_done" formatted="false">"完成"</string>
+    <string name="common_save_apply" formatted="false">"儲存並套用"</string>
+    <string name="common_unknown" formatted="false">"未知"</string>
+    <string name="common_custom" formatted="false">"自訂"</string>
+    <string name="home_icon_hidden" formatted="false">"已隱藏圖示"</string>
+    <string name="home_icon_restored" formatted="false">"已恢復顯示圖示"</string>
+    <string name="home_activated" formatted="false">"已啟用"</string>
+    <string name="home_inactive" formatted="false">"未啟用"</string>
+    <string name="home_activation_missing" formatted="false">"未在 LSPosed 框架中偵測到啟用狀態"</string>
+    <string name="home_host_section" formatted="false">"TikTok 相容性"</string>
+    <string name="home_host_current" formatted="false">"目前安裝的 TikTok"</string>
+    <string name="home_host_missing" formatted="false">"未在裝置上找到已安裝且受支援的 TikTok"</string>
+    <string name="home_host_not_installed" formatted="false">"未安裝"</string>
+    <string name="home_supported_versions" formatted="false">"已支援的版本"</string>
+    <string name="home_community" formatted="false">"開放原始碼與社群"</string>
+    <string name="home_github" formatted="false">"GitHub 專案儲存庫"</string>
+    <string name="home_telegram" formatted="false">"Telegram 群組"</string>
+    <string name="home_preferences" formatted="false">"模組偏好設定"</string>
+    <string name="home_hide_icon" formatted="false">"隱藏桌面圖示"</string>
+    <string name="home_hide_icon_summary" formatted="false">"隱藏後可透過 LSPosed 管理器開啟"</string>
+    <string name="home_support" formatted="false">"支持開發"</string>
+    <string name="home_support_summary" formatted="false">"贊助開發者持續維護與改善功能"</string>
+    <string name="feature_region_section" formatted="false">"地區與環境偽裝"</string>
+    <string name="feature_playback_section" formatted="false">"播放與操作體驗"</string>
+    <string name="feature_progress" formatted="false">"一律顯示影片進度列"</string>
+    <string name="feature_progress_summary" formatted="false">"短片也持續顯示底部播放進度列"</string>
+    <string name="feature_immersive" formatted="false">"影片顯示"</string>
+    <string name="feature_autoplay" formatted="false">"自動連播增強"</string>
+    <string name="feature_autoplay_summary" formatted="false">"解鎖所有影片頁面的長按連播選項"</string>
+    <string name="feature_status_bar" formatted="false">"隱藏系統狀態列"</string>
+    <string name="feature_media_section" formatted="false">"內容下載與操作增強"</string>
+    <string name="feature_download" formatted="false">"強制無浮水印下載"</string>
+    <string name="feature_download_summary" formatted="false">"透過長按或分享選單直接儲存無浮水印原始影片"</string>
+    <string name="feature_music" formatted="false">"解除音訊限制"</string>
+    <string name="feature_music_summary" formatted="false">"解除版權與地區下架限制，恢復音訊播放"</string>
+    <string name="feature_author_region" formatted="false">"顯示作者位置"</string>
+    <string name="feature_author_region_summary" formatted="false">"在作者暱稱旁顯示國家／地區旗幟與代碼"</string>
+    <string name="feature_copy_comment" formatted="false">"複製留言時僅複製內文"</string>
+    <string name="feature_video_translation" formatted="false">"字幕和翻譯入口"</string>
+    <string name="feature_video_translation_summary" formatted="false">"解鎖長按選單中的「字幕和翻譯」入口"</string>
+    <string name="feature_comment_translation" formatted="false">"留言區一鍵翻譯"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"在留言區新增翻譯按鈕，批次翻譯外語留言"</string>
+    <string name="feature_filter_section" formatted="false">"動態消息與精準篩選"</string>
+    <string name="feature_remove_ads" formatted="false">"移除動態消息廣告"</string>
+    <string name="feature_remove_live" formatted="false">"篩除推薦直播"</string>
+    <string name="feature_remove_photos" formatted="false">"篩除推薦圖文"</string>
+    <string name="feature_filter_views" formatted="false">"觀看次數篩選"</string>
+    <string name="feature_filter_likes" formatted="false">"按讚數篩選"</string>
+    <string name="feature_filter_duration" formatted="false">"影片長度篩選"</string>
+    <string name="feature_filter_keywords" formatted="false">"關鍵字篩選"</string>
+    <string name="feature_block_offline" formatted="false">"禁止插入離線影片"</string>
+    <string name="feature_block_offline_summary" formatted="false">"防止網路不佳時插播預先載入的離線影片"</string>
+    <string name="feature_remove_ai" formatted="false">"移除 AI 生成內容"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"篩除 TikTok 標示為 AI 生成的影片"</string>
+    <string name="filter_metric_views" formatted="false">"觀看次數"</string>
+    <string name="filter_metric_likes" formatted="false">"按讚數"</string>
+    <string name="filter_metric_duration" formatted="false">"長度"</string>
+    <string name="filter_unit_seconds" formatted="false">"秒"</string>
+    <string name="filter_views_saved" formatted="false">"已儲存觀看次數範圍"</string>
+    <string name="filter_likes_saved" formatted="false">"已儲存按讚數範圍"</string>
+    <string name="filter_duration_saved" formatted="false">"已儲存影片長度範圍"</string>
+    <string name="download_path_saved" formatted="false">"已更新自訂儲存路徑"</string>
+    <string name="region_spoof_title" formatted="false">"地區與 SIM 卡偽裝"</string>
+    <string name="region_current" formatted="false">"目前設定"</string>
+    <string name="region_target" formatted="true">"目標地區：%1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"電信業者：%1$s"</string>
+    <string name="region_operator_code" formatted="true">"電信業者代碼：%1$s"</string>
+    <string name="region_select_preset" formatted="false">"選擇預設值"</string>
+    <string name="region_custom_parameters" formatted="false">"自訂參數"</string>
+    <string name="language_spoof" formatted="false">"語言偽裝"</string>
+    <string name="environment_follow_region" formatted="false">"依照所選地區"</string>
+    <string name="language_effective" formatted="true">"生效語言：%1$s"</string>
+    <string name="language_custom" formatted="false">"自訂語言"</string>
+    <string name="timezone_spoof" formatted="false">"時區偽裝"</string>
+    <string name="timezone_effective" formatted="true">"生效時區：%1$s"</string>
+    <string name="timezone_custom" formatted="false">"自訂時區"</string>
+    <string name="gps_spoof" formatted="false">"位置偽裝"</string>
+    <string name="gps_effective" formatted="true">"生效座標：%1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"自訂經緯度"</string>
+    <string name="speed_fixed" formatted="false">"固定播放速度"</string>
+    <string name="speed_fixed_summary" formatted="false">"在長按選單調整速度後自動保留，切換影片不重設"</string>
+    <string name="speed_expand" formatted="false">"擴充播放速度選項"</string>
+    <string name="speed_options_hint" formatted="false">"播放速度選項（點選可修改或刪除）"</string>
+    <string name="speed_add_option" formatted="false">"+ 新增播放速度"</string>
+    <string name="speed_restore" formatted="false">"還原預設值"</string>
+    <string name="clean_on_play" formatted="false">"播放時自動隱藏畫面控制項"</string>
+    <string name="clean_keep_progress" formatted="false">"保留進度列"</string>
+    <string name="download_paths" formatted="false">"自訂儲存路徑"</string>
+    <string name="download_paths_summary" formatted="true">"影片：%1$s · 圖片：%2$s"</string>
+    <string name="filter_range_both" formatted="true">"保留%1$s為 %2$d%4$s～%3$d%4$s 的影片"</string>
+    <string name="filter_range_min" formatted="true">"保留%1$s ≥ %2$d%3$s 的影片"</string>
+    <string name="filter_range_max" formatted="true">"保留%1$s ≤ %2$d%3$s 的影片"</string>
+    <string name="filter_range_unset" formatted="false">"尚未設定範圍（點選以設定下限／上限）"</string>
+    <string name="keyword_unset" formatted="false">"尚未設定篩選規則（點選以管理分類）"</string>
+    <string name="keyword_summary" formatted="true">"已啟用：%1$s"</string>
+    <string name="keyword_description_count" formatted="true">"文案 %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"標籤 %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"作者 %1$d"</string>
+    <string name="keyword_description" formatted="false">"文案"</string>
+    <string name="keyword_tag" formatted="false">"標籤"</string>
+    <string name="keyword_author" formatted="false">"作者"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"尚無%1$s篩選規則，請在上方輸入以新增"</string>
+    <string name="duration_alert_title" formatted="false">"長影片長度提醒"</string>
+    <string name="duration_alert_summary" formatted="true">"目前門檻：≥ %1$s 分鐘"</string>
+    <string name="download_video_path" formatted="false">"影片儲存相對路徑"</string>
+    <string name="download_image_path" formatted="false">"圖片儲存相對路徑"</string>
+    <string name="download_path_hint" formatted="false">"第一層資料夾必須是公用媒體資料夾（例如 Movies、Pictures、DCIM）；無效路徑將使用系統預設值"</string>
+    <string name="views_range_title" formatted="false">"觀看次數篩選範圍"</string>
+    <string name="views_range_min" formatted="false">"觀看次數下限（0 = 不限制）"</string>
+    <string name="views_range_max" formatted="false">"觀看次數上限（0 = 不限制）"</string>
+    <string name="views_range_hint" formatted="false">"僅保留觀看次數在範圍內的影片；上下限皆為 0 時不移除任何影片"</string>
+    <string name="likes_range_title" formatted="false">"按讚數篩選範圍"</string>
+    <string name="likes_range_min" formatted="false">"按讚數下限（0 = 不限制）"</string>
+    <string name="likes_range_max" formatted="false">"按讚數上限（0 = 不限制）"</string>
+    <string name="likes_range_hint" formatted="false">"僅保留按讚數在範圍內的影片；上下限皆為 0 時不移除任何影片"</string>
+    <string name="duration_range_title" formatted="false">"影片長度篩選範圍"</string>
+    <string name="duration_range_min" formatted="false">"長度下限（秒，0 = 不限制）"</string>
+    <string name="duration_range_max" formatted="false">"長度上限（秒，0 = 不限制）"</string>
+    <string name="duration_range_hint" formatted="false">"僅保留推薦動態中長度在範圍內的影片；上下限皆為 0 時不移除任何影片；純圖文貼文不受此限制影響"</string>
+    <string name="keyword_manage" formatted="false">"管理篩選規則"</string>
+    <string name="keyword_description_hint" formatted="false">"比對影片文案與說明，不區分大小寫。"</string>
+    <string name="keyword_tag_hint" formatted="false">"比對主題標籤（Hashtag），不需輸入 # 前綴。"</string>
+    <string name="keyword_author_hint" formatted="false">"比對作者暱稱與唯一使用者名稱，不需輸入 @ 前綴。"</string>
+    <string name="keyword_description_input" formatted="false">"輸入要篩除的文案片語"</string>
+    <string name="keyword_tag_input" formatted="false">"輸入要篩除的主題標籤"</string>
+    <string name="keyword_author_input" formatted="false">"輸入作者暱稱或唯一使用者名稱"</string>
+    <string name="keyword_add" formatted="false">"新增規則"</string>
+    <string name="keyword_delete" formatted="false">"刪除規則"</string>
+    <string name="region_select_title" formatted="false">"選擇目標國家／地區"</string>
+    <string name="region_search" formatted="false">"搜尋國家名稱、英文名稱或地區代碼"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · 電信業者代碼：%2$s"</string>
+    <string name="region_custom_title" formatted="false">"自訂地區與 SIM 卡"</string>
+    <string name="region_custom_hint" formatted="false">"自訂目標國家代碼與電信業者資訊，不受預設值限制。"</string>
+    <string name="region_code_input" formatted="false">"國家／地區代碼（例如 JP, US, TH）"</string>
+    <string name="region_operator_code_input" formatted="false">"電信業者代碼（例如 44010, 52001）"</string>
+    <string name="region_operator_name_input" formatted="false">"電信業者名稱（例如 NTT DOCOMO, AIS）"</string>
+    <string name="language_custom_hint" formatted="false">"選擇常用語言，或手動輸入目標語言代碼。"</string>
+    <string name="language_code_input" formatted="false">"語言代碼（例如 ja-JP, en-US）"</string>
+    <string name="language_presets" formatted="false">"常用語言快速選擇："</string>
+    <string name="timezone_custom_hint" formatted="false">"選擇常用城市時區，或手動輸入目標時區名稱。"</string>
+    <string name="timezone_input" formatted="false">"時區名稱（例如 Asia/Tokyo）"</string>
+    <string name="timezone_presets" formatted="false">"常用城市時區快速選擇："</string>
+    <string name="city_tokyo" formatted="false">"東京"</string>
+    <string name="city_taipei" formatted="false">"台北"</string>
+    <string name="city_hong_kong" formatted="false">"香港"</string>
+    <string name="city_new_york" formatted="false">"紐約"</string>
+    <string name="city_london" formatted="false">"倫敦"</string>
+    <string name="city_seoul" formatted="false">"首爾"</string>
+    <string name="city_bangkok" formatted="false">"曼谷"</string>
+    <string name="city_singapore" formatted="false">"新加坡"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"自訂位置座標"</string>
+    <string name="gps_custom_hint" formatted="false">"選擇常用城市位置，或手動輸入經緯度。"</string>
+    <string name="gps_latitude" formatted="false">"緯度（-90.0～90.0）"</string>
+    <string name="gps_longitude" formatted="false">"經度（-180.0～180.0）"</string>
+    <string name="gps_presets" formatted="false">"常用城市快速選擇："</string>
+    <string name="speed_add_title" formatted="false">"新增播放速度"</string>
+    <string name="speed_input" formatted="false">"播放速度數值"</string>
+    <string name="speed_invalid" formatted="false">"請輸入有效數字"</string>
+    <string name="speed_out_of_range" formatted="true">"僅支援 %1$sx～%2$sx"</string>
+    <string name="speed_range" formatted="true">"支援範圍：%1$sx～%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"修改播放速度"</string>
+    <string name="duration_threshold_title" formatted="false">"設定長度提醒門檻"</string>
+    <string name="duration_threshold_hint" formatted="false">"當影片長度達到此設定值時，開始播放時會顯示短暫提示，提醒影片長度為多少分鐘。"</string>
+    <string name="duration_threshold_input" formatted="false">"長度門檻（單位：分鐘）"</string>
+    <string name="duration_threshold_example" formatted="false">"例如：3 或 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"請輸入大於 0 的有效分鐘數"</string>
+    <string name="duration_threshold_current" formatted="true">"目前設定：影片長度 ≥ %1$s 分鐘時提醒"</string>
+    <string name="duration_threshold_presets" formatted="false">"常用建議長度快速填入："</string>
+    <string name="status_feature_feed" formatted="false">"動態消息篩選"</string>
+    <string name="status_feature_speed" formatted="false">"播放速度"</string>
+    <string name="status_feature_progress" formatted="false">"進度列"</string>
+    <string name="status_feature_clean" formatted="false">"自動隱藏畫面控制項"</string>
+    <string name="status_feature_immersive" formatted="false">"影片顯示"</string>
+    <string name="status_feature_scroll" formatted="false">"自動捲動"</string>
+    <string name="status_feature_duration" formatted="false">"長度提醒"</string>
+    <string name="status_feature_comment_translate" formatted="false">"留言翻譯"</string>
+    <string name="status_feature_video_translate" formatted="false">"字幕和翻譯入口"</string>
+    <string name="status_feature_comment_copy" formatted="false">"留言複製"</string>
+    <string name="status_feature_author" formatted="false">"作者地區"</string>
+    <string name="status_feature_download" formatted="false">"影片儲存"</string>
+    <string name="status_feature_music" formatted="false">"音訊限制"</string>
+    <string name="status_feature_sim" formatted="false">"SIM 與國家代碼"</string>
+    <string name="status_feature_language" formatted="false">"語言"</string>
+    <string name="status_feature_timezone" formatted="false">"時區"</string>
+    <string name="status_feature_gps" formatted="false">"定位"</string>
+    <string name="status_feature_bar" formatted="false">"狀態列"</string>
+    <string name="status_normal" formatted="false">"正常"</string>
+    <string name="status_issue" formatted="false">"有問題"</string>
+    <string name="status_disabled" formatted="false">"未開啟"</string>
+    <string name="status_pending" formatted="false">"待確認"</string>
+    <string name="status_problem_disabled" formatted="false">"目前未開啟，但有異常紀錄"</string>
+    <string name="status_problem_unavailable" formatted="false">"功能暫時無法使用"</string>
+    <string name="status_problem_runtime" formatted="false">"執行時發生異常"</string>
+    <string name="status_problem_speed_menu" formatted="false">"播放速度選單暫時無法使用"</string>
+    <string name="status_prepare_failed" formatted="false">"功能準備失敗，請重新開啟 TikTok 後查看。"</string>
+    <string name="status_preparing" formatted="false">"正在準備功能，請稍候。"</string>
+    <string name="status_prepared" formatted="false">"準備完成，請重新開啟 TikTok。"</string>
+    <string name="status_read_failed" formatted="false">"暫時無法讀取狀態，請稍後查看。"</string>
+    <string name="status_update_failed" formatted="false">"暫時無法更新狀態，目前顯示最近一次的結果。"</string>
+    <string name="status_reading" formatted="false">"正在讀取狀態"</string>
+    <string name="status_empty" formatted="false">"尚無執行紀錄，請在 LSPosed 中啟用 Toki 並開啟 TikTok 後查看。"</string>
+    <string name="status_report_note" formatted="true">"最近報告：%1$s\n「正常」表示功能已就緒，且未回報異常。"</string>
+    <string name="config_section" formatted="false">"設定管理"</string>
+    <string name="config_import" formatted="false">"匯入設定"</string>
+    <string name="config_import_summary" formatted="false">"從檔案還原功能設定"</string>
+    <string name="config_export" formatted="false">"匯出設定"</string>
+    <string name="config_export_summary" formatted="false">"將功能設定儲存為檔案"</string>
+    <string name="config_exported" formatted="false">"已將設定匯出至所選位置。檔案可能包含關鍵字、地區與資料夾設定，請妥善保管。"</string>
+    <string name="config_import_confirm" formatted="true">"檔案包含 %1$d 項設定。匯入會取代所有功能設定，未包含的項目將還原為預設值。\n\n介面語言、桌面圖示、LSPosed 授權與 TikTok 相容性快取不會變更。是否繼續？"</string>
+    <string name="config_overwrite" formatted="false">"確認取代"</string>
+    <string name="config_imported" formatted="false">"已匯入設定，功能頁已同步。支援即時更新的功能會立即套用；其他功能請重新開啟 TikTok 後確認。"</string>
+    <string name="config_processing" formatted="false">"正在處理設定"</string>
+    <string name="config_error_io" formatted="false">"檔案讀寫失敗，請檢查所選位置與可用空間。"</string>
+    <string name="config_error_permission" formatted="false">"沒有存取所選檔案的權限，請重新選擇。"</string>
+    <string name="config_error_invalid" formatted="false">"檔案不是有效的 Toki 設定，未匯入任何設定。"</string>
+    <string name="config_error_validation" formatted="true">"設定驗證失敗：%1$s。未匯入任何設定。"</string>
+    <string name="config_error_commit" formatted="false">"無法確認設定是否套用成功，請重新開啟 Toki 檢查後再試。"</string>
+    <string name="sponsor_title" formatted="false">"支持作者"</string>
+    <string name="sponsor_kofi" formatted="false">"Ko-fi 贊助"</string>
+    <string name="sponsor_alipay" formatted="false">"支付寶"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"支付寶收款碼"</string>
+    <string name="sponsor_saving" formatted="false">"正在儲存…"</string>
+    <string name="sponsor_save_image" formatted="false">"將圖片儲存至裝置"</string>
+    <string name="sponsor_image_hint" formatted="false">"可儲存完整原圖，再於支付寶 App 中選取已儲存的圖片辨識。"</string>
+    <string name="sponsor_address_copied" formatted="false">"已複製 USDT 地址"</string>
+    <string name="sponsor_image_saved" formatted="false">"已將圖片儲存至所選位置"</string>
+    <string name="sponsor_error_io" formatted="false">"儲存失敗：無法完成檔案寫入，請檢查所選位置與可用空間後再試。"</string>
+    <string name="sponsor_error_permission" formatted="false">"儲存失敗：所選位置未授予寫入權限，請重新選擇。"</string>
+    <string name="feature_filter_topics" formatted="false">"過濾話題推薦"</string>
+    <string name="feature_filter_creators" formatted="false">"過濾創作者推薦"</string>
+    <string name="host_scan_title_complete" formatted="false">"查找完成"</string>
+    <string name="host_scan_title_failed" formatted="false">"查找未完成"</string>
+    <string name="host_scan_restart_hint" formatted="false">"請手動重新啟動 TikTok 以套用結果。"</string>
+    <string name="host_scan_failure_hint" formatted="false">"請在 Toki 查看功能診斷。"</string>
+    <string name="layout_title" formatted="false">"頁面佈局淨化"</string>
+    <string name="layout_summary" formatted="false">"分類選擇要隱藏的控制項"</string>
+    <string name="layout_hint" formatted="false">"開啟開關即可隱藏對應項目"</string>
+    <string name="layout_top" formatted="false">"頂部導覽"</string>
+    <string name="layout_bottom" formatted="false">"底部導覽"</string>
+    <string name="layout_side" formatted="false">"影片頁面"</string>
+    <string name="layout_search" formatted="false">"搜尋入口"</string>
+    <string name="layout_live" formatted="false">"直播入口"</string>
+    <string name="layout_friends" formatted="false">"好友"</string>
+    <string name="layout_following" formatted="false">"已關注"</string>
+    <string name="layout_shop" formatted="false">"商城"</string>
+    <string name="layout_for_you" formatted="false">"推薦"</string>
+    <string name="layout_nearby" formatted="false">"附近"</string>
+    <string name="layout_stem" formatted="false">"科普"</string>
+    <string name="layout_series" formatted="false">"短劇"</string>
+    <string name="layout_home" formatted="false">"首頁"</string>
+    <string name="layout_create" formatted="false">"發佈"</string>
+    <string name="layout_inbox" formatted="false">"收件匣"</string>
+    <string name="layout_profile" formatted="false">"個人檔案"</string>
+    <string name="layout_discover" formatted="false">"探索"</string>
+    <string name="layout_avatar" formatted="false">"作者頭像"</string>
+    <string name="layout_follow" formatted="false">"頭像關注按鈕"</string>
+    <string name="layout_like" formatted="false">"按讚"</string>
+    <string name="layout_comment" formatted="false">"留言"</string>
+    <string name="layout_favorite" formatted="false">"收藏"</string>
+    <string name="layout_share" formatted="false">"分享"</string>
+    <string name="layout_music" formatted="false">"音樂唱片"</string>
+    <string name="layout_explore" formatted="false">"社群"</string>
+    <string name="layout_author" formatted="false">"作者資訊"</string>
+    <string name="layout_description" formatted="false">"文案內容"</string>
+    <string name="layout_music_title" formatted="false">"音樂資訊"</string>
+    <string name="layout_tags" formatted="false">"資訊標籤"</string>
+    <string name="layout_search_label" formatted="false">"搜尋標籤"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"停止自動播放按鈕"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"金幣與獎勵"</string>
+    <string name="layout_quick_comment" formatted="false">"快捷留言"</string>
+    <string name="layout_playlist" formatted="false">"播放清單入口"</string>
+    <string name="layout_creation_buttons" formatted="false">"創作快捷按鈕"</string>
+    <string name="layout_live_notice" formatted="false">"直播預約"</string>
+    <string name="layout_opacity" formatted="false">"不透明度"</string>
+    <string name="feature_background_audio">"解鎖背景音訊"</string>
+    <string name="layout_landscape">"全螢幕入口"</string>
+    <string name="layout_photo_indicators">"相片指示與滑動提示"</string>
+    <string name="layout_quick_message">"快捷私訊與分享來源"</string>
+    <string name="layout_user_card">"推薦使用者卡片"</string>
+    <string name="layout_survey">"問卷與意見回饋"</string>
+    <string name="layout_ad_cards">"商品與廣告卡片"</string>
+    <string name="layout_bottom_banners">"其他底部橫幅"</string>
+    <string name="layout_activities">"活動入口"</string>
+    <string name="host_scan_title_running" formatted="false">"正在查找方法"</string>
+    <string name="host_scan_title_saving" formatted="false">"正在儲存結果"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"請保持 TikTok 在前景。"</string>
+    <string name="host_scan_saving_hint" formatted="false">"請稍候。"</string>
+    <string name="host_scan_done" formatted="false">"知道了"</string>
+    <string name="video_fit_center" formatted="false">"置中"</string>
+    <string name="video_fit_smart" formatted="false">"全螢幕沉浸"</string>
+</resources>

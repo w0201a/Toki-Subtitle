@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"होम"</string>
+    <string name="nav_features" formatted="false">"सुविधाएँ"</string>
+    <string name="page_features" formatted="false">"सेटिंग"</string>
+    <string name="page_hook_status" formatted="false">"सुविधाओं की स्थिति"</string>
+    <string name="nav_back" formatted="false">"वापस"</string>
+    <string name="restart_tiktok" formatted="false">"TikTok फिर शुरू करें"</string>
+    <string name="restart_root_required" formatted="false">"कृपया Toki को root अनुमति दें"</string>
+    <string name="language_title" formatted="false">"ऐप की भाषा"</string>
+    <string name="language_system" formatted="false">"सिस्टम के अनुसार"</string>
+    <string name="language_search" formatted="false">"भाषा खोजें"</string>
+    <string name="language_clear_search" formatted="false">"खोज साफ़ करें"</string>
+    <string name="language_no_results" formatted="false">"कोई मेल खाने वाली भाषा नहीं मिली"</string>
+    <string name="common_save" formatted="false">"सेव करें"</string>
+    <string name="common_cancel" formatted="false">"रद्द करें"</string>
+    <string name="common_confirm" formatted="false">"ठीक है"</string>
+    <string name="common_close" formatted="false">"बंद करें"</string>
+    <string name="common_open" formatted="false">"खोलें"</string>
+    <string name="common_copy" formatted="false">"कॉपी करें"</string>
+    <string name="common_add" formatted="false">"जोड़ें"</string>
+    <string name="common_delete" formatted="false">"हटाएँ"</string>
+    <string name="common_done" formatted="false">"हो गया"</string>
+    <string name="common_save_apply" formatted="false">"लागू करें"</string>
+    <string name="common_unknown" formatted="false">"अज्ञात"</string>
+    <string name="common_custom" formatted="false">"कस्टम"</string>
+    <string name="home_icon_hidden" formatted="false">"ऐप आइकन छिपा दिया गया"</string>
+    <string name="home_icon_restored" formatted="false">"ऐप आइकन फिर दिखाया गया"</string>
+    <string name="home_activated" formatted="false">"सक्रिय"</string>
+    <string name="home_inactive" formatted="false">"सक्रिय नहीं"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosed में सक्रियण नहीं मिला"</string>
+    <string name="home_host_section" formatted="false">"TikTok के साथ संगतता"</string>
+    <string name="home_host_current" formatted="false">"इंस्टॉल किया गया TikTok"</string>
+    <string name="home_host_missing" formatted="false">"डिवाइस पर समर्थित TikTok इंस्टॉलेशन नहीं मिला"</string>
+    <string name="home_host_not_installed" formatted="false">"इंस्टॉल नहीं है"</string>
+    <string name="home_supported_versions" formatted="false">"समर्थित संस्करण"</string>
+    <string name="home_community" formatted="false">"समुदाय"</string>
+    <string name="home_github" formatted="false">"GitHub रिपॉज़िटरी"</string>
+    <string name="home_telegram" formatted="false">"Telegram समूह"</string>
+    <string name="home_preferences" formatted="false">"प्राथमिकताएँ"</string>
+    <string name="home_hide_icon" formatted="false">"ऐप आइकन छिपाएँ"</string>
+    <string name="home_hide_icon_summary" formatted="false">"छिपाने के बाद Toki को LSPosed मैनेजर से खोल सकते हैं"</string>
+    <string name="home_support" formatted="false">"विकास में सहयोग करें"</string>
+    <string name="home_support_summary" formatted="false">"निरंतर रखरखाव और सुविधाओं के सुधार में सहयोग करें"</string>
+    <string name="feature_region_section" formatted="false">"क्षेत्र और परिवेश का अनुकरण"</string>
+    <string name="feature_playback_section" formatted="false">"प्लेबैक"</string>
+    <string name="feature_progress" formatted="false">"प्रगति पट्टी हमेशा दिखाएँ"</string>
+    <string name="feature_progress_summary" formatted="false">"छोटे वीडियो में भी नीचे की प्रगति पट्टी दिखाएँ"</string>
+    <string name="feature_immersive" formatted="false">"वीडियो प्रदर्शन"</string>
+    <string name="feature_autoplay" formatted="false">"बेहतर ऑटो स्क्रॉल"</string>
+    <string name="feature_autoplay_summary" formatted="false">"हर वीडियो के मेन्यू में ऑटो स्क्रॉल अनलॉक करें"</string>
+    <string name="feature_status_bar" formatted="false">"सिस्टम स्टेटस बार छिपाएँ"</string>
+    <string name="feature_media_section" formatted="false">"डाउनलोड और टूल"</string>
+    <string name="feature_download" formatted="false">"बिना वॉटरमार्क डाउनलोड"</string>
+    <string name="feature_download_summary" formatted="false">"दबाकर रखने या शेयर मेन्यू से बिना वॉटरमार्क मूल वीडियो सेव करें"</string>
+    <string name="feature_music" formatted="false">"ऑडियो प्रतिबंध हटाएँ"</string>
+    <string name="feature_music_summary" formatted="false">"कॉपीराइट या क्षेत्र के कारण प्रतिबंधित ऑडियो बहाल करें"</string>
+    <string name="feature_author_region" formatted="false">"क्रिएटर का क्षेत्र दिखाएँ"</string>
+    <string name="feature_author_region_summary" formatted="false">"क्रिएटर के नाम के पास देश या क्षेत्र का झंडा और कोड दिखाएँ"</string>
+    <string name="feature_copy_comment" formatted="false">"केवल टेक्स्ट कॉपी करें"</string>
+    <string name="feature_video_translation" formatted="false">"सबटाइटल और अनुवाद मेन्यू"</string>
+    <string name="feature_video_translation_summary" formatted="false">"देर तक दबाने वाले मेन्यू में विकल्प दिखाएँ"</string>
+    <string name="feature_comment_translation" formatted="false">"टिप्पणियों का अनुवाद"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"विदेशी भाषा की टिप्पणियों का एक साथ अनुवाद करने के लिए बटन जोड़ें"</string>
+    <string name="feature_filter_section" formatted="false">"फ़ीड फ़िल्टरिंग"</string>
+    <string name="feature_remove_ads" formatted="false">"फ़ीड के विज्ञापन हटाएँ"</string>
+    <string name="feature_remove_live" formatted="false">"सुझाए गए लाइव प्रसारण फ़िल्टर करें"</string>
+    <string name="feature_remove_photos" formatted="false">"सुझाए गए फ़ोटो पोस्ट फ़िल्टर करें"</string>
+    <string name="feature_filter_views" formatted="false">"व्यू फ़िल्टर"</string>
+    <string name="feature_filter_likes" formatted="false">"लाइक फ़िल्टर"</string>
+    <string name="feature_filter_duration" formatted="false">"अवधि फ़िल्टर"</string>
+    <string name="feature_filter_keywords" formatted="false">"कीवर्ड फ़िल्टर"</string>
+    <string name="feature_block_offline" formatted="false">"ऑफ़लाइन वीडियो रोकें"</string>
+    <string name="feature_block_offline_summary" formatted="false">"कमज़ोर कनेक्शन पर पहले से लोड किए ऑफ़लाइन वीडियो जोड़ने से रोकें"</string>
+    <string name="feature_remove_ai" formatted="false">"AI से बना कॉन्टेंट हटाएँ"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"TikTok द्वारा AI से बना चिह्नित वीडियो फ़िल्टर करें"</string>
+    <string name="filter_metric_views" formatted="false">"व्यू"</string>
+    <string name="filter_metric_likes" formatted="false">"लाइक"</string>
+    <string name="filter_metric_duration" formatted="false">"अवधि"</string>
+    <string name="filter_unit_seconds" formatted="false">"सेकंड"</string>
+    <string name="filter_views_saved" formatted="false">"व्यू सीमा सेव हो गई"</string>
+    <string name="filter_likes_saved" formatted="false">"लाइक सीमा सेव हो गई"</string>
+    <string name="filter_duration_saved" formatted="false">"वीडियो अवधि की सीमा सेव हो गई"</string>
+    <string name="download_path_saved" formatted="false">"सेव करने के पथ अपडेट हो गए"</string>
+    <string name="region_spoof_title" formatted="false">"क्षेत्र और SIM का अनुकरण"</string>
+    <string name="region_current" formatted="false">"मौजूदा सेटिंग"</string>
+    <string name="region_target" formatted="true">"लक्षित क्षेत्र: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"नेटवर्क ऑपरेटर: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"ऑपरेटर कोड: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"प्रीसेट"</string>
+    <string name="region_custom_parameters" formatted="false">"कस्टम"</string>
+    <string name="language_spoof" formatted="false">"भाषा का अनुकरण"</string>
+    <string name="environment_follow_region" formatted="false">"क्षेत्र के अनुसार"</string>
+    <string name="language_effective" formatted="true">"प्रभावी भाषा: %1$s"</string>
+    <string name="language_custom" formatted="false">"कस्टम भाषा"</string>
+    <string name="timezone_spoof" formatted="false">"समय क्षेत्र का अनुकरण"</string>
+    <string name="timezone_effective" formatted="true">"प्रभावी समय क्षेत्र: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"कस्टम समय क्षेत्र"</string>
+    <string name="gps_spoof" formatted="false">"स्थान का अनुकरण"</string>
+    <string name="gps_effective" formatted="true">"प्रभावी निर्देशांक: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"कस्टम निर्देशांक"</string>
+    <string name="speed_fixed" formatted="false">"गति बनाए रखें"</string>
+    <string name="speed_fixed_summary" formatted="false">"वीडियो बदलने पर भी मेन्यू में चुनी गई गति बनाए रखें"</string>
+    <string name="speed_expand" formatted="false">"और गतियाँ"</string>
+    <string name="speed_options_hint" formatted="false">"गति विकल्प (बदलने या हटाने के लिए टैप करें)"</string>
+    <string name="speed_add_option" formatted="false">"+ गति जोड़ें"</string>
+    <string name="speed_restore" formatted="false">"रीसेट करें"</string>
+    <string name="clean_on_play" formatted="false">"चलते समय कंट्रोल छिपाएँ"</string>
+    <string name="clean_keep_progress" formatted="false">"प्रगति पट्टी रखें"</string>
+    <string name="download_paths" formatted="false">"सेव करने के फ़ोल्डर"</string>
+    <string name="download_paths_summary" formatted="true">"वीडियो: %1$s · इमेज: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"%1$s का मान %2$d%4$s से %3$d%4$s वाले वीडियो रखें"</string>
+    <string name="filter_range_min" formatted="true">"%1$s ≥ %2$d%3$s वाले वीडियो रखें"</string>
+    <string name="filter_range_max" formatted="true">"%1$s ≤ %2$d%3$s वाले वीडियो रखें"</string>
+    <string name="filter_range_unset" formatted="false">"सीमा तय नहीं है (न्यूनतम/अधिकतम के लिए टैप करें)"</string>
+    <string name="keyword_unset" formatted="false">"कोई नियम नहीं (श्रेणियाँ प्रबंधित करने के लिए टैप करें)"</string>
+    <string name="keyword_summary" formatted="true">"चालू: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"विवरण %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"हैशटैग %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"क्रिएटर %1$d"</string>
+    <string name="keyword_description" formatted="false">"विवरण"</string>
+    <string name="keyword_tag" formatted="false">"हैशटैग"</string>
+    <string name="keyword_author" formatted="false">"क्रिएटर"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"%1$s के लिए कोई नियम नहीं। ऊपर से जोड़ें"</string>
+    <string name="duration_alert_title" formatted="false">"लंबे वीडियो की अवधि का अलर्ट"</string>
+    <string name="duration_alert_summary" formatted="true">"मौजूदा सीमा: ≥ %1$s मिनट"</string>
+    <string name="download_video_path" formatted="false">"वीडियो फ़ोल्डर"</string>
+    <string name="download_image_path" formatted="false">"इमेज फ़ोल्डर"</string>
+    <string name="download_path_hint" formatted="false">"पहला फ़ोल्डर Movies, Pictures या DCIM जैसा सार्वजनिक मीडिया फ़ोल्डर होना चाहिए। अमान्य पथ के लिए सिस्टम डिफ़ॉल्ट उपयोग होगा"</string>
+    <string name="views_range_title" formatted="false">"व्यू की सीमा"</string>
+    <string name="views_range_min" formatted="false">"न्यूनतम व्यू (0 = कोई सीमा नहीं)"</string>
+    <string name="views_range_max" formatted="false">"अधिकतम व्यू (0 = कोई सीमा नहीं)"</string>
+    <string name="views_range_hint" formatted="false">"केवल इस व्यू सीमा के वीडियो रखें। दोनों सीमाएँ 0 होने पर कुछ नहीं हटेगा"</string>
+    <string name="likes_range_title" formatted="false">"लाइक की सीमा"</string>
+    <string name="likes_range_min" formatted="false">"न्यूनतम लाइक (0 = कोई सीमा नहीं)"</string>
+    <string name="likes_range_max" formatted="false">"अधिकतम लाइक (0 = कोई सीमा नहीं)"</string>
+    <string name="likes_range_hint" formatted="false">"केवल इस लाइक सीमा के वीडियो रखें। दोनों सीमाएँ 0 होने पर कुछ नहीं हटेगा"</string>
+    <string name="duration_range_title" formatted="false">"वीडियो अवधि की सीमा"</string>
+    <string name="duration_range_min" formatted="false">"न्यूनतम अवधि (सेकंड; 0 = कोई सीमा नहीं)"</string>
+    <string name="duration_range_max" formatted="false">"अधिकतम अवधि (सेकंड; 0 = कोई सीमा नहीं)"</string>
+    <string name="duration_range_hint" formatted="false">"केवल तय अवधि के सुझाए गए वीडियो रखें। दोनों सीमाएँ 0 होने पर कुछ नहीं हटेगा। फ़ोटो पोस्ट प्रभावित नहीं होंगे"</string>
+    <string name="keyword_manage" formatted="false">"फ़िल्टर नियम"</string>
+    <string name="keyword_description_hint" formatted="false">"वीडियो टेक्स्ट और विवरण से मिलान करें, बड़े-छोटे अक्षरों में अंतर किए बिना।"</string>
+    <string name="keyword_tag_hint" formatted="false">"हैशटैग से मिलान करें। # उपसर्ग देने की ज़रूरत नहीं है।"</string>
+    <string name="keyword_author_hint" formatted="false">"क्रिएटर के नाम और विशिष्ट यूज़रनेम से मिलान करें। @ उपसर्ग देने की ज़रूरत नहीं है।"</string>
+    <string name="keyword_description_input" formatted="false">"शब्द या वाक्यांश"</string>
+    <string name="keyword_tag_input" formatted="false">"हैशटैग"</string>
+    <string name="keyword_author_input" formatted="false">"नाम या यूज़रनेम"</string>
+    <string name="keyword_add" formatted="false">"नियम जोड़ें"</string>
+    <string name="keyword_delete" formatted="false">"नियम हटाएँ"</string>
+    <string name="region_select_title" formatted="false">"क्षेत्र चुनें"</string>
+    <string name="region_search" formatted="false">"देश के नाम, अंग्रेज़ी नाम या क्षेत्र कोड से खोजें"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · ऑपरेटर कोड: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"कस्टम क्षेत्र और SIM"</string>
+    <string name="region_custom_hint" formatted="false">"प्रीसेट की सीमाओं के बिना देश कोड और ऑपरेटर जानकारी तय करें।"</string>
+    <string name="region_code_input" formatted="false">"देश या क्षेत्र कोड (जैसे JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"ऑपरेटर कोड (जैसे 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"ऑपरेटर का नाम (जैसे NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"कोई आम भाषा चुनें या भाषा कोड डालें।"</string>
+    <string name="language_code_input" formatted="false">"भाषा कोड (जैसे ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"आम भाषाएँ:"</string>
+    <string name="timezone_custom_hint" formatted="false">"शहर का समय क्षेत्र चुनें या समय क्षेत्र का नाम डालें।"</string>
+    <string name="timezone_input" formatted="false">"समय क्षेत्र का नाम (जैसे Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"शहरों के आम समय क्षेत्र:"</string>
+    <string name="city_tokyo" formatted="false">"टोक्यो"</string>
+    <string name="city_taipei" formatted="false">"ताइपे"</string>
+    <string name="city_hong_kong" formatted="false">"हांगकांग"</string>
+    <string name="city_new_york" formatted="false">"न्यूयॉर्क"</string>
+    <string name="city_london" formatted="false">"लंदन"</string>
+    <string name="city_seoul" formatted="false">"सोल"</string>
+    <string name="city_bangkok" formatted="false">"बैंकॉक"</string>
+    <string name="city_singapore" formatted="false">"सिंगापुर"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"कस्टम स्थान निर्देशांक"</string>
+    <string name="gps_custom_hint" formatted="false">"कोई शहर चुनें या अक्षांश और देशांतर डालें।"</string>
+    <string name="gps_latitude" formatted="false">"अक्षांश (-90.0 से 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"देशांतर (-180.0 से 180.0)"</string>
+    <string name="gps_presets" formatted="false">"आम शहर:"</string>
+    <string name="speed_add_title" formatted="false">"गति जोड़ें"</string>
+    <string name="speed_input" formatted="false">"प्लेबैक गति"</string>
+    <string name="speed_invalid" formatted="false">"मान्य संख्या डालें"</string>
+    <string name="speed_out_of_range" formatted="true">"केवल %1$sx से %2$sx समर्थित है"</string>
+    <string name="speed_range" formatted="true">"समर्थित सीमा: %1$sx से %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"गति बदलें"</string>
+    <string name="duration_threshold_title" formatted="false">"लंबे वीडियो की सूचना"</string>
+    <string name="duration_threshold_hint" formatted="false">"वीडियो इस अवधि तक पहुँचने पर, प्लेबैक शुरू होते ही मिनटों में उसकी लंबाई का छोटा अलर्ट दिखेगा।"</string>
+    <string name="duration_threshold_input" formatted="false">"अवधि की सीमा (मिनट)"</string>
+    <string name="duration_threshold_example" formatted="false">"उदाहरण: 3 या 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"0 से बड़ी मिनटों की मान्य संख्या डालें"</string>
+    <string name="duration_threshold_current" formatted="true">"मौजूदा सेटिंग: ≥ %1$s मिनट के वीडियो पर अलर्ट"</string>
+    <string name="duration_threshold_presets" formatted="false">"सुझाई गई अवधियाँ:"</string>
+    <string name="status_feature_feed" formatted="false">"फ़ीड फ़िल्टरिंग"</string>
+    <string name="status_feature_speed" formatted="false">"प्लेबैक गति"</string>
+    <string name="status_feature_progress" formatted="false">"प्रगति पट्टी"</string>
+    <string name="status_feature_clean" formatted="false">"चलते समय कंट्रोल छिपाना"</string>
+    <string name="status_feature_immersive" formatted="false">"वीडियो प्रदर्शन"</string>
+    <string name="status_feature_scroll" formatted="false">"ऑटो स्क्रॉल"</string>
+    <string name="status_feature_duration" formatted="false">"अवधि अलर्ट"</string>
+    <string name="status_feature_comment_translate" formatted="false">"टिप्पणियों का अनुवाद"</string>
+    <string name="status_feature_video_translate" formatted="false">"सबटाइटल और अनुवाद मेन्यू"</string>
+    <string name="status_feature_comment_copy" formatted="false">"टिप्पणी कॉपी"</string>
+    <string name="status_feature_author" formatted="false">"क्रिएटर का क्षेत्र"</string>
+    <string name="status_feature_download" formatted="false">"वीडियो सेव"</string>
+    <string name="status_feature_music" formatted="false">"ऑडियो प्रतिबंध"</string>
+    <string name="status_feature_sim" formatted="false">"SIM और देश"</string>
+    <string name="status_feature_language" formatted="false">"भाषा"</string>
+    <string name="status_feature_timezone" formatted="false">"समय क्षेत्र"</string>
+    <string name="status_feature_gps" formatted="false">"स्थान"</string>
+    <string name="status_feature_bar" formatted="false">"स्टेटस बार"</string>
+    <string name="status_normal" formatted="false">"सामान्य"</string>
+    <string name="status_issue" formatted="false">"समस्या है"</string>
+    <string name="status_disabled" formatted="false">"बंद"</string>
+    <string name="status_pending" formatted="false">"पुष्टि नहीं हुई"</string>
+    <string name="status_problem_disabled" formatted="false">"बंद है, लेकिन त्रुटि दर्ज है"</string>
+    <string name="status_problem_unavailable" formatted="false">"फ़िलहाल उपलब्ध नहीं"</string>
+    <string name="status_problem_runtime" formatted="false">"इस्तेमाल में त्रुटि"</string>
+    <string name="status_problem_speed_menu" formatted="false">"गति मेन्यू उपलब्ध नहीं"</string>
+    <string name="status_prepare_failed" formatted="false">"सुविधाएँ तैयार नहीं हो सकीं। TikTok फिर खोलकर जाँचें।"</string>
+    <string name="status_preparing" formatted="false">"सुविधाएँ तैयार की जा रही हैं। कृपया प्रतीक्षा करें।"</string>
+    <string name="status_prepared" formatted="false">"तैयारी पूरी हुई। TikTok फिर खोलें।"</string>
+    <string name="status_read_failed" formatted="false">"अभी स्थिति नहीं पढ़ी जा सकती। बाद में जाँचें।"</string>
+    <string name="status_update_failed" formatted="false">"अभी स्थिति अपडेट नहीं हो सकती। सबसे हाल का परिणाम दिख रहा है।"</string>
+    <string name="status_reading" formatted="false">"स्थिति पढ़ी जा रही है"</string>
+    <string name="status_empty" formatted="false">"कोई गतिविधि रिकॉर्ड नहीं है। LSPosed में Toki चालू करें, TikTok खोलें और फिर जाँचें।"</string>
+    <string name="status_report_note" formatted="true">"सबसे हाल की रिपोर्ट: %1$s\n“सामान्य” का अर्थ है कि सुविधा तैयार है और उसने कोई त्रुटि रिपोर्ट नहीं की।"</string>
+    <string name="config_section" formatted="false">"कॉन्फ़िगरेशन प्रबंधन"</string>
+    <string name="config_import" formatted="false">"कॉन्फ़िगरेशन आयात करें"</string>
+    <string name="config_import_summary" formatted="false">"फ़ाइल से सुविधा सेटिंग बहाल करें"</string>
+    <string name="config_export" formatted="false">"कॉन्फ़िगरेशन निर्यात करें"</string>
+    <string name="config_export_summary" formatted="false">"सुविधा सेटिंग फ़ाइल में सेव करें"</string>
+    <string name="config_exported" formatted="false">"कॉन्फ़िगरेशन चुने गए स्थान पर निर्यात हो गया। फ़ाइल में कीवर्ड, क्षेत्र और फ़ोल्डर सेटिंग हो सकती हैं। इसे सुरक्षित रखें।"</string>
+    <string name="config_import_confirm" formatted="true">"फ़ाइल में सेटिंग की संख्या: %1$d। आयात सभी सुविधा सेटिंग बदल देगा; अनुपस्थित सेटिंग डिफ़ॉल्ट पर लौटेंगी।\n\nइंटरफ़ेस भाषा, ऐप आइकन, LSPosed अनुमति और TikTok संगतता कैश नहीं बदलेंगे। जारी रखें?"</string>
+    <string name="config_overwrite" formatted="false">"बदलें"</string>
+    <string name="config_imported" formatted="false">"कॉन्फ़िगरेशन आयात हो गया और सुविधा पेज अपडेट हो गया। लाइव अपडेट समर्थित बदलाव तुरंत लागू होंगे। अन्य सुविधाओं के लिए TikTok फिर खोलकर जाँचें।"</string>
+    <string name="config_processing" formatted="false">"प्रोसेस हो रहा है…"</string>
+    <string name="config_error_io" formatted="false">"फ़ाइल पढ़ी या लिखी नहीं जा सकी। चुना स्थान और खाली जगह जाँचें।"</string>
+    <string name="config_error_permission" formatted="false">"चुनी गई फ़ाइल तक पहुँच की अनुमति नहीं है। फिर चुनें।"</string>
+    <string name="config_error_invalid" formatted="false">"यह मान्य Toki कॉन्फ़िगरेशन फ़ाइल नहीं है। कोई सेटिंग आयात नहीं हुई।"</string>
+    <string name="config_error_validation" formatted="true">"कॉन्फ़िगरेशन सत्यापन विफल: %1$s। कोई सेटिंग आयात नहीं हुई।"</string>
+    <string name="config_error_commit" formatted="false">"सेटिंग लागू होने की पुष्टि नहीं हुई। दोबारा कोशिश से पहले Toki खोलकर जाँचें।"</string>
+    <string name="sponsor_title" formatted="false">"डेवलपर को सहयोग दें"</string>
+    <string name="sponsor_kofi" formatted="false">"Ko-fi से सहयोग"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay भुगतान QR कोड"</string>
+    <string name="sponsor_saving" formatted="false">"सेव हो रहा है…"</string>
+    <string name="sponsor_save_image" formatted="false">"इमेज सेव करें"</string>
+    <string name="sponsor_image_hint" formatted="false">"मूल इमेज सेव करें, फिर Alipay में उसे चुनकर कोड पहचानें।"</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT पता कॉपी हो गया"</string>
+    <string name="sponsor_image_saved" formatted="false">"इमेज चुने गए स्थान पर सेव हो गई"</string>
+    <string name="sponsor_error_io" formatted="false">"सेव नहीं हो सका। चुना स्थान और खाली जगह जाँचकर फिर कोशिश करें।"</string>
+    <string name="sponsor_error_permission" formatted="false">"सेव नहीं हो सका: चुने गए स्थान पर लिखने की अनुमति नहीं है। फिर चुनें।"</string>
+    <string name="feature_filter_topics" formatted="false">"सुझाए गए विषय छिपाएँ"</string>
+    <string name="feature_filter_creators" formatted="false">"सुझाए गए क्रिएटर छिपाएँ"</string>
+    <string name="host_scan_title_complete" formatted="false">"खोज पूरी हुई"</string>
+    <string name="host_scan_title_failed" formatted="false">"खोज विफल हुई"</string>
+    <string name="host_scan_restart_hint" formatted="false">"परिणाम लागू करने के लिए TikTok को मैन्युअल रूप से फिर शुरू करें।"</string>
+    <string name="host_scan_failure_hint" formatted="false">"Toki में फ़ीचर डायग्नोस्टिक्स देखें।"</string>
+    <string name="layout_title" formatted="false">"पेज लेआउट"</string>
+    <string name="layout_summary" formatted="false">"छिपाने वाले बटन चुनें"</string>
+    <string name="layout_hint" formatted="false">"किसी आइटम को छिपाने के लिए स्विच चालू करें"</string>
+    <string name="layout_top" formatted="false">"ऊपरी बार"</string>
+    <string name="layout_bottom" formatted="false">"निचला बार"</string>
+    <string name="layout_side" formatted="false">"वीडियो पेज"</string>
+    <string name="layout_search" formatted="false">"खोज"</string>
+    <string name="layout_live" formatted="false">"लाइव"</string>
+    <string name="layout_friends" formatted="false">"दोस्त"</string>
+    <string name="layout_following" formatted="false">"फ़ॉलो किए गए"</string>
+    <string name="layout_shop" formatted="false">"शॉप"</string>
+    <string name="layout_for_you" formatted="false">"आपके लिए"</string>
+    <string name="layout_nearby" formatted="false">"आस-पास"</string>
+    <string name="layout_stem" formatted="false">"विज्ञान"</string>
+    <string name="layout_series" formatted="false">"सीरीज़"</string>
+    <string name="layout_home" formatted="false">"होम"</string>
+    <string name="layout_create" formatted="false">"बनाएँ"</string>
+    <string name="layout_inbox" formatted="false">"इनबॉक्स"</string>
+    <string name="layout_profile" formatted="false">"प्रोफ़ाइल"</string>
+    <string name="layout_discover" formatted="false">"खोजें"</string>
+    <string name="layout_avatar" formatted="false">"प्रोफ़ाइल फ़ोटो"</string>
+    <string name="layout_follow" formatted="false">"फ़ॉलो बटन"</string>
+    <string name="layout_like" formatted="false">"लाइक"</string>
+    <string name="layout_comment" formatted="false">"टिप्पणियाँ"</string>
+    <string name="layout_favorite" formatted="false">"पसंदीदा"</string>
+    <string name="layout_share" formatted="false">"शेयर"</string>
+    <string name="layout_music" formatted="false">"म्यूज़िक डिस्क"</string>
+    <string name="layout_explore" formatted="false">"एक्सप्लोर"</string>
+    <string name="layout_author" formatted="false">"लेखक की जानकारी"</string>
+    <string name="layout_description" formatted="false">"विवरण"</string>
+    <string name="layout_music_title" formatted="false">"संगीत का शीर्षक"</string>
+    <string name="layout_tags" formatted="false">"जानकारी के लेबल"</string>
+    <string name="layout_search_label" formatted="false">"खोज सुझाव"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"ऑटो स्क्रॉल रोकने का बटन"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"कॉइन और इनाम"</string>
+    <string name="layout_quick_comment" formatted="false">"त्वरित टिप्पणियाँ"</string>
+    <string name="layout_playlist" formatted="false">"प्लेलिस्ट"</string>
+    <string name="layout_creation_buttons" formatted="false">"बनाने के शॉर्टकट"</string>
+    <string name="layout_live_notice" formatted="false">"लाइव रिमाइंडर"</string>
+    <string name="layout_opacity" formatted="false">"अपारदर्शिता"</string>
+    <string name="feature_background_audio">"बैकग्राउंड ऑडियो अनलॉक करें"</string>
+    <string name="layout_landscape">"फ़ुलस्क्रीन बटन"</string>
+    <string name="layout_photo_indicators">"फ़ोटो संकेतक और सुझाव"</string>
+    <string name="layout_quick_message">"त्वरित संदेश और साझा करने वाला"</string>
+    <string name="layout_user_card">"सुझाए गए खाते"</string>
+    <string name="layout_survey">"सर्वेक्षण और प्रतिक्रिया"</string>
+    <string name="layout_ad_cards">"उत्पाद और विज्ञापन कार्ड"</string>
+    <string name="layout_bottom_banners">"अन्य निचले बैनर"</string>
+    <string name="layout_activities">"इवेंट का प्रवेश बटन"</string>
+    <string name="host_scan_title_running" formatted="false">"मेथड खोजे जा रहे हैं"</string>
+    <string name="host_scan_title_saving" formatted="false">"परिणाम सहेजे जा रहे हैं"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"TikTok को सामने खुला रखें।"</string>
+    <string name="host_scan_saving_hint" formatted="false">"कृपया प्रतीक्षा करें।"</string>
+    <string name="host_scan_done" formatted="false">"समझ गया"</string>
+    <string name="video_fit_center" formatted="false">"बीच में"</string>
+    <string name="video_fit_smart" formatted="false">"पूरी स्क्रीन"</string>
+</resources>

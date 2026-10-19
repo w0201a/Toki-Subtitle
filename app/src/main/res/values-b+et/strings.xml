@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Avaleht"</string>
+    <string name="nav_features" formatted="false">"Funktsioonid"</string>
+    <string name="page_features" formatted="false">"Seaded"</string>
+    <string name="page_hook_status" formatted="false">"Funktsioonide olek"</string>
+    <string name="nav_back" formatted="false">"Tagasi"</string>
+    <string name="restart_tiktok" formatted="false">"Taaskäivita TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Anna Tokile juurkasutaja õigused."</string>
+    <string name="language_title" formatted="false">"Rakenduse keel"</string>
+    <string name="language_system" formatted="false">"Järgi süsteemi"</string>
+    <string name="language_search" formatted="false">"Otsi keeli"</string>
+    <string name="language_clear_search" formatted="false">"Tühjenda otsing"</string>
+    <string name="language_no_results" formatted="false">"Sobivaid keeli ei leitud"</string>
+    <string name="common_save" formatted="false">"Salvesta"</string>
+    <string name="common_cancel" formatted="false">"Tühista"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Sulge"</string>
+    <string name="common_open" formatted="false">"Ava"</string>
+    <string name="common_copy" formatted="false">"Kopeeri"</string>
+    <string name="common_add" formatted="false">"Lisa"</string>
+    <string name="common_delete" formatted="false">"Kustuta"</string>
+    <string name="common_done" formatted="false">"Valmis"</string>
+    <string name="common_save_apply" formatted="false">"Rakenda"</string>
+    <string name="common_unknown" formatted="false">"Teadmata"</string>
+    <string name="common_custom" formatted="false">"Kohandatud"</string>
+    <string name="home_icon_hidden" formatted="false">"Rakenduse ikoon peidetud"</string>
+    <string name="home_icon_restored" formatted="false">"Rakenduse ikoon taastatud"</string>
+    <string name="home_activated" formatted="false">"Aktiveeritud"</string>
+    <string name="home_inactive" formatted="false">"Aktiveerimata"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosedis ei tuvastatud aktiveerimist"</string>
+    <string name="home_host_section" formatted="false">"TikToki ühilduvus"</string>
+    <string name="home_host_current" formatted="false">"Paigaldatud TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Selles seadmes ei leitud toetatud TikToki paigaldust"</string>
+    <string name="home_host_not_installed" formatted="false">"Paigaldamata"</string>
+    <string name="home_supported_versions" formatted="false">"Toetatud versioonid"</string>
+    <string name="home_community" formatted="false">"Avatud lähtekood ja kogukond"</string>
+    <string name="home_github" formatted="false">"GitHubi hoidla"</string>
+    <string name="home_telegram" formatted="false">"Telegrami rühm"</string>
+    <string name="home_preferences" formatted="false">"Mooduli eelistused"</string>
+    <string name="home_hide_icon" formatted="false">"Peida rakenduse ikoon"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Kui ikoon on peidetud, ava Toki LSPosedi halduri kaudu"</string>
+    <string name="home_support" formatted="false">"Toeta arendust"</string>
+    <string name="home_support_summary" formatted="false">"Toeta pidevat hooldust ja täiustamist"</string>
+    <string name="feature_region_section" formatted="false">"Piirkond ja seade"</string>
+    <string name="feature_playback_section" formatted="false">"Taasesitus"</string>
+    <string name="feature_progress" formatted="false">"Näita alati edenemisriba"</string>
+    <string name="feature_progress_summary" formatted="false">"Hoiab edenemisriba nähtaval ka lühikestes videotes"</string>
+    <string name="feature_immersive" formatted="false">"Video kuvamine"</string>
+    <string name="feature_autoplay" formatted="false">"Täiustatud automaatkerimine"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Avab automaatkerimise kõigi videote menüüs"</string>
+    <string name="feature_status_bar" formatted="false">"Peida süsteemi olekuriba"</string>
+    <string name="feature_media_section" formatted="false">"Allalaadimine ja toimingud"</string>
+    <string name="feature_download" formatted="false">"Allalaadimine vesimärgita"</string>
+    <string name="feature_download_summary" formatted="false">"Salvesta algne video ilma vesimärgita pika vajutuse või jagamise menüüst"</string>
+    <string name="feature_music" formatted="false">"Vabasta heli"</string>
+    <string name="feature_music_summary" formatted="false">"Taasta litsentsi või piirkonna tõttu piiratud heli taasesitus"</string>
+    <string name="feature_author_region" formatted="false">"Näita looja piirkonda"</string>
+    <string name="feature_author_region_summary" formatted="false">"Näita looja nime kõrval riigi või piirkonna lippu ja koodi"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopeeri ainult tekst"</string>
+    <string name="feature_video_translation" formatted="false">"Subtiitrite ja tõlke menüü"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Kuva valik pika vajutuse menüüs"</string>
+    <string name="feature_comment_translation" formatted="false">"Tõlgi kommentaare"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Lisa nupp võõrkeelsete kommentaaride hulgitõlkimiseks"</string>
+    <string name="feature_filter_section" formatted="false">"Voo filtreerimine"</string>
+    <string name="feature_remove_ads" formatted="false">"Eemalda voo reklaamid"</string>
+    <string name="feature_remove_live" formatted="false">"Peida otseülekanded"</string>
+    <string name="feature_remove_photos" formatted="false">"Peida fotopostitused"</string>
+    <string name="feature_filter_views" formatted="false">"Vaatamiste arvu filter"</string>
+    <string name="feature_filter_likes" formatted="false">"Meeldimiste arvu filter"</string>
+    <string name="feature_filter_duration" formatted="false">"Video kestuse filter"</string>
+    <string name="feature_filter_keywords" formatted="false">"Märksõnafilter"</string>
+    <string name="feature_block_offline" formatted="false">"Blokeeri võrguühenduseta videod"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Takista eellaaditud võrguühenduseta videote lisamist halva ühenduse korral"</string>
+    <string name="feature_remove_ai" formatted="false">"Peida tehisintellekti loodud videod"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtreeri videoid, mille TikTok märgib tehisintellektiga looduks"</string>
+    <string name="filter_metric_views" formatted="false">"vaatamised"</string>
+    <string name="filter_metric_likes" formatted="false">"meeldimised"</string>
+    <string name="filter_metric_duration" formatted="false">"kestus"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Vaatamiste arvu vahemik salvestatud"</string>
+    <string name="filter_likes_saved" formatted="false">"Meeldimiste arvu vahemik salvestatud"</string>
+    <string name="filter_duration_saved" formatted="false">"Video kestuse vahemik salvestatud"</string>
+    <string name="download_path_saved" formatted="false">"Kohandatud salvestusteed uuendatud"</string>
+    <string name="region_spoof_title" formatted="false">"Piirkonna ja SIM-kaardi jäljendamine"</string>
+    <string name="region_current" formatted="false">"Praegune seadistus"</string>
+    <string name="region_target" formatted="true">"Sihtpiirkond: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operaator: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Operaatori kood: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Eelseaded"</string>
+    <string name="region_custom_parameters" formatted="false">"Kohandatud"</string>
+    <string name="language_spoof" formatted="false">"Keele jäljendamine"</string>
+    <string name="environment_follow_region" formatted="false">"Piirkonna järgi"</string>
+    <string name="language_effective" formatted="true">"Rakendatud keel: %1$s"</string>
+    <string name="language_custom" formatted="false">"Kohandatud keel"</string>
+    <string name="timezone_spoof" formatted="false">"Ajavööndi jäljendamine"</string>
+    <string name="timezone_effective" formatted="true">"Rakendatud ajavöönd: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Kohandatud ajavöönd"</string>
+    <string name="gps_spoof" formatted="false">"Asukoha jäljendamine"</string>
+    <string name="gps_effective" formatted="true">"Rakendatud koordinaadid: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Kohandatud koordinaadid"</string>
+    <string name="speed_fixed" formatted="false">"Säilita taasesituskiirus"</string>
+    <string name="speed_fixed_summary" formatted="false">"Säilita pika vajutuse menüüs valitud kiirus ka video vahetamisel"</string>
+    <string name="speed_expand" formatted="false">"Lisakiirused"</string>
+    <string name="speed_options_hint" formatted="false">"Kiirusevalikud (muutmiseks või eemaldamiseks puuduta)"</string>
+    <string name="speed_add_option" formatted="false">"+ Lisa kiirus"</string>
+    <string name="speed_restore" formatted="false">"Lähtesta"</string>
+    <string name="clean_on_play" formatted="false">"Peida juhtnupud esitamisel"</string>
+    <string name="clean_keep_progress" formatted="false">"Säilita edenemisriba"</string>
+    <string name="download_paths" formatted="false">"Salvestuskaustad"</string>
+    <string name="download_paths_summary" formatted="true">"Videod: %1$s · Pildid: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Säilita videod, mille %1$s on vahemikus %2$d%4$s kuni %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Säilita videod, mille %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Säilita videod, mille %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Vahemik määramata (miinimumi või maksimumi määramiseks puuduta)"</string>
+    <string name="keyword_unset" formatted="false">"Reegli lisamiseks puuduta"</string>
+    <string name="keyword_summary" formatted="true">"Lubatud: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Kirjeldused %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Teemaviited %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Loojad %1$d"</string>
+    <string name="keyword_description" formatted="false">"Kirjeldused"</string>
+    <string name="keyword_tag" formatted="false">"Teemaviited"</string>
+    <string name="keyword_author" formatted="false">"Loojad"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Reeglid kategooriale %1$s puuduvad. Lisa üks ülal."</string>
+    <string name="duration_alert_title" formatted="false">"Pika video kestuse hoiatus"</string>
+    <string name="duration_alert_summary" formatted="true">"Praegune lävi: ≥ %1$s minutit"</string>
+    <string name="download_video_path" formatted="false">"Videokaust"</string>
+    <string name="download_image_path" formatted="false">"Pildikaust"</string>
+    <string name="download_path_hint" formatted="false">"Esimene kaust peab olema avalik meediakaust, näiteks Movies, Pictures või DCIM. Vigase tee korral kasutatakse süsteemi vaikeväärtust."</string>
+    <string name="views_range_title" formatted="false">"Vaatamiste arvu vahemik"</string>
+    <string name="views_range_min" formatted="false">"Minimaalne vaatamiste arv (0 = piiramatu)"</string>
+    <string name="views_range_max" formatted="false">"Maksimaalne vaatamiste arv (0 = piiramatu)"</string>
+    <string name="views_range_hint" formatted="false">"Säilita ainult selle vaatamiste arvu vahemiku videod. Kui mõlemad piirid on 0, ei eemaldata midagi."</string>
+    <string name="likes_range_title" formatted="false">"Meeldimiste arvu vahemik"</string>
+    <string name="likes_range_min" formatted="false">"Minimaalne meeldimiste arv (0 = piiramatu)"</string>
+    <string name="likes_range_max" formatted="false">"Maksimaalne meeldimiste arv (0 = piiramatu)"</string>
+    <string name="likes_range_hint" formatted="false">"Säilita ainult selle meeldimiste arvu vahemiku videod. Kui mõlemad piirid on 0, ei eemaldata midagi."</string>
+    <string name="duration_range_title" formatted="false">"Video kestuse vahemik"</string>
+    <string name="duration_range_min" formatted="false">"Minimaalne kestus (sekundites; 0 = piiramatu)"</string>
+    <string name="duration_range_max" formatted="false">"Maksimaalne kestus (sekundites; 0 = piiramatu)"</string>
+    <string name="duration_range_hint" formatted="false">"Säilita ainult selles kestuse vahemikus soovitatud videod. Kui mõlemad piirid on 0, ei eemaldata midagi. Fotopostitusi see ei mõjuta."</string>
+    <string name="keyword_manage" formatted="false">"Filtrireeglid"</string>
+    <string name="keyword_description_hint" formatted="false">"Võrdleb videotekste ja kirjeldusi suur- ja väiketähti eristamata."</string>
+    <string name="keyword_tag_hint" formatted="false">"Võrdleb teemaviiteid. Ära lisa eesliidet #."</string>
+    <string name="keyword_author_hint" formatted="false">"Võrdleb loojate nimesid ja kordumatuid kasutajanimesid. Ära lisa eesliidet @."</string>
+    <string name="keyword_description_input" formatted="false">"Märksõna kirjelduses"</string>
+    <string name="keyword_tag_input" formatted="false">"Teemaviide"</string>
+    <string name="keyword_author_input" formatted="false">"Nimi või kasutajanimi"</string>
+    <string name="keyword_add" formatted="false">"Lisa reegel"</string>
+    <string name="keyword_delete" formatted="false">"Kustuta reegel"</string>
+    <string name="region_select_title" formatted="false">"Vali piirkond"</string>
+    <string name="region_search" formatted="false">"Riigi nimi või kood"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Operaatori kood: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Kohandatud piirkond ja SIM-kaart"</string>
+    <string name="region_custom_hint" formatted="false">"Määra kohandatud riigikood ja operaator eelseadistuste piiranguteta."</string>
+    <string name="region_code_input" formatted="false">"Riigi- või piirkonnakood (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Operaatori kood (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Operaatori nimi (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Vali levinud keel või sisesta keelekood."</string>
+    <string name="language_code_input" formatted="false">"Keelekood (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Keeled"</string>
+    <string name="timezone_custom_hint" formatted="false">"Vali levinud linna ajavöönd või sisesta ajavööndi nimi."</string>
+    <string name="timezone_input" formatted="false">"Ajavööndi nimi (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Linnad"</string>
+    <string name="city_tokyo" formatted="false">"Tokyo"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hongkong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Soul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapur"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Kohandatud asukoht"</string>
+    <string name="gps_custom_hint" formatted="false">"Vali levinud linn või sisesta laius- ja pikkuskraad."</string>
+    <string name="gps_latitude" formatted="false">"Laiuskraad (-90.0 kuni 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Pikkuskraad (-180.0 kuni 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Linnad"</string>
+    <string name="speed_add_title" formatted="false">"Lisa kiirus"</string>
+    <string name="speed_input" formatted="false">"Kiirus"</string>
+    <string name="speed_invalid" formatted="false">"Sisesta kehtiv arv"</string>
+    <string name="speed_out_of_range" formatted="true">"Toetatud on ainult %1$sx kuni %2$sx"</string>
+    <string name="speed_range" formatted="true">"Toetatud vahemik: %1$sx kuni %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Muuda kiirust"</string>
+    <string name="duration_threshold_title" formatted="false">"Pika video hoiatus"</string>
+    <string name="duration_threshold_hint" formatted="false">"Kui video saavutab selle kestuse, teatab taasesituse alguses ilmuv lühiteade selle pikkuse minutites."</string>
+    <string name="duration_threshold_input" formatted="false">"Kestuse lävi (minutites)"</string>
+    <string name="duration_threshold_example" formatted="false">"Näiteks: 3 või 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Sisesta kehtiv minutite arv, mis on suurem kui 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Praegune seade: hoiatus videote puhul, mille kestus on ≥ %1$s minutit"</string>
+    <string name="duration_threshold_presets" formatted="false">"Soovitatud kestused:"</string>
+    <string name="status_feature_feed" formatted="false">"Voofilter"</string>
+    <string name="status_feature_speed" formatted="false">"Kiirus"</string>
+    <string name="status_feature_progress" formatted="false">"Edenemisriba"</string>
+    <string name="status_feature_clean" formatted="false">"Automaatne peitmine"</string>
+    <string name="status_feature_immersive" formatted="false">"Video kuvamine"</string>
+    <string name="status_feature_scroll" formatted="false">"Automaatne kerimine"</string>
+    <string name="status_feature_duration" formatted="false">"Kestuse hoiatus"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Kommentaaride tõlge"</string>
+    <string name="status_feature_video_translate" formatted="false">"Subtiitrite ja tõlke menüü"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Kommentaaride koopia"</string>
+    <string name="status_feature_author" formatted="false">"Looja piirkond"</string>
+    <string name="status_feature_download" formatted="false">"Video salvestamine"</string>
+    <string name="status_feature_music" formatted="false">"Helipiirangud"</string>
+    <string name="status_feature_sim" formatted="false">"Piirkond ja SIM"</string>
+    <string name="status_feature_language" formatted="false">"Keel"</string>
+    <string name="status_feature_timezone" formatted="false">"Ajavöönd"</string>
+    <string name="status_feature_gps" formatted="false">"Asukoht"</string>
+    <string name="status_feature_bar" formatted="false">"Olekuriba"</string>
+    <string name="status_normal" formatted="false">"Töötab"</string>
+    <string name="status_issue" formatted="false">"Probleem"</string>
+    <string name="status_disabled" formatted="false">"Väljas"</string>
+    <string name="status_pending" formatted="false">"Ootel"</string>
+    <string name="status_problem_disabled" formatted="false">"Väljas, viga registreeritud"</string>
+    <string name="status_problem_unavailable" formatted="false">"Ajutiselt kättesaamatu"</string>
+    <string name="status_problem_runtime" formatted="false">"Käitusaegne viga"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Kiirusmenüü kättesaamatu"</string>
+    <string name="status_prepare_failed" formatted="false">"Funktsioonide ettevalmistus nurjus. Ava TikTok uuesti ja kontrolli."</string>
+    <string name="status_preparing" formatted="false">"Funktsioonide ettevalmistamine. Palun oota."</string>
+    <string name="status_prepared" formatted="false">"Ettevalmistus valmis. Ava TikTok uuesti."</string>
+    <string name="status_read_failed" formatted="false">"Oleku lugemine pole praegu võimalik. Kontrolli hiljem uuesti."</string>
+    <string name="status_update_failed" formatted="false">"Oleku uuendamine pole praegu võimalik. Kuvatakse viimane tulemus."</string>
+    <string name="status_reading" formatted="false">"Oleku lugemine"</string>
+    <string name="status_empty" formatted="false">"Tegevusi pole registreeritud. Lülita Toki LSPosedis sisse, ava TikTok ja kontrolli uuesti."</string>
+    <string name="status_report_note" formatted="true">"Viimane aruanne: %1$s\n„Töötab” tähendab, et funktsioon on valmis ega ole teatanud vigadest."</string>
+    <string name="config_section" formatted="false">"Seadistus"</string>
+    <string name="config_import" formatted="false">"Impordi seaded"</string>
+    <string name="config_import_summary" formatted="false">"Taasta funktsioonide seaded failist"</string>
+    <string name="config_export" formatted="false">"Ekspordi seaded"</string>
+    <string name="config_export_summary" formatted="false">"Salvesta funktsioonide seaded faili"</string>
+    <string name="config_exported" formatted="false">"Seadistus eksporditi valitud asukohta. Fail võib sisaldada märksõnu, piirkondi ja kaustaseadeid. Hoia seda turvaliselt."</string>
+    <string name="config_import_confirm" formatted="true">"Fail sisaldab %1$d seadet. Import asendab kõik funktsioonide seaded; puuduvad seaded taastatakse vaikeväärtustele.\n\nRakenduse keel, ikoon, LSPosedi volitus ja TikToki ühilduvuse vahemälu ei muutu. Kas jätkata?"</string>
+    <string name="config_overwrite" formatted="false">"Asenda"</string>
+    <string name="config_imported" formatted="false">"Seadistus imporditud ja funktsioonide seaded uuendatud. Töötamise ajal uuendatavad muudatused rakenduvad kohe. Muude muudatuste kontrollimiseks ava TikTok uuesti."</string>
+    <string name="config_processing" formatted="false">"Töötlemine…"</string>
+    <string name="config_error_io" formatted="false">"Faili lugemine või kirjutamine ebaõnnestus. Kontrolli valitud asukohta ja vaba ruumi."</string>
+    <string name="config_error_permission" formatted="false">"Valitud failile juurdepääsu luba pole antud. Vali see uuesti."</string>
+    <string name="config_error_invalid" formatted="false">"See pole kehtiv Toki seadistusfail. Ühtegi seadet ei imporditud."</string>
+    <string name="config_error_validation" formatted="true">"Seadistuse kontroll nurjus: %1$s. Ühtegi seadet ei imporditud."</string>
+    <string name="config_error_commit" formatted="false">"Seadistuse muudatusi ei saanud kinnitada. Ava Toki uuesti ja kontrolli neid enne uut katset."</string>
+    <string name="sponsor_title" formatted="false">"Toeta arendajat"</string>
+    <string name="sponsor_kofi" formatted="false">"Toeta Ko-fi kaudu"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay makse QR-kood"</string>
+    <string name="sponsor_saving" formatted="false">"Salvestamine…"</string>
+    <string name="sponsor_save_image" formatted="false">"Salvesta pilt"</string>
+    <string name="sponsor_image_hint" formatted="false">"Salvesta täielik originaalpilt ja vali see Alipays koodi skannimiseks."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT-aadress kopeeritud"</string>
+    <string name="sponsor_image_saved" formatted="false">"Pilt salvestatud valitud asukohta"</string>
+    <string name="sponsor_error_io" formatted="false">"Salvestamine nurjus. Kontrolli valitud asukohta ja vaba ruumi ning proovi uuesti."</string>
+    <string name="sponsor_error_permission" formatted="false">"Salvestamine nurjus. Sellele asukohale pole kirjutamisluba antud. Vali teine asukoht."</string>
+    <string name="feature_filter_topics" formatted="false">"Peida soovitatud teemad"</string>
+    <string name="feature_filter_creators" formatted="false">"Peida soovitatud loojad"</string>
+    <string name="host_scan_title_complete" formatted="false">"Otsing lõpetatud"</string>
+    <string name="host_scan_title_failed" formatted="false">"Otsing ebaõnnestus"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Tulemuste rakendamiseks taaskäivita TikTok käsitsi."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Vaata Toki funktsioonide diagnostikat."</string>
+    <string name="layout_title" formatted="false">"Lehe paigutus"</string>
+    <string name="layout_summary" formatted="false">"Vali peidetavad elemendid"</string>
+    <string name="layout_hint" formatted="false">"Elemendi peitmiseks lülita lüliti sisse"</string>
+    <string name="layout_top" formatted="false">"Ülariba"</string>
+    <string name="layout_bottom" formatted="false">"Alariba"</string>
+    <string name="layout_side" formatted="false">"Videoleht"</string>
+    <string name="layout_search" formatted="false">"Otsing"</string>
+    <string name="layout_live" formatted="false">"OTSE"</string>
+    <string name="layout_friends" formatted="false">"Sõbrad"</string>
+    <string name="layout_following" formatted="false">"Jälgitavad"</string>
+    <string name="layout_shop" formatted="false">"Pood"</string>
+    <string name="layout_for_you" formatted="false">"Sulle"</string>
+    <string name="layout_nearby" formatted="false">"Läheduses"</string>
+    <string name="layout_stem" formatted="false">"Teadus"</string>
+    <string name="layout_series" formatted="false">"Sarjad"</string>
+    <string name="layout_home" formatted="false">"Avaleht"</string>
+    <string name="layout_create" formatted="false">"Loo"</string>
+    <string name="layout_inbox" formatted="false">"Postkast"</string>
+    <string name="layout_profile" formatted="false">"Profiil"</string>
+    <string name="layout_discover" formatted="false">"Avasta"</string>
+    <string name="layout_avatar" formatted="false">"Profiilipilt"</string>
+    <string name="layout_follow" formatted="false">"Jälgimisnupp"</string>
+    <string name="layout_like" formatted="false">"Meeldib"</string>
+    <string name="layout_comment" formatted="false">"Kommentaarid"</string>
+    <string name="layout_favorite" formatted="false">"Lemmikud"</string>
+    <string name="layout_share" formatted="false">"Jaga"</string>
+    <string name="layout_music" formatted="false">"Muusikaplaat"</string>
+    <string name="layout_explore" formatted="false">"Uuri"</string>
+    <string name="layout_author" formatted="false">"Autori info"</string>
+    <string name="layout_description" formatted="false">"Kirjeldus"</string>
+    <string name="layout_music_title" formatted="false">"Muusika pealkiri"</string>
+    <string name="layout_tags" formatted="false">"Infosildid"</string>
+    <string name="layout_search_label" formatted="false">"Otsingusoovitus"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Automaatkerimise peatamise nupp"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Mündid ja preemiad"</string>
+    <string name="layout_quick_comment" formatted="false">"Kiirkommentaarid"</string>
+    <string name="layout_playlist" formatted="false">"Esitusloend"</string>
+    <string name="layout_creation_buttons" formatted="false">"Loomise otseteed"</string>
+    <string name="layout_live_notice" formatted="false">"LIVE-meeldetuletused"</string>
+    <string name="layout_opacity" formatted="false">"Läbipaistmatus"</string>
+    <string name="feature_background_audio">"Ava taustaheli"</string>
+    <string name="layout_landscape">"Täisekraani nupp"</string>
+    <string name="layout_photo_indicators">"Fotode näidikud ja vihjed"</string>
+    <string name="layout_quick_message">"Kiirsõnumid ja jagaja"</string>
+    <string name="layout_user_card">"Soovitatud kontod"</string>
+    <string name="layout_survey">"Küsitlused ja tagasiside"</string>
+    <string name="layout_ad_cards">"Toote- ja reklaamikaardid"</string>
+    <string name="layout_bottom_banners">"Muud alumised bännerid"</string>
+    <string name="layout_activities">"Sündmuste nupp"</string>
+    <string name="host_scan_title_running" formatted="false">"Meetodite otsimine"</string>
+    <string name="host_scan_title_saving" formatted="false">"Tulemuste salvestamine"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Hoia TikTok esiplaanil."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Palun oota."</string>
+    <string name="host_scan_done" formatted="false">"Selge"</string>
+    <string name="video_fit_center" formatted="false">"Keskel"</string>
+    <string name="video_fit_smart" formatted="false">"Täisekraan"</string>
+</resources>

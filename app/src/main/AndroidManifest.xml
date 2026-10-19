@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <permission android:name="io.github.meiyongai.toki.subtitle.permission.READ_DIAGNOSTICS"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="io.github.meiyongai.toki.subtitle.permission.READ_DIAGNOSTICS" />
+
+    <!-- 声明目标宿主应用的包可见性，确保 Android 11+ (API 30+) 环境下可正确解析启动 Intent -->
+    <queries>
+        <package android:name="com.zhiliaoapp.musically" />
+        <package android:name="com.ss.android.ugc.trill" />
+    </queries>
+
+    <application
+        android:name=".TokiApplication"
+        android:label="Toki 字幕版"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:allowBackup="false"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Toki">
+
+        <provider android:name=".provider.SubtitlePositionProvider"
+            android:authorities="io.github.meiyongai.toki.subtitle.position"
+            android:exported="true" />
+
+
+
+        <!-- LSPosed 模块标识与兼容性声明 -->
+        <meta-data
+            android:name="xposedmodule"
+            android:value="true" />
+        <meta-data
+            android:name="xposeddescription"
+            android:value="Toki" />
+        <meta-data
+            android:name="xposedminversion"
+            android:value="102" />
+
+        <!-- 模块设置入口始终启用，LSPosed 通过 MODULE_SETTINGS 查找该活动。 -->
+        <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/Theme.Toki.Starting"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="de.robv.android.xposed.category.MODULE_SETTINGS" />
+            </intent-filter>
+        </activity>
+
+        <!-- 桌面启动别名：隐藏图标只禁用该组件，不影响主活动的模块设置入口。 -->
+        <activity android:name=".ui.SubtitleSettingsActivity"
+            android:theme="@style/Theme.Toki.SubtitleDialog"
+            android:exported="true" android:excludeFromRecents="true" />
+
+        <activity-alias
+            android:name="io.github.meiyongai.toki.subtitle.LauncherAlias"
+            android:targetActivity=".ui.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-alias>
+
+    </application>
+
+</manifest>

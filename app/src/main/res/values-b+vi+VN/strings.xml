@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Trang chủ"</string>
+    <string name="nav_features" formatted="false">"Tính năng"</string>
+    <string name="page_features" formatted="false">"Cài đặt"</string>
+    <string name="page_hook_status" formatted="false">"Trạng thái tính năng"</string>
+    <string name="nav_back" formatted="false">"Quay lại"</string>
+    <string name="restart_tiktok" formatted="false">"Khởi động lại TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Vui lòng cấp quyền root cho Toki"</string>
+    <string name="language_title" formatted="false">"Ngôn ngữ ứng dụng"</string>
+    <string name="language_system" formatted="false">"Theo hệ thống"</string>
+    <string name="language_search" formatted="false">"Tìm ngôn ngữ"</string>
+    <string name="language_clear_search" formatted="false">"Xóa tìm kiếm"</string>
+    <string name="language_no_results" formatted="false">"Không tìm thấy ngôn ngữ phù hợp"</string>
+    <string name="common_save" formatted="false">"Lưu"</string>
+    <string name="common_cancel" formatted="false">"Hủy"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Đóng"</string>
+    <string name="common_open" formatted="false">"Mở"</string>
+    <string name="common_copy" formatted="false">"Sao chép"</string>
+    <string name="common_add" formatted="false">"Thêm"</string>
+    <string name="common_delete" formatted="false">"Xóa"</string>
+    <string name="common_done" formatted="false">"Xong"</string>
+    <string name="common_save_apply" formatted="false">"Áp dụng"</string>
+    <string name="common_unknown" formatted="false">"Không xác định"</string>
+    <string name="common_custom" formatted="false">"Tùy chỉnh"</string>
+    <string name="home_icon_hidden" formatted="false">"Đã ẩn biểu tượng"</string>
+    <string name="home_icon_restored" formatted="false">"Đã hiện lại biểu tượng"</string>
+    <string name="home_activated" formatted="false">"Đã kích hoạt"</string>
+    <string name="home_inactive" formatted="false">"Chưa kích hoạt"</string>
+    <string name="home_activation_missing" formatted="false">"Chưa phát hiện kích hoạt trong LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Khả năng tương thích TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok đã cài đặt"</string>
+    <string name="home_host_missing" formatted="false">"Không tìm thấy bản TikTok được hỗ trợ trên thiết bị"</string>
+    <string name="home_host_not_installed" formatted="false">"Chưa cài đặt"</string>
+    <string name="home_supported_versions" formatted="false">"Phiên bản được hỗ trợ"</string>
+    <string name="home_community" formatted="false">"Cộng đồng"</string>
+    <string name="home_github" formatted="false">"Kho mã GitHub"</string>
+    <string name="home_telegram" formatted="false">"Nhóm Telegram"</string>
+    <string name="home_preferences" formatted="false">"Tùy chọn"</string>
+    <string name="home_hide_icon" formatted="false">"Ẩn biểu tượng ứng dụng"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Sau khi ẩn, có thể mở Toki qua trình quản lý LSPosed"</string>
+    <string name="home_support" formatted="false">"Ủng hộ phát triển"</string>
+    <string name="home_support_summary" formatted="false">"Hỗ trợ duy trì và cải tiến tính năng"</string>
+    <string name="feature_region_section" formatted="false">"Giả lập khu vực và môi trường"</string>
+    <string name="feature_playback_section" formatted="false">"Phát video"</string>
+    <string name="feature_progress" formatted="false">"Luôn hiện thanh tiến trình video"</string>
+    <string name="feature_progress_summary" formatted="false">"Hiện thanh tiến trình phía dưới ngay cả với video ngắn"</string>
+    <string name="feature_immersive" formatted="false">"Hiển thị video"</string>
+    <string name="feature_autoplay" formatted="false">"Cuộn tự động nâng cao"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Mở khóa cuộn tự động trong menu mọi video"</string>
+    <string name="feature_status_bar" formatted="false">"Ẩn thanh trạng thái hệ thống"</string>
+    <string name="feature_media_section" formatted="false">"Tải xuống và công cụ"</string>
+    <string name="feature_download" formatted="false">"Tải không hình mờ"</string>
+    <string name="feature_download_summary" formatted="false">"Lưu video gốc không có hình mờ từ menu nhấn giữ hoặc chia sẻ"</string>
+    <string name="feature_music" formatted="false">"Gỡ hạn chế âm thanh"</string>
+    <string name="feature_music_summary" formatted="false">"Khôi phục âm thanh bị hạn chế do bản quyền hoặc khu vực"</string>
+    <string name="feature_author_region" formatted="false">"Hiện khu vực tác giả"</string>
+    <string name="feature_author_region_summary" formatted="false">"Hiện cờ và mã quốc gia/khu vực bên cạnh tên tác giả"</string>
+    <string name="feature_copy_comment" formatted="false">"Chỉ sao chép văn bản"</string>
+    <string name="feature_video_translation" formatted="false">"Menu phụ đề và bản dịch"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Hiện mục trong menu nhấn giữ"</string>
+    <string name="feature_comment_translation" formatted="false">"Dịch bình luận"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Thêm nút để dịch hàng loạt bình luận bằng tiếng nước ngoài"</string>
+    <string name="feature_filter_section" formatted="false">"Lọc bảng tin"</string>
+    <string name="feature_remove_ads" formatted="false">"Loại bỏ quảng cáo bảng tin"</string>
+    <string name="feature_remove_live" formatted="false">"Lọc buổi LIVE được đề xuất"</string>
+    <string name="feature_remove_photos" formatted="false">"Lọc bài đăng ảnh được đề xuất"</string>
+    <string name="feature_filter_views" formatted="false">"Lọc theo lượt xem"</string>
+    <string name="feature_filter_likes" formatted="false">"Lọc theo lượt thích"</string>
+    <string name="feature_filter_duration" formatted="false">"Lọc theo thời lượng"</string>
+    <string name="feature_filter_keywords" formatted="false">"Lọc theo từ khóa"</string>
+    <string name="feature_block_offline" formatted="false">"Chặn video ngoại tuyến"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Ngăn chèn video đã tải sẵn khi kết nối yếu"</string>
+    <string name="feature_remove_ai" formatted="false">"Ẩn video do AI tạo"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Lọc video được TikTok đánh dấu là do AI tạo"</string>
+    <string name="filter_metric_views" formatted="false">"lượt xem"</string>
+    <string name="filter_metric_likes" formatted="false">"lượt thích"</string>
+    <string name="filter_metric_duration" formatted="false">"thời lượng"</string>
+    <string name="filter_unit_seconds" formatted="false">"giây"</string>
+    <string name="filter_views_saved" formatted="false">"Đã lưu phạm vi lượt xem"</string>
+    <string name="filter_likes_saved" formatted="false">"Đã lưu phạm vi lượt thích"</string>
+    <string name="filter_duration_saved" formatted="false">"Đã lưu phạm vi thời lượng"</string>
+    <string name="download_path_saved" formatted="false">"Đã cập nhật đường dẫn lưu"</string>
+    <string name="region_spoof_title" formatted="false">"Giả lập khu vực và SIM"</string>
+    <string name="region_current" formatted="false">"Cấu hình hiện tại"</string>
+    <string name="region_target" formatted="true">"Khu vực đích: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Nhà mạng: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Mã nhà mạng: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Cấu hình sẵn"</string>
+    <string name="region_custom_parameters" formatted="false">"Tùy chỉnh"</string>
+    <string name="language_spoof" formatted="false">"Giả lập ngôn ngữ"</string>
+    <string name="environment_follow_region" formatted="false">"Theo khu vực"</string>
+    <string name="language_effective" formatted="true">"Ngôn ngữ có hiệu lực: %1$s"</string>
+    <string name="language_custom" formatted="false">"Ngôn ngữ tùy chỉnh"</string>
+    <string name="timezone_spoof" formatted="false">"Giả lập múi giờ"</string>
+    <string name="timezone_effective" formatted="true">"Múi giờ có hiệu lực: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Múi giờ tùy chỉnh"</string>
+    <string name="gps_spoof" formatted="false">"Giả lập vị trí"</string>
+    <string name="gps_effective" formatted="true">"Tọa độ có hiệu lực: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Tọa độ tùy chỉnh"</string>
+    <string name="speed_fixed" formatted="false">"Giữ tốc độ phát"</string>
+    <string name="speed_fixed_summary" formatted="false">"Giữ tốc độ đã chọn trong menu nhấn giữ khi chuyển video"</string>
+    <string name="speed_expand" formatted="false">"Thêm tốc độ"</string>
+    <string name="speed_options_hint" formatted="false">"Các tốc độ (chạm để sửa hoặc xóa)"</string>
+    <string name="speed_add_option" formatted="false">"+ Thêm tốc độ"</string>
+    <string name="speed_restore" formatted="false">"Đặt lại"</string>
+    <string name="clean_on_play" formatted="false">"Ẩn điều khiển khi phát"</string>
+    <string name="clean_keep_progress" formatted="false">"Giữ thanh tiến trình"</string>
+    <string name="download_paths" formatted="false">"Thư mục lưu"</string>
+    <string name="download_paths_summary" formatted="true">"Video: %1$s · Ảnh: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Giữ video có %1$s từ %2$d%4$s đến %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Giữ video có %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Giữ video có %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Chưa đặt phạm vi (chạm để đặt giới hạn dưới/trên)"</string>
+    <string name="keyword_unset" formatted="false">"Chưa có quy tắc (chạm để quản lý danh mục)"</string>
+    <string name="keyword_summary" formatted="true">"Đã bật: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Chú thích %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Hashtag %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Tác giả %1$d"</string>
+    <string name="keyword_description" formatted="false">"Chú thích"</string>
+    <string name="keyword_tag" formatted="false">"Hashtag"</string>
+    <string name="keyword_author" formatted="false">"Tác giả"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Chưa có quy tắc %1$s. Nhập ở trên để thêm"</string>
+    <string name="duration_alert_title" formatted="false">"Thông báo video dài"</string>
+    <string name="duration_alert_summary" formatted="true">"Ngưỡng hiện tại: ≥ %1$s phút"</string>
+    <string name="download_video_path" formatted="false">"Thư mục video"</string>
+    <string name="download_image_path" formatted="false">"Thư mục ảnh"</string>
+    <string name="download_path_hint" formatted="false">"Thư mục đầu tiên phải là thư mục đa phương tiện chung như Movies, Pictures hoặc DCIM. Đường dẫn không hợp lệ sẽ dùng mặc định hệ thống"</string>
+    <string name="views_range_title" formatted="false">"Phạm vi lượt xem"</string>
+    <string name="views_range_min" formatted="false">"Lượt xem tối thiểu (0 = không giới hạn)"</string>
+    <string name="views_range_max" formatted="false">"Lượt xem tối đa (0 = không giới hạn)"</string>
+    <string name="views_range_hint" formatted="false">"Chỉ giữ video có lượt xem trong phạm vi. Đặt cả hai giới hạn là 0 để không loại bỏ video nào"</string>
+    <string name="likes_range_title" formatted="false">"Phạm vi lượt thích"</string>
+    <string name="likes_range_min" formatted="false">"Lượt thích tối thiểu (0 = không giới hạn)"</string>
+    <string name="likes_range_max" formatted="false">"Lượt thích tối đa (0 = không giới hạn)"</string>
+    <string name="likes_range_hint" formatted="false">"Chỉ giữ video có lượt thích trong phạm vi. Đặt cả hai giới hạn là 0 để không loại bỏ video nào"</string>
+    <string name="duration_range_title" formatted="false">"Phạm vi thời lượng video"</string>
+    <string name="duration_range_min" formatted="false">"Thời lượng tối thiểu (giây; 0 = không giới hạn)"</string>
+    <string name="duration_range_max" formatted="false">"Thời lượng tối đa (giây; 0 = không giới hạn)"</string>
+    <string name="duration_range_hint" formatted="false">"Chỉ giữ video đề xuất có thời lượng trong phạm vi. Đặt cả hai giới hạn là 0 để không loại bỏ video nào. Bài đăng ảnh không bị ảnh hưởng"</string>
+    <string name="keyword_manage" formatted="false">"Quy tắc lọc"</string>
+    <string name="keyword_description_hint" formatted="false">"Khớp chú thích và mô tả video, không phân biệt chữ hoa chữ thường."</string>
+    <string name="keyword_tag_hint" formatted="false">"Khớp hashtag. Không cần nhập tiền tố #."</string>
+    <string name="keyword_author_hint" formatted="false">"Khớp tên hiển thị và tên người dùng duy nhất của tác giả. Không cần nhập tiền tố @."</string>
+    <string name="keyword_description_input" formatted="false">"Từ hoặc cụm từ"</string>
+    <string name="keyword_tag_input" formatted="false">"Hashtag"</string>
+    <string name="keyword_author_input" formatted="false">"Tên hoặc tên người dùng"</string>
+    <string name="keyword_add" formatted="false">"Thêm quy tắc"</string>
+    <string name="keyword_delete" formatted="false">"Xóa quy tắc"</string>
+    <string name="region_select_title" formatted="false">"Chọn khu vực"</string>
+    <string name="region_search" formatted="false">"Tìm tên quốc gia, tên tiếng Anh hoặc mã khu vực"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Mã nhà mạng: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Khu vực và SIM tùy chỉnh"</string>
+    <string name="region_custom_hint" formatted="false">"Đặt mã quốc gia và thông tin nhà mạng mà không bị giới hạn bởi cấu hình sẵn."</string>
+    <string name="region_code_input" formatted="false">"Mã quốc gia/khu vực (ví dụ: JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Mã nhà mạng (ví dụ: 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Tên nhà mạng (ví dụ: NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Chọn ngôn ngữ phổ biến hoặc nhập mã ngôn ngữ."</string>
+    <string name="language_code_input" formatted="false">"Mã ngôn ngữ (ví dụ: ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Ngôn ngữ phổ biến:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Chọn múi giờ thành phố hoặc nhập tên múi giờ."</string>
+    <string name="timezone_input" formatted="false">"Tên múi giờ (ví dụ: Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Múi giờ thành phố phổ biến:"</string>
+    <string name="city_tokyo" formatted="false">"Tokyo"</string>
+    <string name="city_taipei" formatted="false">"Đài Bắc"</string>
+    <string name="city_hong_kong" formatted="false">"Hồng Kông"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"Luân Đôn"</string>
+    <string name="city_seoul" formatted="false">"Seoul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapore"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Tọa độ vị trí tùy chỉnh"</string>
+    <string name="gps_custom_hint" formatted="false">"Chọn thành phố hoặc nhập vĩ độ và kinh độ."</string>
+    <string name="gps_latitude" formatted="false">"Vĩ độ (-90.0 đến 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Kinh độ (-180.0 đến 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Thành phố phổ biến:"</string>
+    <string name="speed_add_title" formatted="false">"Thêm tốc độ"</string>
+    <string name="speed_input" formatted="false">"Tốc độ phát"</string>
+    <string name="speed_invalid" formatted="false">"Vui lòng nhập số hợp lệ"</string>
+    <string name="speed_out_of_range" formatted="true">"Chỉ hỗ trợ %1$sx–%2$sx"</string>
+    <string name="speed_range" formatted="true">"Phạm vi hỗ trợ: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Sửa tốc độ"</string>
+    <string name="duration_threshold_title" formatted="false">"Thông báo video dài"</string>
+    <string name="duration_threshold_hint" formatted="false">"Khi video đạt thời lượng này, lúc bắt đầu phát sẽ hiện thông báo ngắn về độ dài tính bằng phút."</string>
+    <string name="duration_threshold_input" formatted="false">"Ngưỡng thời lượng (phút)"</string>
+    <string name="duration_threshold_example" formatted="false">"Ví dụ: 3 hoặc 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Nhập số phút hợp lệ lớn hơn 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Cài đặt hiện tại: thông báo khi video ≥ %1$s phút"</string>
+    <string name="duration_threshold_presets" formatted="false">"Thời lượng đề xuất:"</string>
+    <string name="status_feature_feed" formatted="false">"Lọc bảng tin"</string>
+    <string name="status_feature_speed" formatted="false">"Tốc độ phát"</string>
+    <string name="status_feature_progress" formatted="false">"Thanh tiến trình"</string>
+    <string name="status_feature_clean" formatted="false">"Tự động ẩn điều khiển"</string>
+    <string name="status_feature_immersive" formatted="false">"Hiển thị video"</string>
+    <string name="status_feature_scroll" formatted="false">"Cuộn tự động"</string>
+    <string name="status_feature_duration" formatted="false">"Báo thời lượng"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Dịch bình luận"</string>
+    <string name="status_feature_video_translate" formatted="false">"Menu phụ đề và bản dịch"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Sao chép bình luận"</string>
+    <string name="status_feature_author" formatted="false">"Khu vực tác giả"</string>
+    <string name="status_feature_download" formatted="false">"Lưu video"</string>
+    <string name="status_feature_music" formatted="false">"Hạn chế âm thanh"</string>
+    <string name="status_feature_sim" formatted="false">"SIM và quốc gia"</string>
+    <string name="status_feature_language" formatted="false">"Ngôn ngữ"</string>
+    <string name="status_feature_timezone" formatted="false">"Múi giờ"</string>
+    <string name="status_feature_gps" formatted="false">"Vị trí"</string>
+    <string name="status_feature_bar" formatted="false">"Thanh trạng thái"</string>
+    <string name="status_normal" formatted="false">"Bình thường"</string>
+    <string name="status_issue" formatted="false">"Có vấn đề"</string>
+    <string name="status_disabled" formatted="false">"Đã tắt"</string>
+    <string name="status_pending" formatted="false">"Chưa xác nhận"</string>
+    <string name="status_problem_disabled" formatted="false">"Đang tắt nhưng có bản ghi lỗi"</string>
+    <string name="status_problem_unavailable" formatted="false">"Tạm thời không khả dụng"</string>
+    <string name="status_problem_runtime" formatted="false">"Lỗi khi sử dụng"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Menu tốc độ không khả dụng"</string>
+    <string name="status_prepare_failed" formatted="false">"Chuẩn bị tính năng thất bại. Mở lại TikTok rồi kiểm tra."</string>
+    <string name="status_preparing" formatted="false">"Đang chuẩn bị tính năng. Vui lòng chờ."</string>
+    <string name="status_prepared" formatted="false">"Chuẩn bị hoàn tất. Vui lòng mở lại TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Tạm thời không đọc được trạng thái. Vui lòng kiểm tra sau."</string>
+    <string name="status_update_failed" formatted="false">"Tạm thời không cập nhật được trạng thái. Đang hiển thị kết quả gần nhất."</string>
+    <string name="status_reading" formatted="false">"Đang đọc trạng thái"</string>
+    <string name="status_empty" formatted="false">"Chưa có bản ghi hoạt động. Bật Toki trong LSPosed, mở TikTok rồi kiểm tra."</string>
+    <string name="status_report_note" formatted="true">"Báo cáo gần nhất: %1$s\n“Bình thường” nghĩa là tính năng đã sẵn sàng và chưa báo lỗi."</string>
+    <string name="config_section" formatted="false">"Quản lý cấu hình"</string>
+    <string name="config_import" formatted="false">"Nhập cấu hình"</string>
+    <string name="config_import_summary" formatted="false">"Khôi phục cài đặt tính năng từ tệp"</string>
+    <string name="config_export" formatted="false">"Xuất cấu hình"</string>
+    <string name="config_export_summary" formatted="false">"Lưu cài đặt tính năng thành tệp"</string>
+    <string name="config_exported" formatted="false">"Đã xuất cấu hình đến vị trí đã chọn. Tệp có thể chứa từ khóa, khu vực và cài đặt thư mục. Hãy giữ an toàn."</string>
+    <string name="config_import_confirm" formatted="true">"Số cài đặt trong tệp: %1$d. Nhập sẽ thay thế toàn bộ cấu hình tính năng; các mục thiếu sẽ trở về mặc định.\n\nNgôn ngữ giao diện, biểu tượng ứng dụng, quyền LSPosed và bộ nhớ đệm tương thích TikTok không thay đổi. Tiếp tục?"</string>
+    <string name="config_overwrite" formatted="false">"Thay thế"</string>
+    <string name="config_imported" formatted="false">"Đã nhập cấu hình và cập nhật trang tính năng. Các thay đổi hỗ trợ cập nhật trực tiếp có hiệu lực ngay. Với các tính năng khác, hãy mở lại TikTok để kiểm tra."</string>
+    <string name="config_processing" formatted="false">"Đang xử lý cấu hình"</string>
+    <string name="config_error_io" formatted="false">"Không đọc hoặc ghi được tệp. Kiểm tra vị trí đã chọn và dung lượng trống."</string>
+    <string name="config_error_permission" formatted="false">"Không có quyền truy cập tệp đã chọn. Vui lòng chọn lại."</string>
+    <string name="config_error_invalid" formatted="false">"Đây không phải tệp cấu hình Toki hợp lệ. Chưa nhập cài đặt nào."</string>
+    <string name="config_error_validation" formatted="true">"Xác thực cấu hình thất bại: %1$s. Chưa nhập cài đặt nào."</string>
+    <string name="config_error_commit" formatted="false">"Chưa xác nhận được việc áp dụng cấu hình. Mở lại Toki để kiểm tra trước khi thử lại."</string>
+    <string name="sponsor_title" formatted="false">"Ủng hộ nhà phát triển"</string>
+    <string name="sponsor_kofi" formatted="false">"Ủng hộ qua Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Mã QR thanh toán Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Đang lưu…"</string>
+    <string name="sponsor_save_image" formatted="false">"Lưu ảnh"</string>
+    <string name="sponsor_image_hint" formatted="false">"Lưu ảnh gốc đầy đủ rồi chọn ảnh đã lưu trong Alipay để nhận dạng mã."</string>
+    <string name="sponsor_address_copied" formatted="false">"Đã sao chép địa chỉ USDT"</string>
+    <string name="sponsor_image_saved" formatted="false">"Đã lưu ảnh đến vị trí đã chọn"</string>
+    <string name="sponsor_error_io" formatted="false">"Lưu thất bại. Kiểm tra vị trí và dung lượng trống rồi thử lại."</string>
+    <string name="sponsor_error_permission" formatted="false">"Lưu thất bại: chưa có quyền ghi vào vị trí đã chọn. Vui lòng chọn lại."</string>
+    <string name="feature_filter_topics" formatted="false">"Ẩn chủ đề được đề xuất"</string>
+    <string name="feature_filter_creators" formatted="false">"Ẩn nhà sáng tạo được đề xuất"</string>
+    <string name="host_scan_title_complete" formatted="false">"Tìm kiếm hoàn tất"</string>
+    <string name="host_scan_title_failed" formatted="false">"Tìm kiếm thất bại"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Khởi động lại TikTok theo cách thủ công để áp dụng kết quả."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Xem chẩn đoán tính năng trong Toki."</string>
+    <string name="layout_title" formatted="false">"Bố cục trang"</string>
+    <string name="layout_summary" formatted="false">"Chọn các nút muốn ẩn"</string>
+    <string name="layout_hint" formatted="false">"Bật công tắc để ẩn mục tương ứng"</string>
+    <string name="layout_top" formatted="false">"Thanh trên"</string>
+    <string name="layout_bottom" formatted="false">"Thanh dưới"</string>
+    <string name="layout_side" formatted="false">"Trang video"</string>
+    <string name="layout_search" formatted="false">"Tìm kiếm"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Bạn bè"</string>
+    <string name="layout_following" formatted="false">"Đang Follow"</string>
+    <string name="layout_shop" formatted="false">"Cửa hàng"</string>
+    <string name="layout_for_you" formatted="false">"Dành cho bạn"</string>
+    <string name="layout_nearby" formatted="false">"Gần đây"</string>
+    <string name="layout_stem" formatted="false">"Khoa học"</string>
+    <string name="layout_series" formatted="false">"Phim ngắn"</string>
+    <string name="layout_home" formatted="false">"Trang chủ"</string>
+    <string name="layout_create" formatted="false">"Tạo"</string>
+    <string name="layout_inbox" formatted="false">"Hộp thư"</string>
+    <string name="layout_profile" formatted="false">"Hồ sơ"</string>
+    <string name="layout_discover" formatted="false">"Khám phá"</string>
+    <string name="layout_avatar" formatted="false">"Ảnh đại diện"</string>
+    <string name="layout_follow" formatted="false">"Nút Follow"</string>
+    <string name="layout_like" formatted="false">"Thích"</string>
+    <string name="layout_comment" formatted="false">"Bình luận"</string>
+    <string name="layout_favorite" formatted="false">"Yêu thích"</string>
+    <string name="layout_share" formatted="false">"Chia sẻ"</string>
+    <string name="layout_music" formatted="false">"Đĩa nhạc"</string>
+    <string name="layout_explore" formatted="false">"Tìm hiểu"</string>
+    <string name="layout_author" formatted="false">"Thông tin tác giả"</string>
+    <string name="layout_description" formatted="false">"Mô tả"</string>
+    <string name="layout_music_title" formatted="false">"Tên nhạc"</string>
+    <string name="layout_tags" formatted="false">"Nhãn thông tin"</string>
+    <string name="layout_search_label" formatted="false">"Gợi ý tìm kiếm"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Nút dừng cuộn tự động"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Xu và phần thưởng"</string>
+    <string name="layout_quick_comment" formatted="false">"Bình luận nhanh"</string>
+    <string name="layout_playlist" formatted="false">"Danh sách phát"</string>
+    <string name="layout_creation_buttons" formatted="false">"Lối tắt sáng tạo"</string>
+    <string name="layout_live_notice" formatted="false">"Lời nhắc LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Độ đục"</string>
+    <string name="feature_background_audio">"Mở khóa âm thanh nền"</string>
+    <string name="layout_landscape">"Nút toàn màn hình"</string>
+    <string name="layout_photo_indicators">"Chỉ báo và gợi ý ảnh"</string>
+    <string name="layout_quick_message">"Tin nhắn nhanh và nguồn chia sẻ"</string>
+    <string name="layout_user_card">"Tài khoản được gợi ý"</string>
+    <string name="layout_survey">"Khảo sát và phản hồi"</string>
+    <string name="layout_ad_cards">"Thẻ sản phẩm và quảng cáo"</string>
+    <string name="layout_bottom_banners">"Biểu ngữ dưới cùng khác"</string>
+    <string name="layout_activities">"Lối vào sự kiện"</string>
+    <string name="host_scan_title_running" formatted="false">"Đang tìm phương thức"</string>
+    <string name="host_scan_title_saving" formatted="false">"Đang lưu kết quả"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Giữ TikTok ở phía trước."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Vui lòng chờ."</string>
+    <string name="host_scan_done" formatted="false">"Đã hiểu"</string>
+    <string name="video_fit_center" formatted="false">"Căn giữa"</string>
+    <string name="video_fit_smart" formatted="false">"Toàn màn hình"</string>
+</resources>

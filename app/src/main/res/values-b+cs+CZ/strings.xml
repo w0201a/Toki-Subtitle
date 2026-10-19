@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Domů"</string>
+    <string name="nav_features" formatted="false">"Funkce"</string>
+    <string name="page_features" formatted="false">"Nastavení"</string>
+    <string name="page_hook_status" formatted="false">"Stav funkcí"</string>
+    <string name="nav_back" formatted="false">"Zpět"</string>
+    <string name="restart_tiktok" formatted="false">"Restartovat TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Udělte aplikaci Toki přístup root."</string>
+    <string name="language_title" formatted="false">"Jazyk aplikace"</string>
+    <string name="language_system" formatted="false">"Podle systému"</string>
+    <string name="language_search" formatted="false">"Hledat jazyky"</string>
+    <string name="language_clear_search" formatted="false">"Vymazat hledání"</string>
+    <string name="language_no_results" formatted="false">"Žádné odpovídající jazyky"</string>
+    <string name="common_save" formatted="false">"Uložit"</string>
+    <string name="common_cancel" formatted="false">"Zrušit"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Zavřít"</string>
+    <string name="common_open" formatted="false">"Otevřít"</string>
+    <string name="common_copy" formatted="false">"Kopírovat"</string>
+    <string name="common_add" formatted="false">"Přidat"</string>
+    <string name="common_delete" formatted="false">"Odstranit"</string>
+    <string name="common_done" formatted="false">"Hotovo"</string>
+    <string name="common_save_apply" formatted="false">"Použít"</string>
+    <string name="common_unknown" formatted="false">"Neznámé"</string>
+    <string name="common_custom" formatted="false">"Vlastní"</string>
+    <string name="home_icon_hidden" formatted="false">"Ikona aplikace skryta"</string>
+    <string name="home_icon_restored" formatted="false">"Ikona aplikace obnovena"</string>
+    <string name="home_activated" formatted="false">"Aktivováno"</string>
+    <string name="home_inactive" formatted="false">"Neaktivováno"</string>
+    <string name="home_activation_missing" formatted="false">"V LSPosed nebyla zjištěna aktivace"</string>
+    <string name="home_host_section" formatted="false">"Kompatibilita s TikTokem"</string>
+    <string name="home_host_current" formatted="false">"Nainstalovaný TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Na tomto zařízení nebyla nalezena podporovaná instalace TikToku"</string>
+    <string name="home_host_not_installed" formatted="false">"Nenainstalováno"</string>
+    <string name="home_supported_versions" formatted="false">"Podporované verze"</string>
+    <string name="home_community" formatted="false">"Otevřený zdrojový kód a komunita"</string>
+    <string name="home_github" formatted="false">"Repozitář GitHub"</string>
+    <string name="home_telegram" formatted="false">"Skupina Telegram"</string>
+    <string name="home_preferences" formatted="false">"Předvolby modulu"</string>
+    <string name="home_hide_icon" formatted="false">"Skrýt ikonu aplikace"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Po skrytí lze Toki otevřít přes správce LSPosed"</string>
+    <string name="home_support" formatted="false">"Podpořit vývoj"</string>
+    <string name="home_support_summary" formatted="false">"Podpořte průběžnou údržbu a vylepšování"</string>
+    <string name="feature_region_section" formatted="false">"Oblast a zařízení"</string>
+    <string name="feature_playback_section" formatted="false">"Přehrávání"</string>
+    <string name="feature_progress" formatted="false">"Vždy zobrazovat průběh"</string>
+    <string name="feature_progress_summary" formatted="false">"Ponechá ukazatel průběhu viditelný i u krátkých videí"</string>
+    <string name="feature_immersive" formatted="false">"Zobrazení videa"</string>
+    <string name="feature_autoplay" formatted="false">"Rozšířené automatické posouvání"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Odemkne automatické posouvání v nabídce všech videí"</string>
+    <string name="feature_status_bar" formatted="false">"Skrýt systémový stavový řádek"</string>
+    <string name="feature_media_section" formatted="false">"Stahování a akce"</string>
+    <string name="feature_download" formatted="false">"Stahování bez vodoznaku"</string>
+    <string name="feature_download_summary" formatted="false">"Uloží původní video bez vodoznaku z nabídky po podržení nebo sdílení"</string>
+    <string name="feature_music" formatted="false">"Odblokovat zvuk"</string>
+    <string name="feature_music_summary" formatted="false">"Obnoví přehrávání zvuku omezeného licencí nebo oblastí"</string>
+    <string name="feature_author_region" formatted="false">"Zobrazit oblast tvůrce"</string>
+    <string name="feature_author_region_summary" formatted="false">"Zobrazí vlajku a kód země nebo oblasti vedle jména tvůrce"</string>
+    <string name="feature_copy_comment" formatted="false">"Kopírovat jen text"</string>
+    <string name="feature_video_translation" formatted="false">"Nabídka titulků a překladu"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Zobrazit položku v nabídce dlouhého stisknutí"</string>
+    <string name="feature_comment_translation" formatted="false">"Přeložit komentáře"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Přidá tlačítko pro hromadný překlad cizojazyčných komentářů"</string>
+    <string name="feature_filter_section" formatted="false">"Filtrování kanálu"</string>
+    <string name="feature_remove_ads" formatted="false">"Odstranit reklamy z kanálu"</string>
+    <string name="feature_remove_live" formatted="false">"Skrýt živá vysílání"</string>
+    <string name="feature_remove_photos" formatted="false">"Skrýt fotopříspěvky"</string>
+    <string name="feature_filter_views" formatted="false">"Filtr podle počtu zhlédnutí"</string>
+    <string name="feature_filter_likes" formatted="false">"Filtr podle počtu lajků"</string>
+    <string name="feature_filter_duration" formatted="false">"Filtr podle délky videa"</string>
+    <string name="feature_filter_keywords" formatted="false">"Filtr klíčových slov"</string>
+    <string name="feature_block_offline" formatted="false">"Blokovat offline videa"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Zabrání vkládání předem načtených offline videí při špatném připojení"</string>
+    <string name="feature_remove_ai" formatted="false">"Skrýt videa vytvořená AI"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtruje videa, která TikTok označuje jako vytvořená AI"</string>
+    <string name="filter_metric_views" formatted="false">"zhlédnutí"</string>
+    <string name="filter_metric_likes" formatted="false">"lajky"</string>
+    <string name="filter_metric_duration" formatted="false">"délka"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Rozsah počtu zhlédnutí uložen"</string>
+    <string name="filter_likes_saved" formatted="false">"Rozsah počtu lajků uložen"</string>
+    <string name="filter_duration_saved" formatted="false">"Rozsah délky videa uložen"</string>
+    <string name="download_path_saved" formatted="false">"Vlastní cesty pro ukládání aktualizovány"</string>
+    <string name="region_spoof_title" formatted="false">"Simulace oblasti a SIM"</string>
+    <string name="region_current" formatted="false">"Aktuální konfigurace"</string>
+    <string name="region_target" formatted="true">"Cílová oblast: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operátor: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Kód operátora: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Předvolby"</string>
+    <string name="region_custom_parameters" formatted="false">"Vlastní"</string>
+    <string name="language_spoof" formatted="false">"Simulace jazyka"</string>
+    <string name="environment_follow_region" formatted="false">"Podle oblasti"</string>
+    <string name="language_effective" formatted="true">"Použitý jazyk: %1$s"</string>
+    <string name="language_custom" formatted="false">"Vlastní jazyk"</string>
+    <string name="timezone_spoof" formatted="false">"Simulace časového pásma"</string>
+    <string name="timezone_effective" formatted="true">"Použité časové pásmo: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Vlastní časové pásmo"</string>
+    <string name="gps_spoof" formatted="false">"Simulace polohy"</string>
+    <string name="gps_effective" formatted="true">"Použité souřadnice: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Vlastní souřadnice"</string>
+    <string name="speed_fixed" formatted="false">"Zachovat rychlost přehrávání"</string>
+    <string name="speed_fixed_summary" formatted="false">"Při přepnutí videa zachová rychlost vybranou v nabídce po podržení"</string>
+    <string name="speed_expand" formatted="false">"Další rychlosti"</string>
+    <string name="speed_options_hint" formatted="false">"Možnosti rychlosti (klepnutím upravíte nebo odstraníte)"</string>
+    <string name="speed_add_option" formatted="false">"+ Přidat rychlost"</string>
+    <string name="speed_restore" formatted="false">"Obnovit"</string>
+    <string name="clean_on_play" formatted="false">"Skrýt ovládání při přehrávání"</string>
+    <string name="clean_keep_progress" formatted="false">"Ponechat ukazatel průběhu"</string>
+    <string name="download_paths" formatted="false">"Složky pro ukládání"</string>
+    <string name="download_paths_summary" formatted="true">"Videa: %1$s · Obrázky: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Ponechat videa s hodnotou %1$s od %2$d%4$s do %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Ponechat videa s hodnotou %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Ponechat videa s hodnotou %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Rozsah nenastaven (klepnutím nastavíte minimum nebo maximum)"</string>
+    <string name="keyword_unset" formatted="false">"Klepnutím přidáte pravidla"</string>
+    <string name="keyword_summary" formatted="true">"Zapnuto: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Popisky %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Hashtagy %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Tvůrci %1$d"</string>
+    <string name="keyword_description" formatted="false">"Popisky"</string>
+    <string name="keyword_tag" formatted="false">"Hashtagy"</string>
+    <string name="keyword_author" formatted="false">"Tvůrci"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Žádná pravidla pro %1$s. Přidejte je výše."</string>
+    <string name="duration_alert_title" formatted="false">"Upozornění na dlouhé video"</string>
+    <string name="duration_alert_summary" formatted="true">"Aktuální mez: ≥ %1$s minut"</string>
+    <string name="download_video_path" formatted="false">"Složka videí"</string>
+    <string name="download_image_path" formatted="false">"Složka obrázků"</string>
+    <string name="download_path_hint" formatted="false">"První složka musí být veřejná složka médií, například Movies, Pictures nebo DCIM. Neplatné cesty použijí výchozí hodnotu systému."</string>
+    <string name="views_range_title" formatted="false">"Rozsah počtu zhlédnutí"</string>
+    <string name="views_range_min" formatted="false">"Minimální počet zhlédnutí (0 = bez omezení)"</string>
+    <string name="views_range_max" formatted="false">"Maximální počet zhlédnutí (0 = bez omezení)"</string>
+    <string name="views_range_hint" formatted="false">"Ponechá pouze videa v tomto rozsahu počtu zhlédnutí. Nastavením obou mezí na 0 se nic neodstraní."</string>
+    <string name="likes_range_title" formatted="false">"Rozsah počtu lajků"</string>
+    <string name="likes_range_min" formatted="false">"Minimální počet lajků (0 = bez omezení)"</string>
+    <string name="likes_range_max" formatted="false">"Maximální počet lajků (0 = bez omezení)"</string>
+    <string name="likes_range_hint" formatted="false">"Ponechá pouze videa v tomto rozsahu počtu lajků. Nastavením obou mezí na 0 se nic neodstraní."</string>
+    <string name="duration_range_title" formatted="false">"Rozsah délky videa"</string>
+    <string name="duration_range_min" formatted="false">"Minimální délka (sekundy; 0 = bez omezení)"</string>
+    <string name="duration_range_max" formatted="false">"Maximální délka (sekundy; 0 = bez omezení)"</string>
+    <string name="duration_range_hint" formatted="false">"Ponechá pouze doporučená videa v tomto rozsahu délky. Nastavením obou mezí na 0 se nic neodstraní. Fotografické příspěvky nejsou ovlivněny."</string>
+    <string name="keyword_manage" formatted="false">"Pravidla filtrování"</string>
+    <string name="keyword_description_hint" formatted="false">"Porovnává texty a popisky videí bez rozlišování velkých a malých písmen."</string>
+    <string name="keyword_tag_hint" formatted="false">"Porovnává hashtagy. Nezadávejte předponu #."</string>
+    <string name="keyword_author_hint" formatted="false">"Porovnává jména tvůrců a jedinečná uživatelská jména. Nezadávejte předponu @."</string>
+    <string name="keyword_description_input" formatted="false">"Klíčové slovo popisku"</string>
+    <string name="keyword_tag_input" formatted="false">"Hashtag"</string>
+    <string name="keyword_author_input" formatted="false">"Jméno nebo uživatelské jméno"</string>
+    <string name="keyword_add" formatted="false">"Přidat pravidlo"</string>
+    <string name="keyword_delete" formatted="false">"Odstranit pravidlo"</string>
+    <string name="region_select_title" formatted="false">"Vybrat oblast"</string>
+    <string name="region_search" formatted="false">"Název nebo kód země"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Kód operátora: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Vlastní oblast a SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Nastavte vlastní kód země a operátora bez omezení předvoleb."</string>
+    <string name="region_code_input" formatted="false">"Kód země nebo oblasti (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Kód operátora (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Název operátora (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Vyberte běžný jazyk nebo zadejte kód jazyka."</string>
+    <string name="language_code_input" formatted="false">"Kód jazyka (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Jazyky"</string>
+    <string name="timezone_custom_hint" formatted="false">"Vyberte časové pásmo běžného města nebo zadejte název časového pásma."</string>
+    <string name="timezone_input" formatted="false">"Název časového pásma (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Města"</string>
+    <string name="city_tokyo" formatted="false">"Tokio"</string>
+    <string name="city_taipei" formatted="false">"Tchaj-pej"</string>
+    <string name="city_hong_kong" formatted="false">"Hongkong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"Londýn"</string>
+    <string name="city_seoul" formatted="false">"Soul"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapur"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Vlastní poloha"</string>
+    <string name="gps_custom_hint" formatted="false">"Vyberte běžné město nebo zadejte zeměpisnou šířku a délku."</string>
+    <string name="gps_latitude" formatted="false">"Zeměpisná šířka (-90.0 až 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Zeměpisná délka (-180.0 až 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Města"</string>
+    <string name="speed_add_title" formatted="false">"Přidat rychlost"</string>
+    <string name="speed_input" formatted="false">"Rychlost"</string>
+    <string name="speed_invalid" formatted="false">"Zadejte platné číslo"</string>
+    <string name="speed_out_of_range" formatted="true">"Podporováno pouze %1$sx až %2$sx"</string>
+    <string name="speed_range" formatted="true">"Podporovaný rozsah: %1$sx až %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Upravit rychlost"</string>
+    <string name="duration_threshold_title" formatted="false">"Upozornění na dlouhá videa"</string>
+    <string name="duration_threshold_hint" formatted="false">"Když video dosáhne této délky, krátká zpráva na začátku přehrávání upozorní na jeho délku v minutách."</string>
+    <string name="duration_threshold_input" formatted="false">"Mez délky (minuty)"</string>
+    <string name="duration_threshold_example" formatted="false">"Například: 3 nebo 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Zadejte platný počet minut větší než 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Aktuální nastavení: upozornění pro videa ≥ %1$s minut"</string>
+    <string name="duration_threshold_presets" formatted="false">"Doporučené délky:"</string>
+    <string name="status_feature_feed" formatted="false">"Filtr kanálu"</string>
+    <string name="status_feature_speed" formatted="false">"Rychlost"</string>
+    <string name="status_feature_progress" formatted="false">"Ukazatel průběhu"</string>
+    <string name="status_feature_clean" formatted="false">"Automatické skrytí"</string>
+    <string name="status_feature_immersive" formatted="false">"Zobrazení videa"</string>
+    <string name="status_feature_scroll" formatted="false">"Automatické posouvání"</string>
+    <string name="status_feature_duration" formatted="false">"Upozornění na délku"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Překlad komentářů"</string>
+    <string name="status_feature_video_translate" formatted="false">"Nabídka titulků a překladu"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Kopie komentářů"</string>
+    <string name="status_feature_author" formatted="false">"Oblast tvůrce"</string>
+    <string name="status_feature_download" formatted="false">"Ukládání videí"</string>
+    <string name="status_feature_music" formatted="false">"Omezení zvuku"</string>
+    <string name="status_feature_sim" formatted="false">"Oblast a SIM"</string>
+    <string name="status_feature_language" formatted="false">"Jazyk"</string>
+    <string name="status_feature_timezone" formatted="false">"Časové pásmo"</string>
+    <string name="status_feature_gps" formatted="false">"Poloha"</string>
+    <string name="status_feature_bar" formatted="false">"Stavový řádek"</string>
+    <string name="status_normal" formatted="false">"Funguje"</string>
+    <string name="status_issue" formatted="false">"Problém"</string>
+    <string name="status_disabled" formatted="false">"Vypnuto"</string>
+    <string name="status_pending" formatted="false">"Čeká"</string>
+    <string name="status_problem_disabled" formatted="false">"Vypnuto, se zaznamenanou chybou"</string>
+    <string name="status_problem_unavailable" formatted="false">"Dočasně nedostupné"</string>
+    <string name="status_problem_runtime" formatted="false">"Chyba za běhu"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Nabídka rychlosti nedostupná"</string>
+    <string name="status_prepare_failed" formatted="false">"Příprava funkcí selhala. Znovu otevřete TikTok a ověřte stav."</string>
+    <string name="status_preparing" formatted="false">"Připravují se funkce. Čekejte prosím."</string>
+    <string name="status_prepared" formatted="false">"Příprava dokončena. Znovu otevřete TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Stav nyní nelze přečíst. Zkuste to později."</string>
+    <string name="status_update_failed" formatted="false">"Stav nyní nelze aktualizovat. Zobrazuje se poslední výsledek."</string>
+    <string name="status_reading" formatted="false">"Načítání stavu"</string>
+    <string name="status_empty" formatted="false">"Žádná zaznamenaná aktivita. Zapněte Toki v LSPosed, otevřete TikTok a znovu ověřte stav."</string>
+    <string name="status_report_note" formatted="true">"Poslední hlášení: %1$s\n„Funguje“ znamená, že je funkce připravena a nehlásila žádné chyby."</string>
+    <string name="config_section" formatted="false">"Konfigurace"</string>
+    <string name="config_import" formatted="false">"Importovat nastavení"</string>
+    <string name="config_import_summary" formatted="false">"Obnoví nastavení funkcí ze souboru"</string>
+    <string name="config_export" formatted="false">"Exportovat nastavení"</string>
+    <string name="config_export_summary" formatted="false">"Uloží nastavení funkcí do souboru"</string>
+    <string name="config_exported" formatted="false">"Konfigurace exportována do vybraného umístění. Soubor může obsahovat klíčová slova, oblasti a nastavení složek. Uchovávejte jej bezpečně."</string>
+    <string name="config_import_confirm" formatted="true">"Soubor obsahuje %1$d nastavení. Import nahradí všechna nastavení funkcí; chybějící nastavení se vrátí na výchozí hodnoty.\n\nJazyk aplikace, ikona, oprávnění LSPosed a mezipaměť kompatibility TikToku se nezmění. Pokračovat?"</string>
+    <string name="config_overwrite" formatted="false">"Nahradit"</string>
+    <string name="config_imported" formatted="false">"Konfigurace importována a nastavení funkcí aktualizována. Změny podporující aktualizaci za běhu se použijí ihned. Ostatní změny ověřte opětovným otevřením TikToku."</string>
+    <string name="config_processing" formatted="false">"Zpracování…"</string>
+    <string name="config_error_io" formatted="false">"Soubor nelze přečíst nebo zapsat. Zkontrolujte vybrané umístění a volné místo."</string>
+    <string name="config_error_permission" formatted="false">"Přístup k vybranému souboru nebyl povolen. Vyberte jej znovu."</string>
+    <string name="config_error_invalid" formatted="false">"Toto není platný konfigurační soubor Toki. Žádná nastavení nebyla importována."</string>
+    <string name="config_error_validation" formatted="true">"Ověření konfigurace selhalo: %1$s. Žádná nastavení nebyla importována."</string>
+    <string name="config_error_commit" formatted="false">"Změny konfigurace nebylo možné potvrdit. Před dalším pokusem je ověřte opětovným otevřením Toki."</string>
+    <string name="sponsor_title" formatted="false">"Podpořit vývojáře"</string>
+    <string name="sponsor_kofi" formatted="false">"Podpořit na Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Platební QR kód Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Ukládání…"</string>
+    <string name="sponsor_save_image" formatted="false">"Uložit obrázek"</string>
+    <string name="sponsor_image_hint" formatted="false">"Uložte celý původní obrázek a vyberte jej v Alipay pro načtení kódu."</string>
+    <string name="sponsor_address_copied" formatted="false">"Adresa USDT zkopírována"</string>
+    <string name="sponsor_image_saved" formatted="false">"Obrázek uložen do vybraného umístění"</string>
+    <string name="sponsor_error_io" formatted="false">"Uložení selhalo. Zkontrolujte vybrané umístění a volné místo a zkuste to znovu."</string>
+    <string name="sponsor_error_permission" formatted="false">"Uložení selhalo. Pro toto umístění nebyl povolen zápis. Vyberte jiné umístění."</string>
+    <string name="feature_filter_topics" formatted="false">"Skrýt doporučená témata"</string>
+    <string name="feature_filter_creators" formatted="false">"Skrýt doporučené tvůrce"</string>
+    <string name="host_scan_title_complete" formatted="false">"Hledání dokončeno"</string>
+    <string name="host_scan_title_failed" formatted="false">"Hledání selhalo"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Ručně restartujte TikTok, aby se výsledky použily."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Prohlédněte si diagnostiku funkcí v Toki."</string>
+    <string name="layout_title" formatted="false">"Rozvržení stránky"</string>
+    <string name="layout_summary" formatted="false">"Vyberte ovládací prvky ke skrytí"</string>
+    <string name="layout_hint" formatted="false">"Zapnutím přepínače položku skryjete"</string>
+    <string name="layout_top" formatted="false">"Horní lišta"</string>
+    <string name="layout_bottom" formatted="false">"Dolní lišta"</string>
+    <string name="layout_side" formatted="false">"Stránka videa"</string>
+    <string name="layout_search" formatted="false">"Hledání"</string>
+    <string name="layout_live" formatted="false">"ŽIVĚ"</string>
+    <string name="layout_friends" formatted="false">"Přátelé"</string>
+    <string name="layout_following" formatted="false">"Sledování"</string>
+    <string name="layout_shop" formatted="false">"Obchod"</string>
+    <string name="layout_for_you" formatted="false">"Pro vás"</string>
+    <string name="layout_nearby" formatted="false">"V okolí"</string>
+    <string name="layout_stem" formatted="false">"Věda"</string>
+    <string name="layout_series" formatted="false">"Seriály"</string>
+    <string name="layout_home" formatted="false">"Domů"</string>
+    <string name="layout_create" formatted="false">"Vytvořit"</string>
+    <string name="layout_inbox" formatted="false">"Doručená pošta"</string>
+    <string name="layout_profile" formatted="false">"Profil"</string>
+    <string name="layout_discover" formatted="false">"Objevovat"</string>
+    <string name="layout_avatar" formatted="false">"Avatar"</string>
+    <string name="layout_follow" formatted="false">"Tlačítko sledování"</string>
+    <string name="layout_like" formatted="false">"To se mi líbí"</string>
+    <string name="layout_comment" formatted="false">"Komentáře"</string>
+    <string name="layout_favorite" formatted="false">"Oblíbené"</string>
+    <string name="layout_share" formatted="false">"Sdílení"</string>
+    <string name="layout_music" formatted="false">"Hudební disk"</string>
+    <string name="layout_explore" formatted="false">"Prozkoumat"</string>
+    <string name="layout_author" formatted="false">"Informace o autorovi"</string>
+    <string name="layout_description" formatted="false">"Popis"</string>
+    <string name="layout_music_title" formatted="false">"Název hudby"</string>
+    <string name="layout_tags" formatted="false">"Informační štítky"</string>
+    <string name="layout_search_label" formatted="false">"Návrh hledání"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Tlačítko zastavení automatického posouvání"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Mince a odměny"</string>
+    <string name="layout_quick_comment" formatted="false">"Rychlé komentáře"</string>
+    <string name="layout_playlist" formatted="false">"Playlist"</string>
+    <string name="layout_creation_buttons" formatted="false">"Zkratky pro tvorbu"</string>
+    <string name="layout_live_notice" formatted="false">"Připomenutí LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Neprůhlednost"</string>
+    <string name="feature_background_audio">"Odemknout zvuk na pozadí"</string>
+    <string name="layout_landscape">"Tlačítko celé obrazovky"</string>
+    <string name="layout_photo_indicators">"Indikátory a tipy k fotkám"</string>
+    <string name="layout_quick_message">"Rychlé zprávy a zdroj sdílení"</string>
+    <string name="layout_user_card">"Doporučené účty"</string>
+    <string name="layout_survey">"Průzkumy a zpětná vazba"</string>
+    <string name="layout_ad_cards">"Karty produktů a reklam"</string>
+    <string name="layout_bottom_banners">"Další spodní bannery"</string>
+    <string name="layout_activities">"Vstup do událostí"</string>
+    <string name="host_scan_title_running" formatted="false">"Hledání metod"</string>
+    <string name="host_scan_title_saving" formatted="false">"Ukládání výsledků"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Ponechte TikTok v popředí."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Počkejte prosím."</string>
+    <string name="host_scan_done" formatted="false">"Rozumím"</string>
+    <string name="video_fit_center" formatted="false">"Na střed"</string>
+    <string name="video_fit_smart" formatted="false">"Celá obrazovka"</string>
+</resources>

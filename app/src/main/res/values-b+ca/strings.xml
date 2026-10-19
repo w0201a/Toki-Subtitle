@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Inici"</string>
+    <string name="nav_features" formatted="false">"Funcions"</string>
+    <string name="page_features" formatted="false">"Configuració"</string>
+    <string name="page_hook_status" formatted="false">"Estat de les funcions"</string>
+    <string name="nav_back" formatted="false">"Enrere"</string>
+    <string name="restart_tiktok" formatted="false">"Reinicia TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Concedeix accés root a Toki."</string>
+    <string name="language_title" formatted="false">"Llengua de l’aplicació"</string>
+    <string name="language_system" formatted="false">"Segueix el sistema"</string>
+    <string name="language_search" formatted="false">"Cerca llengües"</string>
+    <string name="language_clear_search" formatted="false">"Esborra la cerca"</string>
+    <string name="language_no_results" formatted="false">"No s’ha trobat cap llengua coincident"</string>
+    <string name="common_save" formatted="false">"Desa"</string>
+    <string name="common_cancel" formatted="false">"Cancel·la"</string>
+    <string name="common_confirm" formatted="false">"D’acord"</string>
+    <string name="common_close" formatted="false">"Tanca"</string>
+    <string name="common_open" formatted="false">"Obre"</string>
+    <string name="common_copy" formatted="false">"Copia"</string>
+    <string name="common_add" formatted="false">"Afegeix"</string>
+    <string name="common_delete" formatted="false">"Suprimeix"</string>
+    <string name="common_done" formatted="false">"Fet"</string>
+    <string name="common_save_apply" formatted="false">"Aplica"</string>
+    <string name="common_unknown" formatted="false">"Desconegut"</string>
+    <string name="common_custom" formatted="false">"Personalitzat"</string>
+    <string name="home_icon_hidden" formatted="false">"Icona de l’aplicació amagada"</string>
+    <string name="home_icon_restored" formatted="false">"Icona de l’aplicació restaurada"</string>
+    <string name="home_activated" formatted="false">"Activat"</string>
+    <string name="home_inactive" formatted="false">"No activat"</string>
+    <string name="home_activation_missing" formatted="false">"No s’ha detectat l’activació a LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Compatibilitat amb TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok instal·lat"</string>
+    <string name="home_host_missing" formatted="false">"No s’ha trobat cap instal·lació de TikTok compatible en aquest dispositiu"</string>
+    <string name="home_host_not_installed" formatted="false">"No instal·lat"</string>
+    <string name="home_supported_versions" formatted="false">"Versions compatibles"</string>
+    <string name="home_community" formatted="false">"Codi obert i comunitat"</string>
+    <string name="home_github" formatted="false">"Repositori de GitHub"</string>
+    <string name="home_telegram" formatted="false">"Grup de Telegram"</string>
+    <string name="home_preferences" formatted="false">"Preferències del mòdul"</string>
+    <string name="home_hide_icon" formatted="false">"Amaga la icona de l’aplicació"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Quan estigui amagada, obre Toki des del gestor de LSPosed"</string>
+    <string name="home_support" formatted="false">"Dona suport al desenvolupament"</string>
+    <string name="home_support_summary" formatted="false">"Ajuda a mantenir i millorar l’aplicació"</string>
+    <string name="feature_region_section" formatted="false">"Regió i dispositiu"</string>
+    <string name="feature_playback_section" formatted="false">"Reproducció"</string>
+    <string name="feature_progress" formatted="false">"Mostra sempre la barra de progrés"</string>
+    <string name="feature_progress_summary" formatted="false">"Manté visible la barra de progrés, fins i tot en vídeos curts"</string>
+    <string name="feature_immersive" formatted="false">"Visualització de vídeo"</string>
+    <string name="feature_autoplay" formatted="false">"Desplaçament automàtic millorat"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Desbloqueja el desplaçament automàtic al menú de cada vídeo"</string>
+    <string name="feature_status_bar" formatted="false">"Amaga la barra d’estat del sistema"</string>
+    <string name="feature_media_section" formatted="false">"Baixades i accions"</string>
+    <string name="feature_download" formatted="false">"Baixades sense marca d’aigua"</string>
+    <string name="feature_download_summary" formatted="false">"Desa el vídeo original sense marca d’aigua des del menú de pulsació llarga o de compartició"</string>
+    <string name="feature_music" formatted="false">"Desbloqueja l’àudio"</string>
+    <string name="feature_music_summary" formatted="false">"Restaura la reproducció d’àudio restringida per llicències o regió"</string>
+    <string name="feature_author_region" formatted="false">"Mostra la regió del creador"</string>
+    <string name="feature_author_region_summary" formatted="false">"Mostra la bandera i el codi del país o regió al costat del nom del creador"</string>
+    <string name="feature_copy_comment" formatted="false">"Copia només el text"</string>
+    <string name="feature_video_translation" formatted="false">"Menú de subtítols i traducció"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Mostra l’opció al menú de pulsació llarga"</string>
+    <string name="feature_comment_translation" formatted="false">"Tradueix comentaris"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Afegeix un botó per traduir en bloc els comentaris en llengües estrangeres"</string>
+    <string name="feature_filter_section" formatted="false">"Filtratge del canal"</string>
+    <string name="feature_remove_ads" formatted="false">"Elimina els anuncis del canal"</string>
+    <string name="feature_remove_live" formatted="false">"Amaga els directes"</string>
+    <string name="feature_remove_photos" formatted="false">"Amaga les publicacions de fotos"</string>
+    <string name="feature_filter_views" formatted="false">"Filtre per visualitzacions"</string>
+    <string name="feature_filter_likes" formatted="false">"Filtre per M’agrada"</string>
+    <string name="feature_filter_duration" formatted="false">"Filtre per durada del vídeo"</string>
+    <string name="feature_filter_keywords" formatted="false">"Filtre per paraules clau"</string>
+    <string name="feature_block_offline" formatted="false">"Bloqueja vídeos sense connexió"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Impedeix que s’insereixin vídeos sense connexió precarregats quan la connexió és deficient"</string>
+    <string name="feature_remove_ai" formatted="false">"Amaga vídeos generats per IA"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filtra els vídeos que TikTok etiqueta com a generats per IA"</string>
+    <string name="filter_metric_views" formatted="false">"visualitzacions"</string>
+    <string name="filter_metric_likes" formatted="false">"M’agrada"</string>
+    <string name="filter_metric_duration" formatted="false">"durada"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Interval de visualitzacions desat"</string>
+    <string name="filter_likes_saved" formatted="false">"Interval de M’agrada desat"</string>
+    <string name="filter_duration_saved" formatted="false">"Interval de durada del vídeo desat"</string>
+    <string name="download_path_saved" formatted="false">"Camins de desament personalitzats actualitzats"</string>
+    <string name="region_spoof_title" formatted="false">"Simulació de la regió i de la SIM"</string>
+    <string name="region_current" formatted="false">"Configuració actual"</string>
+    <string name="region_target" formatted="true">"Regió de destinació: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Operador: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Codi de l’operador: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Predefinits"</string>
+    <string name="region_custom_parameters" formatted="false">"Personalitzat"</string>
+    <string name="language_spoof" formatted="false">"Simulació de la llengua"</string>
+    <string name="environment_follow_region" formatted="false">"Segons la regió"</string>
+    <string name="language_effective" formatted="true">"Llengua aplicada: %1$s"</string>
+    <string name="language_custom" formatted="false">"Llengua personalitzada"</string>
+    <string name="timezone_spoof" formatted="false">"Simulació del fus horari"</string>
+    <string name="timezone_effective" formatted="true">"Fus horari aplicat: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Fus horari personalitzat"</string>
+    <string name="gps_spoof" formatted="false">"Simulació de la ubicació"</string>
+    <string name="gps_effective" formatted="true">"Coordenades aplicades: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Coordenades personalitzades"</string>
+    <string name="speed_fixed" formatted="false">"Mantén la velocitat de reproducció"</string>
+    <string name="speed_fixed_summary" formatted="false">"Manté la velocitat triada al menú de pulsació llarga en canviar de vídeo"</string>
+    <string name="speed_expand" formatted="false">"Més velocitats"</string>
+    <string name="speed_options_hint" formatted="false">"Opcions de velocitat (toca per editar o eliminar)"</string>
+    <string name="speed_add_option" formatted="false">"+ Afegeix una velocitat"</string>
+    <string name="speed_restore" formatted="false">"Restableix"</string>
+    <string name="clean_on_play" formatted="false">"Amaga els controls en reproduir"</string>
+    <string name="clean_keep_progress" formatted="false">"Mantén la barra de progrés"</string>
+    <string name="download_paths" formatted="false">"Carpetes de desament"</string>
+    <string name="download_paths_summary" formatted="true">"Vídeos: %1$s · Imatges: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Conserva vídeos amb %1$s entre %2$d%4$s i %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Conserva vídeos amb %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Conserva vídeos amb %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Cap interval definit (toca per establir un mínim o un màxim)"</string>
+    <string name="keyword_unset" formatted="false">"Toca per afegir regles"</string>
+    <string name="keyword_summary" formatted="true">"Activat: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Descripcions %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Etiquetes %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Creadors %1$d"</string>
+    <string name="keyword_description" formatted="false">"Descripcions"</string>
+    <string name="keyword_tag" formatted="false">"Etiquetes"</string>
+    <string name="keyword_author" formatted="false">"Creadors"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"No hi ha regles de %1$s. Afegeix-ne una a dalt."</string>
+    <string name="duration_alert_title" formatted="false">"Avís de vídeo llarg"</string>
+    <string name="duration_alert_summary" formatted="true">"Llindar actual: ≥ %1$s minuts"</string>
+    <string name="download_video_path" formatted="false">"Carpeta de vídeos"</string>
+    <string name="download_image_path" formatted="false">"Carpeta d’imatges"</string>
+    <string name="download_path_hint" formatted="false">"La primera carpeta ha de ser una carpeta multimèdia pública, com ara Movies, Pictures o DCIM. Els camins no vàlids fan servir el valor predeterminat del sistema."</string>
+    <string name="views_range_title" formatted="false">"Interval de visualitzacions"</string>
+    <string name="views_range_min" formatted="false">"Visualitzacions mínimes (0 = sense límit)"</string>
+    <string name="views_range_max" formatted="false">"Visualitzacions màximes (0 = sense límit)"</string>
+    <string name="views_range_hint" formatted="false">"Conserva només els vídeos dins d’aquest interval de visualitzacions. Estableix tots dos límits a 0 per no eliminar-ne cap."</string>
+    <string name="likes_range_title" formatted="false">"Interval de M’agrada"</string>
+    <string name="likes_range_min" formatted="false">"Mínim de M’agrada (0 = sense límit)"</string>
+    <string name="likes_range_max" formatted="false">"Màxim de M’agrada (0 = sense límit)"</string>
+    <string name="likes_range_hint" formatted="false">"Conserva només els vídeos dins d’aquest interval de M’agrada. Estableix tots dos límits a 0 per no eliminar-ne cap."</string>
+    <string name="duration_range_title" formatted="false">"Interval de durada del vídeo"</string>
+    <string name="duration_range_min" formatted="false">"Durada mínima (segons; 0 = sense límit)"</string>
+    <string name="duration_range_max" formatted="false">"Durada màxima (segons; 0 = sense límit)"</string>
+    <string name="duration_range_hint" formatted="false">"Conserva només els vídeos recomanats dins d’aquest interval de durada. Estableix tots dos límits a 0 per no eliminar-ne cap. Les publicacions de fotos no es veuen afectades."</string>
+    <string name="keyword_manage" formatted="false">"Regles de filtratge"</string>
+    <string name="keyword_description_hint" formatted="false">"Cerca coincidències al text i a les descripcions dels vídeos sense distingir majúscules de minúscules."</string>
+    <string name="keyword_tag_hint" formatted="false">"Cerca coincidències a les etiquetes. No hi incloguis el prefix #."</string>
+    <string name="keyword_author_hint" formatted="false">"Cerca coincidències als noms dels creadors i als noms d’usuari únics. No hi incloguis el prefix @."</string>
+    <string name="keyword_description_input" formatted="false">"Paraula clau del text"</string>
+    <string name="keyword_tag_input" formatted="false">"Etiqueta"</string>
+    <string name="keyword_author_input" formatted="false">"Nom o nom d’usuari"</string>
+    <string name="keyword_add" formatted="false">"Afegeix una regla"</string>
+    <string name="keyword_delete" formatted="false">"Suprimeix la regla"</string>
+    <string name="region_select_title" formatted="false">"Tria la regió"</string>
+    <string name="region_search" formatted="false">"Nom o codi del país"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Codi de l’operador: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Regió i SIM personalitzades"</string>
+    <string name="region_custom_hint" formatted="false">"Estableix un codi de país i un operador personalitzats sense les restriccions de les configuracions predefinides."</string>
+    <string name="region_code_input" formatted="false">"Codi del país o regió (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Codi de l’operador (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Nom de l’operador (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Tria una llengua habitual o introdueix un codi de llengua."</string>
+    <string name="language_code_input" formatted="false">"Codi de llengua (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Llengües"</string>
+    <string name="timezone_custom_hint" formatted="false">"Tria el fus horari d’una ciutat habitual o introdueix el nom d’un fus horari."</string>
+    <string name="timezone_input" formatted="false">"Nom del fus horari (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Ciutats"</string>
+    <string name="city_tokyo" formatted="false">"Tòquio"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hong Kong"</string>
+    <string name="city_new_york" formatted="false">"Nova York"</string>
+    <string name="city_london" formatted="false">"Londres"</string>
+    <string name="city_seoul" formatted="false">"Seül"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapur"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Ubicació personalitzada"</string>
+    <string name="gps_custom_hint" formatted="false">"Tria una ciutat habitual o introdueix la latitud i la longitud."</string>
+    <string name="gps_latitude" formatted="false">"Latitud (-90.0 a 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Longitud (-180.0 a 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Ciutats"</string>
+    <string name="speed_add_title" formatted="false">"Afegeix velocitat"</string>
+    <string name="speed_input" formatted="false">"Velocitat"</string>
+    <string name="speed_invalid" formatted="false">"Introdueix un número vàlid"</string>
+    <string name="speed_out_of_range" formatted="true">"Només s’admet de %1$sx a %2$sx"</string>
+    <string name="speed_range" formatted="true">"Interval admès: %1$sx a %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Edita la velocitat"</string>
+    <string name="duration_threshold_title" formatted="false">"Avís de vídeo llarg"</string>
+    <string name="duration_threshold_hint" formatted="false">"Quan un vídeo arriba a aquesta durada, un missatge en començar la reproducció n’indica la durada en minuts."</string>
+    <string name="duration_threshold_input" formatted="false">"Llindar de durada (minuts)"</string>
+    <string name="duration_threshold_example" formatted="false">"Per exemple: 3 o 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Introdueix un nombre vàlid de minuts superior a 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Configuració actual: avís per a vídeos ≥ %1$s minuts"</string>
+    <string name="duration_threshold_presets" formatted="false">"Durades suggerides:"</string>
+    <string name="status_feature_feed" formatted="false">"Filtre del canal"</string>
+    <string name="status_feature_speed" formatted="false">"Velocitat"</string>
+    <string name="status_feature_progress" formatted="false">"Barra de progrés"</string>
+    <string name="status_feature_clean" formatted="false">"Ocultació automàtica"</string>
+    <string name="status_feature_immersive" formatted="false">"Visualització de vídeo"</string>
+    <string name="status_feature_scroll" formatted="false">"Desplaçament automàtic"</string>
+    <string name="status_feature_duration" formatted="false">"Avís de durada"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Traducció de comentaris"</string>
+    <string name="status_feature_video_translate" formatted="false">"Menú de subtítols i traducció"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Còpia de comentaris"</string>
+    <string name="status_feature_author" formatted="false">"Regió del creador"</string>
+    <string name="status_feature_download" formatted="false">"Desament de vídeos"</string>
+    <string name="status_feature_music" formatted="false">"Límits d’àudio"</string>
+    <string name="status_feature_sim" formatted="false">"Regió i SIM"</string>
+    <string name="status_feature_language" formatted="false">"Llengua"</string>
+    <string name="status_feature_timezone" formatted="false">"Fus horari"</string>
+    <string name="status_feature_gps" formatted="false">"Ubicació"</string>
+    <string name="status_feature_bar" formatted="false">"Barra d’estat"</string>
+    <string name="status_normal" formatted="false">"Funciona"</string>
+    <string name="status_issue" formatted="false">"Problema"</string>
+    <string name="status_disabled" formatted="false">"Desactivat"</string>
+    <string name="status_pending" formatted="false">"Pendent"</string>
+    <string name="status_problem_disabled" formatted="false">"Desactivat, amb un error registrat"</string>
+    <string name="status_problem_unavailable" formatted="false">"No disponible ara"</string>
+    <string name="status_problem_runtime" formatted="false">"Error en executar"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Menú de velocitat no disponible"</string>
+    <string name="status_prepare_failed" formatted="false">"La preparació de les funcions ha fallat. Torna a obrir TikTok i comprova-ho."</string>
+    <string name="status_preparing" formatted="false">"S’estan preparant les funcions. Espera."</string>
+    <string name="status_prepared" formatted="false">"Preparació completada. Torna a obrir TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Ara no es pot llegir l’estat. Torna-ho a comprovar més tard."</string>
+    <string name="status_update_failed" formatted="false">"Ara no es pot actualitzar l’estat. Es mostra el resultat més recent."</string>
+    <string name="status_reading" formatted="false">"S’està llegint l’estat"</string>
+    <string name="status_empty" formatted="false">"No hi ha activitat registrada. Activa Toki a LSPosed, obre TikTok i torna-ho a comprovar."</string>
+    <string name="status_report_note" formatted="true">"Últim informe: %1$s\n«Funciona» vol dir que la funció està preparada i no ha comunicat cap error."</string>
+    <string name="config_section" formatted="false">"Configuració"</string>
+    <string name="config_import" formatted="false">"Importa la configuració"</string>
+    <string name="config_import_summary" formatted="false">"Restaura la configuració de funcions des d’un fitxer"</string>
+    <string name="config_export" formatted="false">"Exporta la configuració"</string>
+    <string name="config_export_summary" formatted="false">"Desa la configuració de funcions en un fitxer"</string>
+    <string name="config_exported" formatted="false">"Configuració exportada a la ubicació seleccionada. El fitxer pot contenir paraules clau, regions i configuració de carpetes. Conserva’l de manera segura."</string>
+    <string name="config_import_confirm" formatted="true">"El fitxer conté %1$d paràmetres. La importació substitueix tota la configuració de funcions; els paràmetres absents tornen als valors predeterminats.\n\nLa llengua de l’aplicació, la icona, l’autorització de LSPosed i la memòria cau de compatibilitat amb TikTok no canvien. Vols continuar?"</string>
+    <string name="config_overwrite" formatted="false">"Substitueix"</string>
+    <string name="config_imported" formatted="false">"Configuració importada i paràmetres de funcions actualitzats. Els canvis compatibles amb actualitzacions en directe s’apliquen immediatament. Torna a obrir TikTok per verificar la resta de canvis."</string>
+    <string name="config_processing" formatted="false">"S’està processant…"</string>
+    <string name="config_error_io" formatted="false">"No es pot llegir o escriure el fitxer. Comprova la ubicació seleccionada i l’espai disponible."</string>
+    <string name="config_error_permission" formatted="false">"No s’ha concedit permís per accedir al fitxer seleccionat. Torna’l a seleccionar."</string>
+    <string name="config_error_invalid" formatted="false">"Aquest fitxer de configuració de Toki no és vàlid. No s’ha importat cap paràmetre."</string>
+    <string name="config_error_validation" formatted="true">"La validació de la configuració ha fallat: %1$s. No s’ha importat cap paràmetre."</string>
+    <string name="config_error_commit" formatted="false">"No s’han pogut confirmar els canvis de configuració. Torna a obrir Toki per comprovar-los abans de tornar-ho a provar."</string>
+    <string name="sponsor_title" formatted="false">"Dona suport al desenvolupador"</string>
+    <string name="sponsor_kofi" formatted="false">"Dona suport a Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Codi QR de pagament d’Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"S’està desant…"</string>
+    <string name="sponsor_save_image" formatted="false">"Desa la imatge"</string>
+    <string name="sponsor_image_hint" formatted="false">"Desa la imatge original completa i selecciona-la a Alipay per escanejar-ne el codi."</string>
+    <string name="sponsor_address_copied" formatted="false">"Adreça USDT copiada"</string>
+    <string name="sponsor_image_saved" formatted="false">"Imatge desada a la ubicació seleccionada"</string>
+    <string name="sponsor_error_io" formatted="false">"No s’ha pogut desar. Comprova la ubicació seleccionada i l’espai disponible i torna-ho a provar."</string>
+    <string name="sponsor_error_permission" formatted="false">"No s’ha pogut desar. No s’ha concedit permís d’escriptura en aquesta ubicació. Tria’n una altra."</string>
+    <string name="feature_filter_topics" formatted="false">"Amaga els temes suggerits"</string>
+    <string name="feature_filter_creators" formatted="false">"Amaga els creadors suggerits"</string>
+    <string name="host_scan_title_complete" formatted="false">"Cerca completada"</string>
+    <string name="host_scan_title_failed" formatted="false">"La cerca ha fallat"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Reinicieu TikTok manualment per aplicar els resultats."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Consulteu el diagnòstic de les funcions a Toki."</string>
+    <string name="layout_title" formatted="false">"Disseny de la pàgina"</string>
+    <string name="layout_summary" formatted="false">"Tria quins controls vols amagar"</string>
+    <string name="layout_hint" formatted="false">"Activa cada opció per amagar-la"</string>
+    <string name="layout_top" formatted="false">"Barra superior"</string>
+    <string name="layout_bottom" formatted="false">"Barra inferior"</string>
+    <string name="layout_side" formatted="false">"Pàgina del vídeo"</string>
+    <string name="layout_search" formatted="false">"Cerca"</string>
+    <string name="layout_live" formatted="false">"En directe"</string>
+    <string name="layout_friends" formatted="false">"Amics"</string>
+    <string name="layout_following" formatted="false">"Seguint"</string>
+    <string name="layout_shop" formatted="false">"Botiga"</string>
+    <string name="layout_for_you" formatted="false">"Per a tu"</string>
+    <string name="layout_nearby" formatted="false">"A prop"</string>
+    <string name="layout_stem" formatted="false">"Ciència"</string>
+    <string name="layout_series" formatted="false">"Sèries"</string>
+    <string name="layout_home" formatted="false">"Inici"</string>
+    <string name="layout_create" formatted="false">"Crea"</string>
+    <string name="layout_inbox" formatted="false">"Safata d’entrada"</string>
+    <string name="layout_profile" formatted="false">"Perfil"</string>
+    <string name="layout_discover" formatted="false">"Descobreix"</string>
+    <string name="layout_avatar" formatted="false">"Avatar"</string>
+    <string name="layout_follow" formatted="false">"Botó de seguiment"</string>
+    <string name="layout_like" formatted="false">"M’agrada"</string>
+    <string name="layout_comment" formatted="false">"Comentaris"</string>
+    <string name="layout_favorite" formatted="false">"Preferits"</string>
+    <string name="layout_share" formatted="false">"Comparteix"</string>
+    <string name="layout_music" formatted="false">"Disc de música"</string>
+    <string name="layout_explore" formatted="false">"Explora"</string>
+    <string name="layout_author" formatted="false">"Informació de l’autor"</string>
+    <string name="layout_description" formatted="false">"Descripció"</string>
+    <string name="layout_music_title" formatted="false">"Títol de la música"</string>
+    <string name="layout_tags" formatted="false">"Etiquetes informatives"</string>
+    <string name="layout_search_label" formatted="false">"Suggeriment de cerca"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Botó per aturar el desplaçament automàtic"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Monedes i recompenses"</string>
+    <string name="layout_quick_comment" formatted="false">"Comentaris ràpids"</string>
+    <string name="layout_playlist" formatted="false">"Llista de reproducció"</string>
+    <string name="layout_creation_buttons" formatted="false">"Dreceres de creació"</string>
+    <string name="layout_live_notice" formatted="false">"Recordatoris de directes"</string>
+    <string name="layout_opacity" formatted="false">"Opacitat"</string>
+    <string name="feature_background_audio">"Desbloca l’àudio en segon pla"</string>
+    <string name="layout_landscape">"Botó de pantalla completa"</string>
+    <string name="layout_photo_indicators">"Indicadors i pistes de fotos"</string>
+    <string name="layout_quick_message">"Missatges ràpids i origen compartit"</string>
+    <string name="layout_user_card">"Comptes suggerits"</string>
+    <string name="layout_survey">"Enquestes i comentaris"</string>
+    <string name="layout_ad_cards">"Targetes de productes i anuncis"</string>
+    <string name="layout_bottom_banners">"Altres bàners inferiors"</string>
+    <string name="layout_activities">"Accés a esdeveniments"</string>
+    <string name="host_scan_title_running" formatted="false">"Cercant mètodes"</string>
+    <string name="host_scan_title_saving" formatted="false">"Desant els resultats"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Manteniu TikTok en primer pla."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Espereu, si us plau."</string>
+    <string name="host_scan_done" formatted="false">"Entesos"</string>
+    <string name="video_fit_center" formatted="false">"Centrat"</string>
+    <string name="video_fit_smart" formatted="false">"Pantalla completa"</string>
+</resources>

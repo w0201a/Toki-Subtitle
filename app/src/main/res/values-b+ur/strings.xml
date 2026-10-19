@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"ہوم"</string>
+    <string name="nav_features" formatted="false">"خصوصیات"</string>
+    <string name="page_features" formatted="false">"ترتیبات"</string>
+    <string name="page_hook_status" formatted="false">"خصوصیات کی حالت"</string>
+    <string name="nav_back" formatted="false">"واپس"</string>
+    <string name="restart_tiktok" formatted="false">"TikTok دوبارہ شروع کریں"</string>
+    <string name="restart_root_required" formatted="false">"براہ کرم Toki کو root اجازت دیں"</string>
+    <string name="language_title" formatted="false">"ایپ کی زبان"</string>
+    <string name="language_system" formatted="false">"سسٹم کے مطابق"</string>
+    <string name="language_search" formatted="false">"زبان تلاش کریں"</string>
+    <string name="language_clear_search" formatted="false">"تلاش صاف کریں"</string>
+    <string name="language_no_results" formatted="false">"کوئی مماثل زبان نہیں ملی"</string>
+    <string name="common_save" formatted="false">"محفوظ کریں"</string>
+    <string name="common_cancel" formatted="false">"منسوخ"</string>
+    <string name="common_confirm" formatted="false">"ٹھیک ہے"</string>
+    <string name="common_close" formatted="false">"بند کریں"</string>
+    <string name="common_open" formatted="false">"کھولیں"</string>
+    <string name="common_copy" formatted="false">"کاپی کریں"</string>
+    <string name="common_add" formatted="false">"شامل کریں"</string>
+    <string name="common_delete" formatted="false">"حذف کریں"</string>
+    <string name="common_done" formatted="false">"مکمل"</string>
+    <string name="common_save_apply" formatted="false">"لاگو کریں"</string>
+    <string name="common_unknown" formatted="false">"نامعلوم"</string>
+    <string name="common_custom" formatted="false">"حسب ضرورت"</string>
+    <string name="home_icon_hidden" formatted="false">"ایپ کا آئیکن چھپا دیا گیا"</string>
+    <string name="home_icon_restored" formatted="false">"ایپ کا آئیکن دوبارہ دکھا دیا گیا"</string>
+    <string name="home_activated" formatted="false">"فعال"</string>
+    <string name="home_inactive" formatted="false">"غیر فعال"</string>
+    <string name="home_activation_missing" formatted="false">"LSPosed میں فعالیت کا پتہ نہیں چلا"</string>
+    <string name="home_host_section" formatted="false">"TikTok سے مطابقت"</string>
+    <string name="home_host_current" formatted="false">"نصب شدہ TikTok"</string>
+    <string name="home_host_missing" formatted="false">"آلے پر TikTok کا معاونت یافتہ نسخہ نہیں ملا"</string>
+    <string name="home_host_not_installed" formatted="false">"نصب نہیں"</string>
+    <string name="home_supported_versions" formatted="false">"معاونت یافتہ نسخے"</string>
+    <string name="home_community" formatted="false">"کمیونٹی"</string>
+    <string name="home_github" formatted="false">"GitHub ذخیرہ"</string>
+    <string name="home_telegram" formatted="false">"Telegram گروپ"</string>
+    <string name="home_preferences" formatted="false">"ترجیحات"</string>
+    <string name="home_hide_icon" formatted="false">"ایپ کا آئیکن چھپائیں"</string>
+    <string name="home_hide_icon_summary" formatted="false">"چھپانے کے بعد Toki کو LSPosed مینیجر سے کھول سکتے ہیں"</string>
+    <string name="home_support" formatted="false">"ترقی میں تعاون"</string>
+    <string name="home_support_summary" formatted="false">"مسلسل دیکھ بھال اور خصوصیات کی بہتری میں تعاون کریں"</string>
+    <string name="feature_region_section" formatted="false">"خطے اور ماحول کی نقالی"</string>
+    <string name="feature_playback_section" formatted="false">"پلے بیک"</string>
+    <string name="feature_progress" formatted="false">"پیش رفت کی پٹی ہمیشہ دکھائیں"</string>
+    <string name="feature_progress_summary" formatted="false">"مختصر ویڈیوز میں بھی نیچے پیش رفت کی پٹی دکھائیں"</string>
+    <string name="feature_immersive" formatted="false">"ویڈیو کی نمائش"</string>
+    <string name="feature_autoplay" formatted="false">"بہتر خودکار اسکرول"</string>
+    <string name="feature_autoplay_summary" formatted="false">"ہر ویڈیو کے مینو میں خودکار اسکرول کھولیں"</string>
+    <string name="feature_status_bar" formatted="false">"سسٹم کی اسٹیٹس بار چھپائیں"</string>
+    <string name="feature_media_section" formatted="false">"ڈاؤن لوڈ اور ٹولز"</string>
+    <string name="feature_download" formatted="false">"بغیر واٹرمارک ڈاؤن لوڈ"</string>
+    <string name="feature_download_summary" formatted="false">"دبا کر رکھنے یا شیئر مینو سے بغیر واٹرمارک اصل ویڈیو محفوظ کریں"</string>
+    <string name="feature_music" formatted="false">"آڈیو کی پابندیاں ہٹائیں"</string>
+    <string name="feature_music_summary" formatted="false">"حقوق یا خطے کی وجہ سے محدود آڈیو بحال کریں"</string>
+    <string name="feature_author_region" formatted="false">"تخلیق کار کا خطہ دکھائیں"</string>
+    <string name="feature_author_region_summary" formatted="false">"نام کے ساتھ ملک یا خطے کا پرچم اور کوڈ دکھائیں"</string>
+    <string name="feature_copy_comment" formatted="false">"صرف متن کاپی کریں"</string>
+    <string name="feature_video_translation" formatted="false">"سب ٹائٹلز اور ترجمے کا مینو"</string>
+    <string name="feature_video_translation_summary" formatted="false">"دیر تک دبانے والے مینو میں اختیار دکھائیں"</string>
+    <string name="feature_comment_translation" formatted="false">"تبصروں کا ترجمہ"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"غیر ملکی زبان کے تبصروں کے اجتماعی ترجمے کا بٹن شامل کریں"</string>
+    <string name="feature_filter_section" formatted="false">"فیڈ کی فلٹرنگ"</string>
+    <string name="feature_remove_ads" formatted="false">"فیڈ کے اشتہارات ہٹائیں"</string>
+    <string name="feature_remove_live" formatted="false">"تجویز کردہ لائیو نشریات فلٹر کریں"</string>
+    <string name="feature_remove_photos" formatted="false">"تجویز کردہ تصویری پوسٹس فلٹر کریں"</string>
+    <string name="feature_filter_views" formatted="false">"مشاہدات کا فلٹر"</string>
+    <string name="feature_filter_likes" formatted="false">"پسند کا فلٹر"</string>
+    <string name="feature_filter_duration" formatted="false">"دورانیے کا فلٹر"</string>
+    <string name="feature_filter_keywords" formatted="false">"کلیدی الفاظ کا فلٹر"</string>
+    <string name="feature_block_offline" formatted="false">"آف لائن ویڈیوز روکیں"</string>
+    <string name="feature_block_offline_summary" formatted="false">"کمزور کنکشن پر پہلے سے لوڈ شدہ آف لائن ویڈیوز شامل ہونے سے روکیں"</string>
+    <string name="feature_remove_ai" formatted="false">"AI سے تیار کردہ مواد ہٹائیں"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"TikTok کی جانب سے AI سے تیار کردہ نشان زد ویڈیوز فلٹر کریں"</string>
+    <string name="filter_metric_views" formatted="false">"ویوز"</string>
+    <string name="filter_metric_likes" formatted="false">"پسند"</string>
+    <string name="filter_metric_duration" formatted="false">"دورانیہ"</string>
+    <string name="filter_unit_seconds" formatted="false">"سیکنڈ"</string>
+    <string name="filter_views_saved" formatted="false">"ویوز کی حد محفوظ ہو گئی"</string>
+    <string name="filter_likes_saved" formatted="false">"پسند کی حد محفوظ ہو گئی"</string>
+    <string name="filter_duration_saved" formatted="false">"دورانیے کی حد محفوظ ہو گئی"</string>
+    <string name="download_path_saved" formatted="false">"محفوظ کرنے کے راستے اپ ڈیٹ ہو گئے"</string>
+    <string name="region_spoof_title" formatted="false">"خطے اور SIM کی نقالی"</string>
+    <string name="region_current" formatted="false">"موجودہ ترتیبات"</string>
+    <string name="region_target" formatted="true">"مطلوبہ خطہ: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"موبائل کمپنی: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"موبائل کمپنی کا کوڈ: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"تیار ترتیبات"</string>
+    <string name="region_custom_parameters" formatted="false">"حسب ضرورت"</string>
+    <string name="language_spoof" formatted="false">"زبان کی نقالی"</string>
+    <string name="environment_follow_region" formatted="false">"خطے کے مطابق"</string>
+    <string name="language_effective" formatted="true">"مؤثر زبان: %1$s"</string>
+    <string name="language_custom" formatted="false">"حسب ضرورت زبان"</string>
+    <string name="timezone_spoof" formatted="false">"ٹائم زون کی نقالی"</string>
+    <string name="timezone_effective" formatted="true">"مؤثر ٹائم زون: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"حسب ضرورت ٹائم زون"</string>
+    <string name="gps_spoof" formatted="false">"مقام کی نقالی"</string>
+    <string name="gps_effective" formatted="true">"مؤثر نقاط: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"حسب ضرورت نقاط"</string>
+    <string name="speed_fixed" formatted="false">"رفتار برقرار رکھیں"</string>
+    <string name="speed_fixed_summary" formatted="false">"ویڈیو بدلنے پر بھی مینو میں منتخب رفتار برقرار رکھیں"</string>
+    <string name="speed_expand" formatted="false">"مزید رفتاریں"</string>
+    <string name="speed_options_hint" formatted="false">"رفتاریں (ترمیم یا حذف کرنے کے لیے چھوئیں)"</string>
+    <string name="speed_add_option" formatted="false">"+ رفتار شامل کریں"</string>
+    <string name="speed_restore" formatted="false">"بحال کریں"</string>
+    <string name="clean_on_play" formatted="false">"چلتے وقت کنٹرول چھپائیں"</string>
+    <string name="clean_keep_progress" formatted="false">"پیش رفت کی پٹی رکھیں"</string>
+    <string name="download_paths" formatted="false">"محفوظ کرنے کے فولڈر"</string>
+    <string name="download_paths_summary" formatted="true">"ویڈیوز: %1$s · تصاویر: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"%1$s کی قدر %2$d%4$s سے %3$d%4$s والی ویڈیوز رکھیں"</string>
+    <string name="filter_range_min" formatted="true">"%1$s ≥ %2$d%3$s والی ویڈیوز رکھیں"</string>
+    <string name="filter_range_max" formatted="true">"%1$s ≤ %2$d%3$s والی ویڈیوز رکھیں"</string>
+    <string name="filter_range_unset" formatted="false">"حد مقرر نہیں (کم سے کم یا زیادہ سے زیادہ کے لیے چھوئیں)"</string>
+    <string name="keyword_unset" formatted="false">"کوئی اصول نہیں (زمروں کے انتظام کے لیے چھوئیں)"</string>
+    <string name="keyword_summary" formatted="true">"فعال: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"تفصیلات %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"ہیش ٹیگز %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"تخلیق کار %1$d"</string>
+    <string name="keyword_description" formatted="false">"تفصیلات"</string>
+    <string name="keyword_tag" formatted="false">"ہیش ٹیگز"</string>
+    <string name="keyword_author" formatted="false">"تخلیق کار"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"%1$s کے لیے کوئی اصول نہیں۔ اوپر سے شامل کریں"</string>
+    <string name="duration_alert_title" formatted="false">"طویل ویڈیو کے دورانیے کی اطلاع"</string>
+    <string name="duration_alert_summary" formatted="true">"موجودہ حد: ≥ %1$s منٹ"</string>
+    <string name="download_video_path" formatted="false">"ویڈیو فولڈر"</string>
+    <string name="download_image_path" formatted="false">"تصویر فولڈر"</string>
+    <string name="download_path_hint" formatted="false">"پہلا فولڈر Movies، Pictures یا DCIM جیسا مشترکہ میڈیا فولڈر ہونا چاہیے۔ غلط راستوں کے لیے سسٹم کی طے شدہ قدر استعمال ہوگی"</string>
+    <string name="views_range_title" formatted="false">"ویوز کی حد"</string>
+    <string name="views_range_min" formatted="false">"کم سے کم ویوز (0 = کوئی حد نہیں)"</string>
+    <string name="views_range_max" formatted="false">"زیادہ سے زیادہ ویوز (0 = کوئی حد نہیں)"</string>
+    <string name="views_range_hint" formatted="false">"صرف اسی حد کے ویوز والی ویڈیوز رکھیں۔ دونوں حدیں 0 ہوں تو کچھ نہیں ہٹایا جائے گا"</string>
+    <string name="likes_range_title" formatted="false">"پسند کی حد"</string>
+    <string name="likes_range_min" formatted="false">"کم سے کم پسند (0 = کوئی حد نہیں)"</string>
+    <string name="likes_range_max" formatted="false">"زیادہ سے زیادہ پسند (0 = کوئی حد نہیں)"</string>
+    <string name="likes_range_hint" formatted="false">"صرف اسی حد کی پسند والی ویڈیوز رکھیں۔ دونوں حدیں 0 ہوں تو کچھ نہیں ہٹایا جائے گا"</string>
+    <string name="duration_range_title" formatted="false">"ویڈیو کے دورانیے کی حد"</string>
+    <string name="duration_range_min" formatted="false">"کم سے کم دورانیہ (سیکنڈ؛ 0 = کوئی حد نہیں)"</string>
+    <string name="duration_range_max" formatted="false">"زیادہ سے زیادہ دورانیہ (سیکنڈ؛ 0 = کوئی حد نہیں)"</string>
+    <string name="duration_range_hint" formatted="false">"مقررہ دورانیے کی تجویز کردہ ویڈیوز رکھیں۔ دونوں حدیں 0 ہوں تو کچھ نہیں ہٹایا جائے گا۔ تصویری پوسٹس متاثر نہیں ہوں گی"</string>
+    <string name="keyword_manage" formatted="false">"فلٹر کے اصول"</string>
+    <string name="keyword_description_hint" formatted="false">"ویڈیو کے متن اور تفصیل سے مطابقت، بڑے اور چھوٹے حروف میں فرق کے بغیر۔"</string>
+    <string name="keyword_tag_hint" formatted="false">"ہیش ٹیگز سے مطابقت۔ شروع میں # لگانے کی ضرورت نہیں۔"</string>
+    <string name="keyword_author_hint" formatted="false">"تخلیق کار کے نام اور منفرد صارف نام سے مطابقت۔ شروع میں @ لگانے کی ضرورت نہیں۔"</string>
+    <string name="keyword_description_input" formatted="false">"لفظ یا فقرہ"</string>
+    <string name="keyword_tag_input" formatted="false">"ہیش ٹیگ"</string>
+    <string name="keyword_author_input" formatted="false">"نام یا صارف نام"</string>
+    <string name="keyword_add" formatted="false">"اصول شامل کریں"</string>
+    <string name="keyword_delete" formatted="false">"اصول حذف کریں"</string>
+    <string name="region_select_title" formatted="false">"خطہ منتخب کریں"</string>
+    <string name="region_search" formatted="false">"ملک کے نام، انگریزی نام یا خطے کے کوڈ سے تلاش کریں"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · موبائل کمپنی کا کوڈ: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"حسب ضرورت خطہ اور SIM"</string>
+    <string name="region_custom_hint" formatted="false">"تیار شدہ ترتیبات کی پابندی کے بغیر ملک کا کوڈ اور موبائل کمپنی کی معلومات مقرر کریں۔"</string>
+    <string name="region_code_input" formatted="false">"ملک یا خطے کا کوڈ (مثلاً JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"موبائل کمپنی کا کوڈ (مثلاً 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"موبائل کمپنی کا نام (مثلاً NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"عام زبان منتخب کریں یا زبان کا کوڈ لکھیں۔"</string>
+    <string name="language_code_input" formatted="false">"زبان کا کوڈ (مثلاً ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"عام زبانیں:"</string>
+    <string name="timezone_custom_hint" formatted="false">"شہر کا ٹائم زون منتخب کریں یا ٹائم زون کا نام لکھیں۔"</string>
+    <string name="timezone_input" formatted="false">"ٹائم زون کا نام (مثلاً Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"شہروں کے عام ٹائم زون:"</string>
+    <string name="city_tokyo" formatted="false">"ٹوکیو"</string>
+    <string name="city_taipei" formatted="false">"تائی پے"</string>
+    <string name="city_hong_kong" formatted="false">"ہانگ کانگ"</string>
+    <string name="city_new_york" formatted="false">"نیویارک"</string>
+    <string name="city_london" formatted="false">"لندن"</string>
+    <string name="city_seoul" formatted="false">"سیول"</string>
+    <string name="city_bangkok" formatted="false">"بنکاک"</string>
+    <string name="city_singapore" formatted="false">"سنگاپور"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"مقام کے حسب ضرورت نقاط"</string>
+    <string name="gps_custom_hint" formatted="false">"شہر منتخب کریں یا عرض بلد اور طول بلد لکھیں۔"</string>
+    <string name="gps_latitude" formatted="false">"عرض بلد (-90.0 سے 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"طول بلد (-180.0 سے 180.0)"</string>
+    <string name="gps_presets" formatted="false">"عام شہر:"</string>
+    <string name="speed_add_title" formatted="false">"رفتار شامل کریں"</string>
+    <string name="speed_input" formatted="false">"پلے بیک کی رفتار"</string>
+    <string name="speed_invalid" formatted="false">"درست عدد لکھیں"</string>
+    <string name="speed_out_of_range" formatted="true">"صرف %1$sx سے %2$sx معاونت یافتہ ہے"</string>
+    <string name="speed_range" formatted="true">"معاونت یافتہ حد: %1$sx سے %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"رفتار بدلیں"</string>
+    <string name="duration_threshold_title" formatted="false">"طویل ویڈیو کی اطلاع"</string>
+    <string name="duration_threshold_hint" formatted="false">"ویڈیو اس دورانیے تک پہنچے تو پلے بیک کے آغاز پر اس کی لمبائی منٹوں میں بتانے والی مختصر اطلاع دکھائی جائے گی۔"</string>
+    <string name="duration_threshold_input" formatted="false">"دورانیے کی حد (منٹ)"</string>
+    <string name="duration_threshold_example" formatted="false">"مثلاً: 3 یا 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"0 سے بڑا منٹوں کا درست عدد لکھیں"</string>
+    <string name="duration_threshold_current" formatted="true">"موجودہ ترتیب: ≥ %1$s منٹ کی ویڈیو پر اطلاع"</string>
+    <string name="duration_threshold_presets" formatted="false">"تجویز کردہ دورانیے:"</string>
+    <string name="status_feature_feed" formatted="false">"فیڈ کی فلٹرنگ"</string>
+    <string name="status_feature_speed" formatted="false">"رفتار"</string>
+    <string name="status_feature_progress" formatted="false">"پیش رفت کی پٹی"</string>
+    <string name="status_feature_clean" formatted="false">"چلتے وقت کنٹرول چھپانا"</string>
+    <string name="status_feature_immersive" formatted="false">"ویڈیو کی نمائش"</string>
+    <string name="status_feature_scroll" formatted="false">"خودکار اسکرول"</string>
+    <string name="status_feature_duration" formatted="false">"دورانیے کی اطلاع"</string>
+    <string name="status_feature_comment_translate" formatted="false">"تبصروں کا ترجمہ"</string>
+    <string name="status_feature_video_translate" formatted="false">"سب ٹائٹلز اور ترجمے کا مینو"</string>
+    <string name="status_feature_comment_copy" formatted="false">"تبصرے کاپی کرنا"</string>
+    <string name="status_feature_author" formatted="false">"تخلیق کار کا خطہ"</string>
+    <string name="status_feature_download" formatted="false">"ویڈیو محفوظ کرنا"</string>
+    <string name="status_feature_music" formatted="false">"آڈیو کی پابندیاں"</string>
+    <string name="status_feature_sim" formatted="false">"SIM اور ملک"</string>
+    <string name="status_feature_language" formatted="false">"زبان"</string>
+    <string name="status_feature_timezone" formatted="false">"ٹائم زون"</string>
+    <string name="status_feature_gps" formatted="false">"مقام"</string>
+    <string name="status_feature_bar" formatted="false">"اسٹیٹس بار"</string>
+    <string name="status_normal" formatted="false">"درست"</string>
+    <string name="status_issue" formatted="false">"مسئلہ ہے"</string>
+    <string name="status_disabled" formatted="false">"بند"</string>
+    <string name="status_pending" formatted="false">"غیر مصدقہ"</string>
+    <string name="status_problem_disabled" formatted="false">"بند ہے، مگر خرابی کا ریکارڈ موجود ہے"</string>
+    <string name="status_problem_unavailable" formatted="false">"عارضی طور پر دستیاب نہیں"</string>
+    <string name="status_problem_runtime" formatted="false">"استعمال میں خرابی"</string>
+    <string name="status_problem_speed_menu" formatted="false">"رفتار کا مینو دستیاب نہیں"</string>
+    <string name="status_prepare_failed" formatted="false">"خصوصیات کی تیاری ناکام ہوئی۔ TikTok دوبارہ کھول کر دیکھیں۔"</string>
+    <string name="status_preparing" formatted="false">"خصوصیات تیار ہو رہی ہیں۔ براہ کرم انتظار کریں۔"</string>
+    <string name="status_prepared" formatted="false">"تیاری مکمل ہو گئی۔ TikTok دوبارہ کھولیں۔"</string>
+    <string name="status_read_failed" formatted="false">"ابھی حالت پڑھی نہیں جا سکتی۔ بعد میں دیکھیں۔"</string>
+    <string name="status_update_failed" formatted="false">"ابھی حالت اپ ڈیٹ نہیں ہو سکتی۔ تازہ ترین نتیجہ دکھایا جا رہا ہے۔"</string>
+    <string name="status_reading" formatted="false">"حالت پڑھی جا رہی ہے"</string>
+    <string name="status_empty" formatted="false">"چلنے کا ریکارڈ نہیں۔ LSPosed میں Toki فعال کرکے TikTok کھولیں، پھر دیکھیں۔"</string>
+    <string name="status_report_note" formatted="true">"آخری رپورٹ: %1$s\n«درست» کا مطلب ہے خصوصیت تیار ہے اور اس نے خرابی رپورٹ نہیں کی۔"</string>
+    <string name="config_section" formatted="false">"ترتیبات کا انتظام"</string>
+    <string name="config_import" formatted="false">"ترتیبات درآمد کریں"</string>
+    <string name="config_import_summary" formatted="false">"فائل سے خصوصیات کی ترتیبات بحال کریں"</string>
+    <string name="config_export" formatted="false">"ترتیبات برآمد کریں"</string>
+    <string name="config_export_summary" formatted="false">"خصوصیات کی ترتیبات فائل میں محفوظ کریں"</string>
+    <string name="config_exported" formatted="false">"ترتیبات منتخب مقام پر برآمد ہو گئیں۔ فائل میں کلیدی الفاظ، خطے اور فولڈر کی ترتیبات ہو سکتی ہیں۔ اسے محفوظ رکھیں۔"</string>
+    <string name="config_import_confirm" formatted="true">"فائل میں ترتیبات کی تعداد: %1$d۔ درآمد سے تمام خصوصیات کی ترتیبات بدل جائیں گی؛ غیر موجود ترتیبات طے شدہ اقدار پر واپس آئیں گی۔\n\nانٹرفیس کی زبان، ایپ کا آئیکن، LSPosed کی اجازت اور TikTok کی مطابقت کیش نہیں بدلیں گے۔ جاری رکھیں؟"</string>
+    <string name="config_overwrite" formatted="false">"بدل دیں"</string>
+    <string name="config_imported" formatted="false">"ترتیبات درآمد ہو گئیں اور خصوصیات کا صفحہ اپ ڈیٹ ہو گیا۔ براہ راست اپ ڈیٹ والی تبدیلیاں فوراً لاگو ہوتی ہیں۔ باقی کے لیے TikTok دوبارہ کھول کر جانچیں۔"</string>
+    <string name="config_processing" formatted="false">"کارروائی جاری ہے…"</string>
+    <string name="config_error_io" formatted="false">"فائل پڑھنے یا لکھنے میں ناکامی۔ منتخب مقام اور خالی جگہ دیکھیں۔"</string>
+    <string name="config_error_permission" formatted="false">"منتخب فائل تک رسائی کی اجازت نہیں۔ دوبارہ منتخب کریں۔"</string>
+    <string name="config_error_invalid" formatted="false">"یہ Toki کی درست ترتیبات کی فائل نہیں۔ کوئی ترتیب درآمد نہیں ہوئی۔"</string>
+    <string name="config_error_validation" formatted="true">"ترتیبات کی توثیق ناکام: %1$s۔ کوئی ترتیب درآمد نہیں ہوئی۔"</string>
+    <string name="config_error_commit" formatted="false">"ترتیبات لاگو ہونے کی تصدیق نہیں ہوئی۔ دوبارہ کوشش سے پہلے Toki کھول کر جانچیں۔"</string>
+    <string name="sponsor_title" formatted="false">"ڈویلپر کی حمایت"</string>
+    <string name="sponsor_kofi" formatted="false">"Ko-fi کے ذریعے تعاون"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay ادائیگی کا QR کوڈ"</string>
+    <string name="sponsor_saving" formatted="false">"محفوظ ہو رہا ہے…"</string>
+    <string name="sponsor_save_image" formatted="false">"تصویر محفوظ کریں"</string>
+    <string name="sponsor_image_hint" formatted="false">"اصل تصویر محفوظ کریں، پھر Alipay میں اسے منتخب کرکے کوڈ پڑھیں۔"</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT پتہ کاپی ہو گیا"</string>
+    <string name="sponsor_image_saved" formatted="false">"تصویر منتخب مقام پر محفوظ ہو گئی"</string>
+    <string name="sponsor_error_io" formatted="false">"محفوظ کرنے میں ناکامی۔ مقام اور خالی جگہ دیکھ کر دوبارہ کوشش کریں۔"</string>
+    <string name="sponsor_error_permission" formatted="false">"محفوظ کرنے میں ناکامی: منتخب مقام پر لکھنے کی اجازت نہیں۔ دوبارہ منتخب کریں۔"</string>
+    <string name="feature_filter_topics" formatted="false">"مجوزہ موضوعات چھپائیں"</string>
+    <string name="feature_filter_creators" formatted="false">"مجوزہ تخلیق کار چھپائیں"</string>
+    <string name="host_scan_title_complete" formatted="false">"تلاش مکمل ہو گئی"</string>
+    <string name="host_scan_title_failed" formatted="false">"تلاش ناکام ہو گئی"</string>
+    <string name="host_scan_restart_hint" formatted="false">"نتائج لاگو کرنے کے لیے TikTok کو دستی طور پر دوبارہ شروع کریں۔"</string>
+    <string name="host_scan_failure_hint" formatted="false">"Toki میں خصوصیات کی تشخیص دیکھیں۔"</string>
+    <string name="layout_title" formatted="false">"صفحے کی ترتیب"</string>
+    <string name="layout_summary" formatted="false">"چھپانے والے بٹن منتخب کریں"</string>
+    <string name="layout_hint" formatted="false">"کسی آئٹم کو چھپانے کے لیے سوئچ آن کریں"</string>
+    <string name="layout_top" formatted="false">"اوپر کی بار"</string>
+    <string name="layout_bottom" formatted="false">"نیچے کی بار"</string>
+    <string name="layout_side" formatted="false">"ویڈیو کا صفحہ"</string>
+    <string name="layout_search" formatted="false">"تلاش"</string>
+    <string name="layout_live" formatted="false">"لائیو"</string>
+    <string name="layout_friends" formatted="false">"دوست"</string>
+    <string name="layout_following" formatted="false">"فالو کردہ"</string>
+    <string name="layout_shop" formatted="false">"دکان"</string>
+    <string name="layout_for_you" formatted="false">"آپ کے لیے"</string>
+    <string name="layout_nearby" formatted="false">"قریبی"</string>
+    <string name="layout_stem" formatted="false">"سائنس"</string>
+    <string name="layout_series" formatted="false">"سیریز"</string>
+    <string name="layout_home" formatted="false">"ہوم"</string>
+    <string name="layout_create" formatted="false">"بنائیں"</string>
+    <string name="layout_inbox" formatted="false">"ان باکس"</string>
+    <string name="layout_profile" formatted="false">"پروفائل"</string>
+    <string name="layout_discover" formatted="false">"دریافت"</string>
+    <string name="layout_avatar" formatted="false">"پروفائل تصویر"</string>
+    <string name="layout_follow" formatted="false">"فالو بٹن"</string>
+    <string name="layout_like" formatted="false">"لائک"</string>
+    <string name="layout_comment" formatted="false">"تبصرے"</string>
+    <string name="layout_favorite" formatted="false">"پسندیدہ"</string>
+    <string name="layout_share" formatted="false">"شیئر"</string>
+    <string name="layout_music" formatted="false">"موسیقی کی ڈسک"</string>
+    <string name="layout_explore" formatted="false">"کھوجیں"</string>
+    <string name="layout_author" formatted="false">"تخلیق کار کی معلومات"</string>
+    <string name="layout_description" formatted="false">"تفصیل"</string>
+    <string name="layout_music_title" formatted="false">"موسیقی کا عنوان"</string>
+    <string name="layout_tags" formatted="false">"معلوماتی لیبل"</string>
+    <string name="layout_search_label" formatted="false">"تلاش کی تجویز"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"آٹو اسکرول روکنے کا بٹن"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"سکے اور انعامات"</string>
+    <string name="layout_quick_comment" formatted="false">"فوری تبصرے"</string>
+    <string name="layout_playlist" formatted="false">"پلے لسٹ"</string>
+    <string name="layout_creation_buttons" formatted="false">"تخلیق کے شارٹ کٹس"</string>
+    <string name="layout_live_notice" formatted="false">"لائیو یاد دہانیاں"</string>
+    <string name="layout_opacity" formatted="false">"غیر شفافیت"</string>
+    <string name="feature_background_audio">"پس منظر آڈیو کھولیں"</string>
+    <string name="layout_landscape">"فل اسکرین بٹن"</string>
+    <string name="layout_photo_indicators">"تصویر کے اشارے اور تجاویز"</string>
+    <string name="layout_quick_message">"فوری پیغامات اور شیئر کرنے والا"</string>
+    <string name="layout_user_card">"تجویز کردہ اکاؤنٹس"</string>
+    <string name="layout_survey">"سروے اور رائے"</string>
+    <string name="layout_ad_cards">"مصنوعات اور اشتہارات کے کارڈ"</string>
+    <string name="layout_bottom_banners">"دیگر نچلے بینر"</string>
+    <string name="layout_activities">"ایونٹ کا داخلی بٹن"</string>
+    <string name="host_scan_title_running" formatted="false">"طریقے تلاش کیے جا رہے ہیں"</string>
+    <string name="host_scan_title_saving" formatted="false">"نتائج محفوظ کیے جا رہے ہیں"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"TikTok کو سامنے کھلا رکھیں۔"</string>
+    <string name="host_scan_saving_hint" formatted="false">"براہ کرم انتظار کریں۔"</string>
+    <string name="host_scan_done" formatted="false">"سمجھ گیا"</string>
+    <string name="video_fit_center" formatted="false">"درمیان میں"</string>
+    <string name="video_fit_smart" formatted="false">"پوری اسکرین"</string>
+</resources>

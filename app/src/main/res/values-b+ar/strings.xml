@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"الرئيسية"</string>
+    <string name="nav_features" formatted="false">"الميزات"</string>
+    <string name="page_features" formatted="false">"الإعدادات"</string>
+    <string name="page_hook_status" formatted="false">"حالة الميزات"</string>
+    <string name="nav_back" formatted="false">"رجوع"</string>
+    <string name="restart_tiktok" formatted="false">"إعادة تشغيل TikTok"</string>
+    <string name="restart_root_required" formatted="false">"يرجى منح Toki صلاحية root"</string>
+    <string name="language_title" formatted="false">"لغة التطبيق"</string>
+    <string name="language_system" formatted="false">"اتباع النظام"</string>
+    <string name="language_search" formatted="false">"البحث عن لغة"</string>
+    <string name="language_clear_search" formatted="false">"مسح البحث"</string>
+    <string name="language_no_results" formatted="false">"لم يُعثر على لغات مطابقة"</string>
+    <string name="common_save" formatted="false">"حفظ"</string>
+    <string name="common_cancel" formatted="false">"إلغاء"</string>
+    <string name="common_confirm" formatted="false">"موافق"</string>
+    <string name="common_close" formatted="false">"إغلاق"</string>
+    <string name="common_open" formatted="false">"فتح"</string>
+    <string name="common_copy" formatted="false">"نسخ"</string>
+    <string name="common_add" formatted="false">"إضافة"</string>
+    <string name="common_delete" formatted="false">"حذف"</string>
+    <string name="common_done" formatted="false">"تم"</string>
+    <string name="common_save_apply" formatted="false">"تطبيق"</string>
+    <string name="common_unknown" formatted="false">"غير معروف"</string>
+    <string name="common_custom" formatted="false">"مخصص"</string>
+    <string name="home_icon_hidden" formatted="false">"تم إخفاء أيقونة التطبيق"</string>
+    <string name="home_icon_restored" formatted="false">"تمت إعادة إظهار الأيقونة"</string>
+    <string name="home_activated" formatted="false">"مفعّل"</string>
+    <string name="home_inactive" formatted="false">"غير مفعّل"</string>
+    <string name="home_activation_missing" formatted="false">"لم يُكتشف تفعيل في LSPosed"</string>
+    <string name="home_host_section" formatted="false">"التوافق مع TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok المثبّت"</string>
+    <string name="home_host_missing" formatted="false">"لم يُعثر على نسخة TikTok مدعومة على الجهاز"</string>
+    <string name="home_host_not_installed" formatted="false">"غير مثبّت"</string>
+    <string name="home_supported_versions" formatted="false">"الإصدارات المدعومة"</string>
+    <string name="home_community" formatted="false">"المجتمع"</string>
+    <string name="home_github" formatted="false">"مستودع GitHub"</string>
+    <string name="home_telegram" formatted="false">"مجموعة Telegram"</string>
+    <string name="home_preferences" formatted="false">"التفضيلات"</string>
+    <string name="home_hide_icon" formatted="false">"إخفاء أيقونة التطبيق"</string>
+    <string name="home_hide_icon_summary" formatted="false">"يمكن فتح Toki عبر مدير LSPosed بعد إخفائها"</string>
+    <string name="home_support" formatted="false">"دعم التطوير"</string>
+    <string name="home_support_summary" formatted="false">"دعم الصيانة المستمرة وتحسين الميزات"</string>
+    <string name="feature_region_section" formatted="false">"محاكاة المنطقة والبيئة"</string>
+    <string name="feature_playback_section" formatted="false">"التشغيل"</string>
+    <string name="feature_progress" formatted="false">"إظهار شريط التقدم دائمًا"</string>
+    <string name="feature_progress_summary" formatted="false">"إبقاء شريط التقدم السفلي ظاهرًا حتى في الفيديوهات القصيرة"</string>
+    <string name="feature_immersive" formatted="false">"عرض الفيديو"</string>
+    <string name="feature_autoplay" formatted="false">"تمرير تلقائي محسّن"</string>
+    <string name="feature_autoplay_summary" formatted="false">"إتاحة التمرير التلقائي في قوائم جميع الفيديوهات"</string>
+    <string name="feature_status_bar" formatted="false">"إخفاء شريط حالة النظام"</string>
+    <string name="feature_media_section" formatted="false">"التنزيلات والأدوات"</string>
+    <string name="feature_download" formatted="false">"تنزيل بلا علامة مائية"</string>
+    <string name="feature_download_summary" formatted="false">"حفظ الفيديو الأصلي بلا علامة مائية من قائمة الضغط المطول أو المشاركة"</string>
+    <string name="feature_music" formatted="false">"إزالة قيود الصوت"</string>
+    <string name="feature_music_summary" formatted="false">"استعادة الصوت المقيّد بسبب الحقوق أو المنطقة"</string>
+    <string name="feature_author_region" formatted="false">"إظهار منطقة المنشئ"</string>
+    <string name="feature_author_region_summary" formatted="false">"إظهار علم البلد أو المنطقة ورمزها بجانب اسم المنشئ"</string>
+    <string name="feature_copy_comment" formatted="false">"نسخ النص فقط"</string>
+    <string name="feature_video_translation" formatted="false">"قائمة الترجمة والتسميات التوضيحية"</string>
+    <string name="feature_video_translation_summary" formatted="false">"إظهار المدخل في قائمة الضغط المطوّل"</string>
+    <string name="feature_comment_translation" formatted="false">"ترجمة التعليقات"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"إضافة زر لترجمة التعليقات الأجنبية دفعة واحدة"</string>
+    <string name="feature_filter_section" formatted="false">"تصفية الموجز"</string>
+    <string name="feature_remove_ads" formatted="false">"إزالة إعلانات الموجز"</string>
+    <string name="feature_remove_live" formatted="false">"تصفية البث المباشر المقترح"</string>
+    <string name="feature_remove_photos" formatted="false">"تصفية منشورات الصور المقترحة"</string>
+    <string name="feature_filter_views" formatted="false">"تصفية المشاهدات"</string>
+    <string name="feature_filter_likes" formatted="false">"تصفية الإعجابات"</string>
+    <string name="feature_filter_duration" formatted="false">"تصفية المدة"</string>
+    <string name="feature_filter_keywords" formatted="false">"تصفية الكلمات المفتاحية"</string>
+    <string name="feature_block_offline" formatted="false">"منع الفيديوهات غير المتصلة"</string>
+    <string name="feature_block_offline_summary" formatted="false">"منع إدراج فيديوهات محمّلة مسبقًا عند ضعف الاتصال"</string>
+    <string name="feature_remove_ai" formatted="false">"إزالة المحتوى المُنشأ بالذكاء الاصطناعي"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"تصفية الفيديوهات التي يصنّفها TikTok على أنها مُنشأة بالذكاء الاصطناعي"</string>
+    <string name="filter_metric_views" formatted="false">"المشاهدات"</string>
+    <string name="filter_metric_likes" formatted="false">"الإعجابات"</string>
+    <string name="filter_metric_duration" formatted="false">"المدة"</string>
+    <string name="filter_unit_seconds" formatted="false">"ث"</string>
+    <string name="filter_views_saved" formatted="false">"تم حفظ نطاق المشاهدات"</string>
+    <string name="filter_likes_saved" formatted="false">"تم حفظ نطاق الإعجابات"</string>
+    <string name="filter_duration_saved" formatted="false">"تم حفظ نطاق المدة"</string>
+    <string name="download_path_saved" formatted="false">"تم تحديث مسارات الحفظ"</string>
+    <string name="region_spoof_title" formatted="false">"محاكاة المنطقة وSIM"</string>
+    <string name="region_current" formatted="false">"الإعدادات الحالية"</string>
+    <string name="region_target" formatted="true">"المنطقة المستهدفة: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"شركة الاتصالات: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"رمز شركة الاتصالات: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"إعدادات مسبقة"</string>
+    <string name="region_custom_parameters" formatted="false">"تخصيص"</string>
+    <string name="language_spoof" formatted="false">"محاكاة اللغة"</string>
+    <string name="environment_follow_region" formatted="false">"حسب المنطقة"</string>
+    <string name="language_effective" formatted="true">"اللغة الفعالة: %1$s"</string>
+    <string name="language_custom" formatted="false">"لغة مخصصة"</string>
+    <string name="timezone_spoof" formatted="false">"محاكاة المنطقة الزمنية"</string>
+    <string name="timezone_effective" formatted="true">"المنطقة الزمنية الفعالة: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"منطقة زمنية مخصصة"</string>
+    <string name="gps_spoof" formatted="false">"محاكاة الموقع"</string>
+    <string name="gps_effective" formatted="true">"الإحداثيات الفعالة: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"إحداثيات مخصصة"</string>
+    <string name="speed_fixed" formatted="false">"حفظ السرعة"</string>
+    <string name="speed_fixed_summary" formatted="false">"الاحتفاظ بالسرعة المختارة من قائمة الضغط المطول عند تبديل الفيديو"</string>
+    <string name="speed_expand" formatted="false">"سرعات إضافية"</string>
+    <string name="speed_options_hint" formatted="false">"خيارات السرعة (اضغط للتعديل أو الحذف)"</string>
+    <string name="speed_add_option" formatted="false">"+ إضافة سرعة"</string>
+    <string name="speed_restore" formatted="false">"إعادة ضبط"</string>
+    <string name="clean_on_play" formatted="false">"إخفاء عناصر التحكم أثناء التشغيل"</string>
+    <string name="clean_keep_progress" formatted="false">"إبقاء شريط التقدم"</string>
+    <string name="download_paths" formatted="false">"مجلدات الحفظ"</string>
+    <string name="download_paths_summary" formatted="true">"الفيديوهات: %1$s · الصور: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"الاحتفاظ بالفيديوهات التي تكون فيها %1$s من %2$d%4$s إلى %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"الاحتفاظ بالفيديوهات التي تكون فيها %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"الاحتفاظ بالفيديوهات التي تكون فيها %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"لم يُحدد نطاق (اضغط لتحديد الحد الأدنى أو الأقصى)"</string>
+    <string name="keyword_unset" formatted="false">"لا توجد قواعد (اضغط لإدارة الفئات)"</string>
+    <string name="keyword_summary" formatted="true">"مفعّل: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"الأوصاف: %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"الوسوم: %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"المنشئون: %1$d"</string>
+    <string name="keyword_description" formatted="false">"الأوصاف"</string>
+    <string name="keyword_tag" formatted="false">"الوسوم"</string>
+    <string name="keyword_author" formatted="false">"المنشئون"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"لا توجد قواعد لفئة %1$s. أضف قاعدة من الأعلى"</string>
+    <string name="duration_alert_title" formatted="false">"تنبيه مدة الفيديو الطويل"</string>
+    <string name="duration_alert_summary" formatted="true">"الحد الحالي: ≥ %1$s دقيقة"</string>
+    <string name="download_video_path" formatted="false">"مجلد الفيديوهات"</string>
+    <string name="download_image_path" formatted="false">"مجلد الصور"</string>
+    <string name="download_path_hint" formatted="false">"يجب أن يكون المجلد الأول مجلد وسائط عامًا مثل Movies أو Pictures أو DCIM. تستخدم المسارات غير الصالحة القيمة الافتراضية للنظام"</string>
+    <string name="views_range_title" formatted="false">"نطاق المشاهدات"</string>
+    <string name="views_range_min" formatted="false">"أدنى عدد مشاهدات (0 = بلا حد)"</string>
+    <string name="views_range_max" formatted="false">"أقصى عدد مشاهدات (0 = بلا حد)"</string>
+    <string name="views_range_hint" formatted="false">"الاحتفاظ بالفيديوهات ضمن نطاق المشاهدات فقط. عند ضبط الحدين على 0 لا يُحذف شيء"</string>
+    <string name="likes_range_title" formatted="false">"نطاق الإعجابات"</string>
+    <string name="likes_range_min" formatted="false">"أدنى عدد إعجابات (0 = بلا حد)"</string>
+    <string name="likes_range_max" formatted="false">"أقصى عدد إعجابات (0 = بلا حد)"</string>
+    <string name="likes_range_hint" formatted="false">"الاحتفاظ بالفيديوهات ضمن نطاق الإعجابات فقط. عند ضبط الحدين على 0 لا يُحذف شيء"</string>
+    <string name="duration_range_title" formatted="false">"نطاق مدة الفيديو"</string>
+    <string name="duration_range_min" formatted="false">"أدنى مدة (بالثواني؛ 0 = بلا حد)"</string>
+    <string name="duration_range_max" formatted="false">"أقصى مدة (بالثواني؛ 0 = بلا حد)"</string>
+    <string name="duration_range_hint" formatted="false">"الاحتفاظ بالفيديوهات المقترحة ضمن نطاق المدة. عند ضبط الحدين على 0 لا يُحذف شيء. لا تتأثر منشورات الصور"</string>
+    <string name="keyword_manage" formatted="false">"قواعد التصفية"</string>
+    <string name="keyword_description_hint" formatted="false">"مطابقة نص الفيديو ووصفه دون تمييز حالة الأحرف."</string>
+    <string name="keyword_tag_hint" formatted="false">"مطابقة الوسوم. لا حاجة لإدخال البادئة #."</string>
+    <string name="keyword_author_hint" formatted="false">"مطابقة اسم المنشئ واسم المستخدم الفريد. لا حاجة لإدخال البادئة @."</string>
+    <string name="keyword_description_input" formatted="false">"كلمة أو عبارة"</string>
+    <string name="keyword_tag_input" formatted="false">"وسم"</string>
+    <string name="keyword_author_input" formatted="false">"الاسم أو اسم المستخدم"</string>
+    <string name="keyword_add" formatted="false">"إضافة قاعدة"</string>
+    <string name="keyword_delete" formatted="false">"حذف قاعدة"</string>
+    <string name="region_select_title" formatted="false">"اختيار المنطقة"</string>
+    <string name="region_search" formatted="false">"البحث باسم البلد أو الاسم الإنجليزي أو رمز المنطقة"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · رمز شركة الاتصالات: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"منطقة وSIM مخصصتان"</string>
+    <string name="region_custom_hint" formatted="false">"تحديد رمز البلد وبيانات شركة الاتصالات دون قيود الإعدادات المسبقة."</string>
+    <string name="region_code_input" formatted="false">"رمز البلد أو المنطقة (مثل JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"رمز شركة الاتصالات (مثل 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"اسم شركة الاتصالات (مثل NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"اختر لغة شائعة أو أدخل رمز اللغة."</string>
+    <string name="language_code_input" formatted="false">"رمز اللغة (مثل ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"اللغات الشائعة:"</string>
+    <string name="timezone_custom_hint" formatted="false">"اختر المنطقة الزمنية لمدينة أو أدخل اسم المنطقة الزمنية."</string>
+    <string name="timezone_input" formatted="false">"اسم المنطقة الزمنية (مثل Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"المناطق الزمنية الشائعة للمدن:"</string>
+    <string name="city_tokyo" formatted="false">"طوكيو"</string>
+    <string name="city_taipei" formatted="false">"تايبيه"</string>
+    <string name="city_hong_kong" formatted="false">"هونغ كونغ"</string>
+    <string name="city_new_york" formatted="false">"نيويورك"</string>
+    <string name="city_london" formatted="false">"لندن"</string>
+    <string name="city_seoul" formatted="false">"سيول"</string>
+    <string name="city_bangkok" formatted="false">"بانكوك"</string>
+    <string name="city_singapore" formatted="false">"سنغافورة"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"إحداثيات موقع مخصصة"</string>
+    <string name="gps_custom_hint" formatted="false">"اختر مدينة أو أدخل خط العرض وخط الطول."</string>
+    <string name="gps_latitude" formatted="false">"خط العرض (-90.0 إلى 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"خط الطول (-180.0 إلى 180.0)"</string>
+    <string name="gps_presets" formatted="false">"المدن الشائعة:"</string>
+    <string name="speed_add_title" formatted="false">"إضافة سرعة"</string>
+    <string name="speed_input" formatted="false">"سرعة التشغيل"</string>
+    <string name="speed_invalid" formatted="false">"أدخل رقمًا صالحًا"</string>
+    <string name="speed_out_of_range" formatted="true">"المدعوم فقط: %1$sx–%2$sx"</string>
+    <string name="speed_range" formatted="true">"النطاق المدعوم: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"تعديل السرعة"</string>
+    <string name="duration_threshold_title" formatted="false">"تنبيه الفيديوهات الطويلة"</string>
+    <string name="duration_threshold_hint" formatted="false">"عندما تبلغ مدة الفيديو هذه القيمة، يظهر عند بدء التشغيل تنبيه قصير يوضح المدة بالدقائق."</string>
+    <string name="duration_threshold_input" formatted="false">"حد المدة (بالدقائق)"</string>
+    <string name="duration_threshold_example" formatted="false">"مثلًا: 3 أو 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"أدخل عدد دقائق صالحًا أكبر من 0"</string>
+    <string name="duration_threshold_current" formatted="true">"الإعداد الحالي: تنبيه عند مدة ≥ %1$s دقيقة"</string>
+    <string name="duration_threshold_presets" formatted="false">"المدد المقترحة:"</string>
+    <string name="status_feature_feed" formatted="false">"تصفية الموجز"</string>
+    <string name="status_feature_speed" formatted="false">"سرعة التشغيل"</string>
+    <string name="status_feature_progress" formatted="false">"شريط التقدم"</string>
+    <string name="status_feature_clean" formatted="false">"إخفاء التحكم أثناء التشغيل"</string>
+    <string name="status_feature_immersive" formatted="false">"عرض الفيديو"</string>
+    <string name="status_feature_scroll" formatted="false">"التمرير التلقائي"</string>
+    <string name="status_feature_duration" formatted="false">"تنبيه المدة"</string>
+    <string name="status_feature_comment_translate" formatted="false">"ترجمة التعليقات"</string>
+    <string name="status_feature_video_translate" formatted="false">"قائمة الترجمة والتسميات التوضيحية"</string>
+    <string name="status_feature_comment_copy" formatted="false">"نسخ التعليقات"</string>
+    <string name="status_feature_author" formatted="false">"منطقة المنشئ"</string>
+    <string name="status_feature_download" formatted="false">"حفظ الفيديو"</string>
+    <string name="status_feature_music" formatted="false">"قيود الصوت"</string>
+    <string name="status_feature_sim" formatted="false">"SIM والبلد"</string>
+    <string name="status_feature_language" formatted="false">"اللغة"</string>
+    <string name="status_feature_timezone" formatted="false">"المنطقة الزمنية"</string>
+    <string name="status_feature_gps" formatted="false">"الموقع"</string>
+    <string name="status_feature_bar" formatted="false">"شريط الحالة"</string>
+    <string name="status_normal" formatted="false">"يعمل"</string>
+    <string name="status_issue" formatted="false">"توجد مشكلة"</string>
+    <string name="status_disabled" formatted="false">"متوقف"</string>
+    <string name="status_pending" formatted="false">"غير مؤكد"</string>
+    <string name="status_problem_disabled" formatted="false">"متوقف، مع وجود سجل خطأ"</string>
+    <string name="status_problem_unavailable" formatted="false">"غير متاحة مؤقتًا"</string>
+    <string name="status_problem_runtime" formatted="false">"خطأ أثناء الاستخدام"</string>
+    <string name="status_problem_speed_menu" formatted="false">"قائمة السرعة غير متاحة"</string>
+    <string name="status_prepare_failed" formatted="false">"تعذّر تجهيز الميزات. أعد فتح TikTok ثم تحقق."</string>
+    <string name="status_preparing" formatted="false">"جارٍ تجهيز الميزات. يرجى الانتظار."</string>
+    <string name="status_prepared" formatted="false">"اكتمل التجهيز. يرجى إعادة فتح TikTok."</string>
+    <string name="status_read_failed" formatted="false">"يتعذر قراءة الحالة الآن. تحقق لاحقًا."</string>
+    <string name="status_update_failed" formatted="false">"يتعذر تحديث الحالة الآن. تُعرض آخر نتيجة."</string>
+    <string name="status_reading" formatted="false">"جارٍ قراءة الحالة"</string>
+    <string name="status_empty" formatted="false">"لا يوجد سجل تشغيل. فعّل Toki في LSPosed وافتح TikTok ثم تحقق."</string>
+    <string name="status_report_note" formatted="true">"آخر تقرير: %1$s\n«يعمل» تعني أن الميزة جاهزة ولم تُبلغ عن أخطاء."</string>
+    <string name="config_section" formatted="false">"إدارة الإعدادات"</string>
+    <string name="config_import" formatted="false">"استيراد الإعدادات"</string>
+    <string name="config_import_summary" formatted="false">"استعادة إعدادات الميزات من ملف"</string>
+    <string name="config_export" formatted="false">"تصدير الإعدادات"</string>
+    <string name="config_export_summary" formatted="false">"حفظ إعدادات الميزات في ملف"</string>
+    <string name="config_exported" formatted="false">"تم تصدير الإعدادات إلى الموقع المحدد. قد يحتوي الملف على كلمات مفتاحية ومناطق ومسارات. احفظه بأمان."</string>
+    <string name="config_import_confirm" formatted="true">"عدد الإعدادات في الملف: %1$d. يستبدل الاستيراد جميع إعدادات الميزات، وتعود العناصر غير الموجودة إلى قيمها الافتراضية.\n\nلن تتغير لغة الواجهة أو أيقونة التطبيق أو صلاحيات LSPosed أو ذاكرة توافق TikTok المؤقتة. هل تريد المتابعة؟"</string>
+    <string name="config_overwrite" formatted="false">"استبدال"</string>
+    <string name="config_imported" formatted="false">"تم استيراد الإعدادات وتحديث صفحة الميزات. تُطبق التغييرات التي تدعم التحديث المباشر فورًا. أعد فتح TikTok للتحقق من بقية الميزات."</string>
+    <string name="config_processing" formatted="false">"جارٍ معالجة الإعدادات"</string>
+    <string name="config_error_io" formatted="false">"تعذرت قراءة الملف أو كتابته. تحقق من الموقع والمساحة المتاحة."</string>
+    <string name="config_error_permission" formatted="false">"لا توجد صلاحية للوصول إلى الملف المحدد. اختره مجددًا."</string>
+    <string name="config_error_invalid" formatted="false">"الملف ليس إعدادات Toki صالحة. لم تُستورد أي إعدادات."</string>
+    <string name="config_error_validation" formatted="true">"فشل التحقق من الإعدادات: %1$s. لم تُستورد أي إعدادات."</string>
+    <string name="config_error_commit" formatted="false">"لم يتأكد تطبيق الإعدادات. أعد فتح Toki وتحقق قبل المحاولة مجددًا."</string>
+    <string name="sponsor_title" formatted="false">"دعم المطوّر"</string>
+    <string name="sponsor_kofi" formatted="false">"الدعم عبر Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"رمز QR للدفع عبر Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"جارٍ الحفظ…"</string>
+    <string name="sponsor_save_image" formatted="false">"حفظ الصورة"</string>
+    <string name="sponsor_image_hint" formatted="false">"احفظ الصورة الأصلية، ثم اخترها في Alipay لقراءة الرمز."</string>
+    <string name="sponsor_address_copied" formatted="false">"تم نسخ عنوان USDT"</string>
+    <string name="sponsor_image_saved" formatted="false">"تم حفظ الصورة في الموقع المحدد"</string>
+    <string name="sponsor_error_io" formatted="false">"فشل الحفظ. تحقق من الموقع والمساحة المتاحة ثم أعد المحاولة."</string>
+    <string name="sponsor_error_permission" formatted="false">"فشل الحفظ: لا توجد صلاحية للكتابة في الموقع المحدد. اختره مجددًا."</string>
+    <string name="feature_filter_topics" formatted="false">"إخفاء المواضيع المقترحة"</string>
+    <string name="feature_filter_creators" formatted="false">"إخفاء المبدعين المقترحين"</string>
+    <string name="host_scan_title_complete" formatted="false">"اكتمل البحث"</string>
+    <string name="host_scan_title_failed" formatted="false">"فشل البحث"</string>
+    <string name="host_scan_restart_hint" formatted="false">"أعد تشغيل TikTok يدويًا لتطبيق النتائج."</string>
+    <string name="host_scan_failure_hint" formatted="false">"اعرض تشخيص الميزات في Toki."</string>
+    <string name="layout_title" formatted="false">"تخصيص الواجهة"</string>
+    <string name="layout_summary" formatted="false">"اختر العناصر التي تريد إخفاءها"</string>
+    <string name="layout_hint" formatted="false">"فعّل المفتاح لإخفاء العنصر"</string>
+    <string name="layout_top" formatted="false">"الشريط العلوي"</string>
+    <string name="layout_bottom" formatted="false">"الشريط السفلي"</string>
+    <string name="layout_side" formatted="false">"صفحة الفيديو"</string>
+    <string name="layout_search" formatted="false">"بحث"</string>
+    <string name="layout_live" formatted="false">"بث مباشر"</string>
+    <string name="layout_friends" formatted="false">"الأصدقاء"</string>
+    <string name="layout_following" formatted="false">"أتابعهم"</string>
+    <string name="layout_shop" formatted="false">"المتجر"</string>
+    <string name="layout_for_you" formatted="false">"لك"</string>
+    <string name="layout_nearby" formatted="false">"بالقرب منك"</string>
+    <string name="layout_stem" formatted="false">"علوم"</string>
+    <string name="layout_series" formatted="false">"مسلسلات"</string>
+    <string name="layout_home" formatted="false">"الرئيسية"</string>
+    <string name="layout_create" formatted="false">"إنشاء"</string>
+    <string name="layout_inbox" formatted="false">"الوارد"</string>
+    <string name="layout_profile" formatted="false">"الملف الشخصي"</string>
+    <string name="layout_discover" formatted="false">"اكتشاف"</string>
+    <string name="layout_avatar" formatted="false">"الصورة الشخصية"</string>
+    <string name="layout_follow" formatted="false">"زر المتابعة"</string>
+    <string name="layout_like" formatted="false">"إعجاب"</string>
+    <string name="layout_comment" formatted="false">"التعليقات"</string>
+    <string name="layout_favorite" formatted="false">"المفضلة"</string>
+    <string name="layout_share" formatted="false">"مشاركة"</string>
+    <string name="layout_music" formatted="false">"قرص الموسيقى"</string>
+    <string name="layout_explore" formatted="false">"استكشاف"</string>
+    <string name="layout_author" formatted="false">"معلومات المؤلف"</string>
+    <string name="layout_description" formatted="false">"الوصف"</string>
+    <string name="layout_music_title" formatted="false">"عنوان الموسيقى"</string>
+    <string name="layout_tags" formatted="false">"تسميات المعلومات"</string>
+    <string name="layout_search_label" formatted="false">"اقتراح البحث"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"زر إيقاف التمرير التلقائي"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"العملات والمكافآت"</string>
+    <string name="layout_quick_comment" formatted="false">"التعليقات السريعة"</string>
+    <string name="layout_playlist" formatted="false">"قائمة التشغيل"</string>
+    <string name="layout_creation_buttons" formatted="false">"اختصارات الإنشاء"</string>
+    <string name="layout_live_notice" formatted="false">"تذكيرات البث"</string>
+    <string name="layout_opacity" formatted="false">"التعتيم"</string>
+    <string name="feature_background_audio">"فتح الصوت في الخلفية"</string>
+    <string name="layout_landscape">"زر ملء الشاشة"</string>
+    <string name="layout_photo_indicators">"مؤشرات الصور وتلميحاتها"</string>
+    <string name="layout_quick_message">"الرسائل السريعة ومصدر المشاركة"</string>
+    <string name="layout_user_card">"الحسابات المقترحة"</string>
+    <string name="layout_survey">"الاستطلاعات والملاحظات"</string>
+    <string name="layout_ad_cards">"بطاقات المنتجات والإعلانات"</string>
+    <string name="layout_bottom_banners">"اللافتات السفلية الأخرى"</string>
+    <string name="layout_activities">"مدخل الفعاليات"</string>
+    <string name="host_scan_title_running" formatted="false">"جارٍ البحث عن الطرق"</string>
+    <string name="host_scan_title_saving" formatted="false">"جارٍ حفظ النتائج"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"أبقِ TikTok في المقدمة."</string>
+    <string name="host_scan_saving_hint" formatted="false">"يُرجى الانتظار."</string>
+    <string name="host_scan_done" formatted="false">"فهمت"</string>
+    <string name="video_fit_center" formatted="false">"توسيط الفيديو"</string>
+    <string name="video_fit_smart" formatted="false">"ملء الشاشة"</string>
+</resources>

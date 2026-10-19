@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Heim"</string>
+    <string name="nav_features" formatted="false">"Eiginleikar"</string>
+    <string name="page_features" formatted="false">"Stillingar"</string>
+    <string name="page_hook_status" formatted="false">"Staða eiginleika"</string>
+    <string name="nav_back" formatted="false">"Til baka"</string>
+    <string name="restart_tiktok" formatted="false">"Endurræsa TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Veittu Toki root-aðgang."</string>
+    <string name="language_title" formatted="false">"Tungumál viðmóts"</string>
+    <string name="language_system" formatted="false">"Fylgja kerfinu"</string>
+    <string name="language_search" formatted="false">"Leita að tungumáli"</string>
+    <string name="language_clear_search" formatted="false">"Hreinsa leit"</string>
+    <string name="language_no_results" formatted="false">"Ekkert tungumál fannst"</string>
+    <string name="common_save" formatted="false">"Vista"</string>
+    <string name="common_cancel" formatted="false">"Hætta við"</string>
+    <string name="common_confirm" formatted="false">"Í lagi"</string>
+    <string name="common_close" formatted="false">"Loka"</string>
+    <string name="common_open" formatted="false">"Opna"</string>
+    <string name="common_copy" formatted="false">"Afrita"</string>
+    <string name="common_add" formatted="false">"Bæta við"</string>
+    <string name="common_delete" formatted="false">"Eyða"</string>
+    <string name="common_done" formatted="false">"Lokið"</string>
+    <string name="common_save_apply" formatted="false">"Nota"</string>
+    <string name="common_unknown" formatted="false">"Óþekkt"</string>
+    <string name="common_custom" formatted="false">"Sérsniðið"</string>
+    <string name="home_icon_hidden" formatted="false">"Forritstákn falið"</string>
+    <string name="home_icon_restored" formatted="false">"Forritstákn sýnilegt aftur"</string>
+    <string name="home_activated" formatted="false">"Virkjað"</string>
+    <string name="home_inactive" formatted="false">"Óvirkjað"</string>
+    <string name="home_activation_missing" formatted="false">"Engin virkjun fannst í LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Samhæfni við TikTok"</string>
+    <string name="home_host_current" formatted="false">"Uppsett TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Engin studd TikTok-uppsetning fannst á tækinu"</string>
+    <string name="home_host_not_installed" formatted="false">"Ekki uppsett"</string>
+    <string name="home_supported_versions" formatted="false">"Studdar útgáfur"</string>
+    <string name="home_community" formatted="false">"Opinn hugbúnaður og samfélag"</string>
+    <string name="home_github" formatted="false">"GitHub-kóðasafn"</string>
+    <string name="home_telegram" formatted="false">"Telegram-hópur"</string>
+    <string name="home_preferences" formatted="false">"Stillingar einingar"</string>
+    <string name="home_hide_icon" formatted="false">"Fela forritstákn"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Opnaðu Toki í LSPosed-stjóranum þegar táknið er falið"</string>
+    <string name="home_support" formatted="false">"Styðja þróun"</string>
+    <string name="home_support_summary" formatted="false">"Styðja áframhaldandi viðhald og endurbætur"</string>
+    <string name="feature_region_section" formatted="false">"Svæði og tæki"</string>
+    <string name="feature_playback_section" formatted="false">"Spilun"</string>
+    <string name="feature_progress" formatted="false">"Sýna alltaf framvindustiku"</string>
+    <string name="feature_progress_summary" formatted="false">"Halda framvindustikunni sýnilegri, líka í stuttum myndskeiðum"</string>
+    <string name="feature_immersive" formatted="false">"Birting myndskeiða"</string>
+    <string name="feature_autoplay" formatted="false">"Bætt sjálfvirkt skrun"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Opnar sjálfvirkt skrun í valmynd allra myndskeiða"</string>
+    <string name="feature_status_bar" formatted="false">"Fela stöðustiku kerfis"</string>
+    <string name="feature_media_section" formatted="false">"Niðurhal og aðgerðir"</string>
+    <string name="feature_download" formatted="false">"Niðurhal án vatnsmerkis"</string>
+    <string name="feature_download_summary" formatted="false">"Vista upprunalegt myndskeið án vatnsmerkis úr deili- eða langþrýstivalmynd"</string>
+    <string name="feature_music" formatted="false">"Opna hljóð"</string>
+    <string name="feature_music_summary" formatted="false">"Endurheimta hljóðspilun sem leyfis- eða svæðistakmarkanir hindra"</string>
+    <string name="feature_author_region" formatted="false">"Sýna svæði höfundar"</string>
+    <string name="feature_author_region_summary" formatted="false">"Sýna fána og kóða lands eða svæðis við nafn höfundar"</string>
+    <string name="feature_copy_comment" formatted="false">"Afrita aðeins texta"</string>
+    <string name="feature_video_translation" formatted="false">"Valmynd texta og þýðinga"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Sýna valkost í valmynd við langa snertingu"</string>
+    <string name="feature_comment_translation" formatted="false">"Þýða athugasemdir"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Bæta við hnappi til að þýða margar erlendar athugasemdir"</string>
+    <string name="feature_filter_section" formatted="false">"Síun streymis"</string>
+    <string name="feature_remove_ads" formatted="false">"Fjarlægja auglýsingar úr streymi"</string>
+    <string name="feature_remove_live" formatted="false">"Fela beinar útsendingar"</string>
+    <string name="feature_remove_photos" formatted="false">"Fela myndafærslur"</string>
+    <string name="feature_filter_views" formatted="false">"Sía eftir áhorfsfjölda"</string>
+    <string name="feature_filter_likes" formatted="false">"Sía eftir fjölda læka"</string>
+    <string name="feature_filter_duration" formatted="false">"Sía eftir lengd myndskeiðs"</string>
+    <string name="feature_filter_keywords" formatted="false">"Leitarorðasía"</string>
+    <string name="feature_block_offline" formatted="false">"Hindra ótengd myndskeið"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Hindra innsetningu forhlaðinna ótengdra myndskeiða þegar tenging er léleg"</string>
+    <string name="feature_remove_ai" formatted="false">"Fela myndskeið gerð með gervigreind"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Sía myndskeið sem TikTok merkir sem búin til með gervigreind"</string>
+    <string name="filter_metric_views" formatted="false">"áhorf"</string>
+    <string name="filter_metric_likes" formatted="false">"læk"</string>
+    <string name="filter_metric_duration" formatted="false">"lengd"</string>
+    <string name="filter_unit_seconds" formatted="false">"sek."</string>
+    <string name="filter_views_saved" formatted="false">"Áhorfsbil vistað"</string>
+    <string name="filter_likes_saved" formatted="false">"Lækabil vistað"</string>
+    <string name="filter_duration_saved" formatted="false">"Lengdarbil myndskeiða vistað"</string>
+    <string name="download_path_saved" formatted="false">"Sérsniðnar vistunarleiðir uppfærðar"</string>
+    <string name="region_spoof_title" formatted="false">"Líking eftir svæði og SIM-korti"</string>
+    <string name="region_current" formatted="false">"Núverandi stillingar"</string>
+    <string name="region_target" formatted="true">"Marksvæði: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Símafyrirtæki: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Kóði símafyrirtækis: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Forstillingar"</string>
+    <string name="region_custom_parameters" formatted="false">"Sérsníða"</string>
+    <string name="language_spoof" formatted="false">"Líking eftir tungumáli"</string>
+    <string name="environment_follow_region" formatted="false">"Eftir svæði"</string>
+    <string name="language_effective" formatted="true">"Virkt tungumál: %1$s"</string>
+    <string name="language_custom" formatted="false">"Sérsniðið tungumál"</string>
+    <string name="timezone_spoof" formatted="false">"Líking eftir tímabelti"</string>
+    <string name="timezone_effective" formatted="true">"Virkt tímabelti: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Sérsniðið tímabelti"</string>
+    <string name="gps_spoof" formatted="false">"Líking eftir staðsetningu"</string>
+    <string name="gps_effective" formatted="true">"Virk hnit: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Sérsniðin hnit"</string>
+    <string name="speed_fixed" formatted="false">"Halda spilunarhraða"</string>
+    <string name="speed_fixed_summary" formatted="false">"Halda hraðanum sem valinn er í langþrýstivalmynd þegar skipt er um myndskeið"</string>
+    <string name="speed_expand" formatted="false">"Fleiri hraðar"</string>
+    <string name="speed_options_hint" formatted="false">"Hraðavalkostir (snertu til að breyta eða eyða)"</string>
+    <string name="speed_add_option" formatted="false">"+ Bæta við hraða"</string>
+    <string name="speed_restore" formatted="false">"Endurstilla"</string>
+    <string name="clean_on_play" formatted="false">"Fela stjórntæki við spilun"</string>
+    <string name="clean_keep_progress" formatted="false">"Halda framvindustiku"</string>
+    <string name="download_paths" formatted="false">"Vistunarmöppur"</string>
+    <string name="download_paths_summary" formatted="true">"Myndskeið: %1$s · Myndir: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Halda myndskeiðum með %1$s frá %2$d%4$s til %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Halda myndskeiðum með %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Halda myndskeiðum með %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Ekkert bil stillt (snertu til að stilla lágmark eða hámark)"</string>
+    <string name="keyword_unset" formatted="false">"Snertu til að bæta við reglum"</string>
+    <string name="keyword_summary" formatted="true">"Virkt: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Textar %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Myllumerki %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Höfundar %1$d"</string>
+    <string name="keyword_description" formatted="false">"Textar"</string>
+    <string name="keyword_tag" formatted="false">"Myllumerki"</string>
+    <string name="keyword_author" formatted="false">"Höfundar"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Engar reglur fyrir %1$s. Bættu við að ofan."</string>
+    <string name="duration_alert_title" formatted="false">"Viðvörun um löng myndskeið"</string>
+    <string name="duration_alert_summary" formatted="true">"Núverandi mörk: ≥ %1$s mínútur"</string>
+    <string name="download_video_path" formatted="false">"Myndskeiðamappa"</string>
+    <string name="download_image_path" formatted="false">"Myndamappa"</string>
+    <string name="download_path_hint" formatted="false">"Fyrsta mappan verður að vera almenn miðlamappa, svo sem Movies, Pictures eða DCIM. Ógildar leiðir nota sjálfgildi kerfisins."</string>
+    <string name="views_range_title" formatted="false">"Áhorfsbil"</string>
+    <string name="views_range_min" formatted="false">"Lágmarksáhorf (0 = ótakmarkað)"</string>
+    <string name="views_range_max" formatted="false">"Hámarksáhorf (0 = ótakmarkað)"</string>
+    <string name="views_range_hint" formatted="false">"Halda aðeins myndskeiðum innan þessa áhorfsbils. Ef bæði mörk eru 0 er ekkert fjarlægt."</string>
+    <string name="likes_range_title" formatted="false">"Lækabil"</string>
+    <string name="likes_range_min" formatted="false">"Lágmarksfjöldi læka (0 = ótakmarkað)"</string>
+    <string name="likes_range_max" formatted="false">"Hámarksfjöldi læka (0 = ótakmarkað)"</string>
+    <string name="likes_range_hint" formatted="false">"Halda aðeins myndskeiðum innan þessa lækabils. Ef bæði mörk eru 0 er ekkert fjarlægt."</string>
+    <string name="duration_range_title" formatted="false">"Lengdarbil myndskeiða"</string>
+    <string name="duration_range_min" formatted="false">"Lágmarkslengd (sekúndur; 0 = ótakmarkað)"</string>
+    <string name="duration_range_max" formatted="false">"Hámarkslengd (sekúndur; 0 = ótakmarkað)"</string>
+    <string name="duration_range_hint" formatted="false">"Halda aðeins ráðlögðum myndskeiðum innan þessa lengdarbils. Ef bæði mörk eru 0 er ekkert fjarlægt. Myndafærslur verða ekki fyrir áhrifum."</string>
+    <string name="keyword_manage" formatted="false">"Síureglur"</string>
+    <string name="keyword_description_hint" formatted="false">"Leita í texta og lýsingum myndskeiða án tillits til há- og lágstafa."</string>
+    <string name="keyword_tag_hint" formatted="false">"Leita að myllumerkjum. Sleppið forskeytinu #."</string>
+    <string name="keyword_author_hint" formatted="false">"Leita að höfundarnöfnum og einkvæmum notandanöfnum. Sleppið forskeytinu @."</string>
+    <string name="keyword_description_input" formatted="false">"Leitarorð í texta"</string>
+    <string name="keyword_tag_input" formatted="false">"Myllumerki"</string>
+    <string name="keyword_author_input" formatted="false">"Nafn eða notandanafn"</string>
+    <string name="keyword_add" formatted="false">"Bæta við reglu"</string>
+    <string name="keyword_delete" formatted="false">"Eyða reglu"</string>
+    <string name="region_select_title" formatted="false">"Velja svæði"</string>
+    <string name="region_search" formatted="false">"Landsheiti eða -kóði"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Kóði símafyrirtækis: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Sérsniðið svæði og SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Stilltu landskóða og símafyrirtæki án takmarkana forstillinga."</string>
+    <string name="region_code_input" formatted="false">"Lands- eða svæðiskóði (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Kóði símafyrirtækis (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Heiti símafyrirtækis (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Veldu algengt tungumál eða sláðu inn tungumálakóða."</string>
+    <string name="language_code_input" formatted="false">"Tungumálakóði (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Tungumál"</string>
+    <string name="timezone_custom_hint" formatted="false">"Veldu tímabelti borgar eða sláðu inn tímabeltisheiti."</string>
+    <string name="timezone_input" formatted="false">"Tímabeltisheiti (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Borgir"</string>
+    <string name="city_tokyo" formatted="false">"Tókýó"</string>
+    <string name="city_taipei" formatted="false">"Taípei"</string>
+    <string name="city_hong_kong" formatted="false">"Hong Kong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"London"</string>
+    <string name="city_seoul" formatted="false">"Seúl"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapúr"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Sérsniðin staðsetning"</string>
+    <string name="gps_custom_hint" formatted="false">"Veldu borg eða sláðu inn breiddar- og lengdargráðu."</string>
+    <string name="gps_latitude" formatted="false">"Breiddargráða (-90.0 til 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Lengdargráða (-180.0 til 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Borgir"</string>
+    <string name="speed_add_title" formatted="false">"Bæta við hraða"</string>
+    <string name="speed_input" formatted="false">"Hraði"</string>
+    <string name="speed_invalid" formatted="false">"Sláðu inn gilda tölu"</string>
+    <string name="speed_out_of_range" formatted="true">"Aðeins %1$sx til %2$sx er stutt"</string>
+    <string name="speed_range" formatted="true">"Stutt bil: %1$sx til %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Breyta hraða"</string>
+    <string name="duration_threshold_title" formatted="false">"Viðvörun um löng myndskeið"</string>
+    <string name="duration_threshold_hint" formatted="false">"Þegar lengd myndskeiðs nær þessum mörkum birtist stutt viðvörun um lengdina í mínútum við upphaf spilunar."</string>
+    <string name="duration_threshold_input" formatted="false">"Lengdarmörk (mínútur)"</string>
+    <string name="duration_threshold_example" formatted="false">"Til dæmis: 3 eða 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Sláðu inn gildan mínútufjölda stærri en 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Núverandi stilling: viðvörun fyrir myndskeið ≥ %1$s mínútur"</string>
+    <string name="duration_threshold_presets" formatted="false">"Tillögur að lengd:"</string>
+    <string name="status_feature_feed" formatted="false">"Streymissía"</string>
+    <string name="status_feature_speed" formatted="false">"Hraði"</string>
+    <string name="status_feature_progress" formatted="false">"Framvindustika"</string>
+    <string name="status_feature_clean" formatted="false">"Sjálfvirk felun"</string>
+    <string name="status_feature_immersive" formatted="false">"Birting myndskeiða"</string>
+    <string name="status_feature_scroll" formatted="false">"Sjálfvirk fletting"</string>
+    <string name="status_feature_duration" formatted="false">"Lengdarviðvörun"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Þýða athugasemdir"</string>
+    <string name="status_feature_video_translate" formatted="false">"Valmynd texta og þýðinga"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Afrita athugasemdir"</string>
+    <string name="status_feature_author" formatted="false">"Svæði höfundar"</string>
+    <string name="status_feature_download" formatted="false">"Vista myndskeið"</string>
+    <string name="status_feature_music" formatted="false">"Hljóðtakmarkanir"</string>
+    <string name="status_feature_sim" formatted="false">"Svæði og SIM"</string>
+    <string name="status_feature_language" formatted="false">"Tungumál"</string>
+    <string name="status_feature_timezone" formatted="false">"Tímabelti"</string>
+    <string name="status_feature_gps" formatted="false">"Staðsetning"</string>
+    <string name="status_feature_bar" formatted="false">"Stöðustika"</string>
+    <string name="status_normal" formatted="false">"Virkar"</string>
+    <string name="status_issue" formatted="false">"Vandamál"</string>
+    <string name="status_disabled" formatted="false">"Slökkt"</string>
+    <string name="status_pending" formatted="false">"Í bið"</string>
+    <string name="status_problem_disabled" formatted="false">"Slökkt, en villa hefur verið skráð"</string>
+    <string name="status_problem_unavailable" formatted="false">"Tímabundið ótiltækt"</string>
+    <string name="status_problem_runtime" formatted="false">"Villa við notkun"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Hraðavalmynd ótiltæk"</string>
+    <string name="status_prepare_failed" formatted="false">"Undirbúningur eiginleika mistókst. Opnaðu TikTok aftur og athugaðu."</string>
+    <string name="status_preparing" formatted="false">"Undirbý eiginleika. Bíddu aðeins."</string>
+    <string name="status_prepared" formatted="false">"Undirbúningi lokið. Opnaðu TikTok aftur."</string>
+    <string name="status_read_failed" formatted="false">"Ekki er hægt að lesa stöðu núna. Athugaðu síðar."</string>
+    <string name="status_update_failed" formatted="false">"Ekki er hægt að uppfæra stöðu núna. Nýjasta niðurstaða er sýnd."</string>
+    <string name="status_reading" formatted="false">"Les stöðu"</string>
+    <string name="status_empty" formatted="false">"Engin virkni skráð. Virkjaðu Toki í LSPosed, opnaðu síðan TikTok og athugaðu aftur."</string>
+    <string name="status_report_note" formatted="true">"Nýjasta skýrsla: %1$s\n„Virkar“ merkir að eiginleikinn sé tilbúinn og engar villur hafi verið tilkynntar."</string>
+    <string name="config_section" formatted="false">"Stillingastjórnun"</string>
+    <string name="config_import" formatted="false">"Flytja inn stillingar"</string>
+    <string name="config_import_summary" formatted="false">"Endurheimta eiginleikastillingar úr skrá"</string>
+    <string name="config_export" formatted="false">"Flytja út stillingar"</string>
+    <string name="config_export_summary" formatted="false">"Vista eiginleikastillingar í skrá"</string>
+    <string name="config_exported" formatted="false">"Stillingar fluttar út á valinn stað. Skráin getur innihaldið leitarorð, svæði og möppustillingar. Varðveittu hana örugglega."</string>
+    <string name="config_import_confirm" formatted="true">"Skráin inniheldur %1$d stillingar. Innflutningur kemur í stað allra eiginleikastillinga; stillingar sem vantar fá sjálfgildi.\n\nTungumál viðmóts, forritstákn, LSPosed-heimild og TikTok-samhæfniminni breytast ekki. Halda áfram?"</string>
+    <string name="config_overwrite" formatted="false">"Skipta út"</string>
+    <string name="config_imported" formatted="false">"Stillingar fluttar inn og eiginleikastillingar uppfærðar. Breytingar sem styðja uppfærslu í keyrslu taka strax gildi. Opnaðu TikTok aftur til að staðfesta aðrar breytingar."</string>
+    <string name="config_processing" formatted="false">"Vinnsla…"</string>
+    <string name="config_error_io" formatted="false">"Ekki tókst að lesa eða skrifa skrána. Athugaðu valinn stað og laust pláss."</string>
+    <string name="config_error_permission" formatted="false">"Aðgangsheimild að valinni skrá vantar. Veldu hana aftur."</string>
+    <string name="config_error_invalid" formatted="false">"Þetta er ekki gild Toki-stillingaskrá. Engar stillingar fluttar inn."</string>
+    <string name="config_error_validation" formatted="true">"Staðfesting stillinga mistókst: %1$s. Engar stillingar fluttar inn."</string>
+    <string name="config_error_commit" formatted="false">"Ekki tókst að staðfesta vistun stillinga. Opnaðu Toki aftur og athugaðu áður en þú reynir aftur."</string>
+    <string name="sponsor_title" formatted="false">"Styðja þróunaraðila"</string>
+    <string name="sponsor_kofi" formatted="false">"Styðja á Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay-greiðslukóði"</string>
+    <string name="sponsor_saving" formatted="false">"Vista…"</string>
+    <string name="sponsor_save_image" formatted="false">"Vista mynd"</string>
+    <string name="sponsor_image_hint" formatted="false">"Vistaðu alla upprunalegu myndina og veldu hana síðan í Alipay til að lesa kóðann."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT-vistfang afritað"</string>
+    <string name="sponsor_image_saved" formatted="false">"Mynd vistuð á valinn stað"</string>
+    <string name="sponsor_error_io" formatted="false">"Vistun mistókst. Athugaðu valinn stað og laust pláss og reyndu aftur."</string>
+    <string name="sponsor_error_permission" formatted="false">"Vistun mistókst. Skrifheimild að staðnum vantar. Veldu annan stað."</string>
+    <string name="feature_filter_topics" formatted="false">"Fela tillögur að umræðuefnum"</string>
+    <string name="feature_filter_creators" formatted="false">"Fela tillögur að höfundum"</string>
+    <string name="host_scan_title_complete" formatted="false">"Leit lokið"</string>
+    <string name="host_scan_title_failed" formatted="false">"Leit mistókst"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Endurræstu TikTok handvirkt til að virkja niðurstöðurnar."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Skoðaðu greiningu eiginleika í Toki."</string>
+    <string name="layout_title" formatted="false">"Útlit síðu"</string>
+    <string name="layout_summary" formatted="false">"Veldu hvaða hnappa á að fela"</string>
+    <string name="layout_hint" formatted="false">"Kveiktu á rofanum til að fela atriðið"</string>
+    <string name="layout_top" formatted="false">"Efsta stika"</string>
+    <string name="layout_bottom" formatted="false">"Neðsta stika"</string>
+    <string name="layout_side" formatted="false">"Síða myndskeiðs"</string>
+    <string name="layout_search" formatted="false">"Leit"</string>
+    <string name="layout_live" formatted="false">"Í BEINNI"</string>
+    <string name="layout_friends" formatted="false">"Vinir"</string>
+    <string name="layout_following" formatted="false">"Fylgir"</string>
+    <string name="layout_shop" formatted="false">"Verslun"</string>
+    <string name="layout_for_you" formatted="false">"Fyrir þig"</string>
+    <string name="layout_nearby" formatted="false">"Nálægt"</string>
+    <string name="layout_stem" formatted="false">"Vísindi"</string>
+    <string name="layout_series" formatted="false">"Þáttaraðir"</string>
+    <string name="layout_home" formatted="false">"Heim"</string>
+    <string name="layout_create" formatted="false">"Búa til"</string>
+    <string name="layout_inbox" formatted="false">"Innhólf"</string>
+    <string name="layout_profile" formatted="false">"Prófíll"</string>
+    <string name="layout_discover" formatted="false">"Uppgötva"</string>
+    <string name="layout_avatar" formatted="false">"Prófílmynd"</string>
+    <string name="layout_follow" formatted="false">"Fylgja-hnappur"</string>
+    <string name="layout_like" formatted="false">"Líkar við"</string>
+    <string name="layout_comment" formatted="false">"Athugasemdir"</string>
+    <string name="layout_favorite" formatted="false">"Eftirlæti"</string>
+    <string name="layout_share" formatted="false">"Deila"</string>
+    <string name="layout_music" formatted="false">"Tónlistardiskur"</string>
+    <string name="layout_explore" formatted="false">"Kanna"</string>
+    <string name="layout_author" formatted="false">"Upplýsingar um höfund"</string>
+    <string name="layout_description" formatted="false">"Lýsing"</string>
+    <string name="layout_music_title" formatted="false">"Heiti tónlistar"</string>
+    <string name="layout_tags" formatted="false">"Upplýsingamerkingar"</string>
+    <string name="layout_search_label" formatted="false">"Leitartillaga"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Stöðvunarhnappur sjálfvirkrar flettingar"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Mynt og verðlaun"</string>
+    <string name="layout_quick_comment" formatted="false">"Fljótlegar athugasemdir"</string>
+    <string name="layout_playlist" formatted="false">"Spilunarlisti"</string>
+    <string name="layout_creation_buttons" formatted="false">"Flýtileiðir til sköpunar"</string>
+    <string name="layout_live_notice" formatted="false">"Áminningar um beinar útsendingar"</string>
+    <string name="layout_opacity" formatted="false">"Ógagnsæi"</string>
+    <string name="feature_background_audio">"Opna bakgrunnshljóð"</string>
+    <string name="layout_landscape">"Hnappur fyrir allan skjáinn"</string>
+    <string name="layout_photo_indicators">"Myndavísar og ábendingar"</string>
+    <string name="layout_quick_message">"Flýtiskilaboð og deilt af"</string>
+    <string name="layout_user_card">"Tillögur að reikningum"</string>
+    <string name="layout_survey">"Kannanir og endurgjöf"</string>
+    <string name="layout_ad_cards">"Vöru- og auglýsingaspjöld"</string>
+    <string name="layout_bottom_banners">"Aðrir borðar neðst"</string>
+    <string name="layout_activities">"Aðgangur að viðburðum"</string>
+    <string name="host_scan_title_running" formatted="false">"Leita að aðferðum"</string>
+    <string name="host_scan_title_saving" formatted="false">"Vista niðurstöður"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Haltu TikTok í forgrunni."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Bíddu augnablik."</string>
+    <string name="host_scan_done" formatted="false">"Skilið"</string>
+    <string name="video_fit_center" formatted="false">"Miðjað"</string>
+    <string name="video_fit_smart" formatted="false">"Allur skjárinn"</string>
+</resources>

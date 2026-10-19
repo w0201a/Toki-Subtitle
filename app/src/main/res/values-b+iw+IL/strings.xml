@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"בית"</string>
+    <string name="nav_features" formatted="false">"תכונות"</string>
+    <string name="page_features" formatted="false">"הגדרות"</string>
+    <string name="page_hook_status" formatted="false">"מצב התכונות"</string>
+    <string name="nav_back" formatted="false">"חזרה"</string>
+    <string name="restart_tiktok" formatted="false">"הפעלה מחדש של TikTok"</string>
+    <string name="restart_root_required" formatted="false">"יש להעניק ל-Toki הרשאת root"</string>
+    <string name="language_title" formatted="false">"שפת האפליקציה"</string>
+    <string name="language_system" formatted="false">"לפי המערכת"</string>
+    <string name="language_search" formatted="false">"חיפוש שפה"</string>
+    <string name="language_clear_search" formatted="false">"ניקוי החיפוש"</string>
+    <string name="language_no_results" formatted="false">"לא נמצאו שפות תואמות"</string>
+    <string name="common_save" formatted="false">"שמירה"</string>
+    <string name="common_cancel" formatted="false">"ביטול"</string>
+    <string name="common_confirm" formatted="false">"אישור"</string>
+    <string name="common_close" formatted="false">"סגירה"</string>
+    <string name="common_open" formatted="false">"פתיחה"</string>
+    <string name="common_copy" formatted="false">"העתקה"</string>
+    <string name="common_add" formatted="false">"הוספה"</string>
+    <string name="common_delete" formatted="false">"מחיקה"</string>
+    <string name="common_done" formatted="false">"סיום"</string>
+    <string name="common_save_apply" formatted="false">"החלה"</string>
+    <string name="common_unknown" formatted="false">"לא ידוע"</string>
+    <string name="common_custom" formatted="false">"מותאם אישית"</string>
+    <string name="home_icon_hidden" formatted="false">"סמל האפליקציה הוסתר"</string>
+    <string name="home_icon_restored" formatted="false">"סמל האפליקציה הוצג מחדש"</string>
+    <string name="home_activated" formatted="false">"מופעל"</string>
+    <string name="home_inactive" formatted="false">"לא מופעל"</string>
+    <string name="home_activation_missing" formatted="false">"לא זוהתה הפעלה ב-LSPosed"</string>
+    <string name="home_host_section" formatted="false">"תאימות ל-TikTok"</string>
+    <string name="home_host_current" formatted="false">"TikTok המותקן"</string>
+    <string name="home_host_missing" formatted="false">"לא נמצאה במכשיר גרסה נתמכת של TikTok"</string>
+    <string name="home_host_not_installed" formatted="false">"לא מותקן"</string>
+    <string name="home_supported_versions" formatted="false">"גרסאות נתמכות"</string>
+    <string name="home_community" formatted="false">"קהילה"</string>
+    <string name="home_github" formatted="false">"מאגר GitHub"</string>
+    <string name="home_telegram" formatted="false">"קבוצת Telegram"</string>
+    <string name="home_preferences" formatted="false">"העדפות"</string>
+    <string name="home_hide_icon" formatted="false">"הסתרת סמל האפליקציה"</string>
+    <string name="home_hide_icon_summary" formatted="false">"לאחר ההסתרה ניתן לפתוח דרך מנהל LSPosed"</string>
+    <string name="home_support" formatted="false">"תמיכה בפיתוח"</string>
+    <string name="home_support_summary" formatted="false">"תמיכה בתחזוקה שוטפת ובשיפור תכונות"</string>
+    <string name="feature_region_section" formatted="false">"הדמיית אזור וסביבה"</string>
+    <string name="feature_playback_section" formatted="false">"הפעלה"</string>
+    <string name="feature_progress" formatted="false">"הצגת סרגל ההתקדמות תמיד"</string>
+    <string name="feature_progress_summary" formatted="false">"הצגת סרגל ההתקדמות התחתון גם בסרטונים קצרים"</string>
+    <string name="feature_immersive" formatted="false">"תצוגת וידאו"</string>
+    <string name="feature_autoplay" formatted="false">"גלילה אוטומטית משופרת"</string>
+    <string name="feature_autoplay_summary" formatted="false">"פתיחת גלילה אוטומטית בתפריט של כל סרטון"</string>
+    <string name="feature_status_bar" formatted="false">"הסתרת שורת המצב של המערכת"</string>
+    <string name="feature_media_section" formatted="false">"הורדות וכלים"</string>
+    <string name="feature_download" formatted="false">"הורדה ללא סימן מים"</string>
+    <string name="feature_download_summary" formatted="false">"שמירת המקור ללא סימן מים מתפריט הלחיצה הממושכת או השיתוף"</string>
+    <string name="feature_music" formatted="false">"הסרת מגבלות שמע"</string>
+    <string name="feature_music_summary" formatted="false">"שחזור שמע שהוגבל עקב זכויות או אזור"</string>
+    <string name="feature_author_region" formatted="false">"הצגת אזור היוצר"</string>
+    <string name="feature_author_region_summary" formatted="false">"הצגת דגל וקוד מדינה או אזור לצד שם היוצר"</string>
+    <string name="feature_copy_comment" formatted="false">"העתקת טקסט בלבד"</string>
+    <string name="feature_video_translation" formatted="false">"תפריט כתוביות ותרגום"</string>
+    <string name="feature_video_translation_summary" formatted="false">"הצגת האפשרות בתפריט הלחיצה הארוכה"</string>
+    <string name="feature_comment_translation" formatted="false">"תרגום תגובות"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"הוספת כפתור לתרגום מרוכז של תגובות בשפות זרות"</string>
+    <string name="feature_filter_section" formatted="false">"סינון הפיד"</string>
+    <string name="feature_remove_ads" formatted="false">"הסרת פרסומות מהפיד"</string>
+    <string name="feature_remove_live" formatted="false">"סינון שידורים חיים מומלצים"</string>
+    <string name="feature_remove_photos" formatted="false">"סינון פוסטים מומלצים עם תמונות"</string>
+    <string name="feature_filter_views" formatted="false">"סינון לפי צפיות"</string>
+    <string name="feature_filter_likes" formatted="false">"סינון לפי לייקים"</string>
+    <string name="feature_filter_duration" formatted="false">"סינון לפי אורך"</string>
+    <string name="feature_filter_keywords" formatted="false">"סינון לפי מילות מפתח"</string>
+    <string name="feature_block_offline" formatted="false">"חסימת סרטונים לא מקוונים"</string>
+    <string name="feature_block_offline_summary" formatted="false">"מניעת הוספת סרטונים שנטענו מראש כשהחיבור חלש"</string>
+    <string name="feature_remove_ai" formatted="false">"הסרת תוכן שנוצר בבינה מלאכותית"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"סינון סרטונים ש-TikTok מסמן כתוכן שנוצר בבינה מלאכותית"</string>
+    <string name="filter_metric_views" formatted="false">"צפיות"</string>
+    <string name="filter_metric_likes" formatted="false">"לייקים"</string>
+    <string name="filter_metric_duration" formatted="false">"אורך"</string>
+    <string name="filter_unit_seconds" formatted="false">"שנ׳"</string>
+    <string name="filter_views_saved" formatted="false">"טווח הצפיות נשמר"</string>
+    <string name="filter_likes_saved" formatted="false">"טווח הלייקים נשמר"</string>
+    <string name="filter_duration_saved" formatted="false">"טווח האורך נשמר"</string>
+    <string name="download_path_saved" formatted="false">"נתיבי השמירה עודכנו"</string>
+    <string name="region_spoof_title" formatted="false">"הדמיית אזור ו-SIM"</string>
+    <string name="region_current" formatted="false">"ההגדרות הנוכחיות"</string>
+    <string name="region_target" formatted="true">"אזור היעד: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"מפעיל סלולרי: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"קוד המפעיל: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"הגדרות מוכנות"</string>
+    <string name="region_custom_parameters" formatted="false">"התאמה אישית"</string>
+    <string name="language_spoof" formatted="false">"הדמיית שפה"</string>
+    <string name="environment_follow_region" formatted="false">"לפי האזור"</string>
+    <string name="language_effective" formatted="true">"השפה הפעילה: %1$s"</string>
+    <string name="language_custom" formatted="false">"שפה מותאמת אישית"</string>
+    <string name="timezone_spoof" formatted="false">"הדמיית אזור זמן"</string>
+    <string name="timezone_effective" formatted="true">"אזור הזמן הפעיל: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"אזור זמן מותאם אישית"</string>
+    <string name="gps_spoof" formatted="false">"הדמיית מיקום"</string>
+    <string name="gps_effective" formatted="true">"הקואורדינטות הפעילות: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"קואורדינטות מותאמות אישית"</string>
+    <string name="speed_fixed" formatted="false">"שמירת המהירות"</string>
+    <string name="speed_fixed_summary" formatted="false">"שמירת המהירות שנבחרה בתפריט גם במעבר בין סרטונים"</string>
+    <string name="speed_expand" formatted="false">"מהירויות נוספות"</string>
+    <string name="speed_options_hint" formatted="false">"מהירויות (לחיצה לעריכה או למחיקה)"</string>
+    <string name="speed_add_option" formatted="false">"+ הוספת מהירות"</string>
+    <string name="speed_restore" formatted="false">"איפוס"</string>
+    <string name="clean_on_play" formatted="false">"הסתרת פקדים בהפעלה"</string>
+    <string name="clean_keep_progress" formatted="false">"השארת סרגל ההתקדמות"</string>
+    <string name="download_paths" formatted="false">"תיקיות שמירה"</string>
+    <string name="download_paths_summary" formatted="true">"סרטונים: %1$s · תמונות: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"השארת סרטונים שבהם %1$s בין %2$d%4$s ל-%3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"השארת סרטונים שבהם %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"השארת סרטונים שבהם %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"לא נקבע טווח (לחיצה להגדרת מינימום או מקסימום)"</string>
+    <string name="keyword_unset" formatted="false">"אין כללים (לחיצה לניהול קטגוריות)"</string>
+    <string name="keyword_summary" formatted="true">"מופעל: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"תיאורים %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"האשטגים %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"יוצרים %1$d"</string>
+    <string name="keyword_description" formatted="false">"תיאורים"</string>
+    <string name="keyword_tag" formatted="false">"האשטגים"</string>
+    <string name="keyword_author" formatted="false">"יוצרים"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"אין כללים עבור %1$s. ניתן להוסיף למעלה"</string>
+    <string name="duration_alert_title" formatted="false">"התראה על סרטונים ארוכים"</string>
+    <string name="duration_alert_summary" formatted="true">"הסף הנוכחי: ≥ %1$s דקות"</string>
+    <string name="download_video_path" formatted="false">"תיקיית סרטונים"</string>
+    <string name="download_image_path" formatted="false">"תיקיית תמונות"</string>
+    <string name="download_path_hint" formatted="false">"התיקייה הראשונה חייבת להיות תיקיית מדיה ציבורית כגון Movies, Pictures או DCIM. נתיבים לא תקינים ישתמשו בברירת המחדל של המערכת"</string>
+    <string name="views_range_title" formatted="false">"טווח צפיות"</string>
+    <string name="views_range_min" formatted="false">"מינימום צפיות (0 = ללא הגבלה)"</string>
+    <string name="views_range_max" formatted="false">"מקסימום צפיות (0 = ללא הגבלה)"</string>
+    <string name="views_range_hint" formatted="false">"השארת סרטונים בטווח הצפיות בלבד. כאשר שני הגבולות הם 0, דבר לא מוסר"</string>
+    <string name="likes_range_title" formatted="false">"טווח לייקים"</string>
+    <string name="likes_range_min" formatted="false">"מינימום לייקים (0 = ללא הגבלה)"</string>
+    <string name="likes_range_max" formatted="false">"מקסימום לייקים (0 = ללא הגבלה)"</string>
+    <string name="likes_range_hint" formatted="false">"השארת סרטונים בטווח הלייקים בלבד. כאשר שני הגבולות הם 0, דבר לא מוסר"</string>
+    <string name="duration_range_title" formatted="false">"טווח אורך הסרטון"</string>
+    <string name="duration_range_min" formatted="false">"אורך מינימלי (שניות; 0 = ללא הגבלה)"</string>
+    <string name="duration_range_max" formatted="false">"אורך מרבי (שניות; 0 = ללא הגבלה)"</string>
+    <string name="duration_range_hint" formatted="false">"השארת סרטונים מומלצים בטווח האורך. כאשר שני הגבולות הם 0, דבר לא מוסר. פוסטים עם תמונות אינם מושפעים"</string>
+    <string name="keyword_manage" formatted="false">"כללי סינון"</string>
+    <string name="keyword_description_hint" formatted="false">"התאמה לטקסט ולתיאור הסרטון ללא הבחנה בין אותיות גדולות לקטנות."</string>
+    <string name="keyword_tag_hint" formatted="false">"התאמה להאשטגים. אין צורך בקידומת #."</string>
+    <string name="keyword_author_hint" formatted="false">"התאמה לשם היוצר ולשם המשתמש הייחודי. אין צורך בקידומת @."</string>
+    <string name="keyword_description_input" formatted="false">"מילה או ביטוי"</string>
+    <string name="keyword_tag_input" formatted="false">"האשטג"</string>
+    <string name="keyword_author_input" formatted="false">"שם או שם משתמש"</string>
+    <string name="keyword_add" formatted="false">"הוספת כלל"</string>
+    <string name="keyword_delete" formatted="false">"מחיקת כלל"</string>
+    <string name="region_select_title" formatted="false">"בחירת אזור"</string>
+    <string name="region_search" formatted="false">"חיפוש לפי מדינה, שם באנגלית או קוד אזור"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · קוד המפעיל: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"אזור ו-SIM מותאמים אישית"</string>
+    <string name="region_custom_hint" formatted="false">"הגדרת קוד מדינה ופרטי מפעיל ללא מגבלות של הגדרות מוכנות."</string>
+    <string name="region_code_input" formatted="false">"קוד מדינה או אזור (למשל JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"קוד מפעיל (למשל 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"שם מפעיל (למשל NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"בחירת שפה נפוצה או הזנת קוד שפה."</string>
+    <string name="language_code_input" formatted="false">"קוד שפה (למשל ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"שפות נפוצות:"</string>
+    <string name="timezone_custom_hint" formatted="false">"בחירת אזור זמן של עיר או הזנת שם אזור זמן."</string>
+    <string name="timezone_input" formatted="false">"שם אזור זמן (למשל Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"אזורי זמן נפוצים של ערים:"</string>
+    <string name="city_tokyo" formatted="false">"טוקיו"</string>
+    <string name="city_taipei" formatted="false">"טאיפיי"</string>
+    <string name="city_hong_kong" formatted="false">"הונג קונג"</string>
+    <string name="city_new_york" formatted="false">"ניו יורק"</string>
+    <string name="city_london" formatted="false">"לונדון"</string>
+    <string name="city_seoul" formatted="false">"סיאול"</string>
+    <string name="city_bangkok" formatted="false">"בנגקוק"</string>
+    <string name="city_singapore" formatted="false">"סינגפור"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"קואורדינטות מיקום מותאמות אישית"</string>
+    <string name="gps_custom_hint" formatted="false">"בחירת עיר או הזנת קווי רוחב ואורך."</string>
+    <string name="gps_latitude" formatted="false">"קו רוחב (-90.0 עד 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"קו אורך (-180.0 עד 180.0)"</string>
+    <string name="gps_presets" formatted="false">"ערים נפוצות:"</string>
+    <string name="speed_add_title" formatted="false">"הוספת מהירות"</string>
+    <string name="speed_input" formatted="false">"מהירות הפעלה"</string>
+    <string name="speed_invalid" formatted="false">"יש להזין מספר תקין"</string>
+    <string name="speed_out_of_range" formatted="true">"נתמך רק %1$sx–%2$sx"</string>
+    <string name="speed_range" formatted="true">"הטווח הנתמך: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"עריכת מהירות"</string>
+    <string name="duration_threshold_title" formatted="false">"התראה על סרטונים ארוכים"</string>
+    <string name="duration_threshold_hint" formatted="false">"כשהסרטון מגיע לאורך זה, בתחילת ההפעלה מוצגת הודעה קצרה עם אורכו בדקות."</string>
+    <string name="duration_threshold_input" formatted="false">"סף אורך (דקות)"</string>
+    <string name="duration_threshold_example" formatted="false">"למשל: 3 או 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"יש להזין מספר דקות תקין הגדול מ-0"</string>
+    <string name="duration_threshold_current" formatted="true">"ההגדרה הנוכחית: התראה לסרטונים ≥ %1$s דקות"</string>
+    <string name="duration_threshold_presets" formatted="false">"אורכים מומלצים:"</string>
+    <string name="status_feature_feed" formatted="false">"סינון הפיד"</string>
+    <string name="status_feature_speed" formatted="false">"מהירות הפעלה"</string>
+    <string name="status_feature_progress" formatted="false">"סרגל התקדמות"</string>
+    <string name="status_feature_clean" formatted="false">"הסתרת פקדים בהפעלה"</string>
+    <string name="status_feature_immersive" formatted="false">"תצוגת וידאו"</string>
+    <string name="status_feature_scroll" formatted="false">"גלילה אוטומטית"</string>
+    <string name="status_feature_duration" formatted="false">"התראת אורך"</string>
+    <string name="status_feature_comment_translate" formatted="false">"תרגום תגובות"</string>
+    <string name="status_feature_video_translate" formatted="false">"תפריט כתוביות ותרגום"</string>
+    <string name="status_feature_comment_copy" formatted="false">"העתקת תגובות"</string>
+    <string name="status_feature_author" formatted="false">"אזור היוצר"</string>
+    <string name="status_feature_download" formatted="false">"שמירת סרטונים"</string>
+    <string name="status_feature_music" formatted="false">"מגבלות שמע"</string>
+    <string name="status_feature_sim" formatted="false">"SIM ומדינה"</string>
+    <string name="status_feature_language" formatted="false">"שפה"</string>
+    <string name="status_feature_timezone" formatted="false">"אזור זמן"</string>
+    <string name="status_feature_gps" formatted="false">"מיקום"</string>
+    <string name="status_feature_bar" formatted="false">"שורת מצב"</string>
+    <string name="status_normal" formatted="false">"תקין"</string>
+    <string name="status_issue" formatted="false">"יש בעיה"</string>
+    <string name="status_disabled" formatted="false">"כבוי"</string>
+    <string name="status_pending" formatted="false">"טרם אומת"</string>
+    <string name="status_problem_disabled" formatted="false">"כבוי, אך קיימת שגיאה מתועדת"</string>
+    <string name="status_problem_unavailable" formatted="false">"לא זמינה זמנית"</string>
+    <string name="status_problem_runtime" formatted="false">"שגיאה בזמן השימוש"</string>
+    <string name="status_problem_speed_menu" formatted="false">"תפריט המהירות לא זמין"</string>
+    <string name="status_prepare_failed" formatted="false">"הכנת התכונות נכשלה. יש לפתוח שוב את TikTok ולבדוק."</string>
+    <string name="status_preparing" formatted="false">"מכין תכונות. נא להמתין."</string>
+    <string name="status_prepared" formatted="false">"ההכנה הושלמה. יש לפתוח שוב את TikTok."</string>
+    <string name="status_read_failed" formatted="false">"לא ניתן לקרוא את המצב כרגע. יש לבדוק מאוחר יותר."</string>
+    <string name="status_update_failed" formatted="false">"לא ניתן לעדכן את המצב כרגע. מוצגת התוצאה האחרונה."</string>
+    <string name="status_reading" formatted="false">"קורא מצב"</string>
+    <string name="status_empty" formatted="false">"אין תיעוד פעילות. יש להפעיל את Toki ב-LSPosed, לפתוח את TikTok ולבדוק."</string>
+    <string name="status_report_note" formatted="true">"הדיווח האחרון: %1$s\n״תקין״ פירושו שהתכונה מוכנה ולא דיווחה על שגיאות."</string>
+    <string name="config_section" formatted="false">"ניהול הגדרות"</string>
+    <string name="config_import" formatted="false">"ייבוא הגדרות"</string>
+    <string name="config_import_summary" formatted="false">"שחזור הגדרות תכונות מקובץ"</string>
+    <string name="config_export" formatted="false">"ייצוא הגדרות"</string>
+    <string name="config_export_summary" formatted="false">"שמירת הגדרות תכונות בקובץ"</string>
+    <string name="config_exported" formatted="false">"ההגדרות יוצאו למיקום שנבחר. הקובץ עשוי להכיל מילות מפתח, אזורים ונתיבי תיקיות. יש לשמור אותו במקום בטוח."</string>
+    <string name="config_import_confirm" formatted="true">"מספר ההגדרות בקובץ: %1$d. הייבוא יחליף את כל הגדרות התכונות; הגדרות חסרות יחזרו לברירת המחדל.\n\nשפת הממשק, הסמל, הרשאות LSPosed ומטמון התאימות של TikTok לא ישתנו. להמשיך?"</string>
+    <string name="config_overwrite" formatted="false">"החלפה"</string>
+    <string name="config_imported" formatted="false">"ההגדרות יובאו ודף התכונות עודכן. שינויים התומכים בעדכון מיידי מוחלים מיד. לבדיקת שאר התכונות יש לפתוח שוב את TikTok."</string>
+    <string name="config_processing" formatted="false">"מעבד הגדרות"</string>
+    <string name="config_error_io" formatted="false">"קריאה או כתיבה של הקובץ נכשלה. יש לבדוק את המיקום ואת המקום הפנוי."</string>
+    <string name="config_error_permission" formatted="false">"אין הרשאת גישה לקובץ שנבחר. יש לבחור אותו שוב."</string>
+    <string name="config_error_invalid" formatted="false">"זה אינו קובץ הגדרות Toki תקין. לא יובאו הגדרות."</string>
+    <string name="config_error_validation" formatted="true">"אימות ההגדרות נכשל: %1$s. לא יובאו הגדרות."</string>
+    <string name="config_error_commit" formatted="false">"החלת ההגדרות לא אומתה. יש לפתוח שוב את Toki ולבדוק לפני ניסיון נוסף."</string>
+    <string name="sponsor_title" formatted="false">"תמיכה במפתח"</string>
+    <string name="sponsor_kofi" formatted="false">"תמיכה דרך Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"קוד QR לתשלום ב-Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"שומר…"</string>
+    <string name="sponsor_save_image" formatted="false">"שמירת תמונה"</string>
+    <string name="sponsor_image_hint" formatted="false">"ניתן לשמור את התמונה המקורית ולבחור בה ב-Alipay כדי לסרוק את הקוד."</string>
+    <string name="sponsor_address_copied" formatted="false">"כתובת USDT הועתקה"</string>
+    <string name="sponsor_image_saved" formatted="false">"התמונה נשמרה במיקום שנבחר"</string>
+    <string name="sponsor_error_io" formatted="false">"השמירה נכשלה. יש לבדוק את המיקום ואת המקום הפנוי ולנסות שוב."</string>
+    <string name="sponsor_error_permission" formatted="false">"השמירה נכשלה: אין הרשאת כתיבה למיקום שנבחר. יש לבחור שוב."</string>
+    <string name="feature_filter_topics" formatted="false">"הסתרת נושאים מוצעים"</string>
+    <string name="feature_filter_creators" formatted="false">"הסתרת יוצרים מוצעים"</string>
+    <string name="host_scan_title_complete" formatted="false">"החיפוש הושלם"</string>
+    <string name="host_scan_title_failed" formatted="false">"החיפוש נכשל"</string>
+    <string name="host_scan_restart_hint" formatted="false">"יש להפעיל מחדש את TikTok באופן ידני כדי להחיל את התוצאות."</string>
+    <string name="host_scan_failure_hint" formatted="false">"ניתן לצפות באבחון התכונות ב-Toki."</string>
+    <string name="layout_title" formatted="false">"פריסת העמוד"</string>
+    <string name="layout_summary" formatted="false">"בחירת הפקדים להסתרה"</string>
+    <string name="layout_hint" formatted="false">"הפעלת המתג מסתירה את הפריט"</string>
+    <string name="layout_top" formatted="false">"סרגל עליון"</string>
+    <string name="layout_bottom" formatted="false">"סרגל תחתון"</string>
+    <string name="layout_side" formatted="false">"עמוד הסרטון"</string>
+    <string name="layout_search" formatted="false">"חיפוש"</string>
+    <string name="layout_live" formatted="false">"שידור חי"</string>
+    <string name="layout_friends" formatted="false">"חברים"</string>
+    <string name="layout_following" formatted="false">"במעקב"</string>
+    <string name="layout_shop" formatted="false">"חנות"</string>
+    <string name="layout_for_you" formatted="false">"בשבילך"</string>
+    <string name="layout_nearby" formatted="false">"בקרבת מקום"</string>
+    <string name="layout_stem" formatted="false">"מדע"</string>
+    <string name="layout_series" formatted="false">"סדרות"</string>
+    <string name="layout_home" formatted="false">"בית"</string>
+    <string name="layout_create" formatted="false">"יצירה"</string>
+    <string name="layout_inbox" formatted="false">"דואר נכנס"</string>
+    <string name="layout_profile" formatted="false">"פרופיל"</string>
+    <string name="layout_discover" formatted="false">"גילוי"</string>
+    <string name="layout_avatar" formatted="false">"תמונת פרופיל"</string>
+    <string name="layout_follow" formatted="false">"כפתור מעקב"</string>
+    <string name="layout_like" formatted="false">"לייק"</string>
+    <string name="layout_comment" formatted="false">"תגובות"</string>
+    <string name="layout_favorite" formatted="false">"מועדפים"</string>
+    <string name="layout_share" formatted="false">"שיתוף"</string>
+    <string name="layout_music" formatted="false">"תקליט מוזיקה"</string>
+    <string name="layout_explore" formatted="false">"חקירה"</string>
+    <string name="layout_author" formatted="false">"פרטי היוצר"</string>
+    <string name="layout_description" formatted="false">"תיאור"</string>
+    <string name="layout_music_title" formatted="false">"שם המוזיקה"</string>
+    <string name="layout_tags" formatted="false">"תוויות מידע"</string>
+    <string name="layout_search_label" formatted="false">"הצעת חיפוש"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"כפתור עצירת גלילה אוטומטית"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"מטבעות ופרסים"</string>
+    <string name="layout_quick_comment" formatted="false">"תגובות מהירות"</string>
+    <string name="layout_playlist" formatted="false">"רשימת השמעה"</string>
+    <string name="layout_creation_buttons" formatted="false">"קיצורי דרך ליצירה"</string>
+    <string name="layout_live_notice" formatted="false">"תזכורות לשידורים חיים"</string>
+    <string name="layout_opacity" formatted="false">"אטימות"</string>
+    <string name="feature_background_audio">"פתיחת שמע ברקע"</string>
+    <string name="layout_landscape">"כפתור מסך מלא"</string>
+    <string name="layout_photo_indicators">"מחוונים ורמזים לתמונות"</string>
+    <string name="layout_quick_message">"הודעות מהירות ומקור השיתוף"</string>
+    <string name="layout_user_card">"חשבונות מומלצים"</string>
+    <string name="layout_survey">"סקרים ומשוב"</string>
+    <string name="layout_ad_cards">"כרטיסי מוצרים ופרסומות"</string>
+    <string name="layout_bottom_banners">"באנרים תחתונים אחרים"</string>
+    <string name="layout_activities">"כניסה לאירועים"</string>
+    <string name="host_scan_title_running" formatted="false">"חיפוש שיטות"</string>
+    <string name="host_scan_title_saving" formatted="false">"שמירת תוצאות"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"יש להשאיר את TikTok בחזית."</string>
+    <string name="host_scan_saving_hint" formatted="false">"נא להמתין."</string>
+    <string name="host_scan_done" formatted="false">"הבנתי"</string>
+    <string name="video_fit_center" formatted="false">"במרכז"</string>
+    <string name="video_fit_smart" formatted="false">"מסך מלא"</string>
+</resources>

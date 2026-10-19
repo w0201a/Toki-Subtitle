@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Αρχική"</string>
+    <string name="nav_features" formatted="false">"Λειτουργίες"</string>
+    <string name="page_features" formatted="false">"Ρυθμίσεις"</string>
+    <string name="page_hook_status" formatted="false">"Κατάσταση λειτουργιών"</string>
+    <string name="nav_back" formatted="false">"Πίσω"</string>
+    <string name="restart_tiktok" formatted="false">"Επανεκκίνηση TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Παραχωρήστε πρόσβαση root στο Toki"</string>
+    <string name="language_title" formatted="false">"Γλώσσα εφαρμογής"</string>
+    <string name="language_system" formatted="false">"Όπως το σύστημα"</string>
+    <string name="language_search" formatted="false">"Αναζήτηση γλώσσας"</string>
+    <string name="language_clear_search" formatted="false">"Εκκαθάριση αναζήτησης"</string>
+    <string name="language_no_results" formatted="false">"Δεν βρέθηκαν γλώσσες"</string>
+    <string name="common_save" formatted="false">"Αποθήκευση"</string>
+    <string name="common_cancel" formatted="false">"Ακύρωση"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Κλείσιμο"</string>
+    <string name="common_open" formatted="false">"Άνοιγμα"</string>
+    <string name="common_copy" formatted="false">"Αντιγραφή"</string>
+    <string name="common_add" formatted="false">"Προσθήκη"</string>
+    <string name="common_delete" formatted="false">"Διαγραφή"</string>
+    <string name="common_done" formatted="false">"Τέλος"</string>
+    <string name="common_save_apply" formatted="false">"Εφαρμογή"</string>
+    <string name="common_unknown" formatted="false">"Άγνωστο"</string>
+    <string name="common_custom" formatted="false">"Προσαρμοσμένο"</string>
+    <string name="home_icon_hidden" formatted="false">"Το εικονίδιο αποκρύφτηκε"</string>
+    <string name="home_icon_restored" formatted="false">"Το εικονίδιο επανεμφανίστηκε"</string>
+    <string name="home_activated" formatted="false">"Ενεργοποιημένο"</string>
+    <string name="home_inactive" formatted="false">"Μη ενεργοποιημένο"</string>
+    <string name="home_activation_missing" formatted="false">"Δεν εντοπίστηκε ενεργοποίηση στο LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Συμβατότητα με το TikTok"</string>
+    <string name="home_host_current" formatted="false">"Εγκατεστημένο TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Δεν βρέθηκε υποστηριζόμενη εγκατάσταση TikTok στη συσκευή"</string>
+    <string name="home_host_not_installed" formatted="false">"Δεν έχει εγκατασταθεί"</string>
+    <string name="home_supported_versions" formatted="false">"Υποστηριζόμενες εκδόσεις"</string>
+    <string name="home_community" formatted="false">"Κοινότητα"</string>
+    <string name="home_github" formatted="false">"Αποθετήριο GitHub"</string>
+    <string name="home_telegram" formatted="false">"Ομάδα Telegram"</string>
+    <string name="home_preferences" formatted="false">"Προτιμήσεις"</string>
+    <string name="home_hide_icon" formatted="false">"Απόκρυψη εικονιδίου εφαρμογής"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Μετά την απόκρυψη, ανοίξτε το Toki από τον διαχειριστή LSPosed"</string>
+    <string name="home_support" formatted="false">"Υποστήριξη ανάπτυξης"</string>
+    <string name="home_support_summary" formatted="false">"Υποστηρίξτε τη συντήρηση και τη βελτίωση των λειτουργιών"</string>
+    <string name="feature_region_section" formatted="false">"Προσομοίωση περιοχής και περιβάλλοντος"</string>
+    <string name="feature_playback_section" formatted="false">"Αναπαραγωγή"</string>
+    <string name="feature_progress" formatted="false">"Πάντα εμφάνιση γραμμής προόδου"</string>
+    <string name="feature_progress_summary" formatted="false">"Εμφάνιση της κάτω γραμμής προόδου και στα σύντομα βίντεο"</string>
+    <string name="feature_immersive" formatted="false">"Προβολή βίντεο"</string>
+    <string name="feature_autoplay" formatted="false">"Βελτιωμένη αυτόματη κύλιση"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Ξεκλειδώνει την αυτόματη κύλιση στο μενού κάθε βίντεο"</string>
+    <string name="feature_status_bar" formatted="false">"Απόκρυψη γραμμής κατάστασης συστήματος"</string>
+    <string name="feature_media_section" formatted="false">"Λήψεις και εργαλεία"</string>
+    <string name="feature_download" formatted="false">"Λήψεις χωρίς υδατογράφημα"</string>
+    <string name="feature_download_summary" formatted="false">"Αποθήκευση του πρωτότυπου χωρίς υδατογράφημα από το παρατεταμένο πάτημα ή το μενού κοινοποίησης"</string>
+    <string name="feature_music" formatted="false">"Ξεκλείδωμα ήχου"</string>
+    <string name="feature_music_summary" formatted="false">"Επαναφορά ήχου που περιορίζεται λόγω δικαιωμάτων ή περιοχής"</string>
+    <string name="feature_author_region" formatted="false">"Εμφάνιση περιοχής δημιουργού"</string>
+    <string name="feature_author_region_summary" formatted="false">"Εμφάνιση σημαίας και κωδικού χώρας ή περιοχής δίπλα στο όνομα"</string>
+    <string name="feature_copy_comment" formatted="false">"Αντιγραφή μόνο κειμένου"</string>
+    <string name="feature_video_translation" formatted="false">"Μενού υποτίτλων και μετάφρασης"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Εμφάνιση επιλογής στο μενού παρατεταμένου πατήματος"</string>
+    <string name="feature_comment_translation" formatted="false">"Μετάφραση σχολίων"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Προσθήκη κουμπιού για μαζική μετάφραση ξενόγλωσσων σχολίων"</string>
+    <string name="feature_filter_section" formatted="false">"Φιλτράρισμα ροής"</string>
+    <string name="feature_remove_ads" formatted="false">"Αφαίρεση διαφημίσεων ροής"</string>
+    <string name="feature_remove_live" formatted="false">"Φίλτρο προτεινόμενων ζωντανών μεταδόσεων"</string>
+    <string name="feature_remove_photos" formatted="false">"Φίλτρο προτεινόμενων φωτογραφιών"</string>
+    <string name="feature_filter_views" formatted="false">"Φίλτρο προβολών"</string>
+    <string name="feature_filter_likes" formatted="false">"Φίλτρο «Μου αρέσει»"</string>
+    <string name="feature_filter_duration" formatted="false">"Φίλτρο διάρκειας"</string>
+    <string name="feature_filter_keywords" formatted="false">"Φίλτρο λέξεων-κλειδιών"</string>
+    <string name="feature_block_offline" formatted="false">"Αποκλεισμός βίντεο εκτός σύνδεσης"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Αποτροπή εισαγωγής προφορτωμένων βίντεο όταν η σύνδεση είναι αδύναμη"</string>
+    <string name="feature_remove_ai" formatted="false">"Αφαίρεση περιεχομένου τεχνητής νοημοσύνης"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Φιλτράρισμα βίντεο που το TikTok επισημαίνει ως δημιουργημένα με τεχνητή νοημοσύνη"</string>
+    <string name="filter_metric_views" formatted="false">"προβολές"</string>
+    <string name="filter_metric_likes" formatted="false">"επισημάνσεις «Μου αρέσει»"</string>
+    <string name="filter_metric_duration" formatted="false">"διάρκεια"</string>
+    <string name="filter_unit_seconds" formatted="false">"δ"</string>
+    <string name="filter_views_saved" formatted="false">"Το εύρος προβολών αποθηκεύτηκε"</string>
+    <string name="filter_likes_saved" formatted="false">"Το εύρος επισημάνσεων αποθηκεύτηκε"</string>
+    <string name="filter_duration_saved" formatted="false">"Το εύρος διάρκειας αποθηκεύτηκε"</string>
+    <string name="download_path_saved" formatted="false">"Οι διαδρομές αποθήκευσης ενημερώθηκαν"</string>
+    <string name="region_spoof_title" formatted="false">"Προσομοίωση περιοχής και SIM"</string>
+    <string name="region_current" formatted="false">"Τρέχουσες ρυθμίσεις"</string>
+    <string name="region_target" formatted="true">"Περιοχή στόχος: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Πάροχος: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Κωδικός παρόχου: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Προρυθμίσεις"</string>
+    <string name="region_custom_parameters" formatted="false">"Προσαρμογή"</string>
+    <string name="language_spoof" formatted="false">"Προσομοίωση γλώσσας"</string>
+    <string name="environment_follow_region" formatted="false">"Ανά περιοχή"</string>
+    <string name="language_effective" formatted="true">"Ενεργή γλώσσα: %1$s"</string>
+    <string name="language_custom" formatted="false">"Προσαρμοσμένη γλώσσα"</string>
+    <string name="timezone_spoof" formatted="false">"Προσομοίωση ζώνης ώρας"</string>
+    <string name="timezone_effective" formatted="true">"Ενεργή ζώνη ώρας: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Προσαρμοσμένη ζώνη ώρας"</string>
+    <string name="gps_spoof" formatted="false">"Προσομοίωση τοποθεσίας"</string>
+    <string name="gps_effective" formatted="true">"Ενεργές συντεταγμένες: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Προσαρμοσμένες συντεταγμένες"</string>
+    <string name="speed_fixed" formatted="false">"Διατήρηση ταχύτητας"</string>
+    <string name="speed_fixed_summary" formatted="false">"Διατήρηση της ταχύτητας του μενού κατά την αλλαγή βίντεο"</string>
+    <string name="speed_expand" formatted="false">"Περισσότερες ταχύτητες"</string>
+    <string name="speed_options_hint" formatted="false">"Ταχύτητες (πατήστε για επεξεργασία ή διαγραφή)"</string>
+    <string name="speed_add_option" formatted="false">"+ Προσθήκη ταχύτητας"</string>
+    <string name="speed_restore" formatted="false">"Επαναφορά"</string>
+    <string name="clean_on_play" formatted="false">"Απόκρυψη χειριστηρίων στην αναπαραγωγή"</string>
+    <string name="clean_keep_progress" formatted="false">"Διατήρηση γραμμής προόδου"</string>
+    <string name="download_paths" formatted="false">"Φάκελοι αποθήκευσης"</string>
+    <string name="download_paths_summary" formatted="true">"Βίντεο: %1$s · Εικόνες: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Διατήρηση βίντεο με %1$s από %2$d%4$s έως %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Διατήρηση βίντεο με %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Διατήρηση βίντεο με %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Δεν ορίστηκε εύρος (πατήστε για ελάχιστο/μέγιστο)"</string>
+    <string name="keyword_unset" formatted="false">"Δεν υπάρχουν κανόνες (πατήστε για διαχείριση κατηγοριών)"</string>
+    <string name="keyword_summary" formatted="true">"Ενεργά: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Περιγραφές: %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Ετικέτες: %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Δημιουργοί: %1$d"</string>
+    <string name="keyword_description" formatted="false">"Περιγραφές"</string>
+    <string name="keyword_tag" formatted="false">"Ετικέτες"</string>
+    <string name="keyword_author" formatted="false">"Δημιουργοί"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Δεν υπάρχουν κανόνες για «%1$s». Προσθέστε έναν παραπάνω"</string>
+    <string name="duration_alert_title" formatted="false">"Ειδοποίηση για μεγάλα βίντεο"</string>
+    <string name="duration_alert_summary" formatted="true">"Τρέχον όριο: ≥ %1$s λεπτά"</string>
+    <string name="download_video_path" formatted="false">"Φάκελος βίντεο"</string>
+    <string name="download_image_path" formatted="false">"Φάκελος εικόνων"</string>
+    <string name="download_path_hint" formatted="false">"Ο πρώτος φάκελος πρέπει να είναι κοινόχρηστος φάκελος πολυμέσων, όπως Movies, Pictures ή DCIM. Μη έγκυρες διαδρομές χρησιμοποιούν την προεπιλογή συστήματος"</string>
+    <string name="views_range_title" formatted="false">"Εύρος προβολών"</string>
+    <string name="views_range_min" formatted="false">"Ελάχιστες προβολές (0 = χωρίς όριο)"</string>
+    <string name="views_range_max" formatted="false">"Μέγιστες προβολές (0 = χωρίς όριο)"</string>
+    <string name="views_range_hint" formatted="false">"Διατήρηση μόνο βίντεο με προβολές εντός εύρους. Με τα δύο όρια στο 0 δεν αφαιρείται τίποτα"</string>
+    <string name="likes_range_title" formatted="false">"Εύρος επισημάνσεων «Μου αρέσει»"</string>
+    <string name="likes_range_min" formatted="false">"Ελάχιστες επισημάνσεις (0 = χωρίς όριο)"</string>
+    <string name="likes_range_max" formatted="false">"Μέγιστες επισημάνσεις (0 = χωρίς όριο)"</string>
+    <string name="likes_range_hint" formatted="false">"Διατήρηση μόνο βίντεο με επισημάνσεις εντός εύρους. Με τα δύο όρια στο 0 δεν αφαιρείται τίποτα"</string>
+    <string name="duration_range_title" formatted="false">"Εύρος διάρκειας βίντεο"</string>
+    <string name="duration_range_min" formatted="false">"Ελάχιστη διάρκεια (δευτερόλεπτα· 0 = χωρίς όριο)"</string>
+    <string name="duration_range_max" formatted="false">"Μέγιστη διάρκεια (δευτερόλεπτα· 0 = χωρίς όριο)"</string>
+    <string name="duration_range_hint" formatted="false">"Διατήρηση προτεινόμενων βίντεο εντός εύρους διάρκειας. Με τα δύο όρια στο 0 δεν αφαιρείται τίποτα. Οι φωτογραφικές αναρτήσεις δεν επηρεάζονται"</string>
+    <string name="keyword_manage" formatted="false">"Κανόνες φίλτρου"</string>
+    <string name="keyword_description_hint" formatted="false">"Αντιστοίχιση κειμένου και περιγραφής βίντεο χωρίς διάκριση πεζών και κεφαλαίων."</string>
+    <string name="keyword_tag_hint" formatted="false">"Αντιστοίχιση ετικετών. Δεν χρειάζεται το πρόθεμα #."</string>
+    <string name="keyword_author_hint" formatted="false">"Αντιστοίχιση ονόματος δημιουργού και μοναδικού ονόματος χρήστη. Δεν χρειάζεται το πρόθεμα @."</string>
+    <string name="keyword_description_input" formatted="false">"Λέξη ή φράση"</string>
+    <string name="keyword_tag_input" formatted="false">"Ετικέτα"</string>
+    <string name="keyword_author_input" formatted="false">"Όνομα ή όνομα χρήστη"</string>
+    <string name="keyword_add" formatted="false">"Προσθήκη κανόνα"</string>
+    <string name="keyword_delete" formatted="false">"Διαγραφή κανόνα"</string>
+    <string name="region_select_title" formatted="false">"Επιλογή περιοχής"</string>
+    <string name="region_search" formatted="false">"Αναζήτηση με χώρα, αγγλικό όνομα ή κωδικό περιοχής"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Κωδικός παρόχου: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Προσαρμοσμένη περιοχή και SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Ορίστε κωδικό χώρας και στοιχεία παρόχου χωρίς περιορισμούς προρύθμισης."</string>
+    <string name="region_code_input" formatted="false">"Κωδικός χώρας ή περιοχής (π.χ. JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Κωδικός παρόχου (π.χ. 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Όνομα παρόχου (π.χ. NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Επιλέξτε γλώσσα ή εισαγάγετε τον κωδικό της."</string>
+    <string name="language_code_input" formatted="false">"Κωδικός γλώσσας (π.χ. ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Συχνές γλώσσες:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Επιλέξτε ζώνη ώρας πόλης ή εισαγάγετε το όνομά της."</string>
+    <string name="timezone_input" formatted="false">"Ζώνη ώρας (π.χ. Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Ζώνες ώρας πόλεων:"</string>
+    <string name="city_tokyo" formatted="false">"Τόκιο"</string>
+    <string name="city_taipei" formatted="false">"Ταϊπέι"</string>
+    <string name="city_hong_kong" formatted="false">"Χονγκ Κονγκ"</string>
+    <string name="city_new_york" formatted="false">"Νέα Υόρκη"</string>
+    <string name="city_london" formatted="false">"Λονδίνο"</string>
+    <string name="city_seoul" formatted="false">"Σεούλ"</string>
+    <string name="city_bangkok" formatted="false">"Μπανγκόκ"</string>
+    <string name="city_singapore" formatted="false">"Σιγκαπούρη"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Προσαρμοσμένες συντεταγμένες τοποθεσίας"</string>
+    <string name="gps_custom_hint" formatted="false">"Επιλέξτε πόλη ή εισαγάγετε γεωγραφικό πλάτος και μήκος."</string>
+    <string name="gps_latitude" formatted="false">"Γεωγραφικό πλάτος (-90.0 έως 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Γεωγραφικό μήκος (-180.0 έως 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Συχνές πόλεις:"</string>
+    <string name="speed_add_title" formatted="false">"Προσθήκη ταχύτητας"</string>
+    <string name="speed_input" formatted="false">"Ταχύτητα αναπαραγωγής"</string>
+    <string name="speed_invalid" formatted="false">"Εισαγάγετε έγκυρο αριθμό"</string>
+    <string name="speed_out_of_range" formatted="true">"Υποστηρίζεται μόνο %1$sx–%2$sx"</string>
+    <string name="speed_range" formatted="true">"Υποστηριζόμενο εύρος: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Επεξεργασία ταχύτητας"</string>
+    <string name="duration_threshold_title" formatted="false">"Ειδοποίηση μεγάλων βίντεο"</string>
+    <string name="duration_threshold_hint" formatted="false">"Όταν η διάρκεια φτάνει αυτή την τιμή, εμφανίζεται στην αρχή της αναπαραγωγής μια σύντομη ειδοποίηση με τη διάρκεια σε λεπτά."</string>
+    <string name="duration_threshold_input" formatted="false">"Όριο διάρκειας (λεπτά)"</string>
+    <string name="duration_threshold_example" formatted="false">"Για παράδειγμα: 3 ή 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Εισαγάγετε έγκυρο αριθμό λεπτών μεγαλύτερο από 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Τρέχουσα ρύθμιση: ειδοποίηση για βίντεο ≥ %1$s λεπτά"</string>
+    <string name="duration_threshold_presets" formatted="false">"Προτεινόμενες διάρκειες:"</string>
+    <string name="status_feature_feed" formatted="false">"Φιλτράρισμα ροής"</string>
+    <string name="status_feature_speed" formatted="false">"Ταχύτητα"</string>
+    <string name="status_feature_progress" formatted="false">"Γραμμή προόδου"</string>
+    <string name="status_feature_clean" formatted="false">"Κρυφά χειριστήρια στην αναπαραγωγή"</string>
+    <string name="status_feature_immersive" formatted="false">"Προβολή βίντεο"</string>
+    <string name="status_feature_scroll" formatted="false">"Αυτόματη κύλιση"</string>
+    <string name="status_feature_duration" formatted="false">"Ειδοποίηση διάρκειας"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Μετάφραση σχολίων"</string>
+    <string name="status_feature_video_translate" formatted="false">"Μενού υποτίτλων και μετάφρασης"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Αντιγραφή σχολίων"</string>
+    <string name="status_feature_author" formatted="false">"Περιοχή δημιουργού"</string>
+    <string name="status_feature_download" formatted="false">"Αποθήκευση βίντεο"</string>
+    <string name="status_feature_music" formatted="false">"Περιορισμοί ήχου"</string>
+    <string name="status_feature_sim" formatted="false">"SIM και χώρα"</string>
+    <string name="status_feature_language" formatted="false">"Γλώσσα"</string>
+    <string name="status_feature_timezone" formatted="false">"Ζώνη ώρας"</string>
+    <string name="status_feature_gps" formatted="false">"Τοποθεσία"</string>
+    <string name="status_feature_bar" formatted="false">"Γραμμή κατάστασης"</string>
+    <string name="status_normal" formatted="false">"Λειτουργεί"</string>
+    <string name="status_issue" formatted="false">"Πρόβλημα"</string>
+    <string name="status_disabled" formatted="false">"Ανενεργό"</string>
+    <string name="status_pending" formatted="false">"Σε αναμονή"</string>
+    <string name="status_problem_disabled" formatted="false">"Ανενεργό, με καταγεγραμμένο σφάλμα"</string>
+    <string name="status_problem_unavailable" formatted="false">"Προσωρινά μη διαθέσιμη"</string>
+    <string name="status_problem_runtime" formatted="false">"Σφάλμα κατά τη χρήση"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Μη διαθέσιμο μενού ταχύτητας"</string>
+    <string name="status_prepare_failed" formatted="false">"Απέτυχε η προετοιμασία λειτουργιών. Ανοίξτε ξανά το TikTok και ελέγξτε."</string>
+    <string name="status_preparing" formatted="false">"Προετοιμασία λειτουργιών. Περιμένετε."</string>
+    <string name="status_prepared" formatted="false">"Η προετοιμασία ολοκληρώθηκε. Ανοίξτε ξανά το TikTok."</string>
+    <string name="status_read_failed" formatted="false">"Δεν είναι δυνατή η ανάγνωση κατάστασης τώρα. Ελέγξτε αργότερα."</string>
+    <string name="status_update_failed" formatted="false">"Δεν είναι δυνατή η ενημέρωση κατάστασης τώρα. Εμφανίζεται το τελευταίο αποτέλεσμα."</string>
+    <string name="status_reading" formatted="false">"Ανάγνωση κατάστασης"</string>
+    <string name="status_empty" formatted="false">"Δεν υπάρχει καταγραφή λειτουργίας. Ενεργοποιήστε το Toki στο LSPosed, ανοίξτε το TikTok και ελέγξτε."</string>
+    <string name="status_report_note" formatted="true">"Τελευταία αναφορά: %1$s\n«Λειτουργεί» σημαίνει ότι η λειτουργία είναι έτοιμη και δεν ανέφερε σφάλματα."</string>
+    <string name="config_section" formatted="false">"Διαχείριση ρυθμίσεων"</string>
+    <string name="config_import" formatted="false">"Εισαγωγή ρυθμίσεων"</string>
+    <string name="config_import_summary" formatted="false">"Επαναφορά ρυθμίσεων λειτουργιών από αρχείο"</string>
+    <string name="config_export" formatted="false">"Εξαγωγή ρυθμίσεων"</string>
+    <string name="config_export_summary" formatted="false">"Αποθήκευση ρυθμίσεων λειτουργιών σε αρχείο"</string>
+    <string name="config_exported" formatted="false">"Οι ρυθμίσεις εξήχθησαν στην επιλεγμένη θέση. Το αρχείο μπορεί να περιέχει λέξεις-κλειδιά, περιοχές και φακέλους. Φυλάξτε το με ασφάλεια."</string>
+    <string name="config_import_confirm" formatted="true">"Ρυθμίσεις στο αρχείο: %1$d. Η εισαγωγή αντικαθιστά όλες τις ρυθμίσεις λειτουργιών και επαναφέρει όσες λείπουν στις προεπιλογές.\n\nΗ γλώσσα, το εικονίδιο, οι άδειες LSPosed και η κρυφή μνήμη συμβατότητας TikTok δεν αλλάζουν. Συνέχεια;"</string>
+    <string name="config_overwrite" formatted="false">"Αντικατάσταση"</string>
+    <string name="config_imported" formatted="false">"Οι ρυθμίσεις εισήχθησαν και η σελίδα λειτουργιών ενημερώθηκε. Οι υποστηριζόμενες αλλαγές εφαρμόζονται αμέσως. Για τις υπόλοιπες, ανοίξτε ξανά το TikTok."</string>
+    <string name="config_processing" formatted="false">"Επεξεργασία ρυθμίσεων"</string>
+    <string name="config_error_io" formatted="false">"Αποτυχία ανάγνωσης ή εγγραφής αρχείου. Ελέγξτε τη θέση και τον ελεύθερο χώρο."</string>
+    <string name="config_error_permission" formatted="false">"Δεν υπάρχει άδεια πρόσβασης στο αρχείο. Επιλέξτε το ξανά."</string>
+    <string name="config_error_invalid" formatted="false">"Το αρχείο δεν περιέχει έγκυρες ρυθμίσεις Toki. Δεν εισήχθησαν ρυθμίσεις."</string>
+    <string name="config_error_validation" formatted="true">"Αποτυχία ελέγχου ρυθμίσεων: %1$s. Δεν εισήχθησαν ρυθμίσεις."</string>
+    <string name="config_error_commit" formatted="false">"Δεν επιβεβαιώθηκε η εφαρμογή των ρυθμίσεων. Ανοίξτε ξανά το Toki, ελέγξτε και επαναλάβετε."</string>
+    <string name="sponsor_title" formatted="false">"Υποστήριξη δημιουργού"</string>
+    <string name="sponsor_kofi" formatted="false">"Υποστήριξη μέσω Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Κωδικός QR πληρωμής Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Αποθήκευση…"</string>
+    <string name="sponsor_save_image" formatted="false">"Αποθήκευση εικόνας"</string>
+    <string name="sponsor_image_hint" formatted="false">"Αποθηκεύστε την αρχική εικόνα και επιλέξτε την στο Alipay για αναγνώριση του κωδικού."</string>
+    <string name="sponsor_address_copied" formatted="false">"Η διεύθυνση USDT αντιγράφηκε"</string>
+    <string name="sponsor_image_saved" formatted="false">"Η εικόνα αποθηκεύτηκε στην επιλεγμένη θέση"</string>
+    <string name="sponsor_error_io" formatted="false">"Αποτυχία αποθήκευσης. Ελέγξτε τη θέση και τον ελεύθερο χώρο και δοκιμάστε ξανά."</string>
+    <string name="sponsor_error_permission" formatted="false">"Αποτυχία αποθήκευσης: δεν υπάρχει άδεια εγγραφής στη θέση. Επιλέξτε ξανά."</string>
+    <string name="feature_filter_topics" formatted="false">"Απόκρυψη προτεινόμενων θεμάτων"</string>
+    <string name="feature_filter_creators" formatted="false">"Απόκρυψη προτεινόμενων δημιουργών"</string>
+    <string name="host_scan_title_complete" formatted="false">"Η αναζήτηση ολοκληρώθηκε"</string>
+    <string name="host_scan_title_failed" formatted="false">"Η αναζήτηση απέτυχε"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Επανεκκινήστε το TikTok χειροκίνητα για να εφαρμοστούν τα αποτελέσματα."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Δείτε τα διαγνωστικά λειτουργιών στο Toki."</string>
+    <string name="layout_title" formatted="false">"Διάταξη σελίδας"</string>
+    <string name="layout_summary" formatted="false">"Επιλέξτε ποια στοιχεία θα κρύβονται"</string>
+    <string name="layout_hint" formatted="false">"Ενεργοποιήστε τον διακόπτη για απόκρυψη"</string>
+    <string name="layout_top" formatted="false">"Πάνω γραμμή"</string>
+    <string name="layout_bottom" formatted="false">"Κάτω γραμμή"</string>
+    <string name="layout_side" formatted="false">"Σελίδα βίντεο"</string>
+    <string name="layout_search" formatted="false">"Αναζήτηση"</string>
+    <string name="layout_live" formatted="false">"ΖΩΝΤΑΝΑ"</string>
+    <string name="layout_friends" formatted="false">"Φίλοι"</string>
+    <string name="layout_following" formatted="false">"Ακολουθείτε"</string>
+    <string name="layout_shop" formatted="false">"Κατάστημα"</string>
+    <string name="layout_for_you" formatted="false">"Για εσάς"</string>
+    <string name="layout_nearby" formatted="false">"Κοντά σας"</string>
+    <string name="layout_stem" formatted="false">"Επιστήμη"</string>
+    <string name="layout_series" formatted="false">"Σειρές"</string>
+    <string name="layout_home" formatted="false">"Αρχική"</string>
+    <string name="layout_create" formatted="false">"Δημιουργία"</string>
+    <string name="layout_inbox" formatted="false">"Εισερχόμενα"</string>
+    <string name="layout_profile" formatted="false">"Προφίλ"</string>
+    <string name="layout_discover" formatted="false">"Ανακάλυψη"</string>
+    <string name="layout_avatar" formatted="false">"Εικόνα προφίλ"</string>
+    <string name="layout_follow" formatted="false">"Κουμπί ακολούθησης"</string>
+    <string name="layout_like" formatted="false">"Μου αρέσει"</string>
+    <string name="layout_comment" formatted="false">"Σχόλια"</string>
+    <string name="layout_favorite" formatted="false">"Αγαπημένα"</string>
+    <string name="layout_share" formatted="false">"Κοινοποίηση"</string>
+    <string name="layout_music" formatted="false">"Δίσκος μουσικής"</string>
+    <string name="layout_explore" formatted="false">"Εξερεύνηση"</string>
+    <string name="layout_author" formatted="false">"Στοιχεία δημιουργού"</string>
+    <string name="layout_description" formatted="false">"Περιγραφή"</string>
+    <string name="layout_music_title" formatted="false">"Τίτλος μουσικής"</string>
+    <string name="layout_tags" formatted="false">"Ετικέτες πληροφοριών"</string>
+    <string name="layout_search_label" formatted="false">"Πρόταση αναζήτησης"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Κουμπί διακοπής αυτόματης κύλισης"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Νομίσματα και ανταμοιβές"</string>
+    <string name="layout_quick_comment" formatted="false">"Γρήγορα σχόλια"</string>
+    <string name="layout_playlist" formatted="false">"Λίστα αναπαραγωγής"</string>
+    <string name="layout_creation_buttons" formatted="false">"Συντομεύσεις δημιουργίας"</string>
+    <string name="layout_live_notice" formatted="false">"Υπενθυμίσεις LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Αδιαφάνεια"</string>
+    <string name="feature_background_audio">"Ξεκλείδωμα ήχου στο παρασκήνιο"</string>
+    <string name="layout_landscape">"Κουμπί πλήρους οθόνης"</string>
+    <string name="layout_photo_indicators">"Ενδείξεις και υποδείξεις φωτογραφιών"</string>
+    <string name="layout_quick_message">"Γρήγορα μηνύματα και πηγή κοινοποίησης"</string>
+    <string name="layout_user_card">"Προτεινόμενοι λογαριασμοί"</string>
+    <string name="layout_survey">"Έρευνες και σχόλια"</string>
+    <string name="layout_ad_cards">"Κάρτες προϊόντων και διαφημίσεων"</string>
+    <string name="layout_bottom_banners">"Άλλα κάτω banner"</string>
+    <string name="layout_activities">"Είσοδος εκδηλώσεων"</string>
+    <string name="host_scan_title_running" formatted="false">"Αναζήτηση μεθόδων"</string>
+    <string name="host_scan_title_saving" formatted="false">"Αποθήκευση αποτελεσμάτων"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Κρατήστε το TikTok στο προσκήνιο."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Περιμένετε."</string>
+    <string name="host_scan_done" formatted="false">"Κατάλαβα"</string>
+    <string name="video_fit_center" formatted="false">"Στο κέντρο"</string>
+    <string name="video_fit_smart" formatted="false">"Πλήρης οθόνη"</string>
+</resources>

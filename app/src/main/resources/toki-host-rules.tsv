@@ -1,0 +1,62 @@
+# 官方 TikTok 统一 DEX 特征规则；制表符分隔，五列。
+# 同一逻辑符号允许多组实际代码指纹，每组须完整匹配，最终只发布唯一候选。
+#   1 symbol    逻辑符号名，与 HostSymbol 枚举对应。
+#   2 shape     类结构 SHA-256：父类、接口、字段、方法签名与访问标志。
+#   3 literals  指令语义 SHA-256：操作码、规范化引用、字符串与数值常量。
+#   4 linked    静态初始化直接引用类型的 DEX 内实现摘要 SHA-256。
+#               空摘要 e3b0c442... 也须精确匹配，不是跳过依赖校验的通配符。
+#   5 bindings  成员契约 role=descriptor，以 | 分隔；- 表示无额外成员绑定。
+#               混淆类型归一化为 L_obfuscated_；成员名与完整签名仍严格校验。
+# 不包含来源、渠道或版本选择字段。注释与空行不参与匹配。
+COMMENT_TRANSLATION	4f5fe783e333373c0e665d7a069fbde9852e805d95546667d9b05d372fe27739	b3abb0127cf6d87423ace22fe464b9ca695e7853a41203d96a589f111006ec12	e4a8f52875cda89e4c282e0fdb2d95f4e052e95523179ecb5e2fc3befa379192	-
+MUTE_INFO	1d53a090c21d6e25b20b7242cff34851c5b4d5f9fd47249a25d98984f27ece51	9b5abeb4c37f71707458be3866a4f8ea21cb21199ab1d1dd8c06951a953f2470	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855	copyright=getIsCopyrightViolation()Z
+MUTE_INFO	c94bbdf4a08ed6e31dd22b751a5e0eb3a359caededd8069601af0142c9d30cfc	cc93af8eac4b301c87dcf37910b97da6727df0bfbce7c20b16827bb8c2a0c78c	e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855	copyright=isCopyrightViolation()Z
+DOWNLOAD_SOURCE	method-v1	(Lcom/ss/android/ugc/aweme/feed/model/Aweme;Z)V	string:tag_no_water|call:Lcom/ss/android/ugc/aweme/feed/model/Aweme;->getVideo()Lcom/ss/android/ugc/aweme/feed/model/Video;|call:Lcom/ss/android/ugc/aweme/feed/model/Video;->getDownloadNoWatermarkAddr()Lcom/ss/android/ugc/aweme/base/model/UrlModel;|call:Lcom/ss/android/ugc/aweme/feed/model/Video;->getPlayAddrH264()Lcom/ss/android/ugc/aweme/feed/model/VideoUrlModel;|call:Lcom/ss/android/ugc/aweme/base/model/UrlModel;->getUri()Ljava/lang/String;|write:Lcom/ss/android/ugc/aweme/base/model/UrlModel;|write:Ljava/lang/String;	select
+COLD_FEED	method-v1	()Lcom/ss/android/ugc/aweme/feed/model/FeedItemList;	static|string:filterCacheByUid skip filter, exist empty uid|call:Lcom/ss/android/ugc/aweme/feed/model/FeedItemList;->getItems()Ljava/util/List;	read
+PRELOADED_FEED	method-v1	()Lcom/ss/android/ugc/aweme/feed/model/FeedItemList;	string:feed_response_from_nuj_preload|string:full_feed_thread_switch_cost_2	read
+OFFLINE_RECOVERY	method-v1	()Z	static|field:Lcom/ss/android/ugc/aweme/offlinemode/experiment/OfflineFypRecoveryConfig;->enabled:Z	enabled
+FEED_ADAPTER	method-v1	(IILjava/util/List;)V	invoke:INVOKE_SUPER:Landroidx/viewpager/widget/PagerAdapter;->notifyDataSetChanged()V|call:Lcom/ss/android/ugc/aweme/feed/model/Aweme;->getAid()Ljava/lang/String;|call:Lcom/bytedance/mt/protector/impl/collections/ListProtector;->add(Ljava/util/List;ILjava/lang/Object;)V	batch
+FEED_ADAPTER	method-v1	(ILcom/ss/android/ugc/aweme/feed/model/Aweme;)V	string:position out of range|invoke:INVOKE_SUPER:Landroidx/viewpager/widget/PagerAdapter;->notifyDataSetChanged()V	insert
+FEED_ADAPTER	method-v1	(ILcom/ss/android/ugc/aweme/feed/model/Aweme;)V	call:Landroid/text/TextUtils;->equals(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z|invoke:INVOKE_SUPER:Landroidx/viewpager/widget/PagerAdapter;->notifyDataSetChanged()V	replace
+FEED_ADAPTER	method-v1	(ILcom/ss/android/ugc/aweme/feed/model/Aweme;)V	call:Landroid/text/TextUtils;->equals(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z|invoke:INVOKE_VIRTUAL:self:(ILcom/ss/android/ugc/aweme/feed/model/Aweme;)V	removeInsert
+FEED_ADAPTER	method-v1	(ILcom/ss/android/ugc/aweme/feed/model/Aweme;)V	called-by:removeInsert|invoke:INVOKE_VIRTUAL:obfuscated:(I)Lcom/ss/android/ugc/aweme/feed/model/Aweme;	remove
+FEED_ADAPTER	method-v1	()Ljava/util/List;	called-by:batch|invoke:INVOKE_VIRTUAL:obfuscated:()Ljava/util/List;	getData
+RECOMMEND_ADAPTER	method-v1	(IILjava/util/List;)V	invoke:INVOKE_INTERFACE:obfuscated:(ILjava/util/List;)V|invoke:INVOKE_VIRTUAL:Landroidx/viewpager/widget/PagerAdapter;->notifyDataSetChanged()V|call:Ljava/util/List;->isEmpty()Z	batch
+RECOMMEND_MODEL	method-v1	(IILjava/util/List;)Ljava/util/List;	invoke:INVOKE_INTERFACE:obfuscated:(IILjava/util/List;)Ljava/util/List;|invoke:INVOKE_STATIC:obfuscated:(Ljava/lang/Iterable;)Ljava/util/List;	batch
+RECOMMEND_MODEL	method-v1	(Ljava/util/List;Z)V	invoke:INVOKE_INTERFACE:obfuscated:(Ljava/util/List;)V|invoke:INVOKE_INTERFACE:obfuscated:()I|invoke:INVOKE_STATIC:obfuscated:(Ljava/lang/Iterable;)Ljava/util/List;	update
+RECOMMEND_MODEL	method-v1	(Ljava/util/List;)V	invoke:INVOKE_INTERFACE:obfuscated:(Ljava/util/List;)V|invoke:INVOKE_INTERFACE:obfuscated:()I|invoke:INVOKE_STATIC:obfuscated:(Ljava/lang/Iterable;)Ljava/util/List;	append
+# speed-v1: controller calls, manager state relations, experiment-gated menu sources.
+PLAYER_CONTROLLER	speed-v1	relations	-	-
+PLAYER_MANAGER	speed-v1	relations	-	-
+SPEED_MANAGER	speed-v1	relations	-	-
+SPEED_OPTIONS	speed-v1	relations	-	-
+# Progress and clean lifecycle method contracts.
+SEEK_BAR	method-v1	(I)V	string:seekbar show type change, change to:|call:Landroid/view/View;->setAlpha(F)V|invoke:INVOKE_VIRTUAL:self:(F)V	setShowType
+SEEK_CONTROLLER	method-v1	(Z)V	string:show progressbar:|string:hide progressbar:|call:Lcom/ss/android/ugc/aweme/feed/model/Video;->getDuration()I	update
+SEEK_CONTROLLER	method-v1	(Z)I	call:Lcom/ss/android/ugc/aweme/feed/model/Aweme;->getAwemeType()I|called-by:update	showType
+DARK_LAYER	method-v1	(Landroid/content/Context;Landroid/util/AttributeSet;I)V	name:<init>|field:Lcom/ss/android/ugc/aweme/app/R$styleable;->TuxDarkLayerView:[I|field:Lcom/ss/android/ugc/aweme/app/R$styleable;->TuxDarkLayerView_tux_beginShadeOpacity:I|field:Lcom/ss/android/ugc/aweme/app/R$styleable;->TuxDarkLayerView_tux_endShadeOpacity:I|call:Landroid/widget/ImageView;->setScaleType(Landroid/widget/ImageView$ScaleType;)V	construct
+VIDEO_CELL	method-v1	(Lcom/ss/android/ugc/aweme/feed/model/Aweme;)V	string:VideoViewCell_bind|string:feed_ui_duration_first_videoviewcell_bind|call:Lcom/ss/android/ugc/aweme/feed/model/Aweme;->getAid()Ljava/lang/String;	bind
+VIDEO_CELL	method-v1	(Z)V	string:RootCellComponentExtKt_handleHolderUnselected|string:on_page_unselected|call:Ljava/util/TimerTask;->cancel()Z	unselect
+COMMENT_COPY	comment-v1	relations	-	-
+AUTHOR_LOCATION	method-v1	(Ljava/lang/String;Lcom/ss/android/ugc/aweme/profile/model/User;Lcom/ss/android/ugc/aweme/feed/model/Aweme;)Ljava/lang/String;	static|call:Lcom/ss/android/ugc/aweme/feed/model/Aweme;->getAuthor()Lcom/ss/android/ugc/aweme/profile/model/User;|call:Lcom/ss/android/ugc/aweme/profile/model/User;->getNickname()Ljava/lang/String;|call:Lcom/ss/android/ugc/aweme/profile/model/User;->isAdFake()Z|call:Lcom/ss/android/ugc/aweme/feed/model/AwemeRawAd;->getOmVast()Lcom/ss/android/ugc/aweme/commercialize/model/OmVast;	build
+RESERVED_AREA	method-v1	(Ljava/util/List;ILX/*;)F	static|call:Ljava/util/Iterator;->hasNext()Z|call:Ljava/util/Iterator;->next()Ljava/lang/Object;|invoke:INVOKE_VIRTUAL:obfuscated:(I)I|invoke:INVOKE_STATIC:obfuscated:(Ljava/lang/Iterable;)F|call:Ljava/lang/Float;->valueOf(F)Ljava/lang/Float;	resolve
+FEED_ADAPTION	method-v1	()Lcom/ss/android/ugc/aweme/videoadaption/adaptionparams/AdaptionPaddingValues;	call:Lcom/ss/android/ugc/aweme/videoadaption/adaptionparams/AdaptionPaddingValues;-><init>(IIII)V|call:Landroid/view/View;->getHeight()I	paddingViewport
+FEED_ADAPTION	method-v1	()Lcom/ss/android/ugc/aweme/videoadaption/adaptionparams/AdaptionPaddingValues;	call:Lcom/ss/android/ugc/aweme/screenadaption/adaptionparams/ScreenAdaptionResult;->getBottomSpaceHeight()I|call:Lcom/ss/android/ugc/aweme/videoadaption/adaptionparams/AdaptionPaddingValues;->getBottom()I	paddingContent
+PHOTO_LAYOUT	method-v1	(Lcom/ss/android/ugc/aweme/ui/layout/FeedContentLayoutInfo;IIIIIILX/*;)LX/*;	static|call:Ljava/lang/Float;->floatValue()F|call:Ljava/util/HashMap;->put(Ljava/lang/Object;Ljava/lang/Object;)Ljava/lang/Object;	plan
+SETTINGS	method-v1	(IILjava/lang/String;Z)I	call:Ljava/lang/Integer;->intValue()I|invoke:INVOKE_VIRTUAL:self:(IIILjava/lang/String;Z)I	readInt
+SEARCH_AUTO_SCROLL	method-v1	()Z	string:search_auto_scroll|invoke:INVOKE_VIRTUAL:obfuscated:(Ljava/lang/String;IZ)I	gate
+AUTO_SCROLL_MENU	method-v1	(LX/*;)LX/*;	string:not create auto scroll item, enterFrom:|string:createAutoScrollItem, add auto scroll item to the menu|call:Lcom/ss/android/ugc/aweme/feed/model/AwemeExtKt;->isAdTraffic(Lcom/ss/android/ugc/aweme/feed/model/Aweme;)Z	build
+AUTO_SCROLL_PLAYBACK	method-v1	(Z)Z	call:Lcom/ss/android/ugc/aweme/feed/model/AwemeExtKt;->isAdTraffic(Lcom/ss/android/ugc/aweme/feed/model/Aweme;)Z|call:Lcom/ss/android/ugc/aweme/feed/model/AwemeRawAd;->getShowMaskTimes()I	canAdvance
+AUTO_SCROLL_CONTEXT	method-v1	(Ljava/lang/String;)Z	static|string:homepage_hot|string:homepage_series|string:paid_series_detail_page	page
+AUTO_SCROLL_CONTEXT	method-v1	(Ljava/lang/String;)Z	static|string:general_search|string:search_result	search
+AUTO_SCROLL_CONTEXT	method-v1	(LX/*;)Lcom/ss/android/ugc/feed/platform/panel/autoscroll/IAutoAScrollAbility;	static|string:For You|string:paid_series_detail_page	resolve
+AUTO_SCROLL_REGISTRATION	method-v1	(Ljava/lang/Object;)Ljava/lang/Object;	class:Lcom/ss/android/ugc/feed/platform/panel/autoscroll/AutoScrollComponent;|field:Lkotlin/Unit;->LIZ:Lkotlin/Unit;|invoke:INVOKE_DIRECT:obfuscated:()V	declaration
+AUTO_SCROLL_REGISTER	method-v1	(Lcom/ss/android/ugc/feed/platform/panel/RootPanelComponent;Lkotlin/jvm/functions/Function1;)V	static|call:Lkotlin/jvm/functions/Function1;->invoke(Ljava/lang/Object;)Ljava/lang/Object;	register
+LAYOUT_TOP_TABS	method-v1	(Landroid/view/View;LX/*;)LX/*;	call:Landroid/view/View;->setFocusable(Z)V|call:Landroid/view/View;->setMinimumWidth(I)V|invoke:INVOKE_INTERFACE:obfuscated:()Ljava/lang/String;	bind
+LAYOUT_TOOLBAR	method-v1	(Landroid/view/View;Ljava/lang/String;)V	static|call:Landroid/view/View;->setTag(ILjava/lang/Object;)V|call:Landroid/view/View;->setTag(Ljava/lang/Object;)V	tag
+LAYOUT_BOTTOM_ITEM	method-v1	()Lcom/bytedance/tux/input/TuxTextView;	name:getTabTitleView	view
+PLAY_BUTTON	method-v1	()V	call:Landroid/view/View;->setSelected(Z)V|call:Landroid/view/ViewPropertyAnimator;->scaleX(F)Landroid/view/ViewPropertyAnimator;|call:Landroid/view/ViewPropertyAnimator;->scaleY(F)Landroid/view/ViewPropertyAnimator;|owner:Lcom/ss/android/ugc/feed/platform/panel/playbutton/PlayButtonComponent;	show
+MENU_CAPTION_ACL	method-v1	(Ljava/lang/String;Ljava/lang/String;Lcom/ss/android/ugc/aweme/feed/model/AwemeACLShare;)Lcom/ss/android/ugc/aweme/feed/model/ACLCommonShare;	static|string:long_press|call:Lcom/ss/android/ugc/aweme/feed/model/ACLCommonShare;->getActionId()Ljava/lang/String;	resolve
+BACKGROUND_AUDIO	method-v1	()Ljava/lang/Object;	string:background_play_enable	group
+CAPTION_CONSUMER	method-v1	()V	static|name:<clinit>|string:fixed_caption_v2_consumer_group	initialize
+TRANSLATION_REVERSE	0a2d2d1047c97c507091098f39a3f20f763446242d00e13e85ff2c900da8076f	a50c83d40b20e20b39afb3b4d7a742cc477a20f4edca713d53a7fda62cda5cb2	148dfa3a5e289861c78cea756e23d2850b749b8dcbe5ad12bbbc816ff1f1f657	blocked=LIZ()Z

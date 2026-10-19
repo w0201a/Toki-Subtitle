@@ -1,0 +1,144 @@
+package io.github.meiyongai.toki.subtitle.hook
+
+import android.view.View
+import io.github.libxposed.api.XposedModule
+import io.github.meiyongai.toki.subtitle.provider.ConfigClient
+import java.lang.ref.WeakReference
+import java.util.WeakHashMap
+
+/** 使用宿主字幕状态与内容；自定义显示层不再受原字幕容器约束。 */
+internal object SubtitleFeature {
+    private val identities = setOf(
+        "0259ca5f53357042b72fe6502ca22875aa3035506bfc458fb645146abb19dc16",
+        "a104c3b28e2f4ee94292a0dcc464ff114e63f430e760bfd093c434cc6298a129")
+    private fun translating() = ConfigClient.getBoolean("video_translate_enabled") ||
+        ConfigClient.getBoolean("comment_translate_enabled")
+
+    fun install(module: XposedModule, loader: ClassLoader, owner: String) {
+        check(identities.any(HostSymbols::matchesCodeIdentity)) { "字幕扩展尚未适配此宿主代码集合" }
+        val language = loader.loadClass("X.08ZO")
+        val target = language.getDeclaredMethod("LIZLLL")
+        check(target.returnType == String::class.java)
+        module.trackHook(owner, target).intercept { chain ->
+            val original = chain.proceed()
+            if (translating()) "zh-Hans" else original
+        }
+        val excluded = language.getDeclaredMethod("LIZJ")
+        check(excluded.returnType == Array<String>::class.java)
+        module.trackHook(owner, excluded).intercept { chain ->
+            val original = chain.proceed() as? Array<*>
+            if (translating()) original?.filterIsInstance<String>()?.let(SubtitlePolicy::includeEnglish) else original
+        }
+        val translator = try {
+            val serviceTarget = loader.loadClass("X.03hV").getDeclaredMethod("LLILLIZIL")
+            check(serviceTarget.returnType == String::class.java)
+            val connected = NativeSubtitleTranslator.connect(loader)
+            module.trackHook(owner, serviceTarget).intercept { chain ->
+                val original = chain.proceed()
+                if (translating()) "zh-Hans" else original
+            }
+            HookRuntime.event("NativeSubtitleTranslation", "native text service ready; target=zh-Hans")
+            connected
+        } catch (error: Exception) {
+            HookRuntime.event("NativeSubtitleTranslation", "unavailable contract=${error.javaClass.simpleName}; original retained")
+            null
+        } catch (error: LinkageError) {
+            HookRuntime.event("NativeSubtitleTranslation", "unavailable contract=${error.javaClass.simpleName}; original retained")
+            null
+        }
+        val renderer = loader.loadClass("X.0B1g")
+        if (translator != null) try {
+            val upcoming = FeedCaptionLookAhead(loader)
+            upcoming.install(module, owner)
+            translator.upcomingTracks = upcoming::next
+        } catch (error: Exception) {
+            HookRuntime.event("CaptionPrefetch", "next-video contract unavailable=${error.javaClass.simpleName}")
+        }
+        val rootField = renderer.getDeclaredField("LIZJ").apply { isAccessible = true }
+        val videoField = renderer.getDeclaredField("LJI").apply { isAccessible = true }
+        val display = renderer.getDeclaredMethod("LJIIIZ", String::class.java, loader.loadClass("X.0B17"),
+            String::class.java, loader.loadClass("X.0B18"))
+        val bindings = WeakHashMap<View, WeakReference<SubtitleOverlay>>()
+        try { SubtitleMenu.install(module, loader, owner) }
+        catch (error: Exception) { HookRuntime.event("SubtitleMenu", "unavailable=${error.javaClass.simpleName}") }
+        val gestures = WeakHashMap<android.app.Activity, SubtitleGesture>()
+        val activity = loader.loadClass("com.ss.android.ugc.aweme.splash.SplashActivity")
+        module.trackHook(owner, android.app.Activity::class.java.getDeclaredMethod("onPause")).intercept { chain ->
+            gestures.remove(chain.thisObject)?.close()
+            chain.proceed()
+        }
+        module.trackHook(owner, activity.getMethod("dispatchTouchEvent", android.view.MotionEvent::class.java)).intercept { chain ->
+            val screen = chain.thisObject as android.app.Activity
+            val event = chain.args[0] as android.view.MotionEvent
+            val gesture = gestures.getOrPut(screen) { SubtitleGesture(screen) }
+            if (gesture.touch(event) { x, y -> bindings.values.firstNotNullOfOrNull { ref ->
+                    ref.get()?.takeIf { it.hit(screen, x, y) }
+                } }) true else chain.proceed()
+        }
+        var unknownRootReported = false
+        // 原生清屏期间 bs 会因 onBlockUIUpdate 提前返回，渲染器收不到新帧。
+        // 直接旁听 VM 已送达的字幕帧，不解除宿主的全局阻塞或改写播放器生命周期。
+        val captionAssem = loader.loadClass("com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2")
+        val captionFrame = loader.loadClass("X.0B14")
+        val rendererField = captionAssem.getDeclaredField("LLLLLILLIL").apply { isAccessible = true }
+        val frameText = captionFrame.getDeclaredField("LIZ").apply { isAccessible = true }
+        val frameState = captionFrame.getDeclaredField("LIZIZ").apply { isAccessible = true }
+        val viewModel = captionAssem.getDeclaredMethod("Sr")
+        val videoKey = loader.loadClass("X.0B1s").getDeclaredMethod("LIZ", loader.loadClass("X.08vj"))
+        check(videoKey.parameterTypes.single().isAssignableFrom(viewModel.returnType))
+        module.trackHook(owner, captionAssem.getDeclaredMethod("bs", captionFrame)).intercept { chain ->
+            val instance = checkNotNull(chain.thisObject)
+            val previousRoot = rendererField.get(instance)?.let { rootField.get(it) as View }
+            val previousBinding = previousRoot?.let { bindings[it]?.get() }
+            val previousRevision = previousBinding?.frameRevision
+            val result = chain.proceed()
+            rendererField.get(instance)?.let { nativeRenderer ->
+                val root = rootField.get(nativeRenderer) as View
+                if (root.id == 2131366789) {
+                    val updated = bindings[root]?.get()
+                    // 原生渲染已送帧时不重复以 VM 原始内容覆盖；仅补足清屏阻塞的路径。
+                    if (updated != null && (updated !== previousBinding || updated.frameRevision != previousRevision))
+                        return@intercept result
+                    val binding = bindings[root]?.get() ?: SubtitleOverlay(root, translator).also {
+                        bindings[root] = WeakReference(it)
+                    }
+                    val frame = checkNotNull(chain.args[0])
+                    binding.update((frameState.get(frame) as? Enum<*>)?.name ?: "UNKNOWN",
+                        frameText.get(frame) as? String ?: "",
+                        videoKey.invoke(null, viewModel.invoke(instance)) as? String ?: "")
+                }
+            }
+            result
+        }
+        // SUB-RENDER / SUB-STATE：宿主送达的字幕保持原文，译文仅替换独立显示层。
+        module.trackHook(owner, display).intercept { chain ->
+            val result = chain.proceed()
+            val root = rootField.get(chain.thisObject) as View
+            if (root.id != 2131366789) {
+                if (!unknownRootReported) {
+                    unknownRootReported = true
+                    HookRuntime.event("SubtitleOverlay", "未核验字幕容器 id=${root.id}，保留原生显示")
+                }
+                return@intercept result
+            }
+            val binding = bindings[root]?.get() ?: SubtitleOverlay(root, translator).also {
+                bindings[root] = WeakReference(it)
+            }
+            binding.update((chain.args[1] as? Enum<*>)?.name ?: "UNKNOWN", chain.args[2] as? String ?: "",
+                videoField.get(chain.thisObject) as? String ?: "")
+            result
+        }
+        HookRuntime.onDispose(owner) {
+            gestures.values.forEach { it.close() }
+            gestures.clear()
+            bindings.values.toList().forEach { it.get()?.close() }
+            bindings.clear()
+            translator?.close()
+        }
+        HookRuntime.subscribe(owner) { snapshot ->
+            if (snapshot == null || !snapshot.boolean("video_translate_enabled") || !snapshot.boolean("subtitle_style_enabled"))
+                translator?.cancel()
+        }
+        HookRuntime.detail(owner, "字幕扩展：原生轨优先 / 原生文字翻译${if (translator == null) "不可用" else "已就绪"} / 独立绘制层")
+    }
+}

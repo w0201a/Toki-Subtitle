@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Start"</string>
+    <string name="nav_features" formatted="false">"Functies"</string>
+    <string name="page_features" formatted="false">"Instellingen"</string>
+    <string name="page_hook_status" formatted="false">"Functiestatus"</string>
+    <string name="nav_back" formatted="false">"Terug"</string>
+    <string name="restart_tiktok" formatted="false">"TikTok opnieuw starten"</string>
+    <string name="restart_root_required" formatted="false">"Geef Toki roottoegang."</string>
+    <string name="language_title" formatted="false">"App-taal"</string>
+    <string name="language_system" formatted="false">"Systeemtaal volgen"</string>
+    <string name="language_search" formatted="false">"Talen zoeken"</string>
+    <string name="language_clear_search" formatted="false">"Zoekopdracht wissen"</string>
+    <string name="language_no_results" formatted="false">"Geen overeenkomende talen"</string>
+    <string name="common_save" formatted="false">"Opslaan"</string>
+    <string name="common_cancel" formatted="false">"Annuleren"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Sluiten"</string>
+    <string name="common_open" formatted="false">"Openen"</string>
+    <string name="common_copy" formatted="false">"Kopiëren"</string>
+    <string name="common_add" formatted="false">"Toevoegen"</string>
+    <string name="common_delete" formatted="false">"Verwijderen"</string>
+    <string name="common_done" formatted="false">"Gereed"</string>
+    <string name="common_save_apply" formatted="false">"Toepassen"</string>
+    <string name="common_unknown" formatted="false">"Onbekend"</string>
+    <string name="common_custom" formatted="false">"Aangepast"</string>
+    <string name="home_icon_hidden" formatted="false">"App-pictogram verborgen"</string>
+    <string name="home_icon_restored" formatted="false">"App-pictogram hersteld"</string>
+    <string name="home_activated" formatted="false">"Geactiveerd"</string>
+    <string name="home_inactive" formatted="false">"Niet geactiveerd"</string>
+    <string name="home_activation_missing" formatted="false">"Geen activering gevonden in LSPosed"</string>
+    <string name="home_host_section" formatted="false">"TikTok-compatibiliteit"</string>
+    <string name="home_host_current" formatted="false">"Geïnstalleerde TikTok"</string>
+    <string name="home_host_missing" formatted="false">"Geen ondersteunde TikTok-installatie gevonden op dit apparaat"</string>
+    <string name="home_host_not_installed" formatted="false">"Niet geïnstalleerd"</string>
+    <string name="home_supported_versions" formatted="false">"Ondersteunde versies"</string>
+    <string name="home_community" formatted="false">"Open source en community"</string>
+    <string name="home_github" formatted="false">"GitHub-repository"</string>
+    <string name="home_telegram" formatted="false">"Telegram-groep"</string>
+    <string name="home_preferences" formatted="false">"Modulevoorkeuren"</string>
+    <string name="home_hide_icon" formatted="false">"App-pictogram verbergen"</string>
+    <string name="home_hide_icon_summary" formatted="false">"Open Toki via LSPosed Manager wanneer het pictogram verborgen is"</string>
+    <string name="home_support" formatted="false">"Ontwikkeling steunen"</string>
+    <string name="home_support_summary" formatted="false">"Steun doorlopend onderhoud en verbeteringen"</string>
+    <string name="feature_region_section" formatted="false">"Regio en apparaat"</string>
+    <string name="feature_playback_section" formatted="false">"Afspelen"</string>
+    <string name="feature_progress" formatted="false">"Voortgangsbalk altijd tonen"</string>
+    <string name="feature_progress_summary" formatted="false">"Houd de voortgangsbalk zichtbaar, ook bij korte video\'s"</string>
+    <string name="feature_immersive" formatted="false">"Videoweergave"</string>
+    <string name="feature_autoplay" formatted="false">"Uitgebreid automatisch scrollen"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Ontgrendel automatisch scrollen in elk videomenu"</string>
+    <string name="feature_status_bar" formatted="false">"Systeemstatusbalk verbergen"</string>
+    <string name="feature_media_section" formatted="false">"Downloads en acties"</string>
+    <string name="feature_download" formatted="false">"Downloads zonder watermerk"</string>
+    <string name="feature_download_summary" formatted="false">"Sla de originele video zonder watermerk op via het menu na lang indrukken of het deelmenu"</string>
+    <string name="feature_music" formatted="false">"Audio vrijgeven"</string>
+    <string name="feature_music_summary" formatted="false">"Herstel audio die door licentie- of regiobeperkingen is geblokkeerd"</string>
+    <string name="feature_author_region" formatted="false">"Regio van maker tonen"</string>
+    <string name="feature_author_region_summary" formatted="false">"Toon de vlag en code van het land of de regio naast de naam van de maker"</string>
+    <string name="feature_copy_comment" formatted="false">"Alleen tekst kopiëren"</string>
+    <string name="feature_video_translation" formatted="false">"Menu voor ondertiteling en vertaling"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Toon de optie in het menu bij lang indrukken"</string>
+    <string name="feature_comment_translation" formatted="false">"Reacties vertalen"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Voeg een knop toe om anderstalige reacties tegelijk te vertalen"</string>
+    <string name="feature_filter_section" formatted="false">"Feedfiltering"</string>
+    <string name="feature_remove_ads" formatted="false">"Feedadvertenties verwijderen"</string>
+    <string name="feature_remove_live" formatted="false">"Livestreams verbergen"</string>
+    <string name="feature_remove_photos" formatted="false">"Fotoberichten verbergen"</string>
+    <string name="feature_filter_views" formatted="false">"Filter op weergaven"</string>
+    <string name="feature_filter_likes" formatted="false">"Filter op vind-ik-leuks"</string>
+    <string name="feature_filter_duration" formatted="false">"Filter op videoduur"</string>
+    <string name="feature_filter_keywords" formatted="false">"Trefwoordfilter"</string>
+    <string name="feature_block_offline" formatted="false">"Offline video\'s blokkeren"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Voorkom dat vooraf geladen offline video\'s bij een slechte verbinding worden ingevoegd"</string>
+    <string name="feature_remove_ai" formatted="false">"AI-gegenereerde video\'s verbergen"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Filter video\'s die TikTok als AI-gegenereerd markeert"</string>
+    <string name="filter_metric_views" formatted="false">"weergaven"</string>
+    <string name="filter_metric_likes" formatted="false">"vind-ik-leuks"</string>
+    <string name="filter_metric_duration" formatted="false">"duur"</string>
+    <string name="filter_unit_seconds" formatted="false">"s"</string>
+    <string name="filter_views_saved" formatted="false">"Weergavebereik opgeslagen"</string>
+    <string name="filter_likes_saved" formatted="false">"Vind-ik-leukbereik opgeslagen"</string>
+    <string name="filter_duration_saved" formatted="false">"Videoduurbereik opgeslagen"</string>
+    <string name="download_path_saved" formatted="false">"Aangepaste opslagpaden bijgewerkt"</string>
+    <string name="region_spoof_title" formatted="false">"Regio en SIM simuleren"</string>
+    <string name="region_current" formatted="false">"Huidige configuratie"</string>
+    <string name="region_target" formatted="true">"Doelregio: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Provider: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Providercode: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Voorinstellingen"</string>
+    <string name="region_custom_parameters" formatted="false">"Aanpassen"</string>
+    <string name="language_spoof" formatted="false">"Taal simuleren"</string>
+    <string name="environment_follow_region" formatted="false">"Volgens regio"</string>
+    <string name="language_effective" formatted="true">"Actieve taal: %1$s"</string>
+    <string name="language_custom" formatted="false">"Aangepaste taal"</string>
+    <string name="timezone_spoof" formatted="false">"Tijdzone simuleren"</string>
+    <string name="timezone_effective" formatted="true">"Actieve tijdzone: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Aangepaste tijdzone"</string>
+    <string name="gps_spoof" formatted="false">"Locatie simuleren"</string>
+    <string name="gps_effective" formatted="true">"Actieve coördinaten: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Aangepaste coördinaten"</string>
+    <string name="speed_fixed" formatted="false">"Afspeelsnelheid behouden"</string>
+    <string name="speed_fixed_summary" formatted="false">"Behoud de snelheid uit het menu na lang indrukken wanneer je van video wisselt"</string>
+    <string name="speed_expand" formatted="false">"Meer snelheden"</string>
+    <string name="speed_options_hint" formatted="false">"Snelheden (tik om te wijzigen of verwijderen)"</string>
+    <string name="speed_add_option" formatted="false">"+ Snelheid toevoegen"</string>
+    <string name="speed_restore" formatted="false">"Herstellen"</string>
+    <string name="clean_on_play" formatted="false">"Bediening verbergen bij afspelen"</string>
+    <string name="clean_keep_progress" formatted="false">"Voortgangsbalk behouden"</string>
+    <string name="download_paths" formatted="false">"Opslagmappen"</string>
+    <string name="download_paths_summary" formatted="true">"Video\'s: %1$s · Afbeeldingen: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Behoud video\'s met %1$s van %2$d%4$s tot %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Behoud video\'s met %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Behoud video\'s met %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Geen bereik ingesteld (tik om minimum of maximum in te stellen)"</string>
+    <string name="keyword_unset" formatted="false">"Tik om regels toe te voegen"</string>
+    <string name="keyword_summary" formatted="true">"Ingeschakeld: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Teksten %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Hashtags %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Makers %1$d"</string>
+    <string name="keyword_description" formatted="false">"Teksten"</string>
+    <string name="keyword_tag" formatted="false">"Hashtags"</string>
+    <string name="keyword_author" formatted="false">"Makers"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Geen regels voor %1$s. Voeg er hierboven een toe."</string>
+    <string name="duration_alert_title" formatted="false">"Waarschuwing voor lange video\'s"</string>
+    <string name="duration_alert_summary" formatted="true">"Huidige drempel: ≥ %1$s minuten"</string>
+    <string name="download_video_path" formatted="false">"Videomap"</string>
+    <string name="download_image_path" formatted="false">"Afbeeldingsmap"</string>
+    <string name="download_path_hint" formatted="false">"De eerste map moet een openbare mediamap zijn, zoals Movies, Pictures of DCIM. Ongeldige paden gebruiken de systeemstandaard."</string>
+    <string name="views_range_title" formatted="false">"Bereik van weergaven"</string>
+    <string name="views_range_min" formatted="false">"Minimumweergaven (0 = geen limiet)"</string>
+    <string name="views_range_max" formatted="false">"Maximumweergaven (0 = geen limiet)"</string>
+    <string name="views_range_hint" formatted="false">"Behoud alleen video\'s binnen dit weergavebereik. Met beide limieten op 0 wordt niets verwijderd."</string>
+    <string name="likes_range_title" formatted="false">"Bereik van vind-ik-leuks"</string>
+    <string name="likes_range_min" formatted="false">"Minimum vind-ik-leuks (0 = geen limiet)"</string>
+    <string name="likes_range_max" formatted="false">"Maximum vind-ik-leuks (0 = geen limiet)"</string>
+    <string name="likes_range_hint" formatted="false">"Behoud alleen video\'s binnen dit vind-ik-leukbereik. Met beide limieten op 0 wordt niets verwijderd."</string>
+    <string name="duration_range_title" formatted="false">"Videoduurbereik"</string>
+    <string name="duration_range_min" formatted="false">"Minimumduur (seconden; 0 = geen limiet)"</string>
+    <string name="duration_range_max" formatted="false">"Maximumduur (seconden; 0 = geen limiet)"</string>
+    <string name="duration_range_hint" formatted="false">"Behoud alleen aanbevolen video\'s binnen dit duurbereik. Met beide limieten op 0 wordt niets verwijderd. Fotoberichten worden niet beïnvloed."</string>
+    <string name="keyword_manage" formatted="false">"Filterregels"</string>
+    <string name="keyword_description_hint" formatted="false">"Zoek in videoteksten en beschrijvingen, zonder onderscheid tussen hoofdletters en kleine letters."</string>
+    <string name="keyword_tag_hint" formatted="false">"Zoek naar hashtags. Laat het voorvoegsel # weg."</string>
+    <string name="keyword_author_hint" formatted="false">"Zoek naar namen van makers en unieke gebruikersnamen. Laat het voorvoegsel @ weg."</string>
+    <string name="keyword_description_input" formatted="false">"Trefwoord in tekst"</string>
+    <string name="keyword_tag_input" formatted="false">"Hashtag"</string>
+    <string name="keyword_author_input" formatted="false">"Naam of gebruikersnaam"</string>
+    <string name="keyword_add" formatted="false">"Regel toevoegen"</string>
+    <string name="keyword_delete" formatted="false">"Regel verwijderen"</string>
+    <string name="region_select_title" formatted="false">"Regio kiezen"</string>
+    <string name="region_search" formatted="false">"Landnaam of landcode"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Providercode: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Aangepaste regio en SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Stel landcode en provider in zonder beperkingen van voorinstellingen."</string>
+    <string name="region_code_input" formatted="false">"Land- of regiocode (JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Providercode (44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Providernaam (NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Kies een gangbare taal of voer een taalcode in."</string>
+    <string name="language_code_input" formatted="false">"Taalcode (ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Talen"</string>
+    <string name="timezone_custom_hint" formatted="false">"Kies een gangbare stadstijdzone of voer een tijdzonenaam in."</string>
+    <string name="timezone_input" formatted="false">"Tijdzonenaam (Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Steden"</string>
+    <string name="city_tokyo" formatted="false">"Tokio"</string>
+    <string name="city_taipei" formatted="false">"Taipei"</string>
+    <string name="city_hong_kong" formatted="false">"Hongkong"</string>
+    <string name="city_new_york" formatted="false">"New York"</string>
+    <string name="city_london" formatted="false">"Londen"</string>
+    <string name="city_seoul" formatted="false">"Seoel"</string>
+    <string name="city_bangkok" formatted="false">"Bangkok"</string>
+    <string name="city_singapore" formatted="false">"Singapore"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Aangepaste locatie"</string>
+    <string name="gps_custom_hint" formatted="false">"Kies een gangbare stad of voer breedte- en lengtegraad in."</string>
+    <string name="gps_latitude" formatted="false">"Breedtegraad (-90.0 tot 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Lengtegraad (-180.0 tot 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Steden"</string>
+    <string name="speed_add_title" formatted="false">"Snelheid toevoegen"</string>
+    <string name="speed_input" formatted="false">"Snelheid"</string>
+    <string name="speed_invalid" formatted="false">"Voer een geldig getal in"</string>
+    <string name="speed_out_of_range" formatted="true">"Alleen %1$sx tot %2$sx wordt ondersteund"</string>
+    <string name="speed_range" formatted="true">"Ondersteund bereik: %1$sx tot %2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Snelheid wijzigen"</string>
+    <string name="duration_threshold_title" formatted="false">"Melding bij lange video\'s"</string>
+    <string name="duration_threshold_hint" formatted="false">"Wanneer een video deze duur bereikt, verschijnt bij het afspelen een kort bericht met de duur in minuten."</string>
+    <string name="duration_threshold_input" formatted="false">"Duurlimiet (minuten)"</string>
+    <string name="duration_threshold_example" formatted="false">"Bijvoorbeeld: 3 of 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Voer een geldig aantal minuten groter dan 0 in"</string>
+    <string name="duration_threshold_current" formatted="true">"Huidige instelling: waarschuwing voor video\'s ≥ %1$s minuten"</string>
+    <string name="duration_threshold_presets" formatted="false">"Voorgestelde duur:"</string>
+    <string name="status_feature_feed" formatted="false">"Feedfilter"</string>
+    <string name="status_feature_speed" formatted="false">"Snelheid"</string>
+    <string name="status_feature_progress" formatted="false">"Voortgangsbalk"</string>
+    <string name="status_feature_clean" formatted="false">"Automatisch verbergen"</string>
+    <string name="status_feature_immersive" formatted="false">"Videoweergave"</string>
+    <string name="status_feature_scroll" formatted="false">"Automatisch scrollen"</string>
+    <string name="status_feature_duration" formatted="false">"Duurmelding"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Reacties vertalen"</string>
+    <string name="status_feature_video_translate" formatted="false">"Menu voor ondertiteling en vertaling"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Reacties kopiëren"</string>
+    <string name="status_feature_author" formatted="false">"Regio van maker"</string>
+    <string name="status_feature_download" formatted="false">"Video\'s opslaan"</string>
+    <string name="status_feature_music" formatted="false">"Audiobeperkingen"</string>
+    <string name="status_feature_sim" formatted="false">"Regio en SIM"</string>
+    <string name="status_feature_language" formatted="false">"Taal"</string>
+    <string name="status_feature_timezone" formatted="false">"Tijdzone"</string>
+    <string name="status_feature_gps" formatted="false">"Locatie"</string>
+    <string name="status_feature_bar" formatted="false">"Statusbalk"</string>
+    <string name="status_normal" formatted="false">"Werkt"</string>
+    <string name="status_issue" formatted="false">"Probleem"</string>
+    <string name="status_disabled" formatted="false">"Uit"</string>
+    <string name="status_pending" formatted="false">"In afwachting"</string>
+    <string name="status_problem_disabled" formatted="false">"Uit, met geregistreerde fout"</string>
+    <string name="status_problem_unavailable" formatted="false">"Tijdelijk niet beschikbaar"</string>
+    <string name="status_problem_runtime" formatted="false">"Fout tijdens gebruik"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Snelheidsmenu niet beschikbaar"</string>
+    <string name="status_prepare_failed" formatted="false">"Voorbereiden van functies mislukt. Open TikTok opnieuw en controleer."</string>
+    <string name="status_preparing" formatted="false">"Functies voorbereiden. Even geduld."</string>
+    <string name="status_prepared" formatted="false">"Voorbereiding voltooid. Open TikTok opnieuw."</string>
+    <string name="status_read_failed" formatted="false">"Status momenteel niet leesbaar. Controleer later opnieuw."</string>
+    <string name="status_update_failed" formatted="false">"Status momenteel niet bij te werken. Het laatste resultaat wordt getoond."</string>
+    <string name="status_reading" formatted="false">"Status lezen"</string>
+    <string name="status_empty" formatted="false">"Geen activiteit geregistreerd. Schakel Toki in LSPosed in, open TikTok en controleer opnieuw."</string>
+    <string name="status_report_note" formatted="true">"Laatste rapport: %1$s\n“Werkt” betekent dat de functie klaar is en geen fouten heeft gemeld."</string>
+    <string name="config_section" formatted="false">"Configuratie"</string>
+    <string name="config_import" formatted="false">"Instellingen importeren"</string>
+    <string name="config_import_summary" formatted="false">"Functie-instellingen herstellen uit een bestand"</string>
+    <string name="config_export" formatted="false">"Instellingen exporteren"</string>
+    <string name="config_export_summary" formatted="false">"Functie-instellingen opslaan in een bestand"</string>
+    <string name="config_exported" formatted="false">"Configuratie geëxporteerd naar de gekozen locatie. Het bestand kan trefwoorden, regio\'s en mapinstellingen bevatten. Bewaar het veilig."</string>
+    <string name="config_import_confirm" formatted="true">"Het bestand bevat %1$d instellingen. Importeren vervangt alle functie-instellingen; ontbrekende instellingen krijgen hun standaardwaarde.\n\nApp-taal, app-pictogram, LSPosed-toestemming en TikTok-compatibiliteitscache blijven ongewijzigd. Doorgaan?"</string>
+    <string name="config_overwrite" formatted="false">"Vervangen"</string>
+    <string name="config_imported" formatted="false">"Configuratie geïmporteerd en instellingen bijgewerkt. Wijzigingen die direct kunnen worden toegepast werken meteen. Open TikTok opnieuw om de overige wijzigingen te controleren."</string>
+    <string name="config_processing" formatted="false">"Verwerken…"</string>
+    <string name="config_error_io" formatted="false">"Kan het bestand niet lezen of schrijven. Controleer de gekozen locatie en beschikbare ruimte."</string>
+    <string name="config_error_permission" formatted="false">"Geen toegang tot het gekozen bestand. Selecteer het opnieuw."</string>
+    <string name="config_error_invalid" formatted="false">"Dit is geen geldig Toki-configuratiebestand. Er zijn geen instellingen geïmporteerd."</string>
+    <string name="config_error_validation" formatted="true">"Configuratiecontrole mislukt: %1$s. Er zijn geen instellingen geïmporteerd."</string>
+    <string name="config_error_commit" formatted="false">"Opslaan van de configuratie kon niet worden bevestigd. Open Toki opnieuw en controleer voordat je het opnieuw probeert."</string>
+    <string name="sponsor_title" formatted="false">"Ontwikkelaar steunen"</string>
+    <string name="sponsor_kofi" formatted="false">"Steunen via Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"Alipay-betaalcode"</string>
+    <string name="sponsor_saving" formatted="false">"Opslaan…"</string>
+    <string name="sponsor_save_image" formatted="false">"Afbeelding opslaan"</string>
+    <string name="sponsor_image_hint" formatted="false">"Sla de volledige originele afbeelding op en selecteer deze in Alipay om de code te scannen."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT-adres gekopieerd"</string>
+    <string name="sponsor_image_saved" formatted="false">"Afbeelding opgeslagen op de gekozen locatie"</string>
+    <string name="sponsor_error_io" formatted="false">"Opslaan mislukt. Controleer de gekozen locatie en beschikbare ruimte en probeer opnieuw."</string>
+    <string name="sponsor_error_permission" formatted="false">"Opslaan mislukt. Geen schrijfrechten voor deze locatie. Kies een andere locatie."</string>
+    <string name="feature_filter_topics" formatted="false">"Onderwerpsuggesties verbergen"</string>
+    <string name="feature_filter_creators" formatted="false">"Voorgestelde makers verbergen"</string>
+    <string name="host_scan_title_complete" formatted="false">"Zoeken voltooid"</string>
+    <string name="host_scan_title_failed" formatted="false">"Zoeken mislukt"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Start TikTok handmatig opnieuw om de resultaten toe te passen."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Bekijk de functiediagnose in Toki."</string>
+    <string name="layout_title" formatted="false">"Pagina-indeling"</string>
+    <string name="layout_summary" formatted="false">"Kies welke knoppen je wilt verbergen"</string>
+    <string name="layout_hint" formatted="false">"Zet de schakelaar aan om het item te verbergen"</string>
+    <string name="layout_top" formatted="false">"Bovenbalk"</string>
+    <string name="layout_bottom" formatted="false">"Onderbalk"</string>
+    <string name="layout_side" formatted="false">"Videopagina"</string>
+    <string name="layout_search" formatted="false">"Zoeken"</string>
+    <string name="layout_live" formatted="false">"LIVE"</string>
+    <string name="layout_friends" formatted="false">"Vrienden"</string>
+    <string name="layout_following" formatted="false">"Volgend"</string>
+    <string name="layout_shop" formatted="false">"Winkel"</string>
+    <string name="layout_for_you" formatted="false">"Voor jou"</string>
+    <string name="layout_nearby" formatted="false">"In de buurt"</string>
+    <string name="layout_stem" formatted="false">"Wetenschap"</string>
+    <string name="layout_series" formatted="false">"Series"</string>
+    <string name="layout_home" formatted="false">"Home"</string>
+    <string name="layout_create" formatted="false">"Maken"</string>
+    <string name="layout_inbox" formatted="false">"Inbox"</string>
+    <string name="layout_profile" formatted="false">"Profiel"</string>
+    <string name="layout_discover" formatted="false">"Ontdekken"</string>
+    <string name="layout_avatar" formatted="false">"Profielfoto"</string>
+    <string name="layout_follow" formatted="false">"Volgknop"</string>
+    <string name="layout_like" formatted="false">"Vind ik leuk"</string>
+    <string name="layout_comment" formatted="false">"Reacties"</string>
+    <string name="layout_favorite" formatted="false">"Favorieten"</string>
+    <string name="layout_share" formatted="false">"Delen"</string>
+    <string name="layout_music" formatted="false">"Muziekplaat"</string>
+    <string name="layout_explore" formatted="false">"Verkennen"</string>
+    <string name="layout_author" formatted="false">"Auteursinfo"</string>
+    <string name="layout_description" formatted="false">"Beschrijving"</string>
+    <string name="layout_music_title" formatted="false">"Muziektitel"</string>
+    <string name="layout_tags" formatted="false">"Informatielabels"</string>
+    <string name="layout_search_label" formatted="false">"Zoeksuggestie"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Stopknop voor automatisch scrollen"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Munten en beloningen"</string>
+    <string name="layout_quick_comment" formatted="false">"Snelle reacties"</string>
+    <string name="layout_playlist" formatted="false">"Afspeellijst"</string>
+    <string name="layout_creation_buttons" formatted="false">"Snelkoppelingen voor maken"</string>
+    <string name="layout_live_notice" formatted="false">"LIVE-herinneringen"</string>
+    <string name="layout_opacity" formatted="false">"Dekking"</string>
+    <string name="feature_background_audio">"Achtergrondaudio ontgrendelen"</string>
+    <string name="layout_landscape">"Knop voor volledig scherm"</string>
+    <string name="layout_photo_indicators">"Foto-indicatoren en tips"</string>
+    <string name="layout_quick_message">"Snelle berichten en gedeeld door"</string>
+    <string name="layout_user_card">"Voorgestelde accounts"</string>
+    <string name="layout_survey">"Enquêtes en feedback"</string>
+    <string name="layout_ad_cards">"Product- en advertentiekaarten"</string>
+    <string name="layout_bottom_banners">"Overige onderste banners"</string>
+    <string name="layout_activities">"Toegang tot evenementen"</string>
+    <string name="host_scan_title_running" formatted="false">"Methoden zoeken"</string>
+    <string name="host_scan_title_saving" formatted="false">"Resultaten opslaan"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Houd TikTok op de voorgrond."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Even geduld."</string>
+    <string name="host_scan_done" formatted="false">"Begrepen"</string>
+    <string name="video_fit_center" formatted="false">"Gecentreerd"</string>
+    <string name="video_fit_smart" formatted="false">"Volledig scherm"</string>
+</resources>

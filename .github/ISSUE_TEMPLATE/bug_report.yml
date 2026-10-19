@@ -1,0 +1,51 @@
+name: Bug report / 错误报告
+description: Report a reproducible failure / 反馈可复现的问题
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Adapted TikTok versions: 47.0.3 and 46.8.3. Store variants can differ.
+        已适配 TikTok 47.0.3、46.8.3；请注明下载渠道。请勿上传 APK、账号信息或未经处理的私人日志。
+  - type: checkboxes
+    id: prerequisites
+    attributes:
+      label: Before submitting / 提交前确认
+      options:
+        - label: I checked existing issues and use the latest Toki release. / 已检查现有问题并使用最新 Toki。
+          required: true
+        - label: Only one Toki module is enabled in LSPosed. / LSPosed 中只启用了一个 Toki 模块。
+          required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Versions and device / 版本与设备
+      description: Toki, TikTok, download source, Android, device and LSPosed version / 请列出这些信息。
+      placeholder: Toki 1.0.0; TikTok 47.0.3 (Google Play); Android; device; LSPosed API 102
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps and relevant settings / 复现步骤与相关设置
+      description: Include whether method discovery completed and whether the failure occurs after a cold start. / 请说明方法查找是否完成、冷启动是否复现。
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: Expected and actual behavior / 预期与实际结果
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Diagnostics / 诊断信息
+      description: Relevant Toki feature status and LSPosed logs; remove personal data before sharing. / 提供相关功能状态与 LSPosed 日志，先移除个人信息。
+      render: text
+  - type: textarea
+    id: media
+    attributes:
+      label: Screenshots or recordings / 截图或录屏
+      description: Hide account names, private messages and other personal information. / 请遮挡账号、私信等个人信息。

@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="nav_home" formatted="false">"Начало"</string>
+    <string name="nav_features" formatted="false">"Функции"</string>
+    <string name="page_features" formatted="false">"Настройки"</string>
+    <string name="page_hook_status" formatted="false">"Състояние на функциите"</string>
+    <string name="nav_back" formatted="false">"Назад"</string>
+    <string name="restart_tiktok" formatted="false">"Рестартиране на TikTok"</string>
+    <string name="restart_root_required" formatted="false">"Предоставете root достъп на Toki"</string>
+    <string name="language_title" formatted="false">"Език на интерфейса"</string>
+    <string name="language_system" formatted="false">"Като в системата"</string>
+    <string name="language_search" formatted="false">"Търсене на език"</string>
+    <string name="language_clear_search" formatted="false">"Изчистване на търсенето"</string>
+    <string name="language_no_results" formatted="false">"Няма съответстващи езици"</string>
+    <string name="common_save" formatted="false">"Запазване"</string>
+    <string name="common_cancel" formatted="false">"Отказ"</string>
+    <string name="common_confirm" formatted="false">"OK"</string>
+    <string name="common_close" formatted="false">"Затваряне"</string>
+    <string name="common_open" formatted="false">"Отваряне"</string>
+    <string name="common_copy" formatted="false">"Копиране"</string>
+    <string name="common_add" formatted="false">"Добавяне"</string>
+    <string name="common_delete" formatted="false">"Изтриване"</string>
+    <string name="common_done" formatted="false">"Готово"</string>
+    <string name="common_save_apply" formatted="false">"Прилагане"</string>
+    <string name="common_unknown" formatted="false">"Неизвестно"</string>
+    <string name="common_custom" formatted="false">"Персонализирано"</string>
+    <string name="home_icon_hidden" formatted="false">"Иконата е скрита"</string>
+    <string name="home_icon_restored" formatted="false">"Иконата е възстановена"</string>
+    <string name="home_activated" formatted="false">"Активиран"</string>
+    <string name="home_inactive" formatted="false">"Неактивен"</string>
+    <string name="home_activation_missing" formatted="false">"Не е открито активиране в LSPosed"</string>
+    <string name="home_host_section" formatted="false">"Съвместимост с TikTok"</string>
+    <string name="home_host_current" formatted="false">"Инсталиран TikTok"</string>
+    <string name="home_host_missing" formatted="false">"На устройството не е намерена поддържана версия на TikTok"</string>
+    <string name="home_host_not_installed" formatted="false">"Не е инсталиран"</string>
+    <string name="home_supported_versions" formatted="false">"Поддържани версии"</string>
+    <string name="home_community" formatted="false">"Общност"</string>
+    <string name="home_github" formatted="false">"Хранилище в GitHub"</string>
+    <string name="home_telegram" formatted="false">"Група в Telegram"</string>
+    <string name="home_preferences" formatted="false">"Предпочитания"</string>
+    <string name="home_hide_icon" formatted="false">"Скриване на иконата"</string>
+    <string name="home_hide_icon_summary" formatted="false">"След скриване Toki може да се отвори чрез мениджъра на LSPosed"</string>
+    <string name="home_support" formatted="false">"Подкрепа за разработката"</string>
+    <string name="home_support_summary" formatted="false">"Подкрепете поддръжката и подобряването на функциите"</string>
+    <string name="feature_region_section" formatted="false">"Подмяна на регион и среда"</string>
+    <string name="feature_playback_section" formatted="false">"Възпроизвеждане"</string>
+    <string name="feature_progress" formatted="false">"Винаги показвай лентата за напредък"</string>
+    <string name="feature_progress_summary" formatted="false">"Показва долната лента за напредък и при кратки видеа"</string>
+    <string name="feature_immersive" formatted="false">"Показване на видео"</string>
+    <string name="feature_autoplay" formatted="false">"Подобрено автопревъртане"</string>
+    <string name="feature_autoplay_summary" formatted="false">"Отключва автопревъртането в менюто на всяко видео"</string>
+    <string name="feature_status_bar" formatted="false">"Скриване на системната лента за състояние"</string>
+    <string name="feature_media_section" formatted="false">"Изтегляне и инструменти"</string>
+    <string name="feature_download" formatted="false">"Изтегляне без воден знак"</string>
+    <string name="feature_download_summary" formatted="false">"Запазвайте оригинала без воден знак чрез задържане или менюто за споделяне"</string>
+    <string name="feature_music" formatted="false">"Отключване на звука"</string>
+    <string name="feature_music_summary" formatted="false">"Възстановява звук, ограничен по авторски права или регион"</string>
+    <string name="feature_author_region" formatted="false">"Показване на региона на автора"</string>
+    <string name="feature_author_region_summary" formatted="false">"Показва флаг и код на държава или регион до името на автора"</string>
+    <string name="feature_copy_comment" formatted="false">"Копиране само на текста"</string>
+    <string name="feature_video_translation" formatted="false">"Меню за субтитри и превод"</string>
+    <string name="feature_video_translation_summary" formatted="false">"Показване на опцията в менюто при задържане"</string>
+    <string name="feature_comment_translation" formatted="false">"Превод на коментари"</string>
+    <string name="feature_comment_translation_summary" formatted="false">"Добавя бутон за групов превод на чуждоезични коментари"</string>
+    <string name="feature_filter_section" formatted="false">"Филтриране на емисията"</string>
+    <string name="feature_remove_ads" formatted="false">"Премахване на реклами от емисията"</string>
+    <string name="feature_remove_live" formatted="false">"Скриване на препоръчани излъчвания"</string>
+    <string name="feature_remove_photos" formatted="false">"Филтър за препоръчани снимки"</string>
+    <string name="feature_filter_views" formatted="false">"Филтър по гледания"</string>
+    <string name="feature_filter_likes" formatted="false">"Филтър по харесвания"</string>
+    <string name="feature_filter_duration" formatted="false">"Филтър по продължителност"</string>
+    <string name="feature_filter_keywords" formatted="false">"Филтър по ключови думи"</string>
+    <string name="feature_block_offline" formatted="false">"Блокиране на офлайн видеа"</string>
+    <string name="feature_block_offline_summary" formatted="false">"Предотвратява вмъкването на предварително заредени видеа при слаба връзка"</string>
+    <string name="feature_remove_ai" formatted="false">"Премахване на съдържание, създадено с ИИ"</string>
+    <string name="feature_remove_ai_summary" formatted="false">"Скрива видеа, означени от TikTok като създадени с ИИ"</string>
+    <string name="filter_metric_views" formatted="false">"гледания"</string>
+    <string name="filter_metric_likes" formatted="false">"харесвания"</string>
+    <string name="filter_metric_duration" formatted="false">"продължителност"</string>
+    <string name="filter_unit_seconds" formatted="false">"с"</string>
+    <string name="filter_views_saved" formatted="false">"Диапазонът на гледанията е запазен"</string>
+    <string name="filter_likes_saved" formatted="false">"Диапазонът на харесванията е запазен"</string>
+    <string name="filter_duration_saved" formatted="false">"Диапазонът на продължителността е запазен"</string>
+    <string name="download_path_saved" formatted="false">"Пътищата за запазване са обновени"</string>
+    <string name="region_spoof_title" formatted="false">"Подмяна на регион и SIM"</string>
+    <string name="region_current" formatted="false">"Текущи настройки"</string>
+    <string name="region_target" formatted="true">"Целеви регион: %1$s %2$s (%3$s)"</string>
+    <string name="region_operator" formatted="true">"Оператор: %1$s"</string>
+    <string name="region_operator_code" formatted="true">"Код на оператора: %1$s"</string>
+    <string name="region_select_preset" formatted="false">"Готови настройки"</string>
+    <string name="region_custom_parameters" formatted="false">"По избор"</string>
+    <string name="language_spoof" formatted="false">"Подмяна на езика"</string>
+    <string name="environment_follow_region" formatted="false">"Според региона"</string>
+    <string name="language_effective" formatted="true">"Действащ език: %1$s"</string>
+    <string name="language_custom" formatted="false">"Собствен език"</string>
+    <string name="timezone_spoof" formatted="false">"Подмяна на часовата зона"</string>
+    <string name="timezone_effective" formatted="true">"Действаща часова зона: %1$s"</string>
+    <string name="timezone_custom" formatted="false">"Собствена часова зона"</string>
+    <string name="gps_spoof" formatted="false">"Подмяна на местоположението"</string>
+    <string name="gps_effective" formatted="true">"Действащи координати: %1$s, %2$s"</string>
+    <string name="gps_custom" formatted="false">"Собствени координати"</string>
+    <string name="speed_fixed" formatted="false">"Запазване на скоростта"</string>
+    <string name="speed_fixed_summary" formatted="false">"Запазва избраната от менюто скорост при смяна на видеото"</string>
+    <string name="speed_expand" formatted="false">"Още скорости"</string>
+    <string name="speed_options_hint" formatted="false">"Скорости (докоснете за редактиране или изтриване)"</string>
+    <string name="speed_add_option" formatted="false">"+ Добавяне на скорост"</string>
+    <string name="speed_restore" formatted="false">"Нулиране"</string>
+    <string name="clean_on_play" formatted="false">"Скриване на контролите при пускане"</string>
+    <string name="clean_keep_progress" formatted="false">"Оставяне на лентата за напредък"</string>
+    <string name="download_paths" formatted="false">"Папки за запазване"</string>
+    <string name="download_paths_summary" formatted="true">"Видеа: %1$s · Изображения: %2$s"</string>
+    <string name="filter_range_both" formatted="true">"Запазвай видеа, където %1$s е от %2$d%4$s до %3$d%4$s"</string>
+    <string name="filter_range_min" formatted="true">"Запазвай видеа, където %1$s ≥ %2$d%3$s"</string>
+    <string name="filter_range_max" formatted="true">"Запазвай видеа, където %1$s ≤ %2$d%3$s"</string>
+    <string name="filter_range_unset" formatted="false">"Няма зададен диапазон (докоснете за долна/горна граница)"</string>
+    <string name="keyword_unset" formatted="false">"Няма правила (докоснете за управление на категориите)"</string>
+    <string name="keyword_summary" formatted="true">"Включено: %1$s"</string>
+    <string name="keyword_description_count" formatted="true">"Описания: %1$d"</string>
+    <string name="keyword_tag_count" formatted="true">"Хаштагове: %1$d"</string>
+    <string name="keyword_author_count" formatted="true">"Автори: %1$d"</string>
+    <string name="keyword_description" formatted="false">"Описания"</string>
+    <string name="keyword_tag" formatted="false">"Хаштагове"</string>
+    <string name="keyword_author" formatted="false">"Автори"</string>
+    <string name="keyword_category_count" formatted="true">"%1$s (%2$d)"</string>
+    <string name="keyword_empty" formatted="true">"Няма правила за „%1$s“. Добавете ги по-горе"</string>
+    <string name="duration_alert_title" formatted="false">"Известие за дълги видеа"</string>
+    <string name="duration_alert_summary" formatted="true">"Текущ праг: ≥ %1$s мин"</string>
+    <string name="download_video_path" formatted="false">"Папка за видеа"</string>
+    <string name="download_image_path" formatted="false">"Папка за изображения"</string>
+    <string name="download_path_hint" formatted="false">"Първата папка трябва да е обща медийна папка, например Movies, Pictures или DCIM. Невалидните пътища използват системната стойност"</string>
+    <string name="views_range_title" formatted="false">"Диапазон на гледанията"</string>
+    <string name="views_range_min" formatted="false">"Минимум гледания (0 = без ограничение)"</string>
+    <string name="views_range_max" formatted="false">"Максимум гледания (0 = без ограничение)"</string>
+    <string name="views_range_hint" formatted="false">"Запазва само видеата с гледания в диапазона. При две граници 0 нищо не се премахва"</string>
+    <string name="likes_range_title" formatted="false">"Диапазон на харесванията"</string>
+    <string name="likes_range_min" formatted="false">"Минимум харесвания (0 = без ограничение)"</string>
+    <string name="likes_range_max" formatted="false">"Максимум харесвания (0 = без ограничение)"</string>
+    <string name="likes_range_hint" formatted="false">"Запазва само видеата с харесвания в диапазона. При две граници 0 нищо не се премахва"</string>
+    <string name="duration_range_title" formatted="false">"Диапазон на продължителността"</string>
+    <string name="duration_range_min" formatted="false">"Минимална продължителност (секунди; 0 = без ограничение)"</string>
+    <string name="duration_range_max" formatted="false">"Максимална продължителност (секунди; 0 = без ограничение)"</string>
+    <string name="duration_range_hint" formatted="false">"Запазва препоръчаните видеа в диапазона. При две граници 0 нищо не се премахва. Фотопубликациите не се засягат"</string>
+    <string name="keyword_manage" formatted="false">"Правила на филтъра"</string>
+    <string name="keyword_description_hint" formatted="false">"Съпоставя текста и описанието на видеото без разлика между главни и малки букви."</string>
+    <string name="keyword_tag_hint" formatted="false">"Съпоставя хаштагове. Не въвеждайте знака #."</string>
+    <string name="keyword_author_hint" formatted="false">"Съпоставя името на автора и уникалното потребителско име. Не въвеждайте знака @."</string>
+    <string name="keyword_description_input" formatted="false">"Дума или фраза"</string>
+    <string name="keyword_tag_input" formatted="false">"Хаштаг"</string>
+    <string name="keyword_author_input" formatted="false">"Име или потребителско име"</string>
+    <string name="keyword_add" formatted="false">"Добавяне на правило"</string>
+    <string name="keyword_delete" formatted="false">"Изтриване на правило"</string>
+    <string name="region_select_title" formatted="false">"Избор на регион"</string>
+    <string name="region_search" formatted="false">"Търсене по име на държава, английско име или код"</string>
+    <string name="region_operator_details" formatted="true">"%1$s · Код на оператора: %2$s"</string>
+    <string name="region_custom_title" formatted="false">"Собствен регион и SIM"</string>
+    <string name="region_custom_hint" formatted="false">"Задайте код на държава и данни за оператор без ограничения от готовите настройки."</string>
+    <string name="region_code_input" formatted="false">"Код на държава или регион (напр. JP, US, TH)"</string>
+    <string name="region_operator_code_input" formatted="false">"Код на оператор (напр. 44010, 52001)"</string>
+    <string name="region_operator_name_input" formatted="false">"Име на оператор (напр. NTT DOCOMO, AIS)"</string>
+    <string name="language_custom_hint" formatted="false">"Изберете език или въведете неговия код."</string>
+    <string name="language_code_input" formatted="false">"Код на език (напр. ja-JP, en-US)"</string>
+    <string name="language_presets" formatted="false">"Често използвани езици:"</string>
+    <string name="timezone_custom_hint" formatted="false">"Изберете часовата зона на град или въведете име на зона."</string>
+    <string name="timezone_input" formatted="false">"Часова зона (напр. Asia/Tokyo)"</string>
+    <string name="timezone_presets" formatted="false">"Часови зони на градове:"</string>
+    <string name="city_tokyo" formatted="false">"Токио"</string>
+    <string name="city_taipei" formatted="false">"Тайпе"</string>
+    <string name="city_hong_kong" formatted="false">"Хонконг"</string>
+    <string name="city_new_york" formatted="false">"Ню Йорк"</string>
+    <string name="city_london" formatted="false">"Лондон"</string>
+    <string name="city_seoul" formatted="false">"Сеул"</string>
+    <string name="city_bangkok" formatted="false">"Банкок"</string>
+    <string name="city_singapore" formatted="false">"Сингапур"</string>
+    <string name="timezone_city" formatted="true">"%1$s (%2$s)"</string>
+    <string name="gps_custom_title" formatted="false">"Собствени координати"</string>
+    <string name="gps_custom_hint" formatted="false">"Изберете град или въведете географска ширина и дължина."</string>
+    <string name="gps_latitude" formatted="false">"Географска ширина (-90.0 до 90.0)"</string>
+    <string name="gps_longitude" formatted="false">"Географска дължина (-180.0 до 180.0)"</string>
+    <string name="gps_presets" formatted="false">"Често използвани градове:"</string>
+    <string name="speed_add_title" formatted="false">"Добавяне на скорост"</string>
+    <string name="speed_input" formatted="false">"Скорост на възпроизвеждане"</string>
+    <string name="speed_invalid" formatted="false">"Въведете валидно число"</string>
+    <string name="speed_out_of_range" formatted="true">"Поддържа се само %1$sx–%2$sx"</string>
+    <string name="speed_range" formatted="true">"Поддържан диапазон: %1$sx–%2$sx"</string>
+    <string name="speed_edit_title" formatted="false">"Редактиране на скоростта"</string>
+    <string name="duration_threshold_title" formatted="false">"Известие за дълги видеа"</string>
+    <string name="duration_threshold_hint" formatted="false">"Когато видеото достигне тази продължителност, в началото му се показва кратко известие с дължината в минути."</string>
+    <string name="duration_threshold_input" formatted="false">"Праг на продължителност (минути)"</string>
+    <string name="duration_threshold_example" formatted="false">"Например: 3 или 5"</string>
+    <string name="duration_threshold_invalid" formatted="false">"Въведете валиден брой минути, по-голям от 0"</string>
+    <string name="duration_threshold_current" formatted="true">"Текуща настройка: известие за видеа ≥ %1$s мин"</string>
+    <string name="duration_threshold_presets" formatted="false">"Препоръчителна продължителност:"</string>
+    <string name="status_feature_feed" formatted="false">"Филтър на емисията"</string>
+    <string name="status_feature_speed" formatted="false">"Скорост"</string>
+    <string name="status_feature_progress" formatted="false">"Лента за напредък"</string>
+    <string name="status_feature_clean" formatted="false">"Скриване на контролите при пускане"</string>
+    <string name="status_feature_immersive" formatted="false">"Показване на видео"</string>
+    <string name="status_feature_scroll" formatted="false">"Автоматично превъртане"</string>
+    <string name="status_feature_duration" formatted="false">"Известие за дължина"</string>
+    <string name="status_feature_comment_translate" formatted="false">"Превод на коментари"</string>
+    <string name="status_feature_video_translate" formatted="false">"Меню за субтитри и превод"</string>
+    <string name="status_feature_comment_copy" formatted="false">"Копиране на коментари"</string>
+    <string name="status_feature_author" formatted="false">"Регион на автора"</string>
+    <string name="status_feature_download" formatted="false">"Запазване на видеа"</string>
+    <string name="status_feature_music" formatted="false">"Аудио ограничения"</string>
+    <string name="status_feature_sim" formatted="false">"SIM и държава"</string>
+    <string name="status_feature_language" formatted="false">"Език"</string>
+    <string name="status_feature_timezone" formatted="false">"Часова зона"</string>
+    <string name="status_feature_gps" formatted="false">"Местоположение"</string>
+    <string name="status_feature_bar" formatted="false">"Лента за състояние"</string>
+    <string name="status_normal" formatted="false">"Работи"</string>
+    <string name="status_issue" formatted="false">"Има проблем"</string>
+    <string name="status_disabled" formatted="false">"Изключено"</string>
+    <string name="status_pending" formatted="false">"Изчаква"</string>
+    <string name="status_problem_disabled" formatted="false">"Изключено, но има записана грешка"</string>
+    <string name="status_problem_unavailable" formatted="false">"Временно недостъпна"</string>
+    <string name="status_problem_runtime" formatted="false">"Грешка при работа"</string>
+    <string name="status_problem_speed_menu" formatted="false">"Недостъпно меню за скорост"</string>
+    <string name="status_prepare_failed" formatted="false">"Подготовката на функциите е неуспешна. Отворете TikTok отново и проверете."</string>
+    <string name="status_preparing" formatted="false">"Функциите се подготвят. Изчакайте."</string>
+    <string name="status_prepared" formatted="false">"Подготовката завърши. Отворете TikTok отново."</string>
+    <string name="status_read_failed" formatted="false">"Състоянието не може да се прочете сега. Проверете по-късно."</string>
+    <string name="status_update_failed" formatted="false">"Състоянието не може да се обнови сега. Показва се последният резултат."</string>
+    <string name="status_reading" formatted="false">"Четене на състоянието"</string>
+    <string name="status_empty" formatted="false">"Няма записи за работа. Включете Toki в LSPosed, отворете TikTok и проверете."</string>
+    <string name="status_report_note" formatted="true">"Последен отчет: %1$s\n„Работи“ означава, че функцията е готова и не е съобщила за грешки."</string>
+    <string name="config_section" formatted="false">"Управление на настройките"</string>
+    <string name="config_import" formatted="false">"Импортиране на настройки"</string>
+    <string name="config_import_summary" formatted="false">"Възстановяване на функционалните настройки от файл"</string>
+    <string name="config_export" formatted="false">"Експортиране на настройки"</string>
+    <string name="config_export_summary" formatted="false">"Запазване на функционалните настройки във файл"</string>
+    <string name="config_exported" formatted="false">"Настройките са експортирани на избраното място. Файлът може да съдържа ключови думи, региони и папки. Пазете го на сигурно място."</string>
+    <string name="config_import_confirm" formatted="true">"Настройки във файла: %1$d. Импортирането заменя всички функционални настройки, а липсващите получават стойностите по подразбиране.\n\nЕзикът, иконата, разрешенията на LSPosed и кешът за съвместимост на TikTok не се променят. Да продължи ли?"</string>
+    <string name="config_overwrite" formatted="false">"Замяна"</string>
+    <string name="config_imported" formatted="false">"Настройките са импортирани и страницата с функции е обновена. Поддържаните промени се прилагат веднага. За останалите отворете TikTok отново."</string>
+    <string name="config_processing" formatted="false">"Обработка на настройките"</string>
+    <string name="config_error_io" formatted="false">"Неуспешно четене или запис на файла. Проверете мястото и свободното пространство."</string>
+    <string name="config_error_permission" formatted="false">"Няма разрешение за достъп до избрания файл. Изберете го отново."</string>
+    <string name="config_error_invalid" formatted="false">"Това не е валиден файл с настройки на Toki. Нищо не е импортирано."</string>
+    <string name="config_error_validation" formatted="true">"Проверката на настройките е неуспешна: %1$s. Нищо не е импортирано."</string>
+    <string name="config_error_commit" formatted="false">"Прилагането на настройките не е потвърдено. Отворете Toki отново, проверете и повторете."</string>
+    <string name="sponsor_title" formatted="false">"Подкрепа за разработчика"</string>
+    <string name="sponsor_kofi" formatted="false">"Подкрепа чрез Ko-fi"</string>
+    <string name="sponsor_alipay" formatted="false">"Alipay"</string>
+    <string name="sponsor_alipay_qr" formatted="false">"QR код за плащане с Alipay"</string>
+    <string name="sponsor_saving" formatted="false">"Запазване…"</string>
+    <string name="sponsor_save_image" formatted="false">"Запазване на изображение"</string>
+    <string name="sponsor_image_hint" formatted="false">"Запазете оригиналното изображение и го изберете в Alipay, за да разпознаете кода."</string>
+    <string name="sponsor_address_copied" formatted="false">"USDT адресът е копиран"</string>
+    <string name="sponsor_image_saved" formatted="false">"Изображението е запазено на избраното място"</string>
+    <string name="sponsor_error_io" formatted="false">"Запазването е неуспешно. Проверете мястото и свободното пространство и повторете."</string>
+    <string name="sponsor_error_permission" formatted="false">"Запазването е неуспешно: няма разрешение за запис на това място. Изберете го отново."</string>
+    <string name="feature_filter_topics" formatted="false">"Скриване на предложените теми"</string>
+    <string name="feature_filter_creators" formatted="false">"Скриване на предложените творци"</string>
+    <string name="host_scan_title_complete" formatted="false">"Търсенето завърши"</string>
+    <string name="host_scan_title_failed" formatted="false">"Търсенето е неуспешно"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Рестартирайте TikTok ръчно, за да се приложат резултатите."</string>
+    <string name="host_scan_failure_hint" formatted="false">"Вижте диагностиката на функциите в Toki."</string>
+    <string name="layout_title" formatted="false">"Оформление"</string>
+    <string name="layout_summary" formatted="false">"Изберете кои елементи да се скрият"</string>
+    <string name="layout_hint" formatted="false">"Включете превключвателя, за да скриете елемента"</string>
+    <string name="layout_top" formatted="false">"Горна лента"</string>
+    <string name="layout_bottom" formatted="false">"Долна лента"</string>
+    <string name="layout_side" formatted="false">"Страница на видеото"</string>
+    <string name="layout_search" formatted="false">"Търсене"</string>
+    <string name="layout_live" formatted="false">"НА ЖИВО"</string>
+    <string name="layout_friends" formatted="false">"Приятели"</string>
+    <string name="layout_following" formatted="false">"Следвани"</string>
+    <string name="layout_shop" formatted="false">"Магазин"</string>
+    <string name="layout_for_you" formatted="false">"За вас"</string>
+    <string name="layout_nearby" formatted="false">"Наблизо"</string>
+    <string name="layout_stem" formatted="false">"Наука"</string>
+    <string name="layout_series" formatted="false">"Поредици"</string>
+    <string name="layout_home" formatted="false">"Начало"</string>
+    <string name="layout_create" formatted="false">"Създаване"</string>
+    <string name="layout_inbox" formatted="false">"Входящи"</string>
+    <string name="layout_profile" formatted="false">"Профил"</string>
+    <string name="layout_discover" formatted="false">"Откриване"</string>
+    <string name="layout_avatar" formatted="false">"Аватар"</string>
+    <string name="layout_follow" formatted="false">"Бутон за следване"</string>
+    <string name="layout_like" formatted="false">"Харесване"</string>
+    <string name="layout_comment" formatted="false">"Коментари"</string>
+    <string name="layout_favorite" formatted="false">"Любими"</string>
+    <string name="layout_share" formatted="false">"Споделяне"</string>
+    <string name="layout_music" formatted="false">"Музикален диск"</string>
+    <string name="layout_explore" formatted="false">"Разглеждане"</string>
+    <string name="layout_author" formatted="false">"Информация за автора"</string>
+    <string name="layout_description" formatted="false">"Описание"</string>
+    <string name="layout_music_title" formatted="false">"Заглавие на музиката"</string>
+    <string name="layout_tags" formatted="false">"Информационни етикети"</string>
+    <string name="layout_search_label" formatted="false">"Предложение за търсене"</string>
+    <string name="layout_auto_scroll_stop" formatted="false">"Бутон за спиране на автопревъртането"</string>
+    <string name="layout_tako" formatted="false">"Tako"</string>
+    <string name="layout_rewards" formatted="false">"Монети и награди"</string>
+    <string name="layout_quick_comment" formatted="false">"Бързи коментари"</string>
+    <string name="layout_playlist" formatted="false">"Плейлист"</string>
+    <string name="layout_creation_buttons" formatted="false">"Преки пътища за създаване"</string>
+    <string name="layout_live_notice" formatted="false">"Напомняния за LIVE"</string>
+    <string name="layout_opacity" formatted="false">"Непрозрачност"</string>
+    <string name="feature_background_audio">"Отключване на фонов звук"</string>
+    <string name="layout_landscape">"Бутон за цял екран"</string>
+    <string name="layout_photo_indicators">"Индикатори и подсказки за снимки"</string>
+    <string name="layout_quick_message">"Бързи съобщения и източник на споделяне"</string>
+    <string name="layout_user_card">"Предложени профили"</string>
+    <string name="layout_survey">"Анкети и обратна връзка"</string>
+    <string name="layout_ad_cards">"Карти за продукти и реклами"</string>
+    <string name="layout_bottom_banners">"Други долни банери"</string>
+    <string name="layout_activities">"Вход към събития"</string>
+    <string name="host_scan_title_running" formatted="false">"Търсене на методи"</string>
+    <string name="host_scan_title_saving" formatted="false">"Запазване на резултатите"</string>
+    <string name="host_scan_keep_foreground" formatted="false">"Оставете TikTok на преден план."</string>
+    <string name="host_scan_saving_hint" formatted="false">"Моля, изчакайте."</string>
+    <string name="host_scan_done" formatted="false">"Разбрах"</string>
+    <string name="video_fit_center" formatted="false">"В центъра"</string>
+    <string name="video_fit_smart" formatted="false">"Цял екран"</string>
+</resources>
