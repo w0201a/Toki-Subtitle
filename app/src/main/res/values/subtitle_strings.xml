@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="upstream_author">"Original Toki author: MeiYongAI · Upstream project"</string>
+    <string name="subtitle_sponsor_title">"Support subtitle development"</string>
+    <string name="subtitle_sponsor_methods">"WeChat Pay / Alipay · Select a QR code"</string>
+    <string name="subtitle_sponsor_wechat">"WeChat Pay"</string>
+    <string name="subtitle_sponsor_hint">"Sponsorship is voluntary and does not unlock features. Choose a method and save the original QR image to scan in your payment app."</string>
+    <string name="subtitle_credits" formatted="false">"Subtitle edition · 154Er · Gi-Ai154M"</string>
+</resources>
