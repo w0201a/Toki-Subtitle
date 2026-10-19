@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Скрывать рекомендуемых авторов"</string>
     <string name="host_scan_title_complete" formatted="false">"Поиск завершён"</string>
     <string name="host_scan_title_failed" formatted="false">"Поиск не удался"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Перезапустите TikTok вручную, чтобы применить результаты."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Посмотрите диагностику функций в Toki."</string>
     <string name="layout_title" formatted="false">"Оформление страниц"</string>
     <string name="layout_summary" formatted="false">"Выберите элементы для скрытия"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Понятно"</string>
     <string name="video_fit_center" formatted="false">"По центру"</string>
     <string name="video_fit_smart" formatted="false">"Полный экран"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

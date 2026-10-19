@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Folaigh cruthaitheoirí molta"</string>
     <string name="host_scan_title_complete" formatted="false">"Cuardach críochnaithe"</string>
     <string name="host_scan_title_failed" formatted="false">"Theip ar an gcuardach"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Atosaigh TikTok de láimh chun na torthaí a chur i bhfeidhm."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Féach ar dhiagnóisic na ngnéithe in Toki."</string>
     <string name="layout_title" formatted="false">"Leagan amach"</string>
     <string name="layout_summary" formatted="false">"Roghnaigh na rialtáin le cur i bhfolach"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Tuigim"</string>
     <string name="video_fit_center" formatted="false">"Láraithe"</string>
     <string name="video_fit_smart" formatted="false">"Lánscáileán"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

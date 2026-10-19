@@ -107,7 +107,7 @@ class HostScanDialogTest {
         compose.onNodeWithText("50%").assertIsDisplayed()
         saveScreenshot("running-320dp-1.0")
         compose.runOnIdle { dialog!!.render(HostScanStatus(HostScanPhase.READY, 2, 2)) }
-        compose.onNodeWithText("请手动重启 TikTok 以应用结果。").assertIsDisplayed()
+        compose.onNodeWithText("适配已完成，功能自动生效。切换到下一条视频即可刷新已有内容，无需重启或连接电脑。").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("知道了").assertIsDisplayed()
         saveScreenshot("completed-320dp-1.0")
     }
@@ -138,7 +138,7 @@ class HostScanDialogTest {
             dialog!!.render(session.status)
         }
         compose.onNodeWithText("查找完成").assertIsDisplayed()
-        compose.onNodeWithText("请手动重启 TikTok 以应用结果。").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("适配已完成，功能自动生效。切换到下一条视频即可刷新已有内容，无需重启或连接电脑。").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("知道了").assertIsDisplayed()
         compose.runOnIdle {
             assertEquals(initialWidth, window.attributes.width)

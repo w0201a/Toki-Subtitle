@@ -18,6 +18,7 @@ class TokiModule : XposedModule() {
     private lateinit var plan: HostFeaturePlan
     private val installed = java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
     private var applicationHookInstalled = false
+    private var application: Application? = null
 
     companion object {
         private const val TAG = "TokiModule"
@@ -69,6 +70,7 @@ class TokiModule : XposedModule() {
         val method = Instrumentation::class.java.getMethod("callApplicationOnCreate", Application::class.java)
         hook(method).setExceptionMode(XposedInterface.ExceptionMode.PASSTHROUGH).intercept { chain ->
             val app = chain.args[0] as Application
+            application = app
             HookRuntime.attach(app)
             if (plan.requiresScan && processName == app.packageName) {
                 HostScanController.attach(app, ModuleResources(moduleApplicationInfo,
@@ -166,14 +168,24 @@ class TokiModule : XposedModule() {
             if (ConfigClient.isReady) updateConfigurationStatus(ConfigClient.snapshot())
             return
         }
-        if (!HostSymbols.initialize(param.applicationInfo, processName == param.packageName, plan.symbols)) return
+        val info = param.applicationInfo
+        val loader = param.classLoader
+        if (HostSymbols.initialize(info, processName == param.packageName, plan.symbols) {
+                installAdapted(loader)
+            }) installAdapted(loader)
+    }
+
+    private fun installAdapted(loader: ClassLoader) {
         // 清屏依赖进度条的安装成功，不能留下半套状态机。
         val ordered = plan.adaptedFeatures.sortedBy { if (it == "ProgressBarHook") 0 else 1 }
         for (feature in ordered) {
             if (feature == "AutoCleanModeHook" && "ProgressBarHook" !in installed) {
                 HookRuntime.failure(feature, IllegalStateException("清屏所需的进度条功能未注册"), "注册失败，已撤销")
-            } else install(feature, param.classLoader)
+            } else if (feature !in installed) install(feature, loader)
         }
-        if (ConfigClient.isReady) updateConfigurationStatus(ConfigClient.snapshot())
+        if (ConfigClient.isReady) {
+            application?.let(::refreshConfiguration)
+            updateConfigurationStatus(ConfigClient.snapshot())
+        }
     }
 }

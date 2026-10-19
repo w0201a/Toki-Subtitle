@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Fela tillögur að höfundum"</string>
     <string name="host_scan_title_complete" formatted="false">"Leit lokið"</string>
     <string name="host_scan_title_failed" formatted="false">"Leit mistókst"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Endurræstu TikTok handvirkt til að virkja niðurstöðurnar."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Skoðaðu greiningu eiginleika í Toki."</string>
     <string name="layout_title" formatted="false">"Útlit síðu"</string>
     <string name="layout_summary" formatted="false">"Veldu hvaða hnappa á að fela"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Skilið"</string>
     <string name="video_fit_center" formatted="false">"Miðjað"</string>
     <string name="video_fit_smart" formatted="false">"Allur skjárinn"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

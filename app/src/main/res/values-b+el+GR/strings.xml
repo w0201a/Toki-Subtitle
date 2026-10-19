@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Απόκρυψη προτεινόμενων δημιουργών"</string>
     <string name="host_scan_title_complete" formatted="false">"Η αναζήτηση ολοκληρώθηκε"</string>
     <string name="host_scan_title_failed" formatted="false">"Η αναζήτηση απέτυχε"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Επανεκκινήστε το TikTok χειροκίνητα για να εφαρμοστούν τα αποτελέσματα."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Δείτε τα διαγνωστικά λειτουργιών στο Toki."</string>
     <string name="layout_title" formatted="false">"Διάταξη σελίδας"</string>
     <string name="layout_summary" formatted="false">"Επιλέξτε ποια στοιχεία θα κρύβονται"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Κατάλαβα"</string>
     <string name="video_fit_center" formatted="false">"Στο κέντρο"</string>
     <string name="video_fit_smart" formatted="false">"Πλήρης οθόνη"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

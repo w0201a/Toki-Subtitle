@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Slēpt ieteiktos veidotājus"</string>
     <string name="host_scan_title_complete" formatted="false">"Meklēšana pabeigta"</string>
     <string name="host_scan_title_failed" formatted="false">"Meklēšana neizdevās"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Manuāli restartējiet TikTok, lai lietotu rezultātus."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Skatiet funkciju diagnostiku lietotnē Toki."</string>
     <string name="layout_title" formatted="false">"Lapas izkārtojums"</string>
     <string name="layout_summary" formatted="false">"Izvēlieties slēpjamos elementus"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Sapratu"</string>
     <string name="video_fit_center" formatted="false">"Centrēts"</string>
     <string name="video_fit_smart" formatted="false">"Pilnekrāns"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

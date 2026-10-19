@@ -10,7 +10,7 @@ This edition adds subtitle drag controls and independent axis locks, subtitle di
 
 Build Debug by default: `./gradlew :app:assembleDebug` (Windows: `gradlew.bat`). Requires Android SDK 37, Build Tools 37.0.0 and JDK 21. Enable the module for TikTok in LSPosed. Internal host interfaces are version-dependent; current validation primarily targets TikTok 47.0.3.
 
-Starting with 2.0.16 Debug, subtitle extensions automatically invalidate their cache after a host code update and discover structural matches in the background. Reopen TikTok after discovery; later launches reuse the verified cache. Obfuscated names may change while code structure stays compatible. Missing or ambiguous extensions are disabled independently and reported in feature status. Relationship contracts cover poll bridge binding, subtitle frame-to-renderer calls and description video-field writes; individual members remain independently verified even when unrelated methods change. Major implementation changes can still require maintained rules; future-version compatibility is not guaranteed. CI builds Debug by default; unsigned Release requires an explicit manual selection.
+Starting with 2.0.16 Debug, subtitle extensions automatically invalidate their cache after a host code update and discover structural matches in the background. Discovery saves and applies verified hooks in the running process; switch videos to refresh existing content. No computer connection is needed, and later launches reuse the cache. Obfuscated names may change while code structure stays compatible. Missing or ambiguous extensions are disabled independently and reported in feature status. Relationship contracts cover poll bridge binding, subtitle frame-to-renderer calls and description video-field writes; individual members remain independently verified even when unrelated methods change. Major implementation changes can still require maintained rules; future-version compatibility is not guaranteed. CI builds Debug by default; unsigned Release requires an explicit manual selection.
 
 [Recent changes](CHANGELOG.md) · [Issues and fixes](docs/ISSUES_AND_FIXES.md) · [Link destinations](docs/LINKS.md) · [Release guide](RELEASING.md)
 
@@ -81,11 +81,11 @@ guarantee that every feature will work.
 3. Open Toki, check the activation status on Home and choose the features you
    want to enable.
 4. Force-stop TikTok and open it again. If a method-discovery dialog appears,
-   let it finish and dismiss the completion message. Then force-stop TikTok
-   and open it again to apply the saved results.
+   let it finish and dismiss the completion message. In 2.0.16 Debug, verified
+   features apply automatically; switch videos to refresh existing content.
 
 Verified builds use bundled adaptation results without first-run discovery. Other builds
-run native method discovery and require a restart when it completes.
+run native method discovery. In 2.0.16 Debug, results apply automatically after verification.
 
 ## Usage
 
@@ -120,8 +120,8 @@ TikTok and check the feature status in Toki after opening TikTok.
 
 ### How to apply method-discovery results
 
-After discovery succeeds, dismiss the completion message, force-stop TikTok
-and open it again to apply the saved results. If discovery fails, check Toki's
+In 2.0.16 Debug, discovery applies verified features automatically. Dismiss the completion
+message and switch videos to refresh existing content. If discovery fails, check Toki's
 feature diagnostics and [report the problem](#contributing).
 
 ### TikTok crashes before the discovery dialog appears

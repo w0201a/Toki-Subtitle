@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Tövsiyə olunan yaradıcıları gizlət"</string>
     <string name="host_scan_title_complete" formatted="false">"Axtarış tamamlandı"</string>
     <string name="host_scan_title_failed" formatted="false">"Axtarış alınmadı"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Nəticələri tətbiq etmək üçün TikTok-u əl ilə yenidən başladın."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Toki-də funksiya diaqnostikasına baxın."</string>
     <string name="layout_title" formatted="false">"Səhifə görünüşü"</string>
     <string name="layout_summary" formatted="false">"Gizlədiləcək elementləri seçin"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Aydındır"</string>
     <string name="video_fit_center" formatted="false">"Mərkəzdə"</string>
     <string name="video_fit_smart" formatted="false">"Tam ekran"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

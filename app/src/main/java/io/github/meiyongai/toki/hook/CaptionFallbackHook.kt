@@ -39,9 +39,11 @@ internal object CaptionFallbackHook {
         val model: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.feed.model.CaptionModel")
         val item: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.feed.model.CaptionItemModel")
         val selection: Class<*> = loader.adaptiveClass("X.08ZQ")
-        val selector: Class<*> = loader.adaptiveClass("X.061i")
-        val trackId: Method = selector.adaptiveDeclaredMethod("LIZLLL", aweme)
-        val result: Method = selector.adaptiveDeclaredMethod("LJFF", aweme, String::class.java)
+        // Service readers are independently verified. A changed private helper must not
+        // prevent recovery through those public service paths.
+        private val selector: Class<*>? = runCatching { loader.adaptiveClass("X.061i") }.getOrNull()
+        val trackId: Method? = selector?.let { runCatching { it.adaptiveDeclaredMethod("LIZLLL", aweme) }.getOrNull() }
+        val result: Method? = selector?.let { runCatching { it.adaptiveDeclaredMethod("LJFF", aweme, String::class.java) }.getOrNull() }
         val subId: Field = selection.adaptiveDeclaredField("LIZIZ").apply { isAccessible = true }
         val enabled: Field = selection.adaptiveDeclaredField("LIZ").apply { isAccessible = true }
         // ICLAPerfETServiceImpl.LJI 明确将 true 映射为 DO_NOT_LOAD，绝非 visible。
@@ -67,15 +69,16 @@ internal object CaptionFallbackHook {
         val serviceClass: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.service.CaptionServiceImpl")
         val serviceResult: Method = serviceClass.adaptiveDeclaredMethod("LJIIIZ", aweme)
         val serviceTrackId: Method = serviceClass.adaptiveDeclaredMethod("LJIIJ", aweme)
-        val cacheResult: Method = loader.adaptiveClass("X.08ZE").adaptiveDeclaredMethod("LIZ", aweme)
+        val cacheResult: Method? = runCatching { loader.adaptiveClass("X.08ZE").adaptiveDeclaredMethod("LIZ", aweme) }.getOrNull()
         val service: Method = loader.adaptiveClass("X.08Zd").adaptiveDeclaredMethod("LIZ")
         val keva: Class<*> = loader.adaptiveClass("com.ss.android.ugc.aweme.service.ICaptionKevaService")
         val captionsForNative: Method = keva.adaptiveDeclaredMethod("LIZIZ")
         val captionsForForeign: Method = keva.adaptiveDeclaredMethod("LJL")
 
         init {
-            check(trackId.returnType == Integer.TYPE) { "字幕轨号读取签名不符" }
-            check(result.returnType == selection) { "字幕选择返回类型不符" }
+            check(trackId == null || trackId.returnType == Integer.TYPE) { "字幕轨号读取签名不符" }
+            check(result == null || result.returnType == selection) { "字幕选择返回类型不符" }
+            check(serviceTrackId.returnType == Integer.TYPE && serviceResult.returnType == selection)
             check(subId.type == Integer.TYPE && captionModel.type == model) { "字幕选择字段类型不符" }
         }
     }
@@ -83,7 +86,7 @@ internal object CaptionFallbackHook {
     private fun installVerified(module: XposedModule, loader: ClassLoader, feature: String) {
         val contract = Contract(loader)
 
-        for (method in listOf(contract.trackId, contract.serviceTrackId)) {
+        for (method in listOfNotNull(contract.trackId, contract.serviceTrackId)) {
         module.trackHook(feature, method).intercept { chain ->
             val reported = chain.proceed() as Int
             guarded(reported) {
@@ -98,7 +101,7 @@ internal object CaptionFallbackHook {
         }
         }
 
-        for (method in listOf(contract.result, contract.serviceResult, contract.cacheResult)) {
+        for (method in listOfNotNull(contract.result, contract.serviceResult, contract.cacheResult)) {
         module.trackHook(feature, method).intercept { chain ->
             val original = chain.proceed()
             guarded(original) {
@@ -169,7 +172,7 @@ internal object CaptionFallbackHook {
             }
         }
 
-        HookRuntime.event(TAG, "trial-6 installed owner=$feature player + service + cache readers + load-policy identity=${HostSymbols.codeIdentity()}")
+        HookRuntime.event(TAG, "verified readers installed owner=$feature selector=${contract.result != null} cache=${contract.cacheResult != null} service=true identity=${HostSymbols.codeIdentity()}")
     }
 
     private fun decide(contract: Contract, aweme: Any?, selected: Int, model: Any?): Int {

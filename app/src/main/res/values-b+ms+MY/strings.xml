@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Sembunyikan cadangan pencipta"</string>
     <string name="host_scan_title_complete" formatted="false">"Carian selesai"</string>
     <string name="host_scan_title_failed" formatted="false">"Carian gagal"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Mulakan semula TikTok secara manual untuk menggunakan hasilnya."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Lihat diagnostik ciri dalam Toki."</string>
     <string name="layout_title" formatted="false">"Susun atur halaman"</string>
     <string name="layout_summary" formatted="false">"Pilih kawalan yang hendak disembunyikan"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Faham"</string>
     <string name="video_fit_center" formatted="false">"Di tengah"</string>
     <string name="video_fit_smart" formatted="false">"Skrin penuh"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

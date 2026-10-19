@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"លាក់អ្នកបង្កើតដែលបានណែនាំ"</string>
     <string name="host_scan_title_complete" formatted="false">"ការស្វែងរកបានបញ្ចប់"</string>
     <string name="host_scan_title_failed" formatted="false">"ការស្វែងរកបរាជ័យ"</string>
-    <string name="host_scan_restart_hint" formatted="false">"សូមចាប់ផ្តើម TikTok ឡើងវិញដោយខ្លួនឯង ដើម្បីអនុវត្តលទ្ធផល។"</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"សូមមើលការវិនិច្ឆ័យមុខងារនៅក្នុង Toki។"</string>
     <string name="layout_title" formatted="false">"ប្លង់ទំព័រ"</string>
     <string name="layout_summary" formatted="false">"ជ្រើសរើសប៊ូតុងដែលត្រូវលាក់"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"យល់ហើយ"</string>
     <string name="video_fit_center" formatted="false">"នៅកណ្ដាល"</string>
     <string name="video_fit_smart" formatted="false">"ពេញអេក្រង់"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

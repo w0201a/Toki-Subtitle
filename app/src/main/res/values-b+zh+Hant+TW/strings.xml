@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"過濾創作者推薦"</string>
     <string name="host_scan_title_complete" formatted="false">"查找完成"</string>
     <string name="host_scan_title_failed" formatted="false">"查找未完成"</string>
-    <string name="host_scan_restart_hint" formatted="false">"請手動重新啟動 TikTok 以套用結果。"</string>
+    <string name="host_scan_restart_hint" formatted="false">"適配已完成，功能自動生效。切換至下一部影片即可重新整理既有內容，無需重啟或連接電腦。"</string>
     <string name="host_scan_failure_hint" formatted="false">"請在 Toki 查看功能診斷。"</string>
     <string name="layout_title" formatted="false">"頁面佈局淨化"</string>
     <string name="layout_summary" formatted="false">"分類選擇要隱藏的控制項"</string>
@@ -307,8 +307,8 @@
     <string name="layout_bottom_banners">"其他底部橫幅"</string>
     <string name="layout_activities">"活動入口"</string>
     <string name="host_scan_title_running" formatted="false">"正在查找方法"</string>
-    <string name="host_scan_title_extensions">正在適配字幕擴充</string>
-    <string name="host_scan_extensions_hint">正在檢查字幕、影片文案和留言投票。完成後儲存結果，後續啟動直接沿用。</string>
+    <string name="host_scan_title_extensions">"正在適配字幕擴充"</string>
+    <string name="host_scan_extensions_hint">"正在檢查字幕、影片文案和留言投票。完成後儲存結果，後續啟動直接沿用。"</string>
     <string name="host_scan_title_saving" formatted="false">"正在儲存結果"</string>
     <string name="host_scan_keep_foreground" formatted="false">"請保持 TikTok 在前景。"</string>
     <string name="host_scan_saving_hint" formatted="false">"請稍候。"</string>

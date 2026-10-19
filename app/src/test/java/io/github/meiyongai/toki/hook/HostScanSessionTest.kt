@@ -5,6 +5,30 @@ import org.junit.Test
 
 /** 验证扫描缓存提交和用户确认提示的完整顺序。 */
 class HostScanSessionTest {
+    @Test fun completedAdaptationInstallsBeforeShowingReadyAndCannotInstallTwice() {
+        val session = HostScanSession()
+        session.begin()
+        session.extensions()
+        session.saving()
+        var installs = 0
+        session.ready {
+            assertEquals(HostScanPhase.SAVING, session.status.phase)
+            installs++
+        }
+        assertEquals(HostScanPhase.READY, session.status.phase)
+        assertThrows(IllegalStateException::class.java) { session.ready { installs++ } }
+        assertEquals(1, installs)
+    }
+    @Test fun failedInstallationCannotShowReady() {
+        val session = HostScanSession()
+        session.begin()
+        session.extensions()
+        session.saving()
+        assertThrows(IllegalStateException::class.java) { session.ready { error("install failed") } }
+        assertEquals(HostScanPhase.SAVING, session.status.phase)
+        session.fail()
+        assertEquals(HostScanPhase.FAILED, session.status.phase)
+    }
     @Test fun extensionScanDoesNotKeepCompletedCoreProgress() {
         val session = HostScanSession()
         session.begin()

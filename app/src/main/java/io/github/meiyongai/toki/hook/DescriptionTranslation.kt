@@ -67,10 +67,16 @@ internal object DescriptionTranslation {
             } else original
         }
         // 观察原生请求实际是否发出，不记录标题正文或视频标识。
-        val request = loader.adaptiveClass("X.0948").adaptiveDeclaredMethod("LJJIIJ", loader.adaptiveClass("X.0Agi"))
-        module.trackHook(OWNER, request).intercept { chain ->
-            if (enabled()) HookRuntime.event(OWNER, "native request started")
-            chain.proceed()
+        try {
+            val request = loader.adaptiveClass("X.0948").adaptiveDeclaredMethod("LJJIIJ", loader.adaptiveClass("X.0Agi"))
+            module.trackHook(OWNER, request).intercept { chain ->
+                if (enabled()) HookRuntime.event(OWNER, "native request started")
+                chain.proceed()
+            }
+        } catch (error: ReflectiveOperationException) {
+            HookRuntime.event(OWNER, "request diagnostics unavailable; eligibility hooks retained")
+        } catch (error: IllegalStateException) {
+            HookRuntime.event(OWNER, "request diagnostics contract unavailable; eligibility hooks retained")
         }
         HookRuntime.event(OWNER, "ready; native description and photo title; no length truncation")
     }

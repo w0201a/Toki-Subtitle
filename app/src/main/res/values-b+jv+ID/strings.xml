@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Dhelikake saran kreator"</string>
     <string name="host_scan_title_complete" formatted="false">"Panelusuran rampung"</string>
     <string name="host_scan_title_failed" formatted="false">"Panelusuran gagal"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Wiwiti maneh TikTok kanthi manual kanggo ngetrapake asil."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Delengen diagnostik fitur ing Toki."</string>
     <string name="layout_title" formatted="false">"Tata kaca"</string>
     <string name="layout_summary" formatted="false">"Pilih kontrol sing arep didhelikake"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Ngerti"</string>
     <string name="video_fit_center" formatted="false">"Ing tengah"</string>
     <string name="video_fit_smart" formatted="false">"Layar kebak"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

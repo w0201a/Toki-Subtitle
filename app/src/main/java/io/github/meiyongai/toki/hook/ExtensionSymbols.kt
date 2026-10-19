@@ -7,12 +7,14 @@ import java.util.Properties
 
 /** Independently cached extension contracts. Unknown versions require unique structural matches. */
 internal object ExtensionSymbols {
+    private const val MATCHER_REVISION = "relationships-v3"
     private val reference: Properties by lazy {
         Properties().apply { checkNotNull(ExtensionSymbols::class.java.getResourceAsStream("/toki-extension-profile.properties")).use(::load) }
     }
-    private val referenceHash by lazy {
-        HostDexIndex.digest(reference.stringPropertyNames().sorted().joinToString("\n") { "$it=${reference.getProperty(it)}" })
-    }
+    private val referenceHash by lazy { profileHash(reference) }
+    internal fun profileHash(profile: Properties): String =
+        HostDexIndex.digest(profile.stringPropertyNames().filterNot { it.startsWith("native.") }
+            .sorted().joinToString("\n") { "$it=${profile.getProperty(it)}" })
     private val known = setOf(
         "0259ca5f53357042b72fe6502ca22875aa3035506bfc458fb645146abb19dc16",
         "a104c3b28e2f4ee94292a0dcc464ff114e63f430e760bfd093c434cc6298a129")
@@ -40,7 +42,8 @@ internal object ExtensionSymbols {
     }
     internal fun cacheMatches(stored: Properties, identity: String, profile: String): Boolean =
         stored.getProperty("cache.identity") == identity && stored.getProperty("cache.profile") == profile &&
-            stored.getProperty("cache.format") == ExtensionDexIndex.FORMAT && stored.getProperty("cache.complete") == "true"
+            stored.getProperty("cache.format") == ExtensionDexIndex.FORMAT &&
+            stored.getProperty("cache.matcher") == MATCHER_REVISION && stored.getProperty("cache.complete") == "true"
 
     /** Called only on the existing background adaptation worker; never scans on a UI thread. */
     fun scan(paths: List<String>, identity: String, directory: File) {
@@ -52,6 +55,7 @@ internal object ExtensionSymbols {
         result.setProperty("cache.identity", identity)
         result.setProperty("cache.profile", referenceHash)
         result.setProperty("cache.format", ExtensionDexIndex.FORMAT)
+        result.setProperty("cache.matcher", MATCHER_REVISION)
         result.setProperty("cache.complete", "true")
         HostSymbolCache.write(cache(directory), result)
         publish(result)

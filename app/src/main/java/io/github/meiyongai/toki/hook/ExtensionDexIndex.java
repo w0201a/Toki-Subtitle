@@ -277,7 +277,31 @@ public final class ExtensionDexIndex {
             for (String key : keys.subList(0, Math.min(8, keys.size()))) result.setProperty(key, role);
         });
         result.setProperty("format", FORMAT);
+        addNativeSelectors(paths, result);
         return result;
+    }
+    /** Optional search hints derived from headers; never part of matching evidence or cache identity. */
+    public static void addNativeSelectors(List<String> paths, Properties profile) throws IOException {
+        Set<String> headers = new HashSet<>();
+        for (String key : profile.stringPropertyNames()) {
+            if (key.startsWith("header.")) headers.add(profile.getProperty(key));
+            if (key.startsWith("witness.")) headers.add(key.substring(8, 72));
+        }
+        Set<String> selectors = new HashSet<>();
+        for (String value : headers) selectors.add(profile.getProperty("selector."+value));
+        visit(paths, type -> {
+            if (!selectors.contains(counts(type))) return;
+            String value = header(type);
+            if (!headers.contains(value)) return;
+            profile.setProperty("native.super."+value, normalized(Objects.toString(type.getSuperclass(), "")));
+            List<String> interfaces = new ArrayList<>();
+            for (String it : type.getInterfaces()) interfaces.add(normalized(it));
+            Collections.sort(interfaces);
+            profile.setProperty("native.interfaces."+value, String.join("|", interfaces));
+            Set<String> methods = new TreeSet<>();
+            for (Method method : type.getMethods()) methods.add(normalized(signature(method)));
+            profile.setProperty("native.methods."+value, String.join("|", methods));
+        });
     }
     /** Refuses zero/multiple candidates and ambiguous member correspondence; stores only proven mappings. */
     public static Properties scan(List<String> paths, Properties profile) throws IOException {
@@ -323,6 +347,7 @@ public final class ExtensionDexIndex {
         visit(paths, type -> {
             String actual = type.getType().substring(1, type.getType().length()-1).replace('/', '.');
             if (actual.equals("com.ss.android.ugc.aweme.translation.service.TranslationServiceImpl")) {
+                definitions.put(actual, type);
                 for (Method method : type.getMethods()) if (method.getImplementation()!=null) {
                     Set<String> roles=implementationRoles.get(methodFingerprint(method));
                     if (roles!=null) for (String role:roles) implementationHints.computeIfAbsent(role, unused -> new HashSet<>())

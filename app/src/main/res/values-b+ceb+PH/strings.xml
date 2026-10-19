@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Itago ang gisugyot nga mga creator"</string>
     <string name="host_scan_title_complete" formatted="false">"Nahuman ang pagpangita"</string>
     <string name="host_scan_title_failed" formatted="false">"Napakyas ang pagpangita"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Manwal nga i-restart ang TikTok aron maaplikar ang mga resulta."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Tan-awa ang mga diagnostic sa mga feature sa Toki."</string>
     <string name="layout_title" formatted="false">"Porma sa pahina"</string>
     <string name="layout_summary" formatted="false">"Pilia ang mga kontrol nga itago"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Nasabtan"</string>
     <string name="video_fit_center" formatted="false">"Sa tunga"</string>
     <string name="video_fit_smart" formatted="false">"Tibuok screen"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

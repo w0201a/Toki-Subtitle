@@ -16,7 +16,7 @@ class LocalizationResourcesTest {
     @Test fun everySelectableLanguageHasCompleteResources() {
         val root = File("src/main/res")
         val baseline = readStrings(File(root, "values/strings.xml"))
-        assertEquals("Expected the complete UI catalog", 313, baseline.size)
+        assertEquals("Expected the complete UI catalog", 315, baseline.size)
         val languages = AppLanguage.entries.filter { it != AppLanguage.SYSTEM }
         assertEquals(57, languages.size)
         for (language in languages) {

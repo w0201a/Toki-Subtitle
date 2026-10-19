@@ -12,6 +12,79 @@ import org.jf.dexlib2.immutable.reference.*;
 
 public class ExtensionSemanticContractsTest {
     private static final String AWEME="Lcom/ss/android/ugc/aweme/feed/model/Aweme;";
+    @Test public void targetLanguageComesFromVerifiedTranslationRequestAndRejectsTwoGetters() {
+        String service="com.ss.android.ugc.aweme.translation.service.TranslationServiceImpl",owner="L"+service.replace('.','/')+";";
+        for(boolean ambiguous:List.of(false,true)) {
+            List<Method> methods=new ArrayList<>();
+            var requestCode=new ArrayList<org.jf.dexlib2.iface.instruction.Instruction>();
+            for(String getter:ambiguous?List.of("target","other"):List.of("target")) {
+                requestCode.add(new ImmutableInstruction35c(Opcode.INVOKE_VIRTUAL,1,0,0,0,0,0,
+                    new ImmutableMethodReference("LX/Facade;",getter,List.of(),"Ljava/lang/String;")));
+                var code=List.of(
+                    new ImmutableInstruction35c(Opcode.INVOKE_INTERFACE,1,0,0,0,0,0,new ImmutableMethodReference(
+                        "Lcom/ss/android/ugc/aweme/translation/service/ITranslationLangKevaService;","read",List.of(),"Ljava/lang/String;")),
+                    new ImmutableInstruction35c(Opcode.INVOKE_STATIC,1,0,0,0,0,0,new ImmutableMethodReference(
+                        "Landroid/text/TextUtils;","isEmpty",List.of("Ljava/lang/CharSequence;"),"Z")),
+                    new ImmutableInstruction11x(Opcode.RETURN_OBJECT,0));
+                methods.add(new ImmutableMethod(owner,getter,List.of(),"Ljava/lang/String;",1,Set.of(),Set.of(),new ImmutableMethodImplementation(2,code,List.of(),List.of())));
+            }
+            requestCode.add(new ImmutableInstruction11x(Opcode.RETURN_OBJECT,0));
+            methods.add(new ImmutableMethod(owner,"translate",List.of(new ImmutableMethodParameter("Ljava/lang/String;",Set.of(),null)),"LX/Rx;",1,Set.of(),Set.of(),
+                new ImmutableMethodImplementation(2,requestCode,List.of(),List.of())));
+            Properties result=new Properties();result.setProperty("class.X.03hV","X.Facade");
+            result.setProperty("X.03hV:method.LJIIJ(Ljava/lang/String;)LX/02tQ;","translate(Ljava/lang/String;)LX/Rx;");
+            ExtensionSemanticContracts.resolve(Map.of(service,type(owner,methods)),result);
+            assertEquals(!ambiguous,result.containsKey("X.03hV:method.LLILLIZIL()Ljava/lang/String;"));
+        }
+    }
+    @Test public void captionServiceRequiresModelTrackReadAndUniqueTypedSelection() {
+        String name="com.ss.android.ugc.aweme.service.CaptionServiceImpl",owner="L"+name.replace('.','/')+";";
+        for(boolean tracks:List.of(true,false)) {
+            var code=new ArrayList<org.jf.dexlib2.iface.instruction.Instruction>();
+            code.add(new ImmutableInstruction35c(Opcode.INVOKE_VIRTUAL,1,1,0,0,0,0,
+                new ImmutableMethodReference(AWEME,"getVideo",List.of(),"Lcom/ss/android/ugc/aweme/feed/model/Video;")));
+            code.add(new ImmutableInstruction35c(Opcode.INVOKE_VIRTUAL,1,0,0,0,0,0,
+                new ImmutableMethodReference("Lcom/ss/android/ugc/aweme/feed/model/Video;","getCaptionModel",List.of(),"Lcom/ss/android/ugc/aweme/feed/model/CaptionModel;")));
+            if(tracks) code.add(new ImmutableInstruction22c(Opcode.IGET_OBJECT,0,1,
+                new ImmutableFieldReference("Lcom/ss/android/ugc/aweme/feed/model/CaptionModel;","captionList","Ljava/util/List;")));
+            code.add(new ImmutableInstruction11x(Opcode.RETURN_OBJECT,0));
+            var method=new ImmutableMethod(owner,"select",List.of(new ImmutableMethodParameter(AWEME,Set.of(),null)),"LX/Selection;",1,Set.of(),Set.of(),
+                new ImmutableMethodImplementation(2,code,List.of(),List.of()));
+            for(boolean duplicate:List.of(false,true)) {
+                List<Method> methods=new ArrayList<>();methods.add(method);
+                if(duplicate) methods.add(new ImmutableMethod(owner,"other",method.getParameters(),method.getReturnType(),1,Set.of(),Set.of(),method.getImplementation()));
+                Properties result=new Properties();result.setProperty("class."+name,name);result.setProperty("class.X.08ZQ","X.Selection");
+                ExtensionSemanticContracts.resolve(Map.of(name,type(owner,methods)),result);
+                assertEquals(tracks&&!duplicate,result.containsKey(name+":method.LJIIIZ("+AWEME+")LX/08ZQ;"));
+            }
+        }
+    }
+    private Method eligibility(String owner,String name,boolean complete) {
+        var instructions=new ArrayList<org.jf.dexlib2.iface.instruction.Instruction>();
+        instructions.add(new ImmutableInstruction35c(Opcode.INVOKE_VIRTUAL,1,1,0,0,0,0,
+            new ImmutableMethodReference(AWEME,"isDescTranslatable",List.of(),"Z")));
+        instructions.add(new ImmutableInstruction35c(Opcode.INVOKE_STATIC,1,0,0,0,0,0,
+            new ImmutableMethodReference("Landroid/text/TextUtils;","isEmpty",List.of("Ljava/lang/CharSequence;"),"Z")));
+        if (complete) instructions.add(new ImmutableInstruction35c(Opcode.INVOKE_STATIC,2,0,1,0,0,0,
+            new ImmutableMethodReference("Landroid/text/TextUtils;","equals",List.of("Ljava/lang/CharSequence;","Ljava/lang/CharSequence;"),"Z")));
+        instructions.add(new ImmutableInstruction11x(Opcode.RETURN,0));
+        return new ImmutableMethod(owner,name,List.of(new ImmutableMethodParameter(AWEME,Set.of(),null)),"Z",17,Set.of(),Set.of(),
+            new ImmutableMethodImplementation(2,instructions,List.of(),List.of()));
+    }
+    @Test public void titleGateSurvivesRenameButRejectsIncompleteOrAmbiguousEvidence() {
+        String service="com.ss.android.ugc.aweme.translation.service.CLATranslatabilityServiceImpl";
+        String owner="L"+service.replace('.','/')+";";
+        String role=service+":method.LJ("+AWEME+")Z";
+        for (int count:List.of(0,1,2)) {
+            List<Method> methods=new ArrayList<>();
+            methods.add(eligibility(owner,"decoy",false));
+            for (int i=0;i<count;i++) methods.add(eligibility(owner,"renamed"+i,true));
+            Properties result=new Properties(); result.setProperty("class."+service,service);
+            ExtensionSemanticContracts.resolve(Map.of(service,type(owner,methods)),result);
+            assertEquals(count==1,result.containsKey(role));
+            if(count==1) assertEquals("renamed0("+AWEME+")Z",result.getProperty(role));
+        }
+    }
     private Method writer(String name,String field) {
         var body=new ImmutableMethodImplementation(2,List.of(
             new ImmutableInstruction22c(Opcode.IPUT_OBJECT,1,0,new ImmutableFieldReference("LX/Renderer;",field,AWEME)),
@@ -40,7 +113,7 @@ public class ExtensionSemanticContractsTest {
         p.setProperty("X.0B14:field.LIZ","text");p.setProperty("X.0B14:field.LIZIZ","state");
         p.setProperty(assem+":field.LLLLLILLIL","renderer");
         p.setProperty("X.0B1g:method.LJIIIZ(Ljava/lang/String;LX/0B17;Ljava/lang/String;LX/0B18;)V","show(Ljava/lang/String;LX/State;Ljava/lang/String;LX/Mode;)V");
-        for (boolean complete:List.of(true,false)) {
+        for (boolean complete:List.of(true,false)) for (boolean derived:List.of(true,false)) {
             var code=new ArrayList<org.jf.dexlib2.iface.instruction.Instruction>();
             code.add(new ImmutableInstruction22c(Opcode.IGET_OBJECT,0,1,new ImmutableFieldReference(owner,"renderer","LX/Renderer;")));
             code.add(new ImmutableInstruction22c(Opcode.IGET_OBJECT,0,1,new ImmutableFieldReference("LX/Frame;","text","Ljava/lang/String;")));
@@ -49,8 +122,16 @@ public class ExtensionSemanticContractsTest {
             code.add(new ImmutableInstruction10x(Opcode.RETURN_VOID));
             var method=new ImmutableMethod(owner,"renamedFrame",List.of(new ImmutableMethodParameter("LX/Frame;",Set.of(),null)),"V",17,Set.of(),Set.of(),new ImmutableMethodImplementation(5,code,List.of(),List.of()));
             var result=new Properties();result.putAll(p);
-            ExtensionSemanticContracts.resolve(Map.of(assem,type(owner,List.of(method))),result);
+            String renderRole="X.0B1g:method.LJIIIZ(Ljava/lang/String;LX/0B17;Ljava/lang/String;LX/0B18;)V";
+            if(derived) result.remove(renderRole);
+            result.setProperty("class.X.0B17","X.State");result.setProperty("class.X.0B18","X.Mode");
+            var target=new ImmutableMethod("LX/Renderer;","show",List.of(
+                new ImmutableMethodParameter("Ljava/lang/String;",Set.of(),null),new ImmutableMethodParameter("LX/State;",Set.of(),null),
+                new ImmutableMethodParameter("Ljava/lang/String;",Set.of(),null),new ImmutableMethodParameter("LX/Mode;",Set.of(),null)),
+                "V",1,Set.of(),Set.of(),new ImmutableMethodImplementation(5,List.of(new ImmutableInstruction10x(Opcode.RETURN_VOID)),List.of(),List.of()));
+            ExtensionSemanticContracts.resolve(Map.of(assem,type(owner,List.of(method)),"X.Renderer",type("LX/Renderer;",List.of(target))),result);
             assertEquals(complete,result.containsKey(assem+":method.bs(LX/0B14;)V"));
+            if(derived) assertEquals(complete,result.containsKey(renderRole));
         }
     }
 }

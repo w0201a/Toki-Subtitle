@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"הסתרת יוצרים מוצעים"</string>
     <string name="host_scan_title_complete" formatted="false">"החיפוש הושלם"</string>
     <string name="host_scan_title_failed" formatted="false">"החיפוש נכשל"</string>
-    <string name="host_scan_restart_hint" formatted="false">"יש להפעיל מחדש את TikTok באופן ידני כדי להחיל את התוצאות."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"ניתן לצפות באבחון התכונות ב-Toki."</string>
     <string name="layout_title" formatted="false">"פריסת העמוד"</string>
     <string name="layout_summary" formatted="false">"בחירת הפקדים להסתרה"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"הבנתי"</string>
     <string name="video_fit_center" formatted="false">"במרכז"</string>
     <string name="video_fit_smart" formatted="false">"מסך מלא"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

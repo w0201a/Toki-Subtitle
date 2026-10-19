@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Skjul foreslåtte skapere"</string>
     <string name="host_scan_title_complete" formatted="false">"Søk fullført"</string>
     <string name="host_scan_title_failed" formatted="false">"Søk mislyktes"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Start TikTok på nytt manuelt for å ta i bruk resultatene."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Se funksjonsdiagnostikk i Toki."</string>
     <string name="layout_title" formatted="false">"Sideoppsett"</string>
     <string name="layout_summary" formatted="false">"Velg hvilke knapper som skal skjules"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Forstått"</string>
     <string name="video_fit_center" formatted="false">"Midtstilt"</string>
     <string name="video_fit_smart" formatted="false">"Fullskjerm"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

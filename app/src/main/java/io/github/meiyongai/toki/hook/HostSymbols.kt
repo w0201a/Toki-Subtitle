@@ -46,7 +46,7 @@ internal enum class HostSymbol {
 /** 以完整代码集合和规则摘要验证私有持久结果，唯一匹配后才允许宿主符号注册。 */
 internal object HostSymbols {
     internal const val INDEX_FORMAT = "index-v9"
-    private var resolved = java.util.Properties()
+    @Volatile private var resolved = java.util.Properties()
     private val rules: String by lazy {
         checkNotNull(HostSymbols::class.java.getResourceAsStream("/toki-host-rules.tsv")) {
             "模块缺少 DEX 特征规则"
@@ -60,9 +60,9 @@ internal object HostSymbols {
      * @return 是否已经存在与完整代码集合及规则一致的缓存。
      * Callers: TokiModule.onPackageReady。
      */
-    fun initialize(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>): Boolean {
+    fun initialize(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onPrepared: () -> Unit = {}): Boolean {
         try {
-            return prepare(info, scanAllowed, required)
+            return prepare(info, scanAllowed, required, onPrepared)
         } catch (error: Exception) {
             // 同步准备位于框架生命周期内，记录可见状态后仍保留原始异常和严格契约。
             HookRuntime.failure("HostSymbols", error, "适配准备失败")
@@ -78,7 +78,7 @@ internal object HostSymbols {
      * @return 结果是否已可用于当前进程注册。
      * Callers: initialize。
      */
-    private fun prepare(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>): Boolean {
+    private fun prepare(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onPrepared: () -> Unit): Boolean {
         require(required.isNotEmpty()) { "无需符号适配的会话不能启动扫描" }
         val paths = listOf(info.sourceDir) + info.splitSourceDirs.orEmpty()
         val identity = HostDexIndex.identity(paths)
@@ -139,10 +139,20 @@ internal object HostSymbols {
                     HostSymbolCache.write(cache, result)
                     HookRuntime.event("TokiHostSymbols", "结果保存并核对成功 pid=${android.os.Process.myPid()} key=$key")
                     val failures = result.stringPropertyNames().filter { it.startsWith("error.") }
-                    HookRuntime.adaptation("扫描结果已保存，请手动重启 TikTok\n代码标识：$identity\n未匹配目标：${failures.joinToString().ifEmpty { "无" }}")
-                    HookRuntime.state("HostSymbols", "扫描完成，等待重新打开")
-                    HostScanController.session.ready()
-                    HostScanController.onScanFinished()
+                    // Publish verified mappings before installing hooks in the running host.
+                    // The main-thread callback also handles already-created application state.
+                    resolved = result
+                    android.os.Handler(android.os.Looper.getMainLooper()).post {
+                        try {
+                            HostScanController.session.ready(onPrepared)
+                            HookRuntime.adaptation("自动适配完成，已应用到当前进程\n代码标识：$identity\n未匹配目标：${failures.joinToString().ifEmpty { "无" }}")
+                            HookRuntime.state("HostSymbols", "自动适配已应用")
+                        } catch (error: Exception) {
+                            HookRuntime.failure("HostSymbols", error, "适配结果已保存，功能安装失败")
+                            HostScanController.session.fail()
+                        }
+                        HostScanController.onScanFinished()
+                    }
                 } catch (error: Exception) {
                     HookRuntime.event("TokiHostSymbols", "扫描未完成 pid=${android.os.Process.myPid()} key=$key error=${error.javaClass.name}")
                     HookRuntime.failure("HostSymbols", error, "扫描失败，未发布缓存")

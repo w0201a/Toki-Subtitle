@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Tavsiya etilgan ijodkorlarni yashirish"</string>
     <string name="host_scan_title_complete" formatted="false">"Qidiruv tugallandi"</string>
     <string name="host_scan_title_failed" formatted="false">"Qidiruv amalga oshmadi"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Natijalarni qoʻllash uchun TikTok ilovasini qoʻlda qayta ishga tushiring."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Toki ilovasida funksiyalar diagnostikasini koʻring."</string>
     <string name="layout_title" formatted="false">"Sahifa tartibi"</string>
     <string name="layout_summary" formatted="false">"Yashiriladigan tugmalarni tanlang"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Tushunarli"</string>
     <string name="video_fit_center" formatted="false">"Markazda"</string>
     <string name="video_fit_smart" formatted="false">"To‘liq ekran"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

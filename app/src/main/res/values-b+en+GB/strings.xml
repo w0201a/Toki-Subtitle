@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Hide suggested creators"</string>
     <string name="host_scan_title_complete" formatted="false">"Search complete"</string>
     <string name="host_scan_title_failed" formatted="false">"Search failed"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Restart TikTok manually to apply the results."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"View feature diagnostics in Toki."</string>
     <string name="layout_title" formatted="false">"Page layout"</string>
     <string name="layout_summary" formatted="false">"Choose which controls to hide"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Got it"</string>
     <string name="video_fit_center" formatted="false">"Centered"</string>
     <string name="video_fit_smart" formatted="false">"Fullscreen"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

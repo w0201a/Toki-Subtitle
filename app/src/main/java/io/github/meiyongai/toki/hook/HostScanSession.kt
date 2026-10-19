@@ -53,8 +53,9 @@ internal class HostScanSession {
      * @return Unit。
      * Callers: HostSymbols、单元测试。
      */
-    @Synchronized fun ready() {
+    @Synchronized fun ready(install: () -> Unit = {}) {
         check(status.phase == HostScanPhase.SAVING)
+        install()
         status = status.copy(phase = HostScanPhase.READY)
     }
 

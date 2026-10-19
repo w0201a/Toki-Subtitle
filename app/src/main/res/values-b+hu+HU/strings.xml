@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Ajánlott alkotók elrejtése"</string>
     <string name="host_scan_title_complete" formatted="false">"Keresés befejezve"</string>
     <string name="host_scan_title_failed" formatted="false">"A keresés sikertelen"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Az eredmények alkalmazásához indítsd újra kézzel a TikTok alkalmazást."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Nézd meg a funkciók diagnosztikáját a Toki alkalmazásban."</string>
     <string name="layout_title" formatted="false">"Oldalelrendezés"</string>
     <string name="layout_summary" formatted="false">"Válaszd ki az elrejtendő elemeket"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Értem"</string>
     <string name="video_fit_center" formatted="false">"Középre"</string>
     <string name="video_fit_smart" formatted="false">"Teljes képernyő"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

@@ -40,6 +40,9 @@ final class ExtensionSemanticContracts {
         if (renderer!=null) description(renderer,result);
         captions(definitions,result);
         menu(definitions,result);
+        titleEligibility(definitions,result);
+        captionService(definitions,result);
+        translationLanguage(definitions,result);
         ClassDef aweme=definitions.get("com.ss.android.ugc.aweme.feed.model.Aweme");
         if (aweme!=null) for (Method method:aweme.getMethods()) if (method.getName().equals("getVideo") &&
                 ExtensionDexIndex.signature(method).equals("()Lcom/ss/android/ugc/aweme/feed/model/Video;")) {
@@ -50,15 +53,108 @@ final class ExtensionSemanticContracts {
             if (field) accept(result,"com.ss.android.ugc.aweme.feed.model.Aweme:method.getVideo()Lcom/ss/android/ugc/aweme/feed/model/Video;",key(method));
         }
     }
+    private static void translationLanguage(Map<String,ClassDef> definitions, Properties result) {
+        ClassDef service=definitions.get("com.ss.android.ugc.aweme.translation.service.TranslationServiceImpl");
+        String facade=result.getProperty("class.X.03hV"),request=result.getProperty("X.03hV:method.LJIIJ(Ljava/lang/String;)LX/02tQ;");
+        if(service==null || facade==null || request==null) return;
+        String facadeType="L"+facade.replace('.','/')+";";
+        Set<String> targets=new HashSet<>();
+        for(Method method:service.getMethods()) if(key(method).equals(request)) {
+            for(var call:calls(method)) if(call.getDefiningClass().equals(facadeType) && ExtensionDexIndex.signature(call).equals("()Ljava/lang/String;"))
+                for(Method target:service.getMethods()) if(key(target).equals(key(call)) &&
+                    calls(target,"Landroid/text/TextUtils;","isEmpty","(Ljava/lang/CharSequence;)Z")) {
+                    boolean language=false;
+                    for(var source:calls(target)) if(source.getDefiningClass().equals("Lcom/ss/android/ugc/aweme/translation/service/ITranslationLangKevaService;") &&
+                        ExtensionDexIndex.signature(source).equals("()Ljava/lang/String;")) language=true;
+                    if(language) targets.add(key(target));
+                }
+        }
+        if(targets.size()==1) accept(result,"X.03hV:method.LLILLIZIL()Ljava/lang/String;",targets.iterator().next());
+    }
+    private static void captionService(Map<String,ClassDef> definitions, Properties result) {
+        String name="com.ss.android.ugc.aweme.service.CaptionServiceImpl";
+        ClassDef service=definitions.get(result.getProperty("class."+name,""));
+        String selection=result.getProperty("class.X.08ZQ");
+        if(service==null || selection==null) return;
+        String selectionType="L"+selection.replace('.','/')+";";
+        List<Method> matches=new ArrayList<>();
+        for(Method method:service.getMethods()) if((method.getAccessFlags()&8)==0 &&
+            ExtensionDexIndex.signature(method).equals("("+AWEME+")"+selectionType) &&
+            calls(method,AWEME,"getVideo","()Lcom/ss/android/ugc/aweme/feed/model/Video;") &&
+            calls(method,"Lcom/ss/android/ugc/aweme/feed/model/Video;","getCaptionModel","()Lcom/ss/android/ugc/aweme/feed/model/CaptionModel;")) {
+            boolean tracks=false;
+            for(var instruction:code(method)) if(instruction.getOpcode()==Opcode.IGET_OBJECT &&
+                instruction instanceof ReferenceInstruction r && r.getReference() instanceof FieldReference f &&
+                f.getDefiningClass().equals("Lcom/ss/android/ugc/aweme/feed/model/CaptionModel;") &&
+                f.getName().equals("captionList") && f.getType().equals("Ljava/util/List;")) tracks=true;
+            if(tracks) matches.add(method);
+        }
+        if(matches.size()==1) accept(result,name+":method.LJIIIZ("+AWEME+")LX/08ZQ;",key(matches.get(0)));
+    }
+    private static boolean calls(Method method, String owner, String name, String signature) {
+        return calls(method).stream().anyMatch(it -> it.getDefiningClass().equals(owner) &&
+            it.getName().equals(name) && ExtensionDexIndex.signature(it).equals(signature));
+    }
+    private static void titleEligibility(Map<String,ClassDef> definitions, Properties result) {
+        String owner="com.ss.android.ugc.aweme.translation.service.CLATranslatabilityServiceImpl";
+        ClassDef service=definitions.get(result.getProperty("class."+owner,""));
+        if (service==null) return;
+        for (boolean photo:List.of(false,true)) {
+            List<Method> gates=new ArrayList<>();
+            for (Method method:service.getMethods()) if ((method.getAccessFlags()&8)==0 &&
+                ExtensionDexIndex.signature(method).equals("("+AWEME+")Z") &&
+                calls(method,AWEME,photo?"isPhotoTitleTranslatable":"isDescTranslatable","()Z") &&
+                calls(method,"Landroid/text/TextUtils;","isEmpty","(Ljava/lang/CharSequence;)Z") &&
+                calls(method,"Landroid/text/TextUtils;","equals","(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Z")) gates.add(method);
+            if (gates.size()!=1) continue;
+            Method gate=gates.get(0);
+            accept(result,owner+":method."+(photo?"LIZLLL":"LJ")+"("+AWEME+")Z",key(gate));
+            List<Method> automatic=new ArrayList<>();
+            for (Method method:service.getMethods()) if ((method.getAccessFlags()&8)==0 &&
+                ExtensionDexIndex.signature(method).equals("("+AWEME+"Ljava/lang/Boolean;)Z") &&
+                calls(method,service.getType(),gate.getName(),ExtensionDexIndex.signature(gate)) &&
+                calls(method,AWEME,"getAid","()Ljava/lang/String;") &&
+                calls(method,"Ljava/lang/Boolean;","booleanValue","()Z")) {
+                boolean override=false;
+                for (var instruction:code(method)) if (instruction.getOpcode()==Opcode.SGET_OBJECT &&
+                    instruction instanceof ReferenceInstruction r && r.getReference() instanceof FieldReference f &&
+                    f.getName().equals("OVERRIDE_TO_TRANSLATED") && f.getType().equals(f.getDefiningClass())) override=true;
+                if (override) automatic.add(method);
+            }
+            if (automatic.size()==1) accept(result,owner+":method."+(photo?"LIZJ":"LJIILL")+
+                "("+AWEME+"Ljava/lang/Boolean;)Z",key(automatic.get(0)));
+        }
+    }
     private static void captions(Map<String,ClassDef> definitions, Properties result) {
         String owner="com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2";
         ClassDef assem=definitions.get(owner);
         String frame=result.getProperty("class.X.0B14"), renderer=result.getProperty("class.X.0B1g");
-        String render=result.getProperty("X.0B1g:method.LJIIIZ(Ljava/lang/String;LX/0B17;Ljava/lang/String;LX/0B18;)V");
+        String renderRole="X.0B1g:method.LJIIIZ(Ljava/lang/String;LX/0B17;Ljava/lang/String;LX/0B18;)V";
+        String render=result.getProperty(renderRole);
         String rendererField=result.getProperty(owner+":field.LLLLLILLIL");
         String textField=result.getProperty("X.0B14:field.LIZ"),stateField=result.getProperty("X.0B14:field.LIZIZ");
-        if (assem==null || frame==null || renderer==null || render==null || rendererField==null || textField==null || stateField==null) return;
+        if (assem==null || frame==null || renderer==null || rendererField==null || textField==null || stateField==null) return;
         String frameType="L"+frame.replace('.','/')+";",rendererType="L"+renderer.replace('.','/')+";";
+        if (render==null) {
+            String state=result.getProperty("class.X.0B17"),mode=result.getProperty("class.X.0B18");
+            ClassDef renderClass=definitions.get(renderer);
+            if(state==null || mode==null || renderClass==null) return;
+            String signature="(Ljava/lang/String;L"+state.replace('.','/')+";Ljava/lang/String;L"+mode.replace('.','/')+";)V";
+            Set<String> renderCalls=new HashSet<>();
+            for(Method method:assem.getMethods()) if(ExtensionDexIndex.signature(method).equals("("+frameType+")V")) {
+                Set<String> reads=new HashSet<>();
+                for(var instruction:code(method)) if(instruction.getOpcode()==Opcode.IGET_OBJECT &&
+                    instruction instanceof ReferenceInstruction r && r.getReference() instanceof FieldReference f)
+                    reads.add(f.getDefiningClass()+":"+f.getName());
+                if(!reads.contains(frameType+":"+textField) || !reads.contains(frameType+":"+stateField) ||
+                    !reads.contains(assem.getType()+":"+rendererField)) continue;
+                for(var called:calls(method)) if(called.getDefiningClass().equals(rendererType) && ExtensionDexIndex.signature(called).equals(signature))
+                    for(Method target:renderClass.getMethods()) if((target.getAccessFlags()&8)==0 && key(target).equals(key(called))) renderCalls.add(key(target));
+            }
+            if(renderCalls.size()!=1) return;
+            render=renderCalls.iterator().next();
+            accept(result,renderRole,render);
+        }
         List<Method> matches=new ArrayList<>();
         for (Method method:assem.getMethods()) if (ExtensionDexIndex.signature(method).equals("("+frameType+")V") && (method.getAccessFlags()&8)==0) {
             Set<String> reads=new HashSet<>(); boolean calls=false;

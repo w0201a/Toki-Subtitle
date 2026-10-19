@@ -67,19 +67,29 @@ internal object HostNativeIndex {
             .map { profile.getProperty(it) }.toSet()
         val witnessHeaders = profile.stringPropertyNames().filter { it.startsWith("witness.") }
             .map { it.substring(8, 72) }.toSet()
-        val selectors = (classHeaders + witnessHeaders).map { header ->
-            profile.getProperty("selector.$header").split(',').map(String::toInt) to (header in classHeaders)
-        }.distinct()
+        val selectors = (classHeaders + witnessHeaders).toList()
         val selected = linkedSetOf<String>()
         for (path in paths) {
             val code = ZipFile(path).use { apk -> apk.entries().asSequence().any { it.name.endsWith(".dex") } }
             if (!code) continue
             DexKitBridge.create(path).use { bridge ->
-                for ((counts, referenceClass) in selectors) {
+                for (header in selectors) {
+                    val counts = profile.getProperty("selector.$header").split(',').map(String::toInt)
+                    val referenceClass = header in classHeaders
                     val (methods, fields, interfaces) = counts
                     bridge.findClass(FindClass().matcher(ClassMatcher().apply {
                         if (referenceClass && methods >= 8) methodCount((methods * 0.6).toInt(), (methods / 0.6).toInt())
                         else { methodCount(methods); fieldCount(fields) }
+                        profile.getProperty("native.super.$header")?.takeIf { it.isNotEmpty() && '*' !in it }?.let {
+                            superClass(DexSignUtil.getTypeName(it))
+                        }
+                        profile.getProperty("native.interfaces.$header", "").split('|')
+                            .filter { it.isNotEmpty() && '*' !in it }.forEach { addInterface(DexSignUtil.getTypeName(it)) }
+                        if (!referenceClass || methods < 8) {
+                            profile.getProperty("native.methods.$header", "").split('|').filter { it.isNotEmpty() }
+                                .sortedByDescending { value -> value.count { it == '/' } }
+                                .take(3).forEach { addMethod(signature(it)) }
+                        }
                     }.interfaceCount(interfaces))).forEach { selected.add(it.descriptor) }
                 }
             }

@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Ficha mapendekezo ya watayarishi"</string>
     <string name="host_scan_title_complete" formatted="false">"Utafutaji umekamilika"</string>
     <string name="host_scan_title_failed" formatted="false">"Utafutaji umeshindwa"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Anzisha upya TikTok wewe mwenyewe ili kutumia matokeo."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Angalia uchunguzi wa vipengele katika Toki."</string>
     <string name="layout_title" formatted="false">"Mpangilio wa ukurasa"</string>
     <string name="layout_summary" formatted="false">"Chagua vidhibiti vya kuficha"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Nimeelewa"</string>
     <string name="video_fit_center" formatted="false">"Katikati"</string>
     <string name="video_fit_smart" formatted="false">"Skrini nzima"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

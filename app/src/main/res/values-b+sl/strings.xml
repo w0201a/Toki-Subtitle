@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"Skrij predlagane ustvarjalce"</string>
     <string name="host_scan_title_complete" formatted="false">"Iskanje končano"</string>
     <string name="host_scan_title_failed" formatted="false">"Iskanje ni uspelo"</string>
-    <string name="host_scan_restart_hint" formatted="false">"Ročno znova zaženi TikTok, da uveljaviš rezultate."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Oglej si diagnostiko funkcij v Toki."</string>
     <string name="layout_title" formatted="false">"Postavitev strani"</string>
     <string name="layout_summary" formatted="false">"Izberite gumbe, ki jih želite skriti"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"Razumem"</string>
     <string name="video_fit_center" formatted="false">"Na sredini"</string>
     <string name="video_fit_smart" formatted="false">"Celoten zaslon"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>

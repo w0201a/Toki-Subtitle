@@ -254,7 +254,7 @@
     <string name="feature_filter_creators" formatted="false">"추천 크리에이터 숨기기"</string>
     <string name="host_scan_title_complete" formatted="false">"검색 완료"</string>
     <string name="host_scan_title_failed" formatted="false">"검색 실패"</string>
-    <string name="host_scan_restart_hint" formatted="false">"결과를 적용하려면 TikTok을 직접 다시 시작하세요."</string>
+    <string name="host_scan_restart_hint" formatted="false">"Adaptation is ready. Features apply automatically; switch to the next video to refresh existing content."</string>
     <string name="host_scan_failure_hint" formatted="false">"Toki에서 기능 진단을 확인하세요."</string>
     <string name="layout_title" formatted="false">"화면 레이아웃"</string>
     <string name="layout_summary" formatted="false">"숨길 항목 선택"</string>
@@ -313,4 +313,6 @@
     <string name="host_scan_done" formatted="false">"알겠어요"</string>
     <string name="video_fit_center" formatted="false">"가운데 정렬"</string>
     <string name="video_fit_smart" formatted="false">"전체 화면"</string>
+    <string name="host_scan_title_extensions">"Adapting subtitles"</string>
+    <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
 </resources>
