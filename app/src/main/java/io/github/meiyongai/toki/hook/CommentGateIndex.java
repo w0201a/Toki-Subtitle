@@ -64,7 +64,7 @@ final class CommentGateIndex {
         List<Method> all=new ArrayList<>(zero);all.addAll(one);
         for(Method method:all) if(method!=reader && calls(method).stream().noneMatch(call->call.getDefiningClass().equals(type.getType()) &&
             call.getName().equals(reader.getName()) && ExtensionDexIndex.signature(call).equals("()Z"))) return List.of();
-        return all.stream().map(method->method.getName()+ExtensionDexIndex.signature(method)).sorted().toList();
+        return all.stream().map(method->method.getName()+ExtensionDexIndex.signature(method)).sorted().collect(java.util.stream.Collectors.toList());
     }
     static void resolve(List<String> paths,Properties result) throws IOException {
         Set<String> suppliers=new HashSet<>();
