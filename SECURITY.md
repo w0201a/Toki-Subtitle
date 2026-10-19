@@ -2,6 +2,8 @@
 
 Only application source, required resources, tests, Gradle configuration and public project documentation are tracked. Local signing files, credentials, build outputs, APKs, device diagnostics, screenshots and host analysis artifacts are excluded.
 
+The local `docs/` directory is ignored by default. Only the curated public `ISSUES_AND_FIXES.md` and `LINKS.md` are explicitly allowed, so routine staging does not include private troubleshooting records.
+
 Before publishing, scan the staged content with Gitleaks:
 
 ```sh

@@ -43,3 +43,8 @@ signing.properties
 *.dex
 /keystore/
 /SHA256SUMS-release*.txt
+
+# Only curated public documentation may be tracked from local docs.
+/docs/*
+!/docs/ISSUES_AND_FIXES.md
+!/docs/LINKS.md
