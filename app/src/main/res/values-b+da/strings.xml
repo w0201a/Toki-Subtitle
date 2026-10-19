@@ -334,4 +334,5 @@
     <string name="host_scan_stage_relationships">"Analyzing business call relationships"</string>
     <string name="host_scan_stage_members">"Verifying translation and display contracts"</string>
     <string name="host_scan_dex_progress">"Processed %1$d / %2$d DEX files in this phase"</string>
+    <string name="status_path_comment">"Comment translation entry"</string>
 </resources>

@@ -146,6 +146,7 @@ internal object TranslationPathCatalog {
         "SubtitleMenu" to R.string.status_path_menu,
         "DescriptionNativeTranslation" to R.string.status_path_title_native,
         "DescriptionTranslation" to R.string.status_path_title_display,
+        "CommentTranslationGate" to R.string.status_path_comment,
         "CommentPollTranslation" to R.string.status_path_poll,
     )
     fun state(report: HookFeatureReport): HookVisualState = when {

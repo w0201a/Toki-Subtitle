@@ -12,8 +12,7 @@ object CommentTranslateHook {
 
     fun init(module: XposedModule, loader: ClassLoader) {
         HookRuntime.install("CommentTranslationGate") {
-        val gate = HostSymbols.resolve(loader, HostSymbol.COMMENT_TRANSLATION)
-        val methods = gate.declaredMethods.filter {
+        val methods = ExtensionSymbols.commentGate(loader) ?: HostSymbols.resolve(loader, HostSymbol.COMMENT_TRANSLATION).declaredMethods.filter {
             Modifier.isStatic(it.modifiers) && it.returnType == Boolean::class.javaPrimitiveType &&
                 (it.parameterCount == 0 || it.parameterTypes.contentEquals(arrayOf(Boolean::class.javaPrimitiveType)))
         }

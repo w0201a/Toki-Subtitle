@@ -7,7 +7,7 @@ import java.util.Properties
 
 /** Independently cached extension contracts. Unknown versions require unique structural matches. */
 internal object ExtensionSymbols {
-    private const val MATCHER_REVISION = "relationships-v5"
+    private const val MATCHER_REVISION = "relationships-v6"
     private val reference: Properties by lazy {
         Properties().apply { checkNotNull(ExtensionSymbols::class.java.getResourceAsStream("/toki-extension-profile.properties")).use(::load) }
     }
@@ -87,6 +87,24 @@ internal object ExtensionSymbols {
         val classes = result.stringPropertyNames().count { it.startsWith("class.") }
         val failures = result.stringPropertyNames().count { it.startsWith("error.") }
         HookRuntime.event("ExtensionSymbols", "$stage classes=$classes unresolvedContracts=$failures; unique structural contracts only")
+    }
+    fun commentGate(loader: ClassLoader): List<Method>? {
+        val owner = resolved.getProperty("commentGate.class") ?: return null
+        val type = Class.forName(owner, false, loader)
+        val methods = checkNotNull(resolved.getProperty("commentGate.methods")).split('\n').map { encoded ->
+            val signature = encoded.substringAfter('(')
+            val parameters = when (signature) {
+                ")Z" -> emptyArray<Class<*>>()
+                "Z)Z" -> arrayOf(Boolean::class.javaPrimitiveType!!)
+                else -> error("Invalid comment gate signature")
+            }
+            type.getDeclaredMethod(encoded.substringBefore('('), *parameters).apply {
+                check(java.lang.reflect.Modifier.isStatic(modifiers) && returnType == Boolean::class.javaPrimitiveType)
+                isAccessible = true
+            }
+        }
+        check(methods.size == 3 && methods.distinct().size == 3)
+        return methods
     }
     private fun baseline(type: Class<*>): String = reverse[type.name] ?: type.name
 

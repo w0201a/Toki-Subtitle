@@ -536,6 +536,8 @@ public final class ExtensionDexIndex {
         }
         // Full structural fingerprints are no longer needed by the relationship pass.
         matches.clear(); callHints.clear(); fieldHints.clear(); implementationHints.clear();
+        phase("comment-gate");
+        CommentGateIndex.resolve(paths,result);
         phase("relationships");
         ExtensionRelationshipIndex.resolve(paths, profile, result, definitions);
         phase("members");

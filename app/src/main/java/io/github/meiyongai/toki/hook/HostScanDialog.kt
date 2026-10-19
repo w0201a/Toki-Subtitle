@@ -146,7 +146,7 @@ private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit) {
                 if (state.phase == HostScanPhase.EXTENSIONS && state.extensionStage.isNotEmpty()) {
                     val stage = when (state.extensionStage) {
                         "native" -> R.string.host_scan_stage_native
-                        "relationships" -> R.string.host_scan_stage_relationships
+                        "relationships", "comment-gate" -> R.string.host_scan_stage_relationships
                         "members" -> R.string.host_scan_stage_members
                         else -> R.string.host_scan_stage_structure
                     }
