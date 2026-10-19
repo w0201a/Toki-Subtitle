@@ -1,5 +1,6 @@
 package io.github.meiyongai.toki.subtitle.ui
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,7 +42,12 @@ fun SubtitleSponsorDialog(onDismiss: () -> Unit) {
                 try {
                     withContext(Dispatchers.IO) {
                         exportOriginalImage(
-                            openInput = { context.resources.openRawResource(resource) },
+                            openInput = {
+                                // Android supports reading file-backed drawable resources as original bytes.
+                                @SuppressLint("ResourceType")
+                                val input = context.resources.openRawResource(resource)
+                                input
+                            },
                             openOutput = { context.contentResolver.openOutputStream(uri, "w") }
                         )
                     }
