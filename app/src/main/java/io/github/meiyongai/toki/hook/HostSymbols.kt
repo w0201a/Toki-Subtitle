@@ -90,7 +90,9 @@ internal object HostSymbols {
             else HostBundledProfiles.load(identity, rules)
         val stored = bundled ?: local
         val plan = HostScanPlan(stored, rules, identity, INDEX_FORMAT, required)
-        if (plan.pending.isEmpty()) {
+        val needsExtensions = required.any { it in setOf(HostSymbol.CAPTION_CONSUMER, HostSymbol.COMMENT_TRANSLATION) }
+        val extensionsReady = !needsExtensions || ExtensionSymbols.load(identity, checkNotNull(cache.parentFile))
+        if (plan.pending.isEmpty() && extensionsReady) {
             if (bundled != null && scanAllowed) HostSymbolCache.write(cache, bundled)
             resolved = if (stored.getProperty("cache.format") == INDEX_FORMAT && stored.getProperty("cache.key") == key) stored else {
                 plan.merge(java.util.Properties()).apply {
@@ -110,15 +112,20 @@ internal object HostSymbols {
         val reason = "${HostCacheReason.describe(stored, identity, rulesIdentity)}；补查目标：${plan.pending.joinToString { it.name }}"
         HookRuntime.event("TokiHostSymbols", "需要查找：$reason；pid=${android.os.Process.myPid()} allowed=$scanAllowed oldKey=${stored.getProperty("cache.key")} newKey=$key code=$identity rules=$rulesIdentity apkCount=${paths.size}")
         val targets = plan.pending
-        val selectedRules = selectRules(rules, targets)
-        HookRuntime.adaptation(if (scanAllowed) "正在查找 ${targets.size} 项功能依赖 · $identity" else "等待主进程扫描完成后重启")
+        val selectedRules = if (targets.isEmpty()) "" else selectRules(rules, targets)
+        HookRuntime.adaptation(if (scanAllowed) "正在查找 ${targets.size} 项基础依赖${if (!extensionsReady) "及字幕扩展" else ""} · $identity" else "等待主进程扫描完成后重启")
         HookRuntime.state("HostSymbols", if (scanAllowed) "正在扫描" else "等待主进程准备")
         if (scanAllowed) {
             HostScanController.session.begin()
             Thread({
                 try {
-                    val scanned = HostNativeIndex.scan(paths, selectedRules) { completed, total ->
+                    val scanned = if (targets.isEmpty()) java.util.Properties() else HostNativeIndex.scan(paths, selectedRules) { completed, total ->
                         HostScanController.session.progress(completed, total)
+                    }
+                    if (!extensionsReady) {
+                        HostScanController.session.extensions()
+                        HookRuntime.event("ExtensionSymbols", "discovering subtitle extension structures for new host")
+                        ExtensionSymbols.scan(paths, identity, checkNotNull(cache.parentFile))
                     }
                     HostScanController.session.saving()
                     check(HostDexIndex.identity(paths) == identity) { "扫描期间宿主代码集合发生变化，缓存未发布" }

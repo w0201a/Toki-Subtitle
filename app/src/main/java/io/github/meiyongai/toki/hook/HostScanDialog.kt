@@ -113,12 +113,14 @@ private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit) {
     val heading = when {
         failed -> R.string.host_scan_title_failed
         complete -> R.string.host_scan_title_complete
+        state.phase == HostScanPhase.EXTENSIONS -> R.string.host_scan_title_extensions
         state.phase == HostScanPhase.SAVING -> R.string.host_scan_title_saving
         else -> R.string.host_scan_title_running
     }
     val description = when {
         failed -> R.string.host_scan_failure_hint
         complete -> R.string.host_scan_restart_hint
+        state.phase == HostScanPhase.EXTENSIONS -> R.string.host_scan_extensions_hint
         state.phase == HostScanPhase.SAVING -> R.string.host_scan_saving_hint
         else -> R.string.host_scan_keep_foreground
     }
@@ -144,7 +146,8 @@ private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit) {
                 TextButton(onClick = onResultDismiss, modifier = Modifier.align(Alignment.End)) {
                     Text(stringResource(if (complete) R.string.host_scan_done else R.string.common_close))
                 }
-            } else if (state.phase == HostScanPhase.SAVING) {
+            } else if (state.phase == HostScanPhase.SAVING || state.phase == HostScanPhase.EXTENSIONS ||
+                (state.total > 0 && state.completed == state.total)) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             } else {
                 // 准备工作量时保持空进度，避免循环动画看起来先填满、再退回零。

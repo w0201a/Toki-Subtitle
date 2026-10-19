@@ -60,6 +60,34 @@ internal object HostNativeIndex {
         }, selected)
     }
 
+    /** Native count filters are necessary conditions only; Java still verifies complete structures. */
+    fun extensionCandidates(paths: List<String>, profile: Properties): Set<String> {
+        library
+        val classHeaders = profile.stringPropertyNames().filter { it.startsWith("header.") }
+            .map { profile.getProperty(it) }.toSet()
+        val witnessHeaders = profile.stringPropertyNames().filter { it.startsWith("witness.") }
+            .map { it.substring(8, 72) }.toSet()
+        val selectors = (classHeaders + witnessHeaders).map { header ->
+            profile.getProperty("selector.$header").split(',').map(String::toInt) to (header in classHeaders)
+        }.distinct()
+        val selected = linkedSetOf<String>()
+        for (path in paths) {
+            val code = ZipFile(path).use { apk -> apk.entries().asSequence().any { it.name.endsWith(".dex") } }
+            if (!code) continue
+            DexKitBridge.create(path).use { bridge ->
+                for ((counts, referenceClass) in selectors) {
+                    val (methods, fields, interfaces) = counts
+                    bridge.findClass(FindClass().matcher(ClassMatcher().apply {
+                        if (referenceClass && methods >= 8) methodCount((methods * 0.6).toInt(), (methods / 0.6).toInt())
+                        else { methodCount(methods); fieldCount(fields) }
+                    }.interfaceCount(interfaces))).forEach { selected.add(it.descriptor) }
+                }
+            }
+        }
+        HookRuntime.event("ExtensionSymbols", "native structural candidates=${selected.size}")
+        return selected
+    }
+
     /**
      * 每个符号从首个角色进入，保留该角色的全部替代规则；其余同类角色交由统一验证。
      * 完整匹配必然包含入口角色，避免通用关联角色扩大候选集合。

@@ -28,7 +28,8 @@ object AuthorLocationHook {
     /** 在挂载前验证作者展示及只读模型契约；缺失或类型不符直接报告。 */
     internal class Contract(builder: Class<*>, name: String, user: Class<*>, aweme: Class<*>) {
         val build = builder.getDeclaredMethod(name, String::class.java, user, aweme).apply {
-            check(returnType == String::class.java && Modifier.isStatic(modifiers)) { "作者展示入口类型不符合契约" }
+            check(returnType == String::class.java && (Modifier.isStatic(modifiers) ||
+                declaringClass.name == "com.ss.android.ugc.aweme.service.CommonFeedApiService")) { "作者展示入口类型不符合契约" }
             isAccessible = true
         }
         val region = user.getMethod("getRegion").apply {

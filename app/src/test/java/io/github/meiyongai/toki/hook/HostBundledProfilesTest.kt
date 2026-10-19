@@ -55,9 +55,20 @@ class HostBundledProfilesTest {
         val profiles = checkNotNull(directory.listFiles()).filter { it.extension == "properties" }
         assertTrue(profiles.isNotEmpty())
         profiles.forEach { file ->
-            val loaded = file.inputStream().use { HostBundledProfiles.read(it, file.nameWithoutExtension, source, HostSymbols.INDEX_FORMAT) }
-            assertTrue(HostScanPlan(loaded, source, file.nameWithoutExtension, HostSymbols.INDEX_FORMAT,
-                HostSymbol.entries.toSet()).pending.isEmpty())
+            val loaded = file.inputStream().use { HostBundledProfiles.readCompatible(it, file.nameWithoutExtension, source, HostSymbols.INDEX_FORMAT) }
+            val plan = HostScanPlan(loaded, source, file.nameWithoutExtension, HostSymbols.INDEX_FORMAT, HostSymbol.entries.toSet())
+            assertTrue(plan.retained.isNotEmpty())
+            assertEquals(HostSymbol.entries.toSet(), plan.retained + plan.pending)
+        }
+    }
+    @Test fun changedRuleRequiresRediscoveryWithoutLosingOtherVerifiedResults() {
+        val data = profile()
+        val changed = rules.replace("()I", "()Z")
+        val bytes = ByteArrayOutputStream().also { data.store(it, null) }.toByteArray()
+        val loaded = HostBundledProfiles.readCompatible(bytes.inputStream(), "code", changed, "format")
+        assertEquals(setOf(HostSymbol.SETTINGS), HostScanPlan(loaded, changed, "code", "format", setOf(HostSymbol.SETTINGS)).pending)
+        assertThrows(IllegalStateException::class.java) {
+            HostBundledProfiles.readCompatible(bytes.inputStream(), "different-code", changed, "format")
         }
     }
 }

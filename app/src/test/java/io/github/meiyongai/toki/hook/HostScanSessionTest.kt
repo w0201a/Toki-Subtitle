@@ -5,6 +5,26 @@ import org.junit.Test
 
 /** 验证扫描缓存提交和用户确认提示的完整顺序。 */
 class HostScanSessionTest {
+    @Test fun extensionScanDoesNotKeepCompletedCoreProgress() {
+        val session = HostScanSession()
+        session.begin()
+        session.progress(100, 100)
+        session.extensions()
+        assertEquals(HostScanPhase.EXTENSIONS, session.status.phase)
+        assertEquals(0, session.status.total)
+        assertThrows(IllegalStateException::class.java) { session.ready() }
+        session.saving()
+        session.ready()
+        assertEquals(HostScanPhase.READY, session.status.phase)
+    }
+    @Test fun cachedCoreCanRunOnlyExtensionDiscovery() {
+        val session = HostScanSession()
+        session.begin()
+        session.extensions()
+        session.saving()
+        session.ready()
+        assertEquals(HostScanPhase.READY, session.status.phase)
+    }
     /** 保存成功后保留完成摘要，直到用户确认提示。@return Unit。Callers: JUnit。 */
     @Test fun savedResultWaitsForUserAcknowledgement() {
         val session = HostScanSession()

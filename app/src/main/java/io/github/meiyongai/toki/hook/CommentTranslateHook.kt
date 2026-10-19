@@ -11,20 +11,27 @@ object CommentTranslateHook {
     fun refreshConfig(context: Context) = Unit
 
     fun init(module: XposedModule, loader: ClassLoader) {
+        HookRuntime.install("CommentTranslationGate") {
         val gate = HostSymbols.resolve(loader, HostSymbol.COMMENT_TRANSLATION)
-        val methods = listOf(gate.getDeclaredMethod("LIZJ"), gate.getDeclaredMethod("LIZIZ"),
-            gate.getDeclaredMethod("LIZ", Boolean::class.javaPrimitiveType))
+        val methods = gate.declaredMethods.filter {
+            Modifier.isStatic(it.modifiers) && it.returnType == Boolean::class.javaPrimitiveType &&
+                (it.parameterCount == 0 || it.parameterTypes.contentEquals(arrayOf(Boolean::class.javaPrimitiveType)))
+        }
+        check(methods.count { it.parameterCount == 0 } == 2 && methods.count { it.parameterCount == 1 } == 1) {
+            "Comment translation gate contract changed"
+        }
         methods.forEach { method ->
             check(Modifier.isStatic(method.modifiers) && method.returnType == Boolean::class.javaPrimitiveType)
-            module.trackHook("CommentTranslateHook", method).intercept { chain ->
+            module.trackHook("CommentTranslationGate", method).intercept { chain ->
                 val original = chain.proceed() as Boolean
                 original || ConfigClient.getBoolean(KEY_COMMENT_TRANSLATE_ENABLED)
             }
         }
+        }
         if (!ConfigClient.getBoolean(VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED) &&
             !ConfigClient.getBoolean("subtitle_style_enabled")) {
-            CaptionFallbackHook.install(module, loader, "CommentTranslateHook")
-            SubtitleFeature.install(module, loader, "CommentTranslateHook")
+            HookRuntime.install("CaptionFallback") { CaptionFallbackHook.install(module, loader, "CaptionFallback") }
+            HookRuntime.install("SubtitleFeature") { SubtitleFeature.install(module, loader, "SubtitleFeature") }
         }
         CommentPollTranslation.install(module, loader)
     }

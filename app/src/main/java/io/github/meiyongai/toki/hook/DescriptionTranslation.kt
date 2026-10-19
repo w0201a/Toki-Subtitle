@@ -6,7 +6,7 @@ import java.util.Locale
 
 /** 标题、说明文案使用宿主富文本翻译，保留展开、话题、链接及查看原文。 */
 internal object DescriptionTranslation {
-    private const val OWNER = "DescriptionTranslation"
+    private const val OWNER = "DescriptionNativeTranslation"
 
     internal fun eligible(text: String?, language: String?): Boolean {
         if (text.isNullOrBlank() || !text.any(Char::isLetter)) return false
@@ -16,22 +16,23 @@ internal object DescriptionTranslation {
         return text.any { it.isLetter() && Character.UnicodeScript.of(it.code) != Character.UnicodeScript.HAN }
     }
 
-    fun install(module: XposedModule, loader: ClassLoader) = HookRuntime.install(OWNER) {
-        check(listOf(
-            "0259ca5f53357042b72fe6502ca22875aa3035506bfc458fb645146abb19dc16",
-            "a104c3b28e2f4ee94292a0dcc464ff114e63f430e760bfd093c434cc6298a129"
-        ).any(HostSymbols::matchesCodeIdentity))
-        val aweme = loader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme")
-        val desc = aweme.getMethod("getDesc")
-        val descLanguage = aweme.getMethod("getDescLanguage")
-        val aid = aweme.getMethod("getAid")
-        val photo = aweme.getMethod("getPhotoModeImageInfo")
-        val photoTitle = photo.returnType.getMethod("getTitle")
-        val facade = loader.loadClass("X.03hV")
-        val service = checkNotNull(facade.getDeclaredField("LIZIZ").get(null))
-        val override = facade.getDeclaredMethod("LJL", String::class.java)
-        val titleLanguage = loader.loadClass("X.0BAx").getDeclaredMethod("LIZ", aweme)
-        val gate = loader.loadClass("com.ss.android.ugc.aweme.translation.service.CLATranslatabilityServiceImpl")
+    fun install(module: XposedModule, loader: ClassLoader) {
+        HookRuntime.install(OWNER) { installNative(module, loader) }
+        HookRuntime.install("DescriptionTranslation") { DescriptionFallback.install(module, loader, "DescriptionTranslation") }
+    }
+
+    private fun installNative(module: XposedModule, loader: ClassLoader) {
+        val aweme = loader.adaptiveClass("com.ss.android.ugc.aweme.feed.model.Aweme")
+        val desc = aweme.adaptiveMethod("getDesc")
+        val descLanguage = aweme.adaptiveMethod("getDescLanguage")
+        val aid = aweme.adaptiveMethod("getAid")
+        val photo = aweme.adaptiveMethod("getPhotoModeImageInfo")
+        val photoTitle = photo.returnType.adaptiveMethod("getTitle")
+        val facade = loader.adaptiveClass("X.03hV")
+        val service = checkNotNull(facade.adaptiveDeclaredField("LIZIZ").get(null))
+        val override = facade.adaptiveDeclaredMethod("LJL", String::class.java)
+        val titleLanguage = loader.adaptiveClass("X.0BAx").adaptiveDeclaredMethod("LIZ", aweme)
+        val gate = loader.adaptiveClass("com.ss.android.ugc.aweme.translation.service.CLATranslatabilityServiceImpl")
         fun enabled() = ConfigClient.getBoolean(VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED)
         fun accepts(value: Any, title: Boolean): Boolean = if (title) {
             val info = photo.invoke(value)
@@ -43,8 +44,8 @@ internal object DescriptionTranslation {
             Triple("LJ", false, false), Triple("LJIILL", false, true),
             Triple("LIZLLL", true, false), Triple("LIZJ", true, true)
         )) {
-            val method = if (auto) gate.getDeclaredMethod(name, aweme, java.lang.Boolean::class.java)
-                else gate.getDeclaredMethod(name, aweme)
+            val method = if (auto) gate.adaptiveDeclaredMethod(name, aweme, java.lang.Boolean::class.java)
+                else gate.adaptiveDeclaredMethod(name, aweme)
             check(method.returnType == Boolean::class.javaPrimitiveType)
             module.trackHook(OWNER, method).intercept { chain ->
                 val original = chain.proceed() as Boolean
@@ -55,7 +56,7 @@ internal object DescriptionTranslation {
                 } else original
             }
         }
-        val auto = facade.getDeclaredMethod("LJJIZ", aweme)
+        val auto = facade.adaptiveDeclaredMethod("LJJIZ", aweme)
         module.trackHook(OWNER, auto).intercept { chain ->
             val original = chain.proceed() as Boolean
             val value = chain.args[0]
@@ -66,12 +67,11 @@ internal object DescriptionTranslation {
             } else original
         }
         // 观察原生请求实际是否发出，不记录标题正文或视频标识。
-        val request = loader.loadClass("X.0948").getDeclaredMethod("LJJIIJ", loader.loadClass("X.0Agi"))
+        val request = loader.adaptiveClass("X.0948").adaptiveDeclaredMethod("LJJIIJ", loader.adaptiveClass("X.0Agi"))
         module.trackHook(OWNER, request).intercept { chain ->
             if (enabled()) HookRuntime.event(OWNER, "native request started")
             chain.proceed()
         }
-        DescriptionFallback.install(module, loader, OWNER)
         HookRuntime.event(OWNER, "ready; native description and photo title; no length truncation")
     }
 }

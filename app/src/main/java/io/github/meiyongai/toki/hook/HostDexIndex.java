@@ -121,6 +121,13 @@ public final class HostDexIndex {
         }
         return digest(String.join("\n", values));
     }
+    /** Register/data-flow fingerprints retain semantics while tolerating obfuscated callee renames. */
+    public static String semanticLiterals(ClassDef type) {
+        List<String> methods=new ArrayList<>();
+        for (Method method:type.getMethods()) methods.add(ExtensionDexIndex.methodFingerprint(method));
+        Collections.sort(methods);
+        return digest(String.join("\n",methods));
+    }
 
     /**
      * 提取静态初始化直接引用的类型，用于区分结构相同的配置开关。
@@ -368,7 +375,9 @@ public final class HostDexIndex {
             if (matching == null) return;
             String content = literals(type);
             for (Rule rule : matching) {
-                if (content.equals(rule.literals()) && matchesBindings(type, rule.bindings())) {
+                boolean contentMatches = rule.literals().startsWith("semantic-v1:") ?
+                    semanticLiterals(type).equals(rule.literals().substring(12)) : content.equals(rule.literals());
+                if (contentMatches && matchesBindings(type, rule.bindings())) {
                     pending.computeIfAbsent(type.getType(), key -> new LinkedHashSet<>()).add(rule);
                     dependencies.put(type.getType(), dependencies(type));
                 }

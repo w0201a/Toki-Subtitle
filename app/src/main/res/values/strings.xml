@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="nav_home" formatted="false">"Home"</string>
     <string name="nav_features" formatted="false">"Features"</string>
     <string name="page_features" formatted="false">"Settings"</string>
@@ -307,6 +307,8 @@
     <string name="layout_bottom_banners">"Other bottom banners"</string>
     <string name="layout_activities">"Event entry"</string>
     <string name="host_scan_title_running" formatted="false">"Finding methods"</string>
+    <string name="host_scan_title_extensions" tools:ignore="MissingTranslation">Adapting subtitles</string>
+    <string name="host_scan_extensions_hint" tools:ignore="MissingTranslation">Checking subtitles, descriptions and comment polls. Results will be saved for later launches.</string>
     <string name="host_scan_title_saving" formatted="false">"Saving results"</string>
     <string name="host_scan_keep_foreground" formatted="false">"Keep TikTok in the foreground."</string>
     <string name="host_scan_saving_hint" formatted="false">"Please wait."</string>

@@ -11,26 +11,22 @@ internal object CommentPollTranslation {
     private const val OWNER = "CommentPollTranslation"
 
     fun install(module: XposedModule, loader: ClassLoader) = HookRuntime.install(OWNER) {
-        check(listOf(
-            "0259ca5f53357042b72fe6502ca22875aa3035506bfc458fb645146abb19dc16",
-            "a104c3b28e2f4ee94292a0dcc464ff114e63f430e760bfd093c434cc6298a129"
-        ).any(HostSymbols::matchesCodeIdentity))
-        val cell = loader.loadClass("com.ss.android.ugc.aweme.commentv2.commentlist.powercell.PollCell")
-        val poll = loader.loadClass("com.ss.android.ugc.aweme.comment.model.PollInfo")
-        val title = poll.getField("title")
-        val optionText = loader.loadClass("com.ss.android.ugc.aweme.comment.model.OptionCount").getField("text")
-        val ordered = loader.loadClass("X.0QGy").getDeclaredMethod("LIZ", poll)
-        val titleView = cell.getDeclaredField("LLJJJIL").apply { isAccessible = true }
-        val optionViews = cell.getDeclaredField("LLJJJJJIL").apply { isAccessible = true }
+        val cell = loader.adaptiveClass("com.ss.android.ugc.aweme.commentv2.commentlist.powercell.PollCell")
+        val poll = loader.adaptiveClass("com.ss.android.ugc.aweme.comment.model.PollInfo")
+        val title = poll.adaptiveField("title")
+        val optionText = loader.adaptiveClass("com.ss.android.ugc.aweme.comment.model.OptionCount").adaptiveField("text")
+        val ordered = loader.adaptiveClass("X.0QGy").adaptiveDeclaredMethod("LIZ", poll)
+        val titleView = cell.adaptiveDeclaredField("LLJJJIL").apply { isAccessible = true }
+        val optionViews = cell.adaptiveDeclaredField("LLJJJJJIL").apply { isAccessible = true }
         val contract = PollBindingContract.resolve(cell, poll)
         val bind = contract.bind
         val data = contract.data
-        val update = cell.getDeclaredMethod("X5", poll)
-        val unbind = cell.getDeclaredMethod("unBind")
+        val update = cell.adaptiveDeclaredMethod("X5", poll)
+        val unbind = cell.adaptiveDeclaredMethod("unBind")
         val queue = PollTranslationQueue(NativeSubtitleTranslator.transport(loader), { target, index, text ->
             if (index == 0) (titleView.get(target) as? TextView)?.text = text
             else (optionViews.get(target) as? List<*>)?.getOrNull(index - 1)?.let { view ->
-                view.javaClass.getMethod("setOptionLabel", String::class.java).invoke(view, text)
+                view.javaClass.adaptiveMethod("setOptionLabel", String::class.java).invoke(view, text)
             }
         }, { HookRuntime.event(OWNER, it) })
         val main = Handler(Looper.getMainLooper())

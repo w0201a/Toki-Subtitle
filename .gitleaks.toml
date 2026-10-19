@@ -7,3 +7,10 @@ condition = "AND"
 paths = ['''^app/src/main/resources/toki-host-profiles/[a-f0-9]{64}\.properties$''']
 regexTarget = "line"
 regexes = ['''cache\.key=[a-f0-9]{64}\r?$''']
+
+[[allowlists]]
+description = "SHA-256 structural hashes of four public Aweme field contracts, not API credentials"
+condition = "AND"
+paths = ['''^app/src/main/resources/toki-extension-profile\.properties$''']
+regexTarget = "match"
+regexes = ['''^(?:field\.)?(?:keySegmentsInfo|mCommerceVideoAuthInfo|promoteToastKey|surveyKey)=[a-f0-9]{64}$''']

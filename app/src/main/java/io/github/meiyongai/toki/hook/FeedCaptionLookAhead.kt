@@ -19,17 +19,17 @@ internal class FeedCaptionLookAhead(loader: ClassLoader) {
             !Modifier.isAbstract(it.modifiers)
     }
     private val models = mutableListOf<WeakReference<Any>>()
-    private val aweme = loader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme")
-    private val aid = aweme.getMethod("getAid")
-    private val video = aweme.getMethod("getVideo")
-    private val caption = video.returnType.getMethod("getCaptionModel")
-    private val tracks = caption.returnType.getField("captionList")
-    private val language = caption.returnType.getField("originalCaptionLanguage")
-    private val languageCode = language.type.getField("languageCode")
-    private val item = loader.loadClass("com.ss.android.ugc.aweme.feed.model.CaptionItemModel")
-    private val itemCode = item.getField("languageCode")
-    private val itemUrl = item.getField("url")
-    private val itemUrls = item.getField("urlList")
+    private val aweme = loader.adaptiveClass("com.ss.android.ugc.aweme.feed.model.Aweme")
+    private val aid = aweme.adaptiveMethod("getAid")
+    private val video = aweme.adaptiveMethod("getVideo")
+    private val caption = video.returnType.adaptiveMethod("getCaptionModel")
+    private val tracks = caption.returnType.adaptiveField("captionList")
+    private val language = caption.returnType.adaptiveField("originalCaptionLanguage")
+    private val languageCode = language.type.adaptiveField("languageCode")
+    private val item = loader.adaptiveClass("com.ss.android.ugc.aweme.feed.model.CaptionItemModel")
+    private val itemCode = item.adaptiveField("languageCode")
+    private val itemUrl = item.adaptiveField("url")
+    private val itemUrls = item.adaptiveField("urlList")
 
     fun install(module: XposedModule, owner: String) {
         module.trackHook(owner, getItems).intercept { chain ->

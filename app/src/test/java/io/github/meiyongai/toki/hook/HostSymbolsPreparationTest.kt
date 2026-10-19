@@ -100,6 +100,8 @@ class HostSymbolsPreparationTest {
             setProperty("cache.symbols", symbol.name)
             setProperty("error.${symbol.name}", "候选数量=0")
         })
+        // An invalid optional extension DEX is cached as unavailable; core results remain usable.
+        ExtensionSymbols.scan(listOf(host.sourceDir), identity, checkNotNull(file.parentFile))
         assertTrue(HostSymbols.initialize(host, true, setOf(symbol)))
         val saved = file.readBytes()
         val before = HostScanController.session.status.phase

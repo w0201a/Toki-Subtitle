@@ -17,28 +17,33 @@ object VideoTranslateHook {
      * Callers: TokiModule.installHost。
      */
     fun init(module: XposedModule, classLoader: ClassLoader) {
+        HookRuntime.install("TranslationReverseGate") {
         val translationGate = HostSymbols.resolve(classLoader, HostSymbol.TRANSLATION_REVERSE)
             .getDeclaredMethod(HostSymbols.member(HostSymbol.TRANSLATION_REVERSE, "blocked"))
             .apply { check(Modifier.isStatic(modifiers) && returnType == Boolean::class.javaPrimitiveType); isAccessible = true }
-        module.trackHook("VideoTranslateHook", translationGate).intercept { chain ->
+        module.trackHook("TranslationReverseGate", translationGate).intercept { chain ->
             val blocked = chain.proceed() as Boolean
             blocked && !enabled()
         }
+        }
+        HookRuntime.install("CaptionConsumerGate") {
         val captionGate = HostSymbols.resolve(classLoader, HostSymbol.CAPTION_CONSUMER).declaredMethods.single {
             Modifier.isStatic(it.modifiers) && it.parameterCount == 0 && it.returnType == Boolean::class.javaPrimitiveType
         }.apply { isAccessible = true }
-        module.trackHook("VideoTranslateHook", captionGate).intercept { chain ->
+        module.trackHook("CaptionConsumerGate", captionGate).intercept { chain ->
             (chain.proceed() as Boolean) || enabled()
         }
-        CaptionFallbackHook.install(module, classLoader)
-        SubtitleFeature.install(module, classLoader, "VideoTranslateHook")
+        }
+        HookRuntime.install("CaptionFallback") { CaptionFallbackHook.install(module, classLoader, "CaptionFallback") }
+        HookRuntime.install("SubtitleFeature") { SubtitleFeature.install(module, classLoader, "SubtitleFeature") }
         DescriptionTranslation.install(module, classLoader)
+        HookRuntime.install("CaptionMenuGate") {
         val menuAcl = HostSymbols.resolve(classLoader, HostSymbol.MENU_CAPTION_ACL).getDeclaredMethod(
             HostSymbols.member(HostSymbol.MENU_CAPTION_ACL, "resolve"),
             String::class.java, String::class.java,
             classLoader.loadClass("com.ss.android.ugc.aweme.feed.model.AwemeACLShare")
         )
-        module.trackHook("VideoTranslateHook", menuAcl).intercept { chain ->
+        module.trackHook("CaptionMenuGate", menuAcl).intercept { chain ->
             val original = chain.proceed()
             if (enabled() &&
                 chain.args[0] == "captions" && chain.args[1] == "long_press") {
@@ -46,6 +51,7 @@ object VideoTranslateHook {
                 null
             }
             else original
+        }
         }
     }
 }

@@ -1,7 +1,7 @@
 package io.github.meiyongai.toki.subtitle.hook
 
 /** 扫描和缓存发布的有序阶段；完成结果等待用户确认。 */
-internal enum class HostScanPhase { IDLE, SCANNING, SAVING, READY, FAILED }
+internal enum class HostScanPhase { IDLE, SCANNING, EXTENSIONS, SAVING, READY, FAILED }
 
 /** 单次发布的不可变进度；单位表示已处理工作，不表示预计耗时。 */
 internal data class HostScanStatus(
@@ -37,8 +37,15 @@ internal class HostScanSession {
 
     /** 扫描全部完成后开始保存结果。@return Unit。Callers: HostSymbols、单元测试。 */
     @Synchronized fun saving() {
-        check(status.phase == HostScanPhase.SCANNING && status.total > 0 && status.completed == status.total)
+        check(status.phase == HostScanPhase.EXTENSIONS ||
+            (status.phase == HostScanPhase.SCANNING && status.total > 0 && status.completed == status.total))
         status = status.copy(phase = HostScanPhase.SAVING)
+    }
+
+    /** Extension discovery has different work units; never show the completed core percentage here. */
+    @Synchronized fun extensions() {
+        check(status.phase == HostScanPhase.SCANNING && (status.total == 0 || status.completed == status.total))
+        status = HostScanStatus(HostScanPhase.EXTENSIONS)
     }
 
     /**

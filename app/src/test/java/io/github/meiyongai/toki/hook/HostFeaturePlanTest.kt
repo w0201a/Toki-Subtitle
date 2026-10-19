@@ -184,7 +184,8 @@ class HostFeaturePlanTest {
                     row.drop(2) == listOf("relations", "-", "-")
             } else if (row[1] == "comment-v1") {
                 row[0] == "COMMENT_COPY" && row.drop(2) == listOf("relations", "-", "-")
-            } else (1..3).all { digest.matches(row[it]) }
+            } else digest.matches(row[1]) && digest.matches(row[3]) &&
+                (digest.matches(row[2]) || (row[2].startsWith("semantic-v1:") && digest.matches(row[2].removePrefix("semantic-v1:"))))
         })
     }
 }

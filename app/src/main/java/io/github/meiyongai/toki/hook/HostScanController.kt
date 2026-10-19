@@ -43,7 +43,7 @@ internal class HostScanController private constructor(
         override fun run() {
             render()
             val phase = session.status.phase
-            if (dialog != null && (phase == HostScanPhase.SCANNING || phase == HostScanPhase.SAVING)) {
+            if (dialog != null && phase in setOf(HostScanPhase.SCANNING, HostScanPhase.EXTENSIONS, HostScanPhase.SAVING)) {
                 main.postDelayed(this, 150)
             }
         }

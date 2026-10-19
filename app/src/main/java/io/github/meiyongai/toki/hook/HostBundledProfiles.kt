@@ -15,8 +15,27 @@ internal object HostBundledProfiles {
     fun load(identity: String, rules: String): Properties? {
         require(identity.matches(Regex("[0-9a-f]{64}"))) { "无效代码身份" }
         return javaClass.getResourceAsStream("/toki-host-profiles/$identity.properties")?.use {
-            read(it, identity, rules, HostSymbols.INDEX_FORMAT)
+            readCompatible(it, identity, rules, HostSymbols.INDEX_FORMAT)
         }
+    }
+
+    /** Keep verified per-symbol results when a module update adds discovery rules. */
+    internal fun readCompatible(input: InputStream, identity: String, rules: String, format: String): Properties {
+        val bytes = input.readBytes()
+        val snapshot = Properties().apply { bytes.inputStream().use(::load) }
+        val digest = snapshot.getProperty("cache.rules")
+        check(snapshot.getProperty("profile.checksum") == HostProfileManifest.checksum(snapshot) &&
+            snapshot.getProperty("cache.identity") == identity && snapshot.getProperty("cache.format") == format &&
+            digest?.matches(Regex("[0-9a-f]{64}")) == true &&
+            snapshot.getProperty("cache.key") == HostDexIndex.digest("$format\n$identity\n$digest")) {
+            "预计算适配结果完整性或代码身份不一致"
+        }
+        val coverage = HostSymbols.coverage(snapshot)
+        check(HostSymbols.cacheComplete(snapshot, coverage, coverage) && coverage.all {
+            snapshot.getProperty("cache.rule.${it.name}")?.matches(Regex("[0-9a-f]{64}")) == true
+        }) { "预计算适配结果缺少独立规则契约" }
+        return if (digest == HostDexIndex.digest(rules)) bytes.inputStream().use { read(it, identity, rules, format) }
+            else snapshot // HostScanPlan retains only unchanged symbol rules and discovers the rest.
     }
 
     /**

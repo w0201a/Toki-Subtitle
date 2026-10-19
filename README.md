@@ -10,6 +10,8 @@ This edition adds subtitle drag controls and independent axis locks, subtitle di
 
 Build Debug by default: `./gradlew :app:assembleDebug` (Windows: `gradlew.bat`). Requires Android SDK 37, Build Tools 37.0.0 and JDK 21. Enable the module for TikTok in LSPosed. Internal host interfaces are version-dependent; current validation primarily targets TikTok 47.0.3.
 
+Starting with 2.0.16 Debug, subtitle extensions automatically invalidate their cache after a host code update and discover structural matches in the background. Reopen TikTok after discovery; later launches reuse the verified cache. Obfuscated names may change while code structure stays compatible. Missing or ambiguous extensions are disabled independently and reported in feature status. Relationship contracts cover poll bridge binding, subtitle frame-to-renderer calls and description video-field writes; individual members remain independently verified even when unrelated methods change. Major implementation changes can still require maintained rules; future-version compatibility is not guaranteed. CI builds Debug by default; unsigned Release requires an explicit manual selection.
+
 [Recent changes](CHANGELOG.md) · [Issues and fixes](docs/ISSUES_AND_FIXES.md) · [Link destinations](docs/LINKS.md) · [Release guide](RELEASING.md)
 
 Sponsorship is voluntary and does not gate features. The provided payment QR images are public application resources. Signing keys, device diagnostics, screenshots, host APKs and decompiled host files are excluded from this repository.

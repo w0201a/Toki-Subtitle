@@ -307,6 +307,8 @@
     <string name="layout_bottom_banners">"其他底部横幅"</string>
     <string name="layout_activities">"活动入口"</string>
     <string name="host_scan_title_running" formatted="false">"正在查找方法"</string>
+    <string name="host_scan_title_extensions">正在适配字幕扩展</string>
+    <string name="host_scan_extensions_hint">正在检查字幕、视频文案和评论投票。完成后保存结果，后续启动直接复用。</string>
     <string name="host_scan_title_saving" formatted="false">"正在保存结果"</string>
     <string name="host_scan_keep_foreground" formatted="false">"保持 TikTok 在前台。"</string>
     <string name="host_scan_saving_hint" formatted="false">"请稍候。"</string>

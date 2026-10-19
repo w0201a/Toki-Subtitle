@@ -10,6 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicReference
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.Before
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
@@ -18,6 +19,9 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class HookRuntimeOwnershipTest {
+    @Before fun initializeDiagnostics() {
+        HookRuntime.start("ownership-tests") { _, _ -> }
+    }
     private fun handle(unhook: () -> Unit) = Proxy.newProxyInstance(XposedInterface.HookHandle::class.java.classLoader,
         arrayOf(XposedInterface.HookHandle::class.java)) { _, method, _ ->
         if (method.name == "unhook") { unhook(); null } else throw AssertionError(method.name)

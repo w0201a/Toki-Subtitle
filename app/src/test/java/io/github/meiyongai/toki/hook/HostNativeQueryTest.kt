@@ -30,7 +30,7 @@ class HostNativeQueryTest {
     @Test fun allPublishedShapesHaveBothCountsAndNamedMethods() {
         val rules = checkNotNull(javaClass.getResourceAsStream("/toki-host-rules.tsv")).bufferedReader().use { it.readText() }
         val queries = HostNativeIndex.classQueries(rules)
-        assertEquals(4, queries.size)
+        assertEquals(2, queries.size) // Translation gates; mute info now uses a semantic getter contract.
         queries.forEach { query ->
             val methods = checkNotNull(query.methodsMatcher)
             val count = checkNotNull(methods.rangeMatcher)
