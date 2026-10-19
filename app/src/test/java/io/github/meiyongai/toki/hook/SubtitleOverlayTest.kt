@@ -71,6 +71,52 @@ class SubtitleOverlayTest {
         controller.pause().stop().destroy()
     }
 
+    @Test fun translationDoesNotRequireCustomStyleAndKeepsTheNativeCaptionTypography() {
+        HookRuntime.start("test.host") { _, _ -> }
+        val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity = controller.get()
+        val page = FrameLayout(activity)
+        page.addView(SurfaceView(activity), FrameLayout.LayoutParams(1080, 2400))
+        val source = FrameLayout(activity)
+        val native = TextView(activity).apply {
+            text = "Original caption"
+            setTextSize(android.util.TypedValue.COMPLEX_UNIT_PX, 18f)
+            setTextColor(android.graphics.Color.BLUE)
+        }
+        source.addView(native)
+        page.addView(source, FrameLayout.LayoutParams(500, 100))
+        activity.setContentView(page)
+        val decor = activity.window.decorView
+        decor.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+        decor.layout(0, 0, 1080, 2400)
+        var enabled = true
+        val requests = mutableListOf<(String?) -> Unit>()
+        val translator = NativeSubtitleTranslator({ enabled }, { _, complete -> requests += complete; AutoCloseable {} })
+        val binding = SubtitleOverlay(source, translator) { ConfigSnapshot(mapOf(
+            "video_translate_enabled" to enabled, "subtitle_style_enabled" to false,
+            "subtitle_size" to "90", "subtitle_color" to "#FFFF0000", "subtitle_x" to "90")) }
+        fun layer(): FrameLayout? = SubtitleOverlay::class.java.getDeclaredField("layer").let { it.isAccessible = true; it.get(binding) as? FrameLayout }
+        binding.update("EXPANDED", "Original caption", "translation-without-style")
+        binding.onPreDraw()
+        shadowOf(Looper.getMainLooper()).idle()
+        assertEquals(1, requests.size)
+        requests.single()("已翻译字幕")
+        binding.onPreDraw()
+        val label = checkNotNull(layer()).getChildAt(0) as TextView
+        assertEquals("已翻译字幕", label.text.toString())
+        assertEquals(18f, label.textSize, .01f)
+        assertEquals(android.graphics.Color.BLUE, label.currentTextColor)
+        assertEquals("Original caption", native.text.toString())
+        assertFalse(binding.canDrag())
+        assertEquals(2, page.childCount)
+        enabled = false
+        binding.onPreDraw()
+        assertNull(layer())
+        assertEquals(1f, source.alpha)
+        binding.close(); translator.close()
+        controller.pause().stop().destroy()
+    }
+
     @Test fun dragSwitchAndEachAxisLockAreAppliedWithoutChangingLockedCoordinate() {
         HookRuntime.start("test.host") { _, _ -> }
         val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()

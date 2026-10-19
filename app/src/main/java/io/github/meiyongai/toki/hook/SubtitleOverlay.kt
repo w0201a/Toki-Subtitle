@@ -101,11 +101,13 @@ internal class SubtitleOverlay(private val source: View,
     private fun render() {
         val settings = configuration()
         if (settings != null && draggedPosition != null && settings.revision != savedRevision) draggedPosition = null
-        if (settings == null || !settings.boolean("subtitle_style_enabled")) {
+        if (settings == null || !presentationEnabled(settings)) {
             resetTranslation()
             unmount()
             return
         }
+        val styled = settings.boolean("subtitle_style_enabled")
+        if (!styled) draggedPosition = null
         val page = visiblePage()
         val sourceVisible = page != null
         if (state != "EXPANDED" || caption.isBlank() || !sourceVisible) {
@@ -152,7 +154,7 @@ internal class SubtitleOverlay(private val source: View,
             val selectedVideo = videoId
             translator?.readAhead(videoId, caption) {
                 videoId == selectedVideo && visiblePage() != null &&
-                    configuration()?.boolean("subtitle_style_enabled") == true
+                    configuration()?.let(::presentationEnabled) == true
             }
         }
         if (!translating) {
@@ -163,35 +165,45 @@ internal class SubtitleOverlay(private val source: View,
             val token = generation
             translator?.request(caption, current = {
                 generation == token && state == "EXPANDED" && visiblePage() != null &&
-                    configuration()?.boolean("subtitle_style_enabled") == true && translator.isEnabled(videoId)
+                    configuration()?.let(::presentationEnabled) == true && translator.isEnabled(videoId)
             }, deliver = {
                 translated = it
                 source.postInvalidateOnAnimation()
             })
         }
         val displayed = if (translating) translated ?: caption else caption
-        val size = settings.string("subtitle_size", "20")!!.toFloat()
-        val weight = when (settings.string("subtitle_weight", "normal")) {
-            "bold" -> Typeface.BOLD
-            "italic" -> Typeface.ITALIC
-            "bold_italic" -> Typeface.BOLD_ITALIC
-            else -> Typeface.NORMAL
-        }
-        // SUB-TEXT / SUB-SIZE：只设置独立 TextView；不修改宿主自动字号或行高。
         if (text.text.toString() != displayed) text.text = displayed
-        val pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, text.resources.displayMetrics)
-        if (kotlin.math.abs(text.textSize - pixels) > .5f) text.setTextSize(TypedValue.COMPLEX_UNIT_PX, pixels)
-        val name = settings.string("subtitle_font", "sans-serif")
-        if (name != fontName || weight != fontStyle) {
-            fontName = name; fontStyle = weight
-            font = Typeface.create(name, weight)
+        if (styled) {
+            val size = settings.string("subtitle_size", "20")!!.toFloat()
+            val weight = when (settings.string("subtitle_weight", "normal")) {
+                "bold" -> Typeface.BOLD
+                "italic" -> Typeface.ITALIC
+                "bold_italic" -> Typeface.BOLD_ITALIC
+                else -> Typeface.NORMAL
+            }
+            val pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, text.resources.displayMetrics)
+            if (kotlin.math.abs(text.textSize - pixels) > .5f) text.setTextSize(TypedValue.COMPLEX_UNIT_PX, pixels)
+            val name = settings.string("subtitle_font", "sans-serif")
+            if (name != fontName || weight != fontStyle) {
+                fontName = name; fontStyle = weight
+                font = Typeface.create(name, weight)
+            }
+            if (text.typeface != font) text.typeface = font
+            val color = Color.parseColor(settings.string("subtitle_color", "#FFFFFFFF"))
+            if (text.currentTextColor != color) text.setTextColor(color)
+            val background = if (settings.string("subtitle_background_mode", "show") == "hide") Color.TRANSPARENT
+                else Color.parseColor(settings.string("subtitle_background", "#80000000"))
+            if ((text.background as? android.graphics.drawable.ColorDrawable)?.color != background) text.setBackgroundColor(background)
+        } else {
+            val native = nativeTextView()
+            val pixels = native?.textSize ?: TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20f, text.resources.displayMetrics)
+            if (kotlin.math.abs(text.textSize - pixels) > .5f) text.setTextSize(TypedValue.COMPLEX_UNIT_PX, pixels)
+            text.typeface = native?.typeface ?: Typeface.DEFAULT
+            val color = native?.currentTextColor ?: Color.WHITE
+            if (text.currentTextColor != color) text.setTextColor(color)
+            val background = ((native?.background ?: source.background) as? android.graphics.drawable.ColorDrawable)?.color ?: Color.TRANSPARENT
+            if ((text.background as? android.graphics.drawable.ColorDrawable)?.color != background) text.setBackgroundColor(background)
         }
-        if (text.typeface != font) text.typeface = font
-        val color = Color.parseColor(settings.string("subtitle_color", "#FFFFFFFF"))
-        if (text.currentTextColor != color) text.setTextColor(color)
-        val background = if (settings.string("subtitle_background_mode", "show") == "hide") Color.TRANSPARENT
-            else Color.parseColor(settings.string("subtitle_background", "#80000000"))
-        if ((text.background as? android.graphics.drawable.ColorDrawable)?.color != background) text.setBackgroundColor(background)
         val margin = (12 * text.resources.displayMetrics.density).toInt()
         text.measure(View.MeasureSpec.makeMeasureSpec((overlay.width - margin * 2).coerceAtLeast(1), View.MeasureSpec.AT_MOST),
             View.MeasureSpec.makeMeasureSpec((overlay.height - margin * 2).coerceAtLeast(1), View.MeasureSpec.AT_MOST))
@@ -199,8 +211,8 @@ internal class SubtitleOverlay(private val source: View,
         overlay.getLocationOnScreen(overlayLocation)
         val baseY = baseline(text.measuredHeight)
         val position = SubtitlePlacement.place(overlay.width, overlay.height, text.measuredWidth, text.measuredHeight,
-            baseY, draggedPosition?.first ?: settings.string("subtitle_x", "0")!!.toFloat(),
-            draggedPosition?.second ?: settings.string("subtitle_y", "0")!!.toFloat(), margin)
+            baseY, if (styled) draggedPosition?.first ?: settings.string("subtitle_x", "0")!!.toFloat() else 0f,
+            if (styled) draggedPosition?.second ?: settings.string("subtitle_y", "0")!!.toFloat() else 0f, margin)
         text.layout(position.first, position.second, position.first + text.measuredWidth, position.second + text.measuredHeight)
         // 保留原视图测量和宿主状态；仅当独立层已可显示时隐藏重复绘制，关闭/离开即恢复。
         // 隐藏整个原字幕渲染容器，包含原背景；isShown 与布局保持不变。
@@ -208,6 +220,23 @@ internal class SubtitleOverlay(private val source: View,
         source.alpha = 0f
         diagnostic("state=$state chars=${caption.length} source=true overlay=true sizePx=${text.textSize}" +
             " bounds=${position.first},${position.second},${text.measuredWidth},${text.measuredHeight} page=${overlay.width}x${overlay.height}")
+    }
+
+    private fun presentationEnabled(settings: ConfigSnapshot): Boolean = settings.boolean("subtitle_style_enabled") ||
+        (settings.boolean("video_translate_enabled") && translator?.isEnabled(videoId) == true)
+
+    private fun nativeTextView(): TextView? {
+        val pending = ArrayDeque<View>().apply { add(source) }
+        val matches = mutableListOf<TextView>()
+        var inspected = 0
+        while (pending.isNotEmpty() && inspected++ < 32) {
+            val view = pending.removeFirst()
+            if (view is TextView && view.text.toString() == caption) matches += view
+            if (view is ViewGroup) for (index in 0 until minOf(view.childCount, (32 - inspected - pending.size).coerceAtLeast(0))) {
+                pending.add(view.getChildAt(index))
+            }
+        }
+        return matches.singleOrNull()
     }
 
     // 清屏会隐藏字幕和交互区域；用仍可见的视频页判断是否在屏幕内，不能依赖 source.isShown。
@@ -261,7 +290,7 @@ internal class SubtitleOverlay(private val source: View,
     }
 
     fun canDrag(): Boolean = configuration()?.let {
-        it.boolean("subtitle_drag_enabled") && !(it.boolean("subtitle_lock_x") && it.boolean("subtitle_lock_y"))
+        it.boolean("subtitle_style_enabled") && it.boolean("subtitle_drag_enabled") && !(it.boolean("subtitle_lock_x") && it.boolean("subtitle_lock_y"))
     } == true
 
     fun drag(origin: Pair<Float, Float>, dx: Float, dy: Float): Pair<Float, Float>? {

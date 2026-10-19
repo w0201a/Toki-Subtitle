@@ -54,6 +54,22 @@ class HookRuntimeOwnershipTest {
         assertEquals(1, parent.getInt("registered"))
     }
 
+    @Test fun displayDisposalClosesDependentObserversWithoutRevokingIndependentLanguagePath() {
+        val parent = "display-owner-test"
+        val observer = "display-observer-test"
+        val language = "independent-language-test"
+        var released = false
+        HookRuntime.install(language) { HookRuntime.registered(language, handle { fail("language must remain installed") }) }
+        HookRuntime.install(parent) {
+            HookRuntime.dependent(parent, observer)
+            HookRuntime.install(observer) { HookRuntime.registered(observer, handle { released = true }) }
+        }
+        HookRuntime.disableAfterCallbackFailure(parent, IllegalStateException("display failure"))
+        assertTrue(released)
+        assertFalse(HookRuntime.scope(observer).active)
+        assertTrue(HookRuntime.scope(language).active)
+    }
+
     @Test fun cleanupFailureIsAttachedAndDoesNotPreventOtherResourcesFromClosing() {
         val original = IllegalStateException("registration")
         val cleanup = IllegalStateException("cleanup")

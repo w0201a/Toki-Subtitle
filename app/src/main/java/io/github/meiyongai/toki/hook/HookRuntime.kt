@@ -68,7 +68,7 @@ internal object HookRuntime {
         adaptation = if (failed.isEmpty()) base else "部分功能未适配，已保留可用功能\n${failed.joinToString()}\n$base"
         state("HostSymbols", if (failed.isEmpty()) "适配结果已应用" else "部分适配")
         for ((parent, children) in mapOf(
-            "VideoTranslateHook" to listOf("TranslationReverseGate", "CaptionConsumerGate", "CaptionFallback", "CaptionOriginalVisibility", "SubtitleLanguage", "SubtitleFeature", "SubtitleMenu", "DescriptionNativeTranslation", "DescriptionTranslation", "CaptionMenuGate"),
+            "VideoTranslateHook" to listOf("TranslationReverseGate", "CaptionConsumerGate", "CaptionFallback", "CaptionOriginalVisibility", "SubtitleLanguage", "SubtitleExcludedLanguages", "SubtitleFeature", "SubtitleRendererBinding", "SubtitleCleanFrames", "SubtitleMenu", "DescriptionNativeTranslation", "DescriptionTranslation", "CaptionMenuGate"),
             "CommentTranslateHook" to listOf("CommentTranslationGate", "CommentPollTranslation"),
             "DownloadHook" to listOf("DownloadSource"),
             "AutoScrollHook" to listOf("AutoScrollBehavior"),
@@ -142,6 +142,14 @@ internal object HookRuntime {
 
     /** 登记功能级状态和视图清理，和 Hook 句柄拥有同一个生命周期。 */
     fun onDispose(feature: String, dispose: () -> Unit) = own(feature, AutoCloseable(dispose))
+
+    /** A display-dependent child may fail alone, but cannot outlive its display owner. */
+    fun dependent(parent: String, child: String) = onDispose(parent) {
+        if (scope(child).active) {
+            dispose(child, IllegalStateException("Owning display was disposed"))
+            state(child, "依赖显示已撤销")
+        }
+    }
 
     /** 配置订阅与同一次安装范围绑定，首次通知及迟到通知都遵守范围资格。 */
     fun subscribe(feature: String, listener: (ConfigSnapshot?) -> Unit) {
