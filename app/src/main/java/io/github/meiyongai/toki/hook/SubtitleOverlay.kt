@@ -198,7 +198,8 @@ internal class SubtitleOverlay(private val source: View,
             val native = nativeTextView()
             val pixels = native?.textSize ?: TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20f, text.resources.displayMetrics)
             if (kotlin.math.abs(text.textSize - pixels) > .5f) text.setTextSize(TypedValue.COMPLEX_UNIT_PX, pixels)
-            text.typeface = native?.typeface ?: Typeface.DEFAULT
+            val nativeTypeface = native?.typeface ?: Typeface.DEFAULT
+            if (text.typeface != nativeTypeface) text.typeface = nativeTypeface
             val color = native?.currentTextColor ?: Color.WHITE
             if (text.currentTextColor != color) text.setTextColor(color)
             val background = ((native?.background ?: source.background) as? android.graphics.drawable.ColorDrawable)?.color ?: Color.TRANSPARENT
@@ -217,7 +218,7 @@ internal class SubtitleOverlay(private val source: View,
         // 保留原视图测量和宿主状态；仅当独立层已可显示时隐藏重复绘制，关闭/离开即恢复。
         // 隐藏整个原字幕渲染容器，包含原背景；isShown 与布局保持不变。
         hidden.getOrPut(source) { source.alpha }
-        source.alpha = 0f
+        if (source.alpha != 0f) source.alpha = 0f
         diagnostic("state=$state chars=${caption.length} source=true overlay=true sizePx=${text.textSize}" +
             " bounds=${position.first},${position.second},${text.measuredWidth},${text.measuredHeight} page=${overlay.width}x${overlay.height}")
     }

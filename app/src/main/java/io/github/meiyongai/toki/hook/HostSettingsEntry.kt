@@ -104,18 +104,21 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
         }
         return opened
     }
+    private val whitespace = Regex("\\s+")
+    private val settingsTitles = setOf("settings and privacy", "设置和隐私", "设置与隐私", "設定與隱私", "設定和隱私", "設定とプライバシー")
     internal fun settingsHeading(value: String?): Boolean = value?.trim()?.lowercase()
-        ?.replace("&", "and")?.replace(Regex("\\s+"), " ") in setOf(
-            "settings and privacy", "设置和隐私", "设置与隐私", "設定與隱私", "設定和隱私", "設定とプライバシー")
+        ?.replace("&", "and")?.replace(whitespace, " ") in settingsTitles
     private class Page(val activity: Activity) : ViewTreeObserver.OnGlobalLayoutListener {
         private var entry: TextView? = null
         private var disposed = false
         private var pending = false
+        private var nextScanAt = 0L
         private val check = Runnable { pending = false; if (!disposed) scan() }
         override fun onGlobalLayout() {
-            if (!disposed && !pending) { pending = true; main.postDelayed(check, 250) }
+            if (!disposed && !pending) { pending = true; main.postDelayed(check, maxOf(250L, nextScanAt - android.os.SystemClock.uptimeMillis())) }
         }
         private fun scan() {
+            nextScanAt = android.os.SystemClock.uptimeMillis() + 2000
             val root = activity.window.decorView as? ViewGroup ?: return
             val queue = ArrayDeque<View>();queue.add(root);var visited = 0
             var settings = false

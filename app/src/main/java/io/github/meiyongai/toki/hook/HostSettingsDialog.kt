@@ -31,6 +31,8 @@ internal class HostSettingsDialog(activity: Activity, resources: ModuleResources
                         SubtitleDialog { dismiss() }
                         return@TokiAppTheme
                     }
+                    var performance by remember { mutableStateOf<String?>(null) }
+                    var capturing by remember { mutableStateOf(false) }
                     var subtitles by remember { mutableStateOf(false) }
                     var features by remember { mutableStateOf(false) }
                     var scan by remember { mutableStateOf(HostScanController.session.status) }
@@ -53,10 +55,19 @@ internal class HostSettingsDialog(activity: Activity, resources: ModuleResources
                             TextButton(enabled = scan.phase != HostScanPhase.IDLE, onClick = { dismiss(); HostScanController.reopenProgress() }) {
                                 Text(stringResource(R.string.host_settings_progress))
                             }
+                            TextButton(enabled = !capturing, onClick = {
+                                capturing = true
+                                HostPerformance.capture { performance = it; capturing = false }
+                            }) { Text(if (capturing) "正在采样…" else "性能采样（手动）") }
                             TextButton(onClick = { subtitles = true }) { Text(stringResource(R.string.host_settings_subtitles)) }
                             TextButton(onClick = { features = !features }) { Text(stringResource(R.string.host_settings_features)) }
                             if (features) Box(Modifier.weight(1f)) { DashboardScreen() }
                         }
+                    }
+                    performance?.let { report ->
+                        AlertDialog(onDismissRequest = { performance = null }, title = { Text("性能采样") },
+                            text = { Text(report, Modifier.heightIn(max = 420.dp).verticalScroll(rememberScrollState())) },
+                            confirmButton = { TextButton(onClick = { performance = null }) { Text("关闭") } })
                     }
                     if (subtitles) SubtitleDialog { subtitles = false }
                 }
