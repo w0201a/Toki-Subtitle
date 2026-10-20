@@ -19,7 +19,7 @@ class ExtensionSymbolsTest {
             setProperty("cache.identity", "host")
             setProperty("cache.profile", "profile")
             setProperty("cache.format", ExtensionDexIndex.FORMAT)
-            setProperty("cache.matcher", "relationships-v8")
+            setProperty("cache.matcher", "relationships-v9")
             setProperty("cache.complete", "true")
         }
         assertTrue(ExtensionSymbols.cacheMatches(cache(), "host", "profile"))
@@ -34,7 +34,7 @@ class ExtensionSymbolsTest {
             setProperty("cache.identity", "host")
             setProperty("cache.profile", "profile")
             setProperty("cache.format", ExtensionDexIndex.FORMAT)
-            setProperty("cache.matcher", "relationships-v8")
+            setProperty("cache.matcher", "relationships-v9")
             setProperty("cache.complete", "true")
         }
         assertTrue(ExtensionSymbols.cacheMatches(stored, "host", "profile"))

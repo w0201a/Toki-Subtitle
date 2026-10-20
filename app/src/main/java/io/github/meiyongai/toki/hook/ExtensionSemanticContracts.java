@@ -38,6 +38,7 @@ final class ExtensionSemanticContracts {
         if (cell!=null) poll(cell,result);
         ClassDef renderer=definitions.get(result.getProperty("class.X.09Gd",""));
         if (renderer!=null) description(renderer,result);
+        discoverCaptionFrame(definitions,result);
         discoverCaptionRenderer(definitions,result);
         captions(definitions,result);
         menu(definitions,result);
@@ -111,6 +112,109 @@ final class ExtensionSemanticContracts {
         for(Method method:wrapper.getMethods()) if(ExtensionDexIndex.signature(method).equals(ExtensionDexIndex.signature(target)) &&
             calls(method,"Lcom/ss/android/ugc/aweme/translation/service/ITranslationService;",target.getName(),ExtensionDexIndex.signature(target))) wrappers.add(method);
         if(wrappers.size()==1) accept(result,"X.03hV:method.LJIIJ(Ljava/lang/String;)LX/02tQ;",key(wrappers.get(0)));
+    }
+    // Load only the small graph referenced by the stable caption assembly. Reuse the
+    // existing member pass rather than fingerprint every DEX class a second time.
+    static Set<String> captionDependencies(Map<String,ClassDef> definitions) {
+        Set<String> wanted=new HashSet<>();
+        ClassDef assem=definitions.get("com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2");
+        if(assem==null) return wanted;
+        for(Method method:assem.getMethods()) if(method.getParameterTypes().size()==1 && method.getReturnType().equals("V")) {
+            wanted.add(method.getParameterTypes().get(0).toString());
+            for(var instruction:code(method)) if(instruction instanceof ReferenceInstruction r) {
+                if(r.getReference() instanceof FieldReference f) { wanted.add(f.getDefiningClass());wanted.add(f.getType()); }
+                if(r.getReference() instanceof MethodReference m && m.getReturnType().equals("V") && m.getParameterTypes().size()>=3) {
+                    wanted.add(m.getDefiningClass()); wanted.add(m.getParameterTypes().get(1).toString());
+                }
+            }
+        }
+        Set<String> names=new HashSet<>();
+        for(String type:wanted) if(type.startsWith("L") && type.endsWith(";")) names.add(type.substring(1,type.length()-1).replace('/','.'));
+        return names;
+    }
+    private static FieldReference argumentField(Instruction instruction,int argument,Map<Integer,FieldReference> registers) {
+        if(instruction instanceof FiveRegisterInstruction args) {
+            int[] values={args.getRegisterC(),args.getRegisterD(),args.getRegisterE(),args.getRegisterF(),args.getRegisterG()};
+            return argument<args.getRegisterCount()?registers.get(values[argument]):null;
+        }
+        if(instruction instanceof RegisterRangeInstruction args && argument<args.getRegisterCount())
+            return registers.get(args.getStartRegister()+argument);
+        return null;
+    }
+    private static Map<Integer,FieldReference> transferFields(Instruction instruction,Map<Integer,FieldReference> input) {
+        Map<Integer,FieldReference> output=new HashMap<>(input);
+        if(instruction instanceof OneRegisterInstruction dest && instruction.getOpcode().setsRegister()) {
+            FieldReference value=null;
+            if(instruction.getOpcode()==Opcode.IGET_OBJECT && instruction instanceof ReferenceInstruction r && r.getReference() instanceof FieldReference field) value=field;
+            else if((instruction.getOpcode()==Opcode.MOVE_OBJECT || instruction.getOpcode()==Opcode.MOVE_OBJECT_FROM16 || instruction.getOpcode()==Opcode.MOVE_OBJECT_16) && instruction instanceof TwoRegisterInstruction move) value=input.get(move.getRegisterB());
+            if(value==null) output.remove(dest.getRegisterA());else output.put(dest.getRegisterA(),value);
+            if(instruction.getOpcode().setsWideRegister()) output.remove(dest.getRegisterA()+1);
+        }
+        return output;
+    }
+    // Must-analysis over all normal control-flow paths. At joins keep only field
+    // provenance identical on every incoming path, including loops and null guards.
+    private static List<Map<Integer,FieldReference>> fieldFlow(List<Instruction> instructions) {
+        List<Map<Integer,FieldReference>> entries=new ArrayList<>();Map<Integer,Integer> offsets=new HashMap<>();
+        int offset=0;for(int i=0;i<instructions.size();i++) { entries.add(null);offsets.put(offset,i);offset+=instructions.get(i).getCodeUnits(); }
+        if(instructions.isEmpty()) return entries;
+        for(var instruction:instructions) if(instruction.getOpcode()==Opcode.PACKED_SWITCH || instruction.getOpcode()==Opcode.SPARSE_SWITCH) return List.of();
+        entries.set(0,new HashMap<>());Deque<Integer> pending=new ArrayDeque<>();pending.add(0);
+        int[] addresses=new int[instructions.size()];offset=0;
+        for(int i=0;i<instructions.size();i++) { addresses[i]=offset;offset+=instructions.get(i).getCodeUnits(); }
+        while(!pending.isEmpty()) {
+            int i=pending.removeFirst();Instruction instruction=instructions.get(i);
+            Map<Integer,FieldReference> output=transferFields(instruction,entries.get(i));
+            List<Integer> next=new ArrayList<>();
+            if(instruction.getOpcode().canContinue() && i+1<instructions.size()) next.add(i+1);
+            if(instruction instanceof OffsetInstruction branch) {
+                Integer target=offsets.get(addresses[i]+branch.getCodeOffset());if(target==null) return List.of();next.add(target);
+            }
+            for(int target:next) {
+                Map<Integer,FieldReference> previous=entries.get(target),merged=new HashMap<>(output);
+                if(previous!=null) merged.entrySet().removeIf(e->!e.getValue().equals(previous.get(e.getKey())));
+                if(!merged.equals(previous)) { entries.set(target,merged);pending.add(target); }
+            }
+        }
+        return entries;
+    }
+    /** Recover a changed frame from actual frame-field -> renderer argument flow. */
+    private static void discoverCaptionFrame(Map<String,ClassDef> definitions,Properties result) {
+        String name="com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2";
+        ClassDef assem=definitions.get(name);if(assem==null) return;
+        Map<String,List<String>> candidates=new HashMap<>();
+        for(Method method:assem.getMethods()) if((method.getAccessFlags()&8)==0 && method.getParameterTypes().size()==1 && method.getReturnType().equals("V")) {
+            String frame=method.getParameterTypes().get(0).toString();
+            if(method.getImplementation()==null || !method.getImplementation().getTryBlocks().isEmpty()) continue;
+            var instructions=code(method);var flow=fieldFlow(instructions);if(flow.isEmpty()) continue;
+            for(int index=0;index<instructions.size();index++) {
+                var instruction=instructions.get(index);var registers=flow.get(index);if(registers==null) continue;
+                if((instruction.getOpcode()==Opcode.INVOKE_VIRTUAL || instruction.getOpcode()==Opcode.INVOKE_VIRTUAL_RANGE) &&
+                    instruction instanceof ReferenceInstruction r && r.getReference() instanceof MethodReference call &&
+                    call.getReturnType().equals("V") && call.getParameterTypes().size()>=3 &&
+                    call.getParameterTypes().get(0).toString().equals("Ljava/lang/String;") &&
+                    call.getParameterTypes().get(2).toString().equals("Ljava/lang/String;")) {
+                    FieldReference renderer=argumentField(instruction,0,registers), state=argumentField(instruction,2,registers), text=argumentField(instruction,3,registers);
+                    if(renderer==null || state==null || text==null || !renderer.getDefiningClass().equals(assem.getType()) ||
+                        !renderer.getType().equals(call.getDefiningClass()) || !text.getDefiningClass().equals(frame) ||
+                        !text.getType().equals("Ljava/lang/String;") || !state.getDefiningClass().equals(frame) ||
+                        !state.getType().equals(call.getParameterTypes().get(1).toString())) continue;
+                    String stateType=state.getType();if(!stateType.startsWith("L")) continue;
+                    ClassDef stateClass=definitions.get(stateType.substring(1,stateType.length()-1).replace('/','.'));
+                    if(stateClass==null || !"Ljava/lang/Enum;".equals(stateClass.getSuperclass())) continue;
+                    boolean expanded=false;
+                    for(Field field:stateClass.getFields()) if((field.getAccessFlags()&0x4000)!=0 && field.getName().equals("EXPANDED") && field.getType().equals(stateType)) expanded=true;
+                    if(expanded) candidates.put(key(method)+":"+key(call),List.of(frame,text.getName(),state.getName(),stateType));
+                }
+
+            }
+        }
+        if(candidates.size()!=1) return;
+        var evidence=candidates.values().iterator().next();
+        accept(result,"class.X.0B14",evidence.get(0).substring(1,evidence.get(0).length()-1).replace('/','.'));
+        accept(result,"X.0B14:field.LIZ",evidence.get(1));
+        accept(result,"X.0B14:field.LIZIZ",evidence.get(2));
+        accept(result,"class.X.0B17",evidence.get(3).substring(1,evidence.get(3).length()-1).replace('/','.'));
     }
     /** Follow an independently mapped frame into its actual four-argument renderer. */
     private static void discoverCaptionRenderer(Map<String,ClassDef> definitions,Properties result) {

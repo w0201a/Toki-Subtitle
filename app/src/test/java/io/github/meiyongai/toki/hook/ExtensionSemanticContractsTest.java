@@ -156,4 +156,39 @@ public class ExtensionSemanticContractsTest {
         assertEquals("draw(Ljava/lang/String;LX/NewState;Ljava/lang/String;Lexample/Mode;Z)V",result.getProperty("X.0B1g:method.LJIIIZ(Ljava/lang/String;LX/0B17;Ljava/lang/String;LX/0B18;)V"));
     }
 
+    @Test public void changedCaptionFrameIsRecoveredFromArgumentFlowWithNoPriorMappings() {
+        String assem="com.ss.android.ugc.aweme.autocaption.refactor.CLACaptionAssemV2",owner="L"+assem.replace('.','/')+";";
+        for(int variant:List.of(0,1,2,3,4,5)) {
+            List<Method> methods=new ArrayList<>();
+            for(int n=0;n<(variant==1?2:1);n++) {
+                String frame="LX/NewFrame"+n+";";
+                var code=new ArrayList<org.jf.dexlib2.iface.instruction.Instruction>();
+                code.add(new ImmutableInstruction22c(Opcode.IGET_OBJECT,0,6,new ImmutableFieldReference(owner,"renderer","LX/NewRenderer;")));
+                code.add(new ImmutableInstruction22c(Opcode.IGET_OBJECT,1,7,new ImmutableFieldReference(frame,"text","Ljava/lang/String;")));
+                code.add(new ImmutableInstruction22c(Opcode.IGET_OBJECT,2,7,new ImmutableFieldReference(frame,"state","LX/NewState;")));
+                code.add(new ImmutableInstruction22c(Opcode.IGET_OBJECT,3,7,new ImmutableFieldReference(frame,"text","Ljava/lang/String;")));
+                if(variant==5) { code.add(new ImmutableInstruction21t(Opcode.IF_EQZ,4,3));code.add(new ImmutableInstruction10x(Opcode.NOP)); }
+                if(variant==2) code.add(new ImmutableInstruction11n(Opcode.CONST_4,3,0));
+                if(variant==3) { code.add(new ImmutableInstruction21t(Opcode.IF_EQZ,4,3));code.add(new ImmutableInstruction11n(Opcode.CONST_4,3,0)); }
+                code.add(new ImmutableInstruction35c(Opcode.INVOKE_VIRTUAL,4,0,1,2,3,0,new ImmutableMethodReference("LX/NewRenderer;","draw",List.of("Ljava/lang/String;","LX/NewState;","Ljava/lang/String;"),"V")));
+                code.add(new ImmutableInstruction10x(Opcode.RETURN_VOID));
+                methods.add(new ImmutableMethod(owner,"frame"+n,List.of(new ImmutableMethodParameter(frame,Set.of(),null)),"V",1,Set.of(),Set.of(),new ImmutableMethodImplementation(8,code,List.of(),List.of())));
+            }
+            ClassDef state=new ImmutableClassDef("LX/NewState;",0x4001,"Ljava/lang/Enum;",List.of(),null,Set.of(),List.of(
+                new ImmutableField("LX/NewState;",variant==4?"OTHER":"EXPANDED","LX/NewState;",0x4019,null,Set.of(),Set.of()),
+                new ImmutableField("LX/NewState;","NEW_CONSTANT","LX/NewState;",0x4019,null,Set.of(),Set.of())),List.of());
+            var definitions=Map.of(assem,type(owner,methods),"X.NewState",state);
+            Properties result=new Properties();ExtensionSemanticContracts.resolve(definitions,result);
+            assertEquals("variant="+variant,variant==0||variant==5,result.containsKey("class.X.0B14"));
+            if(variant==0) {
+                assertEquals("X.NewFrame0",result.getProperty("class.X.0B14"));
+                assertEquals("text",result.getProperty("X.0B14:field.LIZ"));
+                assertEquals("state",result.getProperty("X.0B14:field.LIZIZ"));
+                assertEquals("X.NewRenderer",result.getProperty("class.X.0B1g"));
+                assertTrue(result.containsKey(assem+":method.bs(LX/0B14;)V"));
+                assertTrue(ExtensionSemanticContracts.captionDependencies(definitions).containsAll(List.of("X.NewFrame0","X.NewState","X.NewRenderer")));
+            }
+        }
+    }
+
 }

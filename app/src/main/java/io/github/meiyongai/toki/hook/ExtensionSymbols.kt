@@ -7,7 +7,7 @@ import java.util.Properties
 
 /** Independently cached extension contracts. Unknown versions require unique structural matches. */
 internal object ExtensionSymbols {
-    private const val MATCHER_REVISION = "relationships-v8"
+    private const val MATCHER_REVISION = "relationships-v9"
     private val reference: Properties by lazy {
         Properties().apply { checkNotNull(ExtensionSymbols::class.java.getResourceAsStream("/toki-extension-profile.properties")).use(::load) }
     }

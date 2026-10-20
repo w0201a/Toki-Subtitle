@@ -143,6 +143,7 @@ final class ExtensionRelationshipIndex {
     }
     static void completeMembers(List<String> paths,Properties profile,Properties result,Map<String,ClassDef> definitions) throws IOException {
         Set<String> wanted=new HashSet<>();for(String key:result.stringPropertyNames()) if(key.startsWith("class.")) wanted.add(result.getProperty(key));
+        wanted.addAll(ExtensionSemanticContracts.captionDependencies(definitions));
         wanted.removeAll(definitions.keySet());
         if(!wanted.isEmpty()) ExtensionDexIndex.visit(paths,type->{String actual=name(type.getType());if(wanted.contains(actual)) definitions.computeIfAbsent(actual,unused->org.jf.dexlib2.immutable.ImmutableClassDef.of(type));});
         Map<String,Map<String,List<Method>>> indexed=new HashMap<>();
