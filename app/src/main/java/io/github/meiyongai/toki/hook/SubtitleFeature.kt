@@ -57,15 +57,20 @@ internal object SubtitleFeature {
             null
         }
         val renderer = loader.adaptiveClass("X.0B1g")
-        if (translator != null) try {
-            val upcoming = FeedCaptionLookAhead(loader)
-            upcoming.install(module, owner)
-            translator.upcomingTracks = upcoming::next
-        } catch (error: Exception) {
-            HookRuntime.event("CaptionPrefetch", "next-video contract unavailable=${error.javaClass.simpleName}")
+        if (translator != null) {
+            val prefetchOwner = "SubtitleFeedPrefetch"
+            HookRuntime.dependent(owner, prefetchOwner)
+            HookRuntime.install(prefetchOwner) {
+                val upcoming = FeedCaptionLookAhead(loader)
+                HookRuntime.onDispose(prefetchOwner) { translator.upcomingTracks = { emptyList() } }
+                upcoming.install(module, prefetchOwner)
+                translator.upcomingTracks = upcoming::next
+            }
         }
         val rootField = renderer.adaptiveDeclaredField("LIZJ").apply { isAccessible = true }
-        val videoField = renderer.adaptiveDeclaredField("LJI").apply { isAccessible = true }
+        val videoField = runCatching { renderer.adaptiveDeclaredField("LJI").apply {
+            check(type == String::class.java); isAccessible = true
+        } }.getOrNull()
         val display = try {
             ExtensionSymbols.methodByRole(renderer, "LJIIIZ").also {
                 check(it.returnType == Void.TYPE && it.parameterTypes.size >= 3 &&
@@ -84,6 +89,7 @@ internal object SubtitleFeature {
         }
         val bindings = WeakHashMap<View, WeakReference<SubtitleOverlay>>()
         val verifiedRenderers = WeakHashMap<Any, Boolean>()
+        val frameVideos = WeakHashMap<Any, String>()
         val gestures = WeakHashMap<android.app.Activity, SubtitleGesture>()
         HookRuntime.onDispose(owner) {
             gestures.values.forEach { it.close() }
@@ -91,6 +97,7 @@ internal object SubtitleFeature {
             bindings.values.toList().forEach { it.get()?.close() }
             bindings.clear()
             verifiedRenderers.clear()
+            frameVideos.clear()
         }
         HookRuntime.dependent(owner, "SubtitleRendererBinding")
         HookRuntime.dependent(owner, "SubtitleCleanFrames")
@@ -135,13 +142,16 @@ internal object SubtitleFeature {
             } else null
             module.trackHook("SubtitleCleanFrames", captionAssem.adaptiveDeclaredMethod("bs", captionFrame)).intercept { chain ->
                 val instance = checkNotNull(chain.thisObject)
-                rendererField.get(instance)?.let { verifiedRenderers[it] = true }
+                val frameVideo = (videoKey?.invoke(null, viewModel.invoke(instance))
+                    ?: directVideoKey?.invoke(viewModel.invoke(instance))) as? String ?: ""
+                rendererField.get(instance)?.let { verifiedRenderers[it] = true; frameVideos[it] = frameVideo }
                 val previousRoot = rendererField.get(instance)?.let { rootField.get(it) as View }
                 val previousBinding = previousRoot?.let { bindings[it]?.get() }
                 val previousRevision = previousBinding?.frameRevision
                 val result = chain.proceed()
                 rendererField.get(instance)?.let { nativeRenderer ->
                     verifiedRenderers[nativeRenderer] = true
+                    frameVideos[nativeRenderer] = frameVideo
                     val root = rootField.get(nativeRenderer) as View
                     if (verifiedRenderers.containsKey(nativeRenderer)) {
                         val updated = bindings[root]?.get()
@@ -154,7 +164,7 @@ internal object SubtitleFeature {
                         val frame = checkNotNull(chain.args[0])
                         binding.update((frameState.get(frame) as? Enum<*>)?.name ?: "UNKNOWN",
                             frameText.get(frame) as? String ?: "",
-                            (videoKey?.invoke(null, viewModel.invoke(instance)) ?: directVideoKey?.invoke(viewModel.invoke(instance))) as? String ?: "")
+                            frameVideo)
                     }
                 }
                 result
@@ -175,7 +185,8 @@ internal object SubtitleFeature {
                 bindings[root] = WeakReference(it)
             }
             binding.update((chain.args[1] as? Enum<*>)?.name ?: "UNKNOWN", chain.args[2] as? String ?: "",
-                videoField.get(chain.thisObject) as? String ?: "")
+                (videoField?.get(chain.thisObject) as? String)?.takeIf(String::isNotBlank)
+                    ?: frameVideos[chain.thisObject].orEmpty())
             result
         }
         check(display != null || HookRuntime.scope("SubtitleCleanFrames").active) {

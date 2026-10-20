@@ -32,6 +32,7 @@ internal class FeedCaptionLookAhead(loader: ClassLoader) {
     private val itemUrls = item.adaptiveField("urlList")
 
     fun install(module: XposedModule, owner: String) {
+        HookRuntime.onDispose(owner) { synchronized(models) { models.clear() } }
         module.trackHook(owner, getItems).intercept { chain ->
             val result = chain.proceed()
             synchronized(models) {

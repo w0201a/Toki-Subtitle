@@ -39,7 +39,7 @@ class SubtitleRegistrationTest {
         fun onViewCreated(view: android.view.View) {}
     }
 
-    @Test fun verifiedFrameObserverInstallsEvenWhenTheRendererMethodMappingIsMissing() {
+    @Test fun verifiedFramesInstallWithoutRendererMethodOrRedundantVideoFieldMapping() {
         HookRuntime.start("subtitle-frame-registration-test") { _, _ -> }
         val resolved = ExtensionSymbols::class.java.getDeclaredField("resolved").apply { isAccessible = true }
         val previous = resolved.get(null) as Properties
@@ -74,7 +74,7 @@ class SubtitleRegistrationTest {
             setProperty("class.X.0B1g", Renderer::class.java.name)
             setProperty("class.X.0B14", Frame::class.java.name)
             setProperty("class.$assem", CaptionAssembly::class.java.name)
-            setProperty("X.0B1g:field.LIZJ", "root"); setProperty("X.0B1g:field.LJI", "video")
+            setProperty("X.0B1g:field.LIZJ", "root"); setProperty("X.0B1g:field.LJI", "!unresolved")
             setProperty("X.0B14:field.LIZ", "text"); setProperty("X.0B14:field.LIZIZ", "state")
             setProperty("$assem:field.LLLLLILLIL", "renderer")
             setProperty("$assem:method.Sr()Lcom/ss/android/ugc/aweme/autocaption/refactor/CLACaptionViewModelV2;", "viewModel()${descriptor(ViewModel::class.java)}")
