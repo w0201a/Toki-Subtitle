@@ -42,11 +42,11 @@ jobs:
         run: |
           API_AAR=$(find "$HOME/.gradle/caches/modules-2/files-2.1/io.github.libxposed/api/102.0.0" -name '*.aar' -print -quit)
           python3 scripts/prepare-lspatch.py "$API_AAR"
-          ./gradlew :app:assembleLspatch -PtokiLegacy=true --no-daemon --max-workers=1 --console=plain
+          ./gradlew :app:assembleLspatch -PtokiLegacy=true -PtokiOptimize=true --no-daemon --max-workers=1 --console=plain
           python3 scripts/verify-lspatch.py app/build/outputs/apk/lspatch/app-lspatch.apk
           mkdir -p app/build/universal-assets/toki
           cp app/build/outputs/apk/lspatch/app-lspatch.apk app/build/universal-assets/toki/legacy-payload.apk
-          ./gradlew :app:assembleUniversal --no-daemon --max-workers=1 --console=plain
+          ./gradlew :app:assembleUniversal -PtokiOptimize=true --no-daemon --max-workers=1 --console=plain
           python3 scripts/verify-universal.py app/build/outputs/apk/universal/app-universal.apk
       - name: Build Release when explicitly requested
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.build_release }}

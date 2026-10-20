@@ -53,9 +53,15 @@ class UniversalLegacyEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
             }
             val loader=object : DexClassLoader(payload.absolutePath,dir.absolutePath,null,javaClass.classLoader) {
                 override fun loadClass(name: String, resolve: Boolean): Class<*> {
-                    if(name.startsWith("io.github.meiyongai.toki.subtitle.") || name.startsWith("io.github.meiyongai.toki.privateapi.")) {
+                    // Inner and outer R8 outputs may assign the same short name to
+                    // unrelated classes. Isolate all bundled dependencies, while
+                    // sharing Android/JDK and the framework's traditional API.
+                    if (!name.startsWith("java.") && !name.startsWith("javax.") &&
+                        !name.startsWith("android.") && !name.startsWith("dalvik.") &&
+                        !name.startsWith("de.robv.android.xposed.")) {
                         synchronized(this) {
-                            val loaded=findLoadedClass(name) ?: findClass(name)
+                            val loaded=findLoadedClass(name) ?: try { findClass(name) }
+                                catch (_: ClassNotFoundException) { return super.loadClass(name, resolve) }
                             if(resolve) resolveClass(loaded)
                             return loaded
                         }

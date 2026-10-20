@@ -8,3 +8,9 @@
 
 # Traditional LSPatch entry and its runtime facade (only bundled by lspatch build).
 -keep class io.github.meiyongai.toki.subtitle.hook.LegacyTokiEntry { *; }
+
+# Traditional entry is loaded by the literal name in assets/xposed_init.
+-keep class io.github.meiyongai.toki.subtitle.bootstrap.UniversalLegacyEntry { *; }
+# The private facade is implemented using Proxy; keep method names and interface
+# boundaries across both class loaders, without retaining unrelated UI libraries.
+-keep class io.github.meiyongai.toki.privateapi.** { *; }

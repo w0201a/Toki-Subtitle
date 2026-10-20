@@ -12,6 +12,7 @@ if (releaseSigningPropertiesFile.isFile) {
 }
 val hasReleaseSigning = releaseSigningPropertiesFile.isFile
 val productionUnified = providers.gradleProperty("tokiProduction").orNull == "true"
+val optimizeUnified = productionUnified || providers.gradleProperty("tokiOptimize").orNull == "true"
 check(!productionUnified || hasReleaseSigning) { "Official unified build requires release signing" }
 
 android {
@@ -22,8 +23,8 @@ android {
         applicationId = "io.github.meiyongai.toki.subtitle"
         minSdk = 28
         targetSdk = 35
-        versionCode = 56
-        versionName = "2.0.36"
+        versionCode = 57
+        versionName = "2.0.37"
         // 默认仍可构建通用包；真机调试包可只带目标 ABI。
         providers.gradleProperty("subtitleAbi").orNull?.let { ndk.abiFilters.add(it) }
     }
@@ -44,12 +45,18 @@ android {
             initWith(getByName("debug"))
             signingConfig = signingConfigs.getByName(if (productionUnified) "release" else "debug")
             isDebuggable = !productionUnified
+            isMinifyEnabled = optimizeUnified
+            isShrinkResources = optimizeUnified
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             matchingFallbacks += "debug"
         }
         create("lspatch") {
             initWith(getByName("debug"))
             signingConfig = signingConfigs.getByName(if (productionUnified) "release" else "debug")
             isDebuggable = !productionUnified
+            isMinifyEnabled = optimizeUnified
+            isShrinkResources = optimizeUnified
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             matchingFallbacks += "debug"
         }
         release {
