@@ -5,3 +5,6 @@
 # 保留错误定位信息，不保留未使用的图标、工具或方法。
 -keepattributes SourceFile,LineNumberTable
 
+
+# Traditional LSPatch entry and its runtime facade (only bundled by lspatch build).
+-keep class io.github.meiyongai.toki.subtitle.hook.LegacyTokiEntry { *; }

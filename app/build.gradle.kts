@@ -20,8 +20,8 @@ android {
         applicationId = "io.github.meiyongai.toki.subtitle"
         minSdk = 28
         targetSdk = 35
-        versionCode = 49
-        versionName = "2.0.29-dev"
+        versionCode = 50
+        versionName = "2.0.30-dev"
         // 默认仍可构建通用包；真机调试包可只带目标 ABI。
         providers.gradleProperty("subtitleAbi").orNull?.let { ndk.abiFilters.add(it) }
     }
@@ -38,6 +38,11 @@ android {
     }
 
     buildTypes {
+        create("lspatch") {
+            initWith(getByName("debug"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += "debug"
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -85,6 +90,10 @@ android {
 dependencies {
     // libxposed 现代化 API：仅在编译期间参与类型检查，运行时由 LSPosed 框架在宿主进程中提供
     compileOnly("io.github.libxposed:api:102.0.0")
+    // LSPatch supplies legacy Xposed; only this build bundles the modern facade
+    // consumed by the shared implementation. The normal Debug stays framework-owned.
+    add("lspatchImplementation", "io.github.libxposed:api:102.0.0")
+    add("lspatchCompileOnly", files("libs/xposed-api-82.jar"))
     implementation("io.github.libxposed:service:102.0.0")
     implementation("org.smali:dexlib2:2.5.2") {
         exclude(group = "com.google.guava", module = "guava")

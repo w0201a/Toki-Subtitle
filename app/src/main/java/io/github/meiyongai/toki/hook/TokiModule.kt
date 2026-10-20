@@ -71,22 +71,33 @@ class TokiModule : XposedModule() {
         val method = Instrumentation::class.java.getMethod("callApplicationOnCreate", Application::class.java)
         hook(method).setExceptionMode(XposedInterface.ExceptionMode.PASSTHROUGH).intercept { chain ->
             val app = chain.args[0] as Application
-            application = app
-            HookRuntime.attach(app)
-            ConfigClient.attachHostSettings(app)
-            plan = HostFeaturePlan(ConfigClient.requestedSnapshotOrNull())
-            plan.platformFeatures.forEach { if (it !in installed) install(it) }
-            if (processName == app.packageName) {
-                val resources = ModuleResources(moduleApplicationInfo, checkNotNull(TokiModule::class.java.classLoader))
-                HostSettingsEntry.attach(app, this, resources)
-                HostScanController.attach(app, ModuleResources(moduleApplicationInfo,
-                    checkNotNull(TokiModule::class.java.classLoader)))
-            }
-            pendingHost?.also { pendingHost = null }?.invoke()
-            if (ConfigClient.isReady) refreshConfiguration(app)
+            bindApplication(app)
             chain.proceed()
         }
         applicationHookInstalled = true
+    }
+
+    /** LSPatch's legacy package callback already has an attached Application. */
+    internal fun onLegacyApplication(app: Application) {
+        applicationHookInstalled = true
+        bindApplication(app)
+    }
+
+    private fun bindApplication(app: Application) {
+        if (application === app) return
+        application = app
+        HookRuntime.attach(app)
+        ConfigClient.attachHostSettings(app)
+        plan = HostFeaturePlan(ConfigClient.requestedSnapshotOrNull())
+        plan.platformFeatures.forEach { if (it !in installed) install(it) }
+        if (processName == app.packageName) {
+            val resources = ModuleResources(moduleApplicationInfo, checkNotNull(TokiModule::class.java.classLoader))
+            HostSettingsEntry.attach(app, this, resources)
+            HostScanController.attach(app, ModuleResources(moduleApplicationInfo,
+                checkNotNull(TokiModule::class.java.classLoader)))
+        }
+        pendingHost?.also { pendingHost = null }?.invoke()
+        if (ConfigClient.isReady) refreshConfiguration(app)
     }
 
     private fun refreshConfiguration(app: Application) {
