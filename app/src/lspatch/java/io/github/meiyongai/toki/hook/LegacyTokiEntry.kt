@@ -24,6 +24,7 @@ class LegacyTokiEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun handleLoadPackage(param: XC_LoadPackage.LoadPackageParam) {
         if(param.packageName !in setOf(TokiModule.PKG_TIKTOK_GLOBAL,TokiModule.PKG_TIKTOK_TRILL) ||
             param.processName != param.packageName || !loaded.add(param.processName)) return
+        installPreloaderWait(param)
         android.util.Log.i("TokiLegacy", "entry callback received")
         XposedBridge.hookMethod(Application::class.java.getDeclaredMethod("attach", android.content.Context::class.java),
             object : XC_MethodHook() {
@@ -47,6 +48,48 @@ class LegacyTokiEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
         if(current?.packageName == param.packageName) start(current,param)
         XposedBridge.log("Toki legacy: entry loaded; waiting for host Application")
     }
+    /** Exact-version recovery for the verified two-condition busy wait. */
+    private fun installPreloaderWait(param: XC_LoadPackage.LoadPackageParam) {
+        try {
+            val verified = LegacyPreloaderContract.verify(param.appInfo.sourceDir) ?: return
+            val owner = Class.forName(verified.owner, false, param.classLoader)
+            val markerOwner = Class.forName(verified.markerOwner, false, param.classLoader)
+            val marker = markerOwner.getDeclaredField(verified.marker).apply {
+                check(type == java.lang.Long.TYPE && java.lang.reflect.Modifier.isStatic(modifiers)); isAccessible = true
+            }
+            // Class-loader preloading can enter the wait before modules are loaded.
+            // Existing invocations cannot be replaced; yield at their repeated
+            // Application.getBaseContext checkpoint until the same marker is ready.
+            XposedBridge.hookMethod(android.content.ContextWrapper::class.java.getMethod("getBaseContext"),
+                object : XC_MethodHook() {
+                    override fun afterHookedMethod(hook: MethodHookParam) {
+                        if (hook.thisObject !is Application || !Thread.currentThread().name.startsWith("AsyncTask")) return
+                        if (hook.result != null && marker.getLong(null) != 0L) return
+                        val waiting = Thread.currentThread().stackTrace.any {
+                            it.className == verified.owner && it.methodName == verified.method
+                        }
+                        if (waiting) {
+                            try { Thread.sleep(10) } catch (_: InterruptedException) { Thread.currentThread().interrupt() }
+                        }
+                    }
+                })
+            val method = owner.getDeclaredMethod(verified.method, Application::class.java)
+            XposedBridge.hookMethod(method, object : XC_MethodHook() {
+                override fun beforeHookedMethod(hook: MethodHookParam) {
+                    val app = hook.args[0] as Application
+                    var interrupted = false
+                    try {
+                        while (app.baseContext == null || marker.getLong(null) == 0L) {
+                            try { Thread.sleep(10) } catch (_: InterruptedException) { interrupted = true }
+                        }
+                        hook.result = null
+                    } finally { if (interrupted) Thread.currentThread().interrupt() }
+                }
+            })
+            XposedBridge.log("Toki preloader: verified busy wait replaced with yielding wait")
+        } catch (error: Throwable) { XposedBridge.log("Toki preloader guard unavailable: " + error.javaClass.simpleName) }
+    }
+
     private var started=false
     // This build implements a framework facade, rather than attaching to a
     // framework-owned modern API. The API facade is bundled only in this variant.
@@ -86,7 +129,7 @@ class LegacyTokiEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
                 override fun onActivityResumed(activity: android.app.Activity) {
                     if (!notified) {
                         notified = true
-                        android.widget.Toast.makeText(activity, "Toki 2.0.33 已加载 · 长按首页打开设置", android.widget.Toast.LENGTH_LONG).show()
+                        android.widget.Toast.makeText(activity, "Toki 2.0.35 已加载 · 长按首页打开设置", android.widget.Toast.LENGTH_LONG).show()
                     }
                 }
                 override fun onActivityCreated(a: android.app.Activity,b: android.os.Bundle?) = Unit

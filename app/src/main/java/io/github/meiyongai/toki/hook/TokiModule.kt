@@ -179,6 +179,10 @@ class TokiModule : XposedModule() {
             hookApplication()
             plan.platformFeatures.forEach { install(it) }
         }
+        // Install independently of feature configuration, including modern-API
+        // LSPatch forks where the traditional bootstrap deliberately skips.
+        val injected = runCatching { frameworkName.lowercase().let { ("lspatch" in it || "vector" in it) && "legacy bridge" !in it } }.getOrDefault(false)
+        if (injected) PreloaderWaitGuard.install(this, param.classLoader, param.applicationInfo.sourceDir)
         if (application == null) {
             pendingHost = {
                 plan.platformFeatures.forEach { if (it !in installed) install(it) }
