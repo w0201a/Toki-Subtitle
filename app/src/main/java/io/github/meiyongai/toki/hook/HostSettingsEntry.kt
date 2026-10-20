@@ -104,11 +104,18 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
         }
         return opened
     }
+    internal fun settingsHeading(value: String?): Boolean = value?.trim()?.lowercase()
+        ?.replace("&", "and")?.replace(Regex("\\s+"), " ") in setOf(
+            "settings and privacy", "设置和隐私", "设置与隐私", "設定與隱私", "設定和隱私", "設定とプライバシー")
     private class Page(val activity: Activity) : ViewTreeObserver.OnGlobalLayoutListener {
         private var entry: TextView? = null
-        private var lastCheck = 0L
+        private var disposed = false
+        private var pending = false
+        private val check = Runnable { pending = false; if (!disposed) scan() }
         override fun onGlobalLayout() {
-            val now = android.os.SystemClock.uptimeMillis();if(now-lastCheck < 500) return;lastCheck = now
+            if (!disposed && !pending) { pending = true; main.postDelayed(check, 250) }
+        }
+        private fun scan() {
             val root = activity.window.decorView as? ViewGroup ?: return
             val queue = ArrayDeque<View>();queue.add(root);var visited = 0
             var settings = false
@@ -116,7 +123,7 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
                 val view=queue.removeFirst()
                 if(view === entry || !view.isShown) continue
                 val label=(view as? TextView)?.text?.toString()?.trim()?.lowercase()
-                if(label in setOf("settings and privacy", "设置和隐私", "設定與隱私", "設定とプライバシー")) settings=true
+                if(settingsHeading(label)) settings=true
                 if(view is ViewGroup) for(i in 0 until view.childCount) queue.add(view.getChildAt(i))
             }
             if(settings && entry==null) {
@@ -128,6 +135,7 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
                 root.addView(entry, android.widget.FrameLayout.LayoutParams(-2,-2,Gravity.BOTTOM or Gravity.END).apply { bottomMargin=96;rightMargin=20 })
             } else if(!settings) removeEntry()
         }
+        fun dispose() { disposed = true; main.removeCallbacks(check); removeEntry() }
         fun removeEntry() { entry?.let { (it.parent as? ViewGroup)?.removeView(it) };entry=null }
     }
     override fun onActivityResumed(activity: Activity) {
@@ -143,7 +151,7 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
         page.onGlobalLayout()
     }
     override fun onActivityPaused(activity: Activity) {
-        pages.remove(activity)?.let { activity.window.decorView.viewTreeObserver.removeOnGlobalLayoutListener(it);it.removeEntry() }
+        pages.remove(activity)?.let { activity.window.decorView.viewTreeObserver.removeOnGlobalLayoutListener(it);it.dispose() }
         main.removeCallbacks(hold);target=null;opened=false
         if(dialogActivity===activity) dialog?.dismiss()
     }

@@ -86,7 +86,7 @@ class LegacyTokiEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
                 override fun onActivityResumed(activity: android.app.Activity) {
                     if (!notified) {
                         notified = true
-                        android.widget.Toast.makeText(activity, "Toki 2.0.31 已加载 · 长按首页打开设置", android.widget.Toast.LENGTH_LONG).show()
+                        android.widget.Toast.makeText(activity, "Toki 2.0.32 已加载 · 长按首页打开设置", android.widget.Toast.LENGTH_LONG).show()
                     }
                 }
                 override fun onActivityCreated(a: android.app.Activity,b: android.os.Bundle?) = Unit

@@ -20,8 +20,8 @@ android {
         applicationId = "io.github.meiyongai.toki.subtitle"
         minSdk = 28
         targetSdk = 35
-        versionCode = 51
-        versionName = "2.0.31-dev"
+        versionCode = 52
+        versionName = "2.0.32-dev"
         // 默认仍可构建通用包；真机调试包可只带目标 ABI。
         providers.gradleProperty("subtitleAbi").orNull?.let { ndk.abiFilters.add(it) }
     }
@@ -38,6 +38,11 @@ android {
     }
 
     buildTypes {
+        create("universal") {
+            initWith(getByName("debug"))
+            signingConfig = signingConfigs.getByName("debug")
+            matchingFallbacks += "debug"
+        }
         create("lspatch") {
             initWith(getByName("debug"))
             signingConfig = signingConfigs.getByName("debug")
@@ -95,6 +100,7 @@ dependencies {
     if (providers.gradleProperty("tokiLegacy").orNull == "true")
         add("lspatchImplementation", files(layout.buildDirectory.file("legacy-api/relocated-api.jar")))
     add("lspatchCompileOnly", files("libs/xposed-api-82.jar"))
+    add("universalCompileOnly", files("libs/xposed-api-82.jar"))
     implementation("io.github.libxposed:service:102.0.0")
     implementation("org.smali:dexlib2:2.5.2") {
         exclude(group = "com.google.guava", module = "guava")
@@ -138,6 +144,15 @@ tasks.matching { it.name == "compileLspatchKotlin" }.configureEach {
     doFirst {
         check(providers.gradleProperty("tokiLegacy").orNull == "true") {
             "Use scripts/build-lspatch.ps1 to prepare the private API namespace."
+        }
+    }
+}
+
+android.sourceSets.getByName("universal").assets.srcDir(layout.buildDirectory.dir("universal-assets").get().asFile)
+tasks.matching { it.name == "mergeUniversalAssets" }.configureEach {
+    doFirst {
+        check(layout.buildDirectory.file("universal-assets/toki/legacy-payload.apk").get().asFile.isFile) {
+            "Build and verify the isolated LSPatch payload first."
         }
     }
 }

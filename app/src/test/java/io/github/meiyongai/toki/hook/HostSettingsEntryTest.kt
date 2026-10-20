@@ -13,6 +13,11 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35], qualifiers = "w400dp-h800dp-mdpi")
 class HostSettingsEntryTest {
+    @Test fun settingsHeaderAcceptsNativeAmpersandAndChineseVariants() {
+        for (text in listOf("Settings & privacy", "Settings and privacy", "设置和隐私", "设置与隐私", "設定與隱私"))
+            assertTrue(text,HostSettingsEntry.settingsHeading(text))
+        assertFalse(HostSettingsEntry.settingsHeading("Privacy policy"))
+    }
     @Test fun homeLabelRequiresAnExactNavigationLabel() {
         val activity=Robolectric.buildActivity(Activity::class.java).setup().get()
         val label=TextView(activity)

@@ -10,3 +10,5 @@ The normal Debug build uses framework-provided modern libxposed API 102. The sep
 SHA-256: `f48c635f1c7469fdec0e00ad2ea0b7a6b2f5b55065784a35b7ca3a84615e8e25`
 
 Build the integrated-module APK with `scripts/build-lspatch.ps1`. The script relocates the modern API facade into a private namespace and rewrites generated source copies; original sources stay unchanged. This is required because VectorModuleManager rejects modules defining `io.github.libxposed.api.*`. `scripts/verify-lspatch.py` checks actual DEX class definitions, the legacy entry and bundled discovery resources.
+
+For a single distributable, use `scripts/build-universal.ps1`. It builds the private legacy payload first, copies it into generated assets, then builds the outer modern module plus traditional bootstrap. No framework API definitions are bundled in the primary DEX. The bootstrap loads the private payload only when a modern framework API is unavailable. Both stages run serially with one worker and no persistent Gradle daemon. `scripts/verify-universal.py` checks both entry points, API class definitions, superclass isolation and matching discovery profiles.

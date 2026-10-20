@@ -1,7 +1,7 @@
 """Reject a LSPatch APK that would fail VectorModuleManager's API namespace guard."""
 import struct,sys,zipfile
 
-def definitions(data):
+def definitions(data, expected_super="Lio/github/meiyongai/toki/privateapi/XposedModule;"):
     sc,so=struct.unpack_from("<II",data,56);tc,to=struct.unpack_from("<II",data,64);cc,co=struct.unpack_from("<II",data,96)
     strings=[]
     for index in range(sc):
@@ -12,7 +12,7 @@ def definitions(data):
     for i in range(cc):
         offset=co+32*i
         if types[struct.unpack_from("<I",data,offset)[0]]=="Lio/github/meiyongai/toki/subtitle/hook/TokiModule;":
-            assert types[struct.unpack_from("<I",data,offset+8)[0]]=="Lio/github/meiyongai/toki/privateapi/XposedModule;", "Business code still references unrelocated API"
+            assert types[struct.unpack_from("<I",data,offset+8)[0]]==expected_super, "Business code still references unrelocated API"
     return {types[struct.unpack_from("<I",data,co+32*i)[0]] for i in range(cc)}
 def verify(path):
     with zipfile.ZipFile(path) as archive:
