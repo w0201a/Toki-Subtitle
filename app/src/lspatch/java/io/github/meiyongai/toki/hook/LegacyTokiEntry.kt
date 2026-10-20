@@ -40,6 +40,9 @@ class LegacyTokiEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
         XposedBridge.log("Toki legacy: entry loaded; waiting for host Application")
     }
     private var started=false
+    // This build implements a framework facade, rather than attaching to a
+    // framework-owned modern API. The API facade is bundled only in this variant.
+    @android.annotation.SuppressLint("XposedInternalApi")
     @Synchronized private fun start(app: Application,param: XC_LoadPackage.LoadPackageParam) {
         if(started) return
         started=true
