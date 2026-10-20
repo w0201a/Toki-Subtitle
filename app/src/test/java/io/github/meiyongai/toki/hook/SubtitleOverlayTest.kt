@@ -19,6 +19,39 @@ import java.time.Duration
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class SubtitleOverlayTest {
+    @Test fun visibleCreatorCaptionWithHiddenAutoStateTranslatesButInvisibleStaleTextDoesNot() {
+        HookRuntime.start("test.host") { _, _ -> }
+        val owner=Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity=owner.get()
+        val page=FrameLayout(activity)
+        page.addView(SurfaceView(activity),FrameLayout.LayoutParams(1080,2400))
+        val source=FrameLayout(activity)
+        val native=TextView(activity).apply { text="Creator provided caption" }
+        source.addView(native,FrameLayout.LayoutParams(600,100))
+        page.addView(source,FrameLayout.LayoutParams(600,100))
+        activity.setContentView(page)
+        activity.window.decorView.apply {
+            measure(View.MeasureSpec.makeMeasureSpec(1080,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(2400,View.MeasureSpec.EXACTLY))
+            layout(0,0,1080,2400)
+        }
+        val replies=mutableListOf<(String?) -> Unit>()
+        val translator=NativeSubtitleTranslator({true},{ _,reply -> replies+=reply;AutoCloseable {} })
+        val binding=SubtitleOverlay(source,translator) { ConfigSnapshot(mapOf("subtitle_style_enabled" to true)) }
+        fun layer()=SubtitleOverlay::class.java.getDeclaredField("layer").let { it.isAccessible=true;it.get(binding) as? FrameLayout }
+        binding.update("HIDDEN",native.text.toString(),"creator-video")
+        binding.onPreDraw();shadowOf(Looper.getMainLooper()).idle()
+        assertEquals(1,replies.size)
+        replies.single()("作者提供的字幕")
+        binding.onPreDraw()
+        assertEquals("作者提供的字幕",(layer()!!.getChildAt(0) as TextView).text.toString())
+        // Hiding source with visibility must still hide the overlay even after Toki hid its alpha.
+        source.visibility=View.GONE;binding.onPreDraw()
+        assertEquals(View.INVISIBLE,layer()!!.visibility)
+        source.visibility=View.VISIBLE;native.text="stale text";binding.onPreDraw()
+        assertEquals(View.INVISIBLE,layer()!!.visibility)
+        binding.close();translator.close();owner.pause().stop().destroy()
+    }
+
     @Test fun nativeCleanHiddenCaptionContainerStillRendersAndTranslatesUntilVideoPageLeaves() {
         HookRuntime.start("test.host") { _, _ -> }
         val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()

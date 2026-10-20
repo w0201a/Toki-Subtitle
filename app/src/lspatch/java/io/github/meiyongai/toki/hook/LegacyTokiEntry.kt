@@ -24,6 +24,14 @@ class LegacyTokiEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
     override fun handleLoadPackage(param: XC_LoadPackage.LoadPackageParam) {
         if(param.packageName !in setOf(TokiModule.PKG_TIKTOK_GLOBAL,TokiModule.PKG_TIKTOK_TRILL) ||
             param.processName != param.packageName || !loaded.add(param.processName)) return
+        android.util.Log.i("TokiLegacy", "entry callback received")
+        XposedBridge.hookMethod(Application::class.java.getDeclaredMethod("attach", android.content.Context::class.java),
+            object : XC_MethodHook() {
+                override fun afterHookedMethod(hook: MethodHookParam) {
+                    val app = hook.thisObject as? Application ?: return
+                    if (app.packageName == param.packageName) start(app, param)
+                }
+            })
         // LSPatch loads modules after Application.attach. Do not wait on an
         // Instrumentation callback which its loader may already have passed.
         val callback = object : XC_MethodHook() {
@@ -49,6 +57,7 @@ class LegacyTokiEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
         try {
             val path=modulePath ?: javaClass.protectionDomain?.codeSource?.location?.path
                 ?: error("LSPatch did not provide module APK path")
+            ModuleCodeResources.apkPath = path
             val moduleInfo=checkNotNull(app.packageManager.getPackageArchiveInfo(path,0)?.applicationInfo) {
                 "Cannot read integrated module APK"
             }.apply { sourceDir=path;publicSourceDir=path }
@@ -72,6 +81,21 @@ class LegacyTokiEntry : IXposedHookLoadPackage, IXposedHookZygoteInit {
             module.onLegacyApplication(app)
             module.onPackageReady(host)
             android.util.Log.i("TokiLegacy","LSPatch host initialized: "+param.packageName)
+            app.registerActivityLifecycleCallbacks(object : Application.ActivityLifecycleCallbacks {
+                private var notified = false
+                override fun onActivityResumed(activity: android.app.Activity) {
+                    if (!notified) {
+                        notified = true
+                        android.widget.Toast.makeText(activity, "Toki 2.0.31 已加载 · 长按首页打开设置", android.widget.Toast.LENGTH_LONG).show()
+                    }
+                }
+                override fun onActivityCreated(a: android.app.Activity,b: android.os.Bundle?) = Unit
+                override fun onActivityStarted(a: android.app.Activity) = Unit
+                override fun onActivityPaused(a: android.app.Activity) = Unit
+                override fun onActivityStopped(a: android.app.Activity) = Unit
+                override fun onActivityDestroyed(a: android.app.Activity) = Unit
+                override fun onActivitySaveInstanceState(a: android.app.Activity,b: android.os.Bundle) = Unit
+            })
         } catch(error: Throwable) {
             XposedBridge.log("Toki legacy initialization failed");XposedBridge.log(error)
             android.widget.Toast.makeText(app,"Toki 加载失败："+error.javaClass.simpleName,android.widget.Toast.LENGTH_LONG).show()

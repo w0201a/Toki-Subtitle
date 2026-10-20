@@ -19,13 +19,18 @@ import io.github.meiyongai.toki.subtitle.ui.screen.DashboardScreen
 import io.github.meiyongai.toki.subtitle.ui.screen.SubtitleDialog
 
 /** A host-owned window: no external Activity, provider, or overlay permission. */
-internal class HostSettingsDialog(activity: Activity, resources: ModuleResources) :
+internal class HostSettingsDialog(activity: Activity, resources: ModuleResources, private val subtitleOnly: Boolean = false) :
     ComponentDialog(io.github.meiyongai.toki.subtitle.provider.ConfigClient.EditingContext(resources.createActivityContext(activity)), android.R.style.Theme_Material_Light_NoActionBar) {
     init {
+        if (subtitleOnly) window?.setBackgroundDrawableResource(android.R.color.transparent)
         setContentView(ComposeView(context).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 TokiAppTheme {
+                    if (subtitleOnly) {
+                        SubtitleDialog { dismiss() }
+                        return@TokiAppTheme
+                    }
                     var subtitles by remember { mutableStateOf(false) }
                     var features by remember { mutableStateOf(false) }
                     var scan by remember { mutableStateOf(HostScanController.session.status) }

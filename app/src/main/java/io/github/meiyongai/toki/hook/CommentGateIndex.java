@@ -68,10 +68,26 @@ final class CommentGateIndex {
         return all.stream().map(method->method.getName()+ExtensionDexIndex.signature(method)).sorted().collect(java.util.stream.Collectors.toList());
     }
     static void resolve(List<String> paths,Properties result) throws IOException {
-        Set<String> suppliers=new HashSet<>();
+        Set<String> suppliers=new HashSet<>(), reverseSuppliers=new HashSet<>();
+        Map<String,Set<String>> reverseConverters=new HashMap<>();
         Map<String,List<String>> language=new HashMap<>();
         ExtensionDexIndex.visit(paths,type->{
             if(supplier(type)) suppliers.add(type.getType());
+            for(Method method:type.getMethods()) if(method.getName().equals("invoke") && method.getImplementation()!=null) {
+                boolean key=false,integer=false,number=false,boxed=false;
+                Set<String> fields=new HashSet<>();
+                for(var instruction:method.getImplementation().getInstructions()) if(instruction instanceof ReferenceInstruction ref) {
+                    if(ref.getReference() instanceof StringReference text && text.getString().equals("feed_translation_reverse")) key=true;
+                    if(ref.getReference() instanceof FieldReference f) fields.add(f.getDefiningClass()+"->"+f.getName());
+                }
+                for(var call:calls(method)) {
+                    if(call.getDefiningClass().equals("Ljava/lang/Integer;") && call.getName().equals("valueOf")) integer=true;
+                    if(call.getDefiningClass().equals("Ljava/lang/Number;") && call.getName().equals("intValue")) number=true;
+                    if(call.getDefiningClass().equals("Ljava/lang/Boolean;") && call.getName().equals("valueOf")) boxed=true;
+                }
+                if(key&&integer) reverseSuppliers.add(type.getType());
+                if(number&&boxed&&!fields.isEmpty()) reverseConverters.put(type.getType(),fields);
+            }
             for(Method method:type.getMethods()) if((method.getAccessFlags()&8)!=0 &&
                 ExtensionDexIndex.signature(method).equals("(Lcom/ss/android/ugc/aweme/feed/model/Aweme;Ljava/lang/Boolean;)Z") && method.getImplementation()!=null) {
                 Set<String> enumValues=new HashSet<>();boolean aid=false,originalGuard=false;
@@ -95,9 +111,37 @@ final class CommentGateIndex {
             }
         });
         for(var entry:language.entrySet()) if(entry.getValue().size()==1) result.setProperty("captionLanguage."+entry.getKey(),entry.getValue().get(0));
-        if(suppliers.isEmpty()) { result.setProperty("error.commentGate","preference supplier unavailable");return; }
+        if(suppliers.isEmpty()) result.setProperty("error.commentGate","preference supplier unavailable");
+        Set<String> reverseMatches=new HashSet<>();
         Map<String,List<String>> matches=new HashMap<>();
-        ExtensionDexIndex.visit(paths,type->{List<String> methods=contract(type,suppliers);if(!methods.isEmpty()) matches.put(type.getType(),methods);});
+        ExtensionDexIndex.visit(paths,type->{
+            List<String> methods=contract(type,suppliers);if(!methods.isEmpty()) matches.put(type.getType(),methods);
+            Map<String,String> lazy=new HashMap<>();
+            for(Method method:type.getMethods()) if(method.getName().equals("<clinit>") && method.getImplementation()!=null) {
+                String created=null;boolean factory=false;
+                for(var instruction:method.getImplementation().getInstructions()) if(instruction instanceof ReferenceInstruction ref) {
+                    if(instruction.getOpcode()==Opcode.NEW_INSTANCE && ref.getReference() instanceof TypeReference t) { created=t.getType();factory=false; }
+                    if(ref.getReference() instanceof MethodReference m && m.getParameterTypes().size()==1 &&
+                        m.getParameterTypes().get(0).toString().equals("Lkotlin/jvm/functions/Function0;")) factory=true;
+                    if(factory && created!=null && instruction.getOpcode()==Opcode.SPUT_OBJECT && ref.getReference() instanceof FieldReference f && f.getDefiningClass().equals(type.getType()))
+                        lazy.put(type.getType()+"->"+f.getName(),created);
+                }
+            }
+            Set<String> integerFields=new HashSet<>();lazy.forEach((field,supplier)->{if(reverseSuppliers.contains(supplier)) integerFields.add(field);});
+            Set<String> booleanFields=new HashSet<>();lazy.forEach((field,supplier)->{
+                var reads=reverseConverters.get(supplier);if(reads!=null && reads.stream().anyMatch(integerFields::contains)) booleanFields.add(field);
+            });
+            for(Method method:type.getMethods()) if((method.getAccessFlags()&8)!=0 && ExtensionDexIndex.signature(method).equals("()Z") && method.getImplementation()!=null) {
+                boolean read=false,lazyRead=false,unbox=false;
+                for(var instruction:method.getImplementation().getInstructions()) if(instruction instanceof ReferenceInstruction ref && ref.getReference() instanceof FieldReference f && booleanFields.contains(f.getDefiningClass()+"->"+f.getName())) read=true;
+                for(var call:calls(method)) {
+                    if(call.getName().equals("getValue") && call.getReturnType().equals("Ljava/lang/Object;")) lazyRead=true;
+                    if(call.getDefiningClass().equals("Ljava/lang/Boolean;") && call.getName().equals("booleanValue")) unbox=true;
+                }
+                if(read&&lazyRead&&unbox) reverseMatches.add(type.getType()+"->"+method.getName());
+            }
+        });
+        if(reverseMatches.size()==1) result.setProperty("translationReverse",reverseMatches.iterator().next());
         if(matches.size()!=1) { result.setProperty("error.commentGate","relationship candidates="+matches.size());return; }
         var match=matches.entrySet().iterator().next();
         result.setProperty("commentGate.class",match.getKey().substring(1,match.getKey().length()-1).replace('/','.'));

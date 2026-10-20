@@ -38,13 +38,14 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
         this.module = module; this.resources = resources
         app.registerActivityLifecycleCallbacks(this)
     }
-    fun open(activity: Activity) {
+    fun openSubtitle(activity: Activity) = open(activity, subtitleOnly = true)
+    fun open(activity: Activity, subtitleOnly: Boolean = false) {
         if (!::resources.isInitialized || activity.isFinishing || activity.isDestroyed) return
         if (dialog?.isShowing == true && dialogActivity === activity) return
         dialog?.dismiss()
         dialogActivity = activity
         try {
-            dialog = HostSettingsDialog(activity, resources).also { window ->
+            dialog = HostSettingsDialog(activity, resources, subtitleOnly).also { window ->
                 window.setOnDismissListener { if (dialog === window) { dialog = null; dialogActivity = null } }
                 window.show()
             }

@@ -7,9 +7,9 @@ import java.util.Properties
 
 /** Independently cached extension contracts. Unknown versions require unique structural matches. */
 internal object ExtensionSymbols {
-    private const val MATCHER_REVISION = "relationships-v9"
+    private const val MATCHER_REVISION = "relationships-v10"
     private val reference: Properties by lazy {
-        Properties().apply { checkNotNull(ExtensionSymbols::class.java.getResourceAsStream("/toki-extension-profile.properties")).use(::load) }
+        Properties().apply { checkNotNull(ModuleCodeResources.open(ExtensionSymbols::class.java, "/toki-extension-profile.properties")).use(::load) }
     }
     private val referenceHash by lazy { profileHash(reference) }
     internal fun profileHash(profile: Properties): String =
@@ -87,6 +87,14 @@ internal object ExtensionSymbols {
         val classes = result.stringPropertyNames().count { it.startsWith("class.") }
         val failures = result.stringPropertyNames().count { it.startsWith("error.") }
         HookRuntime.event("ExtensionSymbols", "$stage classes=$classes unresolvedContracts=$failures; unique structural contracts only")
+    }
+    fun translationReverse(loader: ClassLoader): Method? {
+        val value = resolved.getProperty("translationReverse") ?: return null
+        return Class.forName(value.substringBefore("->").removePrefix("L").removeSuffix(";").replace('/', '.'), false, loader)
+            .getDeclaredMethod(value.substringAfter("->")).apply {
+                check(java.lang.reflect.Modifier.isStatic(modifiers) && returnType == Boolean::class.javaPrimitiveType)
+                isAccessible = true
+            }
     }
     fun captionOriginalVisibility(loader: ClassLoader): Method? {
         val value = resolved.getProperty("captionLanguage.originalVisibility") ?: return null

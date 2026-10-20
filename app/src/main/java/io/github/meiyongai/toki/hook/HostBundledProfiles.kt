@@ -14,7 +14,7 @@ internal object HostBundledProfiles {
      */
     fun load(identity: String, rules: String): Properties? {
         require(identity.matches(Regex("[0-9a-f]{64}"))) { "无效代码身份" }
-        return javaClass.getResourceAsStream("/toki-host-profiles/$identity.properties")?.use {
+        return ModuleCodeResources.open(javaClass, "/toki-host-profiles/$identity.properties")?.use {
             readCompatible(it, identity, rules, HostSymbols.INDEX_FORMAT)
         }
     }

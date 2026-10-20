@@ -8,3 +8,5 @@ Artifact: https://maven.aliyun.com/repository/public/de/robv/android/xposed/api/
 The normal Debug build uses framework-provided modern libxposed API 102. The separate LSPatch build bundles the modern facade used by shared Toki code and adapts it to the traditional framework entry. It does not turn a traditional injector into a full API 102 framework.
 
 SHA-256: `f48c635f1c7469fdec0e00ad2ea0b7a6b2f5b55065784a35b7ca3a84615e8e25`
+
+Build the integrated-module APK with `scripts/build-lspatch.ps1`. The script relocates the modern API facade into a private namespace and rewrites generated source copies; original sources stay unchanged. This is required because VectorModuleManager rejects modules defining `io.github.libxposed.api.*`. `scripts/verify-lspatch.py` checks actual DEX class definitions, the legacy entry and bundled discovery resources.

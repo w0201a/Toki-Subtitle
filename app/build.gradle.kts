@@ -20,8 +20,8 @@ android {
         applicationId = "io.github.meiyongai.toki.subtitle"
         minSdk = 28
         targetSdk = 35
-        versionCode = 50
-        versionName = "2.0.30-dev"
+        versionCode = 51
+        versionName = "2.0.31-dev"
         // 默认仍可构建通用包；真机调试包可只带目标 ABI。
         providers.gradleProperty("subtitleAbi").orNull?.let { ndk.abiFilters.add(it) }
     }
@@ -92,7 +92,8 @@ dependencies {
     compileOnly("io.github.libxposed:api:102.0.0")
     // LSPatch supplies legacy Xposed; only this build bundles the modern facade
     // consumed by the shared implementation. The normal Debug stays framework-owned.
-    add("lspatchImplementation", "io.github.libxposed:api:102.0.0")
+    if (providers.gradleProperty("tokiLegacy").orNull == "true")
+        add("lspatchImplementation", files(layout.buildDirectory.file("legacy-api/relocated-api.jar")))
     add("lspatchCompileOnly", files("libs/xposed-api-82.jar"))
     implementation("io.github.libxposed:service:102.0.0")
     implementation("org.smali:dexlib2:2.5.2") {
@@ -122,4 +123,21 @@ dependencies {
     testImplementation("org.robolectric:robolectric:4.17")
     // 仅用于本地多语言布局测量及交互回归，不进入模块 APK。
     testImplementation("androidx.compose.ui:ui-test-junit4")
+}
+
+// The LSPatch loader rejects modules defining io.github.libxposed.api.* even
+// when those classes are an adapter. A private namespace is required throughout.
+if (providers.gradleProperty("tokiLegacy").orNull == "true") {
+    android.sourceSets.getByName("main").kotlin.setSrcDirs(listOf(layout.buildDirectory.dir("legacy-src/main")))
+    android.sourceSets.getByName("lspatch").kotlin.setSrcDirs(listOf(layout.buildDirectory.dir("legacy-src/lspatch")))
+    android.sourceSets.getByName("main").java.setSrcDirs(listOf(layout.buildDirectory.dir("legacy-src/main")))
+    android.sourceSets.getByName("lspatch").java.setSrcDirs(listOf(layout.buildDirectory.dir("legacy-src/lspatch")))
+}
+
+tasks.matching { it.name == "compileLspatchKotlin" }.configureEach {
+    doFirst {
+        check(providers.gradleProperty("tokiLegacy").orNull == "true") {
+            "Use scripts/build-lspatch.ps1 to prepare the private API namespace."
+        }
+    }
 }

@@ -169,7 +169,7 @@ internal object HostNativeIndex {
      * Callers: scan、HostNativeQueryTest。
      */
     internal fun classQueries(rules: String): List<ClassMatcher> {
-        val shapes = checkNotNull(javaClass.getResourceAsStream("/toki-host-shapes.tsv")) {
+        val shapes = checkNotNull(ModuleCodeResources.open(javaClass, "/toki-host-shapes.tsv")) {
             "模块缺少类结构检索条件"
         }.bufferedReader().useLines { lines -> lines.filter { it.isNotBlank() && !it.startsWith('#') }
             .associate { line -> line.split('\t').let { it[0] to it } } }

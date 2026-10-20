@@ -110,7 +110,7 @@ internal class SubtitleOverlay(private val source: View,
         if (!styled) draggedPosition = null
         val page = visiblePage()
         val sourceVisible = page != null
-        if (state != "EXPANDED" || caption.isBlank() || !sourceVisible) {
+        if (!frameVisible() || caption.isBlank() || !sourceVisible) {
             resetTranslation()
             layer?.visibility = View.INVISIBLE
             restoreSource()
@@ -164,7 +164,7 @@ internal class SubtitleOverlay(private val source: View,
             requested = true
             val token = generation
             translator?.request(caption, current = {
-                generation == token && state == "EXPANDED" && visiblePage() != null &&
+                generation == token && frameVisible() && visiblePage() != null &&
                     configuration()?.let(::presentationEnabled) == true && translator.isEnabled(videoId)
             }, deliver = {
                 translated = it
@@ -224,6 +224,23 @@ internal class SubtitleOverlay(private val source: View,
 
     private fun presentationEnabled(settings: ConfigSnapshot): Boolean = settings.boolean("subtitle_style_enabled") ||
         (settings.boolean("video_translate_enabled") && translator?.isEnabled(videoId) == true)
+
+    /** Creator captions can be visibly rendered while the auto-caption state is HIDDEN.
+     * Require matching native text with a visible ancestor chain; never show stale hidden frames. */
+    private fun frameVisible(): Boolean {
+        if (state == "EXPANDED") return true
+        if (state != "HIDDEN" || caption.isBlank()) return false
+        val native = nativeTextView() ?: return false
+        if (!native.isShown || !native.getGlobalVisibleRect(Rect())) return false
+        var view: View? = native
+        while (view != null) {
+            val alpha = hidden[view] ?: view.alpha
+            if (alpha <= 0f) return false
+            if (view === source) return true
+            view = view.parent as? View
+        }
+        return false
+    }
 
     private fun nativeTextView(): TextView? {
         val pending = ArrayDeque<View>().apply { add(source) }

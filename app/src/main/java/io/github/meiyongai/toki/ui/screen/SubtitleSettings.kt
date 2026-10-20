@@ -53,7 +53,7 @@ internal fun SubtitleDialog(close: () -> Unit) {
         FontFamily(android.graphics.Typeface.create(values["subtitle_font"], android.graphics.Typeface.NORMAL))
     }
     AlertDialog(onDismissRequest = close, title = { Text("字幕设置") }, text = {
-        Column(Modifier.fillMaxWidth().heightIn(max = 480.dp).verticalScroll(rememberScrollState())) {
+        Column(Modifier.fillMaxWidth().heightIn(max = 480.dp)) {
             Surface(color = if (values["subtitle_background_mode"] == "hide") Color.Transparent else Color(android.graphics.Color.parseColor(values.getValue("subtitle_background"))),
                 modifier = Modifier.fillMaxWidth()) {
                 Text("这是字幕预览\nSubtitle preview", modifier = Modifier.padding(12.dp),
@@ -63,6 +63,7 @@ internal fun SubtitleDialog(close: () -> Unit) {
                     fontWeight = if (weight.contains("bold")) FontWeight.Bold else FontWeight.Normal,
                     fontStyle = if (weight.contains("italic")) FontStyle.Italic else FontStyle.Normal)
             }
+            Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())) {
             for ((key, label, range) in listOf(Triple("subtitle_size", "字号（sp）", 6f..160f),
                 Triple("subtitle_x", "水平偏移 %", -200f..200f), Triple("subtitle_y", "垂直偏移 %", -200f..200f))) {
                 Text("$label：${values.getValue(key).toFloat().toInt()}")
@@ -110,6 +111,7 @@ internal fun SubtitleDialog(close: () -> Unit) {
                     isError = !input.matches(Regex("#[0-9A-Fa-f]{8}")))
             }
             error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
+            }
         }
     }, confirmButton = { TextButton(onClick = {
         try { ConfigClient.putValues(context, values + gestures); close() }

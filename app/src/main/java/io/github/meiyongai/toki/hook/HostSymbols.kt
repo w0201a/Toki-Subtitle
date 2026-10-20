@@ -48,7 +48,7 @@ internal object HostSymbols {
     internal const val INDEX_FORMAT = "index-v9"
     @Volatile private var resolved = java.util.Properties()
     private val rules: String by lazy {
-        checkNotNull(HostSymbols::class.java.getResourceAsStream("/toki-host-rules.tsv")) {
+        checkNotNull(ModuleCodeResources.open(HostSymbols::class.java, "/toki-host-rules.tsv")) {
             "模块缺少 DEX 特征规则"
         }.bufferedReader().use { it.readText() }
     }

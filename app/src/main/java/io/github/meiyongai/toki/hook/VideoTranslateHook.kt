@@ -18,7 +18,7 @@ object VideoTranslateHook {
      */
     fun init(module: XposedModule, classLoader: ClassLoader) {
         HookRuntime.install("TranslationReverseGate") {
-        val translationGate = HostSymbols.resolve(classLoader, HostSymbol.TRANSLATION_REVERSE)
+        val translationGate = ExtensionSymbols.translationReverse(classLoader) ?: HostSymbols.resolve(classLoader, HostSymbol.TRANSLATION_REVERSE)
             .getDeclaredMethod(HostSymbols.member(HostSymbol.TRANSLATION_REVERSE, "blocked"))
             .apply { check(Modifier.isStatic(modifiers) && returnType == Boolean::class.javaPrimitiveType); isAccessible = true }
         module.trackHook("TranslationReverseGate", translationGate).intercept { chain ->

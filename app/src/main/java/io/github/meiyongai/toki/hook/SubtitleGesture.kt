@@ -68,7 +68,7 @@ internal class SubtitleGesture(private val activity: Activity) : AutoCloseable {
 
     companion object {
         fun openSettings(activity: Activity) {
-            HostSettingsEntry.open(activity)
+            HostSettingsEntry.openSubtitle(activity)
         }
     }
 }
