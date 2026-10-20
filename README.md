@@ -64,7 +64,7 @@ through a Material 3 interface with 57 language options.
 | --- | --- |
 | Android | Android 9 (API 28) or newer |
 | Framework | A working LSPosed installation supporting **libxposed API 102** |
-| TikTok | Official client; adapted versions: **47.1.4**, **47.0.3**, and **46.8.3** |
+| TikTok | Official client; on-device adaptation uses code identity. TikTok **47.4.16** was exercised on a Huawei device; compatibility of every feature and future version is not guaranteed. |
 | Module scope | `com.zhiliaoapp.musically` or `com.ss.android.ugc.trill` |
 
 Toki supports **official TikTok clients only**. Third-party modified clients,
@@ -296,3 +296,9 @@ or reuse content only with permission.
 Original author: Copyright © 2026 MeiYongAI. Subtitle edition contributions: © 2026 154Er and Gi-Ai154M. Licensed under the [MIT License](LICENSE).
 Dependency credits and licenses are listed in
 [Third-party notices](THIRD_PARTY_NOTICES.md).
+
+### Unified APK (2.0.36)
+
+Use the same signed APK for modern Root frameworks and LSPatch local or integrated mode. In integrated mode, updating the standalone module does not update the copy already embedded in TikTok. Long-press the TikTok Home navigation button for in-app settings; long-press subtitles for the subtitle editor.
+
+Build a unified test package with `scripts/build-universal.ps1 -ApiAar <api-102.0.0.aar>`. For official signing add `-PtokiProduction=true` with private signing properties configured. This disables debugging in both the outer package and embedded runtime. The package validator checks both entry points, API namespace isolation and identical discovery profiles. Signing files and device diagnostics must not be committed.

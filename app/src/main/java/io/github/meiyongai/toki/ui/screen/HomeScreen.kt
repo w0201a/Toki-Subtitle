@@ -74,7 +74,7 @@ import io.github.meiyongai.toki.subtitle.util.TikTokVersionHelper
  *
  * 遵循 Material 3 分组自适应圆角设计体系，集中呈现：
  * 1. 模块激活状态头部容器；
- * 2. 目标应用 TikTok 当前安装状态与适配版本 Section；
+ * 2. 目标应用 TikTok 当前安装状态 Section；
  * 3. 功能配置文件导入、导出与官方社区快捷入口；
  * 4. 界面多语言切换、桌面图标隐藏开关及开发者赞助支持 Section。
  *
@@ -308,7 +308,7 @@ private fun HostStatusSection(tikTokStatus: TikTokInstallStatus) {
             } else {
                 strings.getString(R.string.home_host_missing)
             },
-            shape = getGroupedShape(0, 2),
+            shape = getGroupedShape(0, 1),
             icon = if (tikTokStatus.isInstalled) Icons.Outlined.CheckCircle else Icons.Outlined.ErrorOutline,
             iconTint = if (tikTokStatus.isInstalled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
             trailingContent = {
@@ -327,53 +327,7 @@ private fun HostStatusSection(tikTokStatus: TikTokInstallStatus) {
             }
         )
 
-        // 第二项：已适配版本清单展示
-        Surface(
-            shape = getGroupedShape(1, 2),
-            color = MaterialTheme.colorScheme.surfaceContainer,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp)
-            ) {
-                Text(
-                    text = strings.getString(R.string.home_supported_versions),
-                    style = MaterialTheme.typography.bodyMedium,
-                    fontWeight = FontWeight.Medium,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    TikTokVersionHelper.SUPPORTED_VERSIONS.forEach { ver ->
-                        val isMatched = "v${tikTokStatus.versionName}" == ver
-                        AssistChip(
-                            onClick = {},
-                            label = { Text(text = ver) },
-                            leadingIcon = if (isMatched) {
-                                {
-                                    Icon(
-                                        imageVector = Icons.Outlined.CheckCircle,
-                                        contentDescription = null,
-                                        tint = MaterialTheme.colorScheme.primary,
-                                        modifier = Modifier.size(16.dp)
-                                    )
-                                }
-                            } else null,
-                            colors = AssistChipDefaults.assistChipColors(
-                                containerColor = if (isMatched) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
-                                labelColor = if (isMatched) MaterialTheme.colorScheme.onPrimaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        )
-                    }
-                }
-            }
-        }
+
     }
 }
 
