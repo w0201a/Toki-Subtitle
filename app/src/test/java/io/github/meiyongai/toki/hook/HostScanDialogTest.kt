@@ -207,10 +207,34 @@ class HostScanDialogTest {
         shadowOf(Looper.getMainLooper()).idle()
         compose.runOnIdle {
             assertNull(currentControllerDialog())
-            assertEquals(HostScanPhase.IDLE, HostScanController.session.status.phase)
+            assertEquals(HostScanPhase.READY, HostScanController.session.status.phase)
+            val badge = (controller.get().window.decorView as android.view.ViewGroup).let { root ->
+                (0 until root.childCount).map(root::getChildAt).filterIsInstance<android.widget.TextView>().firstOrNull { it.text.startsWith("Toki ·") }
+            }
+            assertNotNull(badge)
+            badge!!.performClick()
+            assertNotNull(currentControllerDialog())
             assertTrue(org.robolectric.shadows.ShadowToast.getTextOfLatestToast().contains("适配完成"))
             assertFalse(controller.get().isFinishing)
         }
+    }
+
+    @Test fun scanningStartedAfterIdleResumeStillOpensProgressWindow() {
+        compose.runOnUiThread {
+            controller.pause()
+            HostScanController.session.fail(); HostScanController.session.dismissResult()
+            controllerField().set(null,null)
+            HostScanController.attach(controller.get().application,moduleResources())
+            scanLifecycle=controllerField().get(null) as Application.ActivityLifecycleCallbacks
+            controller.resume()
+        }
+        shadowOf(Looper.getMainLooper()).idle()
+        assertNull(currentControllerDialog())
+        compose.runOnUiThread { HostScanController.session.begin(4);HostScanController.session.progress(1,4) }
+        shadowOf(Looper.getMainLooper()).idle()
+        compose.waitForIdle()
+        assertNotNull(currentControllerDialog())
+        compose.onNodeWithText("25%").assertIsDisplayed()
     }
 
     /** 未确认结果在暂停后恢复；确认后再恢复不会重新显示，也不会结束宿主。 */

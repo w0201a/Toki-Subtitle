@@ -7,4 +7,10 @@
     <string name="subtitle_sponsor_wechat">"WeChat Pay"</string>
     <string name="subtitle_sponsor_hint">"Sponsorship is voluntary and does not unlock features. Choose a method and save the original QR image to scan in your payment app."</string>
     <string name="subtitle_credits" formatted="false">"Subtitle edition · 154Er · Gi-Ai154M"</string>
+    <string name="host_scan_no_pending">No adaptation in progress</string>
+    <string name="host_settings_title">Toki settings</string>
+    <string name="host_settings_progress">View adaptation progress</string>
+    <string name="host_settings_hint">Settings are saved inside TikTok. Newly enabled features may require reopening TikTok.</string>
+    <string name="host_settings_features">Features</string>
+    <string name="host_settings_subtitles">Subtitles</string>
 </resources>

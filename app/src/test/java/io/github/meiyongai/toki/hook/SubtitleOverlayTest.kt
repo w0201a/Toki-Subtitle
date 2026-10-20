@@ -277,8 +277,8 @@ class SubtitleOverlayTest {
         val down = android.view.MotionEvent.obtain(0, 0, android.view.MotionEvent.ACTION_DOWN, 50f, 50f, 0)
         assertTrue(gesture.touch(down) { _, _ -> binding })
         shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(android.view.ViewConfiguration.getLongPressTimeout().toLong()))
-        assertEquals("io.github.meiyongai.toki.subtitle.ui.SubtitleSettingsActivity",
-            shadowOf(activity).nextStartedActivity.component?.className)
+        // Settings stay in the host; a hold must not launch an external Activity.
+        assertNull(shadowOf(activity).nextStartedActivity)
         gesture.close()
         assertTrue(gesture.touch(down) { _, _ -> binding })
         gesture.close()

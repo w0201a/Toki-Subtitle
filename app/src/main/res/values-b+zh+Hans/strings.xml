@@ -337,7 +337,7 @@
     <string name="status_path_comment">"普通评论翻译入口"</string>
     <string name="host_scan_workers">"并行线程上限：%1$d"</string>
     <string name="host_scan_background">"后台适配，继续刷视频"</string>
-    <string name="host_scan_background_hint">"正在后台适配，完成后会提醒。"</string>
+    <string name="host_scan_background_hint">"适配继续进行，点击页面上的 Toki 进度提示可返回详情。"</string>
     <string name="host_scan_background_complete">"适配完成，已应用可用功能。"</string>
     <string name="host_scan_background_partial">"适配完成，部分功能未匹配，可在 Toki 查看。"</string>
     <string name="host_scan_background_failed">"适配未完成，可在 Toki 查看状态并重试。"</string>

@@ -282,4 +282,43 @@ class ConfigStoreTest {
         assertEquals(5L, current.snapshot().revision)
         assertTrue(errors.isEmpty())
     }
+    @Test fun hostSettingsPersistWithoutWritingFrameworkAndMergeLaterManagerUpdates() {
+        val source=published()
+        val readOnly=object : SharedPreferences by source {
+            override fun edit(): SharedPreferences.Editor = throw AssertionError("framework read-only")
+        }
+        val local=preferences()
+        val store=ConfigStore({}, { throw AssertionError(it) })
+        store.attachHost({ readOnly }, {})
+        store.attachHostOverrides(local)
+        store.update(mapOf("feed_remove_ads" to false, "subtitle_size" to "28"))
+        assertFalse(store.snapshot().boolean("feed_remove_ads"))
+        assertTrue(source.getBoolean("feed_remove_ads",false))
+        source.edit().putLong(ConfigStore.REVISION,20).putBoolean("video_translate_enabled",true).commit()
+        store.reloadHost()
+        assertTrue(store.snapshot().boolean("video_translate_enabled"))
+        assertEquals("28",store.snapshot().string("subtitle_size"))
+        val restarted=ConfigStore({}, { throw AssertionError(it) })
+        restarted.attachHost({ readOnly }, {})
+        restarted.attachHostOverrides(local)
+        assertFalse(restarted.snapshot().boolean("feed_remove_ads"))
+        assertEquals("28",restarted.snapshot().string("subtitle_size"))
+        restarted.update(mapOf("subtitle_size" to null))
+        assertNull(restarted.snapshot().string("subtitle_size"))
+    }
+
+    @Test fun hostSettingsWorkWithoutAnyFrameworkPreferenceService() {
+        val local=preferences()
+        val store=ConfigStore({}, {})
+        assertFalse(store.attachHost({ throw UnsupportedOperationException("injected host") }, {}))
+        store.attachHostOverrides(local)
+        assertTrue(store.isReady)
+        store.update(mapOf("video_translate_enabled" to true))
+        val restarted=ConfigStore({}, {})
+        restarted.attachHost({ throw UnsupportedOperationException("injected host") }, {})
+        restarted.attachHostOverrides(local)
+        assertTrue(restarted.snapshot().boolean("video_translate_enabled"))
+        assertEquals(1L,restarted.snapshot().revision)
+    }
+
 }

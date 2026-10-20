@@ -160,7 +160,11 @@ class TokiStartupTest {
         val module = module(preferences().apply { edit().putBoolean("always_show_progress_bar", true).commit() })
         module.onPackageLoaded(host())
         assertEquals(1, hooks.size)
-        val failure = assertThrows(AssertionError::class.java) { module.onPackageReady(host()) }
+        module.onPackageReady(host())
+        assertEquals(1, hooks.size) // Host preferences must be loaded before planning/scanning.
+        val pending = TokiModule::class.java.getDeclaredField("pendingHost").apply { isAccessible = true }
+            .get(module) as (() -> Unit)
+        val failure = assertThrows(AssertionError::class.java) { pending() }
         assertTrue(failure.message.orEmpty().contains("APK/cache"))
     }
 

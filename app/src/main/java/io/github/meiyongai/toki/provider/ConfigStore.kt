@@ -29,6 +29,29 @@ internal class ConfigStore(
         const val IMPORT_REVISION = "__toki_import_revision"
     }
 
+    /** Host-owned overrides never write into framework read-only preferences. */
+    @Synchronized fun attachHostOverrides(preferences: SharedPreferences) {
+        check(host && local == null)
+        local = preferences
+        reloadHost()
+    }
+
+    private fun hostValues(): Map<String, Any?> {
+        val overrides = local?.all
+        val base = if (overrides?.get("__host_replace") == true) emptyMap() else remote?.all.orEmpty()
+        val merged = base.toMutableMap()
+        overrides?.forEach { (key, value) -> if (key in ConfigSchema.keys) merged[key] = value }
+        if (overrides != null) {
+            val removed = overrides["__host_removed"] as? Set<*> ?: emptySet<String>()
+            removed.filterIsInstance<String>().forEach(merged::remove)
+            val baseRevision = (base[REVISION] as? Long) ?: 0L
+            val localRevision = (overrides[REVISION] as? Long) ?: 0L
+            merged[REVISION] = maxOf(baseRevision, localRevision, current?.revision ?: 0L)
+            merged[IMPORT_REVISION] = minOf((overrides[IMPORT_REVISION] as? Long) ?: (base[IMPORT_REVISION] as? Long) ?: 0L, merged[REVISION] as Long)
+        }
+        return merged
+    }
+
     /**
      * 连接管理端私有配置，保留已有键值和版本。
      * @param preferences Toki 私有 SharedPreferences。
@@ -103,7 +126,7 @@ internal class ConfigStore(
     @Synchronized fun reloadHost() {
         check(host) { "仅宿主接收框架配置" }
         val notify = try {
-            accept(requireNotNull(remote).all, requireProtocol = true)
+            accept(if (local != null) hostValues() else requireNotNull(remote).all, requireProtocol = local == null)
         } catch (error: Exception) {
             hostFailed(error)
             return
@@ -141,11 +164,28 @@ internal class ConfigStore(
         val checked = ConfigArchive.validate(values)
         val revision = Math.addExact(snapshot().revision, 1L)
         val importRevision = if (replace) revision else snapshot().importRevision
-        val editor = preferences.edit().clear()
-        putConfiguration(editor, checked, revision, importRevision)
+        val editor = preferences.edit()
+        if (host) {
+            val removed = (preferences.getStringSet("__host_removed", emptySet()) ?: emptySet()).toMutableSet()
+            if (replace) {
+                editor.putBoolean("__host_replace", true)
+                ConfigSchema.keys.forEach { key -> if (key !in checked) { editor.remove(key); removed.add(key) } }
+            }
+            (if (replace) checked else changes).forEach { (key, value) ->
+                when (value) {
+                    null -> { editor.remove(key); removed.add(key) }
+                    is Boolean -> { editor.putBoolean(key, value); removed.remove(key) }
+                    is String -> { editor.putString(key, value); removed.remove(key) }
+                }
+            }
+            editor.putStringSet("__host_removed", removed).putLong(REVISION, revision).putLong(IMPORT_REVISION, importRevision)
+        } else {
+            editor.clear()
+            putConfiguration(editor, checked, revision, importRevision)
+        }
         check(editor.commit()) { "配置保存失败，版本 $revision 未确认" }
-        if (accept(preferences.all, requireProtocol = false)) changed()
-        if (remote != null) {
+        if (accept(if (host) hostValues() else preferences.all, requireProtocol = false)) changed()
+        if (!host && remote != null) {
             try {
                 publish()
             } catch (error: Exception) {

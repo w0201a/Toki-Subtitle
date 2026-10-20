@@ -337,7 +337,7 @@
     <string name="status_path_comment">"Comment translation entry"</string>
     <string name="host_scan_workers">"并行线程上限：%1$d"</string>
     <string name="host_scan_background">"Continue watching while scanning"</string>
-    <string name="host_scan_background_hint">"Compatibility analysis continues in the background. You will be notified when it finishes."</string>
+    <string name="host_scan_background_hint">"Adaptation continues. Tap the Toki progress badge to reopen details."</string>
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>

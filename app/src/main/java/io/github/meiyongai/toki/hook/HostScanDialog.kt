@@ -141,7 +141,7 @@ private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit, onBa
     }
     Surface(modifier = Modifier.fillMaxSize(), shape = RoundedCornerShape(28.dp),
         color = MaterialTheme.colorScheme.surfaceContainerHigh, tonalElevation = 6.dp) {
-        Column(Modifier.padding(24.dp)) {
+        Column(Modifier.padding(16.dp)) {
             Column(Modifier.weight(1f).verticalScroll(contentScroll),
                 verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Text(stringResource(heading), style = MaterialTheme.typography.headlineSmall)
@@ -161,6 +161,8 @@ private fun ScanContent(state: HostScanStatus, onResultDismiss: () -> Unit, onBa
                         style = MaterialTheme.typography.bodySmall)
                 }
             }
+            if (state.phase == HostScanPhase.SCANNING || state.phase == HostScanPhase.EXTENSIONS) Text(HostScanPresentation.summary(LocalContext.current, state),
+                style = MaterialTheme.typography.labelMedium, maxLines = 2)
             if (!complete && !partial && !failed) TextButton(onClick = onBackground, modifier = Modifier.align(Alignment.End)) {
                 Text(stringResource(R.string.host_scan_background))
             }

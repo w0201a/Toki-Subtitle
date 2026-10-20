@@ -19,6 +19,7 @@ class TokiModule : XposedModule() {
     private val installed = java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
     private var applicationHookInstalled = false
     private var application: Application? = null
+    private var pendingHost: (() -> Unit)? = null
 
     companion object {
         private const val TAG = "TokiModule"
@@ -34,7 +35,7 @@ class TokiModule : XposedModule() {
             ConfigClient.syncError?.let { HookRuntime.failure("ConfigClient", it, "配置未就绪，功能暂停") }
         }
         plan = HostFeaturePlan(ConfigClient.requestedSnapshotOrNull())
-        ConfigClient.configureHostSession(plan::apply)
+        ConfigClient.configureHostSession { plan.apply(it) }
         ConfigSchema.featureSwitches.keys.forEach { feature ->
             HookRuntime.state(feature, if (feature in plan.features || feature == "SpeedOptions" && "PlaybackSpeedHook" in plan.features)
                 "等待注册" else "本次会话未安装")
@@ -72,10 +73,16 @@ class TokiModule : XposedModule() {
             val app = chain.args[0] as Application
             application = app
             HookRuntime.attach(app)
-            if (plan.requiresScan && processName == app.packageName) {
+            ConfigClient.attachHostSettings(app)
+            plan = HostFeaturePlan(ConfigClient.requestedSnapshotOrNull())
+            plan.platformFeatures.forEach { if (it !in installed) install(it) }
+            if (processName == app.packageName) {
+                val resources = ModuleResources(moduleApplicationInfo, checkNotNull(TokiModule::class.java.classLoader))
+                HostSettingsEntry.attach(app, this, resources)
                 HostScanController.attach(app, ModuleResources(moduleApplicationInfo,
                     checkNotNull(TokiModule::class.java.classLoader)))
             }
+            pendingHost?.also { pendingHost = null }?.invoke()
             if (ConfigClient.isReady) refreshConfiguration(app)
             chain.proceed()
         }
@@ -161,6 +168,15 @@ class TokiModule : XposedModule() {
             hookApplication()
             plan.platformFeatures.forEach { install(it) }
         }
+        if (application == null) {
+            pendingHost = {
+                plan.platformFeatures.forEach { if (it !in installed) install(it) }
+                prepareHost(param)
+            }
+        } else prepareHost(param)
+    }
+
+    private fun prepareHost(param: PackageReadyParam) {
         if (plan.directHostFeatures.isNotEmpty()) {
             val loader = param.classLoader
             plan.directHostFeatures.forEach { install(it, loader) }

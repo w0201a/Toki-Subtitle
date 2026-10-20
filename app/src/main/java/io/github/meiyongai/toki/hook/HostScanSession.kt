@@ -16,8 +16,14 @@ internal data class HostScanStatus(
 
 /** 统一约束扫描、保存与结果确认顺序，供工作线程和主线程共同使用。 */
 internal class HostScanSession {
+    private val listeners = java.util.concurrent.CopyOnWriteArrayList<() -> Unit>()
+    fun addListener(listener: () -> Unit): AutoCloseable {
+        listeners.add(listener)
+        return AutoCloseable { listeners.remove(listener) }
+    }
+    @Volatile var onChanged: (() -> Unit)? = null
     @Volatile var status = HostScanStatus()
-        private set
+        private set(value) { field = value; onChanged?.invoke(); listeners.forEach { it() } }
 
     /** 开始唯一扫描。@return Unit。Callers: HostSymbols.initialize、单元测试。 */
     @Synchronized fun begin(workers: Int = 1) {

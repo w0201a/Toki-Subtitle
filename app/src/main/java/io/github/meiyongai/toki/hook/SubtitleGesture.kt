@@ -1,10 +1,6 @@
 package io.github.meiyongai.toki.subtitle.hook
 
 import android.app.Activity
-import android.content.ComponentName
-import android.content.Intent
-import android.net.Uri
-import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.MotionEvent
@@ -50,14 +46,11 @@ internal class SubtitleGesture(private val activity: Activity) : AutoCloseable {
                 main.removeCallbacks(hold)
                 position?.let { value ->
                     try {
-                        val saved = activity.contentResolver.call(Uri.parse("content://io.github.meiyongai.toki.subtitle.position"),
-                            "position", null, Bundle().apply {
-                                putFloat("subtitle_x", value.first); putFloat("subtitle_y", value.second)
-                            })?.getBoolean("saved") == true
-                        check(saved)
+                        io.github.meiyongai.toki.subtitle.provider.ConfigClient.putStrings(activity,
+                            mapOf("subtitle_x" to value.first.toString(), "subtitle_y" to value.second.toString()))
                     } catch (_: Exception) {
                         subtitle.discardDrag()
-                        Toast.makeText(activity, "字幕位置保存失败，请在 Toki 内调整", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(activity, "字幕位置保存失败，请长按首页打开设置重试", Toast.LENGTH_SHORT).show()
                     }
                 }
                 target = null; position = null
@@ -75,12 +68,7 @@ internal class SubtitleGesture(private val activity: Activity) : AutoCloseable {
 
     companion object {
         fun openSettings(activity: Activity) {
-            try {
-                activity.startActivity(Intent().setComponent(ComponentName("io.github.meiyongai.toki.subtitle",
-                    "io.github.meiyongai.toki.subtitle.ui.SubtitleSettingsActivity")))
-            } catch (_: Exception) {
-                Toast.makeText(activity, "无法打开字幕设置，请检查 Toki 字幕版是否已安装", Toast.LENGTH_SHORT).show()
-            }
+            HostSettingsEntry.open(activity)
         }
     }
 }

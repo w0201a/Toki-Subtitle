@@ -43,6 +43,20 @@ object ConfigClient {
     val revision: Long get() = store.snapshot().revision
     const val FRAMEWORK_GROUP = ConfigStore.GROUP
 
+    class EditingContext(base: Context) : android.content.ContextWrapper(base)
+    private fun editing(context: Context): Boolean {
+        var current = context
+        repeat(16) {
+            if (current is EditingContext) return true
+            val wrapper = current as? android.content.ContextWrapper ?: return false
+            if (wrapper.baseContext === current) return false
+            current = wrapper.baseContext
+        }
+        return false
+    }
+    private fun contextSnapshot(context: Context): ConfigSnapshot =
+        if (host && editing(context)) requestedSnapshot() else snapshot()
+
     /**
      * 仅在管理端连接私有设置；已初始化的宿主不会访问该 Context 的存储或 Provider。
      * @param context 管理端上下文或已绑定框架的宿主上下文。
@@ -69,6 +83,12 @@ object ConfigClient {
         initialized = true
         connectionChanged = onConnectionChanged
         return store.attachHost(acquire) { it.registerOnSharedPreferenceChangeListener(preferenceListener) }
+    }
+
+    /** Writable host-private storage also works when an injector has no manager configuration service. */
+    @Synchronized fun attachHostSettings(context: Context) {
+        check(host && initialized)
+        store.attachHostOverrides(context.getSharedPreferences("toki_host_settings", Context.MODE_PRIVATE))
     }
 
     /** 宿主安装计划一次确定当前会话可应用的配置；管理端及原始请求保持完整。 */
@@ -178,7 +198,7 @@ object ConfigClient {
     fun getBoolean(key: String): Boolean = snapshot().boolean(key, ConfigSchema.booleanDefault(key))
 
     /** 初始化后读取开关。@param context 上下文。@param key 配置键。@return 布尔值。Callers: 管理界面、refreshConfig。 */
-    fun getBoolean(context: Context, key: String): Boolean { init(context); return getBoolean(key) }
+    fun getBoolean(context: Context, key: String): Boolean { init(context); return contextSnapshot(context).boolean(key, ConfigSchema.booleanDefault(key)) }
 
     /** 读取字符串。@param key 配置键。@param defaultValue 未设置时的默认值。@return 配置值。Callers: 业务 Hook。 */
     fun getString(key: String, defaultValue: String? = null): String? = snapshot().string(key, defaultValue)
@@ -193,7 +213,7 @@ object ConfigClient {
      */
     fun getString(context: Context, key: String, defaultValue: String? = null): String? {
         init(context)
-        return getString(key, defaultValue)
+        return contextSnapshot(context).string(key, defaultValue)
     }
 
     /** 保存开关。@param context 管理端上下文。@param key 配置键。@param value 值。@return Unit。Callers: DashboardScreen。 */
