@@ -62,9 +62,73 @@ internal object SubtitleFeature {
             HookRuntime.dependent(owner, prefetchOwner)
             HookRuntime.install(prefetchOwner) {
                 val upcoming = FeedCaptionLookAhead(loader)
-                HookRuntime.onDispose(prefetchOwner) { translator.upcomingTracks = { emptyList() } }
+                HookRuntime.onDispose(prefetchOwner) { translator.upcomingTracks = { _, _ -> emptyList() } }
                 upcoming.install(module, prefetchOwner)
                 translator.upcomingTracks = upcoming::next
+                val holder = loader.loadClass("com.ss.android.ugc.aweme.feed.adapter.VideoViewCell")
+                val getAweme = holder.getMethod("getAweme")
+                var selectedVideo = ""
+                var selectedHolder = java.lang.ref.WeakReference<Any>(null)
+                var timelineOverlay: SubtitleOverlay? = null
+                var timelineVideo = ""
+                var nextTimelineRefresh = 0L
+                val getVideoView = holder.getMethod("getVideoView")
+                HookRuntime.onDispose(prefetchOwner) {
+                    selectedVideo = ""; selectedHolder.clear(); timelineOverlay?.close(); timelineOverlay = null
+                }
+                module.trackHook(prefetchOwner, android.app.Activity::class.java.getDeclaredMethod("onPause")).intercept { chain ->
+                    selectedVideo = ""
+                    timelineOverlay?.close(); timelineOverlay = null; timelineVideo = ""
+                    chain.proceed()
+                }
+                val progress = holder.getMethod("onPlayProgressChange", String::class.java,
+                    Long::class.javaPrimitiveType, Long::class.javaPrimitiveType)
+                module.trackHook(prefetchOwner, progress).intercept { chain ->
+                    val result = chain.proceed()
+                    val id = chain.args[0] as? String
+                    if (chain.thisObject === selectedHolder.get() && id == selectedVideo && !id.isNullOrBlank()) {
+                        val now = android.os.SystemClock.uptimeMillis()
+                        if (now >= nextTimelineRefresh) {
+                            nextTimelineRefresh = now + 1000
+                            translator.readAhead(id, "") {
+                                selectedVideo == id && selectedHolder.get() != null && translating()
+                            }
+                        }
+                        val cue = if (translating() && translator.isEnabled(id) && !translator.hasNativeFrame(id))
+                            translator.cueAt(id, chain.args[1] as Long) else null
+                        if (timelineVideo != id) { timelineOverlay?.close(); timelineOverlay = null; timelineVideo = id }
+                        if (cue != null) {
+                            val view = getVideoView.invoke(chain.thisObject) as? View
+                            if (view != null) {
+                                val binding = timelineOverlay ?: SubtitleOverlay(view, translator, timelineSource = true).also {
+                                    timelineOverlay = it
+                                    HookRuntime.event("SubtitleTimelineDisplay", "playback timeline display attached")
+                                }
+                                binding.update("EXPANDED", cue, id)
+                            }
+                        } else timelineOverlay?.update("HIDDEN", "", id)
+                    }
+                    result
+                }
+                for (method in listOf(holder.getMethod("onPageSelected", Int::class.javaPrimitiveType),
+                    holder.getMethod("onResumePlay", String::class.java), holder.getMethod("onPreparePlay", String::class.java))) {
+                    module.trackHook(prefetchOwner, method).intercept { chain ->
+                        val result = chain.proceed()
+                        val instance = checkNotNull(chain.thisObject)
+                        getAweme.invoke(instance)?.let(upcoming::selected)?.let { id ->
+                            if (id != selectedVideo) {
+                                timelineOverlay?.close(); timelineOverlay = null; timelineVideo = ""; nextTimelineRefresh = 0L
+                            }
+                            if (method.name == "onPageSelected") translator.selectVideo(id)
+                            selectedVideo = id
+                            selectedHolder = java.lang.ref.WeakReference(instance)
+                            translator.readAhead(id, "") {
+                                selectedVideo == id && selectedHolder.get() != null && translating()
+                            }
+                        }
+                        result
+                    }
+                }
             }
         }
         val rootField = renderer.adaptiveDeclaredField("LIZJ").apply { isAccessible = true }
@@ -144,6 +208,7 @@ internal object SubtitleFeature {
                 val instance = checkNotNull(chain.thisObject)
                 val frameVideo = (videoKey?.invoke(null, viewModel.invoke(instance))
                     ?: directVideoKey?.invoke(viewModel.invoke(instance))) as? String ?: ""
+                translator?.noteNativeFrame(frameVideo)
                 rendererField.get(instance)?.let { verifiedRenderers[it] = true; frameVideos[it] = frameVideo }
                 val previousRoot = rendererField.get(instance)?.let { rootField.get(it) as View }
                 val previousBinding = previousRoot?.let { bindings[it]?.get() }
@@ -184,9 +249,10 @@ internal object SubtitleFeature {
             val binding = bindings[root]?.get() ?: SubtitleOverlay(root, translator).also {
                 bindings[root] = WeakReference(it)
             }
-            binding.update((chain.args[1] as? Enum<*>)?.name ?: "UNKNOWN", chain.args[2] as? String ?: "",
-                (videoField?.get(chain.thisObject) as? String)?.takeIf(String::isNotBlank)
-                    ?: frameVideos[chain.thisObject].orEmpty())
+            val id = (videoField?.get(chain.thisObject) as? String)?.takeIf(String::isNotBlank)
+                ?: frameVideos[chain.thisObject].orEmpty()
+            translator?.noteNativeFrame(id)
+            binding.update((chain.args[1] as? Enum<*>)?.name ?: "UNKNOWN", chain.args[2] as? String ?: "", id)
             result
         }
         check(display != null || HookRuntime.scope("SubtitleCleanFrames").active) {

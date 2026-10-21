@@ -36,7 +36,7 @@ object LayoutCleanupHook {
     }
 
     /**
-     * 校验原生导航、视频组件和奖励入口契约后安装；不删除页面、不替换点击事件、不轮询视图树。
+     * 校验原生导航、视频组件和奖励入口契约后安装，顶部页面切换由独立事务过滤。
      * @param module 模块实例。
      * @param loader 官方 TikTok 类加载器。
      * @return Unit；契约不满足时由注册事务撤销并报告。
@@ -227,6 +227,9 @@ object LayoutCleanupHook {
             bind(checkNotNull(follow.get(chain.thisObject) as? View), LayoutElement.FOLLOW)
             result
         }
+        HookRuntime.install("LayoutNavigation") { LayoutNavigationHook.init(module, loader) }
+        HookRuntime.dependent(FEATURE, "LayoutMinis")
+        HookRuntime.install("LayoutMinis") { MinisCleanupHook.init(module, loader) }
         HookRuntime.install("LayoutRewards") {
         val rewardWidget = loader.loadClass("com.bytedance.touchpoint.ui.pendant.SpecActWidget")
         val rewardBind = rewardWidget.getMethod("bind", ViewGroup::class.java)

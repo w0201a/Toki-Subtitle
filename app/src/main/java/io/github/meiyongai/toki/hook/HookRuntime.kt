@@ -73,7 +73,7 @@ internal object HookRuntime {
             "DownloadHook" to listOf("DownloadSource"),
             "AutoScrollHook" to listOf("AutoScrollBehavior"),
             "FeedFilterHook" to listOf("FeedOfflineRecovery", "FeedRepositories", "FeedAdapters"),
-            "LayoutCleanupHook" to features.keySet().filter { it.startsWith("LayoutComponent:") || it in setOf("LayoutRewards", "LayoutTimers") }
+            "LayoutCleanupHook" to features.keySet().filter { it.startsWith("LayoutComponent:") || it in setOf("LayoutMinis", "LayoutNavigation", "LayoutRewards", "LayoutTimers") }
         )) {
             if (features.getBundle(parent) == null) continue
             val attempted = children.filter { features.getBundle(it) != null }

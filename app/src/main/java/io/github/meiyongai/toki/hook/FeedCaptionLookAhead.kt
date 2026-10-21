@@ -4,12 +4,12 @@ import io.github.libxposed.api.XposedModule
 import java.lang.ref.WeakReference
 import java.lang.reflect.Modifier
 
-/** 只读推荐列表：按当前视频在实际列表中的位置读取后四条，不按到达顺序猜测。 */
+/** 只读推荐列表：按当前视频的实际位置读取后五条，不按到达顺序猜测。 */
 internal class FeedCaptionLookAhead(loader: ClassLoader) {
     companion object {
         internal fun <T> following(items: List<T>, count: Int = 2, current: (T) -> Boolean): List<T> {
             val index = items.indexOfFirst(current)
-            return if (index < 0) emptyList() else items.drop(index + 1).take(count.coerceIn(0, 4))
+            return if (index < 0) emptyList() else items.drop(index + 1).take(count.coerceIn(0, 5))
         }
     }
     data class Track(val video: String, val url: String)
@@ -30,6 +30,19 @@ internal class FeedCaptionLookAhead(loader: ClassLoader) {
     private val itemCode = item.adaptiveField("languageCode")
     private val itemUrl = item.adaptiveField("url")
     private val itemUrls = item.adaptiveField("urlList")
+    private var lastReport = ""
+    fun selected(instance: Any): String? {
+        if (!aweme.isInstance(instance)) return null
+        val id = aid.invoke(instance) as? String ?: return null
+        val data = video.invoke(instance)?.let { caption.invoke(it) }
+        val original = data?.let { language.get(it) }?.let { languageCode.get(it) as? String }
+        val choices = data?.let { tracks.get(it) as? List<*> }?.filterNotNull().orEmpty()
+        val selected = choices.firstOrNull { itemCode.get(it) == original } ?: choices.firstOrNull()
+        val location = selected?.let { (itemUrl.get(it) as? String)?.takeIf(String::isNotBlank)
+            ?: (itemUrls.get(it) as? List<*>)?.filterIsInstance<String>()?.firstOrNull(String::isNotBlank) }
+        CaptionPrefetch.note(id, location)
+        return id
+    }
 
     fun install(module: XposedModule, owner: String) {
         HookRuntime.onDispose(owner) { synchronized(models) { models.clear() } }
@@ -47,26 +60,44 @@ internal class FeedCaptionLookAhead(loader: ClassLoader) {
         }
     }
 
-    fun next(current: String): List<Track> {
+    fun next(current: String, offset: Int = 0): List<Track> {
         val instances = synchronized(models) { models.mapNotNull { it.get() } }
         for (instance in instances.asReversed()) {
             val list = (getItems.invoke(instance) as? List<*>)?.toList() ?: continue
             val index = list.indexOfFirst { it != null && aweme.isInstance(it) && aid.invoke(it) == current }
             if (index < 0) continue
-            // 没有字幕的下一条仍计入四条预算，避免越过它预取更远的视频。
-            return following(list, 4) { it != null && aweme.isInstance(it) && aid.invoke(it) == current }.mapNotNull { entry ->
+            // 没有字幕的下一条仍计入五条预算，避免越过它预取更远的视频。
+            val window = list.drop(index + 1 + offset.coerceAtLeast(0)).take(5)
+            val result = window.mapNotNull { entry ->
                 if (entry == null || !aweme.isInstance(entry)) return@mapNotNull null
                 val id = aid.invoke(entry) as? String ?: return@mapNotNull null
-                val data = video.invoke(entry)?.let { caption.invoke(it) } ?: return@mapNotNull null
+                val unavailable = Track(id, "")
+                val data = video.invoke(entry)?.let { caption.invoke(it) } ?: return@mapNotNull unavailable
                 val original = language.get(data)?.let { languageCode.get(it) as? String }
                 val choices = (tracks.get(data) as? List<*>)?.filterNotNull().orEmpty()
-                if (choices.any { (itemCode.get(it) as? String)?.startsWith("zh") == true }) return@mapNotNull null
-                val selected = choices.firstOrNull { itemCode.get(it) == original } ?: return@mapNotNull null
+                if (original?.startsWith("zh") == true) return@mapNotNull unavailable
+                val selected = choices.firstOrNull { itemCode.get(it) == original &&
+                    (!(itemUrl.get(it) as? String).isNullOrBlank() || (itemUrls.get(it) as? List<*>)?.isNotEmpty() == true) }
+                    ?: choices.firstOrNull { !(itemCode.get(it) as? String).isNullOrBlank() &&
+                        (itemCode.get(it) as? String)?.startsWith("zh") != true &&
+                        (!(itemUrl.get(it) as? String).isNullOrBlank() || (itemUrls.get(it) as? List<*>)?.isNotEmpty() == true) }
+                    ?: return@mapNotNull unavailable
                 val url = (itemUrl.get(selected) as? String)?.takeIf { it.isNotBlank() }
                     ?: (itemUrls.get(selected) as? List<*>)?.filterIsInstance<String>()?.firstOrNull { it.isNotBlank() }
-                    ?: return@mapNotNull null
+                    ?: return@mapNotNull unavailable
                 Track(id, url)
             }
+            val report = "$current:$offset:${window.size}:${result.size}"
+            if (lastReport != report) {
+                lastReport = report
+                HookRuntime.event("CaptionPrefetch", "batchOffset=$offset following videos=${window.size} readableTracks=${result.count { it.url.isNotBlank() }}")
+            }
+            return result
+        }
+        val report = "$current:missing:${instances.size}"
+        if (lastReport != report) {
+            lastReport = report
+            HookRuntime.event("CaptionPrefetch", "current video absent from feed models=${instances.size}")
         }
         return emptyList()
     }

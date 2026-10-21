@@ -65,6 +65,12 @@ private class ModuleResourceContext(
     }
 
     override fun getResources(): Resources = moduleResources
+    @Suppress("DEPRECATION")
+    override fun createConfigurationContext(overrideConfiguration: Configuration): Context {
+        val configuration = Configuration(moduleResources.configuration).apply { updateFrom(overrideConfiguration) }
+        return ModuleResourceContext(baseContext,
+            Resources(moduleResources.assets, moduleResources.displayMetrics, configuration), moduleClassLoader)
+    }
     override fun getAssets(): AssetManager = moduleResources.assets
     override fun getTheme(): Resources.Theme = moduleTheme
     override fun getClassLoader(): ClassLoader = moduleClassLoader

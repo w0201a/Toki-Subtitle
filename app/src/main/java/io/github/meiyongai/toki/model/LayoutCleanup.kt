@@ -20,6 +20,7 @@ enum class LayoutGroup(val title: Int) {
 enum class LayoutElement(val group: LayoutGroup, val title: Int, val tag: String? = null) {
     TOP_SEARCH(LayoutGroup.TOP, R.string.layout_search, "search"),
     TOP_LIVE(LayoutGroup.TOP, R.string.layout_live, "live"),
+    MINIS(LayoutGroup.TOP, R.string.layout_minis),
     TOP_FRIENDS(LayoutGroup.TOP, R.string.layout_friends, "FRIENDS_FEED"),
     TOP_EXPLORE(LayoutGroup.TOP, R.string.layout_explore, "homepage_explore"),
     TOP_FOLLOWING(LayoutGroup.TOP, R.string.layout_following, "Following"),

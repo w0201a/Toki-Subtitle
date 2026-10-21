@@ -21,6 +21,8 @@ object ProgressBarHook {
     private var panelField: Field? = null
     private val seekBars = WeakHashMap<View, SeekBinding>()
     private val interactionViews = WeakHashMap<View, Unit>()
+    private val tracks = WeakHashMap<View, WeakReference<View>>()
+    private var refreshing = false
     /** @param controller 此进度条所属原生控制器。 */
     private class SeekBinding(controller: Any) {
         val controller = WeakReference(controller)
@@ -63,6 +65,7 @@ object ProgressBarHook {
         val decide: Method
         val apply: Method
         val draw: Method
+        val track: Method
 
         init {
             check(View::class.java.isAssignableFrom(seekBar) && View::class.java.isAssignableFrom(mask)) {
@@ -79,6 +82,9 @@ object ProgressBarHook {
             apply = seekBar.getDeclaredMethod(setShowTypeName, Int::class.javaPrimitiveType)
                 .apply { isAccessible = true }
             draw = mask.getDeclaredMethod("onDraw", Canvas::class.java).apply { isAccessible = true }
+            track = seekBar.getMethod("getMutableSeekBar").apply {
+                check(View::class.java.isAssignableFrom(returnType) && parameterCount == 0)
+            }
             check(decide.returnType == Int::class.javaPrimitiveType && apply.returnType == Void.TYPE &&
                 draw.returnType == Void.TYPE && listOf(decide, apply, draw).none { Modifier.isStatic(it.modifiers) }) {
                 "进度条显隐或遮罩绘制入口类型不符合契约"
@@ -115,6 +121,7 @@ object ProgressBarHook {
             panelField = null
             seekBarShowTypeMethod = null
             interactionViews.clear()
+            tracks.clear()
         }
         seekBarShowTypeMethod = contract.apply
         panelField = contract.panel
@@ -122,7 +129,9 @@ object ProgressBarHook {
             module.trackHook("ProgressBarHook", constructor, requiresConfiguration = false).intercept { chain ->
                 val result = chain.proceed()
                 interactionViews[checkNotNull(contract.duration.get(chain.thisObject) as? View)] = Unit
-                seekBars[checkNotNull(contract.field.get(chain.thisObject) as? View)] = SeekBinding(checkNotNull(chain.thisObject))
+                val view = checkNotNull(contract.field.get(chain.thisObject) as? View)
+                seekBars[view] = SeekBinding(checkNotNull(chain.thisObject))
+                (contract.track.invoke(view) as? View)?.let { tracks[it] = WeakReference(view) }
                 result
             }
         }
@@ -144,28 +153,45 @@ object ProgressBarHook {
             val view = chain.thisObject as View
             val requested = chain.args[0] as Int
             val binding = seekBars[view] ?: return@intercept chain.proceed()
-            binding.mode = requested
-            if (!isClean(view)) return@intercept chain.proceed()
-            val mode = cleanMode(requested, ConfigClient.getBoolean(KEY_CLEAN_SHOW_PROGRESS_BAR))
+            if (!refreshing) binding.mode = requested
+            val mode = displayMode(requested, ConfigClient.getBoolean(KEY_ALWAYS_SHOW_PROGRESS_BAR),
+                isClean(view), ConfigClient.getBoolean(KEY_CLEAN_SHOW_PROGRESS_BAR))
+            if (mode != requested) HookRuntime.count("ProgressBarHook", "已修正进度条隐藏模式")
             val result = if (mode == requested) chain.proceed() else chain.proceed(arrayOf(mode))
-            if (mode != 4 && mode != 3 && view.alpha != 1f) view.alpha = 1f
+            val track = contract.track.invoke(view) as? View
+            if (track != null) tracks[track] = WeakReference(view)
+            if (shouldKeepOpaque(binding.mode, ConfigClient.getBoolean(KEY_ALWAYS_SHOW_PROGRESS_BAR),
+                    isClean(view), ConfigClient.getBoolean(KEY_CLEAN_SHOW_PROGRESS_BAR))) {
+                if (view.alpha != 1f) view.alpha = 1f
+                if (track != null && track.alpha != 1f) track.alpha = 1f
+            }
             result
         }
         module.trackHook("ProgressBarHook", contract.draw).intercept { chain ->
             if (ConfigClient.getBoolean(AutoCleanModeHook.KEY_CLEAN_MODE_ON_PLAY)) null else chain.proceed()
         }
         module.trackHook("ProgressBarHook", alpha).intercept { chain ->
-            val viewType = chain.thisObject?.javaClass
             val view = chain.thisObject as View
-            val mode = seekBars[view]?.mode
+            val viewType = view.javaClass
+            val owner = if (seekBars.containsKey(view)) view else tracks[view]?.get()
+            val mode = owner?.let { seekBars[it]?.mode }
             when {
-                viewType == seekBar && isClean(view) &&
-                    (ConfigClient.getBoolean(KEY_CLEAN_SHOW_PROGRESS_BAR) || mode != null && mode !in listOf(0, 3, 4)) ->
+                owner != null && mode != null && shouldKeepOpaque(mode,
+                    ConfigClient.getBoolean(KEY_ALWAYS_SHOW_PROGRESS_BAR), isClean(owner),
+                    ConfigClient.getBoolean(KEY_CLEAN_SHOW_PROGRESS_BAR)) ->
                     chain.proceed(arrayOf(1f))
                 viewType == mask && ConfigClient.getBoolean(AutoCleanModeHook.KEY_CLEAN_MODE_ON_PLAY) ->
                     chain.proceed(arrayOf(0f))
                 else -> chain.proceed()
             }
+        }
+        HookRuntime.subscribe("ProgressBarHook") {
+            refreshing = true
+            try {
+                for ((view, binding) in seekBars.entries.toList()) contract.apply.invoke(view,
+                    displayMode(binding.mode, it?.boolean(KEY_ALWAYS_SHOW_PROGRESS_BAR) == true,
+                        isClean(view), it?.boolean(KEY_CLEAN_SHOW_PROGRESS_BAR) == true))
+            } finally { refreshing = false }
         }
         Log.i(TAG, "进度条已注册：${controller.name}.${contract.decide.name} → ${seekBar.name}.${contract.apply.name}；遮罩=${mask.name}")
     }
@@ -179,4 +205,13 @@ object ProgressBarHook {
      */
     internal fun cleanMode(requested: Int, keep: Boolean): Int =
         if (requested == 0 || requested == 4) { if (keep) 0 else 4 } else requested
+
+    internal fun displayMode(requested: Int, always: Boolean, clean: Boolean, keep: Boolean): Int = when {
+        clean -> cleanMode(requested, keep)
+        always && requested == 4 -> 0
+        else -> requested
+    }
+
+    internal fun shouldKeepOpaque(requested: Int, always: Boolean, clean: Boolean, keep: Boolean): Boolean =
+        (always || clean) && displayMode(requested, always, clean, keep) !in listOf(3, 4)
 }

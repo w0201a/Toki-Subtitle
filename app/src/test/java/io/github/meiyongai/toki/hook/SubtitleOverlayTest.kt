@@ -19,6 +19,35 @@ import java.time.Duration
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class SubtitleOverlayTest {
+    @Test fun timelineCaptionsDisplayTranslationsWithoutChangingVideoSurfaceAlpha() {
+        HookRuntime.start("timeline-display-test") { _, _ -> }
+        val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity = controller.get()
+        val page = FrameLayout(activity)
+        val video = SurfaceView(activity)
+        page.addView(video, FrameLayout.LayoutParams(1080, 2400))
+        activity.setContentView(page)
+        val decor = activity.window.decorView
+        decor.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+            View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+        decor.layout(0, 0, 1080, 2400)
+        val translator = NativeSubtitleTranslator({ true }, { _, complete -> complete("时间轴译文"); AutoCloseable {} })
+        val binding = SubtitleOverlay(video, translator, timelineSource = true) {
+            ConfigSnapshot(mapOf("subtitle_style_enabled" to true, "video_translate_enabled" to true))
+        }
+        binding.update("EXPANDED", "timeline original", "video")
+        binding.onPreDraw()
+        shadowOf(Looper.getMainLooper()).idle()
+        binding.onPreDraw()
+        val overlay = SubtitleOverlay::class.java.getDeclaredField("layer").apply { isAccessible = true }.get(binding) as FrameLayout
+        assertEquals("时间轴译文", (overlay.getChildAt(0) as TextView).text.toString())
+        assertEquals(1f, video.alpha)
+        assertEquals(1, page.childCount)
+        binding.update("HIDDEN", "", "video")
+        binding.onPreDraw()
+        assertEquals(View.INVISIBLE, overlay.visibility)
+        binding.close(); translator.close(); controller.pause().stop().destroy()
+    }
     @Test fun visibleCreatorCaptionWithHiddenAutoStateTranslatesButInvisibleStaleTextDoesNot() {
         HookRuntime.start("test.host") { _, _ -> }
         val owner=Robolectric.buildActivity(Activity::class.java).setup().visible()

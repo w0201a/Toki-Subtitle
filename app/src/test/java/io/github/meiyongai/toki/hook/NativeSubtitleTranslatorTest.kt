@@ -324,4 +324,24 @@ class NativeSubtitleTranslatorTest {
         assertEquals(listOf("current cue", "future cue"), host.requests.map { it.first })
         host.translator.close()
     }
+
+    @Test fun fiveFullVideoTracksRemainAvailableWhenSelectedWithoutNewTranslationRequests() {
+        val host = Host()
+        val inputs = (1..5).flatMap { video -> (1..8).map { CaptionTranslationInput("v$video", "cue $it") } }
+        for (video in 1..5) host.translator.expect("v$video", (1..8).map { "cue $it" })
+        host.translator.prefetchVideos(inputs) { true }
+        advance(0)
+        inputs.forEachIndexed { index, input ->
+            assertEquals(input.text, host.requests[index].first)
+            host.requests[index].second("${input.video}-${input.text}")
+            advance(250)
+        }
+        assertEquals(40, host.requests.size)
+        for (video in 1..5) assertTrue(host.translator.completed("v$video", (1..8).map { "cue $it" }))
+        val delivered = mutableListOf<String>()
+        host.translator.request("v5", "cue 8", { true }, delivered::add)
+        assertEquals(listOf("v5-cue 8"), delivered)
+        assertEquals(40, host.requests.size)
+        host.translator.close()
+    }
 }

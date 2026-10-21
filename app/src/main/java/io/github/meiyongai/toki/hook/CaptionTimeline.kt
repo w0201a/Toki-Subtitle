@@ -7,6 +7,18 @@ internal object CaptionTimeline {
     private val whitespace = Regex("[\\s\u00A0]+")
     fun normalize(text: String): String = text.replace(whitespace, " ").trim()
     data class Cue(val startMs: Long, val endMs: Long, val text: String)
+    fun at(cues: List<Cue>, positionMs: Long): String? {
+        if (positionMs < 0) return null
+        var low = 0
+        var high = cues.lastIndex
+        var index = -1
+        while (low <= high) {
+            val middle = (low + high).ushr(1)
+            if (cues[middle].startMs <= positionMs) { index = middle; low = middle + 1 }
+            else high = middle - 1
+        }
+        return cues.getOrNull(index)?.takeIf { positionMs < it.endMs }?.text
+    }
     fun parse(body: String): List<Cue> {
         if (body.length > 1_048_576) return emptyList()
         val source = body.removePrefix("\uFEFF").replace("\r\n", "\n")
@@ -15,7 +27,7 @@ internal object CaptionTimeline {
             try {
                 val root = JSONObject(source)
                 val entries = root.optJSONArray("utterances") ?: root.optJSONArray("captions") ?: return emptyList()
-                for (i in 0 until minOf(entries.length(), 3000)) {
+                for (i in 0 until entries.length()) {
                     val item = entries.optJSONObject(i) ?: continue
                     val text = item.optString("text").trim()
                     val start = item.optLong("start_time", -1)
@@ -25,7 +37,7 @@ internal object CaptionTimeline {
             } catch (_: Exception) { return emptyList() }
         } else {
             val timing = Regex("(?m)^(?:(\\d+):)?(\\d{2}):(\\d{2})[.,](\\d{3})\\s+-->\\s+(?:(\\d+):)?(\\d{2}):(\\d{2})[.,](\\d{3})[^\\n]*\\n")
-            for (match in timing.findAll(source).take(3000)) {
+            for (match in timing.findAll(source)) {
                 fun time(offset: Int): Long = ((match.groupValues[offset].toLongOrNull() ?: 0) * 3600 +
                     match.groupValues[offset + 1].toLong() * 60 + match.groupValues[offset + 2].toLong()) * 1000 +
                     match.groupValues[offset + 3].toLong()

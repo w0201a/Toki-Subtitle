@@ -53,6 +53,15 @@ class HostSettingsDialogTest {
             assertTrue(ConfigClient.getBoolean(dialog.context,"video_translate_enabled"))
             assertFalse(ConfigClient.getBoolean("video_translate_enabled"))
             compose.onNodeWithText("字幕设置").assertIsDisplayed()
+            compose.onNodeWithText("Toki · 界面语言 · 跟随系统").performClick()
+            compose.onNodeWithText("跟随系统", useUnmergedTree = true).assertIsDisplayed()
+            compose.onNode(hasSetTextAction()).performTextInput("en")
+            compose.onNodeWithText("English (US)").performClick()
+            compose.onNodeWithText("Toki settings").assertIsDisplayed()
+            assertEquals(io.github.meiyongai.toki.subtitle.util.AppLanguage.ENGLISH,
+                io.github.meiyongai.toki.subtitle.util.LocaleHelper.getAppLanguage(dialog.context))
+            compose.onNodeWithText("Toki · App language · English (US)").performClick()
+            compose.onNodeWithText("Subtitles").assertIsDisplayed()
             compose.runOnUiThread { ConfigClient.putString(dialog.context,"subtitle_size","30") }
             assertEquals("30",ConfigClient.requestedSnapshot().string("subtitle_size"))
             assertEquals("30",app.getSharedPreferences("toki_host_settings",Context.MODE_PRIVATE).getString("subtitle_size",null))

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Edition additions currently support English and Simplified Chinese; other locales use English. -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="layout_minis" translatable="false">TikTok Minis</string>
     <string name="upstream_author">"Original Toki author: MeiYongAI · Upstream project"</string>
     <string name="subtitle_sponsor_title">"Support subtitle development"</string>
     <string name="subtitle_sponsor_methods">"WeChat Pay / Alipay · Select a QR code"</string>

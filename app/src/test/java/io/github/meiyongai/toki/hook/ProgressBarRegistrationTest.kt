@@ -14,8 +14,22 @@ import org.robolectric.annotation.Config
 @Config(manifest = Config.NONE, application = Application::class, sdk = [35])
 class ProgressBarRegistrationTest {
     class Seek(context: android.content.Context) : android.view.View(context) {
+        fun getMutableSeekBar(): android.view.View? = null
         /** @param mode 显示模式。@return Unit。Callers: 反射契约测试。 */
         fun renamedApply(mode: Int) {}
+    }
+
+    @Test fun alwaysVisibleCoversNativeFadeModeAndBothAlphaTargets() {
+        assertEquals(0, ProgressBarHook.displayMode(4, true, false, false))
+        assertTrue(ProgressBarHook.shouldKeepOpaque(4, true, false, false))
+        for (mode in listOf(1, 2, 100, 101, 102))
+            assertEquals(mode, ProgressBarHook.displayMode(mode, true, false, false))
+        assertEquals(3, ProgressBarHook.displayMode(3, true, false, false))
+        assertFalse(ProgressBarHook.shouldKeepOpaque(3, true, false, false))
+        assertEquals(4, ProgressBarHook.displayMode(0, true, true, false))
+        assertFalse(ProgressBarHook.shouldKeepOpaque(0, true, true, false))
+        assertTrue(ProgressBarHook.shouldKeepOpaque(0, false, true, true))
+        assertFalse(ProgressBarHook.shouldKeepOpaque(0, false, false, false))
     }
     class Mask(context: android.content.Context) : android.view.View(context) {
         /** @param canvas 绘制画布。@return Unit。Callers: Android、反射契约测试。 */

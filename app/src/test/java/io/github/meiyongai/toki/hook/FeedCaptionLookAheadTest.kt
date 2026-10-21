@@ -21,4 +21,9 @@ class FeedCaptionLookAheadTest {
         assertEquals(listOf("b", "a"), FeedCaptionLookAhead.following(listOf("current", "b", "a", "c")) { it == "current" })
         assertEquals(listOf("a", "c"), FeedCaptionLookAhead.following(listOf("current", "a", "c")) { it == "current" })
     }
+    @Test fun fiveVideoWindowCountsMissingCaptionsAndDoesNotReadSixth() {
+        val items = listOf("current", "one", "no-captions", "three", "four", "five", "six")
+        assertEquals(items.subList(1, 6), FeedCaptionLookAhead.following(items, 5) { it == "current" })
+        assertEquals(items.subList(1, 6), FeedCaptionLookAhead.following(items, 99) { it == "current" })
+    }
 }

@@ -2,6 +2,17 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
+## 2.0.44 update
+
+[Download the signed unified APK](https://github.com/w0201a/Toki-Subtitle/releases/tag/v2.0.44) · [中文 / English release notes](CHANGELOG.md)
+
+- Hidden top tabs are skipped during swipes; an optional TikTok Minis cleanup switch blocks the home sidebar.
+- Choose Toki's interface language from its toolbar or embedded settings; the default follows the phone's system language.
+- Subtitle pretranslation processes complete available tracks in batches of five, retaining up to 100 completed videos. Watched videos are released in older batches of five after another five have been passed, preserving the most recent watched batch and unwatched cached videos.
+- Playback-time subtitle display covers missing native frames, and progress-bar fade handling is repaired.
+
+The subtitle cache is held in memory for the current TikTok process. Ahead-of-playback translation requires TikTok to have loaded a readable subtitle track. Device checks used TikTok 47.4.16; the 100-video cache limit and refill sequence were checked locally. Some newer UI strings fall back to English, and the separate `SubtitleMenu` adaptation mismatch remains. See the [bilingual changelog](CHANGELOG.md) for validation details.
+
 Version 2.0.18 Debug adds on-device business-reference analysis and independent translation, subtitle, title and poll paths. If features fail after a TikTok update or downgrade, choose **Detect compatibility again** in Toki’s feature status page, fully close and reopen TikTok, and wait for local detection. No computer or app-data clearing is required. Ambiguous contracts remain unavailable; major host rewrites can still require a module update. An optional capture compatibility switch addresses a normal phone display with black mirroring by allowing capture of TikTok’s main window.
 
 ## Toki Subtitle edition
@@ -10,7 +21,7 @@ An MIT-licensed derivative of [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki
 
 This edition adds subtitle drag controls and independent axis locks, subtitle display during clean-screen playback, translation scheduling and feed prefetch improvements, comment poll translation, long-description translation with final-layout rendering, and a home-screen sponsor selector with original WeChat Pay / Alipay images.
 
-Build Debug by default: `./gradlew :app:assembleDebug` (Windows: `gradlew.bat`). Requires Android SDK 37, Build Tools 37.0.0 and JDK 21. Enable the module for TikTok in LSPosed. Internal host interfaces are version-dependent; current validation primarily targets TikTok 47.0.3.
+Build Debug by default: `./gradlew :app:assembleDebug` (Windows: `gradlew.bat`). Requires Android SDK 37, Build Tools 37.0.0 and JDK 21 or later. Enable the module for TikTok in LSPosed, or use a compatible non-Root injection setup. Internal host interfaces are version-dependent; current device checks include TikTok 47.4.16. Signed public releases use the unified build described in [RELEASING.md](RELEASING.md).
 
 Starting with 2.0.16 Debug, subtitle extensions automatically invalidate their cache after a host code update and discover structural matches in the background. Discovery saves and applies verified hooks in the running process; switch videos to refresh existing content. No computer connection is needed, and later launches reuse the cache. Obfuscated names may change while code structure stays compatible. Missing or ambiguous extensions are disabled independently and reported in feature status. Relationship contracts cover poll bridge binding, subtitle frame-to-renderer calls and description video-field writes; individual members remain independently verified even when unrelated methods change. Major implementation changes can still require maintained rules; future-version compatibility is not guaranteed. CI builds Debug by default; unsigned Release requires an explicit manual selection.
 

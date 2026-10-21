@@ -8,6 +8,65 @@
 
 以下按现存开发记录与实机反馈整理。中间 Debug 版本用于排查，不表示当时问题已修复；较早记录未逐版保留完整时间，因此不补写推测日期。原项目更新历史保留在下方。
 
+### 2.0.44 正式版 / Release — 2026-10-21
+
+#### 中文
+
+- 修复顶部栏目仅隐藏标签却仍可横滑进入的问题；跳过隐藏栏目，保留未隐藏栏目和图集内部的正常滑动。
+- 新增「页面布局净化 → 顶部导航 → TikTok Minis」开关，阻止首页 Minis 侧栏入口和侧滑打开。
+- 独立 Toki 顶栏及 TikTok 内嵌 Toki 设置增加界面语言入口，使用现有 57 种语言，默认跟随手机系统语言，选择即时保存。部分新增文案仍会回退到英文。
+- 修复进度条常显遗漏的播放淡出模式和内层轨道透明度；暂停、拖拽和净屏保留设置分别处理。
+- 字幕按每批 5 个视频读取并翻译可获取的完整字幕，逐批补充到 100 个已完成视频。满额后暂停补充；看完前 5 个仍保留，再看完后 5 个才释放最早那批并补回 100 个。读取译文和后台预读不会顶替尚未观看的缓存。
+- 修复后台预翻译成功但原生字幕帧没有送达时译文不显示的路径：使用当前视频实际播放时间定位字幕，近期有原生帧时交回原通路。切换视频和字幕间隙收起补偿层，不改变视频画面透明度。
+- 缓存仅保存在当前 TikTok 进程内，重启后重新预读；需要宿主已加载的视频及可读字幕轨，无字幕或只有实时字幕的内容无法提前翻译。
+- 外层 APK 和内嵌兼容运行时均启用 R8 代码压缩、混淆和资源裁剪，关闭调试；沿用正式签名与 Root／免 Root 统一分发。TikTok 47.4.16 小米真机确认隐藏栏目拦截、Minis 阻止、后续字幕预翻译、缓存命中和中文字幕显示；100 个视频容量及 200 视频观看／补充顺序由本地回归验证，未在真机积累满 100 个。`SubtitleMenu` 独立适配失配仍存在。
+
+#### English
+
+- Fixed hidden top tabs remaining reachable by horizontal swipes. Hidden destinations are skipped while visible tabs and photo-carousel gestures retain their behavior.
+- Added **Layout cleanup → Top navigation → TikTok Minis** to block the home Minis sidebar entry and its opening gestures.
+- Added app-language shortcuts to the standalone Toki toolbar and embedded TikTok settings. The existing 57-language catalog defaults to the phone's system language and saves selections immediately. Some newer strings still fall back to English.
+- Fixed missing playback fade-mode and inner-track opacity handling for the always-visible progress bar. Pause, seeking and clean-screen preferences remain independently handled.
+- Read and translate available complete subtitle tracks in batches of five videos, filling a cache of 100 completed videos. Filling pauses at capacity. The first five watched videos remain cached until another five have been passed; the older watched batch is then released and the vacant slots refilled. Background reads do not evict unwatched videos.
+- Added a playback-timeline display path when background translation succeeds but native caption frames do not arrive. It uses the selected video's playback time, yields to recent native frames, hides between cues and on video changes, and does not change video-surface opacity.
+- The cache lasts for the current TikTok process and is rebuilt after restart. Prefetch requires videos already loaded by TikTok and readable subtitle tracks; videos without tracks or with only real-time captions cannot be translated ahead of playback.
+- Both the outer APK and embedded compatibility runtime use R8 code shrinking, obfuscation and resource shrinking, with debugging disabled. Retained the release certificate and unified Root / non-Root APK. A Xiaomi device with TikTok 47.4.16 exercised tab blocking, Minis blocking, subtitle pretranslation, cache hits and visible Chinese subtitles. The 100-video limit and the 200-video viewing/refill sequence were verified locally; the device was not filled to 100 cached videos. The separate `SubtitleMenu` compatibility mismatch remains unresolved.
+
+### 开发记录 / Development notes: 2.0.43-dev — 2026-10-21
+
+- 诊断确认后台预读成功但原生字幕帧及渲染回调均未触发时，新增使用实际播放毫秒位置驱动的字幕时间轴显示；译文继续复用视频缓存，字幕间隙和离开页面时隐藏。
+- 独立显示层不改变视频 Surface 透明度；近期有原生字幕帧时交回原生帧通路，避免重复显示。
+
+### 开发记录：2.0.42-dev — 2026-10-21
+
+- 字幕缓存按观看进度释放：满 100 个时停止补充；看过第一批 5 个仍保留，再前进一批 5 个后才释放更早的已看批次并补回 100 个。
+- 读取译文、后台预读及同一视频重复选中均不推进释放进度；尚未观看的视频不因新预读结果被顶替，当前视频保留完整译文。
+
+### 开发记录：2.0.41-dev — 2026-10-21
+
+- 预读改为连续五视频批次：一批完整译完再处理下一批，已完成缓存达到 100 个视频时等待；选中视频变化后补充新批次并按最近使用顺序淘汰旧缓存。
+- 当前视频没有字幕也能启动后续预读；等待列表更新时保留批次位置，字幕文件下载失败间隔重试，不把无字幕或失败内容计为完成。
+- 移除完整字幕队列的句数截断，保留文件大小与单句传输校验；回归覆盖超过 3000 句的视频尾部排程。
+
+### 开发记录：2.0.40-dev — 2026-10-21
+
+- 新增顶部导航净化中的 TikTok Minis 开关，通过首页侧栏的可用性与打开服务阻止入口和侧滑打开。
+- 字幕预读覆盖实际信息流中的后 5 个视频，并按视频队列读取完整字幕；视频选中和开始播放可独立触发，不再要求当前字幕先显示或当前字幕文件已存在。
+- 完成译文按 100 个视频缓存，进行中的当前视频与后 5 个视频另保留有界暂存；最久未使用的视频整体淘汰，切换视频不清空已完成译文。同句在不同视频间分别缓存。
+- 保留当前句的独立优先通道，预读按视频交错排程。无可读取字幕轨的视频继续跳过，诊断区分列表未找到、没有字幕地址、下载失败和实际翻译成功。
+
+### 开发记录：2.0.39-dev — 2026-10-21
+
+- 独立应用顶栏增加界面语言快捷入口；TikTok 内嵌 Toki 设置接入同一语言选择器，支持现有 57 种语言，默认跟随手机系统语言，选择即时生效并保存。
+- 内嵌设置的语言资源派生保留模块资源、宿主窗口服务和配置编辑上下文，不改变 TikTok 语言伪装设置。
+- 进度条常显补齐原生播放淡出模式及内层轨道透明度处理，支持配置更新后刷新已创建控件；暂停、拖拽、原生不可用模式及净屏隐藏规则保持独立。
+
+### 开发记录：2.0.38-dev — 2026-10-21
+
+- 顶部栏目净化同时限制首页横向翻页的目标；连续隐藏栏目按滑动方向跳过，边界没有可用栏目时回到当前页。
+- 配置更新隐藏当前栏目时切换至可用栏目；保留宿主页面索引，未知栏目标识继续按宿主行为处理。仅作用于首页栏目，不影响视频图集内部翻页。
+- 页面切换契约单独注册，无法适配时保留原有控件隐藏并在布局净化诊断中报告子功能失败。28 项相关回归通过；小米 Root 设备／TikTok 47.4.16 实测新逻辑累计拦截 5 次隐藏栏目切换，关注与推荐可正常切换，未记录该子功能异常。
+
 ### 2.0.37 正式版 — 2026-10-20
 
 - 修正统一正式包继承 Debug 后未启用压缩的构建遗漏：外层 APK 与内嵌兼容运行时均启用 R8 代码优化和资源裁剪，保留入口、代理接口和宿主反射契约。

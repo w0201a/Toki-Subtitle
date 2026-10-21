@@ -142,6 +142,20 @@ class ModuleResourcesTest {
         }
     }
 
+    @Test fun languageOverrideRetainsModuleAssetsAndHostWindowServices() {
+        val controller = Robolectric.buildActivity(HiddenModuleActivity::class.java).setup()
+        try {
+            val activity = controller.get()
+            val context = moduleResources().createActivityContext(activity)
+            val localized = io.github.meiyongai.toki.subtitle.util.LocaleHelper.wrapContext(
+                context, AppLanguage.JA_JP, context.resources.configuration)
+            assertEquals("表示言語", localized.getString(R.string.language_title))
+            assertEquals(MODULE_PACKAGE, localized.resources.getResourcePackageName(R.string.language_title))
+            assertSame(context.assets, localized.assets)
+            assertSame(activity.getSystemService(Context.WINDOW_SERVICE), localized.getSystemService(Context.WINDOW_SERVICE))
+        } finally { controller.pause().stop().destroy() }
+    }
+
     @Test fun hiddenPackageDialogShowsAndRecreatedActivityUsesNewConfiguration() {
         val resources = moduleResources()
         RuntimeEnvironment.setQualifiers("en")

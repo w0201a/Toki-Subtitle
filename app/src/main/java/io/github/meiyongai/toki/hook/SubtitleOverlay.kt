@@ -17,6 +17,7 @@ import java.util.WeakHashMap
 /** 页面内的字幕显示层；不申请悬浮窗权限，不改变宿主字幕布局和字体字段。 */
 internal class SubtitleOverlay(private val source: View,
     private val translator: NativeSubtitleTranslator? = null,
+    private val timelineSource: Boolean = false,
     private val configuration: () -> ConfigSnapshot? = { if (ConfigClient.isReady) ConfigClient.snapshot() else null }
 ) : AutoCloseable,
     View.OnAttachStateChangeListener, ViewTreeObserver.OnPreDrawListener {
@@ -110,6 +111,13 @@ internal class SubtitleOverlay(private val source: View,
         if (!styled) draggedPosition = null
         val page = visiblePage()
         val sourceVisible = page != null
+        if (sourceVisible && videoId.isNotBlank() && translator?.canPrefetch(videoId) == true) {
+            val selectedVideo = videoId
+            translator.readAhead(videoId, caption) {
+                videoId == selectedVideo && visiblePage() != null &&
+                    configuration()?.let(::presentationEnabled) == true
+            }
+        }
         if (!frameVisible() || caption.isBlank() || !sourceVisible) {
             resetTranslation()
             layer?.visibility = View.INVISIBLE
@@ -150,20 +158,13 @@ internal class SubtitleOverlay(private val source: View,
             overlay.layout(0, 0, host.width, host.height)
         }
         val translating = translator?.isEnabled(videoId) == true
-        if (translating) {
-            val selectedVideo = videoId
-            translator?.readAhead(videoId, caption) {
-                videoId == selectedVideo && visiblePage() != null &&
-                    configuration()?.let(::presentationEnabled) == true
-            }
-        }
         if (!translating) {
             translated = null
             requested = false
         } else if (!requested) {
             requested = true
             val token = generation
-            translator?.request(caption, current = {
+            translator?.request(videoId, caption, current = {
                 generation == token && frameVisible() && visiblePage() != null &&
                     configuration()?.let(::presentationEnabled) == true && translator.isEnabled(videoId)
             }, deliver = {
@@ -217,8 +218,10 @@ internal class SubtitleOverlay(private val source: View,
         text.layout(position.first, position.second, position.first + text.measuredWidth, position.second + text.measuredHeight)
         // 保留原视图测量和宿主状态；仅当独立层已可显示时隐藏重复绘制，关闭/离开即恢复。
         // 隐藏整个原字幕渲染容器，包含原背景；isShown 与布局保持不变。
-        hidden.getOrPut(source) { source.alpha }
-        if (source.alpha != 0f) source.alpha = 0f
+        if (!timelineSource) {
+            hidden.getOrPut(source) { source.alpha }
+            if (source.alpha != 0f) source.alpha = 0f
+        }
         diagnostic("state=$state chars=${caption.length} source=true overlay=true sizePx=${text.textSize}" +
             " bounds=${position.first},${position.second},${text.measuredWidth},${text.measuredHeight} page=${overlay.width}x${overlay.height}")
     }
@@ -277,7 +280,7 @@ internal class SubtitleOverlay(private val source: View,
     }
 
     private fun baseline(textHeight: Int): Float {
-        if (source.isShown && source.height > 0) {
+        if (!timelineSource && source.isShown && source.height > 0) {
             lastBaseY = (sourceLocation[1] - overlayLocation[1] + source.height).toFloat()
         }
         return (lastBaseY ?: ((layerHost?.height ?: 0) * .78f)) - textHeight

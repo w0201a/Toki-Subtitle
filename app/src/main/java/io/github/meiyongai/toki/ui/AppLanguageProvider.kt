@@ -43,9 +43,11 @@ internal val LocalAppLanguage = staticCompositionLocalOf<AppLanguageSettings> {
  * Callers: MainActivity.onCreate。
  */
 @Composable
-internal fun LocalizedTokiApp(content: @Composable () -> Unit) {
+internal fun LocalizedTokiApp(
+    systemConfiguration: android.content.res.Configuration = LocalConfiguration.current,
+    content: @Composable () -> Unit
+) {
     val activityContext = LocalContext.current
-    val systemConfiguration = LocalConfiguration.current
     var language by remember { mutableStateOf(LocaleHelper.getAppLanguage(activityContext)) }
     val localizedContext = remember(activityContext, systemConfiguration, language) {
         LocaleHelper.wrapContext(activityContext, language, systemConfiguration)
