@@ -8,6 +8,24 @@
 
 以下按现存开发记录与实机反馈整理。中间 Debug 版本用于排查，不表示当时问题已修复；较早记录未逐版保留完整时间，因此不补写推测日期。原项目更新历史保留在下方。
 
+### 2.0.45 Debug — 2026-10-27
+
+#### 中文
+
+- 针对 TikTok 47.5.3 字幕缓存错配，缓存键增加当前字幕轨身份；地址签名与过期参数刷新不改变轨道指纹。切换语言轨会丢弃旧轨译文，迟到请求不能写回新轨缓存。
+- 字幕设置增加「跟随 TikTok 原生样式」模式并设为默认；自定义渲染与预读翻译由自定义样式模式启用。
+- 设置支持即时保存、清除当前宿主进程中的字幕译文缓存，以及可选的调试浮层。调试默认关闭、每秒最多更新一次，仅展示状态、轨道摘要和缓存计数，不显示字幕正文。
+- 增加 47.5.3 轨道缓存、URL 刷新、迟到响应和原生渲染回归。完整单元测试、Debug lint 与 Debug 构建通过；正式包也曾在连接设备安装验证设置入口。Debug 版尚未安装到正式签名的现有应用，避免卸载造成数据丢失。播放期间字幕回归及 50% CPU 限制仍待测量；当前设备播放采样达到约 60–66% 单核，不能据此宣称满足该上限。
+- JDK/Gradle 构建限制为两个处理器核心；Debug 包使用独立开发签名，不能覆盖正式签名安装。
+
+#### English
+
+- Isolated subtitle translations by the selected track as well as video and normalized cue text. Rotating URL signatures do not create a new track identity; changing tracks invalidates old translations and rejects late results.
+- Added a native TikTok rendering mode as the default. Toki's custom renderer and subtitle prefetch are opt-in through custom style mode.
+- Subtitle settings now save changes immediately and can clear the current host-process translation cache. The optional diagnostic overlay is off by default, refreshes at most once per second and shows state, a track digest and cache counts without caption text.
+- Added regression coverage for track isolation, signed-URL refresh, late responses and native rendering. The complete unit suite, Debug lint and Debug build passed; a signed package was also installed to verify the settings entry. The Debug-signed package has not replaced the release-signed app, avoiding an uninstall and data loss. Playback regression and the requested 50% CPU ceiling remain unverified; a device playback sample reached about 60–66% of one core, so the limit is not claimed as met.
+- Limited JDK/Gradle builds to two processor cores. The Debug APK uses a separate development signing key and cannot update a release-signed installation in place.
+
 ### 2.0.44 正式版 / Release — 2026-10-21
 
 #### 中文

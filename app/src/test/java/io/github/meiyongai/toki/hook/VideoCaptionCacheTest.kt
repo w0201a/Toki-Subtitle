@@ -92,4 +92,22 @@ class VideoCaptionCacheTest {
         cache.put("v2", "last", "late background result")
         assertNull(cache["v2", "last"])
     }
+
+    @Test fun changedCaptionTrackInvalidatesTranslationsAndRejectsLateResults() {
+        val cache = VideoCaptionCache()
+        cache.selectTrack("video", "english-track")
+        cache.expect("video", listOf("shared phrase"), "english-track")
+        cache.put("video", "shared phrase", "English translation", "english-track")
+        assertEquals("English translation", cache["video", "shared phrase", "english-track"])
+
+        cache.selectTrack("video", "russian-track")
+        assertNull(cache["video", "shared phrase", "russian-track"])
+        cache.put("video", "shared phrase", "late English result", "english-track")
+        assertNull(cache["video", "shared phrase", "russian-track"])
+
+        cache.expect("video", listOf("shared phrase"), "russian-track")
+        cache.put("video", "shared phrase", "Russian translation", "russian-track")
+        assertEquals("Russian translation", cache["video", "shared phrase", "russian-track"])
+        assertTrue(cache.diagnostic().contains("trackMismatches=1"))
+    }
 }

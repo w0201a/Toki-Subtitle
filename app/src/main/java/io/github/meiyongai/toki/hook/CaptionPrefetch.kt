@@ -107,6 +107,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         // Only selectVideo releases an older watched batch and creates refill space.
         if (translator.completedVideos >= 100) return
         upcoming = try { translator.upcomingTracks(video, batches.offset).take(5) } catch (_: Exception) { emptyList() }
+        upcoming.forEach { track -> if (track.url.isNotBlank()) note(track.video, track.url) }
         val generation = token
         upcoming.forEach { track ->
             if (track.url.isBlank()) return@forEach
@@ -215,10 +216,47 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         private val domains = setOf("tiktokcdn.com", "tiktokcdn-us.com", "tiktokcdn-eu.com", "tiktokv.com",
             "byteoversea.com", "ibytedtos.com", "muscdn.com", "tiktok.com", "ibyteimg.com")
         private val tracks = LinkedHashMap<String, String>()
+        private val trackIdentities = LinkedHashMap<String, String>()
         @Synchronized fun note(video: String, location: String?) {
-            if (!location.isNullOrBlank()) tracks[video] = location else tracks.remove(video)
-            while (tracks.size > 12) tracks.remove(tracks.keys.first())
+            if (!location.isNullOrBlank()) {
+                if (tracks[video] == location) return
+                tracks[video] = location
+                trackIdentities[video] = trackFingerprint(location)
+            } else {
+                tracks.remove(video)
+                trackIdentities.remove(video)
+            }
+            while (tracks.size > 12) {
+                val oldest = tracks.keys.first()
+                tracks.remove(oldest)
+                trackIdentities.remove(oldest)
+            }
         }
         @Synchronized private fun track(video: String) = tracks[video]
+        @Synchronized fun identity(video: String): String = trackIdentities[video].orEmpty()
+
+        /** URLs remain process-local; only a digest is used to partition subtitle translations. */
+        internal fun trackFingerprint(location: String): String {
+            val stable = runCatching {
+                val uri = java.net.URI(location).normalize()
+                val volatile = setOf("ts", "_rticket", "timestamp", "expires", "expire", "x-expires",
+                    "signature", "x-signature", "sign", "sig", "token", "auth", "auth_key",
+                    "authorization", "x-bogus", "x-tt-params", "x-tt-token")
+                val query = uri.rawQuery.orEmpty().split('&').filter { pair ->
+                    pair.substringBefore('=').lowercase() !in volatile
+                }.sorted().joinToString("&")
+                "${uri.scheme?.lowercase()}://${uri.rawAuthority?.lowercase()}${uri.rawPath}" +
+                    if (query.isBlank()) "" else "?$query"
+            }.getOrDefault(location)
+            val bytes = java.security.MessageDigest.getInstance("SHA-256")
+                .digest(stable.toByteArray(Charsets.UTF_8)).take(12)
+            val digits = "0123456789abcdef"
+            return buildString(24) {
+                bytes.forEach { byte ->
+                    val value = byte.toInt() and 0xff
+                    append(digits[value ushr 4]); append(digits[value and 0x0f])
+                }
+            }
+        }
     }
 }

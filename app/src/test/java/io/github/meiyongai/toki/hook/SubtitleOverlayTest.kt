@@ -19,6 +19,38 @@ import java.time.Duration
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class SubtitleOverlayTest {
+    private fun config(values: Map<String, Any>) =
+        ConfigSnapshot(values + ("subtitle_render_mode" to "custom"))
+
+    @Test fun nativeModeKeepsHostTextAndDoesNotMountCustomLayer() {
+        val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity = controller.get()
+        val page = FrameLayout(activity)
+        page.addView(SurfaceView(activity), FrameLayout.LayoutParams(1080, 2400))
+        val source = FrameLayout(activity)
+        source.addView(TextView(activity).apply { text = "native caption" })
+        page.addView(source, FrameLayout.LayoutParams(600, 100))
+        activity.setContentView(page)
+        activity.window.decorView.apply {
+            measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+            layout(0, 0, 1080, 2400)
+        }
+        val binding = SubtitleOverlay(source) {
+            ConfigSnapshot(mapOf("subtitle_style_enabled" to true, "video_translate_enabled" to true,
+                "subtitle_render_mode" to "native"))
+        }
+        binding.update("EXPANDED", "native caption", "native-video")
+
+        binding.onPreDraw()
+
+        assertEquals(1f, source.alpha)
+        val layer = SubtitleOverlay::class.java.getDeclaredField("layer").apply { isAccessible = true }
+        assertNull(layer.get(binding))
+        binding.close()
+        controller.pause().stop().destroy()
+    }
+
     @Test fun timelineCaptionsDisplayTranslationsWithoutChangingVideoSurfaceAlpha() {
         HookRuntime.start("timeline-display-test") { _, _ -> }
         val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
@@ -33,7 +65,7 @@ class SubtitleOverlayTest {
         decor.layout(0, 0, 1080, 2400)
         val translator = NativeSubtitleTranslator({ true }, { _, complete -> complete("时间轴译文"); AutoCloseable {} })
         val binding = SubtitleOverlay(video, translator, timelineSource = true) {
-            ConfigSnapshot(mapOf("subtitle_style_enabled" to true, "video_translate_enabled" to true))
+            config(mapOf("subtitle_style_enabled" to true, "video_translate_enabled" to true))
         }
         binding.update("EXPANDED", "timeline original", "video")
         binding.onPreDraw()
@@ -65,7 +97,7 @@ class SubtitleOverlayTest {
         }
         val replies=mutableListOf<(String?) -> Unit>()
         val translator=NativeSubtitleTranslator({true},{ _,reply -> replies+=reply;AutoCloseable {} })
-        val binding=SubtitleOverlay(source,translator) { ConfigSnapshot(mapOf("subtitle_style_enabled" to true)) }
+        val binding=SubtitleOverlay(source,translator) { config(mapOf("subtitle_style_enabled" to true)) }
         fun layer()=SubtitleOverlay::class.java.getDeclaredField("layer").let { it.isAccessible=true;it.get(binding) as? FrameLayout }
         binding.update("HIDDEN",native.text.toString(),"creator-video")
         binding.onPreDraw();shadowOf(Looper.getMainLooper()).idle()
@@ -101,7 +133,7 @@ class SubtitleOverlayTest {
             requests += complete
             AutoCloseable {}
         })
-        val binding = SubtitleOverlay(source, translator) { ConfigSnapshot(mapOf("subtitle_style_enabled" to true)) }
+        val binding = SubtitleOverlay(source, translator) { config(mapOf("subtitle_style_enabled" to true)) }
         fun layer(): FrameLayout = SubtitleOverlay::class.java.getDeclaredField("layer").let {
             it.isAccessible = true; it.get(binding) as FrameLayout
         }
@@ -154,7 +186,7 @@ class SubtitleOverlayTest {
         var enabled = true
         val requests = mutableListOf<(String?) -> Unit>()
         val translator = NativeSubtitleTranslator({ enabled }, { _, complete -> requests += complete; AutoCloseable {} })
-        val binding = SubtitleOverlay(source, translator) { ConfigSnapshot(mapOf(
+        val binding = SubtitleOverlay(source, translator) { config(mapOf(
             "video_translate_enabled" to enabled, "subtitle_style_enabled" to false,
             "subtitle_size" to "90", "subtitle_color" to "#FFFF0000", "subtitle_x" to "90")) }
         fun layer(): FrameLayout? = SubtitleOverlay::class.java.getDeclaredField("layer").let { it.isAccessible = true; it.get(binding) as? FrameLayout }
@@ -194,7 +226,7 @@ class SubtitleOverlayTest {
         var enabled = true
         var lockX = false
         var lockY = false
-        val binding = SubtitleOverlay(source) { ConfigSnapshot(mapOf("subtitle_style_enabled" to true,
+        val binding = SubtitleOverlay(source) { config(mapOf("subtitle_style_enabled" to true,
             "subtitle_drag_enabled" to enabled, "subtitle_lock_x" to lockX, "subtitle_lock_y" to lockY)) }
         binding.update("EXPANDED", "Drag subtitle")
         binding.onPreDraw()
@@ -237,7 +269,7 @@ class SubtitleOverlayTest {
             requests += text to complete
             AutoCloseable {}
         })
-        val binding = SubtitleOverlay(source, translator) { ConfigSnapshot(mapOf("subtitle_style_enabled" to style)) }
+        val binding = SubtitleOverlay(source, translator) { config(mapOf("subtitle_style_enabled" to style)) }
         fun shown(): String = SubtitleOverlay::class.java.getDeclaredField("label").let {
             it.isAccessible = true
             (it.get(binding) as TextView).text.toString()
@@ -297,7 +329,7 @@ class SubtitleOverlayTest {
         }
         layout()
         var enabled = true
-        val binding = SubtitleOverlay(source) { ConfigSnapshot(mapOf("subtitle_style_enabled" to enabled,
+        val binding = SubtitleOverlay(source) { config(mapOf("subtitle_style_enabled" to enabled,
             "subtitle_x" to "100", "subtitle_y" to "100", "subtitle_background_mode" to "hide")) }
         fun overlay(): FrameLayout? = SubtitleOverlay::class.java.getDeclaredField("layer").let {
             it.isAccessible = true

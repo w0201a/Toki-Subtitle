@@ -46,8 +46,18 @@ internal fun SubtitleDialog(close: () -> Unit) {
     var values by remember { mutableStateOf(defaults.mapValues { (k, v) -> ConfigClient.getString(context, k, v)!! }) }
     var gestures by remember { mutableStateOf(listOf("subtitle_drag_enabled", "subtitle_lock_x", "subtitle_lock_y")
         .associateWith { ConfigClient.getBoolean(context, it) }) }
+    var renderMode by remember { mutableStateOf(ConfigClient.getString(context, "subtitle_render_mode", "native")!!) }
+    var liveDebug by remember { mutableStateOf(ConfigClient.getBoolean(context, "subtitle_debug_overlay_enabled")) }
+    var cacheCleared by remember { mutableStateOf(false) }
     var error by remember { mutableStateOf<String?>(null) }
-    fun update(key: String, value: String) { values = values + (key to value) }
+    fun persist(key: String, value: Any) {
+        try { ConfigClient.putValues(context, mapOf(key to value)) }
+        catch (e: Exception) { error = e.message ?: "实时同步失败" }
+    }
+    fun update(key: String, value: String, save: Boolean = true) {
+        values = values + (key to value)
+        if (save) persist(key, value)
+    }
     val weight = values.getValue("subtitle_weight")
     val previewFont = remember(values["subtitle_font"]) {
         FontFamily(android.graphics.Typeface.create(values["subtitle_font"], android.graphics.Typeface.NORMAL))
@@ -68,7 +78,8 @@ internal fun SubtitleDialog(close: () -> Unit) {
                 Triple("subtitle_x", "水平偏移 %", -200f..200f), Triple("subtitle_y", "垂直偏移 %", -200f..200f))) {
                 Text("$label：${values.getValue(key).toFloat().toInt()}")
                 Slider(value = values.getValue(key).toFloat().coerceIn(range.start, range.endInclusive), valueRange = range,
-                    onValueChange = { update(key, it.toInt().toString()) })
+                    onValueChange = { update(key, it.toInt().toString(), save = false) },
+                    onValueChangeFinished = { persist(key, values.getValue(key)) })
                 var custom by remember(key, values.getValue(key)) { mutableStateOf(values.getValue(key)) }
                 val allowed = if (key == "subtitle_size") 6f..160f else -1000f..1000f
                 OutlinedTextField(value = custom, onValueChange = {
@@ -85,10 +96,44 @@ internal fun SubtitleDialog(close: () -> Unit) {
                     Text(title, modifier = Modifier.weight(1f))
                     Switch(checked = gestures.getValue(key),
                         enabled = key == "subtitle_drag_enabled" || gestures.getValue("subtitle_drag_enabled"),
-                        onCheckedChange = { gestures = gestures + (key to it) })
+                        onCheckedChange = {
+                            gestures = gestures + (key to it)
+                            persist(key, it)
+                        })
                 }
             }
             Text("方向锁定只影响播放页拖动；仍可在这里手动调整位置。关闭拖动后，长按字幕仍可打开设置。",
+                style = MaterialTheme.typography.bodySmall)
+            Text("显示方式")
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                FilterChip(selected = renderMode == "native", onClick = {
+                    renderMode = "native"; persist("subtitle_render_mode", renderMode)
+                }, label = { Text("跟随 TikTok 原生样式") })
+                FilterChip(selected = renderMode == "custom", onClick = {
+                    renderMode = "custom"; persist("subtitle_render_mode", renderMode)
+                }, label = { Text("Toki 自定义样式") })
+            }
+            Text("原生模式保留 TikTok 字幕渲染和系统样式；Toki 只在需要自定义样式、拖动或清屏补帧时绘制字幕层。",
+                style = MaterialTheme.typography.bodySmall)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Column(Modifier.weight(1f)) {
+                    Text("实时调试浮层")
+                    Text("仅显示当前视频的字幕状态、轨道摘要和缓存计数；默认关闭，不采集字幕正文。",
+                        style = MaterialTheme.typography.bodySmall)
+                }
+                Switch(checked = liveDebug, onCheckedChange = {
+                    liveDebug = it
+                    persist("subtitle_debug_overlay_enabled", it)
+                })
+            }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                Text("字幕翻译缓存：本进程内存")
+                TextButton(onClick = {
+                    ConfigClient.putString(context, "subtitle_cache_clear_revision", java.util.UUID.randomUUID().toString())
+                    cacheCleared = true
+                }) { Text(if (cacheCleared) "已请求清理" else "清空缓存") }
+            }
+            Text("47.5.3 排错时可清除旧译文。缓存按视频及字幕轨隔离；切换语言轨不会复用上一轨的译文。",
                 style = MaterialTheme.typography.bodySmall)
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
                 Text("显示字幕背景")
@@ -114,9 +159,14 @@ internal fun SubtitleDialog(close: () -> Unit) {
             }
         }
     }, confirmButton = { TextButton(onClick = {
-        try { ConfigClient.putValues(context, values + gestures); close() }
+        try {
+            ConfigClient.putValues(context, values + gestures + mapOf(
+                "subtitle_render_mode" to renderMode,
+                "subtitle_debug_overlay_enabled" to liveDebug))
+            close()
+        }
         catch (e: Exception) { error = e.message ?: "保存失败" }
-    }) { Text("保存") } }, dismissButton = { TextButton(onClick = close) { Text("取消") } })
+    }) { Text("完成") } }, dismissButton = { TextButton(onClick = close) { Text("关闭") } })
 }
 
 @Composable

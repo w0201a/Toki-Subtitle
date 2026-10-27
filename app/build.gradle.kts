@@ -23,8 +23,8 @@ android {
         applicationId = "io.github.meiyongai.toki.subtitle"
         minSdk = 28
         targetSdk = 35
-        versionCode = 64
-        versionName = "2.0.44"
+        versionCode = 65
+        versionName = "2.0.45"
         // 默认仍可构建通用包；真机调试包可只带目标 ABI。
         providers.gradleProperty("subtitleAbi").orNull?.let { ndk.abiFilters.add(it) }
     }
@@ -41,6 +41,7 @@ android {
     }
 
     buildTypes {
+        debug { versionNameSuffix = "-debug" }
         create("universal") {
             initWith(getByName("debug"))
             signingConfig = signingConfigs.getByName(if (productionUnified) "release" else "debug")

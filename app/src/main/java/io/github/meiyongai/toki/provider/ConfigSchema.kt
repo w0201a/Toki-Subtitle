@@ -33,11 +33,12 @@ object ConfigSchema {
             "feed_remove_topic_recommendations", "feed_remove_creator_recommendations")
     )
     val booleanDefaults: Map<String, Boolean> = featureSwitches.values.flatten().associateWith { false } +
-        mapOf("subtitle_drag_enabled" to true, "subtitle_lock_x" to false, "subtitle_lock_y" to false) +
+        mapOf("subtitle_drag_enabled" to true, "subtitle_lock_x" to false, "subtitle_lock_y" to false,
+            "subtitle_debug_overlay_enabled" to false) +
         listOf("language_follow_region", "timezone_follow_region", "gps_follow_region").associateWith { true }
     private val rangePrefixes = listOf("feed_filter_views", "feed_filter_likes", "feed_filter_duration")
     private val stringKeys = setOf("target_region", "sim_operator_code", "sim_operator_name",
-        "adaptation_retry_token", "custom_language", "custom_timezone", "custom_latitude", "custom_longitude",
+        "adaptation_retry_token", "subtitle_cache_clear_revision", "subtitle_render_mode", "custom_language", "custom_timezone", "custom_latitude", "custom_longitude",
         "fixed_speed_value", "speed_expand_list", "download_video_path", "download_image_path",
         "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode") +
         rangePrefixes.flatMap { listOf("${it}_min", "${it}_max") } +
@@ -75,6 +76,7 @@ object ConfigSchema {
                 "subtitle_size" -> number(key, value, 6.0, 160.0)
                 "subtitle_x", "subtitle_y" -> number(key, value, -1000.0, 1000.0)
                 "subtitle_background_mode" -> require(value in setOf("show", "hide"))
+                "subtitle_render_mode" -> require(value in setOf("native", "custom"))
                 "subtitle_font" -> require(value in io.github.meiyongai.toki.subtitle.model.SubtitleFonts.names)
                 "subtitle_weight" -> require(value in setOf("normal", "bold", "italic", "bold_italic"))
                 "subtitle_color", "subtitle_background" -> require(value.matches(Regex("#[0-9A-Fa-f]{8}")))

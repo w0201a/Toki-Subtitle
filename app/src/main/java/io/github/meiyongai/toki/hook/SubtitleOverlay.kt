@@ -33,6 +33,7 @@ internal class SubtitleOverlay(private val source: View,
     private var state = "HIDDEN"
     private var caption = ""
     private var videoId = ""
+    private var trackIdentity = ""
     private var translated: String? = null
     private var requested = false
     private var generation = 0L
@@ -64,10 +65,12 @@ internal class SubtitleOverlay(private val source: View,
             generation++
             translated = null
             requested = false
+            trackIdentity = translator?.trackIdentity(video).orEmpty()
         }
         state = displayState
         caption = text
         videoId = video
+        CaptionDebugOverlay.update(source, video, "renderer", displayState, text.length, translator)
         retryAt = 0L
     }
 
@@ -107,8 +110,15 @@ internal class SubtitleOverlay(private val source: View,
             unmount()
             return
         }
-        val styled = settings.boolean("subtitle_style_enabled")
+        val nativeMode = settings.string("subtitle_render_mode", "native") == "native"
+        val styled = settings.boolean("subtitle_style_enabled") && !nativeMode
         if (!styled) draggedPosition = null
+        if (nativeMode) {
+            resetTranslation()
+            unmount()
+            diagnostic("state=$state chars=${caption.length} native=true")
+            return
+        }
         val page = visiblePage()
         val sourceVisible = page != null
         if (sourceVisible && videoId.isNotBlank() && translator?.canPrefetch(videoId) == true) {
@@ -122,7 +132,7 @@ internal class SubtitleOverlay(private val source: View,
             resetTranslation()
             layer?.visibility = View.INVISIBLE
             restoreSource()
-            diagnostic("state=$state chars=${caption.length} source=$sourceVisible overlay=false")
+            diagnostic("state=$state chars=${caption.length} source=$sourceVisible overlay=false mode=${if (nativeMode) "native" else "custom"}")
             return
         }
         // 选择页面中足够大的 FrameLayout，让后打开的评论/菜单仍按宿主层级盖住字幕。
@@ -157,6 +167,13 @@ internal class SubtitleOverlay(private val source: View,
                 View.MeasureSpec.makeMeasureSpec(host.height, View.MeasureSpec.EXACTLY))
             overlay.layout(0, 0, host.width, host.height)
         }
+        val selectedTrack = translator?.trackIdentity(videoId).orEmpty()
+        if (selectedTrack != trackIdentity) {
+            generation++
+            translated = null
+            requested = false
+            trackIdentity = selectedTrack
+        }
         val translating = translator?.isEnabled(videoId) == true
         if (!translating) {
             translated = null
@@ -164,8 +181,9 @@ internal class SubtitleOverlay(private val source: View,
         } else if (!requested) {
             requested = true
             val token = generation
+            val track = selectedTrack
             translator?.request(videoId, caption, current = {
-                generation == token && frameVisible() && visiblePage() != null &&
+                generation == token && translator.trackIdentity(videoId) == track && frameVisible() && visiblePage() != null &&
                     configuration()?.let(::presentationEnabled) == true && translator.isEnabled(videoId)
             }, deliver = {
                 translated = it
@@ -311,7 +329,8 @@ internal class SubtitleOverlay(private val source: View,
     }
 
     fun canDrag(): Boolean = configuration()?.let {
-        it.boolean("subtitle_style_enabled") && it.boolean("subtitle_drag_enabled") && !(it.boolean("subtitle_lock_x") && it.boolean("subtitle_lock_y"))
+        it.boolean("subtitle_style_enabled") && it.string("subtitle_render_mode", "native") == "custom" &&
+            it.boolean("subtitle_drag_enabled") && !(it.boolean("subtitle_lock_x") && it.boolean("subtitle_lock_y"))
     } == true
 
     fun drag(origin: Pair<Float, Float>, dx: Float, dy: Float): Pair<Float, Float>? {

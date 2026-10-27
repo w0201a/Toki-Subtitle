@@ -283,6 +283,32 @@ class NativeSubtitleTranslatorTest {
         host.translator.close()
     }
 
+    @Test fun switchingSubtitleTrackCannotReuseOrCacheThePreviousTracksTranslation() {
+        val host = Host()
+        val delivered = mutableListOf<String>()
+        CaptionPrefetch.note("same-video", "https://cdn.example/en.vtt")
+        host.translator.request("same-video", "shared phrase", { true }, delivered::add)
+        advance(0)
+        assertEquals(1, host.requests.size)
+
+        CaptionPrefetch.note("same-video", "https://cdn.example/ru.vtt")
+        host.requests[0].second("English translation")
+        advance(0)
+        assertTrue(delivered.isEmpty())
+
+        host.translator.request("same-video", "shared phrase", { true }, delivered::add)
+        advance(250)
+        assertEquals(2, host.requests.size)
+        host.requests[1].second("Russian translation")
+        advance(0)
+        assertEquals(listOf("Russian translation"), delivered)
+
+        host.translator.request("same-video", "shared phrase", { true }, delivered::add)
+        assertEquals(listOf("Russian translation", "Russian translation"), delivered)
+        host.translator.close()
+        CaptionPrefetch.note("same-video", null)
+    }
+
     @Test fun readAheadRunsDuringSlowCurrentRequestAndNeverExceedsTwoChannels() {
         val host = Host()
         host.translator.request("slow current", { true }) {}

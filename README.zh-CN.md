@@ -2,6 +2,12 @@
 
 字幕版联合创作：**154Er · Gi-Ai154M**。本署名对应本地字幕版的功能改进与维护，原项目作者及许可证信息保留。
 
+## 2.0.45 Debug 测试版
+
+此开发版针对 TikTok 47.5.3 字幕缓存混用问题：译文按视频和当前字幕轨隔离，并在字幕地址的签名参数刷新时保持同一轨道身份。默认保留 TikTok 原生字幕渲染；Toki 自定义渲染和预读翻译需手动选择。字幕设置新增本进程缓存清理和可选调试浮层，最多每秒刷新一次，不显示字幕正文。进入 Toki「功能 → 字幕外观与位置 → 打开字幕设置」即可调整。
+
+请从 [GitHub Actions 构建](https://github.com/w0201a/Toki-Subtitle/actions/workflows/build.yml)下载 Debug 测试包。它使用 Android Debug 签名，不能直接覆盖正式签名版。TikTok 47.5.3 的实际字幕播放效果仍需继续验收。
+
 ## 2.0.44 更新
 
 [下载已签名统一安装包](https://github.com/w0201a/Toki-Subtitle/releases/tag/v2.0.44) · [中文 / English 更新说明](CHANGELOG.md)
@@ -49,7 +55,7 @@
 [原作者／上游仓库](https://github.com/MeiYongAI/Toki) ·
 [更新日志](CHANGELOG.md) ·
 [问题反馈](https://github.com/w0201a/Toki-Subtitle/issues/new/choose) ·
-[上游 Telegram 群组](https://t.me/toki_lsposed)
+[字幕版 Telegram 群组](https://t.me/Toki_Subtitle)
 
 Toki 提供信息流过滤、播放控制、媒体工具和区域设置，采用 Material 3 界面，
 提供 57 种界面语言选项。
@@ -240,7 +246,7 @@ Toki 按启动时的配置选择要安装的功能。全部主功能关闭时，
 ## 参与贡献
 
 请通过 [GitHub Issues](https://github.com/w0201a/Toki-Subtitle/issues/new/choose)
-提交错误报告和功能建议，也可以加入 [上游 Telegram 群组](https://t.me/toki_lsposed)交流。
+提交错误报告和功能建议，也可以加入[字幕版 Telegram 群组](https://t.me/Toki_Subtitle)交流。
 
 反馈问题时，请提供：
 

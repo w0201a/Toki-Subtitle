@@ -2,6 +2,12 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
+## 2.0.45 Debug build
+
+This development build targets subtitle cache mix-ups on TikTok 47.5.3. Translations are isolated by video and selected subtitle track, with signed-URL refresh parameters excluded from track identity. Native TikTok caption rendering is the default; Toki's custom renderer and translation prefetch are opt-in. The subtitle settings include an on-device cache clear and an opt-in diagnostic overlay that refreshes at most once per second and never displays caption text. Open **Subtitle appearance and position → Open subtitle settings** inside Toki.
+
+Use the Debug APK from the [GitHub Actions build](https://github.com/w0201a/Toki-Subtitle/actions/workflows/build.yml) for testing. It is signed with the Android Debug key and cannot update the release-signed app in place. Runtime subtitle behavior on TikTok 47.5.3 still needs playback verification.
+
 ## 2.0.44 update
 
 [Download the signed unified APK](https://github.com/w0201a/Toki-Subtitle/releases/tag/v2.0.44) · [中文 / English release notes](CHANGELOG.md)
@@ -44,7 +50,7 @@ An LSPosed module that gives you more control over your TikTok experience.
 [Original author / upstream](https://github.com/MeiYongAI/Toki) ·
 [Changelog](CHANGELOG.md) ·
 [Report a problem](https://github.com/w0201a/Toki-Subtitle/issues/new/choose) ·
-[Upstream Telegram](https://t.me/toki_lsposed)
+[Subtitle edition Telegram](https://t.me/Toki_Subtitle)
 
 Toki provides feed filters, playback controls, media tools and region settings
 through a Material 3 interface with 57 language options.
@@ -257,7 +263,7 @@ Unmatched code is reported as an adaptation failure.
 ## Contributing
 
 Use [GitHub Issues](https://github.com/w0201a/Toki-Subtitle/issues/new/choose) for bug
-reports and feature requests, or join the [Telegram group](https://t.me/toki_lsposed)
+reports and feature requests, or join the [Telegram group](https://t.me/Toki_Subtitle)
 for questions and discussion.
 
 For a bug report, include:

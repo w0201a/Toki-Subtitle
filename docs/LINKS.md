@@ -14,7 +14,7 @@
 | 构建状态 | [GitHub Actions](https://github.com/w0201a/Toki-Subtitle/actions/workflows/build.yml) | 本仓库的构建状态 |
 | 原作者／上游项目 | [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki) | 保留原作者仓库入口与版权 |
 | 原项目模块目录 | [Xposed-Modules-Repo/io.github.meiyongai.toki](https://github.com/Xposed-Modules-Repo/io.github.meiyongai.toki) | 上游目录，不是字幕版 2.x 的安装包 |
-| 原项目社区 | [上游 Telegram 群组](https://t.me/toki_lsposed) | 原有链接保留；字幕版问题请优先使用本仓库 Issues |
+| 字幕版社区 | [Toki Subtitle Telegram 群组](https://t.me/Toki_Subtitle) | 字幕版交流与使用帮助 |
 | 原作者赞助 | [上游 README](https://github.com/MeiYongAI/Toki#support) | 原作者的赞助渠道继续保留 |
 | 字幕版赞助 | 首页赞助选择器，[微信](../app/src/main/res/drawable-nodpi/sponsor_wechat_154er.jpg)／[支付宝](../app/src/main/res/drawable-nodpi/sponsor_alipay_154er.jpg) | 与原作者赞助分开说明 |
 

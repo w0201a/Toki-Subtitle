@@ -9,6 +9,13 @@ import org.junit.Test
 
 /** 配置文件的完整往返、默认值、类型边界和失败不修改输入测试。 */
 class ConfigArchiveTest {
+    @Test fun subtitleNativeModeIsDefaultAndDebugRemainsOptIn() {
+        assertFalse(ConfigSchema.booleanDefault("subtitle_debug_overlay_enabled"))
+        assertEquals("native", ConfigSchema.validate(mapOf("subtitle_render_mode" to "native"))["subtitle_render_mode"])
+        assertThrows(IllegalArgumentException::class.java) {
+            ConfigSchema.validate(mapOf("subtitle_render_mode" to "overlay"))
+        }
+    }
     /**
      * 两种推荐卡过滤默认关闭，独立参与状态监控、配置快照及文件导入导出。
      * @return Unit；无入参。

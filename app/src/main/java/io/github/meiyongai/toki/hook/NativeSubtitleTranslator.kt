@@ -14,8 +14,8 @@ internal class NativeSubtitleTranslator(
     private val report: (String) -> Unit = {},
 ) : AutoCloseable {
     private class Job(val text: String, var current: () -> Boolean, var deliver: (String) -> Unit,
-        var foreground: Boolean = true, val video: String = "") {
-        val key = video to CaptionTimeline.normalize(text)
+        var foreground: Boolean = true, val video: String = "", val trackIdentity: String = "") {
+        val key = Triple(video, trackIdentity, CaptionTimeline.normalize(text))
         var subscription: AutoCloseable? = null
         var retries = 0
         var retryAt = 0L
@@ -34,6 +34,8 @@ internal class NativeSubtitleTranslator(
     private var nextForegroundAt = 0L
     private var prefetchBackoffAt = 0L
     private var failures = 0
+    private var diagnosticAt = 0L
+    private var lastDiagnostic = ""
     private var closed = false
     private val nativeFrames = LinkedHashMap<String, Long>()
     private val pump = Runnable { startNext() }
@@ -50,8 +52,16 @@ internal class NativeSubtitleTranslator(
 
     fun request(videoId: String, text: String, current: () -> Boolean, deliver: (String) -> Unit) {
         if (closed || text.length !in 1..1000 || !text.any(Char::isLetter) || !current()) return
-        val key = videoId to CaptionTimeline.normalize(text)
-        cache[videoId, text]?.let { pending = null; report("cache-hit videos=${cache.size}"); deliver(it); return }
+        val sourceTrack = trackIdentity(videoId)
+        cache.selectTrack(videoId, sourceTrack)
+        val key = Triple(videoId, sourceTrack, CaptionTimeline.normalize(text))
+        cache[videoId, text, sourceTrack]?.let {
+            pending = null
+            report("cache-hit videos=${cache.size}")
+            updateDiagnostics()
+            deliver(it)
+            return
+        }
         // 先按正文复用，再检查旧代次；同句重现不能取消已经发出的同一请求。
         listOfNotNull(active, background).firstOrNull { it.key == key }?.let {
             it.current = current
@@ -63,7 +73,7 @@ internal class NativeSubtitleTranslator(
         }
         if (active?.current?.invoke() == false) releaseActive()
         // 后来的当前帧替换尚未发送的旧帧，不积累视频/字幕队列。
-        pending = Job(text, current, deliver, video = videoId)
+        pending = Job(text, current, deliver, video = videoId, trackIdentity = sourceTrack)
         main.removeCallbacks(pump)
         // 当前句立即排程；同一主线程周期内仍合并为最新句。
         main.post(pump)
@@ -79,11 +89,13 @@ internal class NativeSubtitleTranslator(
 
     internal fun prefetchVideos(texts: List<CaptionTranslationInput>, current: () -> Boolean) {
         ahead.clear()
+        texts.forEach { cache.selectTrack(it.video, trackIdentity(it.video)) }
         val allowed = texts.map { it.video }.distinct().associateWith { it.isBlank() || isEnabled(it) }
         texts.asSequence().filter { it.text.length in 1..1000 && it.text.any(Char::isLetter) &&
                 allowed[it.video] == true }
-            .map { Job(it.text, current, {}, foreground = false, video = it.video) }
-            .filter { cache[it.video, it.text] == null && it.key != active?.key && it.key != background?.key }
+            .map { Job(it.text, current, {}, foreground = false, video = it.video,
+                trackIdentity = trackIdentity(it.video)) }
+            .filter { cache[it.video, it.text, it.trackIdentity] == null && it.key != active?.key && it.key != background?.key }
             .distinctBy { it.key }.forEach { ahead += it }
         main.removeCallbacks(pump)
         main.post(pump)
@@ -100,7 +112,7 @@ internal class NativeSubtitleTranslator(
             else if (background == null && pending == null) ahead.removeFirstOrNull() ?: return
             else return
         if (!job.current()) { if (foreground) pending = null; main.post(pump); return }
-        cache[job.video, job.text]?.let {
+        cache[job.video, job.text, job.trackIdentity]?.let {
             if (foreground) pending = null
             if (job.current()) job.deliver(it)
             main.post(pump)
@@ -141,9 +153,11 @@ internal class NativeSubtitleTranslator(
         val translated = result?.trim()?.takeIf { it.isNotEmpty() && it.length <= 4000 }
         if (translated != null) {
             failures = 0
-            cache.put(job.video, job.text, translated)
-            val current = job.current()
-            report("success lane=${if (job.foreground) "current" else "prefetch"} chars=${translated.length} current=$current cachedVideos=${cache.size} elapsedMs=${SystemClock.uptimeMillis() - job.startedAt}")
+            val trackCurrent = trackIdentity(job.video) == job.trackIdentity
+            if (trackCurrent) cache.put(job.video, job.text, translated, job.trackIdentity)
+            val current = job.current() && trackCurrent
+            report("success lane=${if (job.foreground) "current" else "prefetch"} chars=${translated.length} current=$current trackCurrent=$trackCurrent cachedVideos=${cache.size} elapsedMs=${SystemClock.uptimeMillis() - job.startedAt}")
+            updateDiagnostics()
             if (current) job.deliver(translated)
         } else {
             failures = (failures + 1).coerceAtMost(5)
@@ -185,11 +199,33 @@ internal class NativeSubtitleTranslator(
 
     override fun close() { closed = true; cancel(); trackPrefetch.close(); cache.clear() }
 
-    internal fun completed(video: String, texts: List<String>) = cache.complete(video, texts)
-    internal fun expect(video: String, texts: List<String>) = cache.expect(video, texts)
+    internal fun completed(video: String, texts: List<String>) = cache.complete(video, texts, trackIdentity(video))
+    internal fun expect(video: String, texts: List<String>) {
+        cache.expect(video, texts, trackIdentity(video))
+        updateDiagnostics()
+    }
     internal val completedVideos: Int get() = cache.size
     internal val prefetchIdle: Boolean get() = background == null && ahead.isEmpty()
     internal fun cueAt(video: String, positionMs: Long) = trackPrefetch.cueAt(video, positionMs)
+    internal fun trackIdentity(video: String): String = CaptionPrefetch.identity(video)
+    internal fun clearCache() {
+        cancel()
+        cache.clear()
+        report("cache cleared")
+        updateDiagnostics()
+    }
+    private fun updateDiagnostics() {
+        if (!CaptionDebugOverlay.enabled) return
+        val now = SystemClock.uptimeMillis()
+        if (now - diagnosticAt < 1000) return
+        val current = diagnosticSummary()
+        if (current == lastDiagnostic) return
+        diagnosticAt = now
+        lastDiagnostic = current
+        HookRuntime.detail("NativeSubtitleTranslation", current)
+    }
+    internal fun diagnosticSummary(): String = "${cache.diagnostic()} active=${active != null} background=${background != null} queued=${ahead.size}"
+    internal fun trackSummary(video: String): String = trackIdentity(video).take(8).ifBlank { "pending" }
     internal fun noteNativeFrame(video: String) {
         if (video.isBlank()) return
         nativeFrames[video] = SystemClock.uptimeMillis()
@@ -226,6 +262,7 @@ internal class NativeSubtitleTranslator(
             if (automaticPreference == null) HookRuntime.event("NativeSubtitleTranslation", "optional automatic preference unavailable; module switch and per-video override remain active")
             return NativeSubtitleTranslator(enabled = { videoId ->
                 ConfigClient.getBoolean("video_translate_enabled") &&
+                    ConfigClient.getString("subtitle_render_mode", "native") == "custom" &&
                     when ((override.invoke(service, videoId) as? Enum<*>)?.name) {
                         "OVERRIDE_TO_ORIGINAL" -> false
                         "OVERRIDE_TO_TRANSLATED" -> true

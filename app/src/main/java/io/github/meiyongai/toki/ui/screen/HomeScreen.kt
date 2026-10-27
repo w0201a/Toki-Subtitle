@@ -112,7 +112,7 @@ fun HomeScreen(
     var showSponsorDialog by remember { mutableStateOf(false) }
 
     val githubUrl = "https://github.com/w0201a/Toki-Subtitle"
-    val telegramUrl = "https://t.me/toki_lsposed"
+    val telegramUrl = "https://t.me/Toki_Subtitle"
 
     Column(
         modifier = Modifier
@@ -336,7 +336,7 @@ private fun HostStatusSection(tikTokStatus: TikTokInstallStatus) {
  *
  * Args:
  *     githubUrl (String): 官方 GitHub 项目地址。
- *     telegramUrl (String): 官方 Telegram 交流群地址。
+ *     telegramUrl (String): Toki 字幕版 Telegram 交流群地址。
  *     onOpenUrl ((String) -> Unit): 外部链接跳转处理回调。
  *
  * Returns:

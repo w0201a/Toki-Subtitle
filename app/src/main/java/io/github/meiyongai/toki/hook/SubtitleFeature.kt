@@ -96,6 +96,11 @@ internal object SubtitleFeature {
                         }
                         val cue = if (translating() && translator.isEnabled(id) && !translator.hasNativeFrame(id))
                             translator.cueAt(id, chain.args[1] as Long) else null
+                        if (CaptionDebugOverlay.enabled) {
+                            val debugView = getVideoView.invoke(chain.thisObject) as? View
+                            CaptionDebugOverlay.update(debugView, id, "timeline",
+                                if (cue == null) "HIDDEN" else "EXPANDED", cue?.length ?: 0, translator)
+                        }
                         if (timelineVideo != id) { timelineOverlay?.close(); timelineOverlay = null; timelineVideo = id }
                         if (cue != null) {
                             val view = getVideoView.invoke(chain.thisObject) as? View
@@ -118,6 +123,7 @@ internal object SubtitleFeature {
                         getAweme.invoke(instance)?.let(upcoming::selected)?.let { id ->
                             if (id != selectedVideo) {
                                 timelineOverlay?.close(); timelineOverlay = null; timelineVideo = ""; nextTimelineRefresh = 0L
+                                CaptionDebugOverlay.clear()
                             }
                             if (method.name == "onPageSelected") translator.selectVideo(id)
                             selectedVideo = id
@@ -258,10 +264,29 @@ internal object SubtitleFeature {
         check(display != null || HookRuntime.scope("SubtitleCleanFrames").active) {
             "Neither a verified renderer method nor a verified frame observer is available"
         }
+        var cacheClearRevision = ConfigClient.getString("subtitle_cache_clear_revision", "0")
+        var cacheRenderMode = ConfigClient.getString("subtitle_render_mode", "native")
         HookRuntime.subscribe(owner) { snapshot ->
-            if (snapshot == null || !snapshot.boolean("video_translate_enabled"))
+            if (snapshot == null) {
                 translator?.cancel()
+                CaptionDebugOverlay.hide()
+                return@subscribe
+            }
+            CaptionDebugOverlay.enabled = snapshot.boolean("subtitle_debug_overlay_enabled")
+            if (!CaptionDebugOverlay.enabled) CaptionDebugOverlay.clear()
+            val renderMode = snapshot.string("subtitle_render_mode", "native")
+            if (renderMode != cacheRenderMode) {
+                cacheRenderMode = renderMode
+                translator?.clearCache()
+            }
+            val requestedClear = snapshot.string("subtitle_cache_clear_revision", "0")
+            if (requestedClear != cacheClearRevision) {
+                cacheClearRevision = requestedClear
+                translator?.clearCache()
+            }
+            if (!snapshot.boolean("video_translate_enabled")) translator?.cancel()
         }
+        HookRuntime.onDispose(owner) { CaptionDebugOverlay.hide() }
         HookRuntime.detail(owner, "字幕扩展：原生轨优先 / 原生文字翻译${if (translator == null) "不可用" else "已就绪"} / ${if (display == null) "字幕帧独立驱动" else "渲染与字幕帧"} / 独立绘制层")
     }
 }
