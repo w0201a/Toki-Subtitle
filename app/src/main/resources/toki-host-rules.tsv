@@ -57,6 +57,7 @@ LAYOUT_BOTTOM_ITEM	method-v1	()Lcom/bytedance/tux/input/TuxTextView;	name:getTab
 PLAY_BUTTON	method-v1	()V	call:Landroid/view/View;->setSelected(Z)V|call:Landroid/view/ViewPropertyAnimator;->scaleX(F)Landroid/view/ViewPropertyAnimator;|call:Landroid/view/ViewPropertyAnimator;->scaleY(F)Landroid/view/ViewPropertyAnimator;|owner:Lcom/ss/android/ugc/feed/platform/panel/playbutton/PlayButtonComponent;	show
 MENU_CAPTION_ACL	method-v1	(Ljava/lang/String;Ljava/lang/String;Lcom/ss/android/ugc/aweme/feed/model/AwemeACLShare;)Lcom/ss/android/ugc/aweme/feed/model/ACLCommonShare;	static|string:long_press|call:Lcom/ss/android/ugc/aweme/feed/model/ACLCommonShare;->getActionId()Ljava/lang/String;	resolve
 BACKGROUND_AUDIO	method-v1	()Ljava/lang/Object;	string:background_play_enable	group
+LIVE_VERTICAL_PAGER	method-v1	(Landroid/view/MotionEvent;)Z	call:Lcom/bytedance/android/livesdk/LiveRoomFragment;->UX(F)Z|invoke:INVOKE_VIRTUAL:Landroid/widget/Scroller;->computeScrollOffset()Z|invoke:INVOKE_VIRTUAL:Landroid/view/MotionEvent;->findPointerIndex(I)I|invoke:INVOKE_STATIC:Ljava/lang/Math;->abs(I)I	intercept
 CAPTION_CONSUMER	method-v1	()V	static|name:<clinit>|string:fixed_caption_v2_consumer_group	initialize
 TRANSLATION_REVERSE	0a2d2d1047c97c507091098f39a3f20f763446242d00e13e85ff2c900da8076f	a50c83d40b20e20b39afb3b4d7a742cc477a20f4edca713d53a7fda62cda5cb2	148dfa3a5e289861c78cea756e23d2850b749b8dcbe5ad12bbbc816ff1f1f657	blocked=LIZ()Z
 

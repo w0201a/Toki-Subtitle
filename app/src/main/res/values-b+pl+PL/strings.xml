@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"Zawsze pokazuj pasek postępu"</string>
     <string name="feature_progress_summary" formatted="false">"Pokazuj pasek postępu również w krótkich filmach"</string>
     <string name="feature_immersive" formatted="false">"Wyświetlanie wideo"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"Lock live vertical swipe"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"Prevent swiping up or down to switch live streams"</string>
     <string name="feature_autoplay" formatted="false">"Rozszerzone autoprzewijanie"</string>
     <string name="feature_autoplay_summary" formatted="false">"Odblokowuje autoprzewijanie w menu wszystkich filmów"</string>
     <string name="feature_status_bar" formatted="false">"Ukryj systemowy pasek stanu"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"Pasek postępu"</string>
     <string name="status_feature_clean" formatted="false">"Samoczynne ukrywanie"</string>
     <string name="status_feature_immersive" formatted="false">"Wyświetlanie wideo"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"Live swipe lock"</string>
     <string name="status_feature_scroll" formatted="false">"Automatyczne przewijanie"</string>
     <string name="status_feature_duration" formatted="false">"Alert długości"</string>
     <string name="status_feature_comment_translate" formatted="false">"Tłumacz komentarze"</string>
@@ -313,6 +316,7 @@
     <string name="host_scan_done" formatted="false">"Rozumiem"</string>
     <string name="video_fit_center" formatted="false">"Na środku"</string>
     <string name="video_fit_smart" formatted="false">"Pełny ekran"</string>
+    <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
     <string name="host_scan_title_partial">"Some features need adaptation"</string>

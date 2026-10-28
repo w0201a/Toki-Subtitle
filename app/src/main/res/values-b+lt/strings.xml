@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"Visada rodyti eigos juostą"</string>
     <string name="feature_progress_summary" formatted="false">"Rodyti eigos juostą ir trumpuose vaizdo įrašuose"</string>
     <string name="feature_immersive" formatted="false">"Vaizdo rodymas"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"Lock live vertical swipe"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"Prevent swiping up or down to switch live streams"</string>
     <string name="feature_autoplay" formatted="false">"Išplėstas automatinis slinkimas"</string>
     <string name="feature_autoplay_summary" formatted="false">"Atrakina automatinį slinkimą visų vaizdo įrašų meniu"</string>
     <string name="feature_status_bar" formatted="false">"Slėpti sistemos būsenos juostą"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"Eigos juosta"</string>
     <string name="status_feature_clean" formatted="false">"Automatinis slėpimas"</string>
     <string name="status_feature_immersive" formatted="false">"Vaizdo rodymas"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"Live swipe lock"</string>
     <string name="status_feature_scroll" formatted="false">"Automatinis slinkimas"</string>
     <string name="status_feature_duration" formatted="false">"Trukmės įspėjimas"</string>
     <string name="status_feature_comment_translate" formatted="false">"Komentarų vertimas"</string>
@@ -313,6 +316,7 @@
     <string name="host_scan_done" formatted="false">"Supratau"</string>
     <string name="video_fit_center" formatted="false">"Centre"</string>
     <string name="video_fit_smart" formatted="false">"Visas ekranas"</string>
+    <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
     <string name="host_scan_title_partial">"Some features need adaptation"</string>

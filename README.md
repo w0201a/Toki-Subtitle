@@ -2,11 +2,18 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
-## 2.0.45 Debug build
+## 2.0.51 release
 
-This development build targets subtitle cache mix-ups on TikTok 47.5.3. Translations are isolated by video and selected subtitle track, with signed-URL refresh parameters excluded from track identity. Native TikTok caption rendering is the default; Toki's custom renderer and translation prefetch are opt-in. The subtitle settings include an on-device cache clear and an opt-in diagnostic overlay that refreshes at most once per second and never displays caption text. Open **Subtitle appearance and position → Open subtitle settings** inside Toki.
+[Download the production-signed unified APK](https://github.com/w0201a/Toki-Subtitle/releases/tag/v2.0.51) · [Incremental changelog](CHANGELOG.md)
 
-Use the Debug APK from the [GitHub Actions build](https://github.com/w0201a/Toki-Subtitle/actions/workflows/build.yml) for testing. It is signed with the Android Debug key and cannot update the release-signed app in place. Runtime subtitle behavior on TikTok 47.5.3 still needs playback verification.
+- Repairs duplicate/misplaced captions, competing prefetch sessions and track-cache invalidation; the user confirmed the 2.0.49 subtitle fix.
+- Adds Fill, automatic black-border detection/cropping, 100%–150% manual zoom and an optional live vertical-swipe lock.
+- Improves the injected entry under TikTok Settings and opens directly to the feature list.
+- Adds comment-sticker downloads. Enable the option, reopen TikTok and long-press a sticker comment to save its original animation/image to Pictures/TikTok/Stickers or the configured image directory.
+
+Native subtitle rendering is the default. Select Custom and enable video translation to use Toki caption presentation and pretranslation. Prefetch requires readable tracks already loaded by TikTok; its cache lasts for the current process. Automatic cropping, live swipe lock and sticker downloads need broader device feedback. Some newer labels fall back to English.
+
+The unified APK contains Root/non-Root entry points, retains the production certificate, disables debugging in both runtimes and enables R8/resource shrinking. **Release and Debug signatures differ and cannot update each other in place.** Publishing does not uninstall apps or clear data. All 2.0.45–2.0.50 incremental entries remain in the changelog.
 
 ## 2.0.44 update
 

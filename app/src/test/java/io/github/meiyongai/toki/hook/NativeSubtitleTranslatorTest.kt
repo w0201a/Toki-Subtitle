@@ -12,6 +12,16 @@ import java.time.Duration
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class NativeSubtitleTranslatorTest {
+    @Test fun anotherVideoCannotReplaceTheSelectedPrefetchSession() {
+        val host = Host()
+        host.translator.selectVideo("current")
+        assertTrue(host.translator.acceptsReadAhead("current"))
+        assertFalse(host.translator.acceptsReadAhead("prefetched-neighbour"))
+        host.translator.selectVideo("next")
+        assertFalse(host.translator.acceptsReadAhead("current"))
+        assertTrue(host.translator.acceptsReadAhead("next"))
+        host.translator.close()
+    }
     private class Host {
         val requests = mutableListOf<Pair<String, (String?) -> Unit>>()
         var disposed = 0

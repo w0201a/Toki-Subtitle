@@ -23,6 +23,7 @@ internal class SubtitleOverlay(private val source: View,
     View.OnAttachStateChangeListener, ViewTreeObserver.OnPreDrawListener {
     companion object {
         private val sources = WeakHashMap<View, Unit>()
+        private val nativeBindings = WeakHashMap<SubtitleOverlay, Unit>()
         var sourceRevision = 0L
             private set
         fun isSource(view: View): Boolean = view in sources
@@ -54,6 +55,7 @@ internal class SubtitleOverlay(private val source: View,
         private set
     init {
         sources[source] = Unit
+        if (!timelineSource) nativeBindings[this] = Unit
         sourceRevision++
         source.addOnAttachStateChangeListener(this)
         if (source.isAttachedToWindow) onViewAttachedToWindow(source)
@@ -121,12 +123,13 @@ internal class SubtitleOverlay(private val source: View,
         }
         val page = visiblePage()
         val sourceVisible = page != null
-        if (sourceVisible && videoId.isNotBlank() && translator?.canPrefetch(videoId) == true) {
-            val selectedVideo = videoId
-            translator.readAhead(videoId, caption) {
-                videoId == selectedVideo && visiblePage() != null &&
-                    configuration()?.let(::presentationEnabled) == true
-            }
+        // A rendered caption and a playback-timeline fallback share the same video.
+        // Native-frame bindings own presentation as soon as they can show that cue.
+        if (timelineSource && nativeBindings.keys.any { binding ->
+                binding.videoId == videoId && binding.caption.isNotBlank() && binding.frameVisible() &&
+                    binding.visiblePage() != null && binding.configuration()?.let(binding::presentationEnabled) == true
+            }) {
+            resetTranslation(); unmount(); return
         }
         if (!frameVisible() || caption.isBlank() || !sourceVisible) {
             resetTranslation()
@@ -286,7 +289,12 @@ internal class SubtitleOverlay(private val source: View,
         while (parent != null && !parent.javaClass.name.endsWith("DecorView")) {
             if (parent is FrameLayout && parent.width >= metrics.widthPixels * .8f &&
                 parent.height >= metrics.heightPixels * .5f) {
-                if (parent.isShown && parent.alpha > 0f && parent.getGlobalVisibleRect(sourceRect)) return parent
+                val windowBounds = Rect()
+                source.rootView.getWindowVisibleDisplayFrame(windowBounds)
+                val visibleWidth = if (windowBounds.width() > 0) minOf(parent.width, windowBounds.width()) else parent.width
+                val visibleHeight = if (windowBounds.height() > 0) minOf(parent.height, windowBounds.height()) else parent.height
+                if (parent.isShown && parent.alpha > 0f && parent.getGlobalVisibleRect(sourceRect) &&
+                    sourceRect.width() >= visibleWidth * .6f && sourceRect.height() >= visibleHeight * .6f) return parent
                 // 整个视频卡片离屏时不得继续向 Activity 查找，避免旧视频字幕覆盖新视频。
                 if (CleanSceneBinding.containsView(parent) {
                     it is android.view.SurfaceView || it is android.view.TextureView
@@ -366,6 +374,7 @@ internal class SubtitleOverlay(private val source: View,
         label = null
     }
     override fun close() {
+        nativeBindings.remove(this)
         if (sources.remove(source) != null) sourceRevision++
         source.removeOnAttachStateChangeListener(this)
         onViewDetachedFromWindow(source)

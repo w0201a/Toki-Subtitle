@@ -8,6 +8,96 @@
 
 以下按现存开发记录与实机反馈整理。中间 Debug 版本用于排查，不表示当时问题已修复；较早记录未逐版保留完整时间，因此不补写推测日期。原项目更新历史保留在下方。
 
+### 2.0.51 正式版 / Release — 2026-10-29
+
+#### 中文
+
+- 汇总 2.0.45–2.0.50 的字幕轨隔离、显示与预翻译修复，视频填充及自动黑边裁切、直播上下滑限制、TikTok 内嵌设置入口优化和评论贴纸下载。各次小更新完整保留在下方，不合并或删除历史条目。
+- 字幕预读由实际播放视频管理，保留最多 100 个已完成视频及 128 个轨道身份，避免相邻视频准备回调与旧列表信息反复覆盖当前会话；原生帧与时间轴补偿避免同时显示。用户已反馈 2.0.49 的字幕问题修复。
+- 开启「视频显示 → 填充」后可自动识别对称黑边并等比裁切；连续三帧确认、暗场回退、单次有界采样，保留手动 100%–150% 调节。直播上下滑限制和评论贴纸下载为独立可选功能。
+- TikTok「设置」中的 Toki 入口支持原生设置 Activity 和多语言标题，进入后直接显示功能列表。长按贴纸评论可保存原始动态／静态文件；更多评论操作仍可打开原生菜单。
+- 使用既有正式证书构建 Root／免 Root 统一 APK，内外运行时均启用 R8 和资源裁剪、关闭调试；修正正式包继承 Debug 版本后缀的问题。versionCode 71，versionName 2.0.51。
+- 原生渲染保持默认；Toki 自定义字幕及预翻译需选择自定义模式并启用作品翻译。预读依赖宿主已加载的可读字幕文件，重启后重建缓存。自动裁切、直播限制和贴纸下载的实机覆盖有限，不宣称支持所有内容或宿主版本。新增文案在部分界面语言使用英文。
+- 正式签名与 Debug 签名不同，不能直接覆盖 Debug 安装；本次发布不卸载应用、不清除用户数据。已有同签名正式版可以覆盖更新，新增功能首次启用后重新打开 TikTok。
+
+#### English
+
+- Consolidates 2.0.45–2.0.50: subtitle-track/cache isolation, playback-owned pretranslation, single-layer caption presentation, Fill and automatic border crop, optional live swipe lock, improved embedded settings, and original comment-sticker downloads. Each incremental update remains documented below.
+- The user confirmed the 2.0.49 subtitle repair. Automatic cropping, live swipe locking and sticker downloads have limited device coverage; readable host-loaded caption tracks are required for pretranslation.
+- Production-signed unified Root/non-Root APK; both runtimes use R8/resource shrinking and are non-debuggable. versionCode 71 / versionName 2.0.51. Native caption rendering is the default; custom captions and prefetch are opt-in.
+- Release and Debug certificates differ. Same-certificate production installs can update in place; this release does not uninstall or clear any device data. Restart TikTok after enabling newly installed features.
+
+### 2.0.50 Debug — 2026-10-28
+
+#### 中文
+
+- 新增「评论贴纸下载」开关。开启并重新打开 TikTok 后，长按包含贴纸的评论可选择「下载贴纸」；「更多评论操作」进入原生评论菜单，普通文字评论继续使用原菜单。
+- 直接读取评论贴纸的动态／静态地址，按高清、中清、低清顺序尝试，优先动态文件；原样保存 GIF、WebP、PNG、JPEG、AVIF，保留源文件动画与透明度，不以截图替代。
+- 默认保存至 Pictures/TikTok/Stickers，启用自定义图片保存路径时沿用其设置；下载在有界后台队列运行，同一地址不重复排队，单文件限制 20 MiB，文件类型由内容头识别。成功和失败均提供提示。
+- 新功能独立使用已核验的评论菜单契约，不要求开启评论复制或字幕翻译。版本迭代为 2.0.50-debug（versionCode 70）。
+
+#### English
+
+- Added an opt-in Download comment stickers feature. Long-pressing a sticker comment opens Save sticker and More comment actions; the latter opens the complete native menu.
+- Saves original animation/image bytes, preferring animated and high-resolution sources. Uses the configured image directory or Pictures/TikTok/Stickers, bounded background downloads and file-signature detection.
+
+### 2.0.49 Debug — 2026-10-28
+
+验证反馈：用户在后续对话明确确认字幕问题已修复；此反馈不扩大其他新增功能的验证范围。
+
+#### 中文
+
+- 修复字幕预读会被多个显示层及相邻视频的准备播放事件反复切换：改由实际选中／恢复播放的视频管理预读，其他视频不能覆盖当前预读会话；暂停时取消任务。
+- 原生字幕帧可显示时独占当前视频的 Toki 显示层，时间轴仅在原生帧不可显示时补偿，避免两套字幕同时出字及位置跳动。离屏视频需满足可见面积条件才显示。
+- 字幕轨身份保留上限由 12 增至 128，覆盖 100 视频缓存及进行中的批次；陈旧推荐数据不再覆盖播放端确认的轨道，签名 URL 刷新不重置预读任务。同一原语言的字幕轨优先于其他语言的制作者字幕。
+- 手机旧版本日志确认预翻译请求有成功和缓存命中，但预读窗口频繁往返、完成缓存数回退，并存在时间轴与帧显示位置不同的记录。本次修复针对上述路径；无字幕轨或不可读字幕文件不能预翻译。
+- 版本号迭代为 2.0.49-debug（versionCode 69）。
+
+#### English
+
+- Scoped caption prefetch to the selected playback holder instead of preparation callbacks and competing overlay render passes.
+- Native-frame presentation takes priority over timeline fallback, preventing simultaneous Toki caption layers. Offscreen pages no longer qualify merely by a small visible edge.
+- Retained up to 128 track identities for the 100-video cache. Stale feed metadata cannot replace a confirmed playback track, and rotating URL signatures no longer cancel a valid prefetch session.
+
+### 2.0.48 Debug — 2026-10-28
+
+#### 中文
+
+- 填充模式优先使用已测量的信息流单元尺寸，避免沿用宿主较窄的视口；为其他宿主视频布局策略增加等比填充回退。
+- 填充模式默认启用自动黑边裁切：切换视频后最多采样六次低分辨率视频表面，连续三帧确认对称黑边才等比放大，额外自动放大不超过 1.5 倍。暗场、无可靠边缘或不支持读取的视频表面保留原比例；不采集整屏，不保存图像。
+- 视频显示增加 100%–150% 填充放大和重置按钮，可手动裁掉源视频内的黑边，同时也会裁掉部分画面边缘。比例保存后在下一次视频布局时应用；显示模式仍需重新打开 TikTok 后切换。
+- 优化 TikTok 设置页入口：识别原生设置 Activity，兼容非中文标题和 Compose 页面；其他页面只接受顶部可见的设置标题。按钮使用 dp 尺寸、导航栏避让和明暗配色，重复恢复页面时释放旧监听。
+- 注入设置打开后直接显示功能列表，诊断与性能采样折叠到工具入口，字幕和界面语言保留快捷入口。
+- 版本号递增至 2.0.48-debug（versionCode 68）。图片中的黑边是否内嵌在源视频里尚未确认；不将手动裁切或本地回归等同于真机修复结论。
+
+#### English
+
+- Fill uses the measured feed cell and adds an aspect-preserving fallback for alternative host layout policies.
+- Added 100%–150% fill zoom and reset. Extra zoom can crop borders embedded in a video, along with some picture edges, and applies on the next video layout.
+- Improved the injected entry in TikTok settings with native activity recognition, visible-heading fallback, density-aware sizing, system-bar clearance and listener cleanup.
+- Embedded settings opens directly to Features, with diagnostics collapsed and subtitle/language shortcuts available.
+
+### 2.0.47 Debug — 2026-10-28
+
+#### 中文
+
+- 视频显示新增「填充」模式：在已有居中、全屏沉浸之外，强制竖屏和横屏视频等比铺满可用视口，裁切超出部分但不拉伸画面；仍通过既有视频显示总开关启用。
+- 播放与交互体验新增「直播禁止上下滑切换」：在直播竖向翻页容器中阻止上下滑手势切换直播，保留点击、横向手势及程序内部切页；开关可在当前宿主会话内即时生效。
+- 新增对应配置校验、宿主结构定位规则、纯逻辑回归和 57 种界面语言资源；版本号迭代为 2.0.47（versionCode 67）。
+
+#### English
+
+- Added a Fill option to Video display. It extends the existing Centered and Fullscreen modes with an equal-ratio, edge-to-edge fill for portrait and landscape video, cropping overflow without stretching the picture.
+- Added Lock live vertical swipe under Playback. It blocks up/down swipes from switching live streams while preserving taps, horizontal gestures and programmatic paging. The switch applies within the current host session.
+- Added configuration validation, host structure discovery, focused logic tests and all 57 language resources. Version bumped to 2.0.47 (versionCode 67).
+
+### 2.0.46 Debug — 2026-10-28
+
+#### 中文
+
+- 修复同一视频同时存在制作者字幕和自动生成字幕时的轨道选择：优先使用制作者字幕，自动字幕仅在没有制作者字幕时回退使用。
+- 修复自定义样式模式仍保留 TikTok 原生字幕层，导致原生字幕与 Toki 字幕重复显示的问题；设置通过 ConfigClient 状态订阅同步到注入插件。
+
 ### 2.0.45 Debug — 2026-10-27
 
 #### 中文

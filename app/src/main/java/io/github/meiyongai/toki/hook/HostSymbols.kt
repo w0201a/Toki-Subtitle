@@ -41,6 +41,7 @@ internal enum class HostSymbol {
     SPEED_OPTIONS,
     MUTE_INFO,
     VIDEO_CELL,
+    LIVE_VERTICAL_PAGER,
 }
 
 /** 以完整代码集合和规则摘要验证私有持久结果，唯一匹配后才允许宿主符号注册。 */

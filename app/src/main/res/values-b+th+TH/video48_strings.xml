@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="video_auto_crop">Automatically crop black borders</string>
+    <string name="video_auto_crop_hint">Check video edges briefly after switching videos. Crop only after three consistent frames; leave dark or uncertain scenes unchanged.</string>
+    <string name="video_fill_zoom">Fill zoom: %1$d%%</string>
+    <string name="video_fill_zoom_hint">If the source includes black borders, increase zoom to crop them. Image edges will also be cropped. Applies on the next video layout.</string>
+    <string name="video_fill_zoom_reset">Reset zoom</string>
+    <string name="host_settings_tools">Diagnostics</string>
+</resources>

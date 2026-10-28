@@ -5,17 +5,20 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import io.github.libxposed.api.XposedModule
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import java.lang.reflect.Modifier
 
-/** 扩展宿主显示区域；居中扩展保留原适配，智能铺满按比例限制裁切。 */
+/** 扩展宿主显示区域；居中保留原适配，智能铺满限制裁切，填充模式强制等比铺满。 */
 object ImmersiveFullScreenHook {
     private const val TAG = "TokiImmersiveFullScreen"
     const val KEY_IMMERSIVE_FULL_SCREEN = "immersive_full_screen"
     const val KEY_VIDEO_FIT_MODE = "video_fit_mode"
+    const val KEY_VIDEO_FILL_ZOOM = "video_fill_zoom_percent"
+    const val KEY_VIDEO_AUTO_CROP = "video_auto_crop_enabled"
     private const val SCREEN = "com.ss.android.ugc.aweme.screenadaption.adaptionparams.ScreenAdaptionResult"
     private const val FEED = "com.ss.android.ugc.feed.platform.cell.component.adaption.FeedCellAdaptionComponentV2"
     private const val PADDING = "com.ss.android.ugc.aweme.videoadaption.adaptionparams.AdaptionPaddingValues"
@@ -103,20 +106,43 @@ object ImmersiveFullScreenHook {
         val resume = Activity::class.java.getDeclaredMethod("onPostResume").apply { isAccessible = true }
         val photos = ImmersivePhotoLayout(HostSymbols.resolve(classLoader, HostSymbol.PHOTO_LAYOUT),
             HostSymbols.member(HostSymbol.PHOTO_LAYOUT, "plan"))
-        val video = if (ConfigClient.getString(KEY_VIDEO_FIT_MODE, "center") == "smart") SmartVideoLayout(feed,
+        val fitMode = ConfigClient.getString(KEY_VIDEO_FIT_MODE, "center")
+        val video = if (fitMode == "smart" || fitMode == "fill") SmartVideoLayout(feed,
             classLoader.loadClass("com.ss.android.ugc.aweme.videoadaption.adaptionparams.VideoAdaptionResult"),
-            classLoader.loadClass("com.ss.android.ugc.aweme.videoadaption.adaptionparams.resultoperator.MultiContainerThresholdResultOperator")) else null
+            classLoader.loadClass("com.ss.android.ugc.aweme.videoadaption.adaptionparams.resultoperator.MultiContainerThresholdResultOperator"),
+            fill = fitMode == "fill") else null
 
+        val cells = java.util.WeakHashMap<Any, java.lang.ref.WeakReference<View>>()
+        val autoCrop = if (fitMode == "fill") VideoAutoCrop().also { crop ->
+            HookRuntime.onDispose("ImmersiveFullScreenHook") { crop.close() }
+            HookRuntime.subscribe("ImmersiveFullScreenHook") { snapshot ->
+                crop.configure(snapshot?.boolean(KEY_IMMERSIVE_FULL_SCREEN) == true &&
+                    snapshot.boolean(KEY_VIDEO_AUTO_CROP))
+            }
+        } else null
+        if (video != null && fitMode == "fill") {
+            val created = feed.getMethod("onViewCreated", View::class.java)
+            module.trackHook("ImmersiveFullScreenHook", created).intercept { chain ->
+                cells[checkNotNull(chain.thisObject)] = java.lang.ref.WeakReference(chain.args[0] as View)
+                chain.proceed()
+            }
+            HookRuntime.onDispose("ImmersiveFullScreenHook") { cells.clear() }
+        }
         if (video != null) module.trackHook("ImmersiveFullScreenHook", video.apply).intercept { chain ->
             if (enabled()) {
                 val args = chain.args.toTypedArray()
                 val previous = video.lastGeometry
-                args[0] = video.replace(args[0])
+                val cell = cells[chain.thisObject]?.get()
+                val zoom = ConfigClient.getString(KEY_VIDEO_FILL_ZOOM, "100")?.toIntOrNull() ?: 100
+                val contentKey = video.contentKey(args[0])
+                args[0] = video.replace(args[0], cell?.width ?: 0, cell?.height ?: 0, zoom)
                 if (previous != video.lastGeometry) {
                     HookRuntime.detail("ImmersiveFullScreenHook", video.lastGeometry)
                     HookRuntime.event(TAG, video.lastGeometry)
                 }
-                chain.proceed(args)
+                val result = chain.proceed(args)
+                if (cell != null) autoCrop?.bind(cell, contentKey)
+                result
             } else chain.proceed()
         }
 

@@ -7,6 +7,29 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class HostFeaturePlanTest {
+    @Test fun stickerDownloadIsIndependentOfCommentCopyAndNeedsTheVerifiedMenuContract() {
+        val plan = HostFeaturePlan(config("comment_sticker_download_enabled" to true))
+        assertEquals(setOf("CommentStickerDownloadHook"), plan.features)
+        assertEquals(setOf(HostSymbol.COMMENT_COPY), plan.symbols)
+        assertFalse(plan.apply(config("comment_sticker_download_enabled" to true)).boolean("copy_comment_text_only"))
+        plan.reject("CommentStickerDownloadHook")
+        assertFalse(plan.apply(config("comment_sticker_download_enabled" to true)).boolean("comment_sticker_download_enabled"))
+    }
+    @Test fun fillZoomIsValidatedAndCanChangeInAnInstalledSession() {
+        assertTrue(ConfigSchema.booleanDefault("video_auto_crop_enabled"))
+        assertTrue(HostFeaturePlan(config("video_auto_crop_enabled" to true)).features.isEmpty())
+        val startup = config("immersive_full_screen" to true, "video_fit_mode" to "fill")
+        val changed = config("immersive_full_screen" to true, "video_fit_mode" to "fill", "video_fill_zoom_percent" to "120")
+        ConfigSchema.validate(changed.configuration())
+        val plan = HostFeaturePlan(startup)
+        assertFalse(plan.requiresRestart("ImmersiveFullScreenHook", changed))
+        assertEquals("120", plan.apply(changed).string("video_fill_zoom_percent"))
+        for (value in listOf("99", "151", "NaN", "101.5")) {
+            assertThrows(IllegalArgumentException::class.java) {
+                ConfigSchema.validate(mapOf("video_fill_zoom_percent" to value))
+            }
+        }
+    }
     /** 无参数。显示模式在当前会话冻结，旧配置保留居中模式。返回 Unit。Callers: JUnit。 */
     @Test fun videoFitModeRequiresRestartAndDoesNotEnableLayoutAlone() {
         val plan = HostFeaturePlan(config("immersive_full_screen" to true))
@@ -15,6 +38,9 @@ class HostFeaturePlanTest {
         assertEquals("center", plan.apply(smart).string("video_fit_mode", "center"))
         assertTrue(HostFeaturePlan(config("video_fit_mode" to "smart")).features.isEmpty())
         assertEquals("smart", HostFeaturePlan(smart).apply(smart).string("video_fit_mode"))
+        val fill = config("immersive_full_screen" to true, "video_fit_mode" to "fill")
+        assertEquals("fill", HostFeaturePlan(fill).apply(fill).string("video_fit_mode"))
+        assertEquals("fill", ConfigSchema.validate(mapOf("video_fit_mode" to "fill")).getValue("video_fit_mode"))
         assertThrows(IllegalArgumentException::class.java) { ConfigSchema.validate(mapOf("video_fit_mode" to "stretch")) }
     }
     /** 后台音频实验缓存只能通过重启更改。无参数，无返回。Callers: JUnit。 */

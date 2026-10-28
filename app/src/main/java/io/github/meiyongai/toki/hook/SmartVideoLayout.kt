@@ -9,7 +9,7 @@ import java.lang.reflect.Modifier
  * @param operator 多容器适配结果类型。
  * Callers: ImmersiveFullScreenHook.init；SmartVideoLayoutTest。
  */
-internal class SmartVideoLayout(feed: Class<*>, result: Class<*>, private val operator: Class<*>) {
+internal class SmartVideoLayout(feed: Class<*>, result: Class<*>, private val operator: Class<*>, private val fill: Boolean = false) {
     var lastGeometry: String = "等待视频适配"
         private set
     val apply = feed.declaredMethods.single {
@@ -17,9 +17,12 @@ internal class SmartVideoLayout(feed: Class<*>, result: Class<*>, private val op
             it.parameterTypes.contentEquals(arrayOf(result, String::class.java))
     }.apply { isAccessible = true }
     private val getOperator = result.getMethod("getResultOperator")
+    private val getWidth = result.getMethod("getWidth")
+    private val getHeight = result.getMethod("getHeight")
     private val resultConstructor = result.getConstructor(Int::class.javaPrimitiveType, Int::class.javaPrimitiveType,
         java.lang.Float::class.java, java.lang.Float::class.java, getOperator.returnType)
     private val getParams = operator.getMethod("getVideoAdaptionParams")
+    private val getVideoId = runCatching { getParams.returnType.getMethod("getVideoId") }.getOrNull()
     private val dimensions = listOf("getVideoWidth", "getVideoHeight", "getContainerWidth", "getContainerHeight")
         .map { name -> getParams.returnType.getMethod(name).apply {
             check(returnType == Int::class.javaPrimitiveType && !Modifier.isStatic(modifiers))
@@ -43,23 +46,45 @@ internal class SmartVideoLayout(feed: Class<*>, result: Class<*>, private val op
         check(feed.superclass.getDeclaredMethod(apply.name, result, String::class.java).returnType == Void.TYPE)
     }
 
+    fun contentKey(original: Any?): String {
+        val source = original?.let { getOperator.invoke(it) }
+        if (operator.isInstance(source)) {
+            val id = getVideoId?.invoke(getParams.invoke(source)) as? String
+            if (!id.isNullOrEmpty()) return id
+        }
+        return "layout:${System.identityHashCode(original)}"
+    }
+
     /**
-     * 对支持的宿主策略构造居中等比结果，未测量及其他策略沿用原结果。
+     * 对支持的宿主策略构造等比结果；填充模式强制裁切铺满，未测量及其他策略沿用原结果。
      * @param original 宿主当前计算结果，可以为空。
      * @return 新结果或原对象；不原地修改宿主缓存中的结果。
      * Callers: ImmersiveFullScreenHook 的视频提交拦截；SmartVideoLayoutTest。
      */
-    fun replace(original: Any?): Any? {
+    fun replace(original: Any?, viewportWidth: Int = 0, viewportHeight: Int = 0, zoomPercent: Int = 100): Any? {
         if (original == null) return null
         val source = getOperator.invoke(original)
         if (!operator.isInstance(source)) {
+            // Older/alternative host policies still submit an aspect-correct result.
+            // Fill can cover the measured feed cell without guessing that policy's fields.
+            if (fill && viewportWidth > 0 && viewportHeight > 0) {
+                val size = VideoFillGeometry.calculate(getWidth.invoke(original) as Int,
+                    getHeight.invoke(original) as Int, viewportWidth, viewportHeight, true, zoomPercent)
+                    ?: return original
+                lastGeometry = "fallback viewport=${viewportWidth}x$viewportHeight result=${size.width}x${size.height} zoom=$zoomPercent"
+                return resultConstructor.newInstance(size.width, size.height, 0f, 0f, source)
+            }
             lastGeometry = "宿主特殊适配策略，保留原结果"
             return original
         }
         val params = getParams.invoke(source)
-        val d = dimensions.map { it.invoke(params) as Int }
-        val size = VideoFillGeometry.calculate(d[0], d[1], d[2], d[3]) ?: return original
-        lastGeometry = "video=${d[0]}x${d[1]} viewport=${d[2]}x${d[3]} result=${size.width}x${size.height} crop=${size.cropped}"
+        val d = dimensions.map { it.invoke(params) as Int }.toMutableList()
+        if (fill && viewportWidth > 0 && viewportHeight > 0) {
+            d[2] = viewportWidth
+            d[3] = viewportHeight
+        }
+        val size = VideoFillGeometry.calculate(d[0], d[1], d[2], d[3], fill, zoomPercent) ?: return original
+        lastGeometry = "video=${d[0]}x${d[1]} viewport=${d[2]}x${d[3]} result=${size.width}x${size.height} crop=${size.cropped} mode=${if (fill) "fill" else "smart"}"
         val args = getters.map { it.invoke(source) }.toTypedArray()
         args[2] = 0f
         args[3] = 0f

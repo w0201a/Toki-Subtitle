@@ -21,3 +21,7 @@ The dedicated release certificate differs from the development Debug certificate
 Before publishing, verify the APK signature using Android SDK `apksigner verify --verbose --print-certs` and scan the complete Git history using `gitleaks git --redact --config .gitleaks.toml`.
 
 Update `app/build.gradle.kts`, `CHANGELOG.md`, both READMEs and the curated issue record before committing. Stage only application sources, their tests, public documentation and necessary build files. Local device captures, raw diagnostics, host APKs, decompiled files, temporary scripts and private signing material remain local. Create the version tag on the pushed commit, attach the unified APK and checksums to a draft release, then publish after checking the remote assets.
+
+## Incremental release records
+
+Every small change receives its own dated version entry in CHANGELOG.md, including Debug-only iterations. A production release adds a new summary entry; it never replaces prior entries. Update both READMEs and docs/ISSUES_AND_FIXES.md with the release status, verification scope and signature guidance. The current subtitle-edition source and release destination is w0201a/Toki-Subtitle; upstream links are attribution, not upload destinations.

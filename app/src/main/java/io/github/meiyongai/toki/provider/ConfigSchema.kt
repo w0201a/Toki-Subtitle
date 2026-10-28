@@ -15,12 +15,14 @@ object ConfigSchema {
         "VideoTranslateHook" to listOf("video_translate_enabled", "subtitle_style_enabled"),
         "BackgroundAudioHook" to listOf("background_audio_unlock"),
         "CommentCopyHook" to listOf("copy_comment_text_only"),
+        "CommentStickerDownloadHook" to listOf("comment_sticker_download_enabled"),
         "AuthorLocationHook" to listOf("show_author_location"),
         "ProgressBarHook" to listOf("always_show_progress_bar", "clean_mode_show_progress_bar"),
         "AutoCleanModeHook" to listOf("clean_mode_on_play"),
         "LayoutCleanupHook" to io.github.meiyongai.toki.subtitle.model.LayoutElement.entries.map { it.key } +
             io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityEnabledKey },
         "ImmersiveFullScreenHook" to listOf("immersive_full_screen"),
+        "LiveSwipeLockHook" to listOf("live_swipe_lock_enabled"),
         "AutoScrollHook" to listOf("auto_scroll_unlock"),
         "DownloadHook" to listOf("download_force_no_watermark", "download_path_enabled"),
         "MusicUnlockHook" to listOf("music_unlock"),
@@ -34,13 +36,13 @@ object ConfigSchema {
     )
     val booleanDefaults: Map<String, Boolean> = featureSwitches.values.flatten().associateWith { false } +
         mapOf("subtitle_drag_enabled" to true, "subtitle_lock_x" to false, "subtitle_lock_y" to false,
-            "subtitle_debug_overlay_enabled" to false) +
+            "subtitle_debug_overlay_enabled" to false, "video_auto_crop_enabled" to true) +
         listOf("language_follow_region", "timezone_follow_region", "gps_follow_region").associateWith { true }
     private val rangePrefixes = listOf("feed_filter_views", "feed_filter_likes", "feed_filter_duration")
     private val stringKeys = setOf("target_region", "sim_operator_code", "sim_operator_name",
         "adaptation_retry_token", "subtitle_cache_clear_revision", "subtitle_render_mode", "custom_language", "custom_timezone", "custom_latitude", "custom_longitude",
         "fixed_speed_value", "speed_expand_list", "download_video_path", "download_image_path",
-        "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode") +
+        "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode", "video_fill_zoom_percent") +
         rangePrefixes.flatMap { listOf("${it}_min", "${it}_max") } +
         io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityKey }
     private val subtitleKeys = setOf("subtitle_size", "subtitle_x", "subtitle_y", "subtitle_font", "subtitle_weight", "subtitle_color", "subtitle_background", "subtitle_background_mode")
@@ -80,7 +82,8 @@ object ConfigSchema {
                 "subtitle_font" -> require(value in io.github.meiyongai.toki.subtitle.model.SubtitleFonts.names)
                 "subtitle_weight" -> require(value in setOf("normal", "bold", "italic", "bold_italic"))
                 "subtitle_color", "subtitle_background" -> require(value.matches(Regex("#[0-9A-Fa-f]{8}")))
-                "video_fit_mode" -> require(value in setOf("center", "smart")) { "视频显示模式无效" }
+                "video_fit_mode" -> require(value in setOf("center", "smart", "fill")) { "视频显示模式无效" }
+                "video_fill_zoom_percent" -> require(value.toIntOrNull() in 100..150) { "填充放大比例必须为 100 至 150 的整数" }
                 "target_region" -> require(value.matches(Regex("[A-Za-z]{2}"))) { "国家代码必须为两个英文字母" }
                 "sim_operator_code" -> require(value.matches(Regex("[0-9]{5,6}"))) { "运营商代码必须为五至六位数字" }
                 "sim_operator_name" -> require(value.isNotBlank()) { "运营商名称不能为空" }

@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"แสดงแถบความคืบหน้าเสมอ"</string>
     <string name="feature_progress_summary" formatted="false">"แสดงแถบความคืบหน้าไว้ตลอด แม้ในวิดีโอสั้น"</string>
     <string name="feature_immersive" formatted="false">"การแสดงวิดีโอ"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"Lock live vertical swipe"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"Prevent swiping up or down to switch live streams"</string>
     <string name="feature_autoplay" formatted="false">"เลื่อนอัตโนมัติแบบปรับปรุง"</string>
     <string name="feature_autoplay_summary" formatted="false">"ปลดล็อกการเลื่อนอัตโนมัติในเมนูของทุกวิดีโอ"</string>
     <string name="feature_status_bar" formatted="false">"ซ่อนแถบสถานะระบบ"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"แถบความคืบหน้า"</string>
     <string name="status_feature_clean" formatted="false">"ซ่อนตัวควบคุมอัตโนมัติ"</string>
     <string name="status_feature_immersive" formatted="false">"การแสดงวิดีโอ"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"Live swipe lock"</string>
     <string name="status_feature_scroll" formatted="false">"การเลื่อนอัตโนมัติ"</string>
     <string name="status_feature_duration" formatted="false">"แจ้งเตือนความยาว"</string>
     <string name="status_feature_comment_translate" formatted="false">"แปลความคิดเห็น"</string>
@@ -313,6 +316,7 @@
     <string name="host_scan_done" formatted="false">"เข้าใจแล้ว"</string>
     <string name="video_fit_center" formatted="false">"จัดกึ่งกลาง"</string>
     <string name="video_fit_smart" formatted="false">"เต็มหน้าจอ"</string>
+    <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
     <string name="host_scan_title_partial">"Some features need adaptation"</string>

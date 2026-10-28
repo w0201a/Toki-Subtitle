@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"Shfaq gjithmonë shiritin e ecurisë"</string>
     <string name="feature_progress_summary" formatted="false">"Mbaje shiritin e ecurisë të dukshëm edhe në video të shkurtra"</string>
     <string name="feature_immersive" formatted="false">"Shfaqja e videos"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"Lock live vertical swipe"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"Prevent swiping up or down to switch live streams"</string>
     <string name="feature_autoplay" formatted="false">"Lëvizje automatike e përmirësuar"</string>
     <string name="feature_autoplay_summary" formatted="false">"Zhbllokon lëvizjen automatike në menynë e çdo videoje"</string>
     <string name="feature_status_bar" formatted="false">"Fshih shiritin e gjendjes së sistemit"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"Shiriti i ecurisë"</string>
     <string name="status_feature_clean" formatted="false">"Fshih kontrollet gjatë luajtjes"</string>
     <string name="status_feature_immersive" formatted="false">"Shfaqja e videos"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"Live swipe lock"</string>
     <string name="status_feature_scroll" formatted="false">"Lëvizje automatike"</string>
     <string name="status_feature_duration" formatted="false">"Njoftim për kohëzgjatjen"</string>
     <string name="status_feature_comment_translate" formatted="false">"Përkthim komentesh"</string>
@@ -313,6 +316,7 @@
     <string name="host_scan_done" formatted="false">"E kuptova"</string>
     <string name="video_fit_center" formatted="false">"Në qendër"</string>
     <string name="video_fit_smart" formatted="false">"Ekran i plotë"</string>
+    <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
     <string name="host_scan_title_partial">"Some features need adaptation"</string>

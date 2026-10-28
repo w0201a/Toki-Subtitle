@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"הצגת סרגל ההתקדמות תמיד"</string>
     <string name="feature_progress_summary" formatted="false">"הצגת סרגל ההתקדמות התחתון גם בסרטונים קצרים"</string>
     <string name="feature_immersive" formatted="false">"תצוגת וידאו"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"Lock live vertical swipe"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"Prevent swiping up or down to switch live streams"</string>
     <string name="feature_autoplay" formatted="false">"גלילה אוטומטית משופרת"</string>
     <string name="feature_autoplay_summary" formatted="false">"פתיחת גלילה אוטומטית בתפריט של כל סרטון"</string>
     <string name="feature_status_bar" formatted="false">"הסתרת שורת המצב של המערכת"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"סרגל התקדמות"</string>
     <string name="status_feature_clean" formatted="false">"הסתרת פקדים בהפעלה"</string>
     <string name="status_feature_immersive" formatted="false">"תצוגת וידאו"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"Live swipe lock"</string>
     <string name="status_feature_scroll" formatted="false">"גלילה אוטומטית"</string>
     <string name="status_feature_duration" formatted="false">"התראת אורך"</string>
     <string name="status_feature_comment_translate" formatted="false">"תרגום תגובות"</string>
@@ -313,6 +316,7 @@
     <string name="host_scan_done" formatted="false">"הבנתי"</string>
     <string name="video_fit_center" formatted="false">"במרכז"</string>
     <string name="video_fit_smart" formatted="false">"מסך מלא"</string>
+    <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
     <string name="host_scan_title_partial">"Some features need adaptation"</string>

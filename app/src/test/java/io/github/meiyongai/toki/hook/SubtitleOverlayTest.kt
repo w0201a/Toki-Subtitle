@@ -19,6 +19,39 @@ import java.time.Duration
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class SubtitleOverlayTest {
+    @Test fun nativeFrameOwnsDisplayAndTimelineFallbackCannotShowASecondCaption() {
+        HookRuntime.start("duplicate-caption-test") { _, _ -> }
+        val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity = controller.get()
+        val page = FrameLayout(activity)
+        val video = SurfaceView(activity)
+        page.addView(video, FrameLayout.LayoutParams(1080, 2400))
+        val source = FrameLayout(activity)
+        source.addView(TextView(activity).apply { text = "native cue" })
+        page.addView(source, FrameLayout.LayoutParams(600, 100))
+        activity.setContentView(page)
+        activity.window.decorView.apply {
+            measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+            layout(0, 0, 1080, 2400)
+        }
+        val settings = config(mapOf("subtitle_style_enabled" to true))
+        val native = SubtitleOverlay(source, configuration = { settings })
+        val timeline = SubtitleOverlay(video, timelineSource = true, configuration = { settings })
+        val layer = SubtitleOverlay::class.java.getDeclaredField("layer").apply { isAccessible = true }
+        native.update("EXPANDED", "native cue", "same-video")
+        native.onPreDraw()
+        timeline.update("EXPANDED", "timeline cue", "same-video")
+        timeline.onPreDraw()
+        assertNotNull(layer.get(native))
+        assertNull(layer.get(timeline))
+        native.update("HIDDEN", "", "same-video")
+        native.onPreDraw()
+        timeline.onPreDraw()
+        assertNotNull(layer.get(timeline))
+        native.close(); timeline.close()
+        controller.pause().stop().destroy()
+    }
     private fun config(values: Map<String, Any>) =
         ConfigSnapshot(values + ("subtitle_render_mode" to "custom"))
 

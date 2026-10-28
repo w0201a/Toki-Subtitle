@@ -50,7 +50,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         val trackUrl = track(id).orEmpty()
         val changed = latestText != text
         latestText = text; current = valid
-        if (video != id || url != trackUrl) {
+        if (video != id || identityFor(url) != identityFor(trackUrl)) {
             video = id; url = trackUrl; cues = emptyList(); normalized = emptyList(); index = -1
             val generation = ++token
             disconnectAll()
@@ -84,7 +84,10 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
                     }
                 }
             }
-        } else if (changed) queue()
+        } else {
+            url = trackUrl // Signed URL refresh must not cancel a valid timeline or batch.
+            if (changed) queue()
+        }
         val now = android.os.SystemClock.uptimeMillis()
         if (now >= checkedAheadAt) {
             checkedAheadAt = now + 1500
@@ -107,7 +110,8 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         // Only selectVideo releases an older watched batch and creates refill space.
         if (translator.completedVideos >= 100) return
         upcoming = try { translator.upcomingTracks(video, batches.offset).take(5) } catch (_: Exception) { emptyList() }
-        upcoming.forEach { track -> if (track.url.isNotBlank()) note(track.video, track.url) }
+        upcoming.forEach { track -> if (track.url.isNotBlank()) noteCandidate(track.video, track.url) }
+        upcoming = upcoming.map { candidate -> candidate.copy(url = track(candidate.video) ?: candidate.url) }
         val generation = token
         upcoming.forEach { track ->
             if (track.url.isBlank()) return@forEach
@@ -217,6 +221,11 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             "byteoversea.com", "ibytedtos.com", "muscdn.com", "tiktok.com", "ibyteimg.com")
         private val tracks = LinkedHashMap<String, String>()
         private val trackIdentities = LinkedHashMap<String, String>()
+        @Synchronized fun noteCandidate(video: String, location: String?) {
+            // Playback selection is authoritative; a stale feed model cannot flip it back.
+            if (video !in tracks) note(video, location)
+        }
+        private fun identityFor(location: String): String = if (location.isBlank()) "" else trackFingerprint(location)
         @Synchronized fun note(video: String, location: String?) {
             if (!location.isNullOrBlank()) {
                 if (tracks[video] == location) return
@@ -226,7 +235,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
                 tracks.remove(video)
                 trackIdentities.remove(video)
             }
-            while (tracks.size > 12) {
+            while (tracks.size > 128) {
                 val oldest = tracks.keys.first()
                 tracks.remove(oldest)
                 trackIdentities.remove(oldest)

@@ -39,6 +39,14 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
         app.registerActivityLifecycleCallbacks(this)
     }
     fun openSubtitle(activity: Activity) = open(activity, subtitleOnly = true)
+    internal fun localizedContext(activity: Activity): android.content.Context {
+        val context = resources.createActivityContext(activity)
+        return io.github.meiyongai.toki.subtitle.util.LocaleHelper.wrapContext(context,
+            io.github.meiyongai.toki.subtitle.util.LocaleHelper.getAppLanguage(context),
+            android.content.res.Configuration(activity.resources.configuration).apply {
+                setLocales(android.content.res.Resources.getSystem().configuration.locales)
+            })
+    }
     fun open(activity: Activity, subtitleOnly: Boolean = false) {
         if (!::resources.isInitialized || activity.isFinishing || activity.isDestroyed) return
         if (dialog?.isShowing == true && dialogActivity === activity) return
@@ -105,41 +113,91 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
         return opened
     }
     private val whitespace = Regex("\\s+")
-    private val settingsTitles = setOf("settings and privacy", "设置和隐私", "设置与隐私", "設定與隱私", "設定和隱私", "設定とプライバシー")
-    internal fun settingsHeading(value: String?): Boolean = value?.trim()?.lowercase()
+    private val settingsTitles = setOf("settings and privacy", "设置和隐私", "设置与隐私", "設定與隱私", "設定和隱私", "設定とプライバシー",
+        "설정 및 개인정보", "ajustes y privacidad", "configuración y privacidad", "paramètres et confidentialité",
+        "einstellungen und datenschutz", "impostazioni e privacy", "configurações e privacidade",
+        "настройки и конфиденциальность", "pengaturan dan privasi", "tetapan dan privasi",
+        "cài đặt và quyền riêng tư", "การตั้งค่าและความเป็นส่วนตัว", "ayarlar ve gizlilik", "instellingen en privacy",
+        "ustawienia i prywatność", "الإعدادات والخصوصية")
+    internal fun settingsHeading(value: String?): Boolean = value?.trim()?.lowercase(java.util.Locale.ROOT)
         ?.replace("&", "and")?.replace(whitespace, " ") in settingsTitles
+    internal fun settingsActivity(name: String): Boolean =
+        name == "com.ss.android.ugc.aweme.setting.ui.SettingContainerActivity"
+
+    /** Accept a visible page heading, not a settings link in the middle of another page. */
+    internal fun findSettingsHeader(root: ViewGroup, ignored: View? = null): TextView? {
+        val page = Rect()
+        if (!root.getGlobalVisibleRect(page)) return null
+        val headerLimit = page.top + maxOf((144 * root.resources.displayMetrics.density).toInt(), page.height() / 3)
+        val queue = ArrayDeque<View>().apply { add(root) }
+        val bounds = Rect()
+        var visited = 0
+        while (queue.isNotEmpty() && visited++ < 1000) {
+            val view = queue.removeFirst()
+            if (view === ignored || !view.isShown) continue
+            if (view is TextView && settingsHeading(view.text?.toString()) &&
+                view.getGlobalVisibleRect(bounds) && bounds.bottom <= headerLimit) return view
+            if (view is ViewGroup) for (i in 0 until view.childCount) queue.add(view.getChildAt(i))
+        }
+        return null
+    }
+
     private class Page(val activity: Activity) : ViewTreeObserver.OnGlobalLayoutListener {
         private var entry: TextView? = null
+        private var heading: TextView? = null
         private var disposed = false
         private var pending = false
         private var nextScanAt = 0L
         private val check = Runnable { pending = false; if (!disposed) scan() }
         override fun onGlobalLayout() {
-            if (!disposed && !pending) { pending = true; main.postDelayed(check, maxOf(250L, nextScanAt - android.os.SystemClock.uptimeMillis())) }
+            if (!disposed && !pending) {
+                pending = true
+                main.postDelayed(check, maxOf(150L, nextScanAt - android.os.SystemClock.uptimeMillis()))
+            }
         }
         private fun scan() {
-            nextScanAt = android.os.SystemClock.uptimeMillis() + 2000
-            val root = activity.window.decorView as? ViewGroup ?: return
-            val queue = ArrayDeque<View>();queue.add(root);var visited = 0
-            var settings = false
-            while(queue.isNotEmpty() && visited++ < 1000) {
-                val view=queue.removeFirst()
-                if(view === entry || !view.isShown) continue
-                val label=(view as? TextView)?.text?.toString()?.trim()?.lowercase()
-                if(settingsHeading(label)) settings=true
-                if(view is ViewGroup) for(i in 0 until view.childCount) queue.add(view.getChildAt(i))
-            }
-            if(settings && entry==null) {
-                entry=TextView(resources.createActivityContext(activity)).apply {
-                    text=context.getString(R.string.host_settings_title);textSize=16f
-                    setTextColor(android.graphics.Color.WHITE);setBackgroundColor(0xEE303440.toInt())
-                    setPadding(24,16,24,16);elevation=24f;setOnClickListener { open(activity) }
+            val root = activity.findViewById<android.widget.FrameLayout>(android.R.id.content) ?: return
+            val pageBounds = Rect().also { root.getGlobalVisibleRect(it) }
+            val headerBounds = Rect()
+            val cached = heading?.takeIf { it.isShown && settingsHeading(it.text?.toString()) &&
+                it.rootView === root.rootView && it.getGlobalVisibleRect(headerBounds) &&
+                headerBounds.bottom <= pageBounds.top + maxOf((144 * root.resources.displayMetrics.density).toInt(), pageBounds.height() / 3) }
+            val nativeSettings = settingsActivity(activity.javaClass.name)
+            heading = cached ?: if (nativeSettings) null else findSettingsHeader(root, entry)
+            nextScanAt = android.os.SystemClock.uptimeMillis() + if (heading == null) 2000 else 250
+            if (heading == null && !nativeSettings) { removeEntry(); return }
+            if (entry?.parent == null) {
+                val density = root.resources.displayMetrics.density
+                fun dp(value: Int) = (value * density + 0.5f).toInt()
+                val dark = activity.resources.configuration.uiMode and
+                    android.content.res.Configuration.UI_MODE_NIGHT_MASK == android.content.res.Configuration.UI_MODE_NIGHT_YES
+                val button = android.widget.Button(resources.createActivityContext(activity)).apply {
+                    text = context.getString(R.string.host_settings_title)
+                    contentDescription = text
+                    textSize = 15f
+                    isAllCaps = false
+                    minHeight = dp(48)
+                    minimumWidth = dp(100)
+                    setTextColor(if (dark) 0xFFF5F5F5.toInt() else 0xFF161823.toInt())
+                    val shape = android.graphics.drawable.GradientDrawable().apply {
+                        cornerRadius = dp(24).toFloat()
+                        setColor(if (dark) 0xFF303440.toInt() else 0xFFF1F1F2.toInt())
+                    }
+                    background = android.graphics.drawable.RippleDrawable(
+                        android.content.res.ColorStateList.valueOf(0x22696969), shape, null)
+                    setPadding(dp(20), dp(8), dp(20), dp(8))
+                    elevation = dp(6).toFloat()
+                    setOnClickListener { open(activity) }
                 }
-                root.addView(entry, android.widget.FrameLayout.LayoutParams(-2,-2,Gravity.BOTTOM or Gravity.END).apply { bottomMargin=96;rightMargin=20 })
-            } else if(!settings) removeEntry()
+                entry = button
+                root.addView(button, android.widget.FrameLayout.LayoutParams(-2, -2, Gravity.BOTTOM or Gravity.END).apply {
+                    bottomMargin = dp(16) + (root.rootWindowInsets?.systemWindowInsetBottom ?: 0)
+                    marginEnd = dp(16)
+                })
+            }
         }
-        fun dispose() { disposed = true; main.removeCallbacks(check); removeEntry() }
-        fun removeEntry() { entry?.let { (it.parent as? ViewGroup)?.removeView(it) };entry=null }
+        fun dispose() { disposed = true; main.removeCallbacks(check); heading = null; removeEntry() }
+        fun removeEntry() { entry?.let { (it.parent as? ViewGroup)?.removeView(it) }; entry = null }
     }
     override fun onActivityResumed(activity: Activity) {
         val method=activity.javaClass.getMethod("dispatchTouchEvent", MotionEvent::class.java)
@@ -148,6 +206,10 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
                 val screen=chain.thisObject as Activity
                 if(pages.containsKey(screen) && touch(screen,chain.args[0] as MotionEvent)) true else chain.proceed()
             }
+        }
+        pages.remove(activity)?.let { previous ->
+            activity.window.decorView.viewTreeObserver.removeOnGlobalLayoutListener(previous)
+            previous.dispose()
         }
         val page=Page(activity);pages[activity]=page
         activity.window.decorView.viewTreeObserver.addOnGlobalLayoutListener(page)

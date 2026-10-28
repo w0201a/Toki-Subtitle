@@ -13,10 +13,34 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35], qualifiers = "w400dp-h800dp-mdpi")
 class HostSettingsEntryTest {
+    @Test fun nativeSettingsContainerNeedsNoTranslatedOrTextViewTitle() {
+        assertTrue(HostSettingsEntry.settingsActivity("com.ss.android.ugc.aweme.setting.ui.SettingContainerActivity"))
+        assertFalse(HostSettingsEntry.settingsActivity("com.ss.android.ugc.aweme.main.MainActivity"))
+        assertFalse(HostSettingsEntry.settingsActivity("com.ss.android.ugc.aweme.setting.I18nSettingManageMyAccountActivity"))
+    }
     @Test fun settingsHeaderAcceptsNativeAmpersandAndChineseVariants() {
-        for (text in listOf("Settings & privacy", "Settings and privacy", "设置和隐私", "设置与隐私", "設定與隱私"))
+        for (text in listOf("Settings & privacy", "Settings and privacy", "设置和隐私", "设置与隐私", "設定與隱私",
+            "Einstellungen und Datenschutz", "Настройки и конфиденциальность", "Ajustes y privacidad"))
             assertTrue(text,HostSettingsEntry.settingsHeading(text))
         assertFalse(HostSettingsEntry.settingsHeading("Privacy policy"))
+    }
+    @Test fun entryUsesVisiblePageHeaderAndIgnoresBodyLinks() {
+        val owner = Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity = owner.get()
+        val root = FrameLayout(activity)
+        val header = TextView(activity).apply { text = "Settings & privacy" }
+        val body = TextView(activity).apply { text = "Settings & privacy" }
+        root.addView(header, FrameLayout.LayoutParams(300, 50))
+        root.addView(body, FrameLayout.LayoutParams(300, 50).apply { topMargin = 500 })
+        activity.setContentView(root)
+        val decor = activity.window.decorView
+        decor.measure(android.view.View.MeasureSpec.makeMeasureSpec(400, 1073741824),
+            android.view.View.MeasureSpec.makeMeasureSpec(800, 1073741824))
+        decor.layout(0, 0, 400, 800)
+        assertSame(header, HostSettingsEntry.findSettingsHeader(root))
+        header.visibility = android.view.View.GONE
+        assertNull(HostSettingsEntry.findSettingsHeader(root))
+        owner.pause().stop().destroy()
     }
     @Test fun homeLabelRequiresAnExactNavigationLabel() {
         val activity=Robolectric.buildActivity(Activity::class.java).setup().get()

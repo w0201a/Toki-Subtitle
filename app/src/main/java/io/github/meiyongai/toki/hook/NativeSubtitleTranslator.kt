@@ -37,6 +37,7 @@ internal class NativeSubtitleTranslator(
     private var diagnosticAt = 0L
     private var lastDiagnostic = ""
     private var closed = false
+    private var selectedVideo = ""
     private val nativeFrames = LinkedHashMap<String, Long>()
     private val pump = Runnable { startNext() }
 
@@ -80,8 +81,9 @@ internal class NativeSubtitleTranslator(
     }
 
     fun readAhead(videoId: String, text: String, current: () -> Boolean) {
-        if (canPrefetch(videoId)) trackPrefetch.update(videoId, text, current)
+        if (acceptsReadAhead(videoId) && canPrefetch(videoId)) trackPrefetch.update(videoId, text, current)
     }
+    internal fun acceptsReadAhead(videoId: String): Boolean = selectedVideo.isBlank() || selectedVideo == videoId
 
     internal fun prefetch(texts: List<String>, current: () -> Boolean) {
         prefetchVideos(texts.take(32).map { CaptionTranslationInput("", it) }, current)
@@ -235,6 +237,7 @@ internal class NativeSubtitleTranslator(
         SystemClock.uptimeMillis() - it < 2000
     } == true
     internal fun selectVideo(video: String) {
+        selectedVideo = video
         val released = cache.select(video)
         if (released > 0) report("watched batch released=$released completedCache=${cache.size}/100")
     }

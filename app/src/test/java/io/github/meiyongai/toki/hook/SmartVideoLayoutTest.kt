@@ -4,6 +4,30 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class SmartVideoLayoutTest {
+    @Test fun fillUsesMeasuredCellInsteadOfNarrowHostViewport() {
+        val contract = SmartVideoLayout(Feed::class.java, Result::class.java, Multi::class.java, fill = true)
+        val op = Multi(0, 0, 0f, 0f, 1920f, 1000f, Scale.FIT, Align.WIDTH, 0f,
+            Params(1080, 1920, 1000, 1920), null)
+        val original = Result(1000, 1778, 20f, 0f, op)
+        val adjusted = contract.replace(original, 1080, 2400) as Result
+        assertEquals(2400, adjusted.height)
+        assertTrue(adjusted.width >= 1080)
+        assertEquals(1080f, (adjusted.resultOperator as Multi).adjustContainerWidth)
+        assertEquals(1000, original.width)
+    }
+
+    @Test fun fillSupportsAlternativePolicyAndDoesNotMutateIt() {
+        val contract = SmartVideoLayout(Feed::class.java, Result::class.java, Multi::class.java, fill = true)
+        val policy = object : Operator {}
+        val original = Result(1000, 2000, 12f, 20f, policy)
+        assertSame(original, contract.replace(original)) // Wait for a measured cell.
+        val adjusted = contract.replace(original, 1080, 2400, 120) as Result
+        assertEquals(2880, adjusted.height)
+        assertEquals(1440, adjusted.width)
+        assertSame(policy, adjusted.resultOperator)
+        assertEquals(0f, adjusted.translateX)
+        assertEquals(12f, original.translateX)
+    }
     enum class Align { WIDTH, HEIGHT, MATCH_PARENT }
     enum class Scale { FIT, CROP }
     interface Operator

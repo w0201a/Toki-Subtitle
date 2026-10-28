@@ -67,10 +67,12 @@ import java.util.Locale
 import io.github.meiyongai.toki.subtitle.hook.AuthorLocationHook
 import io.github.meiyongai.toki.subtitle.hook.AutoCleanModeHook
 import io.github.meiyongai.toki.subtitle.hook.AutoScrollHook
+import io.github.meiyongai.toki.subtitle.hook.CommentStickerDownloadHook
 import io.github.meiyongai.toki.subtitle.hook.CommentCopyHook
 import io.github.meiyongai.toki.subtitle.hook.DownloadHook
 import io.github.meiyongai.toki.subtitle.hook.FeedFilterHook
 import io.github.meiyongai.toki.subtitle.hook.ImmersiveFullScreenHook
+import io.github.meiyongai.toki.subtitle.hook.LiveSwipeLockHook
 import io.github.meiyongai.toki.subtitle.hook.MusicUnlockHook
 import io.github.meiyongai.toki.subtitle.hook.PlaybackSpeedHook
 import io.github.meiyongai.toki.subtitle.hook.ProgressBarHook
@@ -196,6 +198,10 @@ fun DashboardScreen(
         mutableStateOf(ConfigClient.getBoolean(context, CommentCopyHook.KEY_COPY_COMMENT_TEXT_ONLY))
     }
 
+    var stickerDownloadEnabled by remember {
+        mutableStateOf(ConfigClient.getBoolean(context, CommentStickerDownloadHook.KEY))
+    }
+
     // 8. 显示作者位置状态
     var isAuthorLocationEnabled by remember {
         mutableStateOf(ConfigClient.getBoolean(context, AuthorLocationHook.KEY_SHOW_AUTHOR_LOCATION))
@@ -220,6 +226,9 @@ fun DashboardScreen(
     }
     var videoFitMode by remember {
         mutableStateOf(ConfigClient.getString(context, ImmersiveFullScreenHook.KEY_VIDEO_FIT_MODE, "center")!!)
+    }
+    var isLiveSwipeLockEnabled by remember {
+        mutableStateOf(ConfigClient.getBoolean(context, LiveSwipeLockHook.KEY_LIVE_SWIPE_LOCK))
     }
 
     // 12. 自动滚动解锁状态
@@ -463,10 +472,10 @@ fun DashboardScreen(
             )
         }
 
-        // === 分组 2: 播放与交互体验 (共 7 项) ===
+        // === 分组 2: 播放与交互体验 (共 8 项) ===
         PreferenceSection(title = strings.getString(R.string.feature_playback_section)) {
             PlaybackSpeedCard(
-                shape = getGroupedShape(0, 7),
+                shape = getGroupedShape(0, 8),
                 fixedSpeedEnabled = isSpeedSpoofEnabled,
                 onFixedSpeedChange = { state ->
                     isSpeedSpoofEnabled = state
@@ -488,7 +497,7 @@ fun DashboardScreen(
             )
 
             SwitchPreferenceItem(
-                shape = getGroupedShape(1, 7),
+                shape = getGroupedShape(1, 8),
                 title = strings.getString(R.string.feature_progress),
                 summary = strings.getString(R.string.feature_progress_summary),
                 checked = isAlwaysShowProgressBarEnabled,
@@ -499,7 +508,7 @@ fun DashboardScreen(
             )
 
             CleanModeCard(
-                shape = getGroupedShape(2, 7),
+                shape = getGroupedShape(2, 8),
                 cleanModeEnabled = isCleanModeOnPlayEnabled,
                 onCleanModeChange = { state ->
                     isCleanModeOnPlayEnabled = state
@@ -513,7 +522,7 @@ fun DashboardScreen(
             )
 
             VideoDisplayCard(
-                shape = getGroupedShape(3, 7),
+                shape = getGroupedShape(3, 8),
                 enabled = isImmersiveFullScreenEnabled,
                 mode = videoFitMode,
                 onEnabledChange = { state ->
@@ -527,7 +536,18 @@ fun DashboardScreen(
             )
 
             SwitchPreferenceItem(
-                shape = getGroupedShape(4, 7),
+                shape = getGroupedShape(4, 8),
+                title = strings.getString(R.string.feature_live_swipe_lock),
+                summary = strings.getString(R.string.feature_live_swipe_lock_summary),
+                checked = isLiveSwipeLockEnabled,
+                onCheckedChange = { state ->
+                    isLiveSwipeLockEnabled = state
+                    ConfigClient.putBoolean(context, LiveSwipeLockHook.KEY_LIVE_SWIPE_LOCK, state)
+                }
+            )
+
+            SwitchPreferenceItem(
+                shape = getGroupedShape(5, 8),
                 title = strings.getString(R.string.feature_autoplay),
                 summary = strings.getString(R.string.feature_autoplay_summary),
                 checked = isAutoScrollUnlockEnabled,
@@ -538,7 +558,7 @@ fun DashboardScreen(
             )
 
             VideoDurationAlertCard(
-                shape = getGroupedShape(5, 7),
+                shape = getGroupedShape(6, 8),
                 enabled = isDurationAlertEnabled,
                 onEnabledChange = { state ->
                     isDurationAlertEnabled = state
@@ -549,7 +569,7 @@ fun DashboardScreen(
             )
 
             SwitchPreferenceItem(
-                shape = getGroupedShape(6, 7),
+                shape = getGroupedShape(7, 8),
                 title = strings.getString(R.string.feature_status_bar),
                 checked = isStatusBarHidden,
                 onCheckedChange = { state ->
@@ -659,6 +679,19 @@ fun DashboardScreen(
                 onCheckedChange = { state ->
                     isBackgroundAudioEnabled = state
                     ConfigClient.putBoolean(context, "background_audio_unlock", state)
+                }
+            )
+        }
+
+        PreferenceSection(title = strings.getString(R.string.feature_comment_sticker_download)) {
+            SwitchPreferenceItem(
+                shape = getGroupedShape(0, 1),
+                title = strings.getString(R.string.feature_comment_sticker_download),
+                summary = strings.getString(R.string.feature_comment_sticker_download_hint),
+                checked = stickerDownloadEnabled,
+                onCheckedChange = { state ->
+                    stickerDownloadEnabled = state
+                    ConfigClient.putBoolean(context, CommentStickerDownloadHook.KEY, state)
                 }
             )
         }

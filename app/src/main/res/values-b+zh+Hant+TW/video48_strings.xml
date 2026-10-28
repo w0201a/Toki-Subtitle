@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="video_auto_crop">自動識別並裁掉黑邊</string>
+    <string name="video_auto_crop_hint">切換影片後短暫檢查畫面邊緣，連續三幀確認黑邊才放大。暗場或判斷不可靠時保留原比例。</string>
+    <string name="video_fill_zoom">填滿放大：%1$d%%</string>
+    <string name="video_fill_zoom_hint">原影片帶黑邊時，可加大比例裁掉黑邊，也會裁掉部分畫面邊緣。下一次影片佈局時生效。</string>
+    <string name="video_fill_zoom_reset">重設放大</string>
+    <string name="host_settings_tools">診斷工具</string>
+</resources>

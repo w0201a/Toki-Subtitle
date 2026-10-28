@@ -23,8 +23,8 @@ android {
         applicationId = "io.github.meiyongai.toki.subtitle"
         minSdk = 28
         targetSdk = 35
-        versionCode = 65
-        versionName = "2.0.45"
+        versionCode = 71
+        versionName = "2.0.51"
         // 默认仍可构建通用包；真机调试包可只带目标 ABI。
         providers.gradleProperty("subtitleAbi").orNull?.let { ndk.abiFilters.add(it) }
     }
@@ -44,6 +44,7 @@ android {
         debug { versionNameSuffix = "-debug" }
         create("universal") {
             initWith(getByName("debug"))
+            if (productionUnified) versionNameSuffix = ""
             signingConfig = signingConfigs.getByName(if (productionUnified) "release" else "debug")
             isDebuggable = !productionUnified
             isMinifyEnabled = optimizeUnified
@@ -53,6 +54,7 @@ android {
         }
         create("lspatch") {
             initWith(getByName("debug"))
+            if (productionUnified) versionNameSuffix = ""
             signingConfig = signingConfigs.getByName(if (productionUnified) "release" else "debug")
             isDebuggable = !productionUnified
             isMinifyEnabled = optimizeUnified

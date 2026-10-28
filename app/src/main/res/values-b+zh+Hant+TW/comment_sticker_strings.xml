@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_comment_sticker_download">留言貼圖下載</string>
+    <string name="feature_comment_sticker_download_hint">長按貼圖留言儲存原圖或動圖；「更多留言操作」開啟原生選單。首次開啟後重新開啟 TikTok。</string>
+    <string name="sticker_menu_title">留言貼圖</string>
+    <string name="sticker_download">下載貼圖</string>
+    <string name="sticker_more">更多留言操作</string>
+    <string name="sticker_saving">正在下載貼圖…</string>
+    <string name="sticker_saved">貼圖已儲存到相簿</string>
+    <string name="sticker_save_failed">貼圖儲存失敗，請檢查網絡、儲存權限及剩餘空間。</string>
+</resources>

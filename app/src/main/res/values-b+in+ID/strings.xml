@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"Selalu tampilkan bilah progres"</string>
     <string name="feature_progress_summary" formatted="false">"Tetap menampilkan bilah progres, bahkan pada video pendek"</string>
     <string name="feature_immersive" formatted="false">"Tampilan video"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"Lock live vertical swipe"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"Prevent swiping up or down to switch live streams"</string>
     <string name="feature_autoplay" formatted="false">"Gulir otomatis yang ditingkatkan"</string>
     <string name="feature_autoplay_summary" formatted="false">"Buka gulir otomatis di menu semua video"</string>
     <string name="feature_status_bar" formatted="false">"Sembunyikan bilah status sistem"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"Bilah progres"</string>
     <string name="status_feature_clean" formatted="false">"Sembunyi otomatis"</string>
     <string name="status_feature_immersive" formatted="false">"Tampilan video"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"Live swipe lock"</string>
     <string name="status_feature_scroll" formatted="false">"Gulir otomatis"</string>
     <string name="status_feature_duration" formatted="false">"Peringatan durasi"</string>
     <string name="status_feature_comment_translate" formatted="false">"Terjemahan komentar"</string>
@@ -313,6 +316,7 @@
     <string name="host_scan_done" formatted="false">"Mengerti"</string>
     <string name="video_fit_center" formatted="false">"Di tengah"</string>
     <string name="video_fit_smart" formatted="false">"Layar penuh"</string>
+    <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
     <string name="host_scan_title_partial">"Some features need adaptation"</string>

@@ -181,7 +181,7 @@ class HookStatusModelTest {
         val expected = ConfigSchema.featureSwitches.keys - "SpeedOptions"
         assertEquals(expected, HookStatusCatalog.features.map { it.id }.toSet())
         assertEquals(expected.size, HookStatusCatalog.features.size)
-        assertEquals(21, process(emptyMap()).features.size)
+        assertEquals(23, process(emptyMap()).features.size)
     }
 
     /**

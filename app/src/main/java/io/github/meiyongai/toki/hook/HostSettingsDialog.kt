@@ -44,7 +44,7 @@ internal class HostSettingsDialog(activity: Activity, resources: ModuleResources
                         var performance by remember { mutableStateOf<String?>(null) }
                         var capturing by remember { mutableStateOf(false) }
                         var subtitles by remember { mutableStateOf(false) }
-                        var features by remember { mutableStateOf(false) }
+                        var diagnostics by remember { mutableStateOf(false) }
                         var languages by remember { mutableStateOf(false) }
                         val localizedContext = LocalContext.current
                         val language = LocalAppLanguage.current.language
@@ -60,7 +60,7 @@ internal class HostSettingsDialog(activity: Activity, resources: ModuleResources
                         Surface(Modifier.fillMaxSize()) {
                             Column(Modifier.fillMaxSize().padding(16.dp)) {
                                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                                    Text(stringResource(R.string.host_settings_title), style = MaterialTheme.typography.titleLarge)
+                                    Text(stringResource(R.string.host_settings_title), modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleLarge)
                                     TextButton(onClick = { dismiss() }) { Text(stringResource(R.string.common_close)) }
                                 }
                                 Text(stringResource(R.string.host_settings_hint), style = MaterialTheme.typography.bodySmall)
@@ -71,17 +71,21 @@ internal class HostSettingsDialog(activity: Activity, resources: ModuleResources
                                 if (languages) {
                                     Box(Modifier.weight(1f)) { LanguageScreen() }
                                 } else {
-                                    Text(HostScanPresentation.summary(localizedContext, scan), style = MaterialTheme.typography.bodySmall)
-                                    TextButton(enabled = scan.phase != HostScanPhase.IDLE, onClick = { dismiss(); HostScanController.reopenProgress() }) {
-                                        Text(stringResource(R.string.host_settings_progress))
+                                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                                        TextButton(onClick = { subtitles = true }) { Text(stringResource(R.string.host_settings_subtitles)) }
+                                        TextButton(onClick = { diagnostics = !diagnostics }) { Text(stringResource(R.string.host_settings_tools)) }
                                     }
-                                    TextButton(enabled = !capturing, onClick = {
-                                        capturing = true
-                                        HostPerformance.capture { performance = it; capturing = false }
-                                    }) { Text(if (capturing) "正在采样…" else "性能采样（手动）") }
-                                    TextButton(onClick = { subtitles = true }) { Text(stringResource(R.string.host_settings_subtitles)) }
-                                    TextButton(onClick = { features = !features }) { Text(stringResource(R.string.host_settings_features)) }
-                                    if (features) Box(Modifier.weight(1f)) { DashboardScreen() }
+                                    if (diagnostics) {
+                                        Text(HostScanPresentation.summary(localizedContext, scan), style = MaterialTheme.typography.bodySmall)
+                                        TextButton(enabled = scan.phase != HostScanPhase.IDLE, onClick = { dismiss(); HostScanController.reopenProgress() }) {
+                                            Text(stringResource(R.string.host_settings_progress))
+                                        }
+                                        TextButton(enabled = !capturing, onClick = {
+                                            capturing = true
+                                            HostPerformance.capture { performance = it; capturing = false }
+                                        }) { Text(if (capturing) "正在采样…" else "性能采样（手动）") }
+                                    }
+                                    Box(Modifier.weight(1f)) { DashboardScreen() }
                                 }
                             }
                         }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_comment_sticker_download">Download comment stickers</string>
+    <string name="feature_comment_sticker_download_hint">Long-press a sticker comment to save its original image or GIF. More comment actions opens the native menu. Enable, then reopen TikTok.</string>
+    <string name="sticker_menu_title">Comment sticker</string>
+    <string name="sticker_download">Download sticker</string>
+    <string name="sticker_more">More comment actions</string>
+    <string name="sticker_saving">Downloading sticker…</string>
+    <string name="sticker_saved">Sticker saved to album</string>
+    <string name="sticker_save_failed">Could not save sticker. Check network, storage permission and available space.</string>
+</resources>

@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"Uvijek prikazuj traku napretka"</string>
     <string name="feature_progress_summary" formatted="false">"Zadržava traku napretka vidljivom i u kratkim videozapisima"</string>
     <string name="feature_immersive" formatted="false">"Prikaz videozapisa"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"Lock live vertical swipe"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"Prevent swiping up or down to switch live streams"</string>
     <string name="feature_autoplay" formatted="false">"Poboljšano automatsko pomicanje"</string>
     <string name="feature_autoplay_summary" formatted="false">"Otključava automatsko pomicanje u izborniku svih videozapisa"</string>
     <string name="feature_status_bar" formatted="false">"Sakrij statusnu traku sustava"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"Traka napretka"</string>
     <string name="status_feature_clean" formatted="false">"Automatsko skrivanje"</string>
     <string name="status_feature_immersive" formatted="false">"Prikaz videozapisa"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"Live swipe lock"</string>
     <string name="status_feature_scroll" formatted="false">"Automatsko pomicanje"</string>
     <string name="status_feature_duration" formatted="false">"Upozorenje o trajanju"</string>
     <string name="status_feature_comment_translate" formatted="false">"Prijevod komentara"</string>
@@ -313,6 +316,7 @@
     <string name="host_scan_done" formatted="false">"Razumijem"</string>
     <string name="video_fit_center" formatted="false">"Centrirano"</string>
     <string name="video_fit_smart" formatted="false">"Cijeli zaslon"</string>
+    <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
     <string name="host_scan_title_partial">"Some features need adaptation"</string>

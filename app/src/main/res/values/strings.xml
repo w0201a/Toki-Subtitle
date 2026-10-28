@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"Always show progress bar"</string>
     <string name="feature_progress_summary" formatted="false">"Show it even on short videos"</string>
     <string name="feature_immersive" formatted="false">"Video display"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"Lock live vertical swipe"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"Prevent swiping up or down to switch live streams"</string>
     <string name="feature_autoplay" formatted="false">"Enhanced auto scroll"</string>
     <string name="feature_autoplay_summary" formatted="false">"Unlock auto scroll in all video menus"</string>
     <string name="feature_status_bar" formatted="false">"Hide status bar"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"Progress bar"</string>
     <string name="status_feature_clean" formatted="false">"Auto-hide controls"</string>
     <string name="status_feature_immersive" formatted="false">"Video display"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"Live swipe lock"</string>
     <string name="status_feature_scroll" formatted="false">"Auto scroll"</string>
     <string name="status_feature_duration" formatted="false">"Duration alert"</string>
     <string name="status_feature_comment_translate" formatted="false">"Comment translation"</string>
@@ -315,6 +318,7 @@
     <string name="host_scan_done" formatted="false">"Got it"</string>
     <string name="video_fit_center" formatted="false">"Centered"</string>
     <string name="video_fit_smart" formatted="false">"Fullscreen"</string>
+    <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_partial">"部分功能尚未适配"</string>
     <string name="host_scan_partial_hint">"可用功能已自动启用；未匹配功能已独立隔离，不影响其他功能。请在诊断中查看缺失项。"</string>
     <string name="feature_screen_capture">"允许投屏和截图"</string>

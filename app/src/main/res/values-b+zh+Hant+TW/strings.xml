@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"一律顯示影片進度列"</string>
     <string name="feature_progress_summary" formatted="false">"短片也持續顯示底部播放進度列"</string>
     <string name="feature_immersive" formatted="false">"影片顯示"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"直播禁止上下滑切換"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"阻止上下滑動切換直播，保留點擊和橫向手勢"</string>
     <string name="feature_autoplay" formatted="false">"自動連播增強"</string>
     <string name="feature_autoplay_summary" formatted="false">"解鎖所有影片頁面的長按連播選項"</string>
     <string name="feature_status_bar" formatted="false">"隱藏系統狀態列"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"進度列"</string>
     <string name="status_feature_clean" formatted="false">"自動隱藏畫面控制項"</string>
     <string name="status_feature_immersive" formatted="false">"影片顯示"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"直播禁止上下滑切換"</string>
     <string name="status_feature_scroll" formatted="false">"自動捲動"</string>
     <string name="status_feature_duration" formatted="false">"長度提醒"</string>
     <string name="status_feature_comment_translate" formatted="false">"留言翻譯"</string>
@@ -315,6 +318,7 @@
     <string name="host_scan_done" formatted="false">"知道了"</string>
     <string name="video_fit_center" formatted="false">"置中"</string>
     <string name="video_fit_smart" formatted="false">"全螢幕沉浸"</string>
+    <string name="video_fit_fill" formatted="false">"填滿"</string>
     <string name="host_scan_title_partial">"部分功能待适配"</string>
     <string name="host_scan_partial_hint">"已自动启用可用功能。未匹配功能已独立隔离，可在 Toki 功能状态中查看各条通路。"</string>
     <string name="feature_screen_capture">"允许投屏和截图"</string>

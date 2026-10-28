@@ -50,6 +50,7 @@ class HostSettingsDialogTest {
                 dialog.show()
             }
             compose.onNodeWithText("Toki 设置").assertIsDisplayed()
+            compose.onNodeWithText("地区与环境伪装").assertIsDisplayed()
             assertTrue(ConfigClient.getBoolean(dialog.context,"video_translate_enabled"))
             assertFalse(ConfigClient.getBoolean("video_translate_enabled"))
             compose.onNodeWithText("字幕设置").assertIsDisplayed()

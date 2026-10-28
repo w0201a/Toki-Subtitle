@@ -47,6 +47,8 @@
     <string name="feature_progress" formatted="false">"نمایش همیشگی نوار پیشرفت"</string>
     <string name="feature_progress_summary" formatted="false">"نمایش نوار پیشرفت پایین حتی برای ویدئوهای کوتاه"</string>
     <string name="feature_immersive" formatted="false">"نمایش ویدیو"</string>
+    <string name="feature_live_swipe_lock" formatted="false">"Lock live vertical swipe"</string>
+    <string name="feature_live_swipe_lock_summary" formatted="false">"Prevent swiping up or down to switch live streams"</string>
     <string name="feature_autoplay" formatted="false">"پیمایش خودکار پیشرفته"</string>
     <string name="feature_autoplay_summary" formatted="false">"پیمایش خودکار را در منوی همهٔ ویدئوها در دسترس می‌گذارد"</string>
     <string name="feature_status_bar" formatted="false">"پنهان کردن نوار وضعیت سیستم"</string>
@@ -195,6 +197,7 @@
     <string name="status_feature_progress" formatted="false">"نوار پیشرفت"</string>
     <string name="status_feature_clean" formatted="false">"پنهان کردن کنترل‌ها هنگام پخش"</string>
     <string name="status_feature_immersive" formatted="false">"نمایش ویدیو"</string>
+    <string name="status_feature_live_swipe_lock" formatted="false">"Live swipe lock"</string>
     <string name="status_feature_scroll" formatted="false">"پیمایش خودکار"</string>
     <string name="status_feature_duration" formatted="false">"هشدار مدت"</string>
     <string name="status_feature_comment_translate" formatted="false">"ترجمه نظرات"</string>
@@ -313,6 +316,7 @@
     <string name="host_scan_done" formatted="false">"متوجه شدم"</string>
     <string name="video_fit_center" formatted="false">"وسط‌چین"</string>
     <string name="video_fit_smart" formatted="false">"تمام‌صفحه"</string>
+    <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_extensions">"Adapting subtitles"</string>
     <string name="host_scan_extensions_hint">"Checking subtitles, descriptions and comment polls. Results will be saved for later launches."</string>
     <string name="host_scan_title_partial">"Some features need adaptation"</string>

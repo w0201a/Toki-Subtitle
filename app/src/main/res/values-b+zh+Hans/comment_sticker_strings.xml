@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_comment_sticker_download">评论贴纸下载</string>
+    <string name="feature_comment_sticker_download_hint">长按贴纸评论保存原图或动图；“更多评论操作”打开原生菜单。首次开启后重新打开 TikTok。</string>
+    <string name="sticker_menu_title">评论贴纸</string>
+    <string name="sticker_download">下载贴纸</string>
+    <string name="sticker_more">更多评论操作</string>
+    <string name="sticker_saving">正在下载贴纸…</string>
+    <string name="sticker_saved">贴纸已保存到相册</string>
+    <string name="sticker_save_failed">贴纸保存失败，请检查网络、存储权限和剩余空间。</string>
+</resources>
