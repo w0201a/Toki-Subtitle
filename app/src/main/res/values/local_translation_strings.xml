@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="local_translation_section">Offline preparation: translation network control</string>
+    <string name="local_translation_section">Translation network control (optional)</string>
     <string name="local_translation_enable">Toki translations and subtitle files: local data only</string>
-    <string name="local_translation_summary">Use saved subtitle tracks/translations without remote fallback. Disconnected or unknown connectivity also denies remote requests. No local translation model is bundled: missing translations retain the original with a notice. This controls Toki’s translation transport and caption fetches only; it does not block TikTok’s own traffic or implement offline video export/comments. Re-enter the video after changing this option.</string>
-    <string name="local_translation_unavailable">Local-only translation: no saved translation or ready local engine. The original text is retained; no remote request was started for this missing result.</string>
-    <string name="local_caption_unavailable">Local-only captions: no saved subtitle file for this track. No remote file was fetched.</string>
+    <string name="local_translation_summary">Off by default: online translation and missing subtitle data may be requested when connected; saved caches are used when disconnected. Enable this option to force local data only. Missing translations or local engines retain the original with a notice. This controls Toki translation/caption requests, not TikTok’s own traffic; video cache export remains separate.</string>
+    <string name="local_translation_unavailable">No cached translation or ready local engine is available, and online translation is currently unavailable. The original is retained. Check connectivity or the local-data-only setting.</string>
+    <string name="local_caption_unavailable">No local subtitle file is available for this track, and it cannot currently be fetched online. Retry when connected; local-data-only mode prevents remote fetching.</string>
 </resources>

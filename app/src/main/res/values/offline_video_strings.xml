@@ -2,7 +2,7 @@
 <resources>
     <string name="offline_video_feature">Offline video: local controls (experimental)</string>
     <string name="offline_video_enable">Local long-press menu and saved-video export</string>
-    <string name="offline_video_summary">Off by default. Re-enter a video after enabling. On recognized offline entries, long-press the video while playing or paused for local actions; Toki translation/caption fetches remain local even if Wi-Fi is connected. Export currently requires the inspected 47.6.3 cache code, Android 10+, and a complete non-fragmented local MP4. Partial, encrypted, split audio/video and unsupported caches are not fetched or exported. Offline comments and a local translation model are not yet included.</string>
+    <string name="offline_video_summary">Off by default. Re-enter a video after enabling. On recognized offline entries, long-press the video while playing or paused for local actions; Toki may translate online or fetch missing subtitle data when connected, and reads existing caches when disconnected. Only the explicit local-data-only option prohibits these remote requests. Export currently requires the inspected 47.6.3 cache code, Android 10+, and a complete non-fragmented local MP4. Partial, encrypted, split audio/video and unsupported caches are not fetched or exported. Offline comments and a local translation model are not yet included.</string>
     <string name="offline_video_menu">Offline video: local actions</string>
     <string name="offline_video_save">Save complete cached video to gallery</string>
     <string name="offline_video_subtitles">Toki subtitle settings</string>

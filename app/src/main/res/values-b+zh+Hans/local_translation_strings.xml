@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="local_translation_section">离线准备：翻译联网控制</string>
+    <string name="local_translation_section">翻译联网控制（可选）</string>
     <string name="local_translation_enable">Toki 翻译与字幕文件仅使用本地数据</string>
-    <string name="local_translation_summary">只读取已保存的字幕轨与译文，不联网补齐；断网或网络状态不明也不尝试远程请求。尚未内置本地翻译模型：缺译文时明确提示并保留原文。仅约束 Toki 翻译通道及字幕文件请求，不拦截 TikTok 自身流量，也不代表已实现离线视频导出或评论区。修改后请重新进入视频。</string>
-    <string name="local_translation_unavailable">仅本地翻译：没有缓存译文或可用本地引擎，已保留原文；本次缺失结果未发起远程请求。</string>
-    <string name="local_caption_unavailable">仅本地字幕：没有这条字幕轨的已存文件，未联网获取。</string>
+    <string name="local_translation_summary">默认关闭：有网络时允许在线翻译或获取缺失字幕数据，断网时使用已保存缓存。开启后才强制只使用本地数据；缺少译文或本地引擎时保留原文并提示。此项只约束 Toki 翻译通道与字幕文件请求，不拦截 TikTok 自身流量；视频缓存导出仍单独处理。</string>
+    <string name="local_translation_unavailable">没有缓存译文或可用本地引擎，当前也无法在线翻译，已保留原文。请检查网络或是否开启了“仅使用本地数据”。</string>
+    <string name="local_caption_unavailable">没有这条字幕轨的本地文件，当前无法在线获取。联网后可重试；开启“仅使用本地数据”时不会补下。</string>
 </resources>

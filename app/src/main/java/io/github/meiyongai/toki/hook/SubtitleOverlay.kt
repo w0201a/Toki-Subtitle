@@ -44,6 +44,7 @@ internal class SubtitleOverlay(private val source: View,
     private var trackIdentity = ""
     private var translated: String? = null
     private var requested = false
+    private val remoteResume = SubtitleRemoteResume()
     private var generation = 0L
     private var observing = false
     private var retryAt = 0L
@@ -187,6 +188,8 @@ internal class SubtitleOverlay(private val source: View,
         }
         val displayMode = settings.string("subtitle_text_mode", "translated")!!
         val translating = displayMode != "original" && translator?.isEnabled(videoId) == true
+        if (translating && remoteResume.observe(android.os.SystemClock.uptimeMillis(), TranslationNetworkPolicy::remoteAvailable) &&
+            translated == null) resetTranslation()
         if (!translating) {
             translated = null
             requested = false

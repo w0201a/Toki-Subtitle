@@ -59,6 +59,29 @@ class LocalSubtitleExecutionTest {
         host.translator.close()
     }
 
+    @Test fun reconnectCreatesANewRequestInsteadOfReusingAnIrrevocablyDeniedSubscription() {
+        var online = true
+        val tickets = mutableListOf<LocalOnlyRequest>()
+        val requests = mutableListOf<(String?) -> Unit>()
+        val results = mutableListOf<String>()
+        var disposed = 0
+        val translator = NativeSubtitleTranslator({ true }, { _, done ->
+            requests += done; AutoCloseable { disposed++ }
+        }, access = { LocalOnlyRequest { online }.also(tickets::add) })
+        translator.request("same cue", { true }, results::add); advance()
+        online = false
+        assertFalse(tickets.first().permitsNetwork())
+        online = true
+        translator.request("same cue", { true }, results::add); advance(250)
+        assertEquals(2, requests.size)
+        assertEquals(1, disposed)
+        requests[0]("旧订阅译文")
+        requests[1]("重连后的译文")
+        advance()
+        assertEquals(listOf("重连后的译文"), results)
+        translator.close()
+    }
+
     @Test fun revokedActiveResultIsNotCachedDisplayedOrRetried() {
         val host = Host()
         host.request("active source"); advance()

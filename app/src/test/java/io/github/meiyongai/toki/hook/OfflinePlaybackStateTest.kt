@@ -6,16 +6,16 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class OfflinePlaybackStateTest {
-    @Test fun selectedOfflineVideoRemainsLocalEvenWithNetworkAvailable() {
+    @Test fun selectedOfflineVideoMayUseNetworkUnlessLocalOnlyWasExplicitlyChosen() {
         val state = OfflinePlaybackState()
         val selected = Any()
         state.select(selected, "offline", true)
         val revision = state.revision
-        val ticket = LocalOnlyRequest { state.revision == revision && !state.localOnly }
-        assertFalse(ticket.permitsNetwork())
+        val ticket = LocalOnlyRequest { state.revision == revision && TranslationNetworkPolicy.allowsRemote(true, false, true) }
+        assertTrue(ticket.permitsNetwork())
         state.select(Any(), "online", false)
         assertFalse(ticket.permitsNetwork())
-        assertTrue(LocalOnlyRequest { !state.localOnly }.permitsNetwork())
+        assertTrue(LocalOnlyRequest { TranslationNetworkPolicy.allowsRemote(true, false, true) }.permitsNetwork())
     }
     @Test fun repeatedProgressDoesNotChangeIdentityButNewHolderOrModeDoes() {
         val state = OfflinePlaybackState()
@@ -28,19 +28,19 @@ class OfflinePlaybackStateTest {
         state.clear(Any())
         assertEquals(revision, state.revision)
         state.retire(holder)
-        assertTrue(state.localOnly)
+        assertTrue(state.offline)
         assertFalse(state.owns(holder, "same"))
         state.select(holder, "same", false)
-        assertFalse(state.localOnly)
+        assertFalse(state.offline)
         assertTrue(state.revision > revision)
         state.clear()
-        assertFalse(state.localOnly)
+        assertFalse(state.offline)
     }
     @Test fun playbackRevisionRejectsOldTasksEvenWhenTheNewVideoIsOnline() {
         val state = OfflinePlaybackState()
         state.select(Any(), "first", false)
         val revision = state.revision
-        val task = LocalOnlyRequest { state.revision == revision && !state.localOnly }
+        val task = LocalOnlyRequest { state.revision == revision && !state.offline }
         assertTrue(task.permitsNetwork())
         state.select(Any(), "second", false)
         assertFalse(task.permitsNetwork())

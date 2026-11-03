@@ -150,7 +150,7 @@ internal class NativeSubtitleTranslator(
         val remote = access()
         if (!remote.permitsNetwork()) { localMiss(videoId); return }
         // 先按正文复用，再检查旧代次；同句重现不能取消已经发出的同一请求。
-        listOfNotNull(active, background).firstOrNull { it.key == key }?.let {
+        listOfNotNull(active, background).firstOrNull { it.key == key && it.remote.permitsNetwork() }?.let {
             it.current = current
             it.deliver = deliver
             it.foreground = true
@@ -158,7 +158,7 @@ internal class NativeSubtitleTranslator(
             report("reuse lane=${if (it === active) "current" else "prefetch"}")
             return
         }
-        if (active?.current?.invoke() == false) releaseActive()
+        if (active?.let { !it.current() || !it.remote.permitsNetwork() } == true) releaseActive()
         // 后来的当前帧替换尚未发送的旧帧，不积累视频/字幕队列。
         pending = Job(text, current, deliver, video = videoId, trackIdentity = sourceTrack, remote = remote)
         main.removeCallbacks(pump)

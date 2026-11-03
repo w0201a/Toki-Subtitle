@@ -35,6 +35,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
     private val loading = mutableSetOf<String>()
     private val attempted = mutableSetOf<String>()
     @Volatile private var closed = false
+    private val remoteResume = SubtitleRemoteResume()
     private val connections = java.util.concurrent.ConcurrentHashMap.newKeySet<HttpURLConnection>()
     private val refreshAhead = object : Runnable {
         override fun run() {
@@ -52,7 +53,8 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         val trackUrl = track(id).orEmpty()
         val changed = latestText != text
         latestText = text; current = valid
-        if (video != id || identityFor(url) != identityFor(trackUrl)) {
+        val networkResumed = remoteResume.observe(android.os.SystemClock.uptimeMillis(), TranslationNetworkPolicy::remoteAvailable)
+        if (video != id || identityFor(url) != identityFor(trackUrl) || networkResumed && cues.isEmpty()) {
             video = id; url = trackUrl; cues = emptyList(); normalized = emptyList(); index = -1
             val generation = ++token
             disconnectAll()
