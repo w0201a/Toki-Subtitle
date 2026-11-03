@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 95' in gradle and 'versionName = "2.0.75"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
+check('versionCode = 96' in gradle and 'versionName = "2.0.76"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.76-debug / 96")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -489,6 +489,18 @@ check('00-先看这里-诊断速览.txt' in log_capture and '01-阅读说明.txt
 check('root.walkTopDown()' not in log_capture and 'selected-capture' in log_capture and 'if (includeLogcat) synchronized(this) { directory }' in log_capture and '8L * 1024 * 1024' in log_capture and '32L * 1024 * 1024' in log_capture, 'export includes only the current snapshot/explicit selected capture and bounds file/archive bytes instead of attaching all history')
 check('DiagnosticText.redact(value)' in log_capture and '完整logcat可能包含其他应用信息' in log_capture and '47.0.3' not in (JAVA / 'ui/screen/TrialLogSection.kt').read_text(encoding='utf-8'), 'JSON is redacted, full-logcat privacy is disclosed and obsolete hardcoded host-version UI is removed')
 
+# Shared standardized "template" renderers are not video-template business components.
+template_policy = (JAVA / 'hook/TemplateComponentSemantics.kt').read_text(encoding='utf-8')
+check('TemplateComponentSemantics.permitsClassOnlyMapping(name, element)' in cleanup and cleanup.index('TemplateComponentSemantics.permitsClassOnlyMapping(name, element)') < cleanup.index('val type = loader.loadClass(name)'), 'shared-renderer semantic policy runs before class-wide cleanup hook discovery')
+check('element != LayoutElement.VIDEO_TEMPLATE || !className.startsWith(SHARED_SCHEMA)' in template_policy and 'next.standardized.template.' in template_policy, 'class-only video-template ownership is refused for the shared UI schema namespace and its variants')
+for name in ('FcpStandardTemplateAssem', 'FcpStandardButtonAssem', 'FcpStandardTagAssem'):
+    check(re.search(r'"[^"\n]*' + name + r'"\s+to LayoutElement\.VIDEO_TEMPLATE', cleanup) is None, name + ' shared renderer is not unconditionally mapped as a video template')
+check('VideoTemplateButtonAssem" to LayoutElement.VIDEO_TEMPLATE' in cleanup, 'inspected video-template-specific component mapping is retained')
+selector_tests = read('app/src/test/java/io/github/meiyongai/toki/hook/LayoutComponentSelectorTest.kt')
+check('genericStandardRenderersAreRejectedBeforeClassWideTemplateRegistration' in selector_tests and 'inheritedMatchDoesNotByItselfProveTemplateBusinessSemantics' in selector_tests and 'FcpStandardBottomTagVerifyAssem' in selector_tests, 'selector regression sources distinguish inheritance mechanics from template-business ownership (not executed)')
+check(not re.search(r'^### .*### ', read('CHANGELOG.md'), re.M), 'changelog headings do not contain duplicated markdown/version prefixes')
+check('<CURRENT_COMMIT>' not in read('docs/USER_WORK_ORDER.md'), 'work order identifies a real review baseline rather than a current-commit placeholder')
+
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
     length = len(source)
@@ -546,6 +558,7 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'hook/TemplateComponentSemantics.kt',
     'provider/DiagnosticText.kt', 'provider/TrialLog.kt', 'provider/OperationJournal.kt', 'provider/DiagnosticOverview.kt',
     'provider/TrialLogCapture.kt', 'ui/screen/TrialLogSection.kt', 'hook/HookRuntime.kt',
     'hook/OfflineExportCandidates.kt', 'hook/OfflineExportCodeGate.kt', 'hook/LocalVideoTracks.kt', 'hook/LocalVideoRemuxer.kt',
@@ -606,6 +619,7 @@ for relative in (
     'hook/OfflineExportFixtures.kt', 'hook/OfflineExportCandidatesTest.kt', 'hook/LocalVideoTracksTest.kt', 'hook/LocalVideoRemuxerTest.kt',
     'provider/OperationJournalTest.kt', 'provider/DiagnosticTextTest.kt', 'provider/DiagnosticOverviewTest.kt', 'provider/TrialLogCaptureTest.kt',
     'provider/TrialLogTest.kt',
+    'hook/LayoutComponentSelectorTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

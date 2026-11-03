@@ -149,6 +149,10 @@ object LayoutCleanupHook {
                 if (variant != null) put(name, element)
             }
         }.mapNotNull { (name, element) ->
+            if (!TemplateComponentSemantics.permitsClassOnlyMapping(name, element)) {
+                HookRuntime.event(FEATURE, "共享渲染器缺少模板业务判定，保持原界面：$name")
+                return@mapNotNull null
+            }
             try {
                 val type = loader.loadClass(name)
                 Triple(type.getMethod("onViewCreated", View::class.java), type, element)

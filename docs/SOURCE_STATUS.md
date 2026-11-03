@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.75-debug
+# Source-only development status — 2.0.76-debug
 
-Updated: 2026-11-04. Source version: **2.0.75-debug / 95**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.76-debug / 96**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -40,7 +40,15 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
 
+## Added in 2.0.76 — review correction of uncommitted shared-renderer mappings
+
+- Reviewed the nine modified tracked files left in the local worktree. Retained the source version increment, documentation structure and inheritance test; preserved a local pre-review patch rather than resetting or discarding unrelated work.
+- Inspected original DEX metadata and targeted decompilation: FcpStandardTemplateAssem selects generic UI schemas (plain button/tag/bottom tag/avatar tag/tip card); FcpStandardButtonAssem and FcpStandardTagAssem are abstract shared renderers. The schema namespace is not sufficient proof of video-template/effect business identity. One method in FcpStandardTemplateAssem failed decompilation; no claim of full-body inspection is made.
+- Removed the draft's three unconditional VIDEO_TEMPLATE mappings. Existing inspected VideoTemplateButtonAssem mapping remains. A pre-registration policy now rejects class-only VIDEO_TEMPLATE ownership for the shared standardized-template namespace, including verification variants. Future support still needs an explicit per-instance business/anchor/root contract; this policy is not that implementation.
+- Retained/relabelled the inheritance test as mechanism-only evidence, added negative registration-policy test sources and strengthened source checks. Corrected the duplicated changelog heading and inaccurate coverage claims. 501 source-only and whitespace checks passed; one inherited-selector regression source was retained and two policy cases added, NOT executed. No compilation, test execution, device verification or APK build was performed. The four selected tasks remain incomplete.
+
 ## Added in 2.0.75 — readable evidence-first diagnostics and operation logging
+
 
 - Added a curated Chinese at-a-glance file distinguishing implementation, explicit missing support and verification level for all original requirements. Latest authorization remains the four selected tasks plus readable logging; deferred functionality was not expanded.
 - Runtime ZIP overview lists every ConfigSchema feature: requested/applied/restart/registration/config-revision differences, errors/detail/counters and internal-path summaries. Missing host/feature reports, stale snapshots, version mismatch, unobserved operations and ready hooks are not promoted to business success.
