@@ -1,12 +1,12 @@
-# Source-only development status — 2.0.64-debug
+# Source-only development status — 2.0.65-debug
 
-Updated: 2026-11-03. Source version: **2.0.64-debug / 84**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-03. Source version: **2.0.65-debug / 85**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
 ## Current user-directed ordering
 
-The user supplied the full offline acceptance requirements on 2026-11-03. Offline-video work remains the final integrated feature group, but is **no longer awaiting clarification**. The online-comment batch and local-only preparation are committed. The user has since confirmed hybrid networking by default: online translation/data are permitted when connected; saved caches are used when disconnected; explicit local-only remains optional. Selected-cell offline classification, a local menu and complete-MP4 export have now been wired in source; a read-only saved-comment viewer with cached-translation modes is now wired as well; full online-fill/native-comment-button/engine/player integration remains pending. Existing code is retained. No APK build is authorized.
+The user supplied the full offline acceptance requirements on 2026-11-03. Offline-video work remains the final integrated feature group, but is **no longer awaiting clarification**. The online-comment batch and local-only preparation are committed. The user has since confirmed hybrid networking by default: online translation/data are permitted when connected; saved caches are used when disconnected; explicit local-only remains optional. Selected-cell offline classification, a local menu and complete-MP4 export have now been wired in source; a saved-comment viewer with optional explicit online translation and persistent translated results is now wired as well; missing-comment online loading/native-comment-button/engine/player integration remains pending. Existing code is retained. No APK build is authorized.
 
 ## Offline acceptance contract (received and networking policy amended 2026-11-03; full behavior NOT verified)
 
@@ -17,7 +17,7 @@ The user supplied the full offline acceptance requirements on 2026-11-03. Offlin
 | Video menu | Long press while playing or paused opens locally executable actions; no connectivity-wide disable. | Experimental selected VideoViewCell local menu is wired; alternative layouts, paused gestures and conflicts remain unverified. |
 | Save/export | Export only complete, validated local video bytes to user-accessible storage. Never fetch missing bytes; report incomplete/missing/unsupported caches. Offline cache and user export remain distinct. | Read-only indexed MP4 cache discovery, completeness checks and Android 10+ local export are wired. Split/encrypted/special MDL caches and API 28 still unsupported. |
 | Comments | Open cached comments with author information/text and scroll cached pages; distinguish empty, not cached and partially cached pages. | A dedicated menu opens current-account native persisted snapshots with cached author/text/replies and local pagination. Native button integration and online missing-page loading are still absent. |
-| Comment translation | Single-comment original/translation/bilingual toggle in the comment area. Cached/local results work disconnected; online translation may be used when connected unless explicit local-only is enabled. | Cached translations now have per-row original/translation/bilingual display. New online per-row fill/persistence and a local model remain absent. |
+| Comment translation | Single-comment original/translation/bilingual toggle in the comment area. Cached/local results work disconnected; online translation may be used when connected unless explicit local-only is enabled. | Per-row original/translation/bilingual, optional explicit online translation and account/source/target-bound private persistence are wired. No bundled local model; native-cell coverage and device validation remain incomplete. |
 | Captions | Read original cues, synchronize to playback/seek/replay, show/hide and switch original/translation/bilingual. | Cached tracks alone do not provide offline page/player integration. |
 | Caption translation | Read saved translations offline; online translation/caption data may be requested when connected unless explicit local-only is enabled. Local translation/ASR applies only if actually available. | Hybrid eligibility and visible-frame reconnect handling are in source. No bundled local engine, and full offline player integration is missing. |
 | Persistence | Reopening the app retains complete local data/translations and per-video identity without applying stale results to another video. | Caption archives exist; full offline video/comment association is missing. |
@@ -33,6 +33,15 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.65 — explicit online cached-comment translation and persistence
+
+- Independent default-off **Online translation for cached comments** option prepares the existing host translation extension, with live admission, core-only deferral, status reporting and service rollback. Cached reading remains independent. No user text is submitted just by enabling or opening the viewer; a row action is required, validated connectivity is checked and explicit local-only prevents submission.
+- Per-window single-comment segmented translation reuses timeout, duplicate/stale guards and retry-failed-segments behavior. Progress/partial results appear in that row; original/translation/bilingual stays selectable. Unchanged service output is not saved as a new translation. Actual host target language is read and checked, not assumed Chinese. No bundled local model is added.
+- Complete successful results are written on a bounded background worker to private Toki preferences and restored on a read worker when reopening comments, including disconnected use. Cache identity hashes length-prefixed account/video/comment/exact source/normalized target. Existing host snapshots/models remain read-only; missing-comment downloading is still not implemented.
+- At most 2000 saved results and about 2M characters; full/failed/busy persistence is reported without deleting or evicting earlier user caches. Only a confirmed commit matching the same displayed source/target/output marks that result saved. Partial or stale results never claim complete durable success.
+- Close/reload/pause/account-page changes, feature disable and explicit local-only cancel active translation. The original/translated text is not written to public diagnostics. The host translation service, initial adaptation, real latency/language behavior and cold-reopen restoration still need actual device verification.
+- 252 source-only and whitespace checks passed. Session/retry/cancellation, source-account-target keying, private restore/capacity and recycled-row precise-save regression sources are added but NOT executed. No compilation, JUnit/Robolectric, device verification or APK build was performed.
 
 ## Added in 2.0.64 — saved-comment viewer
 
@@ -117,7 +126,7 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 | Hold-to-speed, downward-slide lock/unlock | Owned native downward-mode path, default-off setting and cancellation lifecycle wired from 47.6.3 contracts. Real gestures, fixed-speed interaction, layout coverage and native-eligibility limitations remain unverified. |
 | More video display modes | Existing center/smart/fill retained; additional modes incomplete. |
 | Search/inbox/live internal cleanup | Dedicated bottom-of-video search suggestions toggle added to existing targets. This is not search-page/inbox/live internal cleanup; more bindings and runtime checks remain. |
-| All comments translatable and translation switching | Ordinary-comment online fallback and per-row cached-comment original/translation/bilingual viewer are connected in source. Native bulk/cell coverage, special comments, offline-viewer online fill/persistence and local-engine integration remain incomplete/unverified. |
+| All comments translatable and translation switching | Ordinary-comment fallback plus cached-comment per-row modes, optional explicit online translation and private persistent results are in source. Native bulk/cell coverage, special comments, missing-comment loading, local engines and all device/service behavior remain incomplete/unverified. |
 | More subtitle styles | New renderer/settings/test sources present; compilation, pixel checks, device behavior and full localization unverified. |
 
 ## Verification performed

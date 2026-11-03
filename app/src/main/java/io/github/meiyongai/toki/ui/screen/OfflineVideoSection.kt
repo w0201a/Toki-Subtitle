@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import io.github.meiyongai.toki.subtitle.R
 import io.github.meiyongai.toki.subtitle.hook.OfflineVideoHook
+import io.github.meiyongai.toki.subtitle.hook.CachedCommentTranslateHook
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.meiyongai.toki.subtitle.ui.component.CompactPreferenceSwitch
 import io.github.meiyongai.toki.subtitle.ui.component.PreferenceSection
@@ -18,8 +19,12 @@ internal fun OfflineVideoSection() {
     val context = LocalContext.current
     var enabled by remember { mutableStateOf(ConfigClient.getBoolean(context, OfflineVideoHook.KEY)) }
     var failed by remember { mutableStateOf(false) }
+    var online by remember { mutableStateOf(ConfigClient.getBoolean(context, CachedCommentTranslateHook.KEY)) }
     DisposableEffect(context) {
-        val subscription = ConfigClient.addStateListener { enabled = ConfigClient.getBoolean(context, OfflineVideoHook.KEY) }
+        val subscription = ConfigClient.addStateListener {
+            enabled = ConfigClient.getBoolean(context, OfflineVideoHook.KEY)
+            online = ConfigClient.getBoolean(context, CachedCommentTranslateHook.KEY)
+        }
         onDispose { subscription.close() }
     }
     PreferenceSection(title = context.getString(R.string.offline_video_feature)) {
@@ -27,6 +32,12 @@ internal fun OfflineVideoSection() {
             summary = context.getString(R.string.offline_video_summary), checked = enabled,
             modifier = Modifier.padding(12.dp), onCheckedChange = {
                 try { ConfigClient.putBoolean(context, OfflineVideoHook.KEY, it); failed = false }
+                catch (_: Exception) { failed = true }
+            })
+        CompactPreferenceSwitch(title = context.getString(R.string.cached_comment_online_feature),
+            summary = context.getString(R.string.cached_comment_online_summary), checked = online,
+            modifier = Modifier.padding(12.dp), onCheckedChange = {
+                try { ConfigClient.putBoolean(context, CachedCommentTranslateHook.KEY, it); failed = false }
                 catch (_: Exception) { failed = true }
             })
         if (failed) Text(context.getString(R.string.manual_comment_save_error), Modifier.padding(12.dp), color = MaterialTheme.colorScheme.error)

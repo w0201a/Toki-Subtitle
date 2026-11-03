@@ -86,7 +86,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
         val directHost = setOf("StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook", "SharePanelCleanupHook", "AuthorLocationHook", "QuickCommentCleanupHook", "HoldSpeedGestureHook", "OfflineVideoHook")
         // Startup-sensitive SIM/locale/timezone/GPS, speed, immersive and audio-experiment hooks remain explicit restart cases.
         val liveInstallable = setOf("LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
-            "CommentCopyHook", "CommentStickerDownloadHook", "ManualCommentTranslateHook", "VideoTranslateHook", "LiveSwipeLockHook",
+            "CommentCopyHook", "CommentStickerDownloadHook", "ManualCommentTranslateHook", "CachedCommentTranslateHook", "VideoTranslateHook", "LiveSwipeLockHook",
             "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook") + directHost
 
         fun liveSymbols(features: Collection<String>): Set<HostSymbol> {
@@ -121,6 +121,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
                 HostSymbol.FEED_ADAPTER, HostSymbol.RECOMMEND_ADAPTER, HostSymbol.RECOMMEND_MODEL),
             "CommentTranslateHook" to setOf(HostSymbol.COMMENT_TRANSLATION),
             "ManualCommentTranslateHook" to setOf(HostSymbol.COMMENT_COPY, HostSymbol.COMMENT_TRANSLATION),
+            "CachedCommentTranslateHook" to setOf(HostSymbol.COMMENT_TRANSLATION),
             "VideoTranslateHook" to setOf(HostSymbol.MENU_CAPTION_ACL, HostSymbol.CAPTION_CONSUMER, HostSymbol.TRANSLATION_REVERSE, HostSymbol.RECOMMEND_MODEL),
             "BackgroundAudioHook" to setOf(HostSymbol.BACKGROUND_AUDIO),
             "CommentCopyHook" to setOf(HostSymbol.COMMENT_COPY),

@@ -14,6 +14,7 @@ object ConfigSchema {
         "CommentTranslateHook" to listOf("comment_translate_enabled"),
         "ManualCommentTranslateHook" to listOf("comment_manual_translate_enabled"),
         "OfflineVideoHook" to listOf("offline_video_controls_enabled"),
+        "CachedCommentTranslateHook" to listOf("cached_comment_online_translate_enabled"),
         "VideoTranslateHook" to listOf("video_translate_enabled", "subtitle_style_enabled"),
         "BackgroundAudioHook" to listOf("background_audio_unlock"),
         "CommentCopyHook" to listOf("copy_comment_text_only"),

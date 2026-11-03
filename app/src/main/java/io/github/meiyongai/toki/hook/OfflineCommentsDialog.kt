@@ -8,6 +8,7 @@ import android.widget.AbsListView
 import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import io.github.meiyongai.toki.subtitle.R
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
@@ -15,7 +16,7 @@ import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicLong
 
-/** A disconnected-capable viewer of already persisted comments; no networking dependency is created here. */
+/** Persisted comments remain readable disconnected; only explicit row actions use the optional prepared online channel. */
 internal object OfflineCommentsDialog {
     fun show(activity: Activity, video: String, reader: HostOfflineComments, current: () -> Boolean,
         dismissed: (AlertDialog) -> Unit): AlertDialog {
@@ -33,6 +34,7 @@ internal object OfflineCommentsDialog {
         val list = ListView(context)
         var shown: AlertDialog? = null
         lateinit var adapter: OfflineCommentListAdapter
+        var translatingSnapshot: OfflineCommentData.Snapshot? = null
         fun valid(): Boolean = !closed.get() && !activity.isFinishing && !activity.isDestroyed && current() &&
             adapter.snapshot?.let { reader.accountMatches(it.account) } != false
         fun renderSummary() {
@@ -43,7 +45,42 @@ internal object OfflineCommentsDialog {
                 if (snapshot.hasMore || snapshot.truncated) "\n" + context.getString(R.string.offline_comments_partial) else ""
             shown?.getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled = adapter.hasNext
         }
-        adapter = OfflineCommentListAdapter(context, ::valid, ::renderSummary)
+        val translation = CachedCommentTranslationSession(
+            post = { runnable, delay -> main.postDelayed(runnable, delay); Unit },
+            remove = { main.removeCallbacks(it) },
+            valid = { valid() && translatingSnapshot != null && adapter.snapshot === translatingSnapshot },
+            changed = { row, target, state -> adapter.update(row, target, state) },
+            complete = { row, target, text ->
+                val snapshot = translatingSnapshot
+                if (snapshot != null && valid()) {
+                    val token = generation.get()
+                    CommentTranslationStore.save(app, snapshot, row, target, text) { saved ->
+                        main.post {
+                            if (!closed.get() && generation.get() == token && valid() && adapter.snapshot === snapshot)
+                                adapter.saved(row, target, text, saved)
+                        }
+                    }
+                }
+            })
+        fun requestTranslation(snapshot: OfflineCommentData.Snapshot, row: OfflineCommentData.Row) {
+            if (!valid() || adapter.snapshot !== snapshot) return
+            if (translation.busy) {
+                Toast.makeText(context, context.getString(R.string.cached_comment_translation_busy), Toast.LENGTH_SHORT).show(); return
+            }
+            val remote = TranslationNetworkPolicy.capture()
+            if (!remote.permitsNetwork()) { TranslationNetworkPolicy.showMissingTranslation(); return }
+            val channel = try { CachedCommentTranslateHook.channel() } catch (_: Exception) { null }
+            if (channel == null) {
+                Toast.makeText(context, context.getString(R.string.cached_comment_prepare), Toast.LENGTH_LONG).show(); return
+            }
+            translatingSnapshot = snapshot
+            translation.start(row, channel.target) { text, done ->
+                if (!valid() || !remote.permitsNetwork()) { done(null); AutoCloseable { } }
+                else channel.translate(text) { value -> done(if (remote.permitsNetwork()) value else null) }
+            }
+        }
+        adapter = OfflineCommentListAdapter(context, ::valid, ::requestTranslation, ::renderSummary)
+        val cancelSubscription = CachedCommentTranslateHook.watch { translation.cancel(); adapter.cancelPending() }
         list.adapter = adapter
         list.setOnScrollListener(object : AbsListView.OnScrollListener {
             override fun onScrollStateChanged(view: AbsListView?, scrollState: Int) = Unit
@@ -62,13 +99,19 @@ internal object OfflineCommentsDialog {
         fun load() {
             if (closed.get() || !current()) return
             val token = generation.incrementAndGet()
+            translation.cancel(); translatingSnapshot = null
+            val preferredTarget = try { CachedCommentTranslateHook.channel()?.target } catch (_: Exception) { null }
             adapter.submit(null)
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
             status.text = context.getString(R.string.offline_comments_loading)
             worker.queue.clear() // Memory-only obsolete read requests, not files or host data.
             try {
                 worker.execute {
-                    val result = try { Result.success(reader.read(app, video) { !closed.get() && generation.get() == token }) }
+                    val result = try {
+                        val snapshot = reader.read(app, video) { !closed.get() && generation.get() == token }
+                        val restored = try { CommentTranslationStore.restore(app, snapshot, preferredTarget) } catch (_: Exception) { snapshot }
+                        Result.success(restored)
+                    }
                         catch (error: Exception) { Result.failure<OfflineCommentData.Snapshot>(error) }
                         catch (error: LinkageError) { Result.failure<OfflineCommentData.Snapshot>(error) }
                     main.post {
@@ -99,7 +142,7 @@ internal object OfflineCommentsDialog {
                 if (!current()) { dialog.dismiss(); return }
                 val snapshot = adapter.snapshot
                 if (snapshot != null && !reader.accountMatches(snapshot.account)) {
-                    generation.incrementAndGet(); adapter.submit(null)
+                    generation.incrementAndGet(); translation.cancel(); translatingSnapshot = null; adapter.submit(null)
                     status.text = context.getString(R.string.offline_comments_account_changed)
                     dialog.getButton(AlertDialog.BUTTON_POSITIVE).isEnabled = false
                 }
@@ -107,7 +150,8 @@ internal object OfflineCommentsDialog {
             }
         }
         dialog.setOnDismissListener {
-            closed.set(true); generation.incrementAndGet(); worker.shutdown(); worker.queue.clear()
+            closed.set(true); generation.incrementAndGet(); translation.close(); cancelSubscription.close(); translatingSnapshot = null
+            worker.shutdown(); worker.queue.clear()
             main.removeCallbacksAndMessages(null); adapter.submit(null); shown = null; dismissed(dialog)
         }
         try {
@@ -118,7 +162,7 @@ internal object OfflineCommentsDialog {
             main.post(checkAccount)
             load()
         } catch (error: Exception) {
-            closed.set(true); worker.shutdown(); main.removeCallbacksAndMessages(null); shown = null
+            closed.set(true); translation.close(); cancelSubscription.close(); worker.shutdown(); main.removeCallbacksAndMessages(null); shown = null
             throw error
         }
         return dialog

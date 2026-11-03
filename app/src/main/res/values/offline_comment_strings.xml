@@ -2,7 +2,7 @@
 <resources>
     <string name="offline_comments_open">Browse cached comments</string>
     <string name="offline_comments_title">Cached comments</string>
-    <string name="offline_comments_hint">Only comments already saved by TikTok for the current account are shown. Reload reads local storage; it does not download missing comments. Text, author names and cached replies are available; images and profiles are not fetched. Cached translations can be switched per comment. Online translation of missing results is not yet connected to this viewer.</string>
+    <string name="offline_comments_hint">Only comments already saved by TikTok for the current account are shown. Reload reads local storage; it does not download missing comments. Text, author names and cached replies are available; images and profiles are not fetched. Cached translations can be switched per comment. Enable the separate online-translation option to explicitly translate a selected comment when connected; complete results are saved for offline reuse. Missing-comment fetching is not connected.</string>
     <string name="offline_comments_more">More cached rows</string>
     <string name="offline_comments_reload">Reload local cache</string>
     <string name="offline_comments_loading">Reading this account’s saved comments…</string>
@@ -22,4 +22,15 @@
     <string name="offline_comments_translation_language">Saved translation language: %1$s</string>
     <string name="offline_comments_reply_count">Snapshot reply count: %1$d. Only already-cached replies appear here.</string>
     <string name="offline_comments_text_truncated">This long comment is shown up to the display limit. It is not a complete cached-text rendering.</string>
+    <string name="cached_comment_online_feature">Online translation for cached comments</string>
+    <string name="cached_comment_online_summary">Off by default. Prepares TikTok’s translation channel independently; then the cached-comment viewer can submit one explicitly selected comment, display original/translation/bilingual and save complete results privately for later offline viewing. The host channel chooses its target language. No batch/background comment submission or local model is added; local-data-only prevents online requests. Initial preparation may take time.</string>
+    <string name="cached_comment_translate_action">Translate this comment online</string>
+    <string name="cached_comment_retry_action">Retry translation</string>
+    <string name="cached_comment_translation_busy">A comment translation is still running. Wait or close this window to cancel it.</string>
+    <string name="cached_comment_prepare">Enable Online translation for cached comments in Toki’s offline-video settings and wait for translation adaptation to finish. Cached reading remains available without it.</string>
+    <string name="cached_comment_partial_translation">%1$d segments are unavailable. Their source text is retained; partial output is not saved as a complete translation.</string>
+    <string name="cached_comment_translation_saved">Complete translation saved for offline reuse. Target: %1$s</string>
+    <string name="cached_comment_translation_full">Translation is visible, but the private cache is full. Existing saved results were not evicted; this result was not saved.</string>
+    <string name="cached_comment_translation_save_failed">Translation is visible, but saving was not confirmed. It may not survive reopening.</string>
+    <string name="cached_comment_translation_unchanged">The service returned no different translation. Original text is retained; no new translation was saved.</string>
 </resources>

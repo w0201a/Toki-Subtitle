@@ -2,7 +2,7 @@
 <resources>
     <string name="offline_comments_open">浏览已缓存评论</string>
     <string name="offline_comments_title">已缓存评论</string>
-    <string name="offline_comments_hint">只显示 TikTok 为当前账号已保存的评论。重新读取只访问本地，不下载缺失评论；显示正文、作者名称和已存回复，不请求头像或主页。已有缓存译文可逐条切换；此窗口尚未接入缺失译文的在线补译。</string>
+    <string name="offline_comments_hint">只显示 TikTok 为当前账号已保存的评论。重新读取只访问本地，不下载缺失评论；显示正文、作者名称和已存回复，不请求头像或主页。已有缓存译文可逐条切换；开启独立在线翻译选项后，有网时可主动翻译单条评论，完整成功的译文会保存以便离线读取；尚未接入缺失评论的在线抓取。</string>
     <string name="offline_comments_more">更多已缓存条目</string>
     <string name="offline_comments_reload">重新读取本地缓存</string>
     <string name="offline_comments_loading">正在读取当前账号已保存的评论…</string>
@@ -22,4 +22,15 @@
     <string name="offline_comments_translation_language">已保存译文语言：%1$s</string>
     <string name="offline_comments_reply_count">快照记录回复数：%1$d，仅显示已经缓存的回复。</string>
     <string name="offline_comments_text_truncated">这条长评论达到正文展示上限，当前不是完整正文。</string>
+    <string name="cached_comment_online_feature">缓存评论的在线翻译</string>
+    <string name="cached_comment_online_summary">默认关闭。独立准备 TikTok 翻译通道后，可在缓存评论窗口主动选择单条正文在线翻译，原文/译文/双语就在对应评论内显示；完整成功的译文保存到私有缓存供断网后读取。目标语言跟随宿主翻译通道，不额外批量或后台提交其他评论，也未内置本地模型；仅本地模式阻止联网。首次准备可能需要等待适配。</string>
+    <string name="cached_comment_translate_action">在线翻译这条评论</string>
+    <string name="cached_comment_retry_action">重试翻译</string>
+    <string name="cached_comment_translation_busy">已有评论翻译正在进行，请等待，或关闭窗口取消。</string>
+    <string name="cached_comment_prepare">请在 Toki 的离线视频设置开启“缓存评论的在线翻译”，并等待翻译适配完成；无需开启也能读取已有缓存。</string>
+    <string name="cached_comment_partial_translation">有 %1$d 段未完成，保留对应原文；部分结果不会冒充完整译文保存。</string>
+    <string name="cached_comment_translation_saved">完整译文已保存，可离线复用。目标语言：%1$s</string>
+    <string name="cached_comment_translation_full">译文可查看，但私有缓存已满；未淘汰已有结果，本次未保存。</string>
+    <string name="cached_comment_translation_save_failed">译文可查看，但未确认保存成功，重开后可能无法恢复。</string>
+    <string name="cached_comment_translation_unchanged">服务没有返回不同译文，保留原文，未保存为新译文。</string>
 </resources>

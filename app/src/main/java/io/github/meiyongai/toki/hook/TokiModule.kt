@@ -178,6 +178,7 @@ class TokiModule : XposedModule() {
             "CommentTranslateHook" -> CommentTranslateHook.init(this, loader)
             "ManualCommentTranslateHook" -> ManualCommentTranslateHook.init(this, loader)
             "OfflineVideoHook" -> OfflineVideoHook.init(this, loader)
+            "CachedCommentTranslateHook" -> CachedCommentTranslateHook.init(this, loader)
             "VideoTranslateHook" -> VideoTranslateHook.init(this, loader)
             "BackgroundAudioHook" -> BackgroundAudioHook.init(this, loader)
             "CommentCopyHook" -> CommentCopyHook.init(this, loader)
@@ -308,7 +309,7 @@ class TokiModule : XposedModule() {
         // 清屏依赖进度条的安装成功，不能留下半套状态机。
         val ordered = plan.adaptedFeatures.sortedBy { if (it == "ProgressBarHook") 0 else 1 }
         for (feature in ordered) {
-            if (!extensions && feature in setOf("VideoTranslateHook", "CommentTranslateHook", "ManualCommentTranslateHook")) continue
+            if (!extensions && feature in setOf("VideoTranslateHook", "CommentTranslateHook", "ManualCommentTranslateHook", "CachedCommentTranslateHook")) continue
             if (feature == "AutoCleanModeHook" && "ProgressBarHook" !in installed) {
                 HookRuntime.failure(feature, IllegalStateException("清屏所需的进度条功能未注册"), "注册失败，已撤销")
             } else if (feature !in installed && HookRuntime.scope(feature).active) install(feature, loader)

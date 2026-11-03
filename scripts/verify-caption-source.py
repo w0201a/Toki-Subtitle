@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 84' in gradle and 'versionName = "2.0.64"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.64-debug / 84")
+check('versionCode = 85' in gradle and 'versionName = "2.0.65"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.65-debug / 85")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -235,12 +235,30 @@ check('sourceTruncated' in comment_data and 'Character.isHighSurrogate' in comme
 check('OfflineCommentPages' in comment_adapter and 'setOnScrollListener' in comment_dialog and 'adapter.append()' in comment_dialog and 'snapshot.hasMore || snapshot.truncated' in comment_dialog, 'local pagination and explicit partial-cache states are wired')
 check('generation.incrementAndGet()' in comment_dialog and 'generation.get() != token' in comment_dialog and 'worker.shutdown()' in comment_dialog, 'closing/reloading or leaving cached comments invalidates old read completions')
 check('Mode.ORIGINAL' in comment_adapter and 'Mode.TRANSLATED' in comment_adapter and 'Mode.BILINGUAL' in comment_adapter and 'row.translation != null' in comment_adapter, 'individual cached-comment original/translation/bilingual choices are wired without pretending a missing translation exists')
-for relative in ('hook/HostOfflineComments.kt', 'hook/OfflineCommentsDialog.kt', 'hook/OfflineCommentListAdapter.kt'):
+for relative in ('hook/HostOfflineComments.kt',):
     source = (JAVA / relative).read_text(encoding='utf-8')
     check(not any(token in source for token in ('openConnection(', 'NativeSubtitleTranslator.transport(', 'OfflineCommentLifecycleListener', '.storeString(', '.remove(', '.delete(')), relative + ' only reads existing comments and does not invoke remote predownload or mutate host storage (source only)')
 for relative in ('hook/OfflineCommentsDialog.kt', 'hook/OfflineCommentListAdapter.kt'):
     refs = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
     check(refs <= base_names, relative + ' cached-comment state and action strings exist')
+
+comment_online = (JAVA / 'hook/CachedCommentTranslateHook.kt').read_text(encoding='utf-8')
+comment_session = (JAVA / 'hook/CachedCommentTranslationSession.kt').read_text(encoding='utf-8')
+comment_store = (JAVA / 'hook/CommentTranslationStore.kt').read_text(encoding='utf-8')
+comment_key = (JAVA / 'hook/CommentTranslationKey.kt').read_text(encoding='utf-8')
+check('"CachedCommentTranslateHook" to listOf("cached_comment_online_translate_enabled")' in schema and '"CachedCommentTranslateHook" -> CachedCommentTranslateHook.init' in module, 'cached-comment online channel has an independent option and installation entry')
+check('"CachedCommentTranslateHook" to setOf(HostSymbol.COMMENT_TRANSLATION)' in plan and '"ManualCommentTranslateHook", "CachedCommentTranslateHook"' in module, 'optional online channel prepares translation extensions without requiring cached reading or comment-copy dependencies')
+check('NativeSubtitleTranslator.transport(loader)' in comment_online and 'LLILLIZIL' in comment_online and 'target() != selected' in comment_online, 'online comment channel reuses inspected host transport and validates actual target language')
+check('CachedCommentTranslateHook.watch' in comment_dialog and 'translation.close()' in comment_dialog and 'translation.cancel()' in comment_dialog, 'online comment sessions cancel on mode/feature/pause/window/reload lifecycle changes')
+check('TranslationNetworkPolicy.capture()' in comment_dialog and 'if (!remote.permitsNetwork())' in comment_dialog and 'requestTranslation' in comment_dialog, 'cached comments submit online text only from an explicit row action after hybrid/local-only checks')
+check('OfflineCommentListAdapter(context, ::valid, ::requestTranslation, ::renderSummary)' in comment_dialog and 'cached_comment_translate_action' in comment_adapter and 'fun update(' in comment_adapter, 'per-comment action, segmented progress and original/translation/bilingual result display are connected')
+check('CommentTranslationStore.restore' in comment_dialog and 'CommentTranslationStore.save' in comment_dialog and 'adapter.saved(row, target, text, saved)' in comment_dialog, 'local translation restoration and confirmed background commits are connected to comment UI')
+check('state.failed == 0' in comment_session and '!state.busy' in comment_session and '!committed' in comment_session and 'token == generation' in comment_session, 'only complete current successful translated results are submitted for persistence, once')
+check('listOf(account, video, comment, source, language)' in comment_key and 'SHA-256' in comment_key and 'putInt(bytes.size)' in comment_key, 'persisted result identity includes account/video/comment/exact source/target with length-prefixed hashing')
+check('MAX_RECORDS = 2000' in comment_store and 'MAX_CHARACTERS' in comment_store and '.commit()' in comment_store and 'Saved.FULL' in comment_store and '.remove(' not in comment_store and '.clear(' not in comment_store, 'private persistent cache is bounded and reports full/failed writes without eviction/deletion')
+for relative in ('hook/OfflineCommentListAdapter.kt', 'hook/OfflineCommentsDialog.kt', 'ui/screen/OfflineVideoSection.kt'):
+    refs = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
+    check(refs <= base_names, relative + ' online-comment and persistence status strings exist')
 
 for relative in ('hook/TranslationNetworkPolicy.kt', 'ui/screen/LocalTranslationSection.kt'):
     references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
@@ -322,6 +340,8 @@ lexical_files = [
     'hook/OfflineLongPressState.kt', 'hook/OfflineVideoHook.kt', 'ui/screen/OfflineVideoSection.kt', 'hook/SubtitleRemoteResume.kt',
     'hook/OfflineCommentData.kt', 'hook/OfflineCommentCodeGate.kt', 'hook/HostOfflineComments.kt',
     'hook/OfflineCommentListAdapter.kt', 'hook/OfflineCommentsDialog.kt',
+    'hook/CachedCommentTranslateHook.kt', 'hook/CommentTranslationKey.kt', 'hook/CommentTranslationStore.kt',
+    'hook/CachedCommentTranslationSession.kt', 'ui/screen/OfflineVideoSection.kt',
 ]
 for relative in lexical_files:
     kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8'))
@@ -339,6 +359,7 @@ for relative in (
     'hook/NativeSubtitleTranslatorTest.kt', 'hook/SubtitleOverlayTest.kt',
     'hook/OfflinePlaybackStateTest.kt', 'hook/OfflineLongPressStateTest.kt', 'hook/LocalVideoFileTest.kt', 'hook/OfflineVideoHitTest.kt', 'hook/SubtitleRemoteResumeTest.kt',
     'hook/OfflineCommentDataTest.kt', 'hook/OfflineCommentListAdapterTest.kt',
+    'hook/CachedCommentTranslationSessionTest.kt', 'hook/CommentTranslationStoreTest.kt', 'hook/CachedCommentOnlineAdapterTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))
