@@ -16,6 +16,25 @@ def check(condition, message):
 def read(relative):
     return (ROOT / relative).read_text(encoding="utf-8")
 
+# Baseline language catalog additions must not silently fall back or break Android quote decoding.
+def catalog(path):
+    return [(node.attrib['name'], ''.join(node.itertext())) for node in ET.parse(path).getroot() if node.tag == 'string']
+primary_catalog = dict(catalog(ROOT / 'app/src/main/res/values/strings.xml'))
+catalog_errors = []
+locale_catalogs = sorted((ROOT / 'app/src/main/res').glob('values-b+*/strings.xml'))
+for path in locale_catalogs:
+    entries = catalog(path)
+    localized = dict(entries)
+    if len(entries) != len(localized) or localized.keys() != primary_catalog.keys():
+        catalog_errors.append(path.parent.name + ': missing/extra/duplicate baseline keys')
+    for name, value in entries:
+        source = primary_catalog.get(name, '')
+        if not (value.startswith(chr(34)) and value.endswith(chr(34))) or chr(0xfffd) in value:
+            catalog_errors.append(path.parent.name + '/' + name + ': quote/unicode')
+        if sorted(re.findall(r'%[1-9][0-9]*\$[sd]', source)) != sorted(re.findall(r'%[1-9][0-9]*\$[sd]', value)):
+            catalog_errors.append(path.parent.name + '/' + name + ': format placeholders')
+check(len(locale_catalogs) == 57 and not catalog_errors, 'all 57 baseline strings.xml catalogs keep complete keys, Android quoting, Unicode and positional placeholders: ' + '; '.join(catalog_errors[:5]))
+
 base_names = set()
 for locale in ("values", "values-b+zh+Hans"):
     names = []
@@ -52,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 99' in gradle and 'versionName = "2.0.79"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.79-debug / 99")
+check('versionCode = 100' in gradle and 'versionName = "2.0.80"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.80-debug / 100")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -167,7 +186,7 @@ manual_dialog = (JAVA / 'hook/ManualCommentDialog.kt').read_text(encoding='utf-8
 check('"ManualCommentTranslateHook" to listOf' in schema and '"ManualCommentTranslateHook" -> ManualCommentTranslateHook.init' in module, 'ordinary-comment fallback is independently configured and installed')
 check('"ManualCommentTranslateHook" to setOf(HostSymbol.COMMENT_COPY, HostSymbol.COMMENT_TRANSLATION)' in plan, 'manual translation requires verified comment-menu and translation contracts')
 check('"VideoTranslateHook", "CommentTranslateHook", "ManualCommentTranslateHook"' in module, 'manual translation waits for extension preparation rather than failing during core-only installation')
-check('comment.getMethod("getText")' in manual_hook and 'getText.invoke(comment)' in manual_hook, 'manual translation reads actual comment-model source text rather than assuming the visible translation is original')
+check('comment.getMethod("getText")' in manual_hook and 'getter.invoke(comment)' in manual_hook and 'sourceText(comment, getText)' in manual_hook, 'manual translation reads actual comment-model source text rather than assuming the visible translation is original')
 check('Mode.ORIGINAL' in manual_dialog and 'Mode.TRANSLATED' in manual_dialog and 'Mode.BILINGUAL' in manual_dialog, 'manual viewer exposes original, translated and bilingual presentation')
 check('ChunkedDescriptionTranslation.split(text)' in manual_core and '6000' in manual_core and 'retryFailed' in manual_core, 'manual translation has bounded segmentation, request timeout and explicit failed-segment retry')
 check('generation != token' in manual_core and 'AtomicBoolean(false)' in manual_core and 'session.close()' in manual_dialog, 'closed/restarted dialogs reject stale or duplicate callbacks')
@@ -501,6 +520,50 @@ check('genericStandardRenderersAreRejectedBeforeClassWideTemplateRegistration' i
 check(not re.search(r'^### .*### ', read('CHANGELOG.md'), re.M), 'changelog headings do not contain duplicated markdown/version prefixes')
 check('<CURRENT_COMMIT>' not in read('docs/USER_WORK_ORDER.md'), 'work order identifies a real review baseline rather than a current-commit placeholder')
 
+for name in ('HostCommentPageNetwork.kt', 'HostCommentReplyNetwork.kt', 'HostOfflineComments.kt'):
+    check('private class Contract(private val loader: ClassLoader)' in (JAVA / 'hook' / name).read_text(encoding='utf-8'), name + ' retains its classloader for member resolver functions (compiler regression)')
+
+check('if (owner in rejected) return enabled(feature, requested)' in plan, 'revoked installation scopes keep an explicit restart requirement when still requested')
+check('it != "DownloadHook" || downloadRepair || requested.boolean("download_path_enabled")' in plan and 'it != "DownloadHook"' in plan.split('fun liveSymbols', 1)[1], 'late download-path installation avoids unnecessary source scans and does not silently enable frozen repair')
+check('selected.keys.any { it in own.keys }' in (JAVA / 'hook/OfflineExportCandidates.kt').read_text(encoding='utf-8'), 'a host-selected audio is not automatically paired with a different fallback video source')
+check('ShadowChoreographer.setFrameDelay(Duration.ofMillis(16))' in read('app/src/test/java/io/github/meiyongai/toki/hook/SubtitleOverlayTest.kt'), 'manual-frame subtitle tests do not spin indefinitely on automatic zero-delay vsync')
+check(read('app/src/test/java/io/github/meiyongai/toki/hook/OfflineExportFixtures.kt') == read('app/src/androidTest/java/io/github/meiyongai/toki/hook/OfflineExportFixtures.kt'), 'desktop/device media fixtures are byte-identical source data rather than silently drifting samples')
+device_media = read('app/src/androidTest/java/io/github/meiyongai/toki/hook/LocalVideoRemuxerDeviceTest.kt')
+check('AndroidJUnit4::class' in device_media and 'Assume' not in device_media and device_media.count('@Test') == 3, 'three required native remux/readback cases are retained without assumptions in the real Android test target')
+check('org.junit.Assume.assumeTrue' in read('app/src/test/java/io/github/meiyongai/toki/hook/LocalVideoRemuxerTest.kt') and 'LocalVideoRemuxerDeviceTest' in read('app/src/test/java/io/github/meiyongai/toki/hook/LocalVideoRemuxerTest.kt'), 'desktop media shadow limitations are explicit capability skips, not mock successes or deleted assertions')
+
+builder = read('scripts/build-lspatch.ps1')
+check(builder.index('verify-caption-source.py') < builder.index('prepare-lspatch.py') < builder.index(':app:assembleLspatch') and 'git diff --check' in builder and 'compilation was not started' in builder, 'legacy/universal entry enforces basic source and whitespace gates before compilation rather than bypassing a failed check')
+
+# Execution evidence is distinct from registration, configuration receipt and device acceptance.
+execution_model = (JAVA / 'provider/ExecutionEvidence.kt').read_text(encoding='utf-8')
+execution_overview = (JAVA / 'provider/DiagnosticOverview.kt').read_text(encoding='utf-8')
+execution_speed = (JAVA / 'hook/PlaybackSpeedHook.kt').read_text(encoding='utf-8')
+execution_runtime = (JAVA / 'hook/HookRuntime.kt').read_text(encoding='utf-8')
+check('enum class Scope' in execution_model and 'enum class Metric' in execution_model and 'metrics.toMap()' in execution_model, 'execution evidence is enum-keyed numeric data with a defensive copy rather than user-content metadata')
+check('format' in execution_model and 'return null' in execution_model and '旧配置执行证据' in execution_model and '功能与执行证据不匹配' in execution_model, 'unknown codecs, configuration revisions and mismatched feature identities cannot prove current operation success')
+check('if (partial) Outcome.PARTIAL.title' in execution_model and '不测量真实播放速率' in execution_model and '不证明完整截图' in execution_model, 'failures and deferred/raced work override optimistic labels and retain per-scope acceptance boundaries')
+check('for (index in 5 downTo 1)' in execution_runtime and 'executionSignature' in execution_runtime and 'executionObservations' in execution_runtime and 'Long.MAX_VALUE' in execution_runtime, 'execution changes are bounded to six per feature while repeated samples and saturated counters stay explicit')
+check('Diagnostic failure must not alter' in execution_runtime and 'feature != evidence.scope.feature' in execution_runtime, 'execution logging isolates its exceptions and rejects cross-feature writes')
+check('Metric.DEFERRED to result.deferred' in execution_speed and 'recordPlayerEvidence(restored' in execution_speed and 'revisionBefore' in execution_speed and 'playerRates.observation(target)' in execution_speed, 'player application, restoration and successful native setter callbacks report distinct evidence with pre-call configuration association')
+check('Outcome.NEXT_READ' in execution_speed and 'Action.READ' in execution_speed and 'Metric.OPTIONS' in execution_speed, 'menu configuration receipt and actual native source reads are reported separately')
+check('ExecutionEvidence.Scope.AUDIO' in (JAVA / 'hook/BackgroundAudioHook.kt').read_text(encoding='utf-8') and 'val snapshot = ConfigClient.snapshot()' in (JAVA / 'hook/BackgroundAudioHook.kt').read_text(encoding='utf-8'), 'audio execution evidence records actual getter returns from one effective snapshot, not playback started/stopped')
+check('fun statistics()' in (JAVA / 'hook/TemplateRootBindings.kt').read_text(encoding='utf-8') and 'counts.attached' in (JAVA / 'hook/TemplateCleanupHook.kt').read_text(encoding='utf-8') and 'recordEvidence(failed = true)' in (JAVA / 'hook/TemplateCleanupHook.kt').read_text(encoding='utf-8'), 'template counts distinguish observed/attached roots and failed reads without claiming pixel coverage')
+check('fun capture(): Pair' in log_journal and 'render() to brief()' in log_journal and 'operations.first' in execution_runtime and 'operations.second' in execution_runtime, 'operation headlines and detailed phases are captured under one journal lock')
+check('保留窗口没有操作证据' in log_journal and '全局已覆盖记录' in log_journal and '上报成功=' in log_journal and '仍无终态' in log_journal, 'operation headline counts disclose eviction, absence, running work and latest outcomes instead of hiding new failures behind old success')
+check('四项一眼状态' in execution_overview and 'executionHistory' in execution_overview and '尚未收到关闭／恢复回执' in execution_overview, 'overview puts the four target evidence areas first and never infers a successful shutdown from a requested false flag')
+manual_fallback = (JAVA / 'hook/ManualCommentTranslateHook.kt').read_text(encoding='utf-8')
+check('sourceText(comment, getText)' in manual_fallback and 'contract.getId.invoke' not in manual_fallback and '当前评论原文不可读，保留原生菜单' in manual_fallback, 'explicit per-dialog comment translation accepts readable ID-less comments and preserves native actions on read failure')
+for file, names in {
+ 'provider/ExecutionEvidenceTest.kt': ('codecRoundTripAndNumericOrderingAreStable', 'missingUnknownOrMalformedPayloadNeverBecomesSuccess', 'failuresAndDeferredWorkOverrideOptimisticOutcomeLabels', 'crossFeatureEvidenceIsNotAcceptedForAnotherFeature'),
+ 'hook/HookRuntimeExecutionTest.kt': ('identicalSamplesUpdateCountWithoutFillingSemanticHistory', 'changingConfigurationsRetainOnlySixNewestDistinctSamples', 'executionEvidenceDoesNotRewriteApplicationRegistrationOrErrors'),
+ 'provider/OperationJournalTest.kt': ('newestFailureIsVisibleDespiteOlderSuccessInRetainedWindow', 'briefMakesWindowEvictionMissingEvidenceAndRunningWorkExplicit'),
+ 'hook/PlayerRateOverridesTest.kt': ('pendingRequestsAndUnchangedRecordsAreNotCountedAsSuccessfulCommands',),
+ 'provider/DiagnosticOverviewTest.kt': ('disabledRequestWithoutAReleaseReceiptRemainsUnconfirmed', 'quickOverviewShowsOldExecutionAndKeepsItSeparateFromRegistration'),
+ 'hook/ManualCommentTranslationTest.kt': ('readableCommentWithoutIdIsEligibleForExplicitPerDialogTranslation',),
+}.items():
+ check(all(name in read('app/src/test/java/io/github/meiyongai/toki/' + file) for name in names), file + ' covers execution evidence or comment fallback (source inspection only)')
+
 # Fixed-rate runtime state and independent option sources (source assertions, not executed tests).
 speed_hook = (JAVA / 'hook/PlaybackSpeedHook.kt').read_text(encoding='utf-8')
 rate_scope = (JAVA / 'hook/PlaybackRateScope.kt').read_text(encoding='utf-8')
@@ -513,7 +576,7 @@ check('"BackgroundAudioHook" to setOf(HostSymbol.BACKGROUND_AUDIO)' in plan, 'la
 check(all(('"' + name + '"') in plan.split('val liveInstallable = setOf(', 1)[1].split('fun liveSymbols', 1)[0] for name in ('PlaybackSpeedHook', 'SpeedOptions', 'BackgroundAudioHook')), 'fixed rate, menu and future audio getter reads are independently live-installable')
 check('"SpeedOptions" -> PlaybackSpeedHook.initOptions' in module and 'feature == "SpeedOptions"' not in module, 'module installs and reports menu scope directly rather than aliasing fixed-rate status')
 check('requested.importRevision' in plan and 'checkNotNull(startup).importRevision' not in plan, 'current imported speed settings are not silently frozen to the startup import revision')
-check('HookRuntime.subscribe("SpeedOptions")' in speed_hook and 'value.speeds.toList()' in speed_hook, 'menu source reads use live immutable state and return a defensive list copy')
+check('HookRuntime.subscribe("SpeedOptions")' in speed_hook and 'ArrayList(value.speeds)' in speed_hook, 'menu source reads use live immutable state and return a defensive list copy')
 check('private val generated = ThreadLocal' in rate_scope and 'private val selections = ThreadLocal' in rate_scope and 'finally' in rate_scope and 'depth.remove()' in rate_scope, 'module writes and native selections have independent nested thread-local scopes with finally cleanup')
 check('val result = rateScope.nativeSelection { chain.proceed() }' in speed_hook and '!rateScope.selecting' in speed_hook, 'native selections complete before remembered-rate updates and do not override a native 1x selection mid-call')
 check('HookRuntime.subscribe("PlaybackSpeedHook")' in speed_hook and 'releaseFixed(snapshot?.revision)' in speed_hook, 'configuration invalidation releases known fixed-rate overrides without waiting for a ready-only application refresh')
@@ -649,6 +712,8 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'provider/ExecutionEvidence.kt', 'hook/BackgroundAudioHook.kt', 'hook/ManualCommentTranslateHook.kt',
+
     'hook/PlaybackSpeedHook.kt', 'hook/PlaybackRateScope.kt', 'hook/PlayerRateOverrides.kt', 'hook/SpeedFieldLease.kt',
 
     'hook/TemplateAnchorContract.kt', 'hook/TemplateRootBindings.kt', 'hook/TemplateCleanupCodeGate.kt', 'hook/TemplateCleanupHook.kt',
@@ -692,6 +757,8 @@ for relative in lexical_files:
     check(True, relative + ' lexical delimiters and string literals are balanced')
 
 for relative in (
+    'provider/ExecutionEvidenceTest.kt', 'hook/HookRuntimeExecutionTest.kt',
+    'hook/LocalVideoRemuxerGuardTest.kt', 'hook/CaptionTrackFingerprintTest.kt',
     'hook/PlaybackSpeedRegistrationTest.kt', 'hook/PlaybackSpeedMemoryTest.kt',
     'hook/PlaybackRateScopeTest.kt', 'hook/PlayerRateOverridesTest.kt', 'hook/SpeedFieldLeaseTest.kt',
     'hook/HostFeaturePlanTest.kt', 'hook/HostScanSessionTest.kt',
@@ -725,4 +792,7 @@ for relative in (
     kotlin_delimiters(test.read_text(encoding='utf-8'))
     check(True, relative + ' test-source lexical delimiters are balanced (not executed)')
 
-print("SOURCE CHECKS ONLY: compilation, JUnit, device runtime and TikTok 47.6.3 hooks remain UNVERIFIED.")
+kotlin_delimiters(device_media)
+check(True, 'real-device MP4 integration test-source delimiters are balanced; execution still requires Android')
+
+print("SOURCE CHECKS ONLY: this script does not verify compilation, JUnit, device runtime or TikTok 47.6.3 hook behavior.")

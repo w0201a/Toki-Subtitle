@@ -5,6 +5,7 @@ import android.os.Looper
 import io.github.libxposed.api.XposedModule
 import io.github.meiyongai.toki.subtitle.model.LayoutElement
 import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
+import io.github.meiyongai.toki.subtitle.provider.ExecutionEvidence
 import java.lang.ref.WeakReference
 import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicBoolean
@@ -33,13 +34,32 @@ internal object TemplateCleanupHook {
         val roots = TemplateRootBindings(HostViewVisibility.gate, ::current, { error ->
             HookRuntime.event(FEATURE, "模板根重新核对失败，保留原界面；type=" + error.javaClass.simpleName)
         })
+        fun recordEvidence(failed: Boolean = false, deferred: Boolean = false) {
+            val counts = roots.statistics()
+            val desired = config?.boolean(LayoutElement.VIDEO_TEMPLATE.key)
+            val outcome = when {
+                failed || deferred -> ExecutionEvidence.Outcome.PARTIAL
+                config == null -> ExecutionEvidence.Outcome.CONFIG_MISSING
+                desired != true -> ExecutionEvidence.Outcome.DISABLED
+                !checked -> ExecutionEvidence.Outcome.CODE_PENDING
+                !ready -> ExecutionEvidence.Outcome.CODE_UNSUPPORTED
+                counts.known == 0 -> ExecutionEvidence.Outcome.NO_TARGET
+                else -> ExecutionEvidence.Outcome.RULE_REFRESHED
+            }
+            HookRuntime.execution(FEATURE, ExecutionEvidence(ExecutionEvidence.Scope.TEMPLATE, ExecutionEvidence.Action.BIND,
+                outcome, config?.revision, desired, mapOf(ExecutionEvidence.Metric.ROOTS to counts.known.toLong(),
+                    ExecutionEvidence.Metric.ATTACHED to counts.attached.toLong(),
+                    ExecutionEvidence.Metric.FAILED to if (failed) 1L else 0L,
+                    ExecutionEvidence.Metric.DEFERRED to if (deferred) 1L else 0L)))
+        }
         fun forget(owner: Any) {
             roots.release(owner); owners.removeAll { it.get() == null || it.get() === owner }
+            recordEvidence()
         }
         fun observe(owner: Any) {
             owners.removeAll { it.get() == null }
             if (owners.none { it.get() === owner }) {
-                if (owners.size >= 256) { HookRuntime.count(FEATURE, "观察容量已满，保持原界面"); return }
+                if (owners.size >= 256) { HookRuntime.count(FEATURE, "观察容量已满，保持原界面"); recordEvidence(deferred = true); return }
                 owners += WeakReference(owner)
             }
             if (!ready) return // Before code match, retain only weak owner identity; do not inspect business/root methods.
@@ -50,7 +70,10 @@ internal object TemplateCleanupHook {
             } catch (error: Exception) {
                 roots.release(owner)
                 HookRuntime.event(FEATURE, "模板实例读取失败，保留原界面；type=" + error.javaClass.simpleName)
+                recordEvidence(failed = true)
+                return
             }
+            recordEvidence()
         }
         fun configure() {
             if (closed.get() || !HookRuntime.scope(FEATURE).active) return
@@ -63,6 +86,7 @@ internal object TemplateCleanupHook {
             })
             HookRuntime.detail(FEATURE, "只隐藏已核对业务类型的当前渲染根和专用视频模板组件；codeReady=$ready; trackedOwners=${owners.size}; types=${TemplateAnchorContract.allowedAnchorNames.size}; 不处理未知／普通CapCut链接，不按共享schema类名隐藏；首次注入前已有实例仍需宿主回调")
             config?.let { HookRuntime.appliedConfiguration(FEATURE, it, desired && ready) }
+            recordEvidence()
         }
         HookRuntime.onDispose(FEATURE) {
             closed.set(true); worker.shutdownNow(); updateStatus = null

@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Tafuta chaguo la kuficha"</string>
+    <string name="layout_filter_empty" formatted="false">"Hakuna chaguo linalolingana"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Mapendekezo ya utafutaji chini ya video"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Huficha utafutaji ulio chini ya video tu, si wa juu. Swichi ya zamani ya mapendekezo pia huficha pau hizi."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Huficha maoni ya haraka kwenye mlisho na sehemu za chini za kuingiza katika maelezo ya video yanayotumika, si kitufe wala paneli ya maoni. Fungua tena ukurasa wa video baada ya kuwasha mara ya kwanza."</string>
+    <string name="layout_share_panel" formatted="false">"Vipengele vya paneli ya kushiriki"</string>
+    <string name="layout_video_template" formatted="false">"Violezo na madoido ya video"</string>
 </resources>

@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"ស្វែងរកជម្រើសលាក់"</string>
+    <string name="layout_filter_empty" formatted="false">"គ្មានជម្រើសដែលត្រូវគ្នា"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"ការណែនាំស្វែងរកនៅក្រោមវីដេអូ"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"លាក់តែរបារស្វែងរកខាងក្រោមវីដេអូ មិនលាក់ខាងលើទេ។ កុងតាក់ការណែនាំស្វែងរកចាស់ក៏លាក់របារទាំងនេះដែរ។"</string>
+    <string name="layout_quick_comment_hint" formatted="false">"លាក់មតិរហ័សក្នុងផ្ទាំងព័ត៌មាន និងប្រអប់បញ្ចូលខាងក្រោមក្នុងព័ត៌មានលម្អិតវីដេអូដែលគាំទ្រ មិនលាក់ប៊ូតុងឬផ្ទាំងមតិទេ។ បន្ទាប់ពីបើកលើកដំបូង សូមបើកទំព័រវីដេអូឡើងវិញ។"</string>
+    <string name="layout_share_panel" formatted="false">"ធាតុផ្ទាំងចែករំលែក"</string>
+    <string name="layout_video_template" formatted="false">"គំរូនិងបែបផែនវីដេអូ"</string>
 </resources>

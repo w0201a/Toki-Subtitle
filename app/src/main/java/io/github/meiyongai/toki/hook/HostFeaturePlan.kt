@@ -24,7 +24,8 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
 
     /** Candidate discovery does not enable any business callback before hooks are installed. */
     @Synchronized fun liveCandidates(requested: ConfigSnapshot): List<String> = liveInstallable.filter {
-        it !in features && it !in rejected && enabled(it, requested)
+        it !in features && it !in rejected && enabled(it, requested) &&
+            (it != "DownloadHook" || downloadRepair || requested.boolean("download_path_enabled"))
     }.sortedBy { if (it == "ProgressBarHook") 0 else 1 }
 
     /** Admit only after installation succeeds. Failed or startup-frozen features cannot be promoted. */
@@ -63,6 +64,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
     /** 无关配置版本变化不要求重启，只比较该功能影响运行的字段。 */
     @Synchronized fun requiresRestart(feature: String, requested: ConfigSnapshot): Boolean {
         val owner = feature
+        if (owner in rejected) return enabled(feature, requested)
         if (owner == "DownloadHook" && !downloadRepair && requested.boolean("download_force_no_watermark")) return true
         if (owner !in features) return enabled(feature, requested) &&
             (owner !in liveInstallable || owner in rejected)
@@ -81,11 +83,11 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
         // Environment, fixed rate, menu reads and audio group reads update live; immersive window restoration remains separate.
         val liveInstallable = setOf("LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
             "CommentCopyHook", "CommentStickerDownloadHook", "ManualCommentTranslateHook", "CachedCommentTranslateHook", "VideoTranslateHook", "LiveSwipeLockHook",
-            "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook", "PlaybackSpeedHook", "SpeedOptions", "BackgroundAudioHook") + directHost + platform
+            "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook", "PlaybackSpeedHook", "SpeedOptions", "BackgroundAudioHook", "DownloadHook") + directHost + platform
 
         fun liveSymbols(features: Collection<String>): Set<HostSymbol> {
             require(features.all { it in liveInstallable })
-            return features.filter { it !in directHost && it !in platform }.flatMapTo(linkedSetOf()) { symbolDependencies.getValue(it) }
+            return features.filter { it !in directHost && it !in platform && it != "DownloadHook" }.flatMapTo(linkedSetOf()) { symbolDependencies.getValue(it) }
         }
 
         fun enabled(feature: String, snapshot: ConfigSnapshot): Boolean = when (feature) {

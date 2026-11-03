@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Goleki pilihan kanggo ndhelikake"</string>
+    <string name="layout_filter_empty" formatted="false">"Ora ana pilihan sing cocog"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Saran telusuran ing ngisor video"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Mung ndhelikake telusuran ing ngisor video, dudu ing ndhuwur. Saklar saran telusuran lawas uga ndhelikake bar iki."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Ndhelikake komentar cepet ing feed lan kolom ngisor rincian video sing didhukung, dudu tombol utawa panel komentar. Bukak maneh kaca video sawise diuripake sepisanan."</string>
+    <string name="layout_share_panel" formatted="false">"Bagean panel enggo bareng"</string>
+    <string name="layout_video_template" formatted="false">"Cithakan lan efek video"</string>
 </resources>

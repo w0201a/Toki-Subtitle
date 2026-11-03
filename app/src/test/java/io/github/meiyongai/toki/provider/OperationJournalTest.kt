@@ -68,4 +68,25 @@ class OperationJournalTest {
         assertTrue(journal.render().contains("源文件或结果与校验信息不一致"))
         assertTrue(journal.render().contains("本次已取消"))
     }
+
+    @Test fun newestFailureIsVisibleDespiteOlderSuccessInRetainedWindow() {
+        val journal = OperationJournal({})
+        journal.start(OperationJournal.Kind.OFFLINE_EXPORT).finish(OperationJournal.Result.SUCCESS)
+        journal.start(OperationJournal.Kind.OFFLINE_EXPORT).finish(OperationJournal.Result.UNAVAILABLE, OperationJournal.Reason.CACHE_MISSING)
+        val brief = journal.brief()
+        assertTrue(brief.contains("最近 op=OFFLINE_EXPORT-2 [当前条件不可用]"))
+        assertTrue(brief.contains("上报成功=1")); assertTrue(brief.contains("不可用=1"))
+        assertTrue(brief.contains("没有找到对应本地缓存"))
+    }
+    @Test fun briefMakesWindowEvictionMissingEvidenceAndRunningWorkExplicit() {
+        val journal = OperationJournal({}, capacity = 2)
+        journal.start(OperationJournal.Kind.OFFLINE_EXPORT).finish(OperationJournal.Result.SUCCESS)
+        journal.start(OperationJournal.Kind.STICKER_EXPORT)
+        journal.start(OperationJournal.Kind.STICKER_EXPORT)
+        val pair = journal.capture()
+        assertTrue(pair.second.contains("全局已覆盖记录=1"))
+        assertTrue(pair.second.contains("离线视频导出：保留窗口没有操作证据"))
+        assertTrue(pair.second.contains("进行中=2")); assertTrue(pair.second.contains("仍无终态"))
+        assertTrue(pair.first.contains("STICKER_EXPORT-3")); assertTrue(pair.second.contains("STICKER_EXPORT-3"))
+    }
 }

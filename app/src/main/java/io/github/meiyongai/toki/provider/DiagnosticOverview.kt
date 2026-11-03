@@ -28,7 +28,11 @@ internal object DiagnosticOverview {
         if (state.contains("正在") || state.contains("等待") || state in setOf("注册中", "环境配置待应用")) return "准备中／等待条件"
         if (!row.containsKey("requestedEnabled") && !row.containsKey("enabled")) return "请求状态未知"
         val requested = if (row.containsKey("requestedEnabled")) row.getBoolean("requestedEnabled") else row.getBoolean("enabled")
-        if (!requested) return if (row.getBoolean("appliedEnabled")) "请求关闭，宿主仍报告已启用，需核查" else "用户未开启（不是故障证明）"
+        if (!requested) return when {
+            !row.containsKey("appliedEnabled") -> "请求关闭，尚未收到关闭／恢复回执（不代表已停用）"
+            row.getBoolean("appliedEnabled") -> "请求关闭，宿主仍报告已启用，需核查"
+            else -> "用户未开启（不是故障证明）"
+        }
         if (!row.containsKey("appliedEnabled")) return "请求开启，尚未确认应用"
         if (!row.getBoolean("appliedEnabled")) return "请求开启，但未实际应用"
         if (row.getInt("registered") <= 0 || state != "已注册") return "状态待核查，不能判定可用"
@@ -65,6 +69,17 @@ internal object DiagnosticOverview {
             val requested = ConfigSchema.featureSwitches.keys
             val missing = requested.count { features.getBundle(it) == null }
             appendLine("功能记录=${requested.size - missing}/${requested.size}；缺失=$missing，缺失不默认视为关闭。")
+            val currentRevision = if (report.containsKey("configRevision")) report.getLong("configRevision") else null
+            appendLine(); appendLine("### 四项一眼状态（本次会话，不是验收结论）")
+            appendLine(report.getString("operationBrief")?.let { DiagnosticText.redact(it).take(8192) }
+                ?: "离线视频导出／动态贴图：宿主未提供新版操作概览，证据不足；详细operations仍保留。")
+            for (name in listOf("PlaybackSpeedHook", "SpeedOptions", "BackgroundAudioHook", "TemplateCleanupHook")) {
+                val row = features.getBundle(name)
+                appendLine("- ${titles[name]}：${featureState(row)}")
+                appendLine("    " + ExecutionEvidence.describe(row?.getBundle("execution"), currentRevision, name))
+            }
+            appendLine("全设置无重开并未完成；这里只列已接入的执行证据，其余功能状态和缺口在下方。")
+            appendLine(); appendLine("### 全部功能配置／执行证据")
             requested.forEach features@ { name ->
                 val row = features.getBundle(name)
                 appendLine("- ${titles[name] ?: name} [$name]：${featureState(row)}")
@@ -74,6 +89,18 @@ internal object DiagnosticOverview {
                     appendLine("  配置版本不一致：可能尚未同步、启动冻结或功能失败；结合重开／错误状态判断。")
                 appendLine("  状态=${text(row.getString("state"))}")
                 row.getString("detail")?.let { appendLine("  细节=${text(it, 2000)}") }
+                row.getBundle("execution")?.let { evidence ->
+                    appendLine("  执行：" + ExecutionEvidence.describe(evidence, currentRevision, name))
+                    val at = evidence.getLong("at", 0)
+                    appendLine("  最近观察=${if (at > 0) Instant.ofEpochMilli(at) else "未报告"}；记录采样次数=${long(row, "executionObservations")}；重复相同结果不会重复占满历史。")
+                }
+                row.getBundle("executionHistory")?.let { history ->
+                    appendLine("  先前变化（最多5条，可能属于旧配置，不是当前成功证明）：")
+                    for (index in 1..5) history.getBundle(index.toString())?.let { previous ->
+                        val at = previous.getLong("at", 0)
+                        appendLine("    ${if (at > 0) Instant.ofEpochMilli(at) else "时间未报告"} " + ExecutionEvidence.describe(previous, currentRevision, name))
+                    }
+                }
                 row.getString("errorStatus")?.let { appendLine("  失败阶段=${text(it)}") }
                 row.getString("error")?.let { appendLine("  错误类型／位置=${text(it, 1200)}") }
                 val counts = row.getBundle("counts")
@@ -97,10 +124,11 @@ internal object DiagnosticOverview {
         appendLine("- 离线导出：已有本地轨道校验／MP4封装／回读源码；Android9、加密、分散片段、未解析模型等仍有限制。")
         appendLine("- 动态贴图：GIF／WebP逐帧源码已接；有颜色／透明／资源与宿主解码器限制。")
         appendLine("- SIM／语言／时区／GPS已有运行时安装与后续平台读取刷新源码；不会重建宿主已缓存值／已发请求或切换现有页面语言，仍未设备验证。")
+        appendLine("- 倍速按已观察实例发命令，未知实例不猜速；菜单等待后续读取，后台音频不清宿主缓存。执行历史只保留最多6种最近变化且进程退出即丢失，不是长期审计档案。")
         appendLine("- 全设置无重开、模板／特效全覆盖仍未完成，不能由一次绿色注册状态推断实现。")
-        appendLine("- 当前源码批次未编译／未真机验收；具体业务成功以本次操作终态及导出文件实测为准。")
+        appendLine("- 编译／基础测试状态见随版本验证记录；本报告不把编译或静态检查当作真机验收，具体业务成功以本次操作终态及文件实测为准。")
         appendLine("- 数字说明：candidatePlans=候选方案数，candidateKeys=缓存候选键数，tracks=轨道数，samples=编码样本数，sourceBytes/outputBytes=字节数，frames=动画帧数，width/height=画布像素。")
-        appendLine("- 其他需求已写待办，等用户明确说开始；详见仓库 USER_WORK_ORDER.md 和 SOURCE_STATUS.md。")
+        appendLine("- 用户已授权继续其他原始需求，并要求基础检查通过后再编译；完整范围与实际状态见仓库USER_WORK_ORDER.md和SOURCE_STATUS.md。")
         appendLine("隐私：模块诊断只记录技术元数据并做地址／凭据额外遮盖；若选择全量logcat，其内容可能包含其他应用信息，分享前自行检查。")
     }
 }

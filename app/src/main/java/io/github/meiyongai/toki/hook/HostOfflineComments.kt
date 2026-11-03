@@ -100,7 +100,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
             nextCursor = (contract.cursor.invoke(response) as Long).takeIf { it >= 0 })
     }
 
-    private class Contract(loader: ClassLoader) {
+    private class Contract(private val loader: ClassLoader) {
         private fun type(name: String) = Class.forName(name, false, loader)
         private fun method(owner: Class<*>, name: String, result: Class<*>, vararg arguments: Class<*>): Method =
             owner.getMethod(name, *arguments).apply { check(returnType == result && !Modifier.isStatic(modifiers)); isAccessible = true }

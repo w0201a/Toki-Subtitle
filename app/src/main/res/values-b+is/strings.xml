@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Finna feluvalkost"</string>
+    <string name="layout_filter_empty" formatted="false">"Engir samsvarandi valkostir"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Leitartillögur undir myndskeiði"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Felur aðeins leit neðst á myndskeiðinu, ekki efstu leitina. Eldri rofinn fyrir leitartillögur felur einnig þessar stikur."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Felur skyndiathugasemdir í straumi og studda neðri innsláttarreiti í upplýsingum myndskeiðs, ekki athugasemdahnappinn eða -spjaldið. Opnaðu myndskeiðssíðuna aftur eftir fyrstu virkjun."</string>
+    <string name="layout_share_panel" formatted="false">"Hlutar deilispjalds"</string>
+    <string name="layout_video_template" formatted="false">"Sniðmát og áhrif fyrir myndskeið"</string>
 </resources>

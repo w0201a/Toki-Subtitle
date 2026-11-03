@@ -93,6 +93,21 @@ internal class OperationJournal(private val emit: (String) -> Unit, private val 
     private fun event(record: Record): String = "op=${record.kind.name}-${record.id} [${record.result.title}] 阶段=${record.step.title} " +
         "耗时=${elapsed(record)}ms 原因=${record.reason.title} 候选失败次数=${record.attemptFailures} 上次候选错误=${record.lastAttemptError.ifEmpty { "无" }} " + record.stats.entries.sortedBy { it.key }.joinToString { "${it.key}=${it.value}" } +
         if (record.error.isEmpty()) "" else " 错误类型=${record.error}"
+    @Synchronized fun capture(): Pair<String, String> = render() to brief()
+
+    /** Bounded retained-window totals; newest failure/running work must not be hidden by an older success. */
+    @Synchronized fun brief(): String = buildString {
+        appendLine("导出／转换一眼状态：仅本会话保留窗口；全局已覆盖记录=$overwritten，不是终身成功率。")
+        for (kind in Kind.entries) {
+            val rows = records.values.filter { it.kind == kind }
+            val latest = rows.lastOrNull()
+            if (latest == null) { appendLine("- ${kind.title}：保留窗口没有操作证据，不能判为成功。"); continue }
+            appendLine("- ${kind.title}：最近 ${event(latest)}")
+            appendLine("  保留=${rows.size}，进行中=${rows.count { it.result == Result.RUNNING }}，上报成功=${rows.count { it.result == Result.SUCCESS }}，不可用=${rows.count { it.result == Result.UNAVAILABLE }}，失败=${rows.count { it.result == Result.FAILED }}，取消=${rows.count { it.result == Result.CANCELLED }}。")
+            appendLine("  最近开始(UTC)=${Instant.ofEpochMilli(latest.startWall)}；" + if (latest.result == Result.RUNNING) "仍无终态，不能算成功。" else latest.reason.suggestion)
+        }
+        appendLine("最近一次上报成功也不代表所有格式／设备可用；完整阶段、失败候选与文件实测另看详细记录。")
+    }
     @Synchronized fun render(): String = buildString {
         appendLine("操作摘要：只记录本进程本次会话；进程退出后不保留，须复现后及时导出。历史覆盖=$overwritten")
         if (records.isEmpty()) appendLine("没有记录到导出／转换操作；不能据此断言功能正常或故障。")
@@ -111,8 +126,12 @@ internal class OperationJournal(private val emit: (String) -> Unit, private val 
 internal object OperationDiagnostics {
     private val journal = OperationJournal({ TrialLog.add("Operation", it) })
     fun start(kind: OperationJournal.Kind): OperationJournal.Run = journal.start(kind)
-    fun snapshot(): String {
-        val value = journal.render()
-        return if (value.length <= 48 * 1024) value else value.take(48 * 1024) + "\n[操作摘要达到48Ki字符上限，较旧记录未完整展示]"
+    fun brief(): String = journal.brief()
+    fun capture(): Pair<String, String> {
+        val pair = journal.capture()
+        return bounded(pair.first) to pair.second
     }
+    fun snapshot(): String = bounded(journal.render())
+    private fun bounded(value: String): String =
+        if (value.length <= 48 * 1024) value else value.take(48 * 1024) + System.lineSeparator() + "[操作摘要达到48Ki字符上限，较旧记录未完整展示]"
 }

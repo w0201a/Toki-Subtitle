@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"חיפוש אפשרות הסתרה"</string>
+    <string name="layout_filter_empty" formatted="false">"לא נמצאו אפשרויות תואמות"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"הצעות חיפוש מתחת לסרטון"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"מסתיר רק את החיפוש בתחתית הסרטון, לא את החיפוש העליון. גם מתג הצעות החיפוש הישן מסתיר את הפסים האלה."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"מסתיר תגובות מהירות בפיד ושדות תחתונים נתמכים בפרטי הסרטון, אך לא את כפתור התגובות או את הלוח. לאחר ההפעלה הראשונה יש לפתוח שוב את דף הסרטון."</string>
+    <string name="layout_share_panel" formatted="false">"רכיבי לוח השיתוף"</string>
+    <string name="layout_video_template" formatted="false">"תבניות ואפקטים לסרטונים"</string>
 </resources>

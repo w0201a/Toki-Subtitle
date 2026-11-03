@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Знайти параметр приховування"</string>
+    <string name="layout_filter_empty" formatted="false">"Відповідних параметрів немає"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Пошукові підказки під відео"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Приховує лише пошук унизу відео, а не вгорі. Старий перемикач пошукових підказок також приховує ці панелі."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Приховує швидкі коментарі у стрічці та підтримувані нижні поля на сторінці відео, але не кнопку й панель коментарів. Після першого ввімкнення відкрийте сторінку відео знову."</string>
+    <string name="layout_share_panel" formatted="false">"Елементи панелі поширення"</string>
+    <string name="layout_video_template" formatted="false">"Відеошаблони та ефекти"</string>
 </resources>

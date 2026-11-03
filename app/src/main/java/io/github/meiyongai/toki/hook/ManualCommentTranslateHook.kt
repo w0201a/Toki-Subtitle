@@ -21,6 +21,10 @@ internal object ManualCommentTranslateHook {
         check(returnType == String::class.java && parameterCount == 0 && !Modifier.isStatic(modifiers)); isAccessible = true
     }
 
+    /** Per-dialog translation needs readable text, not a persisted comment identity. Never fetch IDs here. */
+    internal fun sourceText(comment: Any, getter: Method): String? = (getter.invoke(comment) as? String)
+        ?.takeIf { it.isNotBlank() && it.length <= ManualCommentTranslation.MAX_SOURCE_LENGTH }
+
     fun init(module: XposedModule, loader: ClassLoader) {
         val roles = listOf("copy", "clip", "menu", "getComment", "item", "display", "text", "extra", "cid", "translated")
         val contract = CommentCopyHook.Contract(loader, roles.associateWith { HostSymbols.members(HostSymbol.COMMENT_COPY, it).single() })
@@ -51,10 +55,10 @@ internal object ManualCommentTranslateHook {
                 return@intercept chain.proceed()
             val args = chain.args.toTypedArray()
             val comment = args[contract.itemIndex]?.let { contract.getComment.invoke(it) } ?: return@intercept chain.proceed()
-            val id = contract.getId.invoke(comment) as? String
-            val source = getText.invoke(comment) as? String
-            if (id.isNullOrBlank() || source.isNullOrBlank() || source.length > ManualCommentTranslation.MAX_SOURCE_LENGTH)
-                return@intercept chain.proceed()
+            val source = try { sourceText(comment, getText) } catch (error: Exception) {
+                HookRuntime.event(FEATURE, "当前评论原文不可读，保留原生菜单；type=" + error.javaClass.simpleName)
+                null
+            } ?: return@intercept chain.proceed()
             val activity = args[fragmentIndex]?.let { getActivity.invoke(it) } as? Activity ?: return@intercept chain.proceed()
             if (activity.isFinishing || activity.isDestroyed) return@intercept chain.proceed()
             val context = HostSettingsEntry.localizedContext(activity)

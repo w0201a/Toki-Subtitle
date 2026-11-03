@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Cerca una opció d’ocultació"</string>
+    <string name="layout_filter_empty" formatted="false">"No hi ha opcions coincidents"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Suggeriments de cerca sota els vídeos"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Amaga només la cerca inferior del vídeo, no la superior. L’interruptor antic dels suggeriments també amaga aquestes barres."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Amaga els comentaris ràpids del canal i els camps inferiors dels detalls de vídeo compatibles, no el botó ni el tauler de comentaris. Després de la primera activació, torna a obrir la pàgina del vídeo."</string>
+    <string name="layout_share_panel" formatted="false">"Elements del tauler de compartició"</string>
+    <string name="layout_video_template" formatted="false">"Plantilles i efectes de vídeo"</string>
 </resources>

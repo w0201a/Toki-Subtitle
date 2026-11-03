@@ -66,7 +66,13 @@ internal class OfflineExportCandidates internal constructor(private val video: C
             if (selected != null && sound != null) result += Plan(selected, sound, true, length)
         }
         val unambiguousAudio = if (rawSounds.size <= 24 && rawSounds.all { sound(it) != null }) sounds.singleOrNull() else null
-        urls.forEach { value -> address(value)?.let { result += Plan(it, sound(selectedAudio.get(value)) ?: unambiguousAudio, needsAudio, length) } }
+        urls.forEach { value -> address(value)?.let { own ->
+            val selected = selectedVideo.get(value)?.let { address(rateAddress.get(it)) }
+            // A selected audio belongs to its selected video, not automatically to every fallback address.
+            val sameSelection = selected == null || selected.keys.any { it in own.keys }
+            val selectedSound = if (sameSelection) sound(selectedAudio.get(value)) else null
+            result += Plan(own, selectedSound ?: unambiguousAudio, needsAudio, length)
+        } }
         (rates.get(model) as? List<*>).orEmpty().take(24).filter(rate::isInstance).forEach { value ->
             address(rateAddress.get(value))?.let { result += Plan(it, unambiguousAudio, needsAudio, length) }
         }

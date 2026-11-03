@@ -23,8 +23,9 @@ android {
         applicationId = "io.github.meiyongai.toki.subtitle"
         minSdk = 28
         targetSdk = 35
-        versionCode = 99
-        versionName = "2.0.79"
+        versionCode = 100
+        versionName = "2.0.80"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // 默认仍可构建通用包；真机调试包可只带目标 ABI。
         providers.gradleProperty("subtitleAbi").orNull?.let { ndk.abiFilters.add(it) }
     }
@@ -135,6 +136,8 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.2.0")
     implementation("androidx.activity:activity-compose:1.9.3")
     testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test:runner:1.5.0")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
     // 在 JVM 中驱动真实模块入口，验证按功能安装与全关会话诊断。
     testImplementation("io.github.libxposed:api:102.0.0")
     // 仅在 JVM 单元测试中提供 Android org.json 的实现，不进入 APK。

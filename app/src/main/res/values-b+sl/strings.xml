@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Poišči možnost skrivanja"</string>
+    <string name="layout_filter_empty" formatted="false">"Ni ujemajočih se možnosti"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Predlogi iskanja pod videom"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Skrije samo iskanje pod videom, ne zgornjega iskanja. Tudi stari preklopnik predlogov iskanja skrije te vrstice."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Skrije hitre komentarje v viru in podprta spodnja vnosna polja podrobnosti videa, ne gumba ali podokna komentarjev. Po prvem vklopu znova odprite stran videa."</string>
+    <string name="layout_share_panel" formatted="false">"Elementi podokna za skupno rabo"</string>
+    <string name="layout_video_template" formatted="false">"Videopredloge in učinki"</string>
 </resources>

@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Aimsigh rogha folaithe"</string>
+    <string name="layout_filter_empty" formatted="false">"Níl aon rogha mheaitseála ann"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Moltaí cuardaigh faoi bhun an fhíseáin"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Folaíonn sé an cuardach faoi bhun an fhíseáin amháin, ní an ceann ag an mbarr. Folaíonn an seanlasc moltaí na barraí seo freisin."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Folaíonn sé tráchtanna tapa sa bhfotha agus na réimsí ionchuir íochtair i sonraí físe tacaithe, ach ní an cnaipe ná an painéal tráchtanna. Oscail leathanach an fhíseáin arís tar éis na chéad ghníomhachtaithe."</string>
+    <string name="layout_share_panel" formatted="false">"Eilimintí an phainéil comhroinnte"</string>
+    <string name="layout_video_template" formatted="false">"Teimpléid agus éifeachtaí físe"</string>
 </resources>

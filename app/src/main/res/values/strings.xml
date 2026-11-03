@@ -303,8 +303,8 @@
     <string name="feature_background_audio">"Unlock background audio"</string>
     <string name="layout_landscape">"Full-screen button"</string>
     <string name="layout_photo_indicators">"Photo indicators &amp; hints"</string>
-    <string name="layout_video_template">"Video templates &amp; effects"</string>
-    <string name="layout_share_panel">"Share sheet components"</string>
+    <string name="layout_video_template" formatted="false">"Video templates &amp; effects"</string>
+    <string name="layout_share_panel" formatted="false">"Share sheet components"</string>
     <string name="layout_quick_message">"Quick messages &amp; shared by"</string>
     <string name="layout_user_card">"Suggested accounts"</string>
     <string name="layout_survey">"Surveys &amp; feedback"</string>
@@ -347,9 +347,9 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
-    <string name="layout_filter_hint">Find a cleanup option</string>
-    <string name="layout_filter_empty">No matching cleanup options</string>
-    <string name="layout_bottom_search_recommendations">Bottom-of-video search suggestions</string>
-    <string name="layout_bottom_search_recommendations_hint">Only hides the bottom video search bars, not top search. The older Search suggestion switch also hides these bars.</string>
-    <string name="layout_quick_comment_hint">Hides feed quick-comment and inspected video-detail bottom-input components, not the comment button or comment sheet. On first activation, reopen the video page once.</string>
+    <string name="layout_filter_hint" formatted="false">"Find a cleanup option"</string>
+    <string name="layout_filter_empty" formatted="false">"No matching cleanup options"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Bottom-of-video search suggestions"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Only hides the bottom video search bars, not top search. The older Search suggestion switch also hides these bars."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Hides feed quick-comment and inspected video-detail bottom-input components, not the comment button or comment sheet. On first activation, reopen the video page once."</string>
 </resources>

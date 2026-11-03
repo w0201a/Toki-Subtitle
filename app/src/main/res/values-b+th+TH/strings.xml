@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"ค้นหาตัวเลือกการซ่อน"</string>
+    <string name="layout_filter_empty" formatted="false">"ไม่มีตัวเลือกที่ตรงกัน"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"คำแนะนำการค้นหาใต้วิดีโอ"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"ซ่อนเฉพาะช่องค้นหาใต้วิดีโอ ไม่ซ่อนด้านบน สวิตช์คำแนะนำการค้นหาแบบเดิมก็ซ่อนแถบเหล่านี้เช่นกัน"</string>
+    <string name="layout_quick_comment_hint" formatted="false">"ซ่อนความคิดเห็นด่วนในฟีดและช่องกรอกด้านล่างของหน้ารายละเอียดวิดีโอที่รองรับ ไม่ซ่อนปุ่มหรือแผงความคิดเห็น หลังเปิดใช้ครั้งแรก ให้เปิดหน้าวิดีโออีกครั้ง"</string>
+    <string name="layout_share_panel" formatted="false">"ส่วนประกอบแผงแชร์"</string>
+    <string name="layout_video_template" formatted="false">"เทมเพลตและเอฟเฟกต์วิดีโอ"</string>
 </resources>

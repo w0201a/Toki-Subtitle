@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Znajdź opcję ukrywania"</string>
+    <string name="layout_filter_empty" formatted="false">"Brak pasujących opcji"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Podpowiedzi wyszukiwania pod filmami"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Ukrywa tylko wyszukiwanie na dole filmu, nie u góry. Starszy przełącznik podpowiedzi również ukrywa te paski."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Ukrywa szybkie komentarze w kanale i obsługiwane dolne pola na stronie filmu, ale nie przycisk ani panel komentarzy. Po pierwszym włączeniu otwórz stronę filmu ponownie."</string>
+    <string name="layout_share_panel" formatted="false">"Elementy panelu udostępniania"</string>
+    <string name="layout_video_template" formatted="false">"Szablony i efekty wideo"</string>
 </resources>

@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Gizlətmə seçimi axtar"</string>
+    <string name="layout_filter_empty" formatted="false">"Uyğun seçim yoxdur"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Videonun altındakı axtarış təklifləri"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Yalnız videonun altındakı axtarışı gizlədir, yuxarıdakını deyil. Köhnə axtarış təklifləri açarı da bu panelləri gizlədir."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Lentdəki sürətli şərhləri və dəstəklənən video təfərrüatlarının alt girişlərini gizlədir, şərh düyməsini və ya panelini deyil. İlk aktivləşdirmədən sonra video səhifəsini yenidən açın."</string>
+    <string name="layout_share_panel" formatted="false">"Paylaşma panelinin elementləri"</string>
+    <string name="layout_video_template" formatted="false">"Video şablonları və effektləri"</string>
 </resources>

@@ -125,4 +125,19 @@ class PlayerRateOverridesTest {
         assertThrows(IllegalArgumentException::class.java) { rates.apply(Float.POSITIVE_INFINITY) }
         assertThrows(IllegalArgumentException::class.java) { PlayerRateOverrides(capacity = 0) }
     }
+
+    @Test fun pendingRequestsAndUnchangedRecordsAreNotCountedAsSuccessfulCommands() {
+        val rates = PlayerRateOverrides()
+        val player = Player()
+        rates.request(player, 1f, 2f, { value ->
+            val pending = rates.apply(3f)
+            assertEquals(1, pending.deferred); assertEquals(0, pending.written)
+            player.rate = value
+        }) { target, value -> (target as Player).rate = value }
+        val same = rates.apply(2f)
+        assertEquals(1, same.unchanged); assertEquals(0, same.written)
+        assertTrue(rates.observation(player).tracked)
+        rates.apply(null)
+        assertEquals(1, rates.apply(null).unchanged)
+    }
 }

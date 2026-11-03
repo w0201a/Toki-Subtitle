@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"ဖျောက်ရန် ရွေးချယ်စရာကို ရှာပါ"</string>
+    <string name="layout_filter_empty" formatted="false">"ကိုက်ညီသော ရွေးချယ်စရာ မရှိပါ"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"ဗီဒီယိုအောက်ရှိ ရှာဖွေမှု အကြံပြုချက်များ"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"ဗီဒီယိုအောက်ရှိ ရှာဖွေမှုဘားကိုသာ ဖျောက်ပြီး အပေါ်ဘားကို မဖျောက်ပါ။ ရှာဖွေမှုအကြံပြုချက် ခလုတ်အဟောင်းကလည်း ဤဘားများကို ဖျောက်ပေးသည်။"</string>
+    <string name="layout_quick_comment_hint" formatted="false">"ဖိဒ်ရှိ အမြန်မှတ်ချက်များနှင့် ပံ့ပိုးထားသော ဗီဒီယိုအသေးစိတ်စာမျက်နှာအောက်ရှိ ထည့်သွင်းကွက်များကို ဖျောက်သည်။ မှတ်ချက်ခလုတ်နှင့် အကန့်ကို မဖျောက်ပါ။ ပထမဆုံး ဖွင့်ပြီးနောက် ဗီဒီယိုစာမျက်နှာကို ပြန်ဖွင့်ပါ။"</string>
+    <string name="layout_share_panel" formatted="false">"မျှဝေခြင်းအကန့် အစိတ်အပိုင်းများ"</string>
+    <string name="layout_video_template" formatted="false">"ဗီဒီယို နမူနာပုံစံများနှင့် အထူးပြုလုပ်ချက်များ"</string>
 </resources>

@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Etsi piilotusvaihtoehto"</string>
+    <string name="layout_filter_empty" formatted="false">"Ei vastaavia vaihtoehtoja"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Hakuehdotukset videon alla"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Piilottaa vain videon alareunan haun, ei yläreunan hakua. Myös vanha hakuehdotusten kytkin piilottaa nämä palkit."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Piilottaa syötteen pikakommentit ja tuettujen videotietojen alareunan syöttökentät, ei kommenttipainiketta tai -paneelia. Avaa videosivu uudelleen ensimmäisen käyttöönoton jälkeen."</string>
+    <string name="layout_share_panel" formatted="false">"Jakopaneelin osat"</string>
+    <string name="layout_video_template" formatted="false">"Videomallit ja tehosteet"</string>
 </resources>

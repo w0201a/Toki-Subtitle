@@ -54,4 +54,20 @@ class DiagnosticOverviewTest {
         val text = DiagnosticOverview.render(Bundle().apply { putBundle("com.zhiliaoapp.musically", report) })
         assertFalse(text.contains("private.example"))
     }
+
+    @Test fun disabledRequestWithoutAReleaseReceiptRemainsUnconfirmed() {
+        val row = Bundle().apply { putBoolean("requestedEnabled", false); putString("state", "已注册") }
+        assertTrue(DiagnosticOverview.featureState(row).contains("尚未收到关闭／恢复回执"))
+    }
+    @Test fun quickOverviewShowsOldExecutionAndKeepsItSeparateFromRegistration() {
+        val receipt = ExecutionEvidence(ExecutionEvidence.Scope.MENU, ExecutionEvidence.Action.APPLY, ExecutionEvidence.Outcome.NEXT_READ, 2, true)
+        val report = Bundle().apply {
+            putLong("configRevision", 3)
+            putBundle("features", Bundle().apply { putBundle("SpeedOptions", registered().apply { putBundle("execution", receipt.encode()) }) })
+        }
+        val text = DiagnosticOverview.render(Bundle().apply { putBundle("com.zhiliaoapp.musically", report) })
+        assertTrue(text.indexOf("四项一眼状态") < text.indexOf("全部功能配置"))
+        assertTrue(text.contains("旧配置执行证据")); assertTrue(text.contains("等待后续原生菜单读取"))
+        assertTrue(text.contains("宿主未提供新版操作概览"))
+    }
 }

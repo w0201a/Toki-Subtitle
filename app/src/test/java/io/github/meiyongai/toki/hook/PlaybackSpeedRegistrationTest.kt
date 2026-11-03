@@ -156,7 +156,7 @@ class PlaybackSpeedRegistrationTest {
             listOf("primary", "secondary", "middle", "last").map { "$owner->$it($owner)Ljava/lang/Object;" }
         setProperty("members.SPEED_OPTIONS.sources", sources.joinToString("\n"))
     }
-    private class Recorder {
+    private inner class Recorder {
         val points = mutableListOf<Executable>()
         val callbacks = mutableMapOf<Executable, XposedInterface.Hooker>()
         var removed = 0
@@ -447,5 +447,15 @@ class PlaybackSpeedRegistrationTest {
         rollback()
         assertEquals(1.5f, SpeedManager.savedSpeed, 0f)
         assertEquals(1, SpeedManager.originalSelections)
+    }
+
+    @Test fun singleOptionReturnsAnIndependentMutableHostList() {
+        resolved.set(null, menuSymbols())
+        val recorder = Recorder()
+        recorder.install(ConfigSnapshot(mapOf("speed_expand_enabled" to true, "speed_expand_list" to "1")))
+        val source = Menus::class.java.getDeclaredMethod("options")
+        val first = recorder.invokeStatic(source) as MutableList<Float>
+        first.add(2f); first.clear()
+        assertEquals(listOf(1f), recorder.invokeStatic(source))
     }
 }

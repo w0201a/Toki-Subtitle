@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Otsi peitmisvalikut"</string>
+    <string name="layout_filter_empty" formatted="false">"Sobivaid valikuid pole"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Otsingusoovitused video all"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Peidab ainult video alumise otsingu, mitte ülemist. Neid ribasid peidab ka vana otsingusoovituste lüliti."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Peidab voo kiirkommentaarid ja toetatud videodetailide alumised sisestusväljad, mitte kommentaarinuppu ega -paneeli. Pärast esimest sisselülitamist ava videoleht uuesti."</string>
+    <string name="layout_share_panel" formatted="false">"Jagamispaneeli elemendid"</string>
+    <string name="layout_video_template" formatted="false">"Videomallid ja efektid"</string>
 </resources>

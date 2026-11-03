@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Finn et skjulealternativ"</string>
+    <string name="layout_filter_empty" formatted="false">"Ingen samsvarende alternativer"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Søkeforslag under videoen"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Skjuler bare søket under videoen, ikke søket øverst. Den gamle bryteren for søkeforslag skjuler også disse feltene."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Skjuler hurtigkommentarer i strømmen og støttede nedre inndatafelt i videodetaljer, ikke kommentarknappen eller kommentarpanelet. Åpne videosiden igjen etter første aktivering."</string>
+    <string name="layout_share_panel" formatted="false">"Elementer i delingspanelet"</string>
+    <string name="layout_video_template" formatted="false">"Videomaler og effekter"</string>
 </resources>

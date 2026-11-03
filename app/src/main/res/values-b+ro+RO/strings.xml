@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Caută o opțiune de ascundere"</string>
+    <string name="layout_filter_empty" formatted="false">"Nicio opțiune corespunzătoare"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Sugestii de căutare sub videoclip"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Ascunde doar căutarea de sub videoclip, nu pe cea de sus. Vechiul comutator pentru sugestii ascunde și aceste bare."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Ascunde comentariile rapide din flux și câmpurile inferioare acceptate din detaliile videoclipului, nu butonul sau panoul de comentarii. După prima activare, redeschide pagina videoclipului."</string>
+    <string name="layout_share_panel" formatted="false">"Elementele panoului de distribuire"</string>
+    <string name="layout_video_template" formatted="false">"Șabloane și efecte video"</string>
 </resources>

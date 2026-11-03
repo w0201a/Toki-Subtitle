@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Maghanap ng opsyon sa pagtatago"</string>
+    <string name="layout_filter_empty" formatted="false">"Walang tumugmang opsyon"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Mga mungkahi sa paghahanap sa ibaba ng video"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Itinatago lamang ang paghahanap sa ibaba ng video, hindi sa itaas. Itinatago rin ng lumang switch ng mungkahi ang mga bar na ito."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Itinatago ang mabilis na komento sa feed at suportadong ibabang input sa detalye ng video, hindi ang pindutan o panel ng komento. Muling buksan ang pahina ng video matapos ang unang pag-enable."</string>
+    <string name="layout_share_panel" formatted="false">"Mga bahagi ng panel ng pagbabahagi"</string>
+    <string name="layout_video_template" formatted="false">"Mga template at effect ng video"</string>
 </resources>

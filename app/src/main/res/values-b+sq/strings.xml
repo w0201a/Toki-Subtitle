@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Gjej një opsion fshehjeje"</string>
+    <string name="layout_filter_empty" formatted="false">"Nuk ka opsione që përputhen"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Sugjerime kërkimi poshtë videos"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Fsheh vetëm kërkimin poshtë videos, jo atë sipër. Edhe çelësi i vjetër i sugjerimeve i fsheh këto shirita."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Fsheh komentet e shpejta në rrjedhë dhe fushat e poshtme të mbështetura në hollësitë e videos, jo butonin apo panelin e komenteve. Pas aktivizimit të parë, rihap faqen e videos."</string>
+    <string name="layout_share_panel" formatted="false">"Elementet e panelit të ndarjes"</string>
+    <string name="layout_video_template" formatted="false">"Modele dhe efekte video"</string>
 </resources>

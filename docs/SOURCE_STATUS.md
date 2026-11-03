@@ -1,12 +1,43 @@
-# Source-only development status — 2.0.79-debug
+# Development checkpoint — 2.0.80-debug
 
-Updated: 2026-11-04. Source version: **2.0.79-debug / 99**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.80-debug / 100**. Latest published production release referenced by this repository remains **2.0.51**.
 
-**No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
+**Desktop verification passed before APK packaging.** 628 source assertions/lexical checks, whitespace checks and 215 XML syntax checks passed. The full `:app:testDebugUnitTest` run completed 931 cases: 928 passed, 0 failed, 3 native-media capability skips. Those three are retained as real Android instrumentation cases and are not counted as actual native-media passes. The instrumentation test APK and unified Debug module APK were built successfully; the native-media device tests were NOT run. Package/entry/payload/profile/signature/ZIP/source consistency checks passed. No real-device acceptance or all-goal completion is claimed.
 
 **For a concise Chinese source/status/limitation matrix, start with [FEATURE_STATUS_ZH.md](FEATURE_STATUS_ZH.md).** The diagnostic ZIP has a separate runtime-evidence overview; the two are not interchangeable.
 
-## Current user-directed ordering
+## Verified 2.0.80 Debug artifact
+
+- Local module APK: `Toki-2.0.80-debug.apk`, 86346478 bytes (82.35 MiB), package `io.github.meiyongai.toki.subtitle`, versionCode 100, minSdk 28, targetSdk 35.
+- SHA-256: `eaa4f60f740124f8786211cdd8af65d27f7db1b58c233e38f25947cacb52f7b0`.
+- Signature: Android Debug certificate, valid APK v2; inner and outer certificates match. ZIP CRC and zipalign checks passed.
+- Both modern and legacy-bootstrap discovery entries, private legacy API namespace, exact embedded payload and equal runtime profiles were checked. The embedded payload itself is version 2.0.80-debug / 100.
+- All 485 recorded non-signing module source/resource/build-script input files still matched after the build. This is source consistency evidence, not a claim of bit-for-bit reproducibility of all third-party dependencies.
+- Order: 628 source checks + whitespace + 215 XML syntax checks; full desktop tests (931 total / 928 passed / 0 failed / 3 native-media skips); Android instrumentation target compile; legacy payload build and verification; unified outer build and final file checks.
+- No APK was installed on a phone, no real TikTok interaction or real native-media test ran, and no GitHub release or original host APK was uploaded. This is a checked Debug checkpoint, not completion of the full original requirements.
+
+## Latest authorization — 2026-11-04
+
+The user now permits the other original objectives immediately, without waiting for four-item acceptance or another start message. Finish the changes, pass basic checks, then compile/test and build a Debug APK; fix failed checks rather than bypassing them. The full original requirements stay active. Previous source-only/no-build and deferred-scope paragraphs below describe historical batches, not the latest authorization. No destructive cleanup or private host-source uploads are authorized.
+
+## Verified desktop gate and earlier failure discovery
+
+The first full desktop run reached 586 cases before a proven infinite automatic-vsync fixture loop was stopped; 8 failures were recorded, not counted as success. Confirmed planner errors now keep restart flags for rejected scopes, allow path-only late download installation without enabling source repair, and avoid associating a selected audio track with a different fallback video. Android-dependent caption tests now use Robolectric; the subtitle window/frame fixture now passes all nine cases with an explicit matching screen, manual vsync and bounded dispatch; expected transparent backgrounds are checked on the current rounded drawable rather than an obsolete drawable subtype.
+
+Robolectric 4.17's MediaExtractor shadow provides zero tracks for real MP4 bytes. Three native demux/mux/readback assertions are preserved unchanged in a real Android instrumentation target, with byte-identical independently generated AVC/AAC fixtures; desktop capability skips are explicitly reported, not treated as native integration passes. Two portable cancellation/source-change guards were added and exercised in the focused repair run. Real Android media/device acceptance remains required, even after a desktop build succeeds.
+
+## Baseline UI resource repair
+
+Seven previously added cleanup labels/hints were missing from the other baseline locale catalogs. They now have localized entries in all 57 language variants, with canonical Android quoting and a 352-entry baseline strings.xml catalog. Both source completeness/placeholder checks and compiled-context locale tests passed. This is not a claim that every separate feature resource is fully translated or that all new wording has been professionally reviewed.
+
+## Added in 2.0.80 — execution evidence and readable ID-less comment fallback
+
+- Typed enum/numeric-only execution records distinguish player command returns, same-instance native setter observations, restore failures, unchanged/deferred/raced work, menu source reads, inspected target-root counts and audio getter returns. Six recent semantic changes per feature are retained, repeated identical samples update a saturated counter, and logging exceptions cannot fail business hooks. No raw comments, media/account IDs or source URLs enter these records.
+- The overview first shows the four priority areas, retained-window media-operation outcomes and per-scope limits. Latest unavailable/running work is not replaced by older success; eviction and absence are explicit. Operation brief/detail capture is atomic under the journal lock. Unknown/future/wrong-feature/wrong-revision evidence cannot prove current success; shutdown without a receipt stays unconfirmed.
+- Explicit per-dialog comment translation accepts readable text without requiring a persisted comment ID, preserves existing length/blank constraints and the native menu on unreadable text. It does not broaden translation networking or persist anonymous comments.
+- 628 basic source checks and whitespace checks passed before Gradle. Main and test sources compiled; all 931 desktop cases completed with 928 passes, no failures and 3 explicitly native-media skips. APK and instrumentation compilation succeeded; package checks passed, but device acceptance remains pending.
+
+## Earlier priority ordering (superseded by latest authorization)
 
 **Updated user priority (clarified 2026-11-04; readable logging additionally requested):** advance only offline-video export, animated sticker conversion, all-setting live application and the pictured template/effect hiding. Offline-video export means saving already-downloaded TikTok offline videos into user-accessible playable files, not adding a cache-format conversion catalogue; track assembly/container handling is implementation work only where the actual export needs it. Other feature expansions are recorded in [USER_WORK_ORDER.md](USER_WORK_ORDER.md) and wait for an explicit user “start”. Existing functionality is retained. None of the four selected items is certified complete. This supersedes the previous ordering for the selected export task; the rest of offline integration is deferred.
 
@@ -275,8 +306,8 @@ Run the source-only checker with:
 
 The checker parses default/Simplified-Chinese XML, checks string references and preset uniqueness, inspects selected wiring, and checks lexical delimiter balance in selected Kotlin files. It **does not** compile or execute Kotlin, prove API signatures, run tests, measure translation speed, validate rendered pixels or certify Hook contracts.
 
-Whitespace was checked with `git diff --check`. Regression test sources cover cache archives, restored ownership, feature admission, scan ordering, style bounds/render state, and configuration conflicts; they remain unexecuted in this batch.
+Whitespace was checked with `git diff --check`. Regression cases now ran in the full 2.0.80 desktop suite: 928 passed, none failed, 3 real-media capabilities require Android and were explicitly skipped on desktop. The same three native integration assertions were compiled into the Android test target, not executed on a device.
 
 ## Publication boundaries
 
-Only source, regression sources and curated documentation are published. Local APKs, signing material, credentials, screenshots, decompiled host code, raw device logs, analysis tools and private handoff notes are excluded. No tag, release or APK upload is created for this batch. The source commit uses `[skip ci]` to respect the request not to build yet.
+Source, regression sources and curated documentation are published. The user now authorizes a locally built Debug module APK after basic checks; it can be delivered locally but is not committed to Git. Signing material, credentials, original host APK/DEX/decompiled code, screenshots, raw private logs and handoff files remain excluded. No GitHub tag/release/APK upload is implied. Source commits retain `[skip ci]`; the explicitly authorized local checked build is separate from CI.

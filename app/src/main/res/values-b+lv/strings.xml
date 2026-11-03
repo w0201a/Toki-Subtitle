@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Meklēt paslēpšanas opciju"</string>
+    <string name="layout_filter_empty" formatted="false">"Nav atbilstošu opciju"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Meklēšanas ieteikumi zem video"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Paslēpj tikai meklēšanu video apakšā, nevis augšā. Arī vecais meklēšanas ieteikumu slēdzis paslēpj šīs joslas."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Paslēpj ātros komentārus plūsmā un atbalstītos apakšējos ievades laukus video informācijā, nevis komentāru pogu vai paneli. Pēc pirmās ieslēgšanas atveriet video lapu vēlreiz."</string>
+    <string name="layout_share_panel" formatted="false">"Kopīgošanas paneļa elementi"</string>
+    <string name="layout_video_template" formatted="false">"Video veidnes un efekti"</string>
 </resources>

@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Cari opsi penyembunyian"</string>
+    <string name="layout_filter_empty" formatted="false">"Tidak ada opsi yang cocok"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Saran pencarian di bawah video"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Hanya menyembunyikan pencarian di bawah video, bukan di atas. Sakelar saran pencarian lama juga menyembunyikan bilah ini."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Menyembunyikan komentar cepat di feed dan kolom bawah detail video yang didukung, bukan tombol atau panel komentar. Buka kembali halaman video setelah pertama kali mengaktifkan."</string>
+    <string name="layout_share_panel" formatted="false">"Komponen panel berbagi"</string>
+    <string name="layout_video_template" formatted="false">"Templat dan efek video"</string>
 </resources>

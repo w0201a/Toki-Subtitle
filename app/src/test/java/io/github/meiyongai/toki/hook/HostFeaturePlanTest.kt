@@ -276,13 +276,18 @@ class HostFeaturePlanTest {
 
     @Test fun startupSensitiveSettingsCannotBeAdmittedAsLiveFeatures() {
         val plan = HostFeaturePlan(config())
-        for (feature in listOf("BackgroundAudioHook", "PlaybackSpeedHook", "ImmersiveFullScreenHook")) {
-            assertThrows(IllegalArgumentException::class.java) { plan.admitLive(feature) }
+        assertThrows(IllegalArgumentException::class.java) { plan.admitLive("ImmersiveFullScreenHook") }
+        for (feature in listOf("BackgroundAudioHook", "PlaybackSpeedHook", "SpeedOptions")) {
+            assertTrue(plan.admitLive(feature))
         }
         assertTrue(HostFeaturePlan.liveSymbols(listOf("StatusBarHook", "ScreenCaptureHook")).isEmpty())
         val download = config("download_path_enabled" to true)
         assertTrue(plan.admitLive("DownloadHook"))
         assertFalse(plan.requiresRestart("DownloadHook", download))
+        assertTrue(HostFeaturePlan.liveSymbols(listOf("DownloadHook")).isEmpty())
+        val pathLate = HostFeaturePlan(config())
+        assertEquals(listOf("DownloadHook"), pathLate.liveCandidates(download))
+        assertTrue(pathLate.liveCandidates(config("download_force_no_watermark" to true)).isEmpty())
         assertTrue(plan.requiresRestart("DownloadHook", config("download_force_no_watermark" to true)))
 
         assertEquals(setOf(HostSymbol.LAYOUT_TOP_TABS, HostSymbol.LAYOUT_TOOLBAR, HostSymbol.LAYOUT_BOTTOM_ITEM),

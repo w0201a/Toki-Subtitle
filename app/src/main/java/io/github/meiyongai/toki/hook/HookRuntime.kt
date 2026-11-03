@@ -186,6 +186,29 @@ internal object HookRuntime {
         row.putBoolean("appliedEnabled", enabled)
     }
 
+    /** Keep bounded semantic changes separately from registration/application receipts; logging cannot fail the hook. */
+    fun execution(feature: String, evidence: io.github.meiyongai.toki.subtitle.provider.ExecutionEvidence) {
+        if (feature != evidence.scope.feature) return
+        try {
+            val changed = synchronized(this) {
+                val row = entry(feature)
+                val encoded = evidence.encode().apply { putLong("at", System.currentTimeMillis()) }
+                val changed = row.getString("executionSignature") != evidence.signature()
+                row.putBundle("execution", encoded)
+                val observations = row.getLong("executionObservations").coerceAtLeast(0)
+                row.putLong("executionObservations", if (observations == Long.MAX_VALUE) observations else observations + 1)
+                if (changed) {
+                    val history = row.getBundle("executionHistory") ?: Bundle()
+                    for (index in 5 downTo 1) history.getBundle((index - 1).toString())?.let { history.putBundle(index.toString(), it) }
+                    history.putBundle("0", encoded); row.putBundle("executionHistory", history)
+                    row.putString("executionSignature", evidence.signature())
+                }
+                changed
+            }
+            if (changed) io.github.meiyongai.toki.subtitle.provider.TrialLog.add("执行:$feature", evidence.summary())
+        } catch (_: Exception) { /* Diagnostic failure must not alter playback, menu or view behavior. */ }
+    }
+
     /** 是否需重开宿主由启动安装集合与功能自身的更新契约决定。 */
     @Synchronized fun restartRequired(feature: String, value: Boolean) {
         entry(feature).putBoolean("restartRequired", value)
@@ -300,7 +323,9 @@ internal object HookRuntime {
         putLong("updated", System.currentTimeMillis())
         putString("adaptation", adaptation)
         putString("trialLog", io.github.meiyongai.toki.subtitle.provider.TrialLog.snapshot())
-        putString("operations", io.github.meiyongai.toki.subtitle.provider.OperationDiagnostics.snapshot())
+        val operations = io.github.meiyongai.toki.subtitle.provider.OperationDiagnostics.capture()
+        putString("operations", operations.first)
+        putString("operationBrief", operations.second)
         putString("moduleVersion", io.github.meiyongai.toki.subtitle.BuildConfig.VERSION_NAME)
         putInt("moduleVersionCode", io.github.meiyongai.toki.subtitle.BuildConfig.VERSION_CODE)
         putInt("androidSdk", android.os.Build.VERSION.SDK_INT)

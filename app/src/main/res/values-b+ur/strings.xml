@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"چھپانے کا اختیار تلاش کریں"</string>
+    <string name="layout_filter_empty" formatted="false">"کوئی مماثل اختیار نہیں"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"ویڈیو کے نیچے تلاش کی تجاویز"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"صرف ویڈیو کے نیچے کی تلاش چھپاتا ہے، اوپر کی نہیں۔ تلاش کی تجاویز کا پرانا سوئچ بھی ان بارز کو چھپاتا ہے۔"</string>
+    <string name="layout_quick_comment_hint" formatted="false">"فیڈ کے فوری تبصرے اور معاون ویڈیو تفصیلات کے نچلے ان پٹ چھپاتا ہے، تبصرے کا بٹن یا پینل نہیں۔ پہلی بار فعال کرنے کے بعد ویڈیو صفحہ دوبارہ کھولیں۔"</string>
+    <string name="layout_share_panel" formatted="false">"شیئر پینل کے اجزا"</string>
+    <string name="layout_video_template" formatted="false">"ویڈیو ٹیمپلیٹس اور ایفیکٹس"</string>
 </resources>

@@ -17,8 +17,13 @@ import org.robolectric.annotation.Config
 import java.time.Duration
 
 @RunWith(RobolectricTestRunner::class)
-@Config(manifest = Config.NONE, sdk = [35])
+@Config(manifest = Config.NONE, sdk = [35], qualifiers = "w1080dp-h2400dp-mdpi")
 class SubtitleOverlayTest {
+    @org.junit.Before fun explicitFramesDoNotAutoSpinThePausedMainLooper() {
+        org.robolectric.shadows.ShadowChoreographer.setPaused(true)
+        org.robolectric.shadows.ShadowChoreographer.setFrameDelay(Duration.ofMillis(16))
+    }
+
     @Test fun nativeFrameOwnsDisplayAndTimelineFallbackCannotShowASecondCaption() {
         HookRuntime.start("duplicate-caption-test") { _, _ -> }
         val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
@@ -34,7 +39,11 @@ class SubtitleOverlayTest {
             measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
             layout(0, 0, 1080, 2400)
+            settleWindowFrame()
         }
+        val fixtureRect = android.graphics.Rect()
+        assertTrue("Window fixture must be visible before caption assertions: attached=${source.isAttachedToWindow}, shown=${page.isShown}, rect=$fixtureRect",
+            source.isAttachedToWindow && page.isShown && page.getGlobalVisibleRect(fixtureRect))
         val settings = config(mapOf("subtitle_style_enabled" to true))
         val native = SubtitleOverlay(source, configuration = { settings })
         val timeline = SubtitleOverlay(video, timelineSource = true, configuration = { settings })
@@ -52,6 +61,8 @@ class SubtitleOverlayTest {
         native.close(); timeline.close()
         controller.pause().stop().destroy()
     }
+    private fun settleWindowFrame() { shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(16)) }
+
     private fun config(values: Map<String, Any>) =
         ConfigSnapshot(values + ("subtitle_render_mode" to "custom"))
 
@@ -68,6 +79,7 @@ class SubtitleOverlayTest {
             measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
             layout(0, 0, 1080, 2400)
+            settleWindowFrame()
         }
         val binding = SubtitleOverlay(source) {
             ConfigSnapshot(mapOf("subtitle_style_enabled" to true, "video_translate_enabled" to true,
@@ -96,13 +108,14 @@ class SubtitleOverlayTest {
         decor.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
         decor.layout(0, 0, 1080, 2400)
+        settleWindowFrame()
         val translator = fakeOnlineTranslator({ true }, { _, complete -> complete("时间轴译文"); AutoCloseable {} })
         val binding = SubtitleOverlay(video, translator, timelineSource = true) {
             config(mapOf("subtitle_style_enabled" to true, "video_translate_enabled" to true))
         }
         binding.update("EXPANDED", "timeline original", "video")
         binding.onPreDraw()
-        shadowOf(Looper.getMainLooper()).idle()
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(300))
         binding.onPreDraw()
         val overlay = SubtitleOverlay::class.java.getDeclaredField("layer").apply { isAccessible = true }.get(binding) as FrameLayout
         assertEquals("时间轴译文", (overlay.getChildAt(0) as TextView).text.toString())
@@ -127,13 +140,14 @@ class SubtitleOverlayTest {
         activity.window.decorView.apply {
             measure(View.MeasureSpec.makeMeasureSpec(1080,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(2400,View.MeasureSpec.EXACTLY))
             layout(0,0,1080,2400)
+            settleWindowFrame()
         }
         val replies=mutableListOf<(String?) -> Unit>()
         val translator=fakeOnlineTranslator({true},{ _,reply -> replies+=reply;AutoCloseable {} })
         val binding=SubtitleOverlay(source,translator) { config(mapOf("subtitle_style_enabled" to true)) }
         fun layer()=SubtitleOverlay::class.java.getDeclaredField("layer").let { it.isAccessible=true;it.get(binding) as? FrameLayout }
         binding.update("HIDDEN",native.text.toString(),"creator-video")
-        binding.onPreDraw();shadowOf(Looper.getMainLooper()).idle()
+        binding.onPreDraw();shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(300))
         assertEquals(1,replies.size)
         replies.single()("作者提供的字幕")
         binding.onPreDraw()
@@ -161,6 +175,7 @@ class SubtitleOverlayTest {
         decor.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
         decor.layout(0, 0, 1080, 2400)
+        settleWindowFrame()
         val requests = mutableListOf<(String?) -> Unit>()
         val translator = fakeOnlineTranslator({ true }, { _, complete ->
             requests += complete
@@ -180,7 +195,7 @@ class SubtitleOverlayTest {
         assertSame(page, SubtitleOverlay::class.java.getDeclaredField("layerHost").let {
             it.isAccessible = true; it.get(binding)
         })
-        shadowOf(Looper.getMainLooper()).idle()
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(300))
         requests.single()("清屏字幕译文")
         binding.onPreDraw()
         assertEquals("清屏字幕译文", (layer().getChildAt(0) as TextView).text.toString())
@@ -216,6 +231,7 @@ class SubtitleOverlayTest {
         val decor = activity.window.decorView
         decor.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
         decor.layout(0, 0, 1080, 2400)
+        settleWindowFrame()
         var enabled = true
         val requests = mutableListOf<(String?) -> Unit>()
         val translator = fakeOnlineTranslator({ enabled }, { _, complete -> requests += complete; AutoCloseable {} })
@@ -225,7 +241,7 @@ class SubtitleOverlayTest {
         fun layer(): FrameLayout? = SubtitleOverlay::class.java.getDeclaredField("layer").let { it.isAccessible = true; it.get(binding) as? FrameLayout }
         binding.update("EXPANDED", "Original caption", "translation-without-style")
         binding.onPreDraw()
-        shadowOf(Looper.getMainLooper()).idle()
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(300))
         assertEquals(1, requests.size)
         requests.single()("已翻译字幕")
         binding.onPreDraw()
@@ -256,6 +272,7 @@ class SubtitleOverlayTest {
         decor.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
         decor.layout(0, 0, 1080, 2400)
+        settleWindowFrame()
         var enabled = true
         var lockX = false
         var lockY = false
@@ -296,6 +313,7 @@ class SubtitleOverlayTest {
         decor.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
         decor.layout(0, 0, 1080, 2400)
+        settleWindowFrame()
         var style = true
         val requests = mutableListOf<Pair<String, (String?) -> Unit>>()
         val translator = fakeOnlineTranslator({ true }, { text, complete ->
@@ -359,6 +377,7 @@ class SubtitleOverlayTest {
             decor.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
             decor.layout(0, 0, 1080, 2400)
+            settleWindowFrame()
         }
         layout()
         var enabled = true
@@ -385,7 +404,7 @@ class SubtitleOverlayTest {
         assertEquals(1f, video.alpha)
         val text = checkNotNull(overlay()).getChildAt(0) as TextView
         assertEquals("Visible caption", text.text.toString())
-        assertEquals(android.graphics.Color.TRANSPARENT, (text.background as android.graphics.drawable.ColorDrawable).color)
+        assertEquals(android.graphics.Color.TRANSPARENT, checkNotNull((text.background as android.graphics.drawable.GradientDrawable).color).defaultColor)
         assertTrue(text.left > small.width)
         assertTrue(text.top > small.height)
         val screenPosition = IntArray(2)

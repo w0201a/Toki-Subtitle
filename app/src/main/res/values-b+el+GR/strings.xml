@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Αναζήτηση επιλογής απόκρυψης"</string>
+    <string name="layout_filter_empty" formatted="false">"Δεν βρέθηκαν αντίστοιχες επιλογές"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Προτάσεις αναζήτησης κάτω από το βίντεο"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Κρύβει μόνο την κάτω αναζήτηση του βίντεο, όχι την επάνω. Ο παλιός διακόπτης προτάσεων κρύβει επίσης αυτές τις γραμμές."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Κρύβει τα γρήγορα σχόλια στη ροή και τα υποστηριζόμενα κάτω πεδία στις λεπτομέρειες βίντεο, όχι το κουμπί ή το πλαίσιο σχολίων. Μετά την πρώτη ενεργοποίηση, ανοίξτε ξανά τη σελίδα του βίντεο."</string>
+    <string name="layout_share_panel" formatted="false">"Στοιχεία πλαισίου κοινοποίησης"</string>
+    <string name="layout_video_template" formatted="false">"Πρότυπα και εφέ βίντεο"</string>
 </resources>

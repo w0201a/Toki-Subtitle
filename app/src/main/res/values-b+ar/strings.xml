@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"البحث عن خيار إخفاء"</string>
+    <string name="layout_filter_empty" formatted="false">"لا توجد خيارات مطابقة"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"اقتراحات البحث أسفل الفيديو"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"يخفي البحث أسفل الفيديو فقط، وليس البحث العلوي. يخفي مفتاح اقتراحات البحث القديم هذه الأشرطة أيضًا."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"يخفي التعليقات السريعة في الموجز وحقول الإدخال السفلية في تفاصيل الفيديو المدعومة، وليس زر التعليقات أو لوحتها. أعد فتح صفحة الفيديو بعد التفعيل لأول مرة."</string>
+    <string name="layout_share_panel" formatted="false">"عناصر لوحة المشاركة"</string>
+    <string name="layout_video_template" formatted="false">"قوالب الفيديو وتأثيراته"</string>
 </resources>

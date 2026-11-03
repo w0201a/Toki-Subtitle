@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Tìm tùy chọn ẩn"</string>
+    <string name="layout_filter_empty" formatted="false">"Không có tùy chọn phù hợp"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Gợi ý tìm kiếm dưới video"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Chỉ ẩn thanh tìm kiếm bên dưới video, không ẩn phía trên. Công tắc gợi ý tìm kiếm cũ cũng ẩn các thanh này."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Ẩn bình luận nhanh trên bảng tin và ô nhập dưới trang chi tiết video được hỗ trợ, không ẩn nút hay bảng bình luận. Mở lại trang video sau lần bật đầu tiên."</string>
+    <string name="layout_share_panel" formatted="false">"Thành phần bảng chia sẻ"</string>
+    <string name="layout_video_template" formatted="false">"Mẫu và hiệu ứng video"</string>
 </resources>

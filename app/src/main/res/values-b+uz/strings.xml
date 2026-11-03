@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Yashirish parametrini qidirish"</string>
+    <string name="layout_filter_empty" formatted="false">"Mos parametrlar topilmadi"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Video ostidagi qidiruv tavsiyalari"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Faqat video ostidagi qidiruvni yashiradi, yuqoridagini emas. Eski qidiruv tavsiyalari tugmasi ham bu panellarni yashiradi."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Tasmadagi tezkor izohlar va qo‘llab-quvvatlanadigan video tafsilotlarining pastki kiritish maydonlarini yashiradi, izoh tugmasi yoki panelini emas. Birinchi yoqishdan keyin video sahifasini qayta oching."</string>
+    <string name="layout_share_panel" formatted="false">"Ulashish paneli elementlari"</string>
+    <string name="layout_video_template" formatted="false">"Video shablonlari va effektlari"</string>
 </resources>

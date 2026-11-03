@@ -303,8 +303,8 @@
     <string name="feature_background_audio">"解锁背景音频"</string>
     <string name="layout_landscape">"全屏入口"</string>
     <string name="layout_photo_indicators">"图集指示与滑动提示"</string>
-    <string name="layout_video_template">"视频模板与特效"</string>
-    <string name="layout_share_panel">"分享面板组件"</string>
+    <string name="layout_video_template" formatted="false">"视频模板与特效"</string>
+    <string name="layout_share_panel" formatted="false">"分享面板组件"</string>
     <string name="layout_quick_message">"快捷私信与分享来源"</string>
     <string name="layout_user_card">"推荐用户卡片"</string>
     <string name="layout_survey">"问卷与反馈"</string>
@@ -347,9 +347,9 @@
     <string name="host_scan_background_complete">"适配完成，已应用可用功能。"</string>
     <string name="host_scan_background_partial">"适配完成，部分功能未匹配，可在 Toki 查看。"</string>
     <string name="host_scan_background_failed">"适配未完成，可在 Toki 查看状态并重试。"</string>
-    <string name="layout_filter_hint">搜索净化选项</string>
-    <string name="layout_filter_empty">没有匹配的净化选项</string>
-    <string name="layout_bottom_search_recommendations">视频底部搜索推荐</string>
-    <string name="layout_bottom_search_recommendations_hint">仅隐藏视频底部搜索推荐条，不隐藏顶部搜索。旧的“搜索标签”开关也会隐藏这些推荐条；如需恢复，请同时关闭。</string>
-    <string name="layout_quick_comment_hint">隐藏信息流快速评论及已核对的详情页底部输入组件，不隐藏评论按钮或评论区。首次开启后请重新进入视频页面一次。</string>
+    <string name="layout_filter_hint" formatted="false">"搜索净化选项"</string>
+    <string name="layout_filter_empty" formatted="false">"没有匹配的净化选项"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"视频底部搜索推荐"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"仅隐藏视频底部搜索栏，不影响顶部搜索。旧版“搜索推荐”开关也会隐藏这些栏。"</string>
+    <string name="layout_quick_comment_hint" formatted="false">"隐藏信息流快捷评论及已适配的视频详情底部输入组件，不隐藏评论按钮或评论面板。首次启用后请重开视频页面一次。"</string>
 </resources>

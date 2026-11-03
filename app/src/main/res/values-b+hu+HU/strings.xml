@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Elrejtési lehetőség keresése"</string>
+    <string name="layout_filter_empty" formatted="false">"Nincs egyező lehetőség"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Keresési javaslatok a videó alatt"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Csak a videó alatti keresőt rejti el, a felsőt nem. A régi keresésijavaslat-kapcsoló is elrejti ezeket a sávokat."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Elrejti a hírfolyam gyors hozzászólásait és a támogatott videórészletek alsó beviteli mezőit, de a hozzászólásgombot és -panelt nem. Az első bekapcsolás után nyissa meg újra a videóoldalt."</string>
+    <string name="layout_share_panel" formatted="false">"A megosztási panel elemei"</string>
+    <string name="layout_video_template" formatted="false">"Videósablonok és effektusok"</string>
 </resources>

@@ -15,6 +15,12 @@ internal class TemplateRootBindings(private val gate: CleanViewGate, private val
         val identity = WeakReference(source.identity); val context = WeakReference(source.context)
         var listener: View.OnAttachStateChangeListener? = null
     }
+    data class Statistics(val known: Int, val attached: Int)
+    /** Read-only counts: neither a visibility-success claim nor a new root scan. Main thread only. */
+    fun statistics(): Statistics {
+        val live = rows.filter { it.owner.get() != null && it.root.get() != null && it.identity.get() != null && it.context.get() != null }
+        return Statistics(live.size, live.count { it.root.get()?.isAttachedToWindow == true })
+    }
     private val rule = CleanViewGate.Owner(hiddenVisibility = View.GONE)
     private val rows = mutableListOf<Binding>()
     private var closed = false

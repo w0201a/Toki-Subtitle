@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Nájsť možnosť skrytia"</string>
+    <string name="layout_filter_empty" formatted="false">"Žiadne zodpovedajúce možnosti"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Návrhy vyhľadávania pod videom"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Skryje iba vyhľadávanie pod videom, nie hore. Tieto lišty skrýva aj pôvodný prepínač návrhov vyhľadávania."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Skryje rýchle komentáre v kanáli a podporované spodné vstupné polia podrobností videa, nie tlačidlo ani panel komentárov. Po prvom zapnutí znova otvorte stránku videa."</string>
+    <string name="layout_share_panel" formatted="false">"Prvky panela zdieľania"</string>
+    <string name="layout_video_template" formatted="false">"Videošablóny a efekty"</string>
 </resources>

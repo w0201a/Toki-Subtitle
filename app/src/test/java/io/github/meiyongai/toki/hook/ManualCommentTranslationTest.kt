@@ -194,4 +194,16 @@ class ManualCommentTranslationTest {
         assertTrue(late.apply(request).boolean(ManualCommentTranslateHook.KEY))
         assertFalse(late.apply(request).boolean("comment_translate_enabled"))
     }
+
+    class TextWithoutIdentity(private val body: String) {
+        fun getText(): String = body
+        fun getCid(): String? = throw AssertionError("Per-dialog translation must not require a comment ID")
+    }
+    @Test fun readableCommentWithoutIdIsEligibleForExplicitPerDialogTranslation() {
+        val getter = ManualCommentTranslateHook.textGetter(TextWithoutIdentity::class.java)
+        val comment = TextWithoutIdentity("an anonymous or not-yet-persisted comment")
+        assertEquals(comment.getText(), ManualCommentTranslateHook.sourceText(comment, getter))
+        assertNull(ManualCommentTranslateHook.sourceText(TextWithoutIdentity("   "), getter))
+        assertNull(ManualCommentTranslateHook.sourceText(TextWithoutIdentity("x".repeat(ManualCommentTranslation.MAX_SOURCE_LENGTH + 1)), getter))
+    }
 }

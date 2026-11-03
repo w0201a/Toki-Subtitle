@@ -80,7 +80,7 @@ internal class HostCommentReplyNetwork(private val loader: ClassLoader) {
           catch (error: LinkageError) { deliver(Result.failure(error)) }
     }
 
-    private class Contract(loader: ClassLoader) {
+    private class Contract(private val loader: ClassLoader) {
         private fun type(name: String) = Class.forName(name, false, loader)
         val aweme = type("com.ss.android.ugc.aweme.feed.model.Aweme")
         val videoId = aweme.getMethod("getAid").apply { check(returnType == String::class.java) }

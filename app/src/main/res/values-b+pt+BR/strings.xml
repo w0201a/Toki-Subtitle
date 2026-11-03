@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Buscar opção de ocultação"</string>
+    <string name="layout_filter_empty" formatted="false">"Nenhuma opção correspondente"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Sugestões de pesquisa abaixo dos vídeos"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Oculta apenas a pesquisa na parte inferior do vídeo, não a superior. O botão antigo de sugestões também oculta essas barras."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Oculta os comentários rápidos do feed e os campos inferiores dos detalhes de vídeo compatíveis, não o botão nem o painel de comentários. Após ativar pela primeira vez, reabra a página do vídeo."</string>
+    <string name="layout_share_panel" formatted="false">"Itens do painel de compartilhamento"</string>
+    <string name="layout_video_template" formatted="false">"Modelos e efeitos de vídeo"</string>
 </resources>

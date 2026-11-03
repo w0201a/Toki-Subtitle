@@ -1,6 +1,11 @@
 param([string]$ApiAar)
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path -Parent $PSScriptRoot)
+# A local build must not bypass the user's basic-check-before-compilation gate.
+python -X utf8 scripts/verify-caption-source.py
+if ($LASTEXITCODE -ne 0) { throw 'Source checks failed; compilation was not started' }
+& git diff --check
+if ($LASTEXITCODE -ne 0) { throw 'Whitespace checks failed; compilation was not started' }
 if (-not $ApiAar) {
     $ApiAar = Get-ChildItem -LiteralPath "$env:USERPROFILE/.gradle/caches/modules-2/files-2.1/io.github.libxposed/api/102.0.0" -Recurse -Filter '*.aar' | Select-Object -First 1 -ExpandProperty FullName
 }

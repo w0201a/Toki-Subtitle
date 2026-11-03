@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Ausblendoption suchen"</string>
+    <string name="layout_filter_empty" formatted="false">"Keine passende Ausblendoption"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Suchvorschläge unter Videos"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Blendet nur die Suche unten am Video aus, nicht die obere Suche. Der ältere Schalter für Suchvorschläge blendet diese Leisten ebenfalls aus."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Blendet Schnellkommentare im Feed und unterstützte untere Eingabefelder in Videodetails aus, nicht die Kommentarschaltfläche oder das Kommentarpanel. Nach dem ersten Aktivieren die Videoseite erneut öffnen."</string>
+    <string name="layout_share_panel" formatted="false">"Elemente des Teilen-Menüs"</string>
+    <string name="layout_video_template" formatted="false">"Videovorlagen und Effekte"</string>
 </resources>

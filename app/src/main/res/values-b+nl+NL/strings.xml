@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Zoek een verbergoptie"</string>
+    <string name="layout_filter_empty" formatted="false">"Geen overeenkomende opties"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Zoeksuggesties onder de video"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Verbergt alleen de zoekbalk onder de video, niet die bovenaan. De oude schakelaar voor zoeksuggesties verbergt deze balken ook."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Verbergt snelle reacties in de feed en ondersteunde onderste invoervelden in videodetails, niet de reactieknop of het reactiepaneel. Open de videopagina opnieuw na de eerste inschakeling."</string>
+    <string name="layout_share_panel" formatted="false">"Onderdelen van het deelpaneel"</string>
+    <string name="layout_video_template" formatted="false">"Videosjablonen en effecten"</string>
 </resources>

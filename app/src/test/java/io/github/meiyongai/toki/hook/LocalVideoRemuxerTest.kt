@@ -10,11 +10,19 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
-/** Requires working platform MediaExtractor/MediaMuxer support. Source-only until execution is authorized. */
+/** Native media integration: desktop shadows cannot demux actual MP4. Identical assertions also live in androidTest. */
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class LocalVideoRemuxerTest {
     @get:Rule val folder = TemporaryFolder()
+    @org.junit.Before fun requireARealMp4DemuxerRatherThanPretendShadowSuccess() {
+        val input = folder.newFile("platform-capability.mp4").apply { writeBytes(OfflineExportFixtures.VIDEO) }
+        val extractor = android.media.MediaExtractor()
+        try {
+            java.io.FileInputStream(input).use { extractor.setDataSource(it.fd, 0, input.length()) }
+            org.junit.Assume.assumeTrue("Requires native Android MP4 extraction; desktop shadow has no tracks. Run LocalVideoRemuxerDeviceTest on Android.", extractor.trackCount > 0)
+        } finally { extractor.release() }
+    }
     private fun local(name: String, bytes: ByteArray): LocalVideoFile.Verified {
         val file = folder.newFile(name).apply { writeBytes(bytes) }
         return LocalVideoFile.inspect(file, file.length(), file.length(), listOf(folder.root))

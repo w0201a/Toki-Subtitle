@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Rechercher une option de masquage"</string>
+    <string name="layout_filter_empty" formatted="false">"Aucune option correspondante"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Suggestions de recherche sous les vidéos"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Masque uniquement la recherche sous les vidéos, pas celle du haut. L’ancien réglage des suggestions masque aussi ces barres."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Masque les commentaires rapides du fil et les champs inférieurs des détails vidéo pris en charge, pas le bouton ni le panneau des commentaires. À la première activation, rouvrez la page vidéo."</string>
+    <string name="layout_share_panel" formatted="false">"Éléments du panneau de partage"</string>
+    <string name="layout_video_template" formatted="false">"Modèles vidéo et effets"</string>
 </resources>

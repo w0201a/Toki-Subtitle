@@ -4,6 +4,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
 
+@org.junit.runner.RunWith(org.robolectric.RobolectricTestRunner::class)
+@org.robolectric.annotation.Config(manifest = org.robolectric.annotation.Config.NONE, sdk = [35])
 class CaptionTrackFingerprintTest {
     @Test fun confirmedPlaybackTrackIsNotReplacedByStaleFeedMetadata() {
         val video = "confirmed-playback-track"

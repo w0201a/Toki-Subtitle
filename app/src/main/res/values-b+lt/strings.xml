@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Rasti slėpimo parinktį"</string>
+    <string name="layout_filter_empty" formatted="false">"Atitinkančių parinkčių nėra"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Paieškos pasiūlymai po vaizdo įrašu"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Paslepia tik paiešką vaizdo įrašo apačioje, ne viršuje. Senasis paieškos pasiūlymų jungiklis taip pat paslepia šias juostas."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Paslepia greitus komentarus sraute ir palaikomus apatinius įvesties laukus vaizdo įrašo informacijoje, bet ne komentarų mygtuką ar skydelį. Įjungę pirmą kartą, vėl atverkite vaizdo įrašo puslapį."</string>
+    <string name="layout_share_panel" formatted="false">"Bendrinimo skydelio elementai"</string>
+    <string name="layout_video_template" formatted="false">"Vaizdo įrašų šablonai ir efektai"</string>
 </resources>

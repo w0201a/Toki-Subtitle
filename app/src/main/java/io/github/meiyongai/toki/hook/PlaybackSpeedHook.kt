@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
+import io.github.meiyongai.toki.subtitle.provider.ExecutionEvidence
 import io.github.libxposed.api.XposedModule
 import java.lang.reflect.Field
 import java.lang.reflect.Method
@@ -21,7 +22,7 @@ object PlaybackSpeedHook {
     @Volatile
     private var activeSpeed: Float = 1.0f
 
-    private data class MenuState(val enabled: Boolean, val speeds: List<Float>)
+    private data class MenuState(val enabled: Boolean, val speeds: List<Float>, val revision: Long? = null)
     @Volatile private var menuState = MenuState(false, listOf(0.5f, 1f, 1.5f, 2f))
     private val rateScope = PlaybackRateScope()
     private val playerRates = PlayerRateOverrides({ error ->
@@ -151,7 +152,24 @@ object PlaybackSpeedHook {
         syncSpeedManagerFields(speed, enablePersist = speed != 1f)
         speedMemory = memory; activeSpeed = speed; isEnabled = true
         val applied = playerRates.apply(speed)
+        recordPlayerEvidence(applied, snapshot.revision, true)
         HookRuntime.detail("PlaybackSpeedHook", "固定倍速配置已处理；revision=${snapshot.revision}; knownPlayers=${applied.known}; commands=${applied.written}; failed=${applied.failed}; raced=${applied.raced}; 未观察原生速率的现有播放器不强行改写，等待后续原生调速／绑定")
+    }
+
+    private fun recordPlayerEvidence(result: PlayerRateOverrides.Result, revision: Long?, enabled: Boolean, fieldFailure: Boolean = false) {
+        val outcome = when {
+            fieldFailure || result.failed > 0 || result.raced > 0 || result.deferred > 0 -> ExecutionEvidence.Outcome.PARTIAL
+            revision == null -> ExecutionEvidence.Outcome.CONFIG_MISSING
+            result.known == 0 -> ExecutionEvidence.Outcome.NO_TARGET
+            result.written > 0 -> ExecutionEvidence.Outcome.COMMANDS_RETURNED
+            else -> ExecutionEvidence.Outcome.NO_NEW_COMMAND
+        }
+        HookRuntime.execution("PlaybackSpeedHook", ExecutionEvidence(ExecutionEvidence.Scope.PLAYER,
+            if (enabled) ExecutionEvidence.Action.APPLY else ExecutionEvidence.Action.RELEASE, outcome, revision, enabled, mapOf(
+                ExecutionEvidence.Metric.KNOWN to result.known.toLong(), ExecutionEvidence.Metric.COMMANDS to result.written.toLong(),
+                ExecutionEvidence.Metric.UNCHANGED to result.unchanged.toLong(), ExecutionEvidence.Metric.DEFERRED to result.deferred.toLong(),
+                ExecutionEvidence.Metric.FAILED to result.failed.toLong(), ExecutionEvidence.Metric.RACED to result.raced.toLong(),
+                ExecutionEvidence.Metric.FIELD_FAILURES to if (fieldFailure) 1L else 0L)))
     }
 
     /** Disable callbacks first, then attempt fields and observed players even if one field fails. */
@@ -160,6 +178,7 @@ object PlaybackSpeedHook {
         val restoreFailure = try { fieldLease?.restore(); null } catch (error: Exception) { error }
         val restored = playerRates.apply(null)
         activeSpeed = 1f
+        recordPlayerEvidence(restored, revision, false, restoreFailure != null)
         HookRuntime.detail("PlaybackSpeedHook", "固定倍速关闭或配置失效；revision=$revision; restoreCommands=${restored.written}; unknownOrRaced=${restored.raced}; failed=${restored.failed}; 只恢复同一播放器已观察的原生请求，不假定未知速率为1倍")
         restoreFailure?.let { throw it }
     }
@@ -272,16 +291,18 @@ object PlaybackSpeedHook {
     private fun onUserSelectedSpeed(speed: Float, scene: String?) {
         if (!isFeatureEnabled() || speed !in MIN_SPEED..MAX_SPEED) return
 
+        val snapshot = ConfigClient.snapshot()
         activeSpeed = speed
         Log.i(TAG, "捕获到用户在 TikTok 原生菜单选择倍速 -> 锁定为: ${formatSpeedText(speed)}x, 场景: $scene")
 
         syncSpeedManagerFields(speed, enablePersist = true)
 
         val applied = playerRates.apply(speed)
+        recordPlayerEvidence(applied, snapshot.revision, true)
         HookRuntime.count("PlaybackSpeedHook", "已观察播放器选速应用命令", applied.written.toLong())
 
 
-        if (!checkNotNull(speedMemory).save(speed, ConfigClient.snapshot())) {
+        if (!checkNotNull(speedMemory).save(speed, snapshot)) {
             HookRuntime.failure("PlaybackSpeedHook", IllegalStateException("宿主未确认倍速记忆保存"), "倍速记忆保存失败")
         }
     }
@@ -303,12 +324,20 @@ object PlaybackSpeedHook {
                 if (rateScope.applying) return@intercept chain.proceed()
                 val target = chain.thisObject ?: return@intercept chain.proceed()
                 val supplied = chain.args[0] as Float
+                val revisionBefore = try { ConfigClient.snapshot().revision } catch (_: Exception) { null }
+                val enabledBefore = isFeatureEnabled()
                 val replacement = if (!rateScope.selecting && isFeatureEnabled() && activeSpeed != 1f && supplied == 1f) activeSpeed else null
-                playerRates.request(target, supplied, replacement, { actual ->
+                val result = playerRates.request(target, supplied, replacement, { actual ->
                     if (actual == supplied) chain.proceed() else chain.proceed(arrayOf(actual))
                 }) { player, value ->
                     rateScope.module { method.invoke(player, value); Unit }
                 }
+                val observation = playerRates.observation(target)
+                HookRuntime.execution("PlaybackSpeedHook", ExecutionEvidence(ExecutionEvidence.Scope.PLAYER,
+                    ExecutionEvidence.Action.NATIVE_REQUEST, if (observation.tracked) ExecutionEvidence.Outcome.NATIVE_RETURNED else ExecutionEvidence.Outcome.UNTRACKED_NATIVE,
+                    revisionBefore, enabledBefore, mapOf(ExecutionEvidence.Metric.KNOWN to observation.known.toLong(),
+                        ExecutionEvidence.Metric.TRACKED to if (observation.tracked) 1L else 0L)))
+                result
             }
             registered = true
         } finally {
@@ -462,7 +491,11 @@ object PlaybackSpeedHook {
         }
         for (method in contract.sources) module.trackHook("SpeedOptions", method).intercept { chain ->
             val value = menuState
-            if (value.enabled) value.speeds.toList() else chain.proceed()
+            val result = if (value.enabled) ArrayList(value.speeds) else chain.proceed()
+            HookRuntime.execution("SpeedOptions", ExecutionEvidence(ExecutionEvidence.Scope.MENU, ExecutionEvidence.Action.READ,
+                ExecutionEvidence.Outcome.READ_RETURNED, value.revision, value.enabled,
+                mapOf(ExecutionEvidence.Metric.OPTIONS to if (value.enabled) value.speeds.size.toLong() else 0L)))
+            result
         }
     }
 
@@ -474,8 +507,12 @@ object PlaybackSpeedHook {
     }
 
     internal fun applyOptions(snapshot: ConfigSnapshot?) {
-        menuState = MenuState(snapshot?.boolean("speed_expand_enabled") == true, parseSpeedList(snapshot?.string("speed_expand_list")))
+        menuState = MenuState(snapshot?.boolean("speed_expand_enabled") == true, parseSpeedList(snapshot?.string("speed_expand_list")), snapshot?.revision)
         HookRuntime.state("SpeedOptions", "已注册")
+        HookRuntime.execution("SpeedOptions", ExecutionEvidence(ExecutionEvidence.Scope.MENU, ExecutionEvidence.Action.APPLY,
+            when { snapshot == null -> ExecutionEvidence.Outcome.CONFIG_MISSING
+                menuState.enabled -> ExecutionEvidence.Outcome.NEXT_READ
+                else -> ExecutionEvidence.Outcome.DISABLED }, snapshot?.revision, snapshot?.let { menuState.enabled }))
         HookRuntime.detail("SpeedOptions", "独立倍速菜单配置已处理；revision=${snapshot?.revision}; 后续原生菜单读取生效，已打开且缓存列表的菜单需重新打开；不依赖固定倍速链")
         if (snapshot != null) HookRuntime.appliedConfiguration("SpeedOptions", snapshot, menuState.enabled)
     }

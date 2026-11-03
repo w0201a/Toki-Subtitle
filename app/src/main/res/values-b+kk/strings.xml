@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Жасыру опциясын іздеу"</string>
+    <string name="layout_filter_empty" formatted="false">"Сәйкес опциялар жоқ"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Видео астындағы іздеу ұсыныстары"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Тек видеоның төменгі іздеу жолағын жасырады, жоғарғысын емес. Ескі іздеу ұсыныстары ауыстырғышы да бұл жолақтарды жасырады."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Таспадағы жылдам пікірлерді және қолдау көрсетілетін видео мәліметтерінің төменгі енгізу өрістерін жасырады, пікір түймесі мен панелін емес. Алғаш қосқаннан кейін видео бетін қайта ашыңыз."</string>
+    <string name="layout_share_panel" formatted="false">"Бөлісу панелінің элементтері"</string>
+    <string name="layout_video_template" formatted="false">"Видео үлгілері мен әсерлері"</string>
 </resources>

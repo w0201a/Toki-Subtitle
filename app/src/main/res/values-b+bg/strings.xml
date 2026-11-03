@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Търсене на опция за скриване"</string>
+    <string name="layout_filter_empty" formatted="false">"Няма съвпадащи опции"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Предложения за търсене под видеото"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Скрива само търсенето под видеото, не горното. Старият превключвател за предложения също скрива тези ленти."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Скрива бързите коментари в потока и поддържаните долни полета в подробностите за видеото, но не бутона или панела за коментари. След първото включване отворете страницата на видеото отново."</string>
+    <string name="layout_share_panel" formatted="false">"Елементи на панела за споделяне"</string>
+    <string name="layout_video_template" formatted="false">"Видео шаблони и ефекти"</string>
 </resources>

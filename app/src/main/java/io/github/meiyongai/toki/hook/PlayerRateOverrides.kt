@@ -13,7 +13,11 @@ internal class PlayerRateOverrides(private val report: (Exception) -> Unit = {},
         var pending = 0
         var write: ((Any, Float) -> Unit)? = null
     }
-    data class Result(val written: Int, val failed: Int, val raced: Int, val known: Int)
+    data class Result(val written: Int, val failed: Int, val raced: Int, val known: Int, val unchanged: Int, val deferred: Int)
+    data class Observation(val tracked: Boolean, val known: Int)
+    @Synchronized fun observation(target: Any): Observation = Observation(
+        entries.any { it.target.get() === target && it.observed && it.pending == 0 },
+        entries.count { it.target.get() != null && it.observed })
     private val entries = mutableListOf<Entry>()
     private var revision = 0L
     init { require(capacity > 0) }
@@ -72,16 +76,25 @@ internal class PlayerRateOverrides(private val report: (Exception) -> Unit = {},
     @Synchronized fun forget(target: Any) { entries.removeAll { it.target.get() == null || it.target.get() === target } }
     fun apply(speed: Float?, only: Any? = null): Result {
         require(speed == null || valid(speed))
+        var unchanged = 0; var deferred = 0
         val work = synchronized(this) {
             entries.removeAll { it.target.get() == null }
-            entries.filter { it.observed && it.pending == 0 && (only == null || it.target.get() === only) && (speed != null || it.owned) }
+            val selected = entries.filter { only == null || it.target.get() === only }
+            deferred = selected.count { it.pending != 0 }
+            unchanged = selected.count { it.observed && it.pending == 0 && speed == null && !it.owned }
+            selected.filter { it.observed && it.pending == 0 && (speed != null || it.owned) }
                 .map { Triple(it, it.revision, speed ?: checkNotNull(it.native)) }
         }
         var written = 0; var failed = 0; var raced = 0
         for ((entry, token, desired) in work) {
-            val target = entry.target.get() ?: continue
+            val target = entry.target.get()
+            if (target == null) { deferred++; continue }
             val writer = synchronized(this) {
-                if (entry !in entries || entry.pending != 0 || entry.revision != token || entry.output == desired) null else entry.write
+                when {
+                    entry !in entries || entry.pending != 0 || entry.revision != token -> { deferred++; null }
+                    entry.output == desired -> { unchanged++; null }
+                    else -> entry.write.also { if (it == null) deferred++ }
+                }
             } ?: continue
             try {
                 writer(target, desired)
@@ -100,7 +113,7 @@ internal class PlayerRateOverrides(private val report: (Exception) -> Unit = {},
                 failed++; notify(error)
             }
         }
-        return Result(written, failed, raced, synchronized(this) { entries.count { it.observed } })
+        return Result(written, failed, raced, synchronized(this) { entries.count { it.observed } }, unchanged, deferred)
     }
     @Synchronized fun clear() { entries.clear() }
 }

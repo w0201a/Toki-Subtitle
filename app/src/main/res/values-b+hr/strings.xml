@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"Pronađi opciju skrivanja"</string>
+    <string name="layout_filter_empty" formatted="false">"Nema odgovarajućih opcija"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"Prijedlozi pretraživanja ispod videozapisa"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"Skriva samo pretraživanje pri dnu videozapisa, ne ono na vrhu. Stari prekidač prijedloga također skriva te trake."</string>
+    <string name="layout_quick_comment_hint" formatted="false">"Skriva brze komentare u sažetku i podržana donja polja u pojedinostima videozapisa, ali ne gumb ni ploču komentara. Nakon prvog uključivanja ponovno otvorite stranicu videozapisa."</string>
+    <string name="layout_share_panel" formatted="false">"Elementi ploče za dijeljenje"</string>
+    <string name="layout_video_template" formatted="false">"Predlošci i efekti videozapisa"</string>
 </resources>

@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"适配完成，已应用可用功能。"</string>
     <string name="host_scan_background_partial">"适配完成，部分功能未匹配，可在 Toki 查看。"</string>
     <string name="host_scan_background_failed">"适配未完成，可在 Toki 查看状态并重试。"</string>
+    <string name="layout_filter_hint" formatted="false">"搜尋淨化選項"</string>
+    <string name="layout_filter_empty" formatted="false">"沒有符合的淨化選項"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"影片底部搜尋推薦"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"只隱藏影片底部搜尋列，不影響頂部搜尋。舊版的搜尋推薦開關也會隱藏這些列。"</string>
+    <string name="layout_quick_comment_hint" formatted="false">"隱藏動態消息的快速留言及已適配的影片詳細頁底部輸入區，不隱藏留言按鈕或留言面板。首次啟用後請重新開啟影片頁面。"</string>
+    <string name="layout_share_panel" formatted="false">"分享面板元件"</string>
+    <string name="layout_video_template" formatted="false">"影片範本與特效"</string>
 </resources>

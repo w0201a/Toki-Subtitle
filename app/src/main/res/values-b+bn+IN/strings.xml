@@ -345,4 +345,11 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint" formatted="false">"লুকানোর বিকল্প খুঁজুন"</string>
+    <string name="layout_filter_empty" formatted="false">"কোনো মিলে যাওয়া বিকল্প নেই"</string>
+    <string name="layout_bottom_search_recommendations" formatted="false">"ভিডিওর নিচে অনুসন্ধানের পরামর্শ"</string>
+    <string name="layout_bottom_search_recommendations_hint" formatted="false">"শুধু ভিডিওর নিচের অনুসন্ধান বার লুকায়, ওপরেরটি নয়। পুরোনো অনুসন্ধান পরামর্শের সুইচও এই বারগুলো লুকায়।"</string>
+    <string name="layout_quick_comment_hint" formatted="false">"ফিডের দ্রুত মন্তব্য ও সমর্থিত ভিডিও বিবরণের নিচের ইনপুট লুকায়, মন্তব্যের বোতাম বা প্যানেল নয়। প্রথমবার চালু করার পরে ভিডিও পৃষ্ঠা আবার খুলুন।"</string>
+    <string name="layout_share_panel" formatted="false">"শেয়ার প্যানেলের উপাদান"</string>
+    <string name="layout_video_template" formatted="false">"ভিডিও টেমপ্লেট ও ইফেক্ট"</string>
 </resources>
