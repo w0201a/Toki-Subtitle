@@ -44,6 +44,9 @@ internal class SubtitleOverlay(private val source: View,
     private var trackIdentity = ""
     private var translated: String? = null
     private var requested = false
+    private var framePlaybackRevision = translator?.playbackRevision ?: 0L
+    private var seenRequestRevision = translator?.requestRevision ?: 0L
+    private var seenCacheRevision = -1L
     private val remoteResume = SubtitleRemoteResume()
     private var generation = 0L
     private var observing = false
@@ -71,12 +74,14 @@ internal class SubtitleOverlay(private val source: View,
 
     fun update(displayState: String, text: String, video: String = "") {
         frameRevision++
-        if (caption != text || videoId != video) {
+        val playback = translator?.playbackRevision ?: 0L
+        if (caption != text || videoId != video || framePlaybackRevision != playback) {
             generation++
             translated = null
             requested = false
             trackIdentity = translator?.trackIdentity(video).orEmpty()
         }
+        framePlaybackRevision = playback
         state = displayState
         caption = text
         videoId = video
@@ -129,12 +134,18 @@ internal class SubtitleOverlay(private val source: View,
             diagnostic("state=$state chars=${caption.length} native=true")
             return
         }
+        if (!timelineSource && translator != null && framePlaybackRevision != translator.playbackRevision) {
+            resetTranslation(); unmount()
+            diagnostic("native frame belongs to prior playback pass; awaiting current frame or timeline")
+            return
+        }
         val page = visiblePage()
         val sourceVisible = page != null
         // A rendered caption and a playback-timeline fallback share the same video.
         // Native-frame bindings own presentation as soon as they can show that cue.
         if (timelineSource && nativeBindings.keys.any { binding ->
                 binding.videoId == videoId && binding.caption.isNotBlank() && binding.frameVisible() &&
+                    (binding.translator == null || binding.framePlaybackRevision == binding.translator.playbackRevision) &&
                     binding.visiblePage() != null && binding.configuration()?.let(binding::presentationEnabled) == true
             }) {
             resetTranslation(); unmount(); return
@@ -186,6 +197,11 @@ internal class SubtitleOverlay(private val source: View,
             requested = false
             trackIdentity = selectedTrack
         }
+        val revision = translator?.requestRevision ?: 0L
+        if (revision != seenRequestRevision) {
+            seenRequestRevision = revision
+            resetTranslation()
+        }
         val displayMode = settings.string("subtitle_text_mode", "translated")!!
         val translating = displayMode != "original" && translator?.isEnabled(videoId) == true
         if (translating && remoteResume.observe(android.os.SystemClock.uptimeMillis(), TranslationNetworkPolicy::remoteAvailable) &&
@@ -193,17 +209,27 @@ internal class SubtitleOverlay(private val source: View,
         if (!translating) {
             translated = null
             requested = false
-        } else if (!requested) {
-            requested = true
-            val token = generation
-            val track = selectedTrack
-            translator?.request(videoId, caption, current = {
-                generation == token && translator.trackIdentity(videoId) == track && frameVisible() && visiblePage() != null &&
-                    configuration()?.let(::presentationEnabled) == true && translator.isEnabled(videoId)
-            }, deliver = {
-                translated = it
-                source.postInvalidateOnAnimation()
-            })
+        } else {
+            val cachedRevision = translator?.cacheRevision ?: 0L
+            if (translated == null && cachedRevision != seenCacheRevision) {
+                seenCacheRevision = cachedRevision
+                translated = translator?.cached(videoId, caption, selectedTrack)
+            }
+            if (!requested && translated == null) {
+                requested = true
+                val token = generation
+                val track = selectedTrack
+                val video = videoId
+                val playback = framePlaybackRevision
+                translator?.request(video, caption, current = {
+                    generation == token && videoId == video && translator.playbackRevision == playback &&
+                        translator.trackIdentity(video) == track && frameVisible() && visiblePage() != null &&
+                        configuration()?.let(::presentationEnabled) == true && translator.isEnabled(video)
+                }, deliver = {
+                    translated = it
+                    source.postInvalidateOnAnimation()
+                })
+            }
         }
         val displayed = SubtitleCaptionPresentation.display(caption, if (translating) translated else null, displayMode)
         if (text.text.toString() != displayed) text.text = displayed
@@ -340,6 +366,7 @@ internal class SubtitleOverlay(private val source: View,
         }
     }
     private fun resetTranslation() {
+        seenCacheRevision = -1L
         if (requested || translated != null) generation++
         requested = false
         translated = null

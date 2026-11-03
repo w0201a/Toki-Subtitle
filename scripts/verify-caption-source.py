@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 88' in gradle and 'versionName = "2.0.68"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.68-debug / 88")
+check('versionCode = 89' in gradle and 'versionName = "2.0.69"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.69-debug / 89")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -306,6 +306,22 @@ check('fun openComments(target: Binding): Boolean' in offline_hook and 'comments
 check('!ConfigClient.getBoolean(KEY)' in offline_hook and 'comments?.isShowing == true) {' in offline_hook and 'life.longPress' in offline_hook, 'button-only enablement does not start long-press gestures or keep exports active after that option is disabled')
 check('getMethod("performClick"' not in entry_contract and 'getMethod("dispatchTouchEvent"' not in entry_contract and 'getResourceEntryName(' not in entry_contract, 'native entry adapter does not hook every view click or use guessed labels/resources')
 
+playback_clock = (JAVA / 'hook/CaptionPlaybackClock.kt').read_text(encoding='utf-8')
+subtitle_feature = (JAVA / 'hook/SubtitleFeature.kt').read_text(encoding='utf-8')
+subtitle_overlay = (JAVA / 'hook/SubtitleOverlay.kt').read_text(encoding='utf-8')
+check('before - positionMs > rewindToleranceMs' in playback_clock and 'rewindToleranceMs: Long = 250' in playback_clock and 'id != video' in playback_clock, 'selected playback clock detects observed backward progress with jitter tolerance, not wall-clock guessing')
+check('playback.select(video, owner)' in native and 'playback.progress(video, positionMs)' in native and 'nativeFrames.clear()' in native, 'replay/holder changes invalidate stale native presentation ownership')
+check('internal var requestRevision' in native and 'requestRevision++' in native.split('fun cancel()', 1)[1] and 'revision != seenRequestRevision' in subtitle_overlay, 'cancelled translation work invalidates an overlay stuck in already-requested state')
+check('framePlaybackRevision != translator.playbackRevision' in subtitle_overlay and 'binding.framePlaybackRevision == binding.translator.playbackRevision' in subtitle_overlay, 'prior-pass native overlays cannot own the custom timeline fallback after observed rewind')
+check('translator.playbackRevision == playback' in subtitle_overlay and 'videoId == video' in subtitle_overlay and 'val video = videoId' in subtitle_overlay, 'async subtitle delivery captures the playback pass and video identity rather than reading mutable current identity alone')
+check('cacheRevision++' in native and 'cachedRevision != seenCacheRevision' in subtitle_overlay and 'translator?.cached(videoId, caption, selectedTrack)' in subtitle_overlay, 'visible bindings can recover a shared finished translation from cache without a new network request')
+invalidation = native.split('private fun invalidatePlaybackPresentation()', 1)[1].split('private val pump', 1)[0]
+check('releaseActive()' in invalidation and 'cache.clear()' not in invalidation and 'trackPrefetch.cancel()' not in invalidation, 'replay invalidation cancels stale foreground delivery without clearing completed translations or loaded timelines')
+progress_hook = subtitle_feature.split('module.trackHook(prefetchOwner, progress)', 1)[1].split('fun selectedPlayback', 1)[0]
+check(progress_hook.index('translator.playbackProgress') < progress_hook.index('chain.proceed()') and 'selection.owns(chain.thisObject, id)' in progress_hook, 'backward progress is classified for the selected holder before native frame callbacks')
+selection_hook = subtitle_feature.split('Establish the playback pass before native selection', 1)[1].split('val rootField', 1)[0]
+check(selection_hook.index('selectedPlayback(instance)') < selection_hook.index('chain.proceed()') and 'translator.selectVideo(id, instance)' in subtitle_feature, 'selection ownership is established before native first-frame emission and rechecked after the native call')
+
 for relative in ('hook/TranslationNetworkPolicy.kt', 'ui/screen/LocalTranslationSection.kt'):
     references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
     check(references <= base_names, relative + ' local-only strings exist')
@@ -390,7 +406,7 @@ lexical_files = [
     'hook/CachedCommentTranslationSession.kt', 'ui/screen/OfflineVideoSection.kt',
     'hook/CommentPageCodeGate.kt', 'hook/HostCommentPageNetwork.kt', 'hook/CommentPageMerge.kt',
     'hook/CommentSnapshotCodec.kt', 'hook/CommentSnapshotStore.kt', 'hook/HostCommentReplyNetwork.kt', 'hook/CommentReplyMerge.kt',
-    'hook/OfflineCommentEntryContract.kt', 'hook/OfflineCommentEntryPolicy.kt', 'hook/OfflineCommentEntryCodeGate.kt',
+    'hook/OfflineCommentEntryContract.kt', 'hook/OfflineCommentEntryPolicy.kt', 'hook/OfflineCommentEntryCodeGate.kt', 'hook/CaptionPlaybackClock.kt',
 ]
 for relative in lexical_files:
     kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8'))
@@ -411,6 +427,7 @@ for relative in (
     'hook/CachedCommentTranslationSessionTest.kt', 'hook/CommentTranslationStoreTest.kt', 'hook/CachedCommentOnlineAdapterTest.kt',
     'hook/CommentPageMergeTest.kt', 'hook/CommentSnapshotCodecTest.kt', 'hook/CommentSnapshotStoreTest.kt',
     'hook/CommentReplyMergeTest.kt', 'hook/CommentReplyCursorCodecTest.kt', 'hook/CommentReplyAdapterTest.kt', 'hook/OfflineCommentEntryPolicyTest.kt',
+    'hook/CaptionPlaybackClockTest.kt', 'hook/SubtitleReplayRecoveryTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

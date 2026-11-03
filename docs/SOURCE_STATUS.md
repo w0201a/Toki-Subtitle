@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.68-debug
+# Source-only development status — 2.0.69-debug
 
-Updated: 2026-11-04. Source version: **2.0.68-debug / 88**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.69-debug / 89**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -33,6 +33,15 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.69 — subtitle replay/cancel/shared-result source fixes
+
+- Observed playback ownership now tracks the selected holder/video and backward progress beyond a 250ms jitter tolerance. Normal resume for the same holder does not repeatedly reset the pass; neighbour progress is excluded. Selection and rewind classification happen before native callbacks may emit frames, with selection rechecked afterward.
+- A rewind/new selected holder invalidates old foreground delivery and native-frame presentation ownership, not completed translations or loaded cue timelines. A prior-pass Toki native binding cannot suppress the current timeline fallback; a real current frame can take ownership again. This does not rewrite or claim to fix TikTok's own raw native-frame content.
+- Cancellation increments a request revision observed by the display layer, so an unchanged visible cue no longer remains permanently requested after its work was cancelled. Result validity captures the video/pass in addition to source/track generation. Cache hits remain available under the current hybrid/explicit-local-only policy.
+- A completed translation increments a cache revision. Other visible bindings waiting on the shared request can read the exact completed video/track/text result once per revision without another network request or repeated per-frame lookup. Replayed completed cues remain reusable from cache.
+- Added pure playback-clock and Robolectric source regressions for jitter/holder changes, same-cue cancellation recovery, shared-request displays, stale native-pass suppression, old callbacks and completed-cue replay. 315 source-only/whitespace checks passed; original APK playback methods were inspected. No compilation, JUnit/Robolectric execution, latency benchmark, device playback or APK build was run.
+- Bounds remain: only observed backward discontinuities and holder changes are detected; forward seeks, paused/no-redraw wakeup, every track/language/host/offline-player variant and actual latency remain unverified. These fixes do not complete the whole subtitle or original project objective.
 
 ## Added in 2.0.68 — opt-in ordinary native comment-button entry
 
@@ -147,7 +156,7 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 | Templates/effects | Existing template-button mapping wired; template implementation presence confirmed in the APK; effect anchors, variants and runtime behavior still need verification. |
 | Individually selectable share actions | 39 named controls, exact custom keys and reversible action/channel adapter filtering now wired to locally inspected 47.6.3 contracts. Runtime, alternative panels and some unnamed actions still need verification; not a whole-panel hide substitute. |
 | Settings synchronization and no-restart use | Late registration and per-key conflict handling added; bidirectional manager/host synchronization and all current-page rebinding remain incomplete. |
-| Faster/reliable subtitle translation and replay | Cache, track-ownership and write-path changes in source; scheduling, replay/seek and latency need runtime verification. |
+| Faster/reliable subtitle translation and replay | Cache/track/write paths, observed-rewind ownership, cancelled-request recovery and shared-result retrieval are wired in source. Compilation, real replay/seek/paused/language behavior and measured latency remain unverified. |
 | Offline subtitles and translation persistence | Persistent caches, optional local-only and default hybrid online eligibility/reconnect handling are in source. No local engine; host offline player/time identity and full local UI still need integration. |
 | Offline long-press, export/download and comments | Selected-cell local menu, indexed complete-MP4 export and current-account cached-comment viewer are wired in source. Real cache/gesture/device validation, split-format/API-28 export, additional native comment-entry/layout/host variants and service/device behavior remain incomplete. |
 | Sticker format/source selection | Source-category selection and real static PNG/JPEG/WebP conversion now wired in source; original bytes retained. Runtime, pixels and API 28–29 coverage unverified. Animated re-encoding is not implemented. |

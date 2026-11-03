@@ -23,8 +23,8 @@ android {
         applicationId = "io.github.meiyongai.toki.subtitle"
         minSdk = 28
         targetSdk = 35
-        versionCode = 88
-        versionName = "2.0.68"
+        versionCode = 89
+        versionName = "2.0.69"
         // 默认仍可构建通用包；真机调试包可只带目标 ABI。
         providers.gradleProperty("subtitleAbi").orNull?.let { ndk.abiFilters.add(it) }
     }

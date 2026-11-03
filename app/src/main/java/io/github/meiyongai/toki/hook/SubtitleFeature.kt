@@ -84,8 +84,10 @@ internal object SubtitleFeature {
                 val progress = holder.getMethod("onPlayProgressChange", String::class.java,
                     Long::class.javaPrimitiveType, Long::class.javaPrimitiveType)
                 module.trackHook(prefetchOwner, progress).intercept { chain ->
-                    val result = chain.proceed()
                     val id = chain.args[0] as? String
+                    if (!id.isNullOrBlank() && selection.owns(chain.thisObject, id) &&
+                        translator.playbackProgress(id, chain.args[1] as Long)) nextTimelineRefresh = 0L
+                    val result = chain.proceed()
                     if (!id.isNullOrBlank() && selection.owns(chain.thisObject, id)) {
                         val now = android.os.SystemClock.uptimeMillis()
                         if (now >= nextTimelineRefresh) {
@@ -115,22 +117,27 @@ internal object SubtitleFeature {
                     }
                     result
                 }
+                fun selectedPlayback(instance: Any) {
+                    getAweme.invoke(instance)?.let(upcoming::selected)?.let { id ->
+                        if (id != selection.video) {
+                            timelineOverlay?.close(); timelineOverlay = null; timelineVideo = ""; nextTimelineRefresh = 0L
+                            CaptionDebugOverlay.clear()
+                        }
+                        translator.selectVideo(id, instance)
+                        selection.select(instance, id)
+                        translator.readAhead(id, "") {
+                            selection.current(id) && translating()
+                        }
+                    }
+                }
                 for (method in listOf(holder.getMethod("onPageSelected", Int::class.javaPrimitiveType),
                     holder.getMethod("onResumePlay", String::class.java))) {
                     module.trackHook(prefetchOwner, method).intercept { chain ->
-                        val result = chain.proceed()
                         val instance = checkNotNull(chain.thisObject)
-                        getAweme.invoke(instance)?.let(upcoming::selected)?.let { id ->
-                            if (id != selection.video) {
-                                timelineOverlay?.close(); timelineOverlay = null; timelineVideo = ""; nextTimelineRefresh = 0L
-                                CaptionDebugOverlay.clear()
-                            }
-                            translator.selectVideo(id)
-                            selection.select(instance, id)
-                            translator.readAhead(id, "") {
-                                selection.current(id) && translating()
-                            }
-                        }
+                        // Establish the playback pass before native selection can emit its first caption frame.
+                        selectedPlayback(instance)
+                        val result = chain.proceed()
+                        selectedPlayback(instance)
                         result
                     }
                 }

@@ -114,6 +114,26 @@ internal class NativeSubtitleTranslator(
     private var closed = false
     private var selectedVideo = ""
     private val nativeFrames = LinkedHashMap<String, Long>()
+    private val playback = CaptionPlaybackClock()
+    internal val playbackRevision: Long get() = playback.revision
+    internal var requestRevision = 0L
+        private set
+    internal var cacheRevision = 0L
+        private set
+    internal fun cached(video: String, text: String, track: String): String? = cache[video, text, track]
+    internal fun playbackProgress(video: String, positionMs: Long): Boolean {
+        if (!playback.progress(video, positionMs)) return false
+        invalidatePlaybackPresentation()
+        return true
+    }
+    private fun invalidatePlaybackPresentation() {
+        requestRevision++
+        nativeFrames.clear()
+        pending = null
+        releaseActive()
+        main.removeCallbacks(pump)
+        main.post(pump)
+    }
     private val pump = Runnable { startNext() }
 
     fun isEnabled(videoId: String): Boolean = !closed && videoId.isNotBlank() && try {
@@ -252,6 +272,7 @@ internal class NativeSubtitleTranslator(
             val trackCurrent = trackIdentity(job.video) == job.trackIdentity
             if (trackCurrent) {
                 cache.put(job.video, job.text, translated, job.trackIdentity)
+                cacheRevision++
                 persistCache()
             }
             val current = job.current() && trackCurrent
@@ -279,6 +300,7 @@ internal class NativeSubtitleTranslator(
     }
 
     fun cancel() {
+        requestRevision++
         if (persistenceScheduled) flushCache()
         trackPrefetch.cancel()
         main.removeCallbacks(pump)
@@ -337,7 +359,8 @@ internal class NativeSubtitleTranslator(
     internal fun hasNativeFrame(video: String): Boolean = nativeFrames[video]?.let {
         SystemClock.uptimeMillis() - it < 2000
     } == true
-    internal fun selectVideo(video: String) {
+    internal fun selectVideo(video: String, owner: Any? = null) {
+        if (playback.select(video, owner)) invalidatePlaybackPresentation()
         selectedVideo = video
         val released = cache.select(video)
         if (released > 0) {
