@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_comments_open">Browse cached comments</string>
+    <string name="offline_comments_title">Cached comments</string>
+    <string name="offline_comments_hint">Only comments already saved by TikTok for the current account are shown. Reload reads local storage; it does not download missing comments. Text, author names and cached replies are available; images and profiles are not fetched. Cached translations can be switched per comment. Online translation of missing results is not yet connected to this viewer.</string>
+    <string name="offline_comments_more">More cached rows</string>
+    <string name="offline_comments_reload">Reload local cache</string>
+    <string name="offline_comments_loading">Reading this account’s saved comments…</string>
+    <string name="offline_comments_count">Showing %1$d of %2$d cached rows. Snapshot total: %3$d. Cached: %4$s</string>
+    <string name="offline_comments_partial">Only part of the data is cached or within the display limits. Uncached comments/replies have not been loaded.</string>
+    <string name="offline_comments_empty">This snapshot contains no readable cached rows. This does not prove the video has no comments online.</string>
+    <string name="offline_comments_missing">No saved comment snapshot was found for this video and account. Open its comments online first; TikTok must have saved a snapshot. No comments were downloaded by this viewer.</string>
+    <string name="offline_comments_corrupt">The saved snapshot is invalid, incomplete or belongs to another video. It was not shown as a successful comment load.</string>
+    <string name="offline_comments_unsupported">This app’s persisted comment format cannot be read by the current adapter. Native comments were not modified or downloaded.</string>
+    <string name="offline_comments_account_changed">The account changed or cannot be verified. Previous rows were cleared from this window. Reload for the current account.</string>
+    <string name="offline_comments_busy">A cached-comment read is still finishing. Try local reload again shortly.</string>
+    <string name="offline_comments_unknown_author">Cached author</string>
+    <string name="offline_comments_unknown_time">unknown time</string>
+    <string name="offline_comments_no_text">No cached text (this comment may contain media).</string>
+    <string name="offline_comments_translation_missing">No saved translation for this text. Original is retained. No local translation engine is bundled.</string>
+    <string name="offline_comments_translation_cached">Saved translation available.</string>
+    <string name="offline_comments_translation_language">Saved translation language: %1$s</string>
+    <string name="offline_comments_reply_count">Snapshot reply count: %1$d. Only already-cached replies appear here.</string>
+    <string name="offline_comments_text_truncated">This long comment is shown up to the display limit. It is not a complete cached-text rendering.</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_comments_open">浏览已缓存评论</string>
+    <string name="offline_comments_title">已缓存评论</string>
+    <string name="offline_comments_hint">只显示 TikTok 为当前账号已保存的评论。重新读取只访问本地，不下载缺失评论；显示正文、作者名称和已存回复，不请求头像或主页。已有缓存译文可逐条切换；此窗口尚未接入缺失译文的在线补译。</string>
+    <string name="offline_comments_more">更多已缓存条目</string>
+    <string name="offline_comments_reload">重新读取本地缓存</string>
+    <string name="offline_comments_loading">正在读取当前账号已保存的评论…</string>
+    <string name="offline_comments_count">显示 %1$d / %2$d 条缓存条目。快照记录总数：%3$d。缓存时间：%4$s</string>
+    <string name="offline_comments_partial">只缓存了部分数据或已达到展示上限；未缓存的评论和回复没有加载。</string>
+    <string name="offline_comments_empty">这份快照没有可读取的缓存条目，不代表视频在线评论数为零。</string>
+    <string name="offline_comments_missing">没有找到当前账号下这个视频的评论快照。需先在线打开评论并由 TikTok 保存快照；此窗口没有下载评论。</string>
+    <string name="offline_comments_corrupt">评论快照无效、不完整或属于其他视频，未将其显示为加载成功。</string>
+    <string name="offline_comments_unsupported">当前适配器无法读取这个应用的已存评论格式，未修改或联网下载原生评论。</string>
+    <string name="offline_comments_account_changed">账号已改变或无法核实，窗口已清除上一账号的条目，请重新读取当前账号缓存。</string>
+    <string name="offline_comments_busy">上一条缓存读取任务尚在结束，请稍后再点本地重新读取。</string>
+    <string name="offline_comments_unknown_author">缓存作者</string>
+    <string name="offline_comments_unknown_time">未知时间</string>
+    <string name="offline_comments_no_text">没有缓存正文（该评论可能只含图片等媒体）。</string>
+    <string name="offline_comments_translation_missing">这段正文没有已保存译文，保留原文；尚未内置本地翻译引擎。</string>
+    <string name="offline_comments_translation_cached">有已保存译文，可切换查看。</string>
+    <string name="offline_comments_translation_language">已保存译文语言：%1$s</string>
+    <string name="offline_comments_reply_count">快照记录回复数：%1$d，仅显示已经缓存的回复。</string>
+    <string name="offline_comments_text_truncated">这条长评论达到正文展示上限，当前不是完整正文。</string>
+</resources>

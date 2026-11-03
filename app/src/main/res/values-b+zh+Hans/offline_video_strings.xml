@@ -2,7 +2,7 @@
 <resources>
     <string name="offline_video_feature">离线视频：本地操作（实验性）</string>
     <string name="offline_video_enable">离线长按菜单与完整缓存导出</string>
-    <string name="offline_video_summary">默认关闭。启用后请重新进入视频。识别到离线条目时，播放或暂停均可长按画面打开本地菜单；有网络时允许在线翻译和补充字幕数据，断网时读取已有缓存；只有主动开启“仅使用本地数据”才禁止这些联网请求。当前导出仅支持已核对的 47.6.3 缓存代码、Android 10 及以上和完整的非分片本地 MP4；不完整、加密、音视频分离或未适配缓存不会联网补齐。尚未包含离线评论区与本地翻译模型。</string>
+    <string name="offline_video_summary">默认关闭。启用后请重新进入视频。识别到离线条目时，播放或暂停均可长按画面打开本地菜单；有网络时允许在线翻译和补充字幕数据，断网时读取已有缓存；只有主动开启“仅使用本地数据”才禁止这些联网请求。当前导出仅支持已核对的 47.6.3 缓存代码、Android 10 及以上和完整的非分片本地 MP4；不完整、加密、音视频分离或未适配缓存不会联网补齐。菜单可打开当前账号已有评论缓存并切换已存译文；尚未接入缺失评论的在线补加载或本地翻译模型。</string>
     <string name="offline_video_menu">离线视频：本地操作</string>
     <string name="offline_video_save">将完整缓存视频保存到相册</string>
     <string name="offline_video_subtitles">Toki 字幕设置</string>

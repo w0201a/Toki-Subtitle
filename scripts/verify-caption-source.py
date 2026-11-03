@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 83' in gradle and 'versionName = "2.0.63"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.63-debug / 83")
+check('versionCode = 84' in gradle and 'versionName = "2.0.64"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.64-debug / 84")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -222,6 +222,26 @@ check('configurationReady && !localOnly && validatedNetwork' in local_policy and
 check('SubtitleRemoteResume()' in (JAVA / 'hook/SubtitleOverlay.kt').read_text(encoding='utf-8') and 'translated == null) resetTranslation()' in (JAVA / 'hook/SubtitleOverlay.kt').read_text(encoding='utf-8'), 'visible subtitle render retries a missing translation on observed connectivity restoration')
 check('networkResumed && cues.isEmpty()' in prefetch, 'an observed reconnect can retry the missing current subtitle timeline without discarding cached cues')
 check('it.key == key && it.remote.permitsNetwork()' in native and '!it.current() || !it.remote.permitsNetwork()' in native, 'reconnect does not reuse a permanently denied old translation subscription')
+comment_reader = (JAVA / 'hook/HostOfflineComments.kt').read_text(encoding='utf-8')
+comment_data = (JAVA / 'hook/OfflineCommentData.kt').read_text(encoding='utf-8')
+comment_dialog = (JAVA / 'hook/OfflineCommentsDialog.kt').read_text(encoding='utf-8')
+comment_adapter = (JAVA / 'hook/OfflineCommentListAdapter.kt').read_text(encoding='utf-8')
+check('OfflineCommentsDialog.show' in offline_hook and 'offline_comments_open' in offline_hook and 'comments?.dismiss()' in offline_hook, 'cached-comment viewer is connected to offline local menu and owner window cleanup')
+check('OfflineCommentCodeGate.verify(context)' in comment_reader and '"offline_comment_" + account' in comment_reader and '"snap_" + video' in comment_reader, 'native cached comments use inspected schema and account/video-specific keys')
+check('contract.account() != account' in comment_reader and 'reader.accountMatches(value.account)' in comment_dialog and 'main.postDelayed(this, 1000)' in comment_dialog, 'account identity is checked after reads and while the cached viewer is visible')
+check('contract.snapshotId.get(native) != video' in comment_reader and 'contract.status.getInt(response) != 0' in comment_reader and 'contract.error.getInt(response) != 0' in comment_reader, 'wrong-video and failed native snapshots are not reported as empty successful comments')
+check('OfflineCommentJsonBounds.check(raw)' in comment_reader and 'depth <= 64' in comment_data and 'MAX_ROWS = 500' in comment_data and '++visited > 1000' in comment_reader and 'depth < 3' in comment_reader, 'cached JSON depth/size, comment count, traversal and reply nesting are bounded')
+check('sourceTruncated' in comment_data and 'Character.isHighSurrogate' in comment_data and 'getOriginalText' in comment_reader and 'getTranslatedText' in comment_reader, 'comment source and translation remain distinct with Unicode-safe display limits')
+check('OfflineCommentPages' in comment_adapter and 'setOnScrollListener' in comment_dialog and 'adapter.append()' in comment_dialog and 'snapshot.hasMore || snapshot.truncated' in comment_dialog, 'local pagination and explicit partial-cache states are wired')
+check('generation.incrementAndGet()' in comment_dialog and 'generation.get() != token' in comment_dialog and 'worker.shutdown()' in comment_dialog, 'closing/reloading or leaving cached comments invalidates old read completions')
+check('Mode.ORIGINAL' in comment_adapter and 'Mode.TRANSLATED' in comment_adapter and 'Mode.BILINGUAL' in comment_adapter and 'row.translation != null' in comment_adapter, 'individual cached-comment original/translation/bilingual choices are wired without pretending a missing translation exists')
+for relative in ('hook/HostOfflineComments.kt', 'hook/OfflineCommentsDialog.kt', 'hook/OfflineCommentListAdapter.kt'):
+    source = (JAVA / relative).read_text(encoding='utf-8')
+    check(not any(token in source for token in ('openConnection(', 'NativeSubtitleTranslator.transport(', 'OfflineCommentLifecycleListener', '.storeString(', '.remove(', '.delete(')), relative + ' only reads existing comments and does not invoke remote predownload or mutate host storage (source only)')
+for relative in ('hook/OfflineCommentsDialog.kt', 'hook/OfflineCommentListAdapter.kt'):
+    refs = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
+    check(refs <= base_names, relative + ' cached-comment state and action strings exist')
+
 for relative in ('hook/TranslationNetworkPolicy.kt', 'ui/screen/LocalTranslationSection.kt'):
     references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
     check(references <= base_names, relative + ' local-only strings exist')
@@ -300,6 +320,8 @@ lexical_files = [
     'hook/OfflinePlaybackState.kt', 'hook/OfflineVideoContract.kt', 'hook/OfflineCacheCodeGate.kt',
     'hook/LocalVideoFile.kt', 'hook/HostLocalVideoCache.kt', 'hook/OfflineVideoExporter.kt',
     'hook/OfflineLongPressState.kt', 'hook/OfflineVideoHook.kt', 'ui/screen/OfflineVideoSection.kt', 'hook/SubtitleRemoteResume.kt',
+    'hook/OfflineCommentData.kt', 'hook/OfflineCommentCodeGate.kt', 'hook/HostOfflineComments.kt',
+    'hook/OfflineCommentListAdapter.kt', 'hook/OfflineCommentsDialog.kt',
 ]
 for relative in lexical_files:
     kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8'))
@@ -316,6 +338,7 @@ for relative in (
     'hook/LocalOnlyRequestTest.kt', 'hook/LocalSubtitleExecutionTest.kt', 'hook/FakeOnlineTranslator.kt',
     'hook/NativeSubtitleTranslatorTest.kt', 'hook/SubtitleOverlayTest.kt',
     'hook/OfflinePlaybackStateTest.kt', 'hook/OfflineLongPressStateTest.kt', 'hook/LocalVideoFileTest.kt', 'hook/OfflineVideoHitTest.kt', 'hook/SubtitleRemoteResumeTest.kt',
+    'hook/OfflineCommentDataTest.kt', 'hook/OfflineCommentListAdapterTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

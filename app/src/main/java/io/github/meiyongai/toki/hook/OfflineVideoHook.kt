@@ -45,15 +45,17 @@ internal object OfflineVideoHook {
         val busy = AtomicBoolean(false)
         val worker = ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, ArrayBlockingQueue(1), ThreadPoolExecutor.AbortPolicy())
         val cache = HostLocalVideoCache(loader)
+        val commentReader = HostOfflineComments(loader)
         val activities = mutableSetOf<Method>()
         var binding: Binding? = null
         var timer: Runnable? = null
         var dialog: AlertDialog? = null
+        var comments: AlertDialog? = null
         val life = Lifetime()
         var cancellingNative = false
 
         fun cancelTouch() { timer?.let(main::removeCallbacks); timer = null; gesture.cancel() }
-        fun closeMenu() { dialog?.dismiss(); dialog = null }
+        fun closeMenu() { dialog?.dismiss(); dialog = null; comments?.dismiss(); comments = null }
         fun current(target: Binding): Boolean = !life.closed && life.enabled && binding === target && target.offline &&
             target.owner.get()?.let { state.owns(it, target.id) } == true
         fun export(target: Binding) {
@@ -103,10 +105,20 @@ internal object OfflineVideoHook {
             val context = HostSettingsEntry.localizedContext(activity)
             closeMenu()
             val shown = AlertDialog.Builder(context).setTitle(context.getString(R.string.offline_video_menu))
-                .setItems(arrayOf(context.getString(R.string.offline_video_save), context.getString(R.string.offline_video_subtitles))) { _, action ->
+                .setItems(arrayOf(context.getString(R.string.offline_video_save), context.getString(R.string.offline_video_subtitles),
+                    context.getString(R.string.offline_comments_open))) { _, action ->
                     try {
                         if (current(target)) {
-                            if (action == 0) export(target) else HostSettingsEntry.openSubtitle(activity)
+                            when (action) {
+                                0 -> export(target)
+                                1 -> HostSettingsEntry.openSubtitle(activity)
+                                2 -> {
+                                    comments?.dismiss()
+                                    comments = OfflineCommentsDialog.show(activity, target.id, commentReader, { current(target) }) { closed ->
+                                        if (comments === closed) comments = null
+                                    }
+                                }
+                            }
                         }
                     } catch (error: Exception) {
                         HookRuntime.event(FEATURE, "local action unavailable type=" + error.javaClass.simpleName)
