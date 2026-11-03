@@ -9,7 +9,7 @@ object ConfigSchema {
         "LocaleHook" to listOf("language_spoof_enabled"),
         "TimeZoneHook" to listOf("timezone_spoof_enabled"),
         "GpsHook" to listOf("gps_spoof_enabled"),
-        "PlaybackSpeedHook" to listOf("fixed_speed_enabled", "speed_expand_enabled"),
+        "PlaybackSpeedHook" to listOf("fixed_speed_enabled"),
         "SpeedOptions" to listOf("speed_expand_enabled"),
         "CommentTranslateHook" to listOf("comment_translate_enabled"),
         "ManualCommentTranslateHook" to listOf("comment_manual_translate_enabled"),

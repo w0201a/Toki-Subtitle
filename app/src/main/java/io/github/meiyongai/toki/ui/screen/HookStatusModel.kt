@@ -92,14 +92,20 @@ internal data class HookFeatureStatus(
     private val menuEnabled = definition.id == "PlaybackSpeedHook" && speedMenu?.enabled == true
     private val menuIssue = definition.id == "PlaybackSpeedHook" && (speedMenu?.hasError == true ||
         (menuEnabled && speedMenu?.state == "倍速菜单数据源未唯一解析；固定倍速独立注册"))
+    private val speedGroup = definition.id == "PlaybackSpeedHook"
+    private val menuReady = menuEnabled && speedMenu?.appliedEnabled == true && (speedMenu?.registered ?: 0) > 0 &&
+        speedMenu?.state in setOf("已注册", "菜单数据源已注册；调用次数计入播放倍速")
     private val videoIssue = definition.id == "ImmersiveFullScreenHook" && videoModes?.hasError == true
     val state = when {
         report?.hasError == true || menuIssue || videoIssue -> HookVisualState.ISSUE
         report?.restartRequired == true || speedMenu?.restartRequired == true -> HookVisualState.PENDING
         report?.state in setOf("正在核验页面组件", "环境配置待应用") -> HookVisualState.PENDING
+        speedGroup && menuEnabled && !menuReady -> HookVisualState.PENDING
+        speedGroup && report?.enabled == true && report.appliedEnabled != true -> HookVisualState.PENDING
+        speedGroup && report?.enabled == false && report.appliedEnabled != false -> HookVisualState.PENDING
+        speedGroup && report?.enabled == false && menuReady -> HookVisualState.NORMAL
         report?.enabled == null -> HookVisualState.PENDING
         report?.appliedEnabled == false -> HookVisualState.DISABLED
-        menuEnabled && speedMenu?.state != "菜单数据源已注册；调用次数计入播放倍速" -> HookVisualState.PENDING
         report?.appliedEnabled == true && report.state == "已注册" && report.registered > 0 -> HookVisualState.NORMAL
         else -> HookVisualState.PENDING
     }
@@ -107,10 +113,10 @@ internal data class HookFeatureStatus(
     val problem: Int? = when {
         state == HookVisualState.PENDING && (report?.restartRequired == true || speedMenu?.restartRequired == true) -> R.string.restart_tiktok
         state != HookVisualState.ISSUE -> null
+        menuIssue -> R.string.status_problem_speed_menu
         report?.enabled == false -> R.string.status_problem_disabled
         report?.state == "地区环境预设缺失" -> R.string.region_environment_missing
         report?.hasError == true -> if (report.state == "注册失败，已撤销") R.string.status_problem_unavailable else R.string.status_problem_runtime
-        menuIssue -> R.string.status_problem_speed_menu
         videoIssue -> if (videoModes?.state == "注册失败，已撤销") R.string.status_problem_unavailable else R.string.status_problem_runtime
         else -> null
     }

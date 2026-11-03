@@ -168,7 +168,7 @@ class HookStatusModelTest {
             "SpeedOptions" to HookFeatureReport(enabled = true)
         )
         assertEquals(HookVisualState.PENDING, process(reports).features.single { it.definition.id == "PlaybackSpeedHook" }.state)
-        val ready = reports + ("SpeedOptions" to HookFeatureReport(true, "菜单数据源已注册；调用次数计入播放倍速"))
+        val ready = reports + ("SpeedOptions" to HookFeatureReport(true, "菜单数据源已注册；调用次数计入播放倍速", 6, appliedEnabled = true))
         assertEquals(HookVisualState.NORMAL, process(ready).features.single { it.definition.id == "PlaybackSpeedHook" }.state)
     }
 
@@ -212,6 +212,24 @@ class HookStatusModelTest {
         assertEquals(HookVisualState.PENDING, TranslationPathCatalog.state(HookFeatureReport(state = "注册中", registered = 3)))
         assertEquals(HookVisualState.ISSUE, TranslationPathCatalog.state(HookFeatureReport(state = "注册失败，已撤销")))
     }
+    @Test fun independentMenuCanBeReadyWithFixedDisabledButUnknownReportsRemainPending() {
+        val menu = HookFeatureReport(true, "已注册", 6, appliedEnabled = true)
+        fun speed(fixed: HookFeatureReport?, option: HookFeatureReport): HookFeatureStatus =
+            HookFeatureStatus(HookStatusCatalog.features.single { it.id == "PlaybackSpeedHook" }, fixed, option)
+        val disabled = HookFeatureReport(false, "本次会话未安装", appliedEnabled = false)
+        assertEquals(HookVisualState.NORMAL, speed(disabled, menu).state)
+        assertEquals(HookVisualState.PENDING, speed(null, menu).state)
+        assertEquals(HookVisualState.PENDING, speed(disabled.copy(appliedEnabled = null), menu).state)
+        assertEquals(HookVisualState.PENDING, speed(disabled.copy(appliedEnabled = true), menu).state)
+        assertEquals(HookVisualState.PENDING, speed(disabled, menu.copy(registered = 0)).state)
+        assertEquals(HookVisualState.PENDING, speed(disabled, menu.copy(appliedEnabled = null)).state)
+        assertEquals(HookVisualState.PENDING, speed(disabled, menu.copy(state = "未知状态")).state)
+        assertEquals(HookVisualState.PENDING, speed(disabled, menu.copy(restartRequired = true)).state)
+        val failed = speed(disabled, menu.copy(error = "menu callback failed"))
+        assertEquals(HookVisualState.ISSUE, failed.state)
+        assertEquals(R.string.status_problem_speed_menu, failed.problem)
+    }
+
     @Test fun catalogContainsOnlyUserFeaturesExactlyOnce() {
         val expected = ConfigSchema.featureSwitches.keys - "SpeedOptions"
         assertEquals(expected, HookStatusCatalog.features.map { it.id }.toSet())

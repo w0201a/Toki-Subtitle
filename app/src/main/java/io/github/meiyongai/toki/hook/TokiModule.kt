@@ -50,7 +50,7 @@ class TokiModule : XposedModule() {
         plan = HostFeaturePlan(ConfigClient.requestedSnapshotOrNull())
         ConfigClient.configureHostSession { plan.apply(it) }
         ConfigSchema.featureSwitches.keys.forEach { feature ->
-            HookRuntime.state(feature, if (feature in plan.features || feature == "SpeedOptions" && "PlaybackSpeedHook" in plan.features)
+            HookRuntime.state(feature, if (feature in plan.features)
                 "等待注册" else "本次会话未安装")
         }
         HookRuntime.own("HostSession", ConfigClient.addStateListener {
@@ -81,7 +81,7 @@ class TokiModule : XposedModule() {
             restart = restart || pending
             HookRuntime.restartRequired(feature, pending)
             if (feature in livePending) HookRuntime.state(feature, "等待运行时注册")
-            val applied = if (feature == "SpeedOptions") "PlaybackSpeedHook" in installed else feature in installed
+            val applied = feature in installed
             val missingEnvironment = io.github.meiyongai.toki.subtitle.model.RegionEnvironmentPolicy.missingPreset(feature, effective)
             if (applied && feature in HostFeaturePlan.platform) {
                 val receipt = EnvironmentApplicationStatus.get(feature)
@@ -98,7 +98,7 @@ class TokiModule : XposedModule() {
                 HookRuntime.state(feature, if (missingEnvironment) "地区环境预设缺失" else "已注册")
             }
             if (applied || !HostFeaturePlan.enabled(feature, effective)) {
-                val revision = plan.appliedRevision(if (feature == "SpeedOptions") "PlaybackSpeedHook" else feature, requested)
+                val revision = plan.appliedRevision(feature, requested)
                 HookRuntime.appliedConfiguration(feature,
                     ConfigSnapshot(effective.configuration(), revision, effective.importRevision),
                     applied && HostFeaturePlan.enabled(feature, effective) && !missingEnvironment)
@@ -193,6 +193,7 @@ class TokiModule : XposedModule() {
         when (feature) {
             "FeedFilterHook" -> FeedFilterHook.init(this, loader)
             "PlaybackSpeedHook" -> PlaybackSpeedHook.init(this, loader, ConfigClient.snapshot())
+            "SpeedOptions" -> PlaybackSpeedHook.initOptions(this, loader)
             "CommentTranslateHook" -> CommentTranslateHook.init(this, loader)
             "ManualCommentTranslateHook" -> ManualCommentTranslateHook.init(this, loader)
             "OfflineVideoHook" -> OfflineVideoHook.init(this, loader)

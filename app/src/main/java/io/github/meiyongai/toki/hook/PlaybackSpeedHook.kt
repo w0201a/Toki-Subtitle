@@ -21,13 +21,12 @@ object PlaybackSpeedHook {
     @Volatile
     private var activeSpeed: Float = 1.0f
 
-    /** 倍速档位拓展功能开关 */
-    @Volatile
-    private var isExpandEnabled: Boolean = false
-
-    /** 自定义倍速档位列表 */
-    @Volatile
-    private var customSpeedList: List<Float> = listOf(0.5f, 1.0f, 1.5f, 2.0f)
+    private data class MenuState(val enabled: Boolean, val speeds: List<Float>)
+    @Volatile private var menuState = MenuState(false, listOf(0.5f, 1f, 1.5f, 2f))
+    private val rateScope = PlaybackRateScope()
+    private val playerRates = PlayerRateOverrides({ error ->
+        HookRuntime.event("PlaybackSpeedHook", "已观察播放器调速／恢复失败；type=" + error.javaClass.simpleName)
+    })
 
     /** 宿主私有倍速记忆，不触发管理端服务启动。 */
     @Volatile
@@ -59,7 +58,7 @@ object PlaybackSpeedHook {
     /** 固定倍速的必需状态字段；全部在注册前验证。 */
     private var managerFields: Map<String, Field> = emptyMap()
     /** 首次真正覆盖中枢时才记录原值；待初始化期间的宿主原生更新必须保留。 */
-    private var managerBaseline: Map<String, Any?>? = null
+    private var fieldLease: SpeedFieldLease? = null
 
     private data class ControllerContract(
         val type: Class<*>, val managerType: Class<*>, val managerSpeed: String,
@@ -140,34 +139,29 @@ object PlaybackSpeedHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.TokiModule.hookApplication`: 宿主进程初始化时同步。
      */
     fun refreshConfig(context: Context) {
-        // 固定链只有在其全部运行依赖就绪后才可进入；初始化失败仍保留明确的未激活状态。
-        isEnabled = false
-        isExpandEnabled = false
         ConfigClient.init(context)
         val snapshot = ConfigClient.snapshot()
-        val fixed = snapshot.boolean("fixed_speed_enabled")
-        val expanded = snapshot.boolean("speed_expand_enabled")
-        val options = parseSpeedList(snapshot.string("speed_expand_list"))
-
-        if (!fixed) {
-            Log.i(TAG, "固定播放倍速功能处于停用状态")
-            syncSpeedManagerFields(1.0f, enablePersist = false)
-            activeSpeed = 1.0f
-            customSpeedList = options
-            isExpandEnabled = expanded
+        isEnabled = false
+        if (!snapshot.boolean("fixed_speed_enabled")) {
+            releaseFixed(snapshot.revision)
             return
         }
-
-        val memory = speedMemory ?: PlaybackSpeedMemory(
-            context.getSharedPreferences("toki_playback", Context.MODE_PRIVATE))
+        val memory = speedMemory ?: PlaybackSpeedMemory(context.getSharedPreferences("toki_playback", Context.MODE_PRIVATE))
         val speed = memory.read(snapshot)
-        syncSpeedManagerFields(speed, enablePersist = speed != 1.0f)
-        speedMemory = memory
-        activeSpeed = speed
-        customSpeedList = options
-        isExpandEnabled = expanded
-        isEnabled = true
-        Log.i(TAG, "已同步倍速记忆配置 -> 状态: 启用, 记忆倍速: ${speed}x")
+        syncSpeedManagerFields(speed, enablePersist = speed != 1f)
+        speedMemory = memory; activeSpeed = speed; isEnabled = true
+        val applied = playerRates.apply(speed)
+        HookRuntime.detail("PlaybackSpeedHook", "固定倍速配置已处理；revision=${snapshot.revision}; knownPlayers=${applied.known}; commands=${applied.written}; failed=${applied.failed}; raced=${applied.raced}; 未观察原生速率的现有播放器不强行改写，等待后续原生调速／绑定")
+    }
+
+    /** Disable callbacks first, then attempt fields and observed players even if one field fails. */
+    private fun releaseFixed(revision: Long?) {
+        isEnabled = false
+        val restoreFailure = try { fieldLease?.restore(); null } catch (error: Exception) { error }
+        val restored = playerRates.apply(null)
+        activeSpeed = 1f
+        HookRuntime.detail("PlaybackSpeedHook", "固定倍速关闭或配置失效；revision=$revision; restoreCommands=${restored.written}; unknownOrRaced=${restored.raced}; failed=${restored.failed}; 只恢复同一播放器已观察的原生请求，不假定未知速率为1倍")
+        restoreFailure?.let { throw it }
     }
 
     /**
@@ -185,7 +179,7 @@ object PlaybackSpeedHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.PlaybackSpeedHook.hookSpeedDialogDataSource`: 动态档位下发时判断。
      *     - `io.github.meiyongai.toki.subtitle.hook.PlaybackSpeedHook.hookLongPressSpeedDataSource`: 长按面板档位下发时判断。
      */
-    fun isExpansionEnabled(): Boolean = isExpandEnabled
+    fun isExpansionEnabled(): Boolean = menuState.enabled
 
     /**
      * 获取当前倍速固定功能是否处于激活状态。
@@ -258,16 +252,8 @@ object PlaybackSpeedHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.PlaybackSpeedHook.onUserSelectedSpeed`: 用户在菜单中选速时更新。
      *     - `io.github.meiyongai.toki.subtitle.hook.PlaybackSpeedHook.hookSpeedManagerMethods`: 状态重置守护。
      */
-    private fun syncSpeedManagerFields(speed: Float, enablePersist: Boolean) {
-        val clazz = speedManagerClass ?: return
-        if (managerBaseline == null) managerBaseline = managerFields.mapValues { (_, field) -> field.get(null) }
-
-        managerFields.getValue("enabled").setBoolean(null, enablePersist)
-        managerFields.getValue("persist").setFloat(null, speed)
-        managerFields.getValue("current0").setFloat(null, speed)
-        managerFields.getValue("current1").setFloat(null, speed)
-
-        Log.i(TAG, "已同步至原生倍速中枢 ${clazz.name} -> speed: ${speed}x, persist: $enablePersist")
+    private fun syncSpeedManagerFields(speed: Float, enablePersist: Boolean, observeExternalChanges: Boolean = true) {
+        fieldLease?.apply(speed, enablePersist, observeExternalChanges)
     }
 
     /**
@@ -291,10 +277,8 @@ object PlaybackSpeedHook {
 
         syncSpeedManagerFields(speed, enablePersist = true)
 
-        activeControllerRef?.get()?.let { controller ->
-            applySpeedToPlayerController(controller, speed)
-            Log.i(TAG, "已向当前视频播放控制器即时应用新倍速 -> ${speed}x")
-        }
+        val applied = playerRates.apply(speed)
+        HookRuntime.count("PlaybackSpeedHook", "已观察播放器选速应用命令", applied.written.toLong())
 
 
         if (!checkNotNull(speedMemory).save(speed, ConfigClient.snapshot())) {
@@ -316,11 +300,14 @@ object PlaybackSpeedHook {
         var registered = false
         try {
             module.trackHook("PlaybackSpeedHook", method).intercept { chain ->
-                val requestedSpeed = chain.args[0] as Float
-                if (isFeatureEnabled() && activeSpeed != 1.0f && requestedSpeed == 1.0f) {
-                    chain.proceed(arrayOf(activeSpeed))
-                } else {
-                    chain.proceed()
+                if (rateScope.applying) return@intercept chain.proceed()
+                val target = chain.thisObject ?: return@intercept chain.proceed()
+                val supplied = chain.args[0] as Float
+                val replacement = if (!rateScope.selecting && isFeatureEnabled() && activeSpeed != 1f && supplied == 1f) activeSpeed else null
+                playerRates.request(target, supplied, replacement, { actual ->
+                    if (actual == supplied) chain.proceed() else chain.proceed(arrayOf(actual))
+                }) { player, value ->
+                    rateScope.module { method.invoke(player, value); Unit }
                 }
             }
             registered = true
@@ -350,23 +337,27 @@ object PlaybackSpeedHook {
         module.trackHook("PlaybackSpeedHook", contract.methods.getValue("restore")).intercept { chain ->
             val aweme = chain.args[0]
             if (isFeatureEnabled() && activeSpeed != 1f && aweme != null) {
-                contract.methods.getValue("select").invoke(null, activeSpeed, aweme, chain.args[1], "long_press")
+                rateScope.module { contract.methods.getValue("select").invoke(null, activeSpeed, aweme, chain.args[1], "long_press") }
+                syncSpeedManagerFields(activeSpeed, enablePersist = true, observeExternalChanges = false)
                 null
             } else chain.proceed()
         }
         module.trackHook("PlaybackSpeedHook", contract.methods.getValue("select")).intercept { chain ->
-            if (!isFeatureEnabled()) return@intercept chain.proceed()
+            if (!isFeatureEnabled() || rateScope.applying) return@intercept chain.proceed()
             val speed = chain.args[0] as Float
-            val scene = chain.args[3] as? String
-            for (role in listOf("current0", "current1", "persist")) managerFields.getValue(role).setFloat(null, speed)
-            onUserSelectedSpeed(speed, scene.takeUnless { it.isNullOrEmpty() } ?: "long_press")
-            if (scene.isNullOrEmpty()) {
-                chain.proceed(arrayOf(speed, chain.args[1], chain.args[2], "long_press"))
-            } else chain.proceed()
+            if (!speed.isFinite() || speed !in MIN_SPEED..MAX_SPEED) return@intercept chain.proceed()
+            // Native selection may fail; do not replace activeSpeed or override a 1x choice before success.
+            val result = rateScope.nativeSelection { chain.proceed() }
+            fieldLease?.observeNativeState()
+            onUserSelectedSpeed(speed, chain.args[3] as? String)
+            result
         }
         module.trackHook("PlaybackSpeedHook", contract.methods.getValue("reset")).intercept { chain ->
             val result = chain.proceed()
-            if (isFeatureEnabled() && activeSpeed != 1f) syncSpeedManagerFields(activeSpeed, enablePersist = true)
+            if (isFeatureEnabled() && !rateScope.applying) {
+                fieldLease?.observeNativeState()
+                syncSpeedManagerFields(activeSpeed, enablePersist = activeSpeed != 1f)
+            }
             result
         }
         Log.i(TAG, "已注册倍速中枢：${contract.type.name}；入口=${contract.methods.size}")
@@ -408,32 +399,29 @@ object PlaybackSpeedHook {
             val controller = checkNotNull(chain.thisObject)
             activeControllerRef = java.lang.ref.WeakReference(controller)
             val manager = chain.args[0]
-            if (manager != null) hookPlayerManagerSetSpeed(module, manager.javaClass)
+            if (manager != null) { playerRates.forget(manager); hookPlayerManagerSetSpeed(module, manager.javaClass) }
             val result = chain.proceed()
-            if (manager != null && isFeatureEnabled() && activeSpeed != 1.0f) {
-                applySpeedToPlayerController(controller, activeSpeed)
-            }
+            if (manager != null && isFeatureEnabled()) playerRates.apply(activeSpeed, manager)
             result
         }
-
         module.trackHook("PlaybackSpeedHook", contract.speed).intercept { chain ->
             activeControllerRef = java.lang.ref.WeakReference(checkNotNull(chain.thisObject))
-            val requestedSpeed = chain.args[0] as Float
-            if (isFeatureEnabled() && activeSpeed != 1.0f && requestedSpeed == 1.0f) {
-                chain.proceed(arrayOf(activeSpeed))
-            } else {
-                chain.proceed()
-            }
+            if (rateScope.applying) return@intercept chain.proceed()
+            val manager = resolvePlayerManager(checkNotNull(chain.thisObject))
+            if (manager != null) hookPlayerManagerSetSpeed(module, manager.javaClass)
+            // Concrete player requests, not speculative controller values, establish the restoration baseline.
+            chain.proceed()
         }
-
         module.trackHook("PlaybackSpeedHook", contract.renderReady).intercept { chain ->
-            val result = chain.proceed()
             val controller = checkNotNull(chain.thisObject)
+            val before = resolvePlayerManager(controller)
+            if (before != null) { playerRates.forget(before); hookPlayerManagerSetSpeed(module, before.javaClass) }
+            val result = chain.proceed()
             activeControllerRef = java.lang.ref.WeakReference(controller)
             val manager = resolvePlayerManager(controller)
             if (manager != null) {
                 hookPlayerManagerSetSpeed(module, manager.javaClass)
-                if (isFeatureEnabled() && activeSpeed != 1.0f) applySpeedToPlayerController(controller, activeSpeed)
+                if (isFeatureEnabled()) playerRates.apply(activeSpeed, manager)
             }
             result
         }
@@ -469,25 +457,36 @@ object PlaybackSpeedHook {
         return MenuContract(gate.apply { isAccessible = true }, methods)
     }
     private fun hookSpeedDialogMethods(module: XposedModule, contract: MenuContract) {
-        module.trackHook("PlaybackSpeedHook", contract.gate).intercept { chain ->
-            if (isExpansionEnabled()) true else chain.proceed()
+        module.trackHook("SpeedOptions", contract.gate).intercept { chain ->
+            if (menuState.enabled) true else chain.proceed()
         }
-        for (method in contract.sources) {
-            module.trackHook("PlaybackSpeedHook", method).intercept { chain ->
-                if (isExpansionEnabled()) customSpeedList else chain.proceed()
-            }
+        for (method in contract.sources) module.trackHook("SpeedOptions", method).intercept { chain ->
+            val value = menuState
+            if (value.enabled) value.speeds.toList() else chain.proceed()
         }
-        HookRuntime.state("SpeedOptions", "菜单数据源已注册；调用次数计入播放倍速")
-        Log.i(TAG, "已注册倍速档位数据源：${contract.sources.size} 个")
+    }
+
+    fun initOptions(module: XposedModule, classLoader: ClassLoader) {
+        val menu = menuContract(classLoader)
+        HookRuntime.onDispose("SpeedOptions") { menuState = MenuState(false, listOf(0.5f, 1f, 1.5f, 2f)) }
+        hookSpeedDialogMethods(module, menu)
+        HookRuntime.subscribe("SpeedOptions") { snapshot -> applyOptions(snapshot) }
+    }
+
+    internal fun applyOptions(snapshot: ConfigSnapshot?) {
+        menuState = MenuState(snapshot?.boolean("speed_expand_enabled") == true, parseSpeedList(snapshot?.string("speed_expand_list")))
+        HookRuntime.state("SpeedOptions", "已注册")
+        HookRuntime.detail("SpeedOptions", "独立倍速菜单配置已处理；revision=${snapshot?.revision}; 后续原生菜单读取生效，已打开且缓存列表的菜单需重新打开；不依赖固定倍速链")
+        if (snapshot != null) HookRuntime.appliedConfiguration("SpeedOptions", snapshot, menuState.enabled)
     }
 
     /**
-     * 依据启动请求分别核实并安装固定倍速链和菜单扩展链；全部所需契约先验证再注册。
+     * 固定倍速单元独立核实完整契约；菜单由initOptions另行安装。
      *
      * Args:
      *     module (XposedModule): 当前注入的 XposedModule 实例。
      *     classLoader (ClassLoader): 宿主目标应用类加载器。
-     *     snapshot (ConfigSnapshot): 本次进程实际应用的启动配置。
+     *     snapshot (ConfigSnapshot): 注册时可读配置，仅用于诊断；业务等待准入后的有效快照。
      *
      * Returns:
      *     Unit: 无返回值。
@@ -496,57 +495,31 @@ object PlaybackSpeedHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.TokiModule.onPackageLoaded`: 目标包加载时触发。
      */
     fun init(module: XposedModule, classLoader: ClassLoader, snapshot: ConfigSnapshot) {
-        val fixed = snapshot.boolean("fixed_speed_enabled")
-        val expanded = snapshot.boolean("speed_expand_enabled")
-        if (!fixed && !expanded) return
-
-        // 先核实本次请求的全部契约；不允许留下只有 gate 或部分锁速入口的安装结果。
-        val controller = if (fixed) controllerContract(classLoader) else null
-        val manager = if (fixed) managerContract(HostSymbols.resolve(classLoader, HostSymbol.SPEED_MANAGER)) else null
-        val fields = manager?.fields.orEmpty()
-        val menu = if (expanded) try {
-            menuContract(classLoader)
-        } catch (error: Exception) {
-            HookRuntime.failure("SpeedOptions", error, "倍速菜单契约验证失败")
-            throw error
-        } else null
+        val controller = controllerContract(classLoader)
+        val manager = managerContract(HostSymbols.resolve(classLoader, HostSymbol.SPEED_MANAGER))
         HookRuntime.onDispose("PlaybackSpeedHook") {
-            synchronized(hookedPlayerManagerMethods) { hookedPlayerManagerMethods.clear() }
-            activeControllerRef?.clear()
-            activeControllerRef = null
-            speedManagerClass = null
-            speedMemory = null
-            controllerSpeedMethod = null
-            playerManagerGetter = null
-            playerManagerType = null
-            managerSpeedName = null
             isEnabled = false
-            isExpandEnabled = false
-            activeSpeed = 1f
-            customSpeedList = listOf(0.5f, 1f, 1.5f, 2f)
-            managerFields = emptyMap()
-            if (expanded) {
-                HookRuntime.state("SpeedOptions", "注册失败，已撤销")
-                HookRuntime.appliedConfiguration("SpeedOptions", snapshot, false)
-            }
-            val originalFields = managerBaseline
-            managerBaseline = null
-            if (originalFields != null) {
-                for ((name, field) in fields) field.set(null, originalFields.getValue(name))
+            try { fieldLease?.restore() } finally {
+                val restored = playerRates.apply(null)
+                HookRuntime.count("PlaybackSpeedHook", "撤销时已观察播放器恢复命令", restored.written.toLong())
+                playerRates.clear(); fieldLease = null
+                synchronized(hookedPlayerManagerMethods) { hookedPlayerManagerMethods.clear() }
+                activeControllerRef?.clear(); activeControllerRef = null
+                speedManagerClass = null; speedMemory = null; controllerSpeedMethod = null
+                playerManagerGetter = null; playerManagerType = null; managerSpeedName = null
+                managerFields = emptyMap(); activeSpeed = 1f
             }
         }
-        managerFields = fields
-        managerBaseline = null
-        isEnabled = false // Application 中准备好倍速记忆和中枢状态后才能激活固定链。
-        isExpandEnabled = expanded
-        customSpeedList = parseSpeedList(snapshot.string("speed_expand_list"))
-        if (controller != null) hookPlayerControllerMethods(module, controller)
-        if (manager != null) hookSpeedManagerMethods(module, manager)
-        if (menu != null) {
-            hookSpeedDialogMethods(module, menu)
-            HookRuntime.appliedConfiguration("SpeedOptions", snapshot)
+        managerFields = manager.fields; fieldLease = SpeedFieldLease(manager.fields)
+        isEnabled = false
+        hookPlayerControllerMethods(module, controller)
+        hookSpeedManagerMethods(module, manager)
+        HookRuntime.subscribe("PlaybackSpeedHook") { snapshot ->
+            if (snapshot?.boolean("fixed_speed_enabled") != true) HookRuntime.configure("PlaybackSpeedHook") {
+                releaseFixed(snapshot?.revision)
+            }
         }
-        Log.i(TAG, "倍速请求已注册：固定=$fixed，档位扩展=$expanded")
+        HookRuntime.detail("PlaybackSpeedHook", "固定倍速链已注册，等待配置应用；revision=${snapshot.revision}; 菜单扩展为独立安装单元")
     }
 
     /**

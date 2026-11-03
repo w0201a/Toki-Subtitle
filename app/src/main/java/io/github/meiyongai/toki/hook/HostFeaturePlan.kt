@@ -7,7 +7,7 @@ import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
 internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
     private val rejected = mutableSetOf<String>()
     private val startupFeatures: Set<String> = ConfigSchema.featureSwitches.keys.filterTo(linkedSetOf()) {
-        it != "SpeedOptions" && startup != null && enabled(it, startup)
+        startup != null && enabled(it, startup)
     }
     private var liveFeatures: Set<String> = emptySet()
     val features: Set<String>
@@ -18,10 +18,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
         if ("DownloadHook" in features && !downloadRepair) setOf("DownloadHook") else emptySet()
     val adaptedFeatures: Set<String> get() = features - platform - directHostFeatures
     val symbols: Set<HostSymbol> get() = adaptedFeatures.flatMapTo(linkedSetOf()) { feature ->
-        if (feature == "PlaybackSpeedHook") buildSet {
-            if (checkNotNull(startup).boolean("fixed_speed_enabled")) addAll(fixedSpeedSymbols)
-            if (startup.boolean("speed_expand_enabled")) addAll(speedMenuSymbols)
-        } else symbolDependencies.getValue(feature)
+        symbolDependencies.getValue(feature)
     }
     val requiresScan: Boolean get() = symbols.isNotEmpty()
 
@@ -49,7 +46,6 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
     @Synchronized fun apply(requested: ConfigSnapshot): ConfigSnapshot {
         val values = requested.configuration().toMutableMap()
         for ((feature, switches) in ConfigSchema.featureSwitches) {
-            if (feature == "SpeedOptions") continue
             if (feature !in features || feature in rejected) switches.forEach { values[it] = false }
         }
         if ("AutoCleanModeHook" !in features || "AutoCleanModeHook" in rejected) values["clean_mode_show_progress_bar"] = false
@@ -61,19 +57,17 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
                 if (key in original) values[key] = original.getValue(key) else values.remove(key)
             }
         }
-        val importRevision = if ("PlaybackSpeedHook" in features) checkNotNull(startup).importRevision else requested.importRevision
-        return ConfigSnapshot(values, requested.revision, importRevision)
+        return ConfigSnapshot(values, requested.revision, requested.importRevision)
     }
 
     /** 无关配置版本变化不要求重启，只比较该功能影响运行的字段。 */
     @Synchronized fun requiresRestart(feature: String, requested: ConfigSnapshot): Boolean {
-        val owner = if (feature == "SpeedOptions") "PlaybackSpeedHook" else feature
+        val owner = feature
         if (owner == "DownloadHook" && !downloadRepair && requested.boolean("download_force_no_watermark")) return true
         if (owner !in features) return enabled(feature, requested) &&
             (owner !in liveInstallable || owner in rejected)
         val keys = startupKeys[owner] ?: return false
         val original = checkNotNull(startup)
-        if (owner == "PlaybackSpeedHook" && original.importRevision != requested.importRevision) return true
         return keys.any { value(original, it) != value(requested, it) }
     }
 
@@ -84,10 +78,10 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
     companion object {
         val platform = setOf("SimHook", "LocaleHook", "TimeZoneHook", "GpsHook")
         val directHost = setOf("StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook", "SharePanelCleanupHook", "AuthorLocationHook", "QuickCommentCleanupHook", "TemplateCleanupHook", "PageCleanupHook", "HoldSpeedGestureHook", "OfflineVideoHook")
-        // Platform environment reads can install/update live. Speed, immersive and audio experiment still need separate restoration work.
+        // Environment, fixed rate, menu reads and audio group reads update live; immersive window restoration remains separate.
         val liveInstallable = setOf("LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
             "CommentCopyHook", "CommentStickerDownloadHook", "ManualCommentTranslateHook", "CachedCommentTranslateHook", "VideoTranslateHook", "LiveSwipeLockHook",
-            "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook") + directHost + platform
+            "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook", "PlaybackSpeedHook", "SpeedOptions", "BackgroundAudioHook") + directHost + platform
 
         fun liveSymbols(features: Collection<String>): Set<HostSymbol> {
             require(features.all { it in liveInstallable })
@@ -103,14 +97,15 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
             if (key in ConfigSchema.booleanDefaults) snapshot.boolean(key) else snapshot.string(key)
 
         private val startupKeys = mapOf(
-            "BackgroundAudioHook" to setOf("background_audio_unlock"),
-            "PlaybackSpeedHook" to setOf("fixed_speed_enabled", "speed_expand_enabled", "fixed_speed_value", "speed_expand_list"),
             // 当前沉浸修改没有成对恢复全部宿主布局/背景，明确按会话应用。
             "ImmersiveFullScreenHook" to setOf("immersive_full_screen"),
         )
         private val fixedSpeedSymbols = setOf(HostSymbol.PLAYER_CONTROLLER, HostSymbol.PLAYER_MANAGER, HostSymbol.SPEED_MANAGER)
         private val speedMenuSymbols = setOf(HostSymbol.SPEED_OPTIONS)
         private val symbolDependencies = mapOf(
+            "PlaybackSpeedHook" to fixedSpeedSymbols,
+            "SpeedOptions" to speedMenuSymbols,
+            "BackgroundAudioHook" to setOf(HostSymbol.BACKGROUND_AUDIO),
             "LayoutCleanupHook" to setOf(HostSymbol.LAYOUT_TOP_TABS, HostSymbol.LAYOUT_TOOLBAR, HostSymbol.LAYOUT_BOTTOM_ITEM),
             "DownloadHook" to setOf(HostSymbol.DOWNLOAD_SOURCE),
             "FeedFilterHook" to setOf(HostSymbol.COLD_FEED, HostSymbol.PRELOADED_FEED, HostSymbol.OFFLINE_RECOVERY,
@@ -119,7 +114,6 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
             "ManualCommentTranslateHook" to setOf(HostSymbol.COMMENT_COPY, HostSymbol.COMMENT_TRANSLATION),
             "CachedCommentTranslateHook" to setOf(HostSymbol.COMMENT_TRANSLATION),
             "VideoTranslateHook" to setOf(HostSymbol.MENU_CAPTION_ACL, HostSymbol.CAPTION_CONSUMER, HostSymbol.TRANSLATION_REVERSE, HostSymbol.RECOMMEND_MODEL),
-            "BackgroundAudioHook" to setOf(HostSymbol.BACKGROUND_AUDIO),
             "CommentCopyHook" to setOf(HostSymbol.COMMENT_COPY),
             "CommentStickerDownloadHook" to setOf(HostSymbol.COMMENT_COPY),
             "AuthorLocationHook" to setOf(HostSymbol.AUTHOR_LOCATION),

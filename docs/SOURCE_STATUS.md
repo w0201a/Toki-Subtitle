@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.78-debug
+# Source-only development status — 2.0.79-debug
 
-Updated: 2026-11-04. Source version: **2.0.78-debug / 98**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.79-debug / 99**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -39,6 +39,15 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.79 — independent live fixed-rate/menu and conditional restoration
+
+- Fixed rate and extended menu have independent feature keys, symbol scopes, runtime installation, configuration listeners, disposal and applied-state reports. The current import revision reaches playback memory; changing fixed-rate settings does not replace menu payloads. Returned menu lists are defensive copies.
+- Successful concrete player setter requests supply the only restoration baseline for that same weakly identified instance. Capacity is reserved before overriding a request; full/untrackable cases pass through. Module-generated writes and native user selections have independent thread-local nesting/finally cleanup. Failed native selections do not pre-update active rate or memory. Fixed-rate configuration loss releases known overrides even while the application refresh waits for ready configuration.
+- Conditional static-field leases restore observed original values only while their last module write still owns the field. Unchanged module-owned fields are not adopted merely because a native method returned. Module-generated central-manager changes do not become external baselines. Per-field failures are aggregated, other fields and known players are still attempted, and failed fields retain retry evidence.
+- Background audio is late-installable with the missing BACKGROUND_AUDIO dependency supplied. It changes future experiment getter reads only; it does not invalidate host-cached groups, start/stop playback or replace media sessions. Immersive-window and download-repair restrictions remain explicit. Menu-only status requires confirmed registration/application and confirmed fixed-rate disable; unknown/pending reports stay pending.
+- 589 source-only assertions/lexical checks and whitespace checks passed. Twenty-four newly added regression cases exist as source only; no compilation, JUnit/Robolectric, device or APK build verification. No offline export, sticker or template behavior was newly extended in this batch.
+- Not complete: a current player without a successful observed native setter is not forcibly changed/restored; it may wait for native speed/binding callbacks. Already-open menus caching their lists may need reopening. Concurrent native/module setter completion is detected/reported, not proof of an atomic physical-player state; a later refresh can retry known baselines. All-setting no-restart and all four user-selected acceptance goals remain unverified/incomplete.
 
 ## Added in 2.0.78 — selected template/effect business roots with independent live control
 

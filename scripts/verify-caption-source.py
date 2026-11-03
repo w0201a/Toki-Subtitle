@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 98' in gradle and 'versionName = "2.0.78"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.78-debug / 98")
+check('versionCode = 99' in gradle and 'versionName = "2.0.79"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.79-debug / 99")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -501,6 +501,42 @@ check('genericStandardRenderersAreRejectedBeforeClassWideTemplateRegistration' i
 check(not re.search(r'^### .*### ', read('CHANGELOG.md'), re.M), 'changelog headings do not contain duplicated markdown/version prefixes')
 check('<CURRENT_COMMIT>' not in read('docs/USER_WORK_ORDER.md'), 'work order identifies a real review baseline rather than a current-commit placeholder')
 
+# Fixed-rate runtime state and independent option sources (source assertions, not executed tests).
+speed_hook = (JAVA / 'hook/PlaybackSpeedHook.kt').read_text(encoding='utf-8')
+rate_scope = (JAVA / 'hook/PlaybackRateScope.kt').read_text(encoding='utf-8')
+rate_state = (JAVA / 'hook/PlayerRateOverrides.kt').read_text(encoding='utf-8')
+field_lease = (JAVA / 'hook/SpeedFieldLease.kt').read_text(encoding='utf-8')
+speed_status = (JAVA / 'ui/screen/HookStatusModel.kt').read_text(encoding='utf-8')
+check('"PlaybackSpeedHook" to listOf("fixed_speed_enabled")' in schema and '"SpeedOptions" to listOf("speed_expand_enabled")' in schema, 'fixed-rate and option menu switches belong to independent installation scopes')
+check('"PlaybackSpeedHook" to fixedSpeedSymbols' in plan and '"SpeedOptions" to speedMenuSymbols' in plan, 'fixed speed and menu resolve only their own symbol dependencies')
+check('"BackgroundAudioHook" to setOf(HostSymbol.BACKGROUND_AUDIO)' in plan, 'late audio installation has an explicit symbol dependency instead of missing getValue entry')
+check(all(('"' + name + '"') in plan.split('val liveInstallable = setOf(', 1)[1].split('fun liveSymbols', 1)[0] for name in ('PlaybackSpeedHook', 'SpeedOptions', 'BackgroundAudioHook')), 'fixed rate, menu and future audio getter reads are independently live-installable')
+check('"SpeedOptions" -> PlaybackSpeedHook.initOptions' in module and 'feature == "SpeedOptions"' not in module, 'module installs and reports menu scope directly rather than aliasing fixed-rate status')
+check('requested.importRevision' in plan and 'checkNotNull(startup).importRevision' not in plan, 'current imported speed settings are not silently frozen to the startup import revision')
+check('HookRuntime.subscribe("SpeedOptions")' in speed_hook and 'value.speeds.toList()' in speed_hook, 'menu source reads use live immutable state and return a defensive list copy')
+check('private val generated = ThreadLocal' in rate_scope and 'private val selections = ThreadLocal' in rate_scope and 'finally' in rate_scope and 'depth.remove()' in rate_scope, 'module writes and native selections have independent nested thread-local scopes with finally cleanup')
+check('val result = rateScope.nativeSelection { chain.proceed() }' in speed_hook and '!rateScope.selecting' in speed_hook, 'native selections complete before remembered-rate updates and do not override a native 1x selection mid-call')
+check('HookRuntime.subscribe("PlaybackSpeedHook")' in speed_hook and 'releaseFixed(snapshot?.revision)' in speed_hook, 'configuration invalidation releases known fixed-rate overrides without waiting for a ready-only application refresh')
+check('playerRates.request(target, supplied, replacement' in speed_hook and 'if (rateScope.applying)' in speed_hook, 'only actual concrete player setter requests establish native restoration evidence')
+check('if (entries.size < capacity)' in rate_state and 'it.pending++' in rate_state and '?: return proceed(native)' in rate_state, 'native requests reserve bounded capacity before any override and pass through when untrackable')
+check('var native: Float? = null' in rate_state and 'it.observed && it.pending == 0' in rate_state and 'speed ?: checkNotNull(it.native)' in rate_state, 'unknown player baselines are absent rather than fabricated as 1x')
+check('it.target.get() === target' in rate_state and 'WeakReference(target)' in rate_state, 'player observations use weak identity rather than equals or strong player retention')
+check('writer(target, desired)' in rate_state and 'entry.revision != token' in rate_state and 'raced++' in rate_state, 'external player writes have revision race accounting rather than overwriting newer observations as successful')
+check('private fun eachField' in field_lease and 'failure.addSuppressed(error)' in field_lease and 'baseline.remove(name)' in field_lease, 'field restoration continues per field, aggregates failures and releases only completed ownership')
+check('current != written[name]' in field_lease and 'observeExternalChanges = false' in speed_hook, 'unchanged module fields and module-generated mutations are not blindly adopted as native baselines')
+check('val restored = playerRates.apply(null)' in speed_hook and 'restoreFailure?.let { throw it }' in speed_hook, 'field restoration errors do not prevent attempting known-player restoration')
+check('speedMenu?.appliedEnabled == true' in speed_status and '(speedMenu?.registered ?: 0) > 0' in speed_status and 'report.appliedEnabled != false' in speed_status, 'menu-only readiness requires actual menu registration and confirmed fixed-rate disable')
+for file, names in {
+    'hook/PlaybackRateScopeTest.kt': ('nestedModuleAndSelectionScopesAreIndependentAndFinallyRestored', 'anotherThreadDoesNotInheritModuleOrNativeSelectionScopes'),
+    'hook/PlayerRateOverridesTest.kt': ('pendingNativeRequestReservesCapacityBeforeOverride', 'failedNativeRequestDoesNotCreateBaselineOrLeakReservedCapacity', 'changedNativeRevisionDuringModuleWriteIsReportedNotCommittedAsOldState', 'equalObjectsHaveIndependentIdentityAndTargetedUpdates'),
+    'hook/SpeedFieldLeaseTest.kt': ('partialRestoreContinuesAggregatesErrorsAndRetainsRetryEvidence', 'successfulNativeCallDoesNotAdoptUnchangedModuleFieldsAsNative', 'moduleGeneratedStateMutationCannotReplaceNativeBaseline'),
+    'hook/HostFeaturePlanTest.kt': ('fixedAndMenuLateAdmissionAndRejectionAreIndependent', 'speedMemoryReceivesLatestImportRevisionWithoutRestart', 'backgroundAudioUsesCurrentEffectiveConfigAndLateSymbolAdmission'),
+    'hook/PlaybackSpeedRegistrationTest.kt': ('fixedRefreshAndIndependentMenuChangesDoNotDisableEachOther', 'nativeSelectionLeavesUnchangedModuleFieldsRestorable', 'invalidConfigurationReleasesFixedOverridesAndRecoveryCanEnableAgain', 'failedMenuContractDoesNotRollBackTheIndependentlyRegisteredFixedChain'),
+    'ui/screen/HookStatusModelTest.kt': ('independentMenuCanBeReadyWithFixedDisabledButUnknownReportsRemainPending',),
+}.items():
+    source = read('app/src/test/java/io/github/meiyongai/toki/' + file)
+    check(all(name in source for name in names), file + ' contains runtime-state regression scenarios (source only; not executed)')
+
 # Live platform environment settings: installation/admission, immutable payloads and reversible downstream reads.
 environment_runtime = (JAVA / 'hook/EnvironmentRuntimeConfig.kt').read_text(encoding='utf-8')
 environment_module = (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8')
@@ -508,7 +544,8 @@ environment_plan = (JAVA / 'hook/HostFeaturePlan.kt').read_text(encoding='utf-8'
 check('+ directHost + platform' in environment_plan and 'it !in directHost && it !in platform' in environment_plan, 'platform environment controls are live-installable and excluded from unrelated host-symbol dependency resolution')
 startup_contract = environment_plan.split('private val startupKeys = mapOf(', 1)[1].split('private val fixedSpeedSymbols', 1)[0]
 check(all(('"' + feature + '" to ') not in startup_contract for feature in ('SimHook', 'LocaleHook', 'TimeZoneHook', 'GpsHook')), 'environment keys are no longer frozen to startup values once their hooks are installed')
-check(all(feature in startup_contract for feature in ('BackgroundAudioHook', 'PlaybackSpeedHook', 'ImmersiveFullScreenHook')), 'unresolved audio/speed/immersive startup restrictions are retained rather than falsely marked live')
+check('ImmersiveFullScreenHook' in startup_contract, 'unresolved immersive window restoration retains its startup restriction')
+check(all(feature not in startup_contract for feature in ('BackgroundAudioHook', 'PlaybackSpeedHook', 'SpeedOptions')), 'fixed speed, independent menu and audio read settings are no longer frozen to startup')
 activation_body = environment_module.split('private fun activateLiveFeatures() {', 1)[1].split('private fun installAdapted', 1)[0]
 check(activation_body.index('activatePlatformFeatures(app)') < activation_body.index('val info = hostInfo') < activation_body.index('HostScanPhase.SCANNING'), 'platform late setup precedes host-classloader and DEX scan prerequisites')
 platform_body = environment_module.split('private fun activatePlatformFeatures(app: Application) {', 1)[1].split('private fun activateLiveFeatures()', 1)[0]
@@ -612,6 +649,8 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'hook/PlaybackSpeedHook.kt', 'hook/PlaybackRateScope.kt', 'hook/PlayerRateOverrides.kt', 'hook/SpeedFieldLease.kt',
+
     'hook/TemplateAnchorContract.kt', 'hook/TemplateRootBindings.kt', 'hook/TemplateCleanupCodeGate.kt', 'hook/TemplateCleanupHook.kt',
     'hook/EnvironmentRuntimeConfig.kt', 'hook/HostFeaturePlan.kt', 'hook/TokiModule.kt',
     'hook/TemplateComponentSemantics.kt',
@@ -653,6 +692,8 @@ for relative in lexical_files:
     check(True, relative + ' lexical delimiters and string literals are balanced')
 
 for relative in (
+    'hook/PlaybackSpeedRegistrationTest.kt', 'hook/PlaybackSpeedMemoryTest.kt',
+    'hook/PlaybackRateScopeTest.kt', 'hook/PlayerRateOverridesTest.kt', 'hook/SpeedFieldLeaseTest.kt',
     'hook/HostFeaturePlanTest.kt', 'hook/HostScanSessionTest.kt',
     'model/SubtitleAppearanceTest.kt', 'ui/StyledSubtitleTextViewTest.kt',
     'provider/ConfigStoreTest.kt', 'provider/ConfigConflictClockTest.kt',

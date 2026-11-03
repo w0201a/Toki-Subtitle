@@ -120,15 +120,15 @@ class PlaybackSpeedRegistrationTest {
     }
 
     private fun rollback() {
-        if (HookRuntime.scope("PlaybackSpeedHook").active) {
-            HookRuntime.install("PlaybackSpeedHook") { throw IllegalStateException("test process reset") }
+        for (feature in listOf("PlaybackSpeedHook", "SpeedOptions")) {
+            if (HookRuntime.scope(feature).active) HookRuntime.install(feature) { throw IllegalStateException("test process reset") }
         }
     }
 
-    /** 每个测试代表新的宿主进程；真实生产会话不能重新激活已撤销的范围。 */
+    /** 每个测试代表新进程；两个实际安装单元各自重置，不复活生产中撤销的范围。 */
     private fun resetScope() {
-        (HookRuntime::class.java.getDeclaredField("scopes").apply { isAccessible = true }
-            .get(null) as MutableMap<*, *>).remove("PlaybackSpeedHook")
+        val scopes = HookRuntime::class.java.getDeclaredField("scopes").apply { isAccessible = true }.get(null) as MutableMap<*, *>
+        scopes.remove("PlaybackSpeedHook"); scopes.remove("SpeedOptions")
     }
 
     private fun fixedSymbols(): Properties = Properties().apply {
@@ -193,16 +193,22 @@ class PlaybackSpeedRegistrationTest {
         }
 
         fun install(snapshot: ConfigSnapshot) {
-            var failure: Throwable? = null
-            HookRuntime.install("PlaybackSpeedHook") {
-                try {
-                    PlaybackSpeedHook.init(module, javaClass.classLoader!!, snapshot)
-                } catch (error: Throwable) {
-                    failure = error
-                    throw error
+            fun unit(feature: String, call: () -> Unit) {
+                var failure: Throwable? = null
+                HookRuntime.install(feature) {
+                    try { call() } catch (error: Throwable) { failure = error; throw error }
                 }
+                failure?.let { throw it }
             }
-            failure?.let { throw it }
+            if (snapshot.boolean("fixed_speed_enabled")) unit("PlaybackSpeedHook") {
+                PlaybackSpeedHook.init(module, javaClass.classLoader!!, snapshot)
+            }
+            if (snapshot.boolean("speed_expand_enabled")) {
+                if (!ConfigClient.isReady) bindFixedConfiguration()
+                unit("SpeedOptions") { PlaybackSpeedHook.initOptions(module, javaClass.classLoader!!) }
+                // Explicit payload application exercises menu handlers, not manager/host transport propagation.
+                PlaybackSpeedHook.applyOptions(snapshot)
+            }
         }
 
         /** 调用实际注册的中枢拦截器，原调用链由真实静态方法提供。 */
@@ -275,6 +281,7 @@ class PlaybackSpeedRegistrationTest {
     @Test fun invalidMenuCollectionsRegisterNothing() {
         val valid = menuSymbols().getProperty("members.SPEED_OPTIONS.sources").split('\n')
         for (encoded in listOf("", valid[0] + "\n" + valid[0], valid[0].replace("()", "(F)"), valid[1])) {
+            rollback(); resetScope() // Each invalid case gets a fresh, active installation scope.
             resolved.set(null, menuSymbols().apply { setProperty("members.SPEED_OPTIONS.sources", encoded) })
             val recorder = Recorder()
             assertThrows(IllegalStateException::class.java) {
@@ -284,7 +291,7 @@ class PlaybackSpeedRegistrationTest {
         }
     }
 
-    @Test fun incompleteCombinedRequestFailsBeforeAnyRegistration() {
+    @Test fun failedMenuContractDoesNotRollBackTheIndependentlyRegisteredFixedChain() {
         resolved.set(null, fixedSymbols().apply {
             putAll(menuSymbols())
             remove("members.SPEED_OPTIONS.sources")
@@ -294,7 +301,9 @@ class PlaybackSpeedRegistrationTest {
             recorder.install(ConfigSnapshot(mapOf("fixed_speed_enabled" to true, "speed_expand_enabled" to true)))
         }
         assertTrue(failure.message.orEmpty().contains("SPEED_OPTIONS.sources"))
-        assertTrue(recorder.points.isEmpty())
+        assertEquals(9, recorder.points.size)
+        assertTrue(HookRuntime.scope("PlaybackSpeedHook").active)
+        assertFalse(HookRuntime.scope("SpeedOptions").active)
         assertFalse(SpeedManager.keepSpeed)
     }
 
@@ -367,6 +376,64 @@ class PlaybackSpeedRegistrationTest {
         assertEquals(1, SpeedManager.originalSelections)
         assertEquals(1f, SpeedManager.savedSpeed, 0f)
         assertTrue(memory.getFloat("selected", 1f).isNaN())
+    }
+
+    @Test fun fixedRefreshAndIndependentMenuChangesDoNotDisableEachOther() {
+        resolved.set(null, fixedSymbols().apply { putAll(menuSymbols()) })
+        val config = bindFixedConfiguration()
+        val recorder = Recorder()
+        recorder.install(ConfigSnapshot(config.configuration() + ("speed_expand_enabled" to true)))
+        PlaybackSpeedHook.refreshConfig(RuntimeEnvironment.getApplication())
+        assertTrue(PlaybackSpeedHook.isFeatureEnabled())
+        assertTrue(PlaybackSpeedHook.isExpansionEnabled())
+        PlaybackSpeedHook.applyOptions(ConfigSnapshot(mapOf("speed_expand_enabled" to false)))
+        assertFalse(PlaybackSpeedHook.isExpansionEnabled())
+        assertTrue(PlaybackSpeedHook.isFeatureEnabled())
+        PlaybackSpeedHook.applyOptions(ConfigSnapshot(mapOf("speed_expand_enabled" to true, "speed_expand_list" to "0.75,1,2.5")))
+        PlaybackSpeedHook.refreshConfig(RuntimeEnvironment.getApplication())
+        assertTrue(PlaybackSpeedHook.isExpansionEnabled())
+        val source = Menus::class.java.getDeclaredMethod("options")
+        val result = recorder.invokeStatic(source) as MutableList<Float>
+        result.clear()
+        assertEquals(listOf(0.75f, 1f, 2.5f), recorder.invokeStatic(source))
+    }
+
+    @Test fun invalidConfigurationReleasesFixedOverridesAndRecoveryCanEnableAgain() {
+        resolved.set(null, fixedSymbols())
+        val config = bindFixedConfiguration()
+        val recorder = Recorder()
+        recorder.install(config)
+        val app = RuntimeEnvironment.getApplication()
+        PlaybackSpeedHook.refreshConfig(app)
+        val preferences = app.getSharedPreferences("speed_configuration", Context.MODE_PRIVATE)
+        val reload = ConfigClient::class.java.getDeclaredField("reload").apply { isAccessible = true }.get(null) as Runnable
+        preferences.edit().putInt(ConfigStore.PROTOCOL, 0).commit()
+        reload.run()
+        org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle()
+        assertFalse(ConfigClient.isReady)
+        assertFalse(PlaybackSpeedHook.isFeatureEnabled())
+        assertFalse(SpeedManager.keepSpeed)
+        assertEquals(1f, SpeedManager.savedSpeed, 0f)
+        preferences.edit().putInt(ConfigStore.PROTOCOL, 1).putLong(ConfigStore.REVISION, 2L).commit()
+        reload.run()
+        org.robolectric.Shadows.shadowOf(android.os.Looper.getMainLooper()).idle()
+        assertTrue(ConfigClient.isReady)
+        PlaybackSpeedHook.refreshConfig(app)
+        assertTrue(PlaybackSpeedHook.isFeatureEnabled())
+        assertEquals(2f, SpeedManager.savedSpeed, 0f)
+    }
+
+    @Test fun nativeSelectionLeavesUnchangedModuleFieldsRestorable() {
+        resolved.set(null, fixedSymbols())
+        val config = bindFixedConfiguration()
+        val recorder = Recorder()
+        recorder.install(config)
+        PlaybackSpeedHook.refreshConfig(RuntimeEnvironment.getApplication())
+        recorder.select(1.5f)
+        assertTrue(SpeedManager.keepSpeed)
+        rollback()
+        assertFalse(SpeedManager.keepSpeed)
+        assertEquals(1f, SpeedManager.savedSpeed, 0f)
     }
 
     @Test fun rollbackBeforeActivationPreservesNativeManagerSelection() {

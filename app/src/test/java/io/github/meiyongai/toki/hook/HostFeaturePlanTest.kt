@@ -43,13 +43,20 @@ class HostFeaturePlanTest {
         assertEquals("fill", ConfigSchema.validate(mapOf("video_fit_mode" to "fill")).getValue("video_fit_mode"))
         assertThrows(IllegalArgumentException::class.java) { ConfigSchema.validate(mapOf("video_fit_mode" to "stretch")) }
     }
-    /** 后台音频实验缓存只能通过重启更改。无参数，无返回。Callers: JUnit。 */
-    @Test fun backgroundAudioFreezesExperimentUntilRestart() {
+    /** 后续实验读取可热切换；宿主已经缓存的值不在此测试范围。 */
+    @Test fun backgroundAudioUsesCurrentEffectiveConfigAndLateSymbolAdmission() {
         val plan = HostFeaturePlan(config("background_audio_unlock" to true))
         assertEquals(setOf(HostSymbol.BACKGROUND_AUDIO), plan.symbols)
         val disabled = config("background_audio_unlock" to false)
-        assertTrue(plan.requiresRestart("BackgroundAudioHook", disabled))
-        assertTrue(plan.apply(disabled).boolean("background_audio_unlock"))
+        assertFalse(plan.requiresRestart("BackgroundAudioHook", disabled))
+        assertFalse(plan.apply(disabled).boolean("background_audio_unlock"))
+        val late = HostFeaturePlan(config())
+        val enabled = config("background_audio_unlock" to true)
+        assertEquals(listOf("BackgroundAudioHook"), late.liveCandidates(enabled))
+        assertEquals(setOf(HostSymbol.BACKGROUND_AUDIO), HostFeaturePlan.liveSymbols(listOf("BackgroundAudioHook")))
+        assertFalse(late.apply(enabled).boolean("background_audio_unlock"))
+        assertTrue(late.admitLive("BackgroundAudioHook"))
+        assertTrue(late.apply(enabled).boolean("background_audio_unlock"))
     }
     /** 翻译入口和播放器消费门控必须一起安装；失败时明确停用。 */
     @Test fun captionMenuRequiresAclAndEnableGate() {
@@ -134,14 +141,36 @@ class HostFeaturePlanTest {
         assertEquals(setOf(HostSymbol.SPEED_OPTIONS), menu.symbols)
     }
 
-    @Test fun speedMemoryCannotClaimAnImportFromOutsideItsStartupSession() {
+    @Test fun speedMemoryReceivesLatestImportRevisionWithoutRestart() {
         val original = ConfigSnapshot(mapOf("fixed_speed_enabled" to true), revision = 3L, importRevision = 2L)
         val imported = ConfigSnapshot(mapOf("fixed_speed_enabled" to true), revision = 4L, importRevision = 4L)
         val plan = HostFeaturePlan(original)
-        assertEquals(2L, plan.apply(imported).importRevision)
-        assertTrue(plan.requiresRestart("PlaybackSpeedHook", imported))
-        assertTrue(plan.requiresRestart("SpeedOptions", imported))
-        assertEquals(3L, plan.appliedRevision("PlaybackSpeedHook", imported))
+        assertEquals(4L, plan.apply(imported).importRevision)
+        assertFalse(plan.requiresRestart("PlaybackSpeedHook", imported))
+        assertFalse(plan.requiresRestart("SpeedOptions", imported))
+        assertEquals(4L, plan.appliedRevision("PlaybackSpeedHook", imported))
+    }
+
+    @Test fun fixedAndMenuLateAdmissionAndRejectionAreIndependent() {
+        val requested = config("fixed_speed_enabled" to true, "speed_expand_enabled" to true,
+            "fixed_speed_value" to "1.75", "speed_expand_list" to "0.75,1,2.5", revision = 8)
+        val plan = HostFeaturePlan(config())
+        assertEquals(setOf("PlaybackSpeedHook", "SpeedOptions"), plan.liveCandidates(requested).toSet())
+        assertEquals(setOf(HostSymbol.PLAYER_CONTROLLER, HostSymbol.PLAYER_MANAGER, HostSymbol.SPEED_MANAGER),
+            HostFeaturePlan.liveSymbols(listOf("PlaybackSpeedHook")))
+        assertEquals(setOf(HostSymbol.SPEED_OPTIONS), HostFeaturePlan.liveSymbols(listOf("SpeedOptions")))
+        assertFalse(plan.apply(requested).boolean("fixed_speed_enabled"))
+        assertFalse(plan.apply(requested).boolean("speed_expand_enabled"))
+        assertTrue(plan.admitLive("SpeedOptions"))
+        assertTrue(plan.apply(requested).boolean("speed_expand_enabled"))
+        assertFalse(plan.apply(requested).boolean("fixed_speed_enabled"))
+        assertTrue(plan.admitLive("PlaybackSpeedHook"))
+        assertEquals("1.75", plan.apply(requested).string("fixed_speed_value"))
+        plan.reject("SpeedOptions")
+        assertFalse(plan.apply(requested).boolean("speed_expand_enabled"))
+        assertTrue(plan.apply(requested).boolean("fixed_speed_enabled"))
+        assertTrue(plan.requiresRestart("SpeedOptions", requested))
+        assertFalse(plan.requiresRestart("PlaybackSpeedHook", requested))
     }
 
     @Test fun unavailableStartupStaysMaskedUntilLatePlatformAdmission() {
