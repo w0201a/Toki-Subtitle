@@ -104,7 +104,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
 
         private val startupKeys = mapOf(
             "BackgroundAudioHook" to setOf("background_audio_unlock"),
-            "SimHook" to setOf("sim_spoof_enabled", "target_region", "sim_operator_code", "sim_operator_name"),
+            "SimHook" to setOf("sim_spoof_enabled", "sim_country_only_enabled", "target_region", "sim_operator_code", "sim_operator_name"),
             "LocaleHook" to setOf("language_spoof_enabled", "language_follow_region", "target_region", "custom_language"),
             "TimeZoneHook" to setOf("timezone_spoof_enabled", "timezone_follow_region", "target_region", "custom_timezone"),
             "GpsHook" to setOf("gps_spoof_enabled", "gps_follow_region", "target_region", "custom_latitude", "custom_longitude"),

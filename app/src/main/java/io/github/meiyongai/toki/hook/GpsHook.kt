@@ -45,8 +45,9 @@ object GpsHook {
      * - `io.github.meiyongai.toki.subtitle.hook.TokiModule.hookApplication`: 宿主启动时触发配置加载。
      */
     fun refreshConfig(context: Context) {
-        isEnabled = ConfigClient.getBoolean(context, "gps_spoof_enabled")
-        if (!isEnabled) {
+        val requestedEnabled = ConfigClient.getBoolean(context, "gps_spoof_enabled")
+        if (!requestedEnabled) {
+            isEnabled = false
             Log.i(TAG, "系统 GPS 伪装功能处于关闭状态")
             return
         }
@@ -54,8 +55,15 @@ object GpsHook {
         val followRegion = ConfigClient.getBoolean(context, "gps_follow_region")
         if (followRegion) {
             val targetRegion = ConfigClient.getString(context, "target_region", defaultValue = "JP") ?: "JP"
-            activeLatitude = RegionPresets.resolveLatitudeForIso(targetRegion)
-            activeLongitude = RegionPresets.resolveLongitudeForIso(targetRegion)
+            val latitude = RegionPresets.resolveLatitudeForIso(targetRegion)
+            val longitude = RegionPresets.resolveLongitudeForIso(targetRegion)
+            if (latitude == null || longitude == null) {
+                isEnabled = false
+                Log.w(TAG, "地区没有坐标预设；保持宿主原始定位，请使用自定义坐标")
+                return
+            }
+            activeLatitude = latitude
+            activeLongitude = longitude
         } else {
             val customLatStr = ConfigClient.getString(context, "custom_latitude", defaultValue = "35.6762") ?: "35.6762"
             val customLngStr = ConfigClient.getString(context, "custom_longitude", defaultValue = "139.6503") ?: "139.6503"
@@ -63,6 +71,7 @@ object GpsHook {
             activeLongitude = customLngStr.toDoubleOrNull() ?: 139.6503
         }
 
+        isEnabled = true
         Log.i(TAG, "已同步伪装 GPS 坐标 -> ($activeLatitude, $activeLongitude) (followRegion=$followRegion)")
     }
 

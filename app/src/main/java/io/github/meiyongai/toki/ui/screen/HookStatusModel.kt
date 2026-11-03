@@ -67,7 +67,7 @@ internal data class HookFeatureReport(
     val restartRequired: Boolean = false,
 ) {
     val hasError = !error.isNullOrBlank() || !errorStatus.isNullOrBlank() ||
-        state in setOf("注册失败，已撤销", "部分功能已注册", "子功能均未安装")
+        state in setOf("注册失败，已撤销", "部分功能已注册", "子功能均未安装", "地区环境预设缺失")
 }
 
 /** 正常仅表示已就绪且未报告异常，不据此承诺每次业务效果。 */
@@ -107,6 +107,7 @@ internal data class HookFeatureStatus(
         state == HookVisualState.PENDING && (report?.restartRequired == true || speedMenu?.restartRequired == true) -> R.string.restart_tiktok
         state != HookVisualState.ISSUE -> null
         report?.enabled == false -> R.string.status_problem_disabled
+        report?.state == "地区环境预设缺失" -> R.string.region_environment_missing
         report?.hasError == true -> if (report.state == "注册失败，已撤销") R.string.status_problem_unavailable else R.string.status_problem_runtime
         menuIssue -> R.string.status_problem_speed_menu
         videoIssue -> if (videoModes?.state == "注册失败，已撤销") R.string.status_problem_unavailable else R.string.status_problem_runtime

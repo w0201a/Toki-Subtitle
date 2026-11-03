@@ -60,21 +60,22 @@ object SimHook {
     fun resolveCarrier(
         regionCode: String,
         customOperatorCode: String?,
-        customOperatorName: String?
+        customOperatorName: String?,
+        countryOnly: Boolean = false
     ): CarrierInfo {
-        val normalizedIso = regionCode.trim().lowercase()
+        val normalizedIso = regionCode.trim().lowercase(java.util.Locale.ROOT)
         val preset = RegionPresets.findByIso(normalizedIso)
 
-        val finalOperatorCode = if (!customOperatorCode.isNullOrBlank()) {
+        val finalOperatorCode = if (countryOnly) "" else if (!customOperatorCode.isNullOrBlank()) {
             customOperatorCode.trim()
         } else {
-            preset?.operatorCode ?: "00000"
+            preset?.operatorCode.orEmpty()
         }
 
-        val finalOperatorName = if (!customOperatorName.isNullOrBlank()) {
+        val finalOperatorName = if (countryOnly) "" else if (!customOperatorName.isNullOrBlank()) {
             customOperatorName.trim()
         } else {
-            preset?.operatorName ?: "${normalizedIso.uppercase()} Carrier"
+            preset?.operatorName.orEmpty()
         }
 
         return CarrierInfo(
@@ -93,8 +94,9 @@ object SimHook {
      * - `io.github.meiyongai.toki.subtitle.hook.SimHook.hookApplication`: 宿主 Application 创建时触发同步。
      */
     fun refreshConfig(context: Context) {
-        isEnabled = ConfigClient.getBoolean(context, "sim_spoof_enabled")
-        if (!isEnabled) {
+        val requestedEnabled = ConfigClient.getBoolean(context, "sim_spoof_enabled")
+        if (!requestedEnabled) {
+            isEnabled = false
             Log.i(TAG, "SIM 卡与地域伪装功能处于关闭状态")
             return
         }
@@ -103,7 +105,9 @@ object SimHook {
         val customOpCode = ConfigClient.getString(context, "sim_operator_code", defaultValue = null)
         val customOpName = ConfigClient.getString(context, "sim_operator_name", defaultValue = null)
 
-        activeCarrier = resolveCarrier(targetRegion, customOpCode, customOpName)
+        activeCarrier = resolveCarrier(targetRegion, customOpCode, customOpName,
+            ConfigClient.getBoolean(context, "sim_country_only_enabled"))
+        isEnabled = true
         Log.i(
             TAG,
             "已同步目标国家/地区配置 -> ${activeCarrier.countryIso.uppercase()} | ${activeCarrier.operatorName} (${activeCarrier.operatorCode})"
@@ -159,7 +163,7 @@ object SimHook {
                 }
                 "getSimOperator", "getNetworkOperator" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled()) {
+                        if (isFeatureEnabled() && getActiveCarrier().operatorCode.isNotBlank()) {
                             getActiveCarrier().operatorCode
                         } else {
                             chain.proceed()
@@ -168,7 +172,7 @@ object SimHook {
                 }
                 "getSimOperatorName", "getNetworkOperatorName" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled()) {
+                        if (isFeatureEnabled() && getActiveCarrier().operatorName.isNotBlank()) {
                             getActiveCarrier().operatorName
                         } else {
                             chain.proceed()
@@ -177,7 +181,7 @@ object SimHook {
                 }
                 "getSimState" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled()) {
+                        if (isFeatureEnabled() && getActiveCarrier().operatorCode.isNotBlank()) {
                             TelephonyManager.SIM_STATE_READY
                         } else {
                             chain.proceed()
@@ -186,7 +190,7 @@ object SimHook {
                 }
                 "hasIccCard" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled()) {
+                        if (isFeatureEnabled() && getActiveCarrier().operatorCode.isNotBlank()) {
                             true
                         } else {
                             chain.proceed()
@@ -195,7 +199,7 @@ object SimHook {
                 }
                 "getPhoneType" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled()) {
+                        if (isFeatureEnabled() && getActiveCarrier().operatorCode.isNotBlank()) {
                             TelephonyManager.PHONE_TYPE_GSM
                         } else {
                             chain.proceed()

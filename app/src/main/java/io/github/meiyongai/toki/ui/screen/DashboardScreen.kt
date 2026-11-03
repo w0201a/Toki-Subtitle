@@ -48,6 +48,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -81,6 +82,8 @@ import io.github.meiyongai.toki.subtitle.hook.VideoDurationAlertHook
 import io.github.meiyongai.toki.subtitle.hook.VideoTranslateHook
 import io.github.meiyongai.toki.subtitle.model.KeywordCategory
 import io.github.meiyongai.toki.subtitle.model.KeywordFilterConfig
+import io.github.meiyongai.toki.subtitle.model.CountryCatalog
+import io.github.meiyongai.toki.subtitle.model.CountryOption
 import io.github.meiyongai.toki.subtitle.model.RegionPreset
 import io.github.meiyongai.toki.subtitle.model.RegionPresets
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
@@ -128,6 +131,8 @@ fun DashboardScreen(
     var operatorName by remember {
         mutableStateOf(ConfigClient.getString(context, "sim_operator_name", defaultValue = "NTT DOCOMO") ?: "NTT DOCOMO")
     }
+
+    var countryOnly by remember { mutableStateOf(ConfigClient.getBoolean(context, "sim_country_only_enabled")) }
 
     // 2. 系统语言伪装状态
     var isLanguageSpoofEnabled by remember {
@@ -358,6 +363,87 @@ fun DashboardScreen(
     }
     var showDurationAlertDialog by remember { mutableStateOf(false) }
 
+    var saveError by remember { mutableStateOf(false) }
+    fun reloadDashboard() {
+        // Read one immutable requested snapshot, not a mixture of per-key revisions or startup-frozen effective values.
+        val current = checkNotNull(ConfigClient.requestedSnapshotOrNull())
+        androidx.compose.runtime.snapshots.Snapshot.withMutableSnapshot {
+            isSimSpoofEnabled = current.boolean("sim_spoof_enabled")
+            regionCode = current.string("target_region", defaultValue = "JP") ?: "JP"
+            operatorCode = current.string("sim_operator_code", defaultValue = "44010") ?: "44010"
+            operatorName = current.string("sim_operator_name", defaultValue = "NTT DOCOMO") ?: "NTT DOCOMO"
+            countryOnly = current.boolean("sim_country_only_enabled")
+            isLanguageSpoofEnabled = current.boolean("language_spoof_enabled")
+            languageFollowRegion = current.boolean("language_follow_region")
+            customLanguage = current.string("custom_language", defaultValue = "ja-JP") ?: "ja-JP"
+            isTimeZoneSpoofEnabled = current.boolean("timezone_spoof_enabled")
+            timezoneFollowRegion = current.boolean("timezone_follow_region")
+            customTimeZone = current.string("custom_timezone", defaultValue = "Asia/Tokyo") ?: "Asia/Tokyo"
+            isGpsSpoofEnabled = current.boolean("gps_spoof_enabled")
+            gpsFollowRegion = current.boolean("gps_follow_region")
+            customLatitude = current.string("custom_latitude", defaultValue = "35.6762") ?: "35.6762"
+            customLongitude = current.string("custom_longitude", defaultValue = "139.6503") ?: "139.6503"
+            isSpeedSpoofEnabled = current.boolean("fixed_speed_enabled")
+            isSpeedExpandEnabled = current.boolean("speed_expand_enabled")
+            customSpeedListStr = current.string("speed_expand_list", defaultValue = "0.5,1.0,1.5,2.0") ?: "0.5,1.0,1.5,2.0"
+            isCommentTranslateEnabled = current.boolean("comment_translate_enabled")
+            isBackgroundAudioEnabled = current.boolean("background_audio_unlock")
+            isVideoTranslateEnabled = current.boolean(VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED)
+            isCopyCommentTextOnlyEnabled = current.boolean(CommentCopyHook.KEY_COPY_COMMENT_TEXT_ONLY)
+            stickerDownloadEnabled = current.boolean(CommentStickerDownloadHook.KEY)
+            isAuthorLocationEnabled = current.boolean(AuthorLocationHook.KEY_SHOW_AUTHOR_LOCATION)
+            isAlwaysShowProgressBarEnabled = current.boolean(ProgressBarHook.KEY_ALWAYS_SHOW_PROGRESS_BAR)
+            isCleanModeOnPlayEnabled = current.boolean(AutoCleanModeHook.KEY_CLEAN_MODE_ON_PLAY)
+            isCleanShowProgressBarEnabled = current.boolean(ProgressBarHook.KEY_CLEAN_SHOW_PROGRESS_BAR)
+            isImmersiveFullScreenEnabled = current.boolean(ImmersiveFullScreenHook.KEY_IMMERSIVE_FULL_SCREEN)
+            videoFitMode = current.string(ImmersiveFullScreenHook.KEY_VIDEO_FIT_MODE, "center")!!
+            isLiveSwipeLockEnabled = current.boolean(LiveSwipeLockHook.KEY_LIVE_SWIPE_LOCK)
+            isAutoScrollUnlockEnabled = current.boolean(AutoScrollHook.KEY_AUTO_SCROLL_UNLOCK)
+            isFeedRemoveAdsEnabled = current.boolean(FeedFilterHook.KEY_FEED_REMOVE_ADS)
+            isDownloadForceEnabled = current.boolean(DownloadHook.KEY_DOWNLOAD_FORCE_NO_WATERMARK)
+            isDownloadPathEnabled = current.boolean(DownloadHook.KEY_DOWNLOAD_PATH_ENABLED)
+            downloadVideoPath = current.string(DownloadHook.KEY_DOWNLOAD_VIDEO_PATH, defaultValue = DownloadHook.DEFAULT_VIDEO_RELATIVE_PATH)
+                            ?: DownloadHook.DEFAULT_VIDEO_RELATIVE_PATH
+            downloadImagePath = current.string(DownloadHook.KEY_DOWNLOAD_IMAGE_PATH, defaultValue = DownloadHook.DEFAULT_IMAGE_RELATIVE_PATH)
+                            ?: DownloadHook.DEFAULT_IMAGE_RELATIVE_PATH
+            isMusicUnlockEnabled = current.boolean(MusicUnlockHook.KEY_MUSIC_UNLOCK)
+            isFeedRemoveLiveEnabled = current.boolean(FeedFilterHook.KEY_FEED_REMOVE_LIVE)
+            isFeedRemoveImageEnabled = current.boolean(FeedFilterHook.KEY_FEED_REMOVE_IMAGE)
+            isViewFilterEnabled = current.boolean(FeedFilterHook.KEY_FILTER_VIEWS_ENABLED)
+            viewMin = current.string(FeedFilterHook.KEY_FILTER_VIEWS_MIN, defaultValue = "0") ?: "0"
+            viewMax = current.string(FeedFilterHook.KEY_FILTER_VIEWS_MAX, defaultValue = "0") ?: "0"
+            isLikeFilterEnabled = current.boolean(FeedFilterHook.KEY_FILTER_LIKES_ENABLED)
+            likeMin = current.string(FeedFilterHook.KEY_FILTER_LIKES_MIN, defaultValue = "0") ?: "0"
+            likeMax = current.string(FeedFilterHook.KEY_FILTER_LIKES_MAX, defaultValue = "0") ?: "0"
+            isDurationFilterEnabled = current.boolean(FeedFilterHook.KEY_FILTER_DURATION_ENABLED)
+            durationMin = current.string(FeedFilterHook.KEY_FILTER_DURATION_MIN, defaultValue = "0") ?: "0"
+            durationMax = current.string(FeedFilterHook.KEY_FILTER_DURATION_MAX, defaultValue = "0") ?: "0"
+            isKeywordFilterEnabled = current.boolean(FeedFilterHook.KEY_FILTER_KEYWORDS_ENABLED)
+            keywordJsonStr = current.string(FeedFilterHook.KEY_FILTER_KEYWORDS_JSON, defaultValue = "{}") ?: "{}"
+            isBlockOfflineVideoEnabled = current.boolean(FeedFilterHook.KEY_REMOVE_OFFLINE)
+            isRemoveAiGeneratedEnabled = current.boolean(FeedFilterHook.KEY_REMOVE_AI_GENERATED)
+            isRemoveTopicRecommendationsEnabled = current.boolean(FeedFilterHook.KEY_REMOVE_TOPIC_RECOMMENDATIONS)
+            isRemoveCreatorRecommendationsEnabled = current.boolean(FeedFilterHook.KEY_REMOVE_CREATOR_RECOMMENDATIONS)
+            isStatusBarHidden = current.boolean(StatusBarHook.KEY_STATUS_BAR_HIDDEN)
+            captureCompatibility = current.boolean("screen_capture_compatibility")
+            isDurationAlertEnabled = current.boolean(VideoDurationAlertHook.KEY_VIDEO_DURATION_ALERT_ENABLED)
+            durationAlertThreshold = current.string(VideoDurationAlertHook.KEY_VIDEO_DURATION_ALERT_THRESHOLD, defaultValue = VideoDurationAlertHook.DEFAULT_THRESHOLD_MINUTES_STRING)
+                            ?: VideoDurationAlertHook.DEFAULT_THRESHOLD_MINUTES_STRING
+        }
+    }
+    DisposableEffect(context) {
+        val subscription = ConfigClient.addStateListener { value -> if (value != null) reloadDashboard() }
+        onDispose { subscription.close() }
+    }
+    val edits = remember(context) {
+        ConfirmedConfigEdits({ values -> ConfigClient.putValues(context, values) }, ::reloadDashboard) { error ->
+            saveError = error != null
+        }
+    }
+    fun saveValues(values: Map<String, Any>): Boolean = edits.save(values)
+    fun saveBoolean(key: String, value: Boolean): Boolean = saveValues(mapOf(key to value))
+    fun saveString(key: String, value: String): Boolean = saveValues(mapOf(key to value))
+
     // 弹窗显隐控制
     var showSelectDialog by remember { mutableStateOf(false) }
     var showCustomSimDialog by remember { mutableStateOf(false) }
@@ -369,16 +455,16 @@ fun DashboardScreen(
     val currentPreset = remember(regionCode) {
         RegionPresets.findByIso(regionCode)
     }
-    val effectiveLanguage = remember(regionCode, languageFollowRegion, customLanguage) {
+    val effectiveLanguage = remember(regionCode, languageFollowRegion, customLanguage, strings.configuration.locales[0]) {
         if (languageFollowRegion) {
-            RegionPresets.resolveLanguageForIso(regionCode)
+            RegionPresets.resolveLanguageForIso(regionCode) ?: strings.getString(R.string.region_environment_missing)
         } else {
             customLanguage
         }
     }
-    val effectiveTimeZone = remember(regionCode, timezoneFollowRegion, customTimeZone) {
+    val effectiveTimeZone = remember(regionCode, timezoneFollowRegion, customTimeZone, strings.configuration.locales[0]) {
         if (timezoneFollowRegion) {
-            RegionPresets.resolveTimeZoneForIso(regionCode)
+            RegionPresets.resolveTimeZoneForIso(regionCode) ?: strings.getString(R.string.region_environment_missing)
         } else {
             customTimeZone
         }
@@ -405,6 +491,7 @@ fun DashboardScreen(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        if (saveError) Text(strings.getString(R.string.dashboard_save_error), color = MaterialTheme.colorScheme.error)
         // === 分组 1: 地区与环境伪装 (共 4 项) ===
         PreferenceSection(title = strings.getString(R.string.feature_region_section)) {
             SimSpoofCard(
@@ -412,12 +499,13 @@ fun DashboardScreen(
                 enabled = isSimSpoofEnabled,
                 onEnabledChange = { state ->
                     isSimSpoofEnabled = state
-                    ConfigClient.putBoolean(context, "sim_spoof_enabled", state)
+                    saveBoolean("sim_spoof_enabled", state)
                 },
                 regionCode = regionCode,
                 operatorCode = operatorCode,
                 operatorName = operatorName,
                 currentPreset = currentPreset,
+                countryOnly = countryOnly,
                 onSelectPresetClick = { showSelectDialog = true },
                 onCustomSimClick = { showCustomSimDialog = true }
             )
@@ -427,12 +515,12 @@ fun DashboardScreen(
                 enabled = isLanguageSpoofEnabled,
                 onEnabledChange = { state ->
                     isLanguageSpoofEnabled = state
-                    ConfigClient.putBoolean(context, "language_spoof_enabled", state)
+                    saveBoolean("language_spoof_enabled", state)
                 },
                 followRegion = languageFollowRegion,
                 onFollowRegionChange = { state ->
                     languageFollowRegion = state
-                    ConfigClient.putBoolean(context, "language_follow_region", state)
+                    saveBoolean("language_follow_region", state)
                 },
                 effectiveLanguage = effectiveLanguage,
                 onCustomLanguageClick = { showCustomLangDialog = true }
@@ -443,12 +531,12 @@ fun DashboardScreen(
                 enabled = isTimeZoneSpoofEnabled,
                 onEnabledChange = { state ->
                     isTimeZoneSpoofEnabled = state
-                    ConfigClient.putBoolean(context, "timezone_spoof_enabled", state)
+                    saveBoolean("timezone_spoof_enabled", state)
                 },
                 followRegion = timezoneFollowRegion,
                 onFollowRegionChange = { state ->
                     timezoneFollowRegion = state
-                    ConfigClient.putBoolean(context, "timezone_follow_region", state)
+                    saveBoolean("timezone_follow_region", state)
                 },
                 effectiveTimeZone = effectiveTimeZone,
                 onCustomTimeZoneClick = { showCustomTzDialog = true }
@@ -459,12 +547,12 @@ fun DashboardScreen(
                 enabled = isGpsSpoofEnabled,
                 onEnabledChange = { state ->
                     isGpsSpoofEnabled = state
-                    ConfigClient.putBoolean(context, "gps_spoof_enabled", state)
+                    saveBoolean("gps_spoof_enabled", state)
                 },
                 followRegion = gpsFollowRegion,
                 onFollowRegionChange = { state ->
                     gpsFollowRegion = state
-                    ConfigClient.putBoolean(context, "gps_follow_region", state)
+                    saveBoolean("gps_follow_region", state)
                 },
                 effectiveLatitude = effectiveLatitude,
                 effectiveLongitude = effectiveLongitude,
@@ -479,12 +567,12 @@ fun DashboardScreen(
                 fixedSpeedEnabled = isSpeedSpoofEnabled,
                 onFixedSpeedChange = { state ->
                     isSpeedSpoofEnabled = state
-                    ConfigClient.putBoolean(context, "fixed_speed_enabled", state)
+                    saveBoolean("fixed_speed_enabled", state)
                 },
                 expandEnabled = isSpeedExpandEnabled,
                 onExpandChange = { state ->
                     isSpeedExpandEnabled = state
-                    ConfigClient.putBoolean(context, "speed_expand_enabled", state)
+                    saveBoolean("speed_expand_enabled", state)
                 },
                 speedList = parsedSpeedList,
                 onSpeedClick = { speedVal -> editingSpeedTarget = speedVal },
@@ -492,7 +580,7 @@ fun DashboardScreen(
                 onResetDefaultClick = {
                     val defaultStr = "0.5,1.0,1.5,2.0"
                     customSpeedListStr = defaultStr
-                    ConfigClient.putString(context, "speed_expand_list", defaultStr)
+                    saveString("speed_expand_list", defaultStr)
                 }
             )
 
@@ -503,7 +591,7 @@ fun DashboardScreen(
                 checked = isAlwaysShowProgressBarEnabled,
                 onCheckedChange = { state ->
                     isAlwaysShowProgressBarEnabled = state
-                    ConfigClient.putBoolean(context, ProgressBarHook.KEY_ALWAYS_SHOW_PROGRESS_BAR, state)
+                    saveBoolean(ProgressBarHook.KEY_ALWAYS_SHOW_PROGRESS_BAR, state)
                 }
             )
 
@@ -512,12 +600,12 @@ fun DashboardScreen(
                 cleanModeEnabled = isCleanModeOnPlayEnabled,
                 onCleanModeChange = { state ->
                     isCleanModeOnPlayEnabled = state
-                    ConfigClient.putBoolean(context, AutoCleanModeHook.KEY_CLEAN_MODE_ON_PLAY, state)
+                    saveBoolean(AutoCleanModeHook.KEY_CLEAN_MODE_ON_PLAY, state)
                 },
                 showProgressBar = isCleanShowProgressBarEnabled,
                 onShowProgressBarChange = { state ->
                     isCleanShowProgressBarEnabled = state
-                    ConfigClient.putBoolean(context, ProgressBarHook.KEY_CLEAN_SHOW_PROGRESS_BAR, state)
+                    saveBoolean(ProgressBarHook.KEY_CLEAN_SHOW_PROGRESS_BAR, state)
                 }
             )
 
@@ -527,11 +615,11 @@ fun DashboardScreen(
                 mode = videoFitMode,
                 onEnabledChange = { state ->
                     isImmersiveFullScreenEnabled = state
-                    ConfigClient.putBoolean(context, ImmersiveFullScreenHook.KEY_IMMERSIVE_FULL_SCREEN, state)
+                    saveBoolean(ImmersiveFullScreenHook.KEY_IMMERSIVE_FULL_SCREEN, state)
                 },
                 onModeChange = { mode ->
                     videoFitMode = mode
-                    ConfigClient.putString(context, ImmersiveFullScreenHook.KEY_VIDEO_FIT_MODE, mode)
+                    saveString(ImmersiveFullScreenHook.KEY_VIDEO_FIT_MODE, mode)
                 }
             )
 
@@ -542,7 +630,7 @@ fun DashboardScreen(
                 checked = isLiveSwipeLockEnabled,
                 onCheckedChange = { state ->
                     isLiveSwipeLockEnabled = state
-                    ConfigClient.putBoolean(context, LiveSwipeLockHook.KEY_LIVE_SWIPE_LOCK, state)
+                    saveBoolean(LiveSwipeLockHook.KEY_LIVE_SWIPE_LOCK, state)
                 }
             )
 
@@ -553,7 +641,7 @@ fun DashboardScreen(
                 checked = isAutoScrollUnlockEnabled,
                 onCheckedChange = { state ->
                     isAutoScrollUnlockEnabled = state
-                    ConfigClient.putBoolean(context, AutoScrollHook.KEY_AUTO_SCROLL_UNLOCK, state)
+                    saveBoolean(AutoScrollHook.KEY_AUTO_SCROLL_UNLOCK, state)
                 }
             )
 
@@ -562,7 +650,7 @@ fun DashboardScreen(
                 enabled = isDurationAlertEnabled,
                 onEnabledChange = { state ->
                     isDurationAlertEnabled = state
-                    ConfigClient.putBoolean(context, VideoDurationAlertHook.KEY_VIDEO_DURATION_ALERT_ENABLED, state)
+                    saveBoolean(VideoDurationAlertHook.KEY_VIDEO_DURATION_ALERT_ENABLED, state)
                 },
                 threshold = durationAlertThreshold,
                 onClick = { showDurationAlertDialog = true }
@@ -574,7 +662,7 @@ fun DashboardScreen(
                 checked = isStatusBarHidden,
                 onCheckedChange = { state ->
                     isStatusBarHidden = state
-                    ConfigClient.putBoolean(context, StatusBarHook.KEY_STATUS_BAR_HIDDEN, state)
+                    saveBoolean(StatusBarHook.KEY_STATUS_BAR_HIDDEN, state)
                 }
             )
         }
@@ -592,7 +680,7 @@ fun DashboardScreen(
                 checked = captureCompatibility,
                 onCheckedChange = { state ->
                     captureCompatibility = state
-                    ConfigClient.putBoolean(context, "screen_capture_compatibility", state)
+                    saveBoolean("screen_capture_compatibility", state)
                 }
             )
         }
@@ -606,7 +694,7 @@ fun DashboardScreen(
                 checked = isDownloadForceEnabled,
                 onCheckedChange = { state ->
                     isDownloadForceEnabled = state
-                    ConfigClient.putBoolean(context, DownloadHook.KEY_DOWNLOAD_FORCE_NO_WATERMARK, state)
+                    saveBoolean(DownloadHook.KEY_DOWNLOAD_FORCE_NO_WATERMARK, state)
                 }
             )
 
@@ -615,7 +703,7 @@ fun DashboardScreen(
                 enabled = isDownloadPathEnabled,
                 onEnabledChange = { state ->
                     isDownloadPathEnabled = state
-                    ConfigClient.putBoolean(context, DownloadHook.KEY_DOWNLOAD_PATH_ENABLED, state)
+                    saveBoolean(DownloadHook.KEY_DOWNLOAD_PATH_ENABLED, state)
                 },
                 videoPath = downloadVideoPath,
                 imagePath = downloadImagePath,
@@ -629,7 +717,7 @@ fun DashboardScreen(
                 checked = isMusicUnlockEnabled,
                 onCheckedChange = { state ->
                     isMusicUnlockEnabled = state
-                    ConfigClient.putBoolean(context, MusicUnlockHook.KEY_MUSIC_UNLOCK, state)
+                    saveBoolean(MusicUnlockHook.KEY_MUSIC_UNLOCK, state)
                 }
             )
 
@@ -640,7 +728,7 @@ fun DashboardScreen(
                 checked = isAuthorLocationEnabled,
                 onCheckedChange = { state ->
                     isAuthorLocationEnabled = state
-                    ConfigClient.putBoolean(context, AuthorLocationHook.KEY_SHOW_AUTHOR_LOCATION, state)
+                    saveBoolean(AuthorLocationHook.KEY_SHOW_AUTHOR_LOCATION, state)
                 }
             )
 
@@ -650,7 +738,7 @@ fun DashboardScreen(
                 checked = isCopyCommentTextOnlyEnabled,
                 onCheckedChange = { state ->
                     isCopyCommentTextOnlyEnabled = state
-                    ConfigClient.putBoolean(context, CommentCopyHook.KEY_COPY_COMMENT_TEXT_ONLY, state)
+                    saveBoolean(CommentCopyHook.KEY_COPY_COMMENT_TEXT_ONLY, state)
                 }
             )
 
@@ -661,7 +749,7 @@ fun DashboardScreen(
                 checked = isVideoTranslateEnabled,
                 onCheckedChange = { state ->
                     isVideoTranslateEnabled = state
-                    ConfigClient.putBoolean(context, VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED, state)
+                    saveBoolean(VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED, state)
                 }
             )
 
@@ -672,7 +760,7 @@ fun DashboardScreen(
                 checked = isCommentTranslateEnabled,
                 onCheckedChange = { state ->
                     isCommentTranslateEnabled = state
-                    ConfigClient.putBoolean(context, "comment_translate_enabled", state)
+                    saveBoolean("comment_translate_enabled", state)
                 }
             )
             SwitchPreferenceItem(
@@ -681,7 +769,7 @@ fun DashboardScreen(
                 checked = isBackgroundAudioEnabled,
                 onCheckedChange = { state ->
                     isBackgroundAudioEnabled = state
-                    ConfigClient.putBoolean(context, "background_audio_unlock", state)
+                    saveBoolean("background_audio_unlock", state)
                 }
             )
         }
@@ -694,7 +782,7 @@ fun DashboardScreen(
                 checked = stickerDownloadEnabled,
                 onCheckedChange = { state ->
                     stickerDownloadEnabled = state
-                    ConfigClient.putBoolean(context, CommentStickerDownloadHook.KEY, state)
+                    saveBoolean(CommentStickerDownloadHook.KEY, state)
                 }
             )
         }
@@ -712,7 +800,7 @@ fun DashboardScreen(
                 checked = isFeedRemoveAdsEnabled,
                 onCheckedChange = { state ->
                     isFeedRemoveAdsEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_FEED_REMOVE_ADS, state)
+                    saveBoolean(FeedFilterHook.KEY_FEED_REMOVE_ADS, state)
                 }
             )
 
@@ -722,7 +810,7 @@ fun DashboardScreen(
                 checked = isFeedRemoveLiveEnabled,
                 onCheckedChange = { state ->
                     isFeedRemoveLiveEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_FEED_REMOVE_LIVE, state)
+                    saveBoolean(FeedFilterHook.KEY_FEED_REMOVE_LIVE, state)
                 }
             )
 
@@ -732,7 +820,7 @@ fun DashboardScreen(
                 checked = isFeedRemoveImageEnabled,
                 onCheckedChange = { state ->
                     isFeedRemoveImageEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_FEED_REMOVE_IMAGE, state)
+                    saveBoolean(FeedFilterHook.KEY_FEED_REMOVE_IMAGE, state)
                 }
             )
 
@@ -742,7 +830,7 @@ fun DashboardScreen(
                 enabled = isViewFilterEnabled,
                 onEnabledChange = { state ->
                     isViewFilterEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_FILTER_VIEWS_ENABLED, state)
+                    saveBoolean(FeedFilterHook.KEY_FILTER_VIEWS_ENABLED, state)
                 },
                 minVal = viewMin,
                 maxVal = viewMax,
@@ -756,7 +844,7 @@ fun DashboardScreen(
                 enabled = isLikeFilterEnabled,
                 onEnabledChange = { state ->
                     isLikeFilterEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_FILTER_LIKES_ENABLED, state)
+                    saveBoolean(FeedFilterHook.KEY_FILTER_LIKES_ENABLED, state)
                 },
                 minVal = likeMin,
                 maxVal = likeMax,
@@ -770,7 +858,7 @@ fun DashboardScreen(
                 enabled = isDurationFilterEnabled,
                 onEnabledChange = { state ->
                     isDurationFilterEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_FILTER_DURATION_ENABLED, state)
+                    saveBoolean(FeedFilterHook.KEY_FILTER_DURATION_ENABLED, state)
                 },
                 minVal = durationMin,
                 maxVal = durationMax,
@@ -785,7 +873,7 @@ fun DashboardScreen(
                 enabled = isKeywordFilterEnabled,
                 onEnabledChange = { state ->
                     isKeywordFilterEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_FILTER_KEYWORDS_ENABLED, state)
+                    saveBoolean(FeedFilterHook.KEY_FILTER_KEYWORDS_ENABLED, state)
                 },
                 config = parsedKeywordConfig,
                 onClick = { showKeywordListDialog = true }
@@ -798,7 +886,7 @@ fun DashboardScreen(
                 checked = isBlockOfflineVideoEnabled,
                 onCheckedChange = { state ->
                     isBlockOfflineVideoEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_REMOVE_OFFLINE, state)
+                    saveBoolean(FeedFilterHook.KEY_REMOVE_OFFLINE, state)
                 }
             )
             SwitchPreferenceItem(
@@ -808,7 +896,7 @@ fun DashboardScreen(
                 checked = isRemoveAiGeneratedEnabled,
                 onCheckedChange = { state ->
                     isRemoveAiGeneratedEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_REMOVE_AI_GENERATED, state)
+                    saveBoolean(FeedFilterHook.KEY_REMOVE_AI_GENERATED, state)
                 }
             )
             SwitchPreferenceItem(
@@ -817,7 +905,7 @@ fun DashboardScreen(
                 checked = isRemoveTopicRecommendationsEnabled,
                 onCheckedChange = { state ->
                     isRemoveTopicRecommendationsEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_REMOVE_TOPIC_RECOMMENDATIONS, state)
+                    saveBoolean(FeedFilterHook.KEY_REMOVE_TOPIC_RECOMMENDATIONS, state)
                 }
             )
             SwitchPreferenceItem(
@@ -826,7 +914,7 @@ fun DashboardScreen(
                 checked = isRemoveCreatorRecommendationsEnabled,
                 onCheckedChange = { state ->
                     isRemoveCreatorRecommendationsEnabled = state
-                    ConfigClient.putBoolean(context, FeedFilterHook.KEY_REMOVE_CREATOR_RECOMMENDATIONS, state)
+                    saveBoolean(FeedFilterHook.KEY_REMOVE_CREATOR_RECOMMENDATIONS, state)
                 }
             )
         }
@@ -839,14 +927,8 @@ fun DashboardScreen(
         RegionSelectionDialog(
             currentIso = regionCode,
             onDismiss = { showSelectDialog = false },
-            onSelected = { preset ->
-                regionCode = preset.isoCode
-                operatorCode = preset.operatorCode
-                operatorName = preset.operatorName
-                ConfigClient.putString(context, "target_region", preset.isoCode)
-                ConfigClient.putString(context, "sim_operator_code", preset.operatorCode)
-                ConfigClient.putString(context, "sim_operator_name", preset.operatorName)
-                showSelectDialog = false
+            onSelected = { option ->
+                if (saveValues(CountryCatalog.selection(option))) showSelectDialog = false
             }
         )
     }
@@ -856,15 +938,10 @@ fun DashboardScreen(
             initialIso = regionCode,
             initialCode = operatorCode,
             initialName = operatorName,
+            initialCountryOnly = countryOnly,
             onDismiss = { showCustomSimDialog = false },
-            onSaved = { iso, code, name ->
-                regionCode = iso
-                operatorCode = code
-                operatorName = name
-                ConfigClient.putString(context, "target_region", iso)
-                ConfigClient.putString(context, "sim_operator_code", code)
-                ConfigClient.putString(context, "sim_operator_name", name)
-                showCustomSimDialog = false
+            onSaved = { iso, code, name, onlyCountry ->
+                if (saveValues(CountryCatalog.custom(iso, code, name, onlyCountry))) showCustomSimDialog = false
             }
         )
     }
@@ -875,8 +952,7 @@ fun DashboardScreen(
             onDismiss = { showCustomLangDialog = false },
             onSaved = { lang ->
                 customLanguage = lang
-                ConfigClient.putString(context, "custom_language", lang)
-                showCustomLangDialog = false
+                if (saveString("custom_language", lang)) showCustomLangDialog = false
             }
         )
     }
@@ -887,8 +963,7 @@ fun DashboardScreen(
             onDismiss = { showCustomTzDialog = false },
             onSaved = { tz ->
                 customTimeZone = tz
-                ConfigClient.putString(context, "custom_timezone", tz)
-                showCustomTzDialog = false
+                if (saveString("custom_timezone", tz)) showCustomTzDialog = false
             }
         )
     }
@@ -901,9 +976,7 @@ fun DashboardScreen(
             onSaved = { lat, lng ->
                 customLatitude = lat
                 customLongitude = lng
-                ConfigClient.putString(context, "custom_latitude", lat)
-                ConfigClient.putString(context, "custom_longitude", lng)
-                showCustomGpsDialog = false
+                if (saveValues(mapOf("custom_latitude" to lat, "custom_longitude" to lng))) showCustomGpsDialog = false
             }
         )
     }
@@ -918,11 +991,12 @@ fun DashboardScreen(
                 val maxSan = FeedFilterHook.parseViewMax(max).toString()
                 viewMin = minSan
                 viewMax = maxSan
-                ConfigClient.putStrings(context, mapOf(
+                if (saveValues(mapOf(
                     FeedFilterHook.KEY_FILTER_VIEWS_MIN to minSan,
-                    FeedFilterHook.KEY_FILTER_VIEWS_MAX to maxSan))
-                showViewRangeDialog = false
-                Toast.makeText(context, strings.getString(R.string.filter_views_saved), Toast.LENGTH_SHORT).show()
+                    FeedFilterHook.KEY_FILTER_VIEWS_MAX to maxSan))) {
+                    showViewRangeDialog = false
+                    Toast.makeText(context, strings.getString(R.string.filter_views_saved), Toast.LENGTH_SHORT).show()
+                }
             }
         )
     }
@@ -937,11 +1011,12 @@ fun DashboardScreen(
                 val maxSan = FeedFilterHook.parseLikeMax(max).toString()
                 likeMin = minSan
                 likeMax = maxSan
-                ConfigClient.putStrings(context, mapOf(
+                if (saveValues(mapOf(
                     FeedFilterHook.KEY_FILTER_LIKES_MIN to minSan,
-                    FeedFilterHook.KEY_FILTER_LIKES_MAX to maxSan))
-                showLikeRangeDialog = false
-                Toast.makeText(context, strings.getString(R.string.filter_likes_saved), Toast.LENGTH_SHORT).show()
+                    FeedFilterHook.KEY_FILTER_LIKES_MAX to maxSan))) {
+                    showLikeRangeDialog = false
+                    Toast.makeText(context, strings.getString(R.string.filter_likes_saved), Toast.LENGTH_SHORT).show()
+                }
             }
         )
     }
@@ -956,11 +1031,12 @@ fun DashboardScreen(
                 val maxSan = FeedFilterHook.parseDurationMax(max).toString()
                 durationMin = minSan
                 durationMax = maxSan
-                ConfigClient.putStrings(context, mapOf(
+                if (saveValues(mapOf(
                     FeedFilterHook.KEY_FILTER_DURATION_MIN to minSan,
-                    FeedFilterHook.KEY_FILTER_DURATION_MAX to maxSan))
-                showDurationRangeDialog = false
-                Toast.makeText(context, strings.getString(R.string.filter_duration_saved), Toast.LENGTH_SHORT).show()
+                    FeedFilterHook.KEY_FILTER_DURATION_MAX to maxSan))) {
+                    showDurationRangeDialog = false
+                    Toast.makeText(context, strings.getString(R.string.filter_duration_saved), Toast.LENGTH_SHORT).show()
+                }
             }
         )
     }
@@ -972,7 +1048,7 @@ fun DashboardScreen(
             onUpdateConfig = { newConfig ->
                 val json = FeedFilterHook.serializeKeywordConfig(newConfig)
                 keywordJsonStr = json
-                ConfigClient.putString(context, FeedFilterHook.KEY_FILTER_KEYWORDS_JSON, json)
+                saveString(FeedFilterHook.KEY_FILTER_KEYWORDS_JSON, json)
             }
         )
     }
@@ -987,10 +1063,11 @@ fun DashboardScreen(
                 val sanitizedImage = DownloadHook.sanitizeRelativePath(iPath, DownloadHook.DEFAULT_IMAGE_RELATIVE_PATH)
                 downloadVideoPath = sanitizedVideo
                 downloadImagePath = sanitizedImage
-                ConfigClient.putString(context, DownloadHook.KEY_DOWNLOAD_VIDEO_PATH, sanitizedVideo)
-                ConfigClient.putString(context, DownloadHook.KEY_DOWNLOAD_IMAGE_PATH, sanitizedImage)
-                showDownloadPathDialog = false
-                Toast.makeText(context, strings.getString(R.string.download_path_saved), Toast.LENGTH_SHORT).show()
+                if (saveValues(mapOf(DownloadHook.KEY_DOWNLOAD_VIDEO_PATH to sanitizedVideo,
+                    DownloadHook.KEY_DOWNLOAD_IMAGE_PATH to sanitizedImage))) {
+                    showDownloadPathDialog = false
+                    Toast.makeText(context, strings.getString(R.string.download_path_saved), Toast.LENGTH_SHORT).show()
+                }
             }
         )
     }
@@ -1002,8 +1079,7 @@ fun DashboardScreen(
                 val updated = (parsedSpeedList + newSpeed).distinct().sorted()
                 val newStr = updated.joinToString(",")
                 customSpeedListStr = newStr
-                ConfigClient.putString(context, "speed_expand_list", newStr)
-                showAddSpeedDialog = false
+                if (saveString("speed_expand_list", newStr)) showAddSpeedDialog = false
             }
         )
     }
@@ -1017,15 +1093,13 @@ fun DashboardScreen(
                 val updated = parsedSpeedList.filter { it != targetSpeed }
                 val newStr = updated.joinToString(",")
                 customSpeedListStr = newStr
-                ConfigClient.putString(context, "speed_expand_list", newStr)
-                editingSpeedTarget = null
+                if (saveString("speed_expand_list", newStr)) editingSpeedTarget = null
             },
             onSaved = { oldSpeed, newSpeed ->
                 val updated = parsedSpeedList.map { if (it == oldSpeed) newSpeed else it }.distinct().sorted()
                 val newStr = updated.joinToString(",")
                 customSpeedListStr = newStr
-                ConfigClient.putString(context, "speed_expand_list", newStr)
-                editingSpeedTarget = null
+                if (saveString("speed_expand_list", newStr)) editingSpeedTarget = null
             }
         )
     }
@@ -1036,8 +1110,7 @@ fun DashboardScreen(
             onDismiss = { showDurationAlertDialog = false },
             onSaved = { newThreshold ->
                 durationAlertThreshold = newThreshold
-                ConfigClient.putString(context, VideoDurationAlertHook.KEY_VIDEO_DURATION_ALERT_THRESHOLD, newThreshold)
-                showDurationAlertDialog = false
+                if (saveString(VideoDurationAlertHook.KEY_VIDEO_DURATION_ALERT_THRESHOLD, newThreshold)) showDurationAlertDialog = false
             }
         )
     }
@@ -1072,6 +1145,7 @@ private fun SimSpoofCard(
     operatorCode: String,
     operatorName: String,
     currentPreset: RegionPreset?,
+    countryOnly: Boolean,
     onSelectPresetClick: () -> Unit,
     onCustomSimClick: () -> Unit
 ) {
@@ -1103,24 +1177,24 @@ private fun SimSpoofCard(
                     Spacer(modifier = Modifier.height(2.dp))
                     val currentFlag = currentPreset?.flagEmoji ?: RegionPresets.isoToFlagEmoji(regionCode)
                     Text(
-                        text = strings.getString(R.string.region_target, currentFlag, if (currentPreset == null) strings.getString(R.string.common_custom) else Locale.forLanguageTag("und-$regionCode").getDisplayCountry(strings.configuration.locales[0]), regionCode.uppercase(Locale.ROOT)),
+                        text = strings.getString(R.string.region_target, currentFlag, Locale.forLanguageTag("und-$regionCode").getDisplayCountry(strings.configuration.locales[0]), regionCode.uppercase(Locale.ROOT)),
                         style = MaterialTheme.typography.bodyLarge,
                         fontWeight = FontWeight.Medium
                     )
                     Text(
-                        text = strings.getString(R.string.region_operator, operatorName),
+                        text = if (countryOnly) strings.getString(R.string.region_country_only_hint) else strings.getString(R.string.region_operator, operatorName),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                     Text(
-                        text = strings.getString(R.string.region_operator_code, operatorCode),
+                        text = if (countryOnly) strings.getString(R.string.region_environment_follow_hint) else strings.getString(R.string.region_operator_code, operatorCode),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
                     CompactPreferenceActions(
-                        firstLabel = strings.getString(R.string.region_select_preset),
+                        firstLabel = strings.getString(R.string.country_catalog_choose),
                         onFirstClick = onSelectPresetClick,
                         secondLabel = strings.getString(R.string.region_custom_parameters),
                         onSecondClick = onCustomSimClick,
@@ -1298,8 +1372,8 @@ private fun TimeZoneSpoofCard(
  *     onEnabledChange (Function1<Boolean, Unit>): 总开关状态变化回调。
  *     followRegion (Boolean): 是否跟随地区设置。
  *     onFollowRegionChange (Function1<Boolean, Unit>): 跟随地区开关变化回调。
- *     effectiveLatitude (Double): 当前最终生效的纬度数值。
- *     effectiveLongitude (Double): 当前最终生效的经度数值。
+ *     effectiveLatitude (Double?): 当前目标纬度；未收录则无值，保持原始定位。
+ *     effectiveLongitude (Double?): 当前目标经度；未收录则无值，保持原始定位。
  *     onCustomGpsClick (Function0<Unit>): 点击自定义经纬度按钮的回调。
  *
  * Returns:
@@ -1315,8 +1389,8 @@ private fun GpsSpoofCard(
     onEnabledChange: (Boolean) -> Unit,
     followRegion: Boolean,
     onFollowRegionChange: (Boolean) -> Unit,
-    effectiveLatitude: Double,
-    effectiveLongitude: Double,
+    effectiveLatitude: Double?,
+    effectiveLongitude: Double?,
     onCustomGpsClick: () -> Unit
 ) {
     val strings = LocalContext.current.resources
@@ -1346,7 +1420,8 @@ private fun GpsSpoofCard(
 
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = strings.getString(R.string.gps_effective, effectiveLatitude.toString(), effectiveLongitude.toString()),
+                        text = if (effectiveLatitude == null || effectiveLongitude == null) strings.getString(R.string.region_environment_missing)
+                            else strings.getString(R.string.gps_effective, effectiveLatitude.toString(), effectiveLongitude.toString()),
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.SemiBold,
                         color = MaterialTheme.colorScheme.primary
@@ -2237,7 +2312,7 @@ fun KeywordListDialog(
  * Args:
  *     currentIso (String): 当前激活的 ISO 国家代号。
  *     onDismiss (Function0<Unit>): 弹窗关闭回调。
- *     onSelected (Function1<RegionPreset, Unit>): 选中指定预设实体时的回调函数。
+ *     onSelected (Function1<CountryOption, Unit>): 选中指定预设实体时的回调函数。
  *
  * Returns:
  *     Unit: 无返回值。
@@ -2246,85 +2321,39 @@ fun KeywordListDialog(
  *     - `io.github.meiyongai.toki.subtitle.ui.screen.DashboardScreen`: 点击地区卡片“选择预设”时展示。
  */
 @Composable
-fun RegionSelectionDialog(
-    currentIso: String,
-    onDismiss: () -> Unit,
-    onSelected: (RegionPreset) -> Unit
-) {
+fun RegionSelectionDialog(currentIso: String, onDismiss: () -> Unit, onSelected: (CountryOption) -> Unit) {
     val strings = LocalContext.current.resources
     var searchQuery by remember { mutableStateOf("") }
     val locale = strings.configuration.locales[0]
-    val filteredList = remember(searchQuery, locale) {
-        val query = searchQuery.trim()
-        val namedMatches = RegionPresets.search(query).toSet()
-        RegionPresets.search("").filter { preset ->
-            preset in namedMatches ||
-                Locale.forLanguageTag("und-${preset.isoCode}").getDisplayCountry(locale)
-                    .contains(query, ignoreCase = true)
-        }
-    }
-
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text(strings.getString(R.string.region_select_title)) },
+    val filteredList = remember(searchQuery, locale) { CountryCatalog.search(searchQuery, locale) }
+    AlertDialog(onDismissRequest = onDismiss, title = { Text(strings.getString(R.string.region_select_title)) },
         text = {
-            Column(modifier = Modifier.fillMaxWidth().stableDialogHeight(460.dp)) {
-                OutlinedTextField(
-                    value = searchQuery,
-                    onValueChange = { searchQuery = it },
-                    label = { Text(strings.getString(R.string.region_search)) },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(12.dp))
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    verticalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    items(filteredList) { preset ->
-                        val isSelected = preset.isoCode.equals(currentIso, ignoreCase = true)
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { onSelected(preset) }
-                                .padding(vertical = 10.dp, horizontal = 4.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Column(modifier = Modifier.weight(1f)) {
-                                Text(
-                                    text = "${preset.flagEmoji}  ${Locale.forLanguageTag("und-${preset.isoCode}").getDisplayCountry(strings.configuration.locales[0])} (${preset.englishName})",
+            Column(Modifier.fillMaxWidth().stableDialogHeight(460.dp)) {
+                Text(strings.getString(R.string.country_catalog_hint), style = MaterialTheme.typography.bodySmall)
+                OutlinedTextField(value = searchQuery, onValueChange = { searchQuery = it },
+                    label = { Text(strings.getString(R.string.region_search)) }, singleLine = true, modifier = Modifier.fillMaxWidth())
+                Spacer(Modifier.height(8.dp))
+                if (filteredList.isEmpty()) Text(strings.getString(R.string.country_catalog_empty))
+                LazyColumn(Modifier.fillMaxWidth().weight(1f), verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                    items(filteredList, key = { it.isoCode }) { option ->
+                        val selected = option.isoCode.equals(currentIso, ignoreCase = true)
+                        Row(Modifier.fillMaxWidth().clickable { onSelected(option) }.padding(vertical = 10.dp, horizontal = 4.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                            Column(Modifier.weight(1f)) {
+                                Text("${option.flag}  ${option.displayName(locale)} (${option.englishName})",
                                     style = MaterialTheme.typography.bodyLarge,
-                                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
-                                    color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
-                                )
-                                Text(
-                                    text = strings.getString(R.string.region_operator_details, preset.operatorName, preset.operatorCode),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                                )
+                                    fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+                                    color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface)
+                                Text(option.preset?.let { strings.getString(R.string.region_operator_details, it.operatorName, it.operatorCode) }
+                                    ?: strings.getString(R.string.region_country_only_hint), style = MaterialTheme.typography.bodySmall)
                             }
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = preset.isoCode,
-                                style = MaterialTheme.typography.labelLarge,
-                                fontWeight = FontWeight.Bold,
-                                color = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline
-                            )
+                            Text(option.isoCode, style = MaterialTheme.typography.labelLarge)
                         }
                         HorizontalDivider()
                     }
                 }
             }
-        },
-        confirmButton = {
-            TextButton(onClick = onDismiss) {
-                Text(strings.getString(R.string.common_close))
-            }
-        }
-    )
+        }, confirmButton = { TextButton(onClick = onDismiss) { Text(strings.getString(R.string.common_close)) } })
 }
 
 /**
@@ -2348,13 +2377,16 @@ fun CustomSimDialog(
     initialIso: String,
     initialCode: String,
     initialName: String,
+    initialCountryOnly: Boolean = false,
     onDismiss: () -> Unit,
-    onSaved: (String, String, String) -> Unit
+    onSaved: (String, String, String, Boolean) -> Unit
 ) {
     val strings = LocalContext.current.resources
     var iso by remember { mutableStateOf(initialIso) }
     var code by remember { mutableStateOf(initialCode) }
     var name by remember { mutableStateOf(initialName) }
+    var countryOnly by remember { mutableStateOf(initialCountryOnly) }
+    var invalid by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -2369,23 +2401,28 @@ fun CustomSimDialog(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+                CompactPreferenceSwitch(title = strings.getString(R.string.region_country_only), checked = countryOnly,
+                    onCheckedChange = { countryOnly = it; invalid = false }, summary = strings.getString(R.string.region_country_only_hint))
+                if (invalid) Text(strings.getString(R.string.region_custom_invalid), color = MaterialTheme.colorScheme.error)
                 OutlinedTextField(
                     value = iso,
-                    onValueChange = { iso = it.trim().uppercase() },
+                    onValueChange = { iso = it.trim().uppercase(Locale.ROOT); invalid = false },
                     label = { Text(strings.getString(R.string.region_code_input)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = code,
-                    onValueChange = { code = it.trim() },
+                    onValueChange = { code = it.trim(); invalid = false },
+                    enabled = !countryOnly,
                     label = { Text(strings.getString(R.string.region_operator_code_input)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = name,
-                    onValueChange = { name = it },
+                    onValueChange = { name = it; invalid = false },
+                    enabled = !countryOnly,
                     label = { Text(strings.getString(R.string.region_operator_name_input)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
@@ -2395,10 +2432,10 @@ fun CustomSimDialog(
         confirmButton = {
             Button(
                 onClick = {
-                    val finalIso = iso.ifBlank { "JP" }
-                    val finalCode = code.ifBlank { "00000" }
-                    val finalName = name.ifBlank { "$finalIso Carrier" }
-                    onSaved(finalIso, finalCode, finalName)
+                    try {
+                        CountryCatalog.custom(iso, code, name, countryOnly)
+                        onSaved(iso.trim().uppercase(Locale.ROOT), code.trim(), name.trim(), countryOnly)
+                    } catch (_: IllegalArgumentException) { invalid = true }
                 }
             ) {
                 Text(strings.getString(R.string.common_save_apply))

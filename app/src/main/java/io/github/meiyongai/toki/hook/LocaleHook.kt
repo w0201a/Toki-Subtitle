@@ -91,21 +91,30 @@ object LocaleHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.TokiModule.hookApplication`: 宿主启动时触发配置加载。
      */
     fun refreshConfig(context: Context) {
-        isEnabled = ConfigClient.getBoolean(context, "language_spoof_enabled")
-        if (!isEnabled) {
+        val requestedEnabled = ConfigClient.getBoolean(context, "language_spoof_enabled")
+        if (!requestedEnabled) {
+            isEnabled = false
             Log.i(TAG, "系统语言伪装功能处于关闭状态")
             return
         }
 
         val followRegion = ConfigClient.getBoolean(context, "language_follow_region")
-        activeLanguageTag = if (followRegion) {
+        val requestedValue = if (followRegion) {
             val targetRegion = ConfigClient.getString(context, "target_region", defaultValue = "JP") ?: "JP"
             RegionPresets.resolveLanguageForIso(targetRegion)
         } else {
             ConfigClient.getString(context, "custom_language", defaultValue = "ja-JP") ?: "ja-JP"
         }
 
+        if (requestedValue == null) {
+            isEnabled = false
+            Log.w(TAG, "地区未收录环境预设；保持宿主原始值，请使用自定义参数")
+            return
+        }
+        activeLanguageTag = requestedValue
+
         activeLocale = parseLocale(activeLanguageTag)
+        isEnabled = true
         Log.i(TAG, "已同步伪装语言配置 -> $activeLanguageTag (Locale: $activeLocale, followRegion=$followRegion)")
     }
 

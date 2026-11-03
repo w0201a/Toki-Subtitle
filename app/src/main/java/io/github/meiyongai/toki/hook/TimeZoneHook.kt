@@ -52,23 +52,32 @@ object TimeZoneHook {
      * - `io.github.meiyongai.toki.subtitle.hook.TokiModule.hookApplication`: 宿主启动时触发配置加载。
      */
     fun refreshConfig(context: Context) {
-        isEnabled = ConfigClient.getBoolean(context, "timezone_spoof_enabled")
-        if (!isEnabled) {
+        val requestedEnabled = ConfigClient.getBoolean(context, "timezone_spoof_enabled")
+        if (!requestedEnabled) {
+            isEnabled = false
             Log.i(TAG, "系统时区伪装功能处于关闭状态")
             return
         }
 
         val followRegion = ConfigClient.getBoolean(context, "timezone_follow_region")
-        activeZoneIdString = if (followRegion) {
+        val requestedValue = if (followRegion) {
             val targetRegion = ConfigClient.getString(context, "target_region", defaultValue = "JP") ?: "JP"
             RegionPresets.resolveTimeZoneForIso(targetRegion)
         } else {
             ConfigClient.getString(context, "custom_timezone", defaultValue = "Asia/Tokyo") ?: "Asia/Tokyo"
         }
 
+        if (requestedValue == null) {
+            isEnabled = false
+            Log.w(TAG, "地区未收录环境预设；保持宿主原始值，请使用自定义参数")
+            return
+        }
+        activeZoneIdString = requestedValue
+
         activeTimeZone = TimeZone.getTimeZone(activeZoneIdString)
         activeZoneId = ZoneId.of(activeZoneIdString)
         activeIcuTimeZone = android.icu.util.TimeZone.getTimeZone(activeZoneIdString)
+        isEnabled = true
         Log.i(TAG, "已同步伪装时区配置 -> $activeZoneIdString (followRegion=$followRegion)")
     }
 

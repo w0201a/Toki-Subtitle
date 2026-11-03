@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.71-debug
+# Source-only development status — 2.0.72-debug
 
-Updated: 2026-11-04. Source version: **2.0.71-debug / 91**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.72-debug / 92**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -33,6 +33,16 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.72 — country directory and confirmed dashboard snapshots
+
+- Country selection includes the runtime platform ISO directory plus the existing 163 carrier/environment presets. Search supports Chinese/English/localized names, codes and accent/locale-independent case normalization. Country metadata, complete operational presets and server/account availability are distinct; this is NOT a verified TikTok service whitelist or a complete state/province catalogue.
+- Missing-carrier entries select a separately persisted country-only mode. It changes only country returns while retaining native operator/SIM/phone paths, and preserves old manual carrier fields. Explicit carrier mode remains validated; blank inputs no longer become JP/00000/invented carrier defaults. The mode does not independently install SIM hooks and remains startup-frozen with its owner.
+- Absent environment presets return absence instead of en-US/UTC/Tokyo. Follow-region locale/timezone/GPS hooks remain native when required metadata is absent; manual environment settings remain available. First enabled state is published after payload resolution. Diagnostics report missing-preset status and do not report that unavailable environment as applied.
+- Dashboard subscribes to changes, reloads all 58 persisted top-level controls from one immutable REQUESTED configuration snapshot and commits the state group through one Compose snapshot. It does not rewrite dialog drafts or reset confirmed controls on disconnected notifications. Waiting-for-restart settings keep their saved intent visible rather than silently showing startup-frozen effective values.
+- Confirmed writes reload actual values and surface write/readback errors. Country/carrier, latitude/longitude, range bounds and video/image download paths use one related-field transaction. Failed saves do not close those dialogs or announce success; optimistic controls are reloaded. These source changes do not certify bidirectional sync or no-restart behavior on a device.
+- Local host resource inspection found distinct support metadata in SettingRegion and a bundled payment-country table without service availability or subdivision fields. No unsupported inference that payment coverage equals TikTok availability was made; host data/decompiled content stays local.
+- 401 source-only/whitespace checks passed. Eleven new regression case sources cover directory coverage/query/selection/custom validation, no fabricated environment/carriers, startup ownership, missing-data diagnostics and confirmed-write failure/readback/retry. They were NOT executed. No compilation, JUnit/Robolectric, device verification or APK build was performed.
 
 ## Added in 2.0.71 — independent search/inbox/LIVE component presentation
 
@@ -168,12 +178,12 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 
 | Requested area | Current evidence / remaining work |
 |---|---|
-| All supported countries, territories, states | 163 preset records and Chinese ISO fallback in code; official host coverage and subdivision model still incomplete. |
+| All supported countries, territories, states | Country picker now includes the platform ISO directory plus 163 operational presets, with explicit country-only mode and no fabricated missing environment values. Actual TikTok server/account coverage and the full state/province model remain incomplete; generic ISO/payment metadata is not proof of service support. |
 | Quick-comment hiding on profile/detail and other pages | Independently installed feed variants plus real video-detail bottom-input creation/attachment targets, with reversible view ownership. Runtime, layouts and alternate variants remain unverified. |
 | Author country in videos opened from a profile | New primary-author TextView binding with span preservation, current identity checks and restoration is connected from actual 47.6.3 contracts. Profile/detail variants and runtime behavior remain unverified. |
 | Templates/effects | Existing template-button mapping wired; template implementation presence confirmed in the APK; effect anchors, variants and runtime behavior still need verification. |
 | Individually selectable share actions | 39 named controls, exact custom keys and reversible action/channel adapter filtering now wired to locally inspected 47.6.3 contracts. Runtime, alternative panels and some unnamed actions still need verification; not a whole-panel hide substitute. |
-| Settings synchronization and no-restart use | Late registration/per-key conflict handling and current video-mode replay are in source. Bidirectional manager/host synchronization, all current-page rebinding and live immersive-window install/restoration remain incomplete. |
+| Settings synchronization and no-restart use | Late registration/per-key conflicts, current video-mode replay, one-snapshot updates for 58 dashboard controls and confirmed atomic related-field saves are in source. Actual bidirectional manager/host synchronization, all-page rebinding and live immersive-window restoration remain incomplete; startup-sensitive environment hooks still require restart. |
 | Faster/reliable subtitle translation and replay | Cache/track/write paths, observed-rewind ownership, cancelled-request recovery and shared-result retrieval are wired in source. Compilation, real replay/seek/paused/language behavior and measured latency remain unverified. |
 | Offline subtitles and translation persistence | Persistent caches, optional local-only and default hybrid online eligibility/reconnect handling are in source. No local engine; host offline player/time identity and full local UI still need integration. |
 | Offline long-press, export/download and comments | Selected-cell local menu, indexed complete-MP4 export and current-account cached-comment viewer are wired in source. Real cache/gesture/device validation, split-format/API-28 export, additional native comment-entry/layout/host variants and service/device behavior remain incomplete. |

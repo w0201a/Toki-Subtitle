@@ -82,11 +82,15 @@ class TokiModule : XposedModule() {
             HookRuntime.restartRequired(feature, pending)
             if (feature in livePending) HookRuntime.state(feature, "等待运行时注册")
             val applied = if (feature == "SpeedOptions") "PlaybackSpeedHook" in installed else feature in installed
+            val missingEnvironment = io.github.meiyongai.toki.subtitle.model.RegionEnvironmentPolicy.missingPreset(feature, effective)
+            if (applied && io.github.meiyongai.toki.subtitle.model.RegionEnvironmentPolicy.owns(feature)) {
+                HookRuntime.state(feature, if (missingEnvironment) "地区环境预设缺失" else "已注册")
+            }
             if (applied || !HostFeaturePlan.enabled(feature, effective)) {
                 val revision = plan.appliedRevision(if (feature == "SpeedOptions") "PlaybackSpeedHook" else feature, requested)
                 HookRuntime.appliedConfiguration(feature,
                     ConfigSnapshot(effective.configuration(), revision, effective.importRevision),
-                    applied && HostFeaturePlan.enabled(feature, effective))
+                    applied && HostFeaturePlan.enabled(feature, effective) && !missingEnvironment)
             }
         }
         // Component code availability is stricter than generic hook installation; retain its actual applied subset.

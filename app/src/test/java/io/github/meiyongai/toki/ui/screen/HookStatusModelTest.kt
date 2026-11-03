@@ -7,6 +7,13 @@ import org.junit.Test
 
 /** 验证简明功能列表的状态语义与自动会话选择，不依赖宿主和设备。 */
 class HookStatusModelTest {
+    @Test fun missingRegionEnvironmentIsVisibleWithASpecificExplanationNotFalseDisabled() {
+        val definition = HookStatusCatalog.features.single { it.id == "GpsHook" }
+        val status = HookFeatureStatus(definition, HookFeatureReport(true, "地区环境预设缺失", 4, appliedEnabled = false))
+        assertEquals(HookVisualState.ISSUE, status.state)
+        assertEquals(R.string.region_environment_missing, status.problem)
+    }
+
     @Test fun pageCodePreparationAndPartialSupportAreNotReportedAsDisabledOrNormal() {
         val definition = HookStatusCatalog.features.single { it.id == "PageCleanupHook" }
         assertEquals(HookVisualState.PENDING, HookFeatureStatus(definition,

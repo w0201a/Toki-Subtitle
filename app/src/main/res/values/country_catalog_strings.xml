@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="country_catalog_choose">Countries / territories</string>
+    <string name="country_catalog_hint">Includes system ISO countries and existing presets; not a TikTok service/account whitelist. Entries without a carrier preset set only the country code. State/province support is a separate model and is not inferred from a two-letter country code. SIM, language, timezone and GPS startup settings still require reopening TikTok.</string>
+    <string name="country_catalog_empty">No matching country or territory</string>
+    <string name="region_country_only">Only override the country code</string>
+    <string name="region_country_only_hint">Keep original carrier and SIM/phone state; do not invent MCC/MNC or a carrier name.</string>
+    <string name="region_environment_missing">No environment preset: native values remain; select custom parameters if needed.</string>
+    <string name="region_environment_follow_hint">Follow-region language/timezone/GPS stays native if no preset exists. Custom values remain available. This does not change account region or network IP.</string>
+    <string name="region_custom_invalid">Use a two-letter country code. Carrier mode also requires a 5–6 digit MCC/MNC and a nonempty carrier name.</string>
+    <string name="dashboard_save_error">Could not save or synchronize settings. Check the current values and try again.</string>
+</resources>

@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 91' in gradle and 'versionName = "2.0.71"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
+check('versionCode = 92' in gradle and 'versionName = "2.0.72"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -380,6 +380,33 @@ for locale in ('values', 'values-b+zh+Hans'):
 for relative in ('PageCleanupBindingsTest.kt', 'PageCleanupContractTest.kt', 'PageCleanupPolicyTest.kt'):
     check((ROOT / 'app/src/test/java/io/github/meiyongai/toki/hook' / relative).exists(), relative + ' regression source exists (not executed)')
 
+# Full platform country directory is distinct from operational presets and server availability.
+country_catalog = (JAVA / 'model/CountryCatalog.kt').read_text(encoding='utf-8')
+dashboard = (JAVA / 'ui/screen/DashboardScreen.kt').read_text(encoding='utf-8')
+confirmed_edits = (JAVA / 'ui/screen/ConfirmedConfigEdits.kt').read_text(encoding='utf-8')
+sim_hook = (JAVA / 'hook/SimHook.kt').read_text(encoding='utf-8')
+check('Locale.getISOCountries().toSet() + RegionPresets.ALL_PRESETS.map { it.isoCode }' in country_catalog, 'country directory includes all available platform ISO countries plus existing presets, not just carrier records')
+check('Normalizer.Form.NFD' in country_catalog and 'lowercase(Locale.ROOT)' in country_catalog and 'item.chineseName, item.displayName(locale)' in country_catalog, 'country directory search handles Chinese, English, local names, codes and accent/case normalization')
+check('"sim_country_only_enabled", item.preset == null' in country_catalog and 'item.preset?.let' in country_catalog and '"00000"' not in country_catalog, 'directory selection writes one country-only or complete-carrier configuration without fake defaults')
+check('"sim_country_only_enabled" to false' in schema and '"SimHook" to setOf("sim_spoof_enabled", "sim_country_only_enabled"' in (JAVA / 'hook/HostFeaturePlan.kt').read_text(encoding='utf-8'), 'country-only is default-off, not an independent installation trigger, and follows the SIM startup contract')
+check('countryOnly: Boolean = false' in sim_hook and 'if (countryOnly) ""' in sim_hook and '"00000"' not in sim_hook and 'normalizedIso = regionCode.trim().lowercase(java.util.Locale.ROOT)' in sim_hook, 'country-only SIM resolution preserves unavailable operator data and is locale-independent')
+check(sim_hook.count('getActiveCarrier().operatorCode.isNotBlank()') == 4 and 'getActiveCarrier().operatorName.isNotBlank()' in sim_hook, 'native operator, name and SIM/phone state are called when country-only has no carrier override')
+check(all('fun resolve' + kind + 'ForIso(isoCode: String): ' + value + '?' in regions for kind, value in (('Language', 'String'), ('TimeZone', 'String'), ('Latitude', 'Double'), ('Longitude', 'Double'))) and '?: 35.6762' not in regions and '?: 139.6503' not in regions, 'missing preset metadata is explicit absence, not a different country or coordinate')
+for relative, token in (('hook/LocaleHook.kt', 'requestedValue == null'), ('hook/TimeZoneHook.kt', 'requestedValue == null'), ('hook/GpsHook.kt', 'latitude == null || longitude == null')):
+    source = (JAVA / relative).read_text(encoding='utf-8')
+    check(token in source and 'isEnabled = false' in source, relative + ' leaves native environment values when follow-region metadata is missing')
+check('fun reloadDashboard()' in dashboard and 'val current = checkNotNull(ConfigClient.requestedSnapshotOrNull())' in dashboard and 'ConfigClient.addStateListener { value -> if (value != null) reloadDashboard() }' in dashboard and 'subscription.close()' in dashboard and 'Snapshot.withMutableSnapshot' in dashboard, 'dashboard subscribes and reloads one requested snapshot without replacing disconnected values with fake defaults')
+reload_body = dashboard.split('fun reloadDashboard() {', 1)[1].split('    DisposableEffect(context)', 1)[0]
+check(len(re.findall(r'^            [A-Za-z][A-Za-z0-9]* = current\.(?:boolean|string)\(', reload_body, re.M)) == 58, 'dashboard synchronization covers all 58 persisted top-level fields rather than only newly added controls')
+check('try { write(values) } catch' in confirmed_edits and 'try { reload() } catch' in confirmed_edits and 'return failure == null' in confirmed_edits, 'confirmed edit helper reloads after failure and refuses success on write/readback failure')
+check('saveValues(CountryCatalog.selection(option))' in dashboard and 'saveValues(CountryCatalog.custom(iso, code, name, onlyCountry))' in dashboard and 'saveValues(mapOf("custom_latitude" to lat, "custom_longitude" to lng))' in dashboard, 'country/carrier and coordinate pairs are saved in one transaction with confirmed dialog closure')
+check('CountryCatalog.search(searchQuery, locale)' in dashboard and 'option.preset?.let' in dashboard and 'region_country_only_hint' in dashboard and 'val finalCode = code.ifBlank' not in dashboard, 'directory and custom settings expose country-only capability and reject fabricated carrier defaults')
+for locale in ('values', 'values-b+zh+Hans'):
+    names = {n.attrib['name'] for n in ET.parse(ROOT / 'app/src/main/res' / locale / 'country_catalog_strings.xml').getroot() if n.tag == 'string'}
+    check({'country_catalog_hint', 'region_country_only', 'region_country_only_hint', 'region_environment_missing', 'region_custom_invalid', 'dashboard_save_error'} <= names, locale + ' country capability, missing-data and persistence messages exist')
+check(set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', dashboard)) <= base_names, 'all dashboard string references resolve in default resources')
+check('RegionEnvironmentPolicy.missingPreset(feature, effective)' in (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8') and '&& !missingEnvironment' in (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8') and '地区环境预设缺失' in (JAVA / 'ui/screen/HookStatusModel.kt').read_text(encoding='utf-8'), 'missing environment data is diagnosed and not reported as an applied hook')
+
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
     length = len(source)
@@ -437,6 +464,8 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'model/RegionEnvironmentPolicy.kt', 'model/CountryCatalog.kt', 'model/RegionPresets.kt', 'hook/SimHook.kt', 'hook/LocaleHook.kt', 'hook/TimeZoneHook.kt',
+    'hook/GpsHook.kt', 'ui/screen/DashboardScreen.kt', 'ui/screen/ConfirmedConfigEdits.kt',
     'model/PageCleanupItem.kt', 'hook/PageCleanupBindings.kt', 'hook/PageCleanupContract.kt',
     'hook/PageCleanupCodeGate.kt', 'hook/PageCleanupHook.kt', 'ui/screen/PageCleanupSection.kt',
     'hook/HostFeaturePlan.kt', 'hook/TokiModule.kt', 'hook/HostSymbols.kt', 'hook/HostScanSession.kt', 'hook/HostScanController.kt',
@@ -486,6 +515,7 @@ for relative in (
     'hook/CaptionPlaybackClockTest.kt', 'hook/SubtitleReplayRecoveryTest.kt',
     'hook/VideoDisplayModesTest.kt', 'hook/VideoLayoutBindingsTest.kt', 'hook/SmartVideoLayoutTest.kt', 'hook/VideoFillGeometryTest.kt',
     'hook/PageCleanupBindingsTest.kt', 'hook/PageCleanupContractTest.kt', 'hook/PageCleanupPolicyTest.kt',
+    'model/CountryCatalogTest.kt', 'ui/screen/ConfirmedConfigEditsTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

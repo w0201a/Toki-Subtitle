@@ -252,56 +252,56 @@ object RegionPresets {
      * 根据 ISO 代号反查对应的推荐系统默认语言标签。
      *
      * @param isoCode 两位国家或地区标准代号。
-     * @return 对应的 BCP-47 语言代码（如 ja-JP），无法查得时默认提供 en-US。
+     * @return 对应的 BCP-47 语言代码（如 ja-JP），未收录时返回 null，不冒充美国语言。
      *
      * Callers:
      * - `io.github.meiyongai.toki.subtitle.hook.LocaleHook.refreshConfig`: 运行时跟随地区时解析语言。
      * - `io.github.meiyongai.toki.subtitle.ui.screen.DashboardScreen`: 界面展示跟随地区的语言名称。
      */
-    fun resolveLanguageForIso(isoCode: String): String {
-        return findByIso(isoCode)?.defaultLanguage ?: "en-US"
+    fun resolveLanguageForIso(isoCode: String): String? {
+        return findByIso(isoCode)?.defaultLanguage
     }
 
     /**
      * 根据 ISO 代号反查对应的推荐系统默认时区标识。
      *
      * @param isoCode 两位国家或地区标准代号。
-     * @return 对应的 IANA 时区标识（如 Asia/Tokyo），无法查得时默认提供 UTC。
+     * @return 对应的 IANA 时区标识（如 Asia/Tokyo），未收录时返回 null，不冒充 UTC 时区。
      *
      * Callers:
      * - `io.github.meiyongai.toki.subtitle.hook.TimeZoneHook.refreshConfig`: 运行时跟随地区时解析时区。
      * - `io.github.meiyongai.toki.subtitle.ui.screen.DashboardScreen`: 界面展示跟随地区的时区标识。
      */
-    fun resolveTimeZoneForIso(isoCode: String): String {
-        return findByIso(isoCode)?.defaultTimeZone ?: "UTC"
+    fun resolveTimeZoneForIso(isoCode: String): String? {
+        return findByIso(isoCode)?.defaultTimeZone
     }
 
     /**
      * 根据 ISO 代号反查对应的推荐系统默认纬度坐标。
      *
      * @param isoCode 两位国家或地区标准代号。
-     * @return 对应的纬度值（Double），未收录时默认返回东京纬度 35.6762。
+     * @return 对应的纬度值（Double），未收录时返回 null，不冒充东京纬度。
      *
      * Callers:
      * - `io.github.meiyongai.toki.subtitle.hook.GpsHook.refreshConfig`: 运行时跟随地区时解析经纬度。
      * - `io.github.meiyongai.toki.subtitle.ui.screen.DashboardScreen`: 界面展示跟随地区的坐标值。
      */
-    fun resolveLatitudeForIso(isoCode: String): Double {
-        return findByIso(isoCode)?.defaultLatitude ?: 35.6762
+    fun resolveLatitudeForIso(isoCode: String): Double? {
+        return findByIso(isoCode)?.defaultLatitude
     }
 
     /**
      * 根据 ISO 代号反查对应的推荐系统默认经度坐标。
      *
      * @param isoCode 两位国家或地区标准代号。
-     * @return 对应的经度值（Double），未收录时默认返回东京经度 139.6503。
+     * @return 对应的经度值（Double），未收录时返回 null，不冒充东京经度。
      *
      * Callers:
      * - `io.github.meiyongai.toki.subtitle.hook.GpsHook.refreshConfig`: 运行时跟随地区时解析经纬度。
      * - `io.github.meiyongai.toki.subtitle.ui.screen.DashboardScreen`: 界面展示跟随地区的坐标值。
      */
-    fun resolveLongitudeForIso(isoCode: String): Double {
-        return findByIso(isoCode)?.defaultLongitude ?: 139.6503
+    fun resolveLongitudeForIso(isoCode: String): Double? {
+        return findByIso(isoCode)?.defaultLongitude
     }
 
     /**
