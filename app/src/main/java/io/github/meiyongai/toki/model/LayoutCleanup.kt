@@ -37,6 +37,7 @@ enum class LayoutElement(val group: LayoutGroup, val title: Int, val tag: String
     BOTTOM_PROFILE(LayoutGroup.BOTTOM, R.string.layout_profile, "USER"),
     BOTTOM_DISCOVER(LayoutGroup.BOTTOM, R.string.layout_discover, "DISCOVER"),
     BOTTOM_EXPLORE(LayoutGroup.BOTTOM, R.string.layout_explore, "homepage_explore"),
+    BOTTOM_SEARCH_RECOMMENDATIONS(LayoutGroup.BOTTOM, R.string.layout_bottom_search_recommendations),
     AVATAR(LayoutGroup.SIDE, R.string.layout_avatar),
     FOLLOW(LayoutGroup.SIDE, R.string.layout_follow),
     LIKE(LayoutGroup.SIDE, R.string.layout_like),

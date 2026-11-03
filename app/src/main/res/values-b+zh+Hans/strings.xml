@@ -349,4 +349,6 @@
     <string name="host_scan_background_failed">"适配未完成，可在 Toki 查看状态并重试。"</string>
     <string name="layout_filter_hint">搜索净化选项</string>
     <string name="layout_filter_empty">没有匹配的净化选项</string>
+    <string name="layout_bottom_search_recommendations">视频底部搜索推荐</string>
+    <string name="layout_bottom_search_recommendations_hint">仅隐藏视频底部搜索推荐条，不隐藏顶部搜索。旧的“搜索标签”开关也会隐藏这些推荐条；如需恢复，请同时关闭。</string>
 </resources>

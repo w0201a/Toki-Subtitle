@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="feature_comment_sticker_download">评论贴纸下载</string>
-    <string name="feature_comment_sticker_download_hint">长按贴纸评论保存原图或动图；“更多评论操作”打开原生菜单。首次开启后重新打开 TikTok。</string>
+    <string name="feature_comment_sticker_download_hint">长按贴纸评论可选择动图或静态来源，保存原始文件，或转换为静态 PNG、JPEG、WebP；“更多评论操作”仍打开原生菜单。</string>
     <string name="sticker_menu_title">评论贴纸</string>
-    <string name="sticker_download">下载贴纸</string>
+    <string name="sticker_download">保存原始贴纸</string>
     <string name="sticker_more">更多评论操作</string>
     <string name="sticker_saving">正在下载贴纸…</string>
     <string name="sticker_saved">贴纸已保存到相册</string>
     <string name="sticker_save_failed">贴纸保存失败，请检查网络、存储权限和剩余空间。</string>
+    <string name="sticker_export">转换为 PNG / JPEG / WebP…</string>
+    <string name="sticker_export_title">导出静态单帧（不保留动画）</string>
+    <string name="sticker_export_png">PNG · 静态单帧 · 保留透明</string>
+    <string name="sticker_export_jpeg">JPEG · 静态单帧 · 透明处填白</string>
+    <string name="sticker_export_webp">WebP · 静态单帧</string>
+    <string name="sticker_source_title">选择贴纸来源</string>
+    <string name="sticker_source_automatic">自动 · 优先动图，失败再尝试静态</string>
+    <string name="sticker_source_animated">仅使用动图来源</string>
+    <string name="sticker_source_static">仅使用静态来源</string>
+    <string name="sticker_already_saving">该导出任务已在队列中</string>
 </resources>

@@ -349,4 +349,6 @@
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
     <string name="layout_filter_hint">Find a cleanup option</string>
     <string name="layout_filter_empty">No matching cleanup options</string>
+    <string name="layout_bottom_search_recommendations">Bottom-of-video search suggestions</string>
+    <string name="layout_bottom_search_recommendations_hint">Only hides the bottom video search bars, not top search. The older Search suggestion switch also hides these bars.</string>
 </resources>

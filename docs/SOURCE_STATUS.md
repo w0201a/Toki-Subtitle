@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.55-debug
+# Source-only development status — 2.0.56-debug
 
-Updated: 2026-11-03. Source version: **2.0.55-debug / 75**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-03. Source version: **2.0.56-debug / 76**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -12,6 +12,12 @@ Updated: 2026-11-03. Source version: **2.0.55-debug / 75**. Latest published pro
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.56
+
+- A dedicated **Layout cleanup → Bottom → Bottom-of-video search suggestions** option now owns the three existing bottom search-bar targets. It does not hide top search. The legacy Search suggestion option still hides those bars; the settings hint explains how to restore them. Actual TikTok 47.6.3 implementation availability and detail/profile variants remain unverified.
+- Sticker export now separates animated and static source categories, retains original bytes, and offers actual static PNG/JPEG/WebP conversion. Explicit source choices do not silently cross into the other category. Converted animation is labelled as a single static frame; original export retains the file bytes.
+- Software bitmap decoding is bounded to a 2048-pixel longest edge; source dimensions and encoded byte growth are limited. JPEG conversion explicitly places white behind transparent pixels. Native-image regression sources were added but not executed. API signatures were inspected read-only in the installed Android SDK, not compiled or device-tested.
 
 ## Requirement tracking
 
@@ -26,10 +32,10 @@ Updated: 2026-11-03. Source version: **2.0.55-debug / 75**. Latest published pro
 | Faster/reliable subtitle translation and replay | Cache, track-ownership and write-path changes in source; scheduling, replay/seek and latency need runtime verification. |
 | Offline subtitles and translation persistence | Cached source/translation path added; uncached content needs network, and host playback must still identify the track. |
 | Offline long-press, export/download and comments | Not implemented end-to-end. Comments/replies/translations need persistent models and offline UI integration; downloaded bytes must be proven local. |
-| Sticker format/source selection | Original-file download remains; additional format conversion/source selection not implemented in this batch. |
+| Sticker format/source selection | Source-category selection and real static PNG/JPEG/WebP conversion now wired in source; original bytes retained. Runtime, pixels and API 28–29 coverage unverified. Animated re-encoding is not implemented. |
 | Hold-to-speed, downward-slide lock/unlock | Existing speed support only; requested gesture extension incomplete. |
 | More video display modes | Existing center/smart/fill retained; additional modes incomplete. |
-| Search/inbox/live internal cleanup | Existing navigation filters/live swipe lock are not full internal-page cleanup; more bindings needed. |
+| Search/inbox/live internal cleanup | Dedicated bottom-of-video search suggestions toggle added to existing targets. This is not search-page/inbox/live internal cleanup; more bindings and runtime checks remain. |
 | All comments translatable and translation switching | Existing native gates/poll path retained; ordinary-comment fallback/cache/toggling incomplete. |
 | More subtitle styles | New renderer/settings/test sources present; compilation, pixel checks, device behavior and full localization unverified. |
 

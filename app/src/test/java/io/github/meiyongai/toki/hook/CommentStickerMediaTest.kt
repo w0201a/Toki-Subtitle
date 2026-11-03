@@ -65,4 +65,18 @@ class CommentStickerMediaTest {
         assertNull(reader.read(Comment(null)))
         assertNull(reader.read(Any()))
     }
+    @Test fun explicitSourceSelectionNeverSilentlyFallsBackToTheOtherSourceType() {
+        val reader = CommentStickerDownloadHook.Reader(Comment::class.java)
+        val animation = "https://p16.tiktokcdn.com/animation.gif"
+        val preview = "https://p16.tiktokcdn.com/preview.png"
+        val asset = checkNotNull(reader.read(Comment(Sticker(Sizes(listOf(animation)), Sizes(listOf(preview))))))
+        assertEquals(listOf(animation), asset.candidates(StickerSource.ANIMATED))
+        assertEquals(listOf(preview), asset.candidates(StickerSource.STATIC))
+        assertEquals(listOf(animation, preview), asset.candidates(StickerSource.AUTOMATIC))
+        assertEquals(StickerSource.entries, asset.sourceChoices)
+        val staticOnly = checkNotNull(reader.read(Comment(Sticker(null, Sizes(listOf(preview))))))
+        assertTrue(staticOnly.candidates(StickerSource.ANIMATED).isEmpty())
+        assertEquals(listOf(StickerSource.AUTOMATIC, StickerSource.STATIC), staticOnly.sourceChoices)
+    }
+
 }

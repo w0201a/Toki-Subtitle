@@ -116,8 +116,8 @@ object LayoutCleanupHook {
             "com.ss.android.ugc.aweme.feed.assem.pugc.VideoTemplateButtonAssem" to LayoutElement.VIDEO_TEMPLATE,
             "com.ss.android.ugc.aweme.feed.assem.addyours.AddYoursEntranceButtonAssem" to LayoutElement.CREATION_BUTTONS,
             "com.ss.android.ugc.aweme.feed.assem.live.LiveNoticeCTAButtonAssem" to LayoutElement.LIVE_NOTICE,
-            "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.AdFeedSearchBottomBarAssem" to LayoutElement.SEARCH_LABEL,
-            "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.FeedEcSearchBottomBarAssem" to LayoutElement.SEARCH_LABEL,
+            "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.AdFeedSearchBottomBarAssem" to LayoutElement.BOTTOM_SEARCH_RECOMMENDATIONS,
+            "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.FeedEcSearchBottomBarAssem" to LayoutElement.BOTTOM_SEARCH_RECOMMENDATIONS,
             "com.ss.android.ugc.feed.platform.panel.autoscroll.AutoScrollComponent" to LayoutElement.AUTO_SCROLL_STOP,
             "com.ss.android.ugc.aweme.feed.assem.avatar.FeedAvatarAssemWrap" to LayoutElement.AVATAR,
             "com.ss.android.ugc.aweme.feed.assem.digg.VideoDiggAssem" to LayoutElement.LIKE,
@@ -132,7 +132,7 @@ object LayoutCleanupHook {
             "com.ss.android.ugc.feed.platform.cell.interact.info.horiontag.FcpHighTagAssem" to LayoutElement.TAGS,
             "com.ss.android.ugc.feed.platform.cell.interact.info.horiontag.FcpMetaTagAssem" to LayoutElement.TAGS,
             "com.ss.android.ugc.feed.platform.cell.interact.info.bottomlabel.FcpBottomTagContainerAssem" to LayoutElement.TAGS,
-            "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.FeedSearchBottomBarAssem" to LayoutElement.SEARCH_LABEL
+            "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.FeedSearchBottomBarAssem" to LayoutElement.BOTTOM_SEARCH_RECOMMENDATIONS
         ).toMutableMap().apply {
             // 新增变体按实际组件能力登记；主体入口仍执行严格契约验证。
             for ((name, element) in mapOf(
@@ -180,8 +180,7 @@ object LayoutCleanupHook {
                     checkNotNull(snapshot.string(group.opacityKey, "100")).toInt() / 100f else 1f
             })
             owners.forEach { (element, owner) ->
-                owner.clean = snapshot?.boolean(element.key) == true ||
-                    element == LayoutElement.VIDEO_TEMPLATE && snapshot?.boolean(LayoutElement.CREATION_BUTTONS.key) == true
+                owner.clean = LayoutCleanupPolicy.hidden(element, snapshot)
             }
             gate.refresh()
             if (snapshot != null) HookRuntime.appliedConfiguration(FEATURE, snapshot)
