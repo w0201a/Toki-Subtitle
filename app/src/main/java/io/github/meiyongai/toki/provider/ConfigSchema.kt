@@ -25,9 +25,11 @@ object ConfigSchema {
         "SharePanelCleanupHook" to io.github.meiyongai.toki.subtitle.model.SharePanelItem.entries.map { it.key } +
             io.github.meiyongai.toki.subtitle.model.SharePanelPolicy.CUSTOM_ENABLED,
         "QuickCommentCleanupHook" to listOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.QUICK_COMMENT.key),
+        "TemplateCleanupHook" to listOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.VIDEO_TEMPLATE.key),
         "PageCleanupHook" to io.github.meiyongai.toki.subtitle.model.PageCleanupItem.entries.map { it.key },
         "LayoutCleanupHook" to io.github.meiyongai.toki.subtitle.model.LayoutElement.entries
-            .filter { it != io.github.meiyongai.toki.subtitle.model.LayoutElement.QUICK_COMMENT }.map { it.key } +
+            .filter { it !in setOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.QUICK_COMMENT,
+                io.github.meiyongai.toki.subtitle.model.LayoutElement.VIDEO_TEMPLATE) }.map { it.key } +
             io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityEnabledKey },
         "ImmersiveFullScreenHook" to listOf("immersive_full_screen"),
         "LiveSwipeLockHook" to listOf("live_swipe_lock_enabled"),

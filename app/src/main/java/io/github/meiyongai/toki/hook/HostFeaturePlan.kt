@@ -83,7 +83,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
 
     companion object {
         val platform = setOf("SimHook", "LocaleHook", "TimeZoneHook", "GpsHook")
-        val directHost = setOf("StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook", "SharePanelCleanupHook", "AuthorLocationHook", "QuickCommentCleanupHook", "PageCleanupHook", "HoldSpeedGestureHook", "OfflineVideoHook")
+        val directHost = setOf("StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook", "SharePanelCleanupHook", "AuthorLocationHook", "QuickCommentCleanupHook", "TemplateCleanupHook", "PageCleanupHook", "HoldSpeedGestureHook", "OfflineVideoHook")
         // Platform environment reads can install/update live. Speed, immersive and audio experiment still need separate restoration work.
         val liveInstallable = setOf("LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
             "CommentCopyHook", "CommentStickerDownloadHook", "ManualCommentTranslateHook", "CachedCommentTranslateHook", "VideoTranslateHook", "LiveSwipeLockHook",

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_template_business_hint">按已核实的业务类型隐藏专用视频模板按钮和当前模板／特效锚点根，不按通用schema类名或显示文案判断。已观察的当前根随开关更新；未知类型／普通CapCut链接保持原样，宿主代码必须匹配已检查版本。观察启动前已有视图、其他旧渲染器仍可能需要原生重新绑定，不代表全场景已验证。旧“创作按钮”开关可能独立隐藏专用模板按钮。</string>
+</resources>

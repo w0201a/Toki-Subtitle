@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 97' in gradle and 'versionName = "2.0.77"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.77-debug / 97")
+check('versionCode = 98' in gradle and 'versionName = "2.0.78"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.78-debug / 98")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -139,7 +139,7 @@ check('view.removeOnAttachStateChangeListener' in author_labels and 'entries.siz
 quick_hook = (JAVA / 'hook/QuickCommentCleanupHook.kt').read_text(encoding='utf-8')
 check('NewBottomDefaultCommentInputAssem' in quick_hook and 'getDeclaredMethod("sq", ViewGroup::class.java)' in quick_hook, 'detail-page bottom input has its own inspected creation and attachment path')
 check('"QuickCommentCleanupHook" to listOf' in schema and '"QuickCommentCleanupHook" -> QuickCommentCleanupHook.init' in module, 'quick-comment switch is installed independently of layout navigation')
-check('.filter { it != io.github.meiyongai.toki.subtitle.model.LayoutElement.QUICK_COMMENT }' in schema, 'quick-comment key is not masked by a second navigation feature owner')
+check('.filter { it !in setOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.QUICK_COMMENT,' in schema and 'LayoutElement.VIDEO_TEMPLATE) }.map' in schema, 'quick-comment and template keys are excluded from the second navigation feature owner')
 check('tracked.size >= 384' in quick_hook and 'gate.unbind(owner, view)' in quick_hook and 'gate.detach(owner)' in quick_hook, 'quick-comment visibility has bounded tracking and reversible lifetime ownership')
 
 hold_hook = (JAVA / 'hook/HoldSpeedGestureHook.kt').read_text(encoding='utf-8')
@@ -530,6 +530,31 @@ for locale in ('values', 'values-b+zh+Hans'):
     hint = ET.parse(ROOT / 'app/src/main/res' / locale / 'country_catalog_strings.xml').getroot().find("string[@name='country_catalog_hint']").text
     check('still require reopening' not in hint and '启动设置仍需重新打开' not in hint, locale + ' country/environment hint no longer claims the old module startup freeze')
 
+# Actual template/effect business ownership, not broad FCP UI-schema class hiding.
+template_contract = (JAVA / 'hook/TemplateAnchorContract.kt').read_text(encoding='utf-8')
+template_roots = (JAVA / 'hook/TemplateRootBindings.kt').read_text(encoding='utf-8')
+template_hook = (JAVA / 'hook/TemplateCleanupHook.kt').read_text(encoding='utf-8')
+template_gate = (JAVA / 'hook/TemplateCleanupCodeGate.kt').read_text(encoding='utf-8')
+check('providerDisplayAnchor' in template_contract and 'providerAweme' in template_contract and '"getType"' in template_contract and 'in allowed' in template_contract, 'template cleanup reads the selected business anchor and current video context instead of inferring type from schema class names')
+check('inspectedAnchorCodes' in template_contract and 'check(it == inspectedAnchorCodes.getValue(name))' in template_contract and '"CAPCUT" to' not in template_contract and '"DONATION_STICKER" to' not in template_contract, 'only inspected symbolic template/effect codes are accepted, with generic CapCut/donation entries left native')
+check('method(type, "rootView", View::class.java)' in template_contract and '"LLJJLIIIJLLLLLLLZ"' in template_contract and 'TemplateRootBindings.Snapshot(view, selected, item' in template_contract, 'standard renderer root ownership is tied to the actual selected anchor/provider rather than the whole multi-tag area')
+check('"LLJLL"' in template_contract and 'cursor !== view' in template_contract and 'depth++ < 32' in template_contract and '"onDestroyView"' in template_contract, 'specific template-button binding requires its child inside its own content root and explicit release callbacks')
+check('WeakReference(source.identity)' in template_roots and 'WeakReference(source.context)' in template_roots and 'binding.identity.get() === value.identity' in template_roots and 'binding.context.get() === value.context' in template_roots, 'root refresh validates exact anchor/video identity so recycled contexts cannot inherit prior hiding')
+check('rows.size >= capacity' in template_roots and 'root !is ViewStub' in template_roots and 'root !is SurfaceView' in template_roots and 'root !is TextureView' in template_roots and 'root === root.rootView' in template_roots, 'bounded template bindings refuse stubs, video surfaces and attached window roots')
+check('onViewAttachedToWindow(view: View) { validate(binding) }' in template_roots and 'onViewDetachedFromWindow(view: View) { gate.unbind(rule, view) }' in template_roots and 'gate.detach(rule)' in template_roots, 'detach releases visible ownership and reattachment/close revalidate or restore without stale root rules')
+check('roots.configure(desired && ready)' in template_hook and 'if (!ready) return' in template_hook and 'owners.mapNotNull { it.get() }' in template_hook, 'observed pre-verification owners are replayed only after fingerprint success and cleanup remains off without both configuration and code readiness')
+check('if (owner == null || closed.get() || reading' in template_hook and 'reading = true' in template_hook and 'finally { reading = false }' in template_hook and 'val result = chain.proceed()' in template_hook, 'template lifecycle always proceeds natively and reflective root observation suppresses recursive getter callbacks')
+check('codeReady=$ready' in template_hook and 'owners.size >= 256' in template_hook and 'worker.shutdownNow()' in template_hook and 'roots.close()' in template_hook, 'template readiness/capacity metadata and asynchronous disposal are explicit without logging source identities')
+check(all(name in template_gate for name in ('classes4.dex', 'classes5.dex', 'classes6.dex', 'classes41.dex')) and 'found == hashes.keys' in template_gate and 'isInterrupted' in template_gate, 'template business/root contracts are gated by all four inspected DEX files with cancellation support')
+check('"TemplateCleanupHook" to listOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.VIDEO_TEMPLATE.key)' in schema and 'LayoutElement.VIDEO_TEMPLATE) }.map' in schema, 'template switch has its own configuration installation owner and is excluded from navigation-cleanup switches')
+check('"QuickCommentCleanupHook", "TemplateCleanupHook"' in environment_plan and '"TemplateCleanupHook" -> TemplateCleanupHook.init(this, loader)' in environment_module, 'template business control is direct/live-installable without unrelated host-symbol scanning')
+prepare_host = environment_module.split('private fun prepareHost(param: PackageReadyParam) {', 1)[1].split('private fun activatePlatformFeatures', 1)[0]
+check(prepare_host.index('install("TemplateCleanupHook", param.classLoader)') < prepare_host.index('if (!plan.requiresScan)') and 'plan.admitLive("TemplateCleanupHook")' in prepare_host and 'if (it !in installed) install(it, loader)' in prepare_host, 'main-feed observation is prepared while disabled and admitted once without duplicate direct-hook installation')
+check('TemplateCleanupHook.refreshStatus()' in environment_module and 'HookFeatureDefinition("TemplateCleanupHook"' in (JAVA / 'ui/screen/HookStatusModel.kt').read_text(encoding='utf-8') and 'layout_template_business_hint' in (JAVA / 'ui/screen/LayoutCleanupSection.kt').read_text(encoding='utf-8'), 'template diagnostic readiness and precise current-page/unknown-business scope are visible in existing settings/status surfaces')
+for locale in ('values', 'values-b+zh+Hans'):
+    names = {n.attrib['name'] for n in ET.parse(ROOT / 'app/src/main/res' / locale / 'template_business_strings.xml').getroot() if n.tag == 'string'}
+    check('layout_template_business_hint' in names, locale + ' contains template-business scope and legacy-switch warning')
+
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
     length = len(source)
@@ -587,6 +612,7 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'hook/TemplateAnchorContract.kt', 'hook/TemplateRootBindings.kt', 'hook/TemplateCleanupCodeGate.kt', 'hook/TemplateCleanupHook.kt',
     'hook/EnvironmentRuntimeConfig.kt', 'hook/HostFeaturePlan.kt', 'hook/TokiModule.kt',
     'hook/TemplateComponentSemantics.kt',
     'provider/DiagnosticText.kt', 'provider/TrialLog.kt', 'provider/OperationJournal.kt', 'provider/DiagnosticOverview.kt',
@@ -651,6 +677,7 @@ for relative in (
     'provider/TrialLogTest.kt',
     'hook/LayoutComponentSelectorTest.kt',
     'hook/EnvironmentLivePlanTest.kt', 'hook/EnvironmentRuntimeConfigTest.kt', 'hook/EnvironmentOverridesTest.kt',
+    'hook/TemplateAnchorContractTest.kt', 'hook/TemplateRootBindingsTest.kt', 'hook/TemplateCleanupPlanTest.kt',
     'hook/HostFeaturePlanTest.kt', 'model/CountryCatalogTest.kt', 'provider/DiagnosticOverviewTest.kt', 'ui/screen/HookStatusModelTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative

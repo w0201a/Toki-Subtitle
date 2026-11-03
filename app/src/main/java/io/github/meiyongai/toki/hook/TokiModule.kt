@@ -106,6 +106,7 @@ class TokiModule : XposedModule() {
         }
         // Component code availability is stricter than generic hook installation; retain its actual applied subset.
         if ("PageCleanupHook" in installed) PageCleanupHook.refreshStatus()
+        if ("TemplateCleanupHook" in installed) TemplateCleanupHook.refreshStatus()
         HookRuntime.configurationReady(if (restart) "配置就绪，等待重新打开" else "配置已就绪")
     }
 
@@ -203,6 +204,7 @@ class TokiModule : XposedModule() {
             "AuthorLocationHook" -> AuthorLocationHook.init(this, loader)
             "ProgressBarHook" -> ProgressBarHook.init(this, loader)
             "AutoCleanModeHook" -> AutoCleanModeHook.init(this, loader)
+            "TemplateCleanupHook" -> TemplateCleanupHook.init(this, loader)
             "PageCleanupHook" -> PageCleanupHook.init(this, loader)
             "LayoutCleanupHook" -> LayoutCleanupHook.init(this, loader)
             "QuickCommentCleanupHook" -> QuickCommentCleanupHook.init(this, loader)
@@ -248,10 +250,18 @@ class TokiModule : XposedModule() {
     private fun prepareHost(param: PackageReadyParam) {
         hostInfo = param.applicationInfo
         hostLoader = param.classLoader
+        // Observe main-feed roots while the switch is off: a later toggle can update already-known current views.
+        if (processName == param.packageName && HookRuntime.scope("TemplateCleanupHook").active) {
+            if ("TemplateCleanupHook" !in installed) install("TemplateCleanupHook", param.classLoader)
+            if ("TemplateCleanupHook" in installed && "TemplateCleanupHook" !in plan.features) {
+                check(plan.admitLive("TemplateCleanupHook")) { "Template observer admission failed" }
+                ConfigClient.refreshHostSession()
+            }
+        }
         scheduleLiveActivation()
         if (plan.directHostFeatures.isNotEmpty()) {
             val loader = param.classLoader
-            plan.directHostFeatures.forEach { install(it, loader) }
+            plan.directHostFeatures.forEach { if (it !in installed) install(it, loader) }
         }
         if (!plan.requiresScan) {
             if (ConfigClient.isReady) updateConfigurationStatus(ConfigClient.snapshot())

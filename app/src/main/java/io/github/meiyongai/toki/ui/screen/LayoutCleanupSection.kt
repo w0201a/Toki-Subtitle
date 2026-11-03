@@ -80,6 +80,7 @@ internal fun LayoutCleanupSection() {
                                 summary = when (element) {
                                     LayoutElement.BOTTOM_SEARCH_RECOMMENDATIONS -> strings.getString(R.string.layout_bottom_search_recommendations_hint)
                                     LayoutElement.QUICK_COMMENT -> strings.getString(R.string.layout_quick_comment_hint)
+                                    LayoutElement.VIDEO_TEMPLATE -> strings.getString(R.string.layout_template_business_hint)
                                     else -> null
                                 },
                                 checked = values.getValue(element),

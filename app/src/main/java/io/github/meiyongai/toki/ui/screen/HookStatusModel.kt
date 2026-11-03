@@ -19,6 +19,7 @@ internal object HookStatusCatalog {
         HookFeatureDefinition("ProgressBarHook", R.string.status_feature_progress),
         HookFeatureDefinition("AutoCleanModeHook", R.string.status_feature_clean),
         HookFeatureDefinition("LayoutCleanupHook", R.string.layout_title),
+        HookFeatureDefinition("TemplateCleanupHook", R.string.layout_video_template),
         HookFeatureDefinition("PageCleanupHook", R.string.page_cleanup_title),
         HookFeatureDefinition("QuickCommentCleanupHook", R.string.layout_quick_comment),
         HookFeatureDefinition("SharePanelCleanupHook", R.string.share_cleanup_title),

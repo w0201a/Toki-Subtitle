@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_template_business_hint">Hides inspected video-template buttons and current template/effect anchor roots by their business type, not the shared UI schema class or visible text. Observed current roots update with this switch; unknown/generic CapCut links remain unchanged. Host code must match the inspected build. Views created before observation or other legacy renderers may still need a native rebind; full coverage is not certified. The older Creation buttons switch may independently hide the dedicated template button.</string>
+</resources>
