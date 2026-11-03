@@ -77,6 +77,7 @@ internal object HookRuntime {
             "VideoTranslateHook" to listOf("TranslationReverseGate", "CaptionConsumerGate", "CaptionFallback", "CaptionOriginalVisibility", "SubtitleLanguage", "SubtitleExcludedLanguages", "SubtitleFeature", "SubtitleRendererBinding", "SubtitleCleanFrames", "SubtitleFeedPrefetch", "SubtitleMenu", "DescriptionNativeTranslation", "DescriptionTranslation", "CaptionMenuGate"),
             "CommentTranslateHook" to listOf("CommentTranslationGate", "CommentPollTranslation"),
             "DownloadHook" to listOf("DownloadSource"),
+            "SharePanelCleanupHook" to listOf("SharePanelRecipients"),
             "AutoScrollHook" to listOf("AutoScrollBehavior"),
             "FeedFilterHook" to listOf("FeedOfflineRecovery", "FeedRepositories", "FeedAdapters"),
             "LayoutCleanupHook" to features.keySet().filter { it.startsWith("LayoutComponent:") || it in setOf("LayoutMinis", "LayoutNavigation", "LayoutRewards", "LayoutTimers") }

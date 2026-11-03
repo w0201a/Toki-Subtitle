@@ -19,6 +19,8 @@ object ConfigSchema {
         "AuthorLocationHook" to listOf("show_author_location"),
         "ProgressBarHook" to listOf("always_show_progress_bar", "clean_mode_show_progress_bar"),
         "AutoCleanModeHook" to listOf("clean_mode_on_play"),
+        "SharePanelCleanupHook" to io.github.meiyongai.toki.subtitle.model.SharePanelItem.entries.map { it.key } +
+            io.github.meiyongai.toki.subtitle.model.SharePanelPolicy.CUSTOM_ENABLED,
         "LayoutCleanupHook" to io.github.meiyongai.toki.subtitle.model.LayoutElement.entries.map { it.key } +
             io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityEnabledKey },
         "ImmersiveFullScreenHook" to listOf("immersive_full_screen"),
@@ -41,7 +43,7 @@ object ConfigSchema {
     private val rangePrefixes = listOf("feed_filter_views", "feed_filter_likes", "feed_filter_duration")
     private val stringKeys = setOf("target_region", "sim_operator_code", "sim_operator_name",
         "adaptation_retry_token", "subtitle_cache_clear_revision", "subtitle_render_mode", "custom_language", "custom_timezone", "custom_latitude", "custom_longitude",
-        "fixed_speed_value", "speed_expand_list", "download_video_path", "download_image_path",
+        "share_hidden_custom_keys", "fixed_speed_value", "speed_expand_list", "download_video_path", "download_image_path",
         "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode", "video_fill_zoom_percent") +
         rangePrefixes.flatMap { listOf("${it}_min", "${it}_max") } +
         io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityKey }
@@ -79,6 +81,7 @@ object ConfigSchema {
                 number(key, value, range.start, range.endInclusive)
             }
             when (key) {
+                "share_hidden_custom_keys" -> io.github.meiyongai.toki.subtitle.model.SharePanelPolicy.customKeys(value)
                 in io.github.meiyongai.toki.subtitle.model.SubtitleAppearance.colorKeys ->
                     require(value.matches(Regex("#[0-9A-Fa-f]{8}")))
                 "subtitle_alignment" -> require(value in setOf("start", "center", "end"))

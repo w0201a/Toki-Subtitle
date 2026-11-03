@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 76' in gradle and 'versionName = "2.0.56"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.56-debug / 76")
+check('versionCode = 77' in gradle and 'versionName = "2.0.57"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.57-debug / 77")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -104,6 +104,27 @@ check('R.string.layout_bottom_search_recommendations_hint' in ui, 'bottom search
 for file in ('hook/CommentStickerDownloadHook.kt',):
     references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / file).read_text(encoding='utf-8')))
     check(references <= base_names, file + ' export string references exist in default resources')
+
+share_hook = (JAVA / 'hook/SharePanelCleanupHook.kt').read_text(encoding='utf-8')
+share_ui = (JAVA / 'ui/screen/SharePanelCleanupSection.kt').read_text(encoding='utf-8')
+share_catalog = (JAVA / 'model/SharePanelItem.kt').read_text(encoding='utf-8')
+share_bindings = (JAVA / 'hook/ShareListBindings.kt').read_text(encoding='utf-8')
+options = re.findall(r'^    [A-Z_]+\(R\.string\.', share_catalog, re.M)
+check(len(options) == 39, 'share catalogue exposes 39 independent named options')
+check('"SharePanelCleanupHook" to' in schema and '"SharePanelCleanupHook" -> SharePanelCleanupHook.init' in module, 'share cleanup is registered in configuration and runtime installation')
+check('"SharePanelCleanupHook"' in plan.split('val directHost', 1)[1].split('val liveInstallable', 1)[0], 'share cleanup can use verified direct contracts without requiring unrelated symbol scans')
+check('SharePanelCleanupSection()' in (JAVA / 'ui/screen/DashboardScreen.kt').read_text(encoding='utf-8'), 'standalone and injected dashboard include the selective share controls')
+check('base.declaredConstructors' in share_hook and 'dataMethod(owner.javaClass, base)' in share_hook, 'concrete share setters are discovered from their own verified adapter constructor hierarchy')
+check('RecyclerView\\$Adapter' in share_hook, 'nested adapter binary name escapes Kotlin string interpolation')
+check('actionKey.invoke(item)' in share_hook and 'channelKey.invoke(item)' in share_hook, 'filtering uses share item business keys rather than visible button text')
+check('source.toList()' in share_bindings and 'if (closed || applying) return source' in share_bindings, 'original adapter lists are retained and replay does not replace restoration data')
+check('panels.remove(chain.thisObject)' in share_hook and 'let(bindings::forget)' in share_hook, 'share panel lifecycle forgets adapter state on view destruction')
+check('CleanViewGate.Owner(hiddenVisibility = View.GONE)' in share_hook, 'recipient-row hiding uses the shared ownership gate')
+check('HostViewVisibility.gate.detach(owner)' in share_hook and 'originals.entries.toList().forEach' in share_bindings, 'feature disposal includes original-list and recipient visibility restoration')
+check('SharePanelPolicy.CUSTOM_KEYS' in share_ui and 'share_hidden_custom_keys' in schema, 'explicit custom action keys have both editing and schema validation paths')
+for relative in ('model/SharePanelItem.kt', 'ui/screen/SharePanelCleanupSection.kt', 'ui/screen/HookStatusModel.kt'):
+    references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
+    check(references <= base_names, relative + ' share-cleanup string references exist')
 
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
@@ -168,6 +189,7 @@ lexical_files = [
     'ui/StyledSubtitleTextView.kt', 'ui/screen/SubtitleSettings.kt',
     'hook/CommentStickerDownloadHook.kt', 'hook/StickerImageExporter.kt', 'hook/StickerExportPolicy.kt',
     'hook/LayoutCleanupHook.kt', 'hook/LayoutCleanupPolicy.kt', 'model/LayoutCleanup.kt', 'ui/screen/LayoutCleanupSection.kt',
+    'hook/SharePanelCleanupHook.kt', 'hook/ShareListBindings.kt', 'model/SharePanelItem.kt', 'ui/screen/SharePanelCleanupSection.kt',
 ]
 for relative in lexical_files:
     kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8'))
@@ -178,7 +200,8 @@ for relative in (
     'model/SubtitleAppearanceTest.kt', 'ui/StyledSubtitleTextViewTest.kt',
     'provider/ConfigStoreTest.kt', 'provider/ConfigConflictClockTest.kt',
     'hook/CommentStickerMediaTest.kt', 'hook/StickerExportPolicyTest.kt', 'hook/StickerImageExporterTest.kt',
-    'hook/LayoutCleanupPolicyTest.kt',
+    'hook/LayoutCleanupPolicyTest.kt', 'hook/ShareListBindingsTest.kt', 'model/SharePanelPolicyTest.kt',
+    'ui/screen/HookStatusModelTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

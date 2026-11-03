@@ -580,6 +580,7 @@ fun DashboardScreen(
         }
 
         LayoutCleanupSection()
+        SharePanelCleanupSection()
 
         PreferenceSection(title = strings.getString(R.string.feature_screen_capture)) {
             SwitchPreferenceItem(

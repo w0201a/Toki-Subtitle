@@ -252,4 +252,22 @@ class HostFeaturePlanTest {
             HostFeaturePlan.liveSymbols(listOf("LayoutCleanupHook")))
     }
 
+    @Test fun shareCleanupIsIndependentAndCanBeAdmittedWithoutLayoutOrCaptionScans() {
+        val key = io.github.meiyongai.toki.subtitle.model.SharePanelItem.COPY_LINK.key
+        val request = config(key to true)
+        val started = HostFeaturePlan(request)
+        assertEquals(setOf("SharePanelCleanupHook"), started.features)
+        assertEquals(setOf("SharePanelCleanupHook"), started.directHostFeatures)
+        assertTrue(started.symbols.isEmpty())
+        val late = HostFeaturePlan(config())
+        assertEquals(listOf("SharePanelCleanupHook"), late.liveCandidates(request))
+        assertFalse(late.apply(request).boolean(key))
+        assertTrue(late.admitLive("SharePanelCleanupHook"))
+        assertTrue(late.apply(request).boolean(key))
+        assertFalse(late.apply(request).boolean("video_translate_enabled"))
+        assertFalse(late.apply(request).boolean("layout_hide_share_panel"))
+        late.reject("SharePanelCleanupHook")
+        assertFalse(late.apply(request).boolean(key))
+    }
+
 }
