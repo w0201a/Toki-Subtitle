@@ -2,16 +2,16 @@
 <resources>
     <string name="offline_video_feature">离线视频：本地操作（实验性）</string>
     <string name="offline_video_enable">离线长按菜单与完整缓存导出</string>
-    <string name="offline_video_summary">默认关闭。启用后请重新进入视频。识别到离线条目时，播放或暂停均可长按画面打开本地菜单；有网络时允许在线翻译和补充字幕数据，断网时读取已有缓存；只有主动开启“仅使用本地数据”才禁止这些联网请求。当前导出仅支持已核对的 47.6.3 缓存代码、Android 10 及以上和完整的非分片本地 MP4；不完整、加密、音视频分离或未适配缓存不会联网补齐。菜单可打开当前账号已有评论缓存并切换已存译文；可另开启单条评论在线补译并保存结果，可主动联网加载评论首页/下一页并保存，可对顶层评论单独加载回复并缓存；原生评论按钮完整替换和本地翻译模型仍未接入。</string>
+    <string name="offline_video_summary">默认关闭。启用后请重新进入视频。识别到离线条目时，播放或暂停均可长按画面打开本地菜单；有网络时允许在线翻译和补充字幕数据，断网时读取已有缓存；只有主动开启“仅使用本地数据”才禁止这些联网请求。离线视频导出使用已核对的宿主缓存／模型代码和 Android 10 及以上接口；可将完整本地 MP4 或可唯一配对的 MP4 视频／AAC 音轨重新封装成一个视频，完整分片须同时具备初始化与媒体数据。导出逐样本检查并回读验证，不完整、加密、缺必要音轨或不支持的编码不会联网补齐。菜单可打开当前账号已有评论缓存并切换已存译文；可另开启单条评论在线补译并保存结果，可主动联网加载评论首页/下一页并保存，可对顶层评论单独加载回复并缓存；原生评论按钮完整替换和本地翻译模型仍未接入。</string>
     <string name="offline_video_menu">离线视频：本地操作</string>
-    <string name="offline_video_save">将完整缓存视频保存到相册</string>
+    <string name="offline_video_save">将已下载的离线视频导出到相册</string>
     <string name="offline_video_subtitles">Toki 字幕设置</string>
     <string name="offline_video_saving">正在检查本地缓存并保存，不发起视频下载请求。</string>
-    <string name="offline_video_saved">完整缓存视频已保存到相册。</string>
+    <string name="offline_video_saved">离线视频已导出并通过本地回读检查。</string>
     <string name="offline_video_busy">已有一个本地视频保存任务正在进行。</string>
     <string name="offline_video_missing">没有找到这个视频的完整本地文件，未尝试联网下载。</string>
-    <string name="offline_video_incomplete">视频缓存不完整或无法核实完整大小，未联网补齐缺失数据。</string>
-    <string name="offline_video_unsupported">暂不支持导出该缓存或设备：需要已核对的 47.6.3 缓存代码、Android 10 及以上和完整非分片 MP4；音视频分离与加密格式仍待支持。</string>
+    <string name="offline_video_incomplete">已下载视频或必要音轨不完整、无法唯一配对或不能核实，未发布输出，也未联网补齐。</string>
+    <string name="offline_video_unsupported">暂不能导出此离线视频：需要已核对的宿主缓存／模型代码、Android 10 及以上及本地可读取的 MP4 轨道；加密数据、缺初始化块或不支持的音视频编码无法导出，没有转为联网下载。</string>
     <string name="offline_video_export_failed">本地保存未完成，原缓存未改动，也未转为联网下载。相册中可能保留一条尚未发布的未完成记录。</string>
     <string name="offline_comment_button_enable">离线视频评论按钮打开缓存评论</string>
     <string name="offline_comment_button_summary">默认关闭，与长按菜单独立。开启后请重新进入视频。仅在已核对的 47.6.3 普通评论按钮路径、当前选中离线视频时，打开 Toki 缓存评论窗口；普通在线视频、过期/隐藏/不匹配组件或未适配代码保留原生行为。原评论按钮必须本来可见，此项不强制恢复被隐藏按钮，也不覆盖所有原生布局。先本地读取，在线评论/补译仍需主动点击；关闭即可恢复原生入口，无需重启。</string>

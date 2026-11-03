@@ -10,6 +10,15 @@ import java.io.File
 
 /** Tests the pure file validator/copier, not Android decodability, cache binding or gallery publication. */
 class LocalVideoFileTest {
+    @Test fun completeFragmentEnvelopesCanReachTheSeparateRealSampleValidatorButMissingInitializationCannot() {
+        val source = folder.newFile("fragmented")
+        source.writeBytes(box("ftyp", "isom0000".toByteArray()) + box("moov", byteArrayOf(1)) +
+            box("moof", byteArrayOf(2)) + box("mdat", ByteArray(64)))
+        assertTrue(LocalVideoFile.inspect(source, source.length(), source.length(), listOf(folder.root)).fragmented)
+        source.writeBytes(box("ftyp", "isom0000".toByteArray()) + box("moof", byteArrayOf(2)) + box("mdat", ByteArray(64)))
+        failure(LocalVideoFile.Failure.INCOMPLETE) { LocalVideoFile.inspect(source, source.length(), source.length(), listOf(folder.root)) }
+    }
+
     @get:Rule val folder = TemporaryFolder()
     private fun box(type: String, body: ByteArray): ByteArray = ByteArrayOutputStream().also { output ->
         DataOutputStream(output).use { it.writeInt(8 + body.size); it.writeBytes(type); it.write(body) }
@@ -35,12 +44,12 @@ class LocalVideoFileTest {
             failure(LocalVideoFile.Failure.INCOMPLETE) { LocalVideoFile.inspect(source, total, cached, listOf(folder.root)) }
         }
     }
-    @Test fun pathsOutsideAllowedRootsAndFragmentedMediaAreRefused() {
+    @Test fun pathsOutsideAllowedRootsAndDanglingFragmentsAreRefused() {
         val source = file()
         val other = folder.newFolder("different")
         failure(LocalVideoFile.Failure.OUTSIDE_STORAGE) { LocalVideoFile.inspect(source, source.length(), source.length(), listOf(other)) }
         source.appendBytes(box("moof", byteArrayOf(1)))
-        failure(LocalVideoFile.Failure.UNSUPPORTED) { LocalVideoFile.inspect(source, source.length(), source.length(), listOf(folder.root)) }
+        failure(LocalVideoFile.Failure.INCOMPLETE) { LocalVideoFile.inspect(source, source.length(), source.length(), listOf(folder.root)) }
     }
     @Test fun truncatedBoxesAndChangedSourceAreNotReportedAsComplete() {
         val source = file()

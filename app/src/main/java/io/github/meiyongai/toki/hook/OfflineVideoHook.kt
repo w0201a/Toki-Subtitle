@@ -79,12 +79,16 @@ internal object OfflineVideoHook {
                 else DownloadHook.DEFAULT_VIDEO_RELATIVE_PATH
             val directory = configured?.takeIf { it.substringBefore('/') in setOf("Movies", "DCIM", "Pictures", "Download") }
                 ?: DownloadHook.DEFAULT_VIDEO_RELATIVE_PATH
+            val selectedRevision = state.revision
+            val exportActive = {
+                !life.closed && life.enabled && life.longPress && state.revision == selectedRevision && state.owns(owner, target.id)
+            }
             try {
                 worker.execute {
                     val message = try {
                         check(!life.closed && life.enabled && life.longPress)
-                        val local = cache.resolve(app, video.model)
-                        OfflineVideoExporter.save(app, local, directory) { !life.closed && life.enabled && life.longPress }
+                        val local = cache.resolve(app, video.model, exportActive)
+                        OfflineVideoExporter.save(app, local, directory, exportActive)
                         R.string.offline_video_saved
                     } catch (error: LocalVideoFile.Unavailable) {
                         HookRuntime.event(FEATURE, "local export unavailable reason=" + error.reason.name)

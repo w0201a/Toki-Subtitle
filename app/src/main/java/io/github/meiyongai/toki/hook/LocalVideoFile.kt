@@ -8,7 +8,7 @@ import java.io.RandomAccessFile
 internal object LocalVideoFile {
     enum class Failure { MISSING, INCOMPLETE, UNSUPPORTED, OUTSIDE_STORAGE, CHANGED }
     class Unavailable(val reason: Failure) : Exception(reason.name)
-    data class Verified(val file: File, val size: Long, val modified: Long)
+    data class Verified(val file: File, val size: Long, val modified: Long, val fragmented: Boolean = false)
 
     fun inspect(source: File, total: Long, cached: Long, roots: List<File>): Verified {
         val file = source.canonicalFile
@@ -17,10 +17,13 @@ internal object LocalVideoFile {
         if (!file.isFile || !file.canRead()) throw Unavailable(Failure.MISSING)
         if (total <= 0 || total > 8L * 1024 * 1024 * 1024 || cached != total || file.length() != total)
             throw Unavailable(Failure.INCOMPLETE)
+        val modified = file.lastModified()
+        var fragmented = false
         RandomAccessFile(file, "r").use { input ->
             var offset = 0L
             var boxes = 0
             var ftyp = false; var moov = false; var mdat = false
+            var waitingForData = false
             while (offset < total) {
                 if (++boxes > 4096 || total - offset < 8) throw Unavailable(Failure.UNSUPPORTED)
                 input.seek(offset)
@@ -33,22 +36,35 @@ internal object LocalVideoFile {
                 when (type) {
                     0x66747970 -> ftyp = size >= header + 8 // ftyp
                     0x6d6f6f76 -> moov = size > header // moov
-                    0x6d646174 -> mdat = size > header // mdat
-                    0x6d6f6f66 -> throw Unavailable(Failure.UNSUPPORTED) // separate/fragmented tracks need explicit muxing
+                    0x6d646174 -> { // mdat
+                        if (size <= header) throw Unavailable(Failure.INCOMPLETE)
+                        mdat = true; waitingForData = false
+                    }
+                    0x6d6f6f66 -> { // A complete local fragmented MP4 still needs actual extractor/sample validation and remuxing.
+                        if (!moov || waitingForData || size <= header) throw Unavailable(Failure.INCOMPLETE)
+                        fragmented = true; waitingForData = true
+                    }
                 }
                 offset += size
             }
+            if (waitingForData) throw Unavailable(Failure.INCOMPLETE)
             if (!ftyp || !moov || !mdat) throw Unavailable(Failure.UNSUPPORTED)
-            if (input.length() != total) throw Unavailable(Failure.CHANGED)
+            if (input.length() != total || file.lastModified() != modified) throw Unavailable(Failure.CHANGED)
         }
-        return Verified(file, total, file.lastModified())
+        return Verified(file, total, modified, fragmented)
+    }
+
+    fun verify(source: Verified, active: () -> Boolean = { true }) {
+        if (!active() || Thread.currentThread().isInterrupted || source.file.canonicalFile != source.file ||
+            !source.file.isFile || source.file.length() != source.size || source.file.lastModified() != source.modified)
+            throw Unavailable(Failure.CHANGED)
     }
 
     fun copy(source: Verified, output: OutputStream, active: () -> Boolean = { true }) {
         RandomAccessFile(source.file, "r").use { input ->
             fun verify() {
-                if (!active() || input.length() != source.size || source.file.lastModified() != source.modified)
-                    throw Unavailable(Failure.CHANGED)
+                verify(source, active)
+                if (input.length() != source.size) throw Unavailable(Failure.CHANGED)
             }
             verify()
             val buffer = ByteArray(128 * 1024)

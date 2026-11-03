@@ -24,7 +24,10 @@ internal object OfflineCacheCodeGate {
                         val digest = MessageDigest.getInstance("SHA-256")
                         zip.getInputStream(entry).use { input ->
                             val buffer = ByteArray(128 * 1024)
-                            while (true) { val n = input.read(buffer); if (n < 0) break; digest.update(buffer, 0, n) }
+                            while (true) {
+                                if (Thread.currentThread().isInterrupted) return false
+                                val n = input.read(buffer); if (n < 0) break; digest.update(buffer, 0, n)
+                            }
                         }
                         if (digest.digest().joinToString("") { "%02x".format(it.toInt() and 255) } == hash) found += name
                     }

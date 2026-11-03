@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 93' in gradle and 'versionName = "2.0.73"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
+check('versionCode = 94' in gradle and 'versionName = "2.0.74"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -205,11 +205,11 @@ check('OfflinePlaybackContext.state.localOnly' not in local_policy and 'OfflineP
 check(offline_hook.index('chain.thisObject?.let(::select) // Local classification') < offline_hook.index('val result = chain.proceed()'), 'offline selection is classified before native selection callbacks')
 check('state.owns(owner, id)' in offline_hook and 'state.retire(owner)' in offline_hook and 'previous.view.get() !== video.view' in offline_hook, 'progress only refreshes the selected owner and content classification survives unbinding until a known page transition')
 check('ViewConfiguration.getLongPressTimeout()' in offline_hook and 'MotionEvent.ACTION_POINTER_DOWN' in offline_hook and 'MotionEvent.ACTION_CANCEL' in offline_hook and 'videoHit' in offline_hook, 'local menu hold has slop, multitouch, cancellation and interactive-overlay boundaries')
-check('cache.resolve(app, video.model)' in offline_hook and 'OfflineVideoExporter.save' in offline_hook and 'ArrayBlockingQueue(1)' in offline_hook, 'offline save action is connected to a bounded local cache/export worker')
+check('cache.resolve(app, video.model, exportActive)' in offline_hook and 'OfflineVideoExporter.save' in offline_hook and 'ArrayBlockingQueue(1)' in offline_hook, 'offline video export is connected to a bounded local worker and selected playback cancellation')
 check('OfflineCacheCodeGate.verify(context)' in offline_cache and 'getDeclaredMethod("LIZJ"' in offline_cache and '100L, TimeUnit.MILLISECONDS' in offline_cache, 'local cache reader checks inspected code and uses bounded cache-index locking')
-check('extractor.setDataSource(input.fd, 0, verified.size)' in offline_cache and 'psshInfo' in offline_cache and 'hasVideoModel' in offline_cache, 'export validates local video tracks and refuses encrypted or model-based split media')
+check('OfflineExportCandidates(loader).read(aweme)' in offline_cache and 'LocalVideoTracks.inspect(verified, active)' in offline_cache and 'LocalVideoTracks.plan' in offline_cache and 'hasVideoModel' not in offline_cache, 'offline video export checks actual complete local tracks instead of rejecting model-based items categorically')
 check('cached != total' in offline_files and 'file.length() != total' in offline_files and '0x6d6f6f66' in offline_files and 'source.file.lastModified() != source.modified' in offline_files, 'local exporter checks indexed completeness, container boundaries and source mutation')
-check('IS_PENDING, 1' in offline_export and offline_export.index('LocalVideoFile.copy') < offline_export.index('IS_PENDING, 0'), 'gallery publication follows successful local copy rather than publishing partial bytes')
+check('IS_PENDING, 1' in offline_export and offline_export.index('LocalVideoRemuxer.write') < offline_export.index('LocalVideoRemuxer.verifyOutput') < offline_export.index('IS_PENDING, 0'), 'gallery publication follows successful local mux and destination readback rather than publishing partial bytes')
 check('Build.VERSION.SDK_INT < 29' in offline_export, 'pre-Android-10 export is explicitly unsupported rather than silently using an unsafe fallback')
 for relative in ('hook/OfflineVideoHook.kt', 'hook/HostLocalVideoCache.kt', 'hook/OfflineVideoExporter.kt', 'hook/LocalVideoFile.kt'):
     source = (JAVA / relative).read_text(encoding='utf-8')
@@ -435,6 +435,32 @@ for locale in ('values', 'values-b+zh+Hans'):
     names = {n.attrib['name'] for n in ET.parse(ROOT / 'app/src/main/res' / locale / 'animated_sticker_strings.xml').getroot() if n.tag == 'string'}
     check({'sticker_export_animated_gif', 'sticker_export_animated_webp', 'sticker_animation_limits', 'sticker_animation_failed', 'sticker_animation_help'} <= names, locale + ' animation labels, format limits and failure strings exist')
 
+# Offline-video export, not an unsolicited cache-format conversion catalogue.
+export_candidates = (JAVA / 'hook/OfflineExportCandidates.kt').read_text(encoding='utf-8')
+export_tracks = (JAVA / 'hook/LocalVideoTracks.kt').read_text(encoding='utf-8')
+export_mux = (JAVA / 'hook/LocalVideoRemuxer.kt').read_text(encoding='utf-8')
+export_gate = (JAVA / 'hook/OfflineExportCodeGate.kt').read_text(encoding='utf-8')
+check('getDeclaredField' in export_candidates and '"bitRateList"' in export_candidates and '"bitRateAudio"' in export_candidates and '"playAddrValue"' in export_candidates, 'offline export reads inspected raw video/rate/audio fields without computed model expansion')
+check('"hitDashAudioBitrate"' in export_candidates and '"hitDashVideoBitrate"' in export_candidates and 'sounds.singleOrNull()' in export_candidates and 'rawSounds.isNotEmpty() || urls.any { selectedAudio.get(it) != null }' in export_candidates, 'explicit host track pairs take precedence and ambiguous/malformed required audio is not silently dropped')
+check('"fileHash"' in export_candidates and 'val keys = boundedKeys(listOf(audioHash.get(data)))' in export_candidates and 'fileId/quality are not interchangeable' in export_candidates, 'DASH audio cache lookup uses the hash identified in the native cache reader rather than a guessed fileId')
+check('OfflineExportCodeGate.verify(context)' in offline_cache and all(name in export_gate for name in ('classes2.dex', 'classes4.dex', 'classes6.dex', 'classes12.dex')) and 'matched == hashes.keys' in export_gate, 'new raw-field contracts require all four inspected model DEX hashes in addition to existing cache-index gates')
+check('fragmented = true; waitingForData = true' in offline_files and 'if (waitingForData)' in offline_files and 'if (!moov || waitingForData' in offline_files, 'complete initialized fragment envelopes reach sample validation while missing init/dangling media remains incomplete')
+check('LocalVideoFile.verify(file, active)' in export_tracks and 'extractor.psshInfo' in export_tracks and 'SAMPLE_FLAG_ENCRYPTED' in export_tracks and 'SAMPLE_FLAG_PARTIAL_FRAME' in export_tracks, 'local descriptor sampling rejects DRM/encrypted/partial samples and observes source/cancellation checks')
+check('MAX_SAMPLE = 16 * 1024 * 1024' in export_tracks and 'MAX_SAMPLES = 2_000_000L' in export_tracks and 'extractor.readSampleData(buffer, 0)' in export_tracks, 'encoded sample memory/count and actual readable sample sizes are bounded before muxing')
+check('requireAudio' in export_candidates and 'needsAudio && !nativeAudio && audio == null' in export_tracks and 'video.tracks.count' in export_tracks and 'audio.file.file == video.file.file' in export_tracks, 'export plan requires one video and any required uniquely paired audio without duplicated source tracks')
+check('v.lastUs - v.firstUs + 500_000L < expectedUs' in export_tracks and 'sound.firstUs - v.firstUs' in export_tracks and 'sound.lastUs - v.lastUs' in export_tracks, 'measured sample coverage and audio/video timeline agreement are checked instead of trusting duration headers alone')
+check('MessageDigest.getInstance("SHA-256")' in export_tracks and 'hash.update((size ushr' in export_tracks and 'fun sample(buffer: ByteBuffer' in export_tracks, 'track fingerprints include every encoded payload and sample boundary')
+check('MediaMuxer(output, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)' in export_mux and 'writer.addTrack' in export_mux and 'muxer.writeSampleData' in export_mux and 'writer.stop()' in export_mux, 'export creates a real indexed MP4 from actual local track samples rather than concatenating files or changing suffixes')
+check('val origin = readers.minOf { it.track.firstUs }' in export_mux and 'val presentation = timestamp - origin' in export_mux and 'minByOrNull { it.time }' in export_mux and 'do not sort/reorder samples within a track' in export_mux, 'muxing uses one shared timestamp origin and retains each track decode order, including B-frame presentation order')
+check('writer.setOrientationHint(rotation)' in export_mux and 'rotation != track.rotation' in export_mux, 'video rotation is applied and checked on destination readback')
+check('digest.count != track.count' in export_mux and 'digest.finish() != track.fingerprint' in export_mux and 'track.firstUs - origin' in export_mux and 'extractor.trackCount != expected.size' in export_mux, 'finished destination is independently read back for expected track count, sample payloads and boundary timestamps')
+check('source.file.canonicalFile != source.file' in offline_files and 'Thread.currentThread().isInterrupted' in offline_files and 'plan.verify(active)' in export_mux, 'path identity, source size/time and cancellation checks surround local export')
+check('selectedRevision = state.revision' in offline_hook and 'state.revision == selectedRevision && state.owns(owner, target.id)' in offline_hook, 'leaving/reusing selected offline playback invalidates a queued or running export')
+check('openFileDescriptor(target, "rw")' in offline_export and 'destination.fileDescriptor.sync()' in offline_export and 'destination.statSize' in offline_export, 'gallery output uses a seekable local descriptor, sync and actual size before readback/publication')
+for relative in ('hook/OfflineExportCandidates.kt', 'hook/OfflineExportCodeGate.kt', 'hook/LocalVideoTracks.kt', 'hook/LocalVideoRemuxer.kt'):
+    source = (JAVA / relative).read_text(encoding='utf-8')
+    check(not any(token in source for token in ('openConnection(', 'getUrlList(', '.delete(', '.renameTo(', 'clearCache(', 'setVideoModel')), relative + ' does not request missing video bytes or alter source cache (source inspection)')
+
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
     length = len(source)
@@ -492,6 +518,7 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'hook/OfflineExportCandidates.kt', 'hook/OfflineExportCodeGate.kt', 'hook/LocalVideoTracks.kt', 'hook/LocalVideoRemuxer.kt',
     'hook/AnimatedStickerData.kt', 'hook/AnimatedStickerContainers.kt', 'hook/HostAnimatedStickerDecoder.kt', 'hook/AnimatedStickerExporter.kt',
     'model/RegionEnvironmentPolicy.kt', 'model/CountryCatalog.kt', 'model/RegionPresets.kt', 'hook/SimHook.kt', 'hook/LocaleHook.kt', 'hook/TimeZoneHook.kt',
     'hook/GpsHook.kt', 'ui/screen/DashboardScreen.kt', 'ui/screen/ConfirmedConfigEdits.kt',
@@ -546,6 +573,7 @@ for relative in (
     'hook/PageCleanupBindingsTest.kt', 'hook/PageCleanupContractTest.kt', 'hook/PageCleanupPolicyTest.kt',
     'model/CountryCatalogTest.kt', 'ui/screen/ConfirmedConfigEditsTest.kt',
     'hook/AnimatedStickerFixtures.kt', 'hook/AnimatedStickerDataTest.kt', 'hook/AnimatedStickerContainersTest.kt',
+    'hook/OfflineExportFixtures.kt', 'hook/OfflineExportCandidatesTest.kt', 'hook/LocalVideoTracksTest.kt', 'hook/LocalVideoRemuxerTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))
