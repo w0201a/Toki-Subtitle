@@ -351,4 +351,5 @@
     <string name="layout_filter_empty">No matching cleanup options</string>
     <string name="layout_bottom_search_recommendations">Bottom-of-video search suggestions</string>
     <string name="layout_bottom_search_recommendations_hint">Only hides the bottom video search bars, not top search. The older Search suggestion switch also hides these bars.</string>
+    <string name="layout_quick_comment_hint">Hides feed quick-comment and inspected video-detail bottom-input components, not the comment button or comment sheet. On first activation, reopen the video page once.</string>
 </resources>

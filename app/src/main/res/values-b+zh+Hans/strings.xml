@@ -351,4 +351,5 @@
     <string name="layout_filter_empty">没有匹配的净化选项</string>
     <string name="layout_bottom_search_recommendations">视频底部搜索推荐</string>
     <string name="layout_bottom_search_recommendations_hint">仅隐藏视频底部搜索推荐条，不隐藏顶部搜索。旧的“搜索标签”开关也会隐藏这些推荐条；如需恢复，请同时关闭。</string>
+    <string name="layout_quick_comment_hint">隐藏信息流快速评论及已核对的详情页底部输入组件，不隐藏评论按钮或评论区。首次开启后请重新进入视频页面一次。</string>
 </resources>

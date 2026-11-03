@@ -216,16 +216,16 @@ class HostFeaturePlanTest {
     }
     @Test fun lateCleanupStaysMaskedUntilVerifiedInstallationIsAdmitted() {
         val plan = HostFeaturePlan(config())
-        val requested = config("layout_hide_quick_comment" to true, revision = 2)
+        val requested = config("layout_hide_bottom_search_recommendations" to true, revision = 2)
         assertEquals(listOf("LayoutCleanupHook"), plan.liveCandidates(requested))
-        assertFalse(plan.apply(requested).boolean("layout_hide_quick_comment"))
+        assertFalse(plan.apply(requested).boolean("layout_hide_bottom_search_recommendations"))
         assertFalse(plan.requiresRestart("LayoutCleanupHook", requested))
         assertTrue(plan.admitLive("LayoutCleanupHook"))
-        assertTrue(plan.apply(requested).boolean("layout_hide_quick_comment"))
+        assertTrue(plan.apply(requested).boolean("layout_hide_bottom_search_recommendations"))
         assertTrue(plan.liveCandidates(requested).isEmpty())
-        val disabled = config("layout_hide_quick_comment" to false, revision = 3)
-        assertFalse(plan.apply(disabled).boolean("layout_hide_quick_comment"))
-        assertTrue(plan.apply(requested).boolean("layout_hide_quick_comment"))
+        val disabled = config("layout_hide_bottom_search_recommendations" to false, revision = 3)
+        assertFalse(plan.apply(disabled).boolean("layout_hide_bottom_search_recommendations"))
+        assertTrue(plan.apply(requested).boolean("layout_hide_bottom_search_recommendations"))
     }
 
     @Test fun liveCleanRequiresProgressAdmissionAndFailedPreparationDoesNotLoop() {

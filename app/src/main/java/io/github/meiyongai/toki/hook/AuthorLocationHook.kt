@@ -137,6 +137,11 @@ object AuthorLocationHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.TokiModule.onPackageReady`: 目标包加载完成时注册。
      */
     fun init(module: XposedModule, classLoader: ClassLoader) {
+        AuthorLocationLabels.resolve(classLoader)?.let { contract ->
+            AuthorLocationLabels.install(module, contract)
+            return
+        }
+        // Older hosts retain the previously verified formatter path when its symbols are available.
         val userClass = classLoader.loadClass("com.ss.android.ugc.aweme.profile.model.User")
         val awemeClass = classLoader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme")
         val contract = Contract(HostSymbols.resolve(classLoader, HostSymbol.AUTHOR_LOCATION),

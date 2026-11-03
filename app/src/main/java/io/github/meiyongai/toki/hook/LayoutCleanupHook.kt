@@ -107,8 +107,6 @@ object LayoutCleanupHook {
             "com.ss.android.ugc.aweme.feed.assem.tikbot.TakoAssemRoof" to LayoutElement.TAKO,
             "com.ss.android.ugc.aweme.feed.assem.incentive.IncentiveBottomButtonAssem" to LayoutElement.REWARDS,
             "com.ss.android.ugc.aweme.feed.assem.incentive.IncentiveShareButtonAssem" to LayoutElement.REWARDS,
-            "com.ss.android.ugc.aweme.feed.assem.quickcomment.VideoQuickCommentAssem" to LayoutElement.QUICK_COMMENT,
-            "com.ss.android.ugc.aweme.feed.assem.quickcomment.ZeroCommentQuickCommentAssem" to LayoutElement.QUICK_COMMENT,
             "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.InteractPlayListBottomBarAssem" to LayoutElement.PLAYLIST,
             "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.PlayListStandardBannerAssem" to LayoutElement.PLAYLIST,
             "com.ss.android.ugc.aweme.feed.assem.duetbutton.VideoDuetButtonAssem" to LayoutElement.CREATION_BUTTONS,
@@ -137,7 +135,6 @@ object LayoutCleanupHook {
             // 新增变体按实际组件能力登记；主体入口仍执行严格契约验证。
             for ((name, element) in mapOf(
                 "com.ss.android.ugc.aweme.feed.assem.duetbutton.VideoDuetStandardButtonAssem" to LayoutElement.CREATION_BUTTONS,
-                "com.ss.android.ugc.aweme.feed.assem.quickcomment.HelpPostQuickCommentAssem" to LayoutElement.QUICK_COMMENT,
                 "com.ss.android.ugc.aweme.feed.assem.template.VideoTemplateAssem" to LayoutElement.VIDEO_TEMPLATE,
                 "com.ss.android.ugc.aweme.feed.assem.template.TemplateAssem" to LayoutElement.VIDEO_TEMPLATE,
                 "com.ss.android.ugc.aweme.share.panel.SharePanelAssem" to LayoutElement.SHARE_PANEL,

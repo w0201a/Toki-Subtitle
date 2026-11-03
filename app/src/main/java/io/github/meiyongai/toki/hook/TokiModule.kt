@@ -184,6 +184,7 @@ class TokiModule : XposedModule() {
             "ProgressBarHook" -> ProgressBarHook.init(this, loader)
             "AutoCleanModeHook" -> AutoCleanModeHook.init(this, loader)
             "LayoutCleanupHook" -> LayoutCleanupHook.init(this, loader)
+            "QuickCommentCleanupHook" -> QuickCommentCleanupHook.init(this, loader)
             "SharePanelCleanupHook" -> SharePanelCleanupHook.init(this, loader)
             "ImmersiveFullScreenHook" -> ImmersiveFullScreenHook.init(this, loader)
             "LiveSwipeLockHook" -> LiveSwipeLockHook.init(this, loader)

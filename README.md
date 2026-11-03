@@ -2,9 +2,9 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
-## Source-only development: 2.0.57-debug
+## Source-only development: 2.0.58-debug
 
-The current source includes persistent subtitle caches, expanded subtitle styling, late feature registration, per-setting conflict handling, a bottom-video search-suggestion toggle, sticker source/static-format export choices, and selective share-panel cleanup. **This development batch has not been compiled, tested on a device or packaged as an APK.** It does not complete all requested features. See [source status and outstanding requirements](docs/SOURCE_STATUS.md) and [incremental changes](CHANGELOG.md). The production release below is a separate, older artifact.
+The current source includes persistent subtitle caches, expanded subtitle styling, late feature registration, per-setting conflict handling, a bottom-video search-suggestion toggle, sticker source/static-format export choices, selective share-panel cleanup, and direct author-label / detail quick-comment bindings. **This development batch has not been compiled, tested on a device or packaged as an APK.** It does not complete all requested features. See [source status and outstanding requirements](docs/SOURCE_STATUS.md) and [incremental changes](CHANGELOG.md). The production release below is a separate, older artifact.
 
 ## 2.0.51 release
 

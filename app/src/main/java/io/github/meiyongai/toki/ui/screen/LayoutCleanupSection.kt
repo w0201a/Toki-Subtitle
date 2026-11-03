@@ -77,8 +77,11 @@ internal fun LayoutCleanupSection() {
                         for (element in filtered) {
                             CompactPreferenceSwitch(
                                 title = strings.getString(element.title),
-                                summary = if (element == LayoutElement.BOTTOM_SEARCH_RECOMMENDATIONS)
-                                    strings.getString(R.string.layout_bottom_search_recommendations_hint) else null,
+                                summary = when (element) {
+                                    LayoutElement.BOTTOM_SEARCH_RECOMMENDATIONS -> strings.getString(R.string.layout_bottom_search_recommendations_hint)
+                                    LayoutElement.QUICK_COMMENT -> strings.getString(R.string.layout_quick_comment_hint)
+                                    else -> null
+                                },
                                 checked = values.getValue(element),
                                 onCheckedChange = { enabled ->
                                     ConfigClient.putBoolean(context, element.key, enabled)

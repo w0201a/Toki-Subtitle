@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.57-debug
+# Source-only development status — 2.0.58-debug
 
-Updated: 2026-11-03. Source version: **2.0.57-debug / 77**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-03. Source version: **2.0.58-debug / 78**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -12,6 +12,12 @@ Updated: 2026-11-03. Source version: **2.0.57-debug / 77**. Latest published pro
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.58
+
+- Added a primary-author-label binding path inspected directly in the 47.6.3 DEX. It decorates only the component's designated author TextView using current video/author identity. Original nickname spans are retained; owned prefix spans support disable, country changes and repeated binding without stripping similar native names. Text replaced by TikTok is not overwritten during refresh. Detached labels restore and reapply on attachment using current settings; tracking is weak and bounded to 256 labels.
+- Author labels and quick-comment cleanup now prepare directly without unrelated navigation/formatter scans. Quick cleanup has one configuration owner and targets the three existing feed variants plus the inspected video-detail bottom-input component and its attach callback. It retains the old quick-comment setting key and UI location, and does not hide the comment button/sheet. Visibility ownership restores/reapplies across detach/attach, with 384 weakly tracked views.
+- Exact method/field descriptors were inspected offline. Regression test sources were added, not executed. Actual profile/detail route coverage and Hook behavior remain unverified; first activation can still require re-entering the video page. Missing region data is not invented. The reversible-feature catalogue now has 17 installation units.
 
 ## Added in 2.0.57
 
@@ -30,8 +36,8 @@ Updated: 2026-11-03. Source version: **2.0.57-debug / 77**. Latest published pro
 | Requested area | Current evidence / remaining work |
 |---|---|
 | All supported countries, territories, states | 163 preset records and Chinese ISO fallback in code; official host coverage and subdivision model still incomplete. |
-| Quick-comment hiding on profile/detail and other pages | Existing component mappings remain; 47.6.3 APK class presence is now confirmed, but full binding/variant behavior and device coverage remain missing. |
-| Author country in videos opened from a profile | Existing author formatter only; alternate detail binding still incomplete. |
+| Quick-comment hiding on profile/detail and other pages | Independently installed feed variants plus real video-detail bottom-input creation/attachment targets, with reversible view ownership. Runtime, layouts and alternate variants remain unverified. |
+| Author country in videos opened from a profile | New primary-author TextView binding with span preservation, current identity checks and restoration is connected from actual 47.6.3 contracts. Profile/detail variants and runtime behavior remain unverified. |
 | Templates/effects | Existing template-button mapping wired; template implementation presence confirmed in the APK; effect anchors, variants and runtime behavior still need verification. |
 | Individually selectable share actions | 39 named controls, exact custom keys and reversible action/channel adapter filtering now wired to locally inspected 47.6.3 contracts. Runtime, alternative panels and some unnamed actions still need verification; not a whole-panel hide substitute. |
 | Settings synchronization and no-restart use | Late registration and per-key conflict handling added; bidirectional manager/host synchronization and all current-page rebinding remain incomplete. |
