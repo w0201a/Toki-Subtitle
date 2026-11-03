@@ -579,6 +579,7 @@ fun DashboardScreen(
             )
         }
 
+        HoldSpeedGestureSection()
         LayoutCleanupSection()
         SharePanelCleanupSection()
 

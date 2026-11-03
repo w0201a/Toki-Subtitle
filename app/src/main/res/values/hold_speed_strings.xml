@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hold_speed_section">Hold-to-speed gesture</string>
+    <string name="hold_speed_down_lock">Slide down to lock / unlock native hold speed</string>
+    <string name="hold_speed_down_lock_hint">During a native left/right edge hold-to-speed gesture, slide down past its threshold and release to toggle its speed lock. Move back before release to cancel. If TikTok provides no usable threshold, this option uses 72dp locally.</string>
+    <string name="hold_speed_scope_hint">Only works where TikTok already permits native edge hold-to-speed. On first enable, re-enter the video. Normal swipes and comment controls stay native. Multi-touch, cancellation, video rebind and pause withdraw the pending toggle. Turning this option off does not reset a speed already committed through TikTok.</string>
+    <string name="hold_speed_save_error">Could not save this gesture setting. Check the configuration connection.</string>
+</resources>

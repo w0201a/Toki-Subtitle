@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.58-debug
+# Source-only development status — 2.0.59-debug
 
-Updated: 2026-11-03. Source version: **2.0.58-debug / 78**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-03. Source version: **2.0.59-debug / 79**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -12,6 +12,13 @@ Updated: 2026-11-03. Source version: **2.0.58-debug / 78**. Latest published pro
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.59
+
+- New default-off **Hold-to-speed gesture → Slide down to lock / unlock** option uses the inspected 47.6.3 native edge-speed gesture/state machine. It preserves native eligibility, left/right geometry, lock hints and release decisions; it does not replace whole-page touch dispatch or directly overwrite the speed manager.
+- Downward-mode and legacy-mode gate overrides are synchronous/thread-local, confined to owned native calls. New sessions begin only on a native single-pointer down event. Cancel/multi-touch, root recreation, data rebind, detach, pause, disable and disposal withdraw pending state and use native noncommitting finish, with delayed-runnable/listener cleanup. Already committed user-selected speed is not reset merely by disabling the extension.
+- Disabled experiment groups may return a zero threshold. Valid native values are retained; a local 72dp-or-touch-slop fallback is used only in the owned gesture, without editing experiment storage. This is the 18th reversible installation unit. First activation may need video re-entry, and only locations where TikTok already supports edge hold-speed are eligible. Fixed-speed interaction, layouts and actual gestures remain untested.
+- DEX method/field/service descriptors and native branch logic were inspected offline; scope/session/threshold/admission regression sources were added but not executed. No compilation or APK build was run.
 
 ## Added in 2.0.58
 
@@ -45,7 +52,7 @@ Updated: 2026-11-03. Source version: **2.0.58-debug / 78**. Latest published pro
 | Offline subtitles and translation persistence | Cached source/translation path added; uncached content needs network, and host playback must still identify the track. |
 | Offline long-press, export/download and comments | Not implemented end-to-end. Comments/replies/translations need persistent models and offline UI integration; downloaded bytes must be proven local. |
 | Sticker format/source selection | Source-category selection and real static PNG/JPEG/WebP conversion now wired in source; original bytes retained. Runtime, pixels and API 28–29 coverage unverified. Animated re-encoding is not implemented. |
-| Hold-to-speed, downward-slide lock/unlock | Existing speed support only; requested gesture extension incomplete. |
+| Hold-to-speed, downward-slide lock/unlock | Owned native downward-mode path, default-off setting and cancellation lifecycle wired from 47.6.3 contracts. Real gestures, fixed-speed interaction, layout coverage and native-eligibility limitations remain unverified. |
 | More video display modes | Existing center/smart/fill retained; additional modes incomplete. |
 | Search/inbox/live internal cleanup | Dedicated bottom-of-video search suggestions toggle added to existing targets. This is not search-page/inbox/live internal cleanup; more bindings and runtime checks remain. |
 | All comments translatable and translation switching | Existing native gates/poll path retained; ordinary-comment fallback/cache/toggling incomplete. |

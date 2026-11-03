@@ -188,6 +188,7 @@ class TokiModule : XposedModule() {
             "SharePanelCleanupHook" -> SharePanelCleanupHook.init(this, loader)
             "ImmersiveFullScreenHook" -> ImmersiveFullScreenHook.init(this, loader)
             "LiveSwipeLockHook" -> LiveSwipeLockHook.init(this, loader)
+            "HoldSpeedGestureHook" -> HoldSpeedGestureHook.init(this, loader)
             "AutoScrollHook" -> AutoScrollHook.init(this, loader)
             "DownloadHook" -> DownloadHook.init(this, loader)
             "MusicUnlockHook" -> MusicUnlockHook.init(this, loader)

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hold_speed_section">长按加速手势</string>
+    <string name="hold_speed_down_lock">下滑锁定 / 解锁原生长按加速</string>
+    <string name="hold_speed_down_lock_hint">原生左右边缘长按加速期间，下滑超过阈值后松手切换倍速锁定，松手前滑回可取消。宿主未下发有效阈值时，仅在本手势内使用 72dp 后备值。</string>
+    <string name="hold_speed_scope_hint">仅作用于宿主原本允许长按加速的位置，首次开启请重新进入视频。普通滑动和评论操作保持原生；多指、取消、重新绑定视频和页面暂停会撤回待提交操作。关闭本选项不会重置已经通过 TikTok 提交的倍速。</string>
+    <string name="hold_speed_save_error">设置保存失败，请检查配置连接。</string>
+</resources>
