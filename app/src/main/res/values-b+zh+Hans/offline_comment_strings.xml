@@ -2,7 +2,7 @@
 <resources>
     <string name="offline_comments_open">浏览已缓存评论</string>
     <string name="offline_comments_title">已缓存评论</string>
-    <string name="offline_comments_hint">本地重新读取访问当前账号的 TikTok/Toki 已存快照，不下载评论；“联网加载首页/下一页”每次主动请求一页原生评论并复制到 Toki 私有存档。显示正文、作者名称和已存回复，不请求头像或主页。已有缓存译文可逐条切换；开启独立在线翻译选项后，有网时可主动翻译单条评论，完整成功的译文会保存以便离线读取；滚动只展开已有缓存，不自动联网翻页；独立回复线程请求和原生评论按钮完整替换仍未接入。</string>
+    <string name="offline_comments_hint">本地重新读取访问当前账号的 TikTok/Toki 已存快照，不下载评论；“联网加载首页/下一页”每次主动请求一页原生评论并复制到 Toki 私有存档。显示正文、作者名称和已存回复，不请求头像或主页。已有缓存译文可逐条切换；开启独立在线翻译选项后，有网时可主动翻译单条评论，完整成功的译文会保存以便离线读取；滚动只展开已有缓存，不自动联网翻页；每条顶层评论可主动联网加载回复，游标独立保存，回复也可切换已有译文；原生评论按钮完整替换仍未接入。</string>
     <string name="offline_comments_more">更多已缓存条目</string>
     <string name="offline_comments_reload">重新读取本地缓存</string>
     <string name="offline_comments_loading">正在读取当前账号已保存的评论…</string>
@@ -45,4 +45,8 @@
     <string name="comment_page_capacity">当前视频已达到评论缓存条目上限，未继续合并；已有条目没有被删除。</string>
     <string name="comment_page_retained_older">包含旧快照中保留的条目，未在本次在线页中重新核实其是否仍存在。</string>
     <string name="comment_page_reply_to">回复缓存评论 %1$s</string>
+    <string name="comment_reply_online_first">联网加载此评论的回复</string>
+    <string name="comment_reply_online_next">联网加载下一页回复</string>
+    <string name="comment_reply_online_refresh">联网刷新回复首页</string>
+    <string name="comment_reply_loading">正在主动加载这条顶层评论的一页回复，保留已有缓存；断网可读取已保存回复。</string>
 </resources>

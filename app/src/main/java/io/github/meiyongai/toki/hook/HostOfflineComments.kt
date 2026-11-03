@@ -34,7 +34,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         } catch (_: Exception) { throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT) }
         if (contract.snapshotId.get(native) != video) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
         val response = contract.response.get(native) ?: throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
-        return copyResponse(context, video, accountToken(account), response, contract.cachedTime.getLong(native), active)
+        return copyResponse(context, video, accountToken(account), response, contract.cachedTime.getLong(native), active = active)
     }
 
     fun account(context: Context): String {
@@ -43,7 +43,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
     }
 
     fun copyResponse(context: Context, video: String, account: String, response: Any, capturedAt: Long,
-        active: () -> Boolean): OfflineCommentData.Snapshot {
+        root: String? = null, active: () -> Boolean): OfflineCommentData.Snapshot {
         val contract = reflected.value
         fun requireCurrent() {
             if (!active() || Thread.currentThread().isInterrupted)
@@ -53,6 +53,9 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         if (!OfflineCommentCodeGate.verify(context) || !accountMatches(account))
             throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.ACCOUNT_CHANGED)
         if (!contract.list.isInstance(response) || contract.status.getInt(response) != 0 || contract.error.getInt(response) != 0) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
+        val responseRoot = contract.root.invoke(response) as? String
+        if (root != null && !responseRoot.isNullOrBlank() && responseRoot != root)
+            throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
         val sourceRows = contract.items.invoke(response) as? List<*>
             ?: throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
         val result = mutableListOf<OfflineCommentData.Row>()
@@ -123,6 +126,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         val cachedTime = snapshot.getDeclaredField("LIZJ").apply { check(type == java.lang.Long.TYPE); isAccessible = true }
         val status = list.getField("status_code").apply { check(type == java.lang.Integer.TYPE); isAccessible = true }
         val error = list.getField("error_code").apply { check(type == java.lang.Integer.TYPE); isAccessible = true }
+        val root = method(list, "getRootCid", String::class.java)
         val items = method(list, "getItems", List::class.java)
         val total = method(list, "getTotal", java.lang.Long.TYPE)
         val cursor = method(list, "getCursor", java.lang.Long.TYPE)

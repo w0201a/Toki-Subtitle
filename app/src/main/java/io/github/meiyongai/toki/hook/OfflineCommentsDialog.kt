@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicLong
 
 /** Offline cache reads remain separate from explicit online page/translation actions. */
 internal object OfflineCommentsDialog {
-    fun show(activity: Activity, video: String, reader: HostOfflineComments, network: HostCommentPageNetwork, model: Any,
+    fun show(activity: Activity, video: String, reader: HostOfflineComments, network: HostCommentPageNetwork, replies: HostCommentReplyNetwork, model: Any,
         current: () -> Boolean, dismissed: (AlertDialog) -> Unit): AlertDialog {
         val context = HostSettingsEntry.localizedContext(activity)
         val app = activity.applicationContext
@@ -178,17 +178,22 @@ internal object OfflineCommentsDialog {
                 loadingLocal = false; status.text = context.getString(R.string.offline_comments_busy); refreshButtons()
             }
         }
-        fun requestPage(cursor: Long) {
+        fun requestPage(cursor: Long, replyRoot: String? = null) {
             if (closed.get() || !current() || loadingLocal || fetching) return
             if (translation.busy) { networkStatus.text = context.getString(R.string.cached_comment_translation_busy); return }
             val old = adapter.snapshot
-            if (cursor > 0 && (old == null || old.nextCursor != cursor || !valid())) return
+            if (replyRoot == null) {
+                if (cursor > 0 && (old == null || old.nextCursor != cursor || !valid())) return
+            } else {
+                if (old == null || !valid() || old.rows.none { it.id == replyRoot && it.parentId.isBlank() && it.depth == 0 }) return
+                if (cursor > 0 && (old.replyCursors[replyRoot]?.next != cursor || old.replyCursors[replyRoot]?.hasMore != true)) return
+            }
             val remote = TranslationNetworkPolicy.capture()
             if (!remote.permitsNetwork()) { networkStatus.text = context.getString(R.string.comment_page_network_unavailable); return }
             val token = generation.incrementAndGet()
             translation.cancel(); translatingSnapshot = null
             val op = CommentPageOperation(); pageOperation = op; fetching = true
-            networkStatus.text = context.getString(R.string.comment_page_loading); refreshButtons()
+            networkStatus.text = context.getString(if (replyRoot == null) R.string.comment_page_loading else R.string.comment_reply_loading); refreshButtons()
             val preferredTarget = try { CachedCommentTranslateHook.channel()?.target } catch (_: Exception) { null }
             fun failed(error: Throwable?) {
                 if (closed.get() || generation.get() != token || pageOperation !== op) return
@@ -202,14 +207,15 @@ internal object OfflineCommentsDialog {
                 worker.execute {
                     try {
                         val account = reader.account(app)
-                        network.fetch(app, reader, video, model, cursor, account, remote, op) { raw ->
+                        val receive: (Result<Any>) -> Unit = { raw ->
                             try { worker.execute {
                                 val processed = try {
                                     check(op.active && generation.get() == token && !closed.get())
-                                    val page = reader.copyResponse(app, video, account, raw.getOrThrow(), System.currentTimeMillis()) {
+                                    val page = reader.copyResponse(app, video, account, raw.getOrThrow(), System.currentTimeMillis(), root = replyRoot) {
                                         op.active && !closed.get() && generation.get() == token
                                     }
-                                    val merged = CommentPageMerge.merge(old, page, cursor)
+                                    val merged = if (replyRoot == null) CommentPageMerge.merge(old, page, cursor)
+                                        else CommentReplyMerge.merge(checkNotNull(old), replyRoot, page, cursor)
                                     check(op.active && reader.accountMatches(account))
                                     val saved = CommentSnapshotStore.save(app, merged) {
                                         op.active && !closed.get() && generation.get() == token && reader.accountMatches(account)
@@ -233,10 +239,19 @@ internal object OfflineCommentsDialog {
                                 }
                             } } catch (error: java.util.concurrent.RejectedExecutionException) { main.post { failed(error) } }
                         }
+                        if (replyRoot == null) network.fetch(app, reader, video, model, cursor, account, remote, op, receive)
+                        else replies.fetch(app, reader, video, model, replyRoot, cursor, account, remote, op, receive)
                     } catch (error: Exception) { main.post { failed(error) } }
                       catch (error: LinkageError) { main.post { failed(error) } }
                 }
             } catch (error: java.util.concurrent.RejectedExecutionException) { failed(error) }
+        }
+        adapter.loadReplies = { snapshot, row ->
+            if (adapter.snapshot === snapshot) {
+                val saved = snapshot.replyCursors[row.id]
+                val cursor = if (saved?.hasMore == true) saved.next ?: 0L else 0L
+                requestPage(cursor, row.id)
+            }
         }
         val checkAccount = object : Runnable {
             override fun run() {
@@ -263,7 +278,7 @@ internal object OfflineCommentsDialog {
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { adapter.append() }
             dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener { load() }
             online.setOnClickListener { requestPage(0L) }
-            nextPage.setOnClickListener { adapter.snapshot?.nextCursor?.let(::requestPage) }
+            nextPage.setOnClickListener { adapter.snapshot?.nextCursor?.let { requestPage(it) } }
             main.post(checkAccount); load()
         } catch (error: Exception) { release(); throw error }
         return dialog

@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 86' in gradle and 'versionName = "2.0.66"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.66-debug / 86")
+check('versionCode = 87' in gradle and 'versionName = "2.0.67"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.67-debug / 87")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -264,7 +264,7 @@ page_network = (JAVA / 'hook/HostCommentPageNetwork.kt').read_text(encoding='utf
 page_merge = (JAVA / 'hook/CommentPageMerge.kt').read_text(encoding='utf-8')
 snapshot_codec = (JAVA / 'hook/CommentSnapshotCodec.kt').read_text(encoding='utf-8')
 snapshot_store = (JAVA / 'hook/CommentSnapshotStore.kt').read_text(encoding='utf-8')
-check('HostCommentPageNetwork(loader)' in offline_hook and 'commentNetwork, model' in offline_hook, 'offline comment viewer receives the current native video model and explicit page request adapter')
+check('HostCommentPageNetwork(loader)' in offline_hook and 'commentNetwork, commentReplies, model' in offline_hook, 'offline comment viewer receives the current native video model and explicit page request adapter')
 check('CommentPageCodeGate.verify(context)' in page_network and 'LJJZZI' in page_network and 'OFFLINE_COMMENT' in page_network and 'contract.request.invoke(null, video, cursor, 20' in page_network, 'comment page adapter uses inspected native request and Rx contracts for one 20-item page')
 check(not any(token in page_network for token in ('OfflineCommentLifecycleListener', 'X.0FTg', 'openConnection(', '.remove(', '.clear(', '.delete(')), 'comment page adapter does not invoke the native predownload/cache-clear manager or construct its own HTTP requests')
 check('remote.permitsNetwork()' in page_network and 'reader.accountMatches(account)' in page_network and 'contract.id.invoke(model) == video' in page_network and 'once.compareAndSet(false, true)' in page_network, 'page dispatch and response acceptance check explicit-network eligibility, identity and duplicate callbacks')
@@ -277,6 +277,21 @@ check('parentId' in comment_data and 'append(replies, depth + 1, id)' in comment
 check('MAX_BYTES = 4 * 1024 * 1024' in snapshot_codec and 'input.available() == 0' in snapshot_codec and 'seen.add(id)' in snapshot_codec and 'value.toByteArray(Charsets.UTF_8).contentEquals(raw)' in snapshot_codec, 'private snapshot codec is bounded/versioned and rejects trailing bytes, duplicate rows and malformed UTF-8')
 check('all.size >= 100' in snapshot_store and 'characters > 12 * 1024 * 1024' in snapshot_store and '.remove(' not in snapshot_store and '.clear(' not in snapshot_store, 'snapshot store reports capacity without deleting existing account/video archives')
 check('cancelPage()' in comment_dialog and 'pageOperation !== op' in comment_dialog and 'generation.get() != token' in comment_dialog and 'configSubscription.close()' in comment_dialog, 'page completions and listeners have owner/generation/configuration cancellation boundaries')
+
+reply_network = (JAVA / 'hook/HostCommentReplyNetwork.kt').read_text(encoding='utf-8')
+reply_merge = (JAVA / 'hook/CommentReplyMerge.kt').read_text(encoding='utf-8')
+check('HostCommentReplyNetwork(loader)' in offline_hook and 'commentReplies, model' in offline_hook and 'replies.fetch(app, reader' in comment_dialog, 'per-root reply request adapter is connected to the selected-video comment dialog')
+check('CommentPageCodeGate.verify(context)' in reply_network and 'getDeclaredMethod("LJIJJ"' in reply_network and 'root, cursor, 20' in reply_network, 'native reply adapter checks inspected code and exact authenticated suspend request contracts')
+check('getDeclaredMethod("LIZ", context)' in reply_network and 'getDeclaredMethod("LIZJ", scopeType, CancellationException::class.java)' in reply_network and 'operation.attach(AutoCloseable { c.cancelScope.invoke' in reply_network, 'reply requests create an owned native coroutine Job scope and register real scope cancellation')
+check('"getContext" -> c.getContext.invoke(continuation)' in reply_network and 'resumed.compareAndSet(false, true)' in reply_network and 'c.resume.invoke(continuation, unit)' in reply_network and 'response === suspended' in reply_network, 'suspend reply bridge preserves native context, single resume and immediate/suspended completion paths')
+check('privacyType = type("X.0F2o")' in reply_network and 'nonPersonalized = privacyType.getDeclaredMethod("LJ")' in reply_network and 'type("X.0F3W")' not in reply_network, 'reply request reads the actual native privacy-mode provider rather than mistaking a translation gate for it')
+check('root: String? = null' in comment_reader and 'responseRoot != root' in comment_reader, 'native reply responses reject an explicitly different returned root comment')
+check('replyCursors: Map<String, ReplyCursor>' in comment_data and 'old.replyCursors[root]?.next == requestedCursor' in reply_merge and 'page.nextCursor > requestedCursor' in reply_merge, 'each reply thread validates its own progressing cursor without borrowing top-level pagination')
+check('old.copy(rows = CommentPageMerge.ordered' in reply_merge and 'parent.parentId.isBlank()' in reply_merge and 'before.parentId == parentId' in reply_merge and 'root !in incomingIds' in reply_merge, 'reply merges preserve video cursor, parent ownership and reject root/cross-thread collisions')
+check('out.writeInt(2)' in snapshot_codec and 'require(version in 1..2)' in snapshot_codec and 'snapshot.replyCursors.forEach' in snapshot_codec and 'if (version >= 2)' in snapshot_codec, 'snapshot v2 persists per-root reply cursors while still reading v1 records without destructive migration')
+check('adapter.loadReplies =' in comment_dialog and 'cell.loadReplies.setOnClickListener' in comment_adapter and 'comment_reply_online_next' in comment_adapter, 'individual root-row first/next/refresh reply actions use the shared timeout/save lifecycle')
+check('root = replyRoot' in comment_dialog and 'CommentReplyMerge.merge(checkNotNull(old), replyRoot, page, cursor)' in comment_dialog and 'main.postDelayed(it, 15000)' in comment_dialog, 'reply copy/merge keeps root identity and inherits bounded cancellation/persistence behavior')
+check(not any(token in reply_network for token in ('openConnection(', 'OfflineCommentLifecycleListener', '.delete(', 'clearCache(')), 'reply adapter adds no raw HTTP, native predownload or cache-deletion path (source only)')
 
 for relative in ('hook/TranslationNetworkPolicy.kt', 'ui/screen/LocalTranslationSection.kt'):
     references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
@@ -361,7 +376,7 @@ lexical_files = [
     'hook/CachedCommentTranslateHook.kt', 'hook/CommentTranslationKey.kt', 'hook/CommentTranslationStore.kt',
     'hook/CachedCommentTranslationSession.kt', 'ui/screen/OfflineVideoSection.kt',
     'hook/CommentPageCodeGate.kt', 'hook/HostCommentPageNetwork.kt', 'hook/CommentPageMerge.kt',
-    'hook/CommentSnapshotCodec.kt', 'hook/CommentSnapshotStore.kt',
+    'hook/CommentSnapshotCodec.kt', 'hook/CommentSnapshotStore.kt', 'hook/HostCommentReplyNetwork.kt', 'hook/CommentReplyMerge.kt',
 ]
 for relative in lexical_files:
     kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8'))
@@ -381,6 +396,7 @@ for relative in (
     'hook/OfflineCommentDataTest.kt', 'hook/OfflineCommentListAdapterTest.kt',
     'hook/CachedCommentTranslationSessionTest.kt', 'hook/CommentTranslationStoreTest.kt', 'hook/CachedCommentOnlineAdapterTest.kt',
     'hook/CommentPageMergeTest.kt', 'hook/CommentSnapshotCodecTest.kt', 'hook/CommentSnapshotStoreTest.kt',
+    'hook/CommentReplyMergeTest.kt', 'hook/CommentReplyCursorCodecTest.kt', 'hook/CommentReplyAdapterTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

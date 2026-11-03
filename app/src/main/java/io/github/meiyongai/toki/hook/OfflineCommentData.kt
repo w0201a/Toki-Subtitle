@@ -12,9 +12,11 @@ internal object OfflineCommentData {
             else -> translation
         }
     }
+    data class ReplyCursor(val next: Long?, val hasMore: Boolean)
     data class Snapshot(val account: String, val video: String, val capturedAt: Long,
         val rows: List<Row>, val total: Long, val hasMore: Boolean, val truncated: Boolean,
-        val nextCursor: Long? = null, val retainedOlder: Boolean = false)
+        val nextCursor: Long? = null, val retainedOlder: Boolean = false,
+        val replyCursors: Map<String, ReplyCursor> = emptyMap())
     enum class Failure { MISSING, UNSUPPORTED, CORRUPT, ACCOUNT_CHANGED, CANCELLED }
     class Unavailable(val reason: Failure) : Exception(reason.name)
     const val MAX_ROWS = 500

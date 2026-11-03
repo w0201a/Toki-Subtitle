@@ -19,7 +19,7 @@ internal object CommentSnapshotCodec {
                 require(encoded.size <= 320000 && encoded.toString(Charsets.UTF_8) == value)
                 out.writeInt(encoded.size); out.write(encoded); require(bytes.size() <= MAX_BYTES)
             }
-            out.writeInt(0x54434d31); out.writeInt(1)
+            out.writeInt(0x54434d31); out.writeInt(2)
             text(snapshot.account); text(snapshot.video)
             out.writeLong(snapshot.capturedAt); out.writeLong(snapshot.total)
             out.writeBoolean(snapshot.hasMore); out.writeBoolean(snapshot.truncated)
@@ -36,6 +36,13 @@ internal object CommentSnapshotCodec {
                 text(row.language); out.writeInt(row.depth); out.writeLong(row.replyCount); out.writeBoolean(row.sourceTruncated); text(row.parentId)
                 require(bytes.size() <= MAX_BYTES)
             }
+            require(snapshot.replyCursors.size <= OfflineCommentData.MAX_ROWS)
+            out.writeInt(snapshot.replyCursors.size)
+            snapshot.replyCursors.forEach { (root, cursor) ->
+                require(root.isNotBlank() && root.length <= 128 && (cursor.next == null || cursor.next >= 0))
+                text(root); out.writeLong(cursor.next ?: -1); out.writeBoolean(cursor.hasMore)
+                require(bytes.size() <= MAX_BYTES)
+            }
         }
         return bytes.toByteArray()
     }
@@ -50,7 +57,8 @@ internal object CommentSnapshotCodec {
                 require(value.length <= limit && value.toByteArray(Charsets.UTF_8).contentEquals(raw))
                 return value
             }
-            require(input.readInt() == 0x54434d31 && input.readInt() == 1)
+            require(input.readInt() == 0x54434d31)
+            val version = input.readInt(); require(version in 1..2)
             val account = text(64); val video = text(128)
             require(account.matches(Regex("[a-f0-9]{64}")) && video.isNotBlank())
             val capturedAt = input.readLong(); val total = input.readLong()
@@ -69,8 +77,17 @@ internal object CommentSnapshotCodec {
                 val shortened = input.readBoolean(); val parent = text(128)
                 OfflineCommentData.Row(id, author, handle, user, source, translated, language, depth, replies, shortened, parent)
             }
+            val replies = linkedMapOf<String, OfflineCommentData.ReplyCursor>()
+            if (version >= 2) {
+                val roots = input.readInt(); require(roots in 0..OfflineCommentData.MAX_ROWS)
+                repeat(roots) {
+                    val root = text(128); require(root.isNotBlank() && root !in replies)
+                    val next = input.readLong(); require(next >= -1)
+                    replies[root] = OfflineCommentData.ReplyCursor(next.takeIf { it >= 0 }, input.readBoolean())
+                }
+            }
             require(input.available() == 0)
-            OfflineCommentData.Snapshot(account, video, capturedAt, rows, total, more, truncated, cursor.takeIf { it >= 0 }, retained)
+            OfflineCommentData.Snapshot(account, video, capturedAt, rows, total, more, truncated, cursor.takeIf { it >= 0 }, retained, replies)
         }
     }
 }

@@ -2,7 +2,7 @@ package io.github.meiyongai.toki.subtitle.hook
 
 /** Explicit network pages update rows by ID without silently dropping previously cached rows. */
 internal object CommentPageMerge {
-    private fun ordered(rows: Collection<OfflineCommentData.Row>): List<OfflineCommentData.Row> {
+    internal fun ordered(rows: Collection<OfflineCommentData.Row>): List<OfflineCommentData.Row> {
         val ids = rows.mapTo(mutableSetOf()) { it.id }
         val children = rows.filter { it.parentId.isNotBlank() && it.parentId in ids }.groupBy { it.parentId }
         val result = mutableListOf<OfflineCommentData.Row>()
@@ -24,7 +24,8 @@ internal object CommentPageMerge {
         secondary.rows.forEach { values.putIfAbsent(it.id, it) }
         return primary.copy(rows = ordered(values.values.take(OfflineCommentData.MAX_ROWS)),
             truncated = primary.truncated || secondary.truncated || values.size > OfflineCommentData.MAX_ROWS,
-            retainedOlder = primary.retainedOlder || secondary.retainedOlder || values.size > primary.rows.size)
+            retainedOlder = primary.retainedOlder || secondary.retainedOlder || values.size > primary.rows.size,
+            replyCursors = secondary.replyCursors + primary.replyCursors)
     }
     fun merge(old: OfflineCommentData.Snapshot?, page: OfflineCommentData.Snapshot, requestedCursor: Long): OfflineCommentData.Snapshot {
         require(requestedCursor >= 0)
@@ -44,7 +45,7 @@ internal object CommentPageMerge {
         require(values.size <= OfflineCommentData.MAX_ROWS) { "Comment snapshot capacity reached" }
         return page.copy(rows = ordered(values.values),
             truncated = page.truncated || old?.truncated == true,
-            retainedOlder = old?.retainedOlder == true || retained)
+            retainedOlder = old?.retainedOlder == true || retained, replyCursors = old?.replyCursors.orEmpty())
     }
 }
 

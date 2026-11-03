@@ -2,7 +2,7 @@
 <resources>
     <string name="offline_comments_open">Browse cached comments</string>
     <string name="offline_comments_title">Cached comments</string>
-    <string name="offline_comments_hint">Local reload reads this account’s saved TikTok/Toki snapshots without downloading. Online first/next-page buttons explicitly request one native comment-list page and save copied rows to Toki’s private archive. Text, author names and cached replies are available; images and profiles are not fetched. Cached translations can be switched per comment. Enable the separate online-translation option to explicitly translate a selected comment when connected; complete results are saved for offline reuse. No automatic network pagination is started by scrolling; separate reply-thread requests and native comment-button replacement are not connected.</string>
+    <string name="offline_comments_hint">Local reload reads this account’s saved TikTok/Toki snapshots without downloading. Online first/next-page buttons explicitly request one native comment-list page and save copied rows to Toki’s private archive. Text, author names and cached replies are available; images and profiles are not fetched. Cached translations can be switched per comment. Enable the separate online-translation option to explicitly translate a selected comment when connected; complete results are saved for offline reuse. No automatic network pagination is started by scrolling; each top-level comment can explicitly load reply pages with a separately saved cursor. Replies use the same translation modes. Native comment-button replacement is not connected.</string>
     <string name="offline_comments_more">More cached rows</string>
     <string name="offline_comments_reload">Reload local cache</string>
     <string name="offline_comments_loading">Reading this account’s saved comments…</string>
@@ -45,4 +45,8 @@
     <string name="comment_page_capacity">This video reached the cached-row limit. The new page was not merged and earlier rows were not deleted.</string>
     <string name="comment_page_retained_older">Includes older cached rows whose continued existence was not revalidated by this online page.</string>
     <string name="comment_page_reply_to">Reply to cached comment %1$s</string>
+    <string name="comment_reply_online_first">Load this comment’s replies online</string>
+    <string name="comment_reply_online_next">Load next reply page online</string>
+    <string name="comment_reply_online_refresh">Refresh first reply page online</string>
+    <string name="comment_reply_loading">Explicitly loading one reply page for this root comment. Existing cached rows remain; saved replies can be read disconnected.</string>
 </resources>

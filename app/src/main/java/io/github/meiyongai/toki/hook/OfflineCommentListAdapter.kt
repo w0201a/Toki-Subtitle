@@ -14,6 +14,7 @@ import io.github.meiyongai.toki.subtitle.R
 internal class OfflineCommentListAdapter(private val context: Context, private val valid: () -> Boolean,
     private val translate: ((OfflineCommentData.Snapshot, OfflineCommentData.Row) -> Unit)? = null,
     private val changed: () -> Unit) : BaseAdapter() {
+    var loadReplies: ((OfflineCommentData.Snapshot, OfflineCommentData.Row) -> Unit)? = null
     var snapshot: OfflineCommentData.Snapshot? = null
         private set
     private var pages = OfflineCommentPages(emptyList())
@@ -93,6 +94,21 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
                     if (original != null) translate?.invoke(snapshot, original)
                 }
             }
+            val replyCursor = snapshot?.replyCursors?.get(row.id)
+            cell.loadReplies.visibility = if (row.parentId.isBlank() && row.depth == 0 &&
+                (row.replyCount > 0 || replyCursor != null)) View.VISIBLE else View.GONE
+            cell.loadReplies.text = context.getString(when {
+                replyCursor == null -> R.string.comment_reply_online_first
+                replyCursor.hasMore -> R.string.comment_reply_online_next
+                else -> R.string.comment_reply_online_refresh
+            })
+            cell.loadReplies.isEnabled = loadReplies != null && (replyCursor?.hasMore != true ||
+                replyCursor.next?.let { it > 0 } == true)
+            cell.loadReplies.setOnClickListener {
+                val current = snapshot
+                if (token == generation && valid() && current != null &&
+                    current.rows.any { it.id == row.id && it.parentId.isBlank() && it.depth == 0 }) loadReplies?.invoke(current, row)
+            }
             cell.replies.text = if (row.replyCount > 0) context.getString(R.string.offline_comments_reply_count, row.replyCount) else ""
             for ((button, value, label) in cell.buttons) {
                 button.text = (if (value == mode) "• " else "") + context.getString(label)
@@ -119,6 +135,7 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
         val status = TextView(context).apply { textSize = 11f }
         val replies = TextView(context).apply { textSize = 11f }
         val online = Button(context).apply { textSize = 12f }
+        val loadReplies = Button(context).apply { textSize = 12f }
         private val controls = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL }
         val buttons = listOf(
             Triple(Button(context), OfflineCommentData.Mode.ORIGINAL, R.string.manual_comment_original),
@@ -131,7 +148,7 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
                 button.textSize = 11f; button.minWidth = 0; button.minimumWidth = 0; button.setPadding(0, 0, 0, 0)
                 controls.addView(button, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
             }
-            root.addView(controls); root.addView(online)
+            root.addView(controls); root.addView(online); root.addView(loadReplies)
         }
     }
 }
