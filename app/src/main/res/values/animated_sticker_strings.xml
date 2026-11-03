@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sticker_export_animated_gif">Animated GIF (quantized colors)</string>
+    <string name="sticker_export_animated_webp">Animated WebP</string>
+    <string name="sticker_animation_limits">Animated modes require actual multi-frame GIF/WebP source bytes and do not use a static preview fallback. Up to 300 frames, 2048 pixels per edge, 1 MP canvas, 64 MP total frame work, 120 seconds and 20 MiB output. GIF uses 216 colors, binary transparency and 10 ms timing units; cumulative timing is rounded without drift. WebP is lossless on Android 11+, high-quality lossy on Android 9–10. An unavailable host decoder or unsupported source reports failure, not first-frame success.</string>
+    <string name="sticker_animation_help">Animation format limits</string>
+    <string name="sticker_animation_back">Back to formats</string>
+    <string name="sticker_animation_failed">Animated conversion failed: check source format, frame/memory limits and host decoder availability. No static preview was exported.</string>
+</resources>

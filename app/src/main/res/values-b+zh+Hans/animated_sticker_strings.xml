@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sticker_export_animated_gif">动态 GIF（减色）</string>
+    <string name="sticker_export_animated_webp">动态 WebP</string>
+    <string name="sticker_animation_limits">动态格式只接收真正多帧 GIF／WebP，不回退到静态预览。限制：300 帧、单边 2048 像素、画布约 100 万像素、累计帧处理 6400 万像素、120 秒、输出 20 MiB。GIF 使用 216 色、二值透明与 10 毫秒时间单位，累计时间舍入不漂移；WebP 在 Android 11 及以上无损，Android 9–10 为高质量有损。宿主解码器不可用或不支持的源会报失败，不以第一帧冒充成功。</string>
+    <string name="sticker_animation_help">动态格式说明与限制</string>
+    <string name="sticker_animation_back">返回格式选择</string>
+    <string name="sticker_animation_failed">动态转换失败：请检查源格式、帧数／内存限制及宿主解码器可用性；没有以静态预览冒充导出成功。</string>
+</resources>

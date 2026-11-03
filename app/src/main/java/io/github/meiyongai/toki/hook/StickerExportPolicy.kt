@@ -1,13 +1,18 @@
 package io.github.meiyongai.toki.subtitle.hook
 
-/** Explicit export intent: only ORIGINAL preserves animation; conversions export one frame. */
+/** Explicit intent: static modes export one frame; animated modes decode and encode the complete frame sequence. */
 internal enum class StickerExportMode(val extension: String?, val mime: String?) {
-    ORIGINAL(null, null), PNG("png", "image/png"), JPEG("jpg", "image/jpeg"), WEBP("webp", "image/webp")
+    ORIGINAL(null, null), PNG("png", "image/png"), JPEG("jpg", "image/jpeg"), WEBP("webp", "image/webp"),
+    ANIMATED_GIF("gif", "image/gif"), ANIMATED_WEBP("webp", "image/webp");
+    val animated: Boolean get() = this == ANIMATED_GIF || this == ANIMATED_WEBP
 }
 
 internal enum class StickerSource { AUTOMATIC, ANIMATED, STATIC }
 
 internal object StickerExportPolicy {
+    fun modes(source: StickerSource, hasAnimation: Boolean): List<StickerExportMode> =
+        listOf(StickerExportMode.PNG, StickerExportMode.JPEG, StickerExportMode.WEBP) +
+            if (source != StickerSource.STATIC && hasAnimation) listOf(StickerExportMode.ANIMATED_WEBP, StickerExportMode.ANIMATED_GIF) else emptyList()
     const val MAX_EDGE = 2048
     private const val MAX_SOURCE_EDGE = 65536
     private const val MAX_SOURCE_PIXELS = 100_000_000L

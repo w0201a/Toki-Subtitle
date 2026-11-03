@@ -1,10 +1,14 @@
-# Source-only development status — 2.0.72-debug
+# Source-only development status — 2.0.73-debug
 
-Updated: 2026-11-04. Source version: **2.0.72-debug / 92**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.73-debug / 93**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
 ## Current user-directed ordering
+
+**Updated user priority:** advance only additional offline-cache export formats, animated sticker conversion, all-setting live application and the pictured template/effect hiding. Other feature expansions are recorded in [USER_WORK_ORDER.md](USER_WORK_ORDER.md) and wait for an explicit user “start”. Existing functionality is retained. None of the four selected items is certified complete. This supersedes the previous ordering for the selected export task; the rest of offline integration is deferred.
+
+### Earlier offline ordering and policy context
 
 The user supplied the full offline acceptance requirements on 2026-11-03. Offline-video work remains the final integrated feature group, but is **no longer awaiting clarification**. The online-comment batch and local-only preparation are committed. The user has since confirmed hybrid networking by default: online translation/data are permitted when connected; saved caches are used when disconnected; explicit local-only remains optional. Selected-cell offline classification, a local menu and complete-MP4 export have now been wired in source; a saved-comment viewer with optional explicit online translation and persistent translated results is now wired as well; explicit first/next comment-page loading and private snapshots are now wired; top-level rows now also have per-root reply pagination/cursors and native coroutine cancellation in source; the inspected ordinary native comment button now has an independent opt-in cache-viewer route; hidden/disabled buttons, other native entry/layout variants, other-host/engine/player integration remain pending. Existing code is retained. No APK build is authorized.
 
@@ -33,6 +37,17 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.73 — selected work order and real animated sticker conversion
+
+- User-approved work order/deferred backlog is published separately. This batch changes animation export and its required UI/resource/validation paths only; it does not expand deferred country/author/comment/subtitle/cleanup features.
+- New animated GIF/WebP intents are separate from original-byte preservation and static first-frame formats. They select only animation-source URLs. No static-preview fallback is used to claim successful animation conversion.
+- Strict bounded container readers inspect source dimensions, frame rectangles, timing, loops, blend/disposal and complete boundaries. Inspected byte-array Fresco decoders provide each actual image patch. Full canvas composition implements blend, background clear and restore-previous. Native concrete frame geometry is compared to the container; handles/bitmaps are released on exit.
+- Related classes10/classes13 DEX fingerprints are checked before animation downloads/decoding. Local original-APK metadata and JNI-registration strings were inspected; this does NOT establish actual device library availability or successful JNI calls.
+- GIF encoding writes actual indexed/LZW frames with transparent index, loop extension and cumulative centisecond rounding. It quantizes to 216 colors and binary alpha. WebP muxing uses platform-encoded image bitstreams in full replacement ANMF frames with source millisecond timing. Android 11+ uses lossless encoding; Android 9–10 uses high-quality lossy WebP. Output is reparsed to check frame count, loop, dimensions and timing before save.
+- Explicit limits: 300 frames, 2048 per edge, 1,048,576 canvas pixels, 64M cumulative work pixels, 120 seconds, 20 MiB encoded output. Inputs without real animation or unsupported rendering semantics are rejected, not flattened silently. Decode/memory/native availability and all actual pixel/timing behavior remain unverified.
+- 429 source-only/whitespace checks passed. Eleven new regression cases with independent tiny fixtures and future ImageIO GIF decode assertions are source-only and NOT executed. A separate Python reference-layout experiment was decoded with Pillow for GIF/WebP frames/alpha/timing/loops; it was NOT the Kotlin implementation or JNI pipeline. No compilation, JUnit/Robolectric, device verification or APK build was performed.
+- Additional cache formats, full live-setting restoration and complete template/effect-anchor coverage remain active selected work, not completed by this animation batch. APNG/animated AVIF and other unsupported codecs are not implemented here.
 
 ## Added in 2.0.72 — country directory and confirmed dashboard snapshots
 
@@ -187,7 +202,7 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 | Faster/reliable subtitle translation and replay | Cache/track/write paths, observed-rewind ownership, cancelled-request recovery and shared-result retrieval are wired in source. Compilation, real replay/seek/paused/language behavior and measured latency remain unverified. |
 | Offline subtitles and translation persistence | Persistent caches, optional local-only and default hybrid online eligibility/reconnect handling are in source. No local engine; host offline player/time identity and full local UI still need integration. |
 | Offline long-press, export/download and comments | Selected-cell local menu, indexed complete-MP4 export and current-account cached-comment viewer are wired in source. Real cache/gesture/device validation, split-format/API-28 export, additional native comment-entry/layout/host variants and service/device behavior remain incomplete. |
-| Sticker format/source selection | Source-category selection and real static PNG/JPEG/WebP conversion now wired in source; original bytes retained. Runtime, pixels and API 28–29 coverage unverified. Animated re-encoding is not implemented. |
+| Sticker format/source selection | Original bytes, static PNG/JPEG/WebP and new multi-frame GIF/WebP decode/compose/re-encode paths are wired in source with explicit palette/alpha/timing and resource limits. Actual host JNI, pixels, frame disposal, output playback and API 28–29 coverage remain unverified; APNG/animated AVIF and other codecs are not implemented. |
 | Hold-to-speed, downward-slide lock/unlock | Owned native downward-mode path, default-off setting and cancellation lifecycle wired from 47.6.3 contracts. Real gestures, fixed-speed interaction, layout coverage and native-eligibility limitations remain unverified. |
 | More video display modes | Six aspect-preserving modes and current-layout reapply inside an installed immersive session are wired. Window master restart, unsupported surfaces/layouts, native lifecycle recursion and actual pixels/device behavior remain unverified. |
 | Search/inbox/live internal cleanup | Six independent inspected page-internal component controls are wired in source, separate from existing bottom-video search suggestions. Other variants/overlays, complete page coverage and runtime verification remain incomplete; standalone LIVE Lynx popups/windows are not covered. |

@@ -15,6 +15,12 @@ import org.robolectric.annotation.GraphicsMode
 @Config(manifest = Config.NONE, sdk = [35])
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 class StickerImageExporterTest {
+    @Test fun animatedIntentCannotAccidentallyUseTheStaticFirstFrameEncoder() {
+        for (mode in listOf(StickerExportMode.ANIMATED_GIF, StickerExportMode.ANIMATED_WEBP)) {
+            assertThrows(IllegalArgumentException::class.java) { StickerImageExporter.convert(AnimatedStickerFixtures.GIF, mode) }
+        }
+    }
+
     private fun transparentPng(): ByteArray {
         val image = Bitmap.createBitmap(16, 16, Bitmap.Config.ARGB_8888)
         try {

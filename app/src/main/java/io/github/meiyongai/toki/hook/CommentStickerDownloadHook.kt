@@ -104,7 +104,9 @@ internal object CommentStickerDownloadHook {
             fun queueExport(source: StickerSource, mode: StickerExportMode) {
                 if (activity.isFinishing || activity.isDestroyed || !ConfigClient.isReady || !ConfigClient.getBoolean(KEY) ||
                     !HookRuntime.scope(FEATURE).active) return
-                val candidates = asset.candidates(source)
+                val candidates = if (mode.animated) {
+                    if (source == StickerSource.STATIC) emptyList() else asset.candidates(StickerSource.ANIMATED)
+                } else asset.candidates(source)
                 val first = candidates.firstOrNull() ?: return
                 val key = mode.name + "|" + first
                 if (!inFlight.add(key)) {
@@ -113,14 +115,16 @@ internal object CommentStickerDownloadHook {
                 }
                 val app = activity.applicationContext
                 val saved = context.getString(R.string.sticker_saved)
-                val failed = context.getString(R.string.sticker_save_failed)
+                val failed = context.getString(if (mode.animated) R.string.sticker_animation_failed else R.string.sticker_save_failed)
                 val directory = if (ConfigClient.getBoolean(DownloadHook.KEY_DOWNLOAD_PATH_ENABLED))
                     ConfigClient.getString(DownloadHook.KEY_DOWNLOAD_IMAGE_PATH, DownloadHook.DEFAULT_IMAGE_RELATIVE_PATH)!!
                 else "Pictures/TikTok/Stickers"
                 try {
                     worker.execute {
                         val success = try {
-                            save(app, asset.id, candidates, directory, mode)
+                            save(app, loader, asset.id, candidates, directory, mode) {
+                                ConfigClient.isReady && ConfigClient.getBoolean(KEY) && HookRuntime.scope(FEATURE).active
+                            }
                             true
                         } catch (error: Exception) {
                             HookRuntime.event(FEATURE, "export failed mode=" + mode.name + " type=" + error.javaClass.simpleName)
@@ -138,12 +142,24 @@ internal object CommentStickerDownloadHook {
                 }
             }
             fun chooseFormat(source: StickerSource) {
-                val modes = listOf(StickerExportMode.PNG, StickerExportMode.JPEG, StickerExportMode.WEBP)
-                val labels = arrayOf(context.getString(R.string.sticker_export_png),
-                    context.getString(R.string.sticker_export_jpeg), context.getString(R.string.sticker_export_webp))
+                val modes = StickerExportPolicy.modes(source, asset.animatedUrls.isNotEmpty())
+                val labels = modes.map { mode -> context.getString(when (mode) {
+                    StickerExportMode.PNG -> R.string.sticker_export_png
+                    StickerExportMode.JPEG -> R.string.sticker_export_jpeg
+                    StickerExportMode.WEBP -> R.string.sticker_export_webp
+                    StickerExportMode.ANIMATED_GIF -> R.string.sticker_export_animated_gif
+                    StickerExportMode.ANIMATED_WEBP -> R.string.sticker_export_animated_webp
+                    StickerExportMode.ORIGINAL -> error("Original has a separate menu action")
+                }) }.toTypedArray()
                 showDialog(AlertDialog.Builder(context)
                     .setTitle(context.getString(R.string.sticker_export_title))
                     .setItems(labels) { _, index -> queueExport(source, modes[index]) }
+                    .setNeutralButton(context.getString(R.string.sticker_animation_help)) { _, _ ->
+                        showDialog(AlertDialog.Builder(context)
+                            .setTitle(context.getString(R.string.sticker_animation_help))
+                            .setMessage(context.getString(R.string.sticker_animation_limits))
+                            .setPositiveButton(context.getString(R.string.sticker_animation_back)) { _, _ -> chooseFormat(source) }.create())
+                    }
                     .setNegativeButton(context.getString(R.string.common_cancel), null).create())
             }
             fun chooseSource(original: Boolean) {
@@ -194,12 +210,22 @@ internal object CommentStickerDownloadHook {
         error("Too many redirects")
     }
 
-    private fun save(context: Context, id: String, candidates: List<String>, path: String, mode: StickerExportMode) {
+    private fun save(context: Context, loader: ClassLoader, id: String, candidates: List<String>, path: String,
+        mode: StickerExportMode, active: () -> Boolean) {
+        check(active() && !Thread.currentThread().isInterrupted)
+        if (mode.animated) HostAnimatedStickerDecoder.requireInspectedCode(context)
         var exported: StickerImageExporter.Result? = null
         for (location in candidates) {
-            exported = try { StickerImageExporter.convert(fetch(location), mode) } catch (_: Exception) { null }
+            check(active() && !Thread.currentThread().isInterrupted)
+            exported = try {
+                val bytes = fetch(location)
+                check(active() && !Thread.currentThread().isInterrupted)
+                if (mode.animated) AnimatedStickerExporter.convert(context, loader, bytes, mode, active)
+                else StickerImageExporter.convert(bytes, mode)
+            } catch (_: Exception) { null }
             if (exported != null) break
         }
+        check(active() && !Thread.currentThread().isInterrupted)
         val (bytes, format) = checkNotNull(exported) { "No readable image for selected source and format" }
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, CommentStickerMedia.fileName(id, format.extension, UUID.randomUUID().toString()))
@@ -212,6 +238,7 @@ internal object CommentStickerDownloadHook {
         val resolver = context.contentResolver
         val uri = checkNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
         resolver.openOutputStream(uri)?.use { it.write(bytes) } ?: error("Cannot write image")
+        check(active() && !Thread.currentThread().isInterrupted)
         if (Build.VERSION.SDK_INT >= 29) check(resolver.update(uri, ContentValues().apply {
             put(MediaStore.Images.Media.IS_PENDING, 0)
         }, null, null) > 0)

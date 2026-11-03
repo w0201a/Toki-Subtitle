@@ -14,6 +14,7 @@ internal object StickerImageExporter {
     data class Result(val bytes: ByteArray, val format: CommentStickerMedia.Format)
 
     fun convert(bytes: ByteArray, mode: StickerExportMode): Result {
+        require(mode != StickerExportMode.ANIMATED_GIF && mode != StickerExportMode.ANIMATED_WEBP) { "Use the complete animation exporter" }
         require(bytes.isNotEmpty() && bytes.size <= CommentStickerMedia.MAX_BYTES)
         val original = requireNotNull(CommentStickerMedia.format(bytes)) { "Unsupported source image" }
         if (mode == StickerExportMode.ORIGINAL) return Result(bytes, original)
@@ -38,6 +39,7 @@ internal object StickerImageExporter {
                 StickerExportMode.WEBP -> if (Build.VERSION.SDK_INT >= 30) Bitmap.CompressFormat.WEBP_LOSSLESS
                     else legacyWebp()
                 StickerExportMode.ORIGINAL -> error("Original returned before decoding")
+                StickerExportMode.ANIMATED_GIF, StickerExportMode.ANIMATED_WEBP -> error("Animation must not use a first-frame encoder")
             }
             check(source.compress(compression, if (mode == StickerExportMode.JPEG) 95 else 100, output)) { "Image encoding failed" }
             val encoded = output.bytes()

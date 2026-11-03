@@ -49,3 +49,6 @@ signing.properties
 !/docs/ISSUES_AND_FIXES.md
 !/docs/LINKS.md
 !/docs/SOURCE_STATUS.md
+
+# User-approved execution order and deferred backlog.
+!/docs/USER_WORK_ORDER.md

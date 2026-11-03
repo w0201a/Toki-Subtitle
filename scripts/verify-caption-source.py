@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 92' in gradle and 'versionName = "2.0.72"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
+check('versionCode = 93' in gradle and 'versionName = "2.0.73"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -407,6 +407,34 @@ for locale in ('values', 'values-b+zh+Hans'):
 check(set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', dashboard)) <= base_names, 'all dashboard string references resolve in default resources')
 check('RegionEnvironmentPolicy.missingPreset(feature, effective)' in (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8') and '&& !missingEnvironment' in (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8') and '地区环境预设缺失' in (JAVA / 'ui/screen/HookStatusModel.kt').read_text(encoding='utf-8'), 'missing environment data is diagnosed and not reported as an applied hook')
 
+# User-selected animation work; no compilation/native codec or pixel behavior is certified here.
+animation_data = (JAVA / 'hook/AnimatedStickerData.kt').read_text(encoding='utf-8')
+animation_containers = (JAVA / 'hook/AnimatedStickerContainers.kt').read_text(encoding='utf-8')
+animation_exporter = (JAVA / 'hook/AnimatedStickerExporter.kt').read_text(encoding='utf-8')
+animation_decoder = (JAVA / 'hook/HostAnimatedStickerDecoder.kt').read_text(encoding='utf-8')
+check((ROOT / 'docs/USER_WORK_ORDER.md').is_file() and '!/docs/USER_WORK_ORDER.md' in read('.gitignore'), 'user-selected four-item work order and deferred backlog are saved for publication')
+check('ANIMATED_GIF("gif", "image/gif")' in export_policy and 'ANIMATED_WEBP("webp", "image/webp")' in export_policy and 'val animated:' in export_policy, 'animated GIF and WebP have explicit export intents separate from static modes')
+check('source != StickerSource.STATIC && hasAnimation' in export_policy and 'asset.candidates(StickerSource.ANIMATED)' in sticker, 'animated export choices do not silently fall back to a static preview source')
+check('AnimatedStickerExporter.convert(context, loader, bytes, mode, active)' in sticker and 'HostAnimatedStickerDecoder.requireInspectedCode(context)' in sticker, 'worker dispatch reaches real animation conversion and checks code availability before downloading animation assets')
+check('mode != StickerExportMode.ANIMATED_GIF' in exporter and 'Animation must not use a first-frame encoder' in exporter, 'static encoder rejects animated intent instead of exporting just the first frame')
+check('0x3b ->' in animation_data and 'input.position == bytes.size' in animation_data and 'Unsupported GIF disposal' in animation_data and 'GIF plain-text rendering cannot be preserved' in animation_data, 'GIF parsing requires a complete trailer and understood disposal/rendering semantics')
+check('NETSCAPE2.0' in animation_data and 'repetitions + 1' in animation_data and 'totalCs = (sourceMs + 5) / 10' in animation_containers, 'GIF repetition normalization and cumulative centisecond rounding are explicit')
+check('"ANIM" ->' in animation_data and '"ANMF" ->' in animation_data and 'input.long() == bytes.size.toLong() - 8' in animation_data and 'Frame outside animation canvas' in animation_data, 'WebP parsing checks RIFF length, animation/frame boundaries and canvas geometry')
+check('MAX_FRAMES = 300' in animation_data and 'MAX_WORK_PIXELS = 64_000_000L' in animation_data and 'MAX_DURATION_MS = 120_000L' in animation_data and 'MAX_PIXELS = 1_048_576L' in animation_data, 'animation frame, canvas, cumulative pixel and duration budgets are bounded')
+check('com.facebook.animated.gif.GifImage' in animation_decoder and 'com.facebook.animated.webp.WebPImage' in animation_decoder and 'ByteArray::class.java' in animation_decoder and 'Native frame geometry differs from container' in animation_decoder, 'inspected host byte-array decoders and concrete native frame geometry are checked')
+check('"classes10.dex"' in animation_decoder and '"classes13.dex"' in animation_decoder and 'MessageDigest.getInstance("SHA-256")' in animation_decoder and 'matched == hashes.keys' in animation_decoder, 'host animation JNI contracts are gated by both inspected DEX digests')
+check('disposeFrame.invoke(frame)' in animation_decoder and 'disposeImage.invoke(handle)' in animation_decoder and 'HostAnimatedStickerDecoder.open(context, loader, source, bytes).use' in animation_exporter, 'native image and per-frame handles are released including exceptional paths')
+check('Disposal.RESTORE' in animation_exporter and 'Disposal.CLEAR' in animation_exporter and 'if (frame.blend) null else replace' in animation_exporter and 'PorterDuff.Mode.SRC' in animation_exporter, 'animation composition implements patch blend, clear and restore-previous before output encoding')
+check('output.text("GIF89a")' in animation_containers and 'HashMap<Int, Int>(256)' in animation_containers and 'if (next < 500)' in animation_containers and 'code(256)' in animation_containers, 'GIF writer emits indexed animated image frames with bounded 9-bit LZW dictionary resets')
+check('output.text("ANMF")' in animation_containers and 'output.byte(2)' in animation_containers and '"VP8 ", "VP8L"' in animation_containers and 'encodedStaticWebp' in animation_containers, 'animated WebP muxes actual encoded bitstreams into complete non-blended frames')
+check('Bitmap.CompressFormat.WEBP_LOSSLESS' in animation_exporter and 'Build.VERSION.SDK_INT >= 30' in animation_exporter and 'canvasBitmap.compress(webpFormat(), 100, output)' in animation_exporter, 'WebP frames use real platform compression with explicit pre-Android-11 fallback semantics')
+check('result.frames.size == source.frames.size' in animation_exporter and 'result.plays == source.plays' in animation_exporter and 'abs(expected - actual) <= 5' in animation_exporter and 'result.frames.map { it.durationMs } == source.frames.map { it.durationMs }' in animation_exporter, 'encoded output is reparsed and checked for full frame count, loop, geometry and timing')
+check('check(active() && !Thread.currentThread().isInterrupted)' in sticker and 'check(active() && !Thread.currentThread().isInterrupted)' in animation_exporter and 'Animation conversion cancelled' in animation_data, 'conversion observes cancellation before publication and through frame/container processing')
+check('sticker_animation_help' in sticker and 'sticker_animation_back' in sticker and 'sticker_animation_failed' in sticker, 'animation limits and failure semantics are visible without replacing the format list with a message')
+for locale in ('values', 'values-b+zh+Hans'):
+    names = {n.attrib['name'] for n in ET.parse(ROOT / 'app/src/main/res' / locale / 'animated_sticker_strings.xml').getroot() if n.tag == 'string'}
+    check({'sticker_export_animated_gif', 'sticker_export_animated_webp', 'sticker_animation_limits', 'sticker_animation_failed', 'sticker_animation_help'} <= names, locale + ' animation labels, format limits and failure strings exist')
+
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
     length = len(source)
@@ -464,6 +492,7 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'hook/AnimatedStickerData.kt', 'hook/AnimatedStickerContainers.kt', 'hook/HostAnimatedStickerDecoder.kt', 'hook/AnimatedStickerExporter.kt',
     'model/RegionEnvironmentPolicy.kt', 'model/CountryCatalog.kt', 'model/RegionPresets.kt', 'hook/SimHook.kt', 'hook/LocaleHook.kt', 'hook/TimeZoneHook.kt',
     'hook/GpsHook.kt', 'ui/screen/DashboardScreen.kt', 'ui/screen/ConfirmedConfigEdits.kt',
     'model/PageCleanupItem.kt', 'hook/PageCleanupBindings.kt', 'hook/PageCleanupContract.kt',
@@ -516,6 +545,7 @@ for relative in (
     'hook/VideoDisplayModesTest.kt', 'hook/VideoLayoutBindingsTest.kt', 'hook/SmartVideoLayoutTest.kt', 'hook/VideoFillGeometryTest.kt',
     'hook/PageCleanupBindingsTest.kt', 'hook/PageCleanupContractTest.kt', 'hook/PageCleanupPolicyTest.kt',
     'model/CountryCatalogTest.kt', 'ui/screen/ConfirmedConfigEditsTest.kt',
+    'hook/AnimatedStickerFixtures.kt', 'hook/AnimatedStickerDataTest.kt', 'hook/AnimatedStickerContainersTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))
