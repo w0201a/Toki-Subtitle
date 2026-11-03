@@ -106,45 +106,8 @@ object ImmersiveFullScreenHook {
         val resume = Activity::class.java.getDeclaredMethod("onPostResume").apply { isAccessible = true }
         val photos = ImmersivePhotoLayout(HostSymbols.resolve(classLoader, HostSymbol.PHOTO_LAYOUT),
             HostSymbols.member(HostSymbol.PHOTO_LAYOUT, "plan"))
-        val fitMode = ConfigClient.getString(KEY_VIDEO_FIT_MODE, "center")
-        val video = if (fitMode == "smart" || fitMode == "fill") SmartVideoLayout(feed,
-            classLoader.loadClass("com.ss.android.ugc.aweme.videoadaption.adaptionparams.VideoAdaptionResult"),
-            classLoader.loadClass("com.ss.android.ugc.aweme.videoadaption.adaptionparams.resultoperator.MultiContainerThresholdResultOperator"),
-            fill = fitMode == "fill") else null
-
-        val cells = java.util.WeakHashMap<Any, java.lang.ref.WeakReference<View>>()
-        val autoCrop = if (fitMode == "fill") VideoAutoCrop().also { crop ->
-            HookRuntime.onDispose("ImmersiveFullScreenHook") { crop.close() }
-            HookRuntime.subscribe("ImmersiveFullScreenHook") { snapshot ->
-                crop.configure(snapshot?.boolean(KEY_IMMERSIVE_FULL_SCREEN) == true &&
-                    snapshot.boolean(KEY_VIDEO_AUTO_CROP))
-            }
-        } else null
-        if (video != null && fitMode == "fill") {
-            val created = feed.getMethod("onViewCreated", View::class.java)
-            module.trackHook("ImmersiveFullScreenHook", created).intercept { chain ->
-                cells[checkNotNull(chain.thisObject)] = java.lang.ref.WeakReference(chain.args[0] as View)
-                chain.proceed()
-            }
-            HookRuntime.onDispose("ImmersiveFullScreenHook") { cells.clear() }
-        }
-        if (video != null) module.trackHook("ImmersiveFullScreenHook", video.apply).intercept { chain ->
-            if (enabled()) {
-                val args = chain.args.toTypedArray()
-                val previous = video.lastGeometry
-                val cell = cells[chain.thisObject]?.get()
-                val zoom = ConfigClient.getString(KEY_VIDEO_FILL_ZOOM, "100")?.toIntOrNull() ?: 100
-                val contentKey = video.contentKey(args[0])
-                args[0] = video.replace(args[0], cell?.width ?: 0, cell?.height ?: 0, zoom)
-                if (previous != video.lastGeometry) {
-                    HookRuntime.detail("ImmersiveFullScreenHook", video.lastGeometry)
-                    HookRuntime.event(TAG, video.lastGeometry)
-                }
-                val result = chain.proceed(args)
-                if (cell != null) autoCrop?.bind(cell, contentKey)
-                result
-            } else chain.proceed()
-        }
+        HookRuntime.dependent("ImmersiveFullScreenHook", VideoDisplayRuntime.FEATURE)
+        HookRuntime.install(VideoDisplayRuntime.FEATURE) { VideoDisplayRuntime.install(module, classLoader, feed) }
 
         module.trackHook("ImmersiveFullScreenHook", layout.screenConstructor).intercept { chain ->
             if (enabled()) {

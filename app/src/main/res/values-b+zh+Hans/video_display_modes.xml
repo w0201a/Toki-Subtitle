@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="video_fit_contain">完整显示</string>
+    <string name="video_fit_width">适应宽度</string>
+    <string name="video_fit_height">适应高度</string>
+    <string name="video_display_runtime_hint">沉浸布局及视频适配已安装后，切换模式/缩放会重算当前已测量视频，无需重开 TikTok；沉浸总开关本身仍需重启宿主。未测量、隐藏、重绑或未适配视图等待原生布局；此项不改变直播或图文页。</string>
+    <string name="video_fit_center_hint">在沉浸区域内使用宿主原始视频适配结果，撤销 Toki 的尺寸覆盖，不叠加上一模式缩放。</string>
+    <string name="video_fit_smart_hint">保持比例：仅对裁切量在既有阈值内的合适竖屏视频铺满，其余完整显示。</string>
+    <string name="video_fit_fill_hint">保持比例铺满已测量视口，可能裁掉画面边缘；额外放大与确认黑边裁切只在此模式生效。</string>
+    <string name="video_fit_contain_hint">保持比例，让整个画面落在已测量视口内；可能左右或上下留边，不主动裁切。</string>
+    <string name="video_fit_width_hint">按视口宽度等比缩放；较高视频可能裁掉上下，较短视频上下留边。</string>
+    <string name="video_fit_height_hint">按视口高度等比缩放；较宽视频可能裁掉左右，较窄视频左右留边。</string>
+    <string name="video_display_save_failed">视频设置保存失败，请检查配置连接；本次修改未确认生效。</string>
+</resources>

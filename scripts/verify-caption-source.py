@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 89' in gradle and 'versionName = "2.0.69"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.69-debug / 89")
+check('versionCode = 90' in gradle and 'versionName = "2.0.70"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.70-debug / 90")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -322,6 +322,29 @@ check(progress_hook.index('translator.playbackProgress') < progress_hook.index('
 selection_hook = subtitle_feature.split('Establish the playback pass before native selection', 1)[1].split('val rootField', 1)[0]
 check(selection_hook.index('selectedPlayback(instance)') < selection_hook.index('chain.proceed()') and 'translator.selectVideo(id, instance)' in subtitle_feature, 'selection ownership is established before native first-frame emission and rechecked after the native call')
 
+mode_catalog = (JAVA / 'model/VideoFitMode.kt').read_text(encoding='utf-8')
+mode_geometry = (JAVA / 'hook/VideoDisplayGeometry.kt').read_text(encoding='utf-8')
+mode_runtime = (JAVA / 'hook/VideoDisplayRuntime.kt').read_text(encoding='utf-8')
+mode_bindings = (JAVA / 'hook/VideoLayoutBindings.kt').read_text(encoding='utf-8')
+mode_contract = (JAVA / 'hook/SmartVideoLayout.kt').read_text(encoding='utf-8')
+immersive = (JAVA / 'hook/ImmersiveFullScreenHook.kt').read_text(encoding='utf-8')
+mode_ui = (JAVA / 'ui/screen/VideoDisplayCard.kt').read_text(encoding='utf-8')
+check(all('"' + key + '"' in mode_catalog for key in ('center', 'smart', 'fill', 'contain', 'fit_width', 'fit_height')) and 'model.VideoFitMode.keys' in schema, 'all six stable video modes share settings validation keys')
+check('VideoFitMode.CONTAIN' in mode_geometry and 'VideoFitMode.WIDTH' in mode_geometry and 'VideoFitMode.HEIGHT' in mode_geometry and 'VideoFillGeometry.calculate' in mode_geometry, 'contain/width/height geometry is real and old smart/fill computation remains reused')
+check('mode == VideoFitMode.CENTER) return original' in mode_contract and 'VideoDisplayGeometry.calculate' in mode_contract and 'operatorConstructor.newInstance' in mode_contract, 'selected mode produces the host result type and center returns the exact original object')
+check('"ImmersiveFullScreenHook" to setOf("immersive_full_screen")' in plan and '"ImmersiveFullScreenHook" to setOf("immersive_full_screen", "video_fit_mode")' not in plan, 'video mode itself is no longer startup-frozen while the immersive window master switch still is')
+check('HookRuntime.dependent("ImmersiveFullScreenHook", VideoDisplayRuntime.FEATURE)' in immersive and 'HookRuntime.install(VideoDisplayRuntime.FEATURE)' in immersive, 'optional video geometry runtime is prepared even in center mode and owned separately from legacy window patches')
+check('val original = bindings.original(owner, chain.args[0], reason)' in mode_runtime and 'video.replace(original' in mode_runtime and 'if (!closed && !replaying)' in mode_bindings, 'replay stores only native originals and does not accumulate its own previously transformed output')
+check('main.removeCallbacks(refresh); main.post(refresh)' in mode_bindings and 'root.getGlobalVisibleRect(Rect())' in mode_bindings and 'bindings[owner] === binding' in mode_bindings, 'configuration/layout replay is coalesced and limited to measured attached visible current roots')
+check('binding.outputs.any { it.get() === value }' in mode_bindings and 'bindings.transformed(owner, args[0])' in mode_runtime, 'recent module-output echoes from host caches resolve back to the native baseline rather than compounding scale')
+check('bindings.invalidate(chain.thisObject)' in mode_runtime and 'bindings.forget(chain.thisObject)' in mode_runtime and 'binding.original = null' in mode_bindings, 'data rebinding, detach and release invalidate previous-video layout captures')
+check('crop.configure(false)' in mode_runtime and 'mode != VideoFitMode.FILL' in mode_runtime and 'crop::unbind' in mode_runtime, 'leaving fill mode or changing geometry restores prior auto-crop transforms instead of stacking them')
+check('HookRuntime.subscribe(FEATURE)' in mode_runtime and 'bindings.requestRefresh()' in mode_runtime and 'main.post { restore() }' in mode_runtime, 'runtime settings and disposal reapply or release tracked layout resources on the UI thread')
+check('VideoFitMode.entries' in mode_ui and 'ConfigClient.addStateListener' in mode_ui and 'subscription.close()' in mode_ui and 'if (!editingZoom)' in mode_ui, 'six-mode UI tracks synchronized config changes without resetting an active zoom drag')
+check('reports["ImmersiveVideoModes"]' in (JAVA / 'ui/screen/HookStatusModel.kt').read_text(encoding='utf-8') and '|| videoIssue' in (JAVA / 'ui/screen/HookStatusModel.kt').read_text(encoding='utf-8'), 'a failed optional video-mode adapter is surfaced in the parent user-visible feature status')
+refs = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', mode_ui))
+check(refs <= base_names, 'video display mode labels, descriptions and errors exist in default resources')
+
 for relative in ('hook/TranslationNetworkPolicy.kt', 'ui/screen/LocalTranslationSection.kt'):
     references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
     check(references <= base_names, relative + ' local-only strings exist')
@@ -407,6 +430,8 @@ lexical_files = [
     'hook/CommentPageCodeGate.kt', 'hook/HostCommentPageNetwork.kt', 'hook/CommentPageMerge.kt',
     'hook/CommentSnapshotCodec.kt', 'hook/CommentSnapshotStore.kt', 'hook/HostCommentReplyNetwork.kt', 'hook/CommentReplyMerge.kt',
     'hook/OfflineCommentEntryContract.kt', 'hook/OfflineCommentEntryPolicy.kt', 'hook/OfflineCommentEntryCodeGate.kt', 'hook/CaptionPlaybackClock.kt',
+    'model/VideoFitMode.kt', 'hook/VideoDisplayGeometry.kt', 'hook/VideoDisplayRuntime.kt', 'hook/VideoLayoutBindings.kt',
+    'hook/SmartVideoLayout.kt', 'hook/VideoAutoCrop.kt', 'hook/ImmersiveFullScreenHook.kt', 'ui/screen/VideoDisplayCard.kt', 'ui/screen/HookStatusModel.kt',
 ]
 for relative in lexical_files:
     kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8'))
@@ -428,6 +453,7 @@ for relative in (
     'hook/CommentPageMergeTest.kt', 'hook/CommentSnapshotCodecTest.kt', 'hook/CommentSnapshotStoreTest.kt',
     'hook/CommentReplyMergeTest.kt', 'hook/CommentReplyCursorCodecTest.kt', 'hook/CommentReplyAdapterTest.kt', 'hook/OfflineCommentEntryPolicyTest.kt',
     'hook/CaptionPlaybackClockTest.kt', 'hook/SubtitleReplayRecoveryTest.kt',
+    'hook/VideoDisplayModesTest.kt', 'hook/VideoLayoutBindingsTest.kt', 'hook/SmartVideoLayoutTest.kt', 'hook/VideoFillGeometryTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

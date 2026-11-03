@@ -30,12 +30,12 @@ class HostFeaturePlanTest {
             }
         }
     }
-    /** 无参数。显示模式在当前会话冻结，旧配置保留居中模式。返回 Unit。Callers: JUnit。 */
-    @Test fun videoFitModeRequiresRestartAndDoesNotEnableLayoutAlone() {
+    /** 模式可以热变更；沉浸窗口总开关仍保留启动契约。 */
+    @Test fun videoFitModeCanChangeInAnInstalledSessionButDoesNotEnableLayoutAlone() {
         val plan = HostFeaturePlan(config("immersive_full_screen" to true))
         val smart = config("immersive_full_screen" to true, "video_fit_mode" to "smart")
-        assertTrue(plan.requiresRestart("ImmersiveFullScreenHook", smart))
-        assertEquals("center", plan.apply(smart).string("video_fit_mode", "center"))
+        assertFalse(plan.requiresRestart("ImmersiveFullScreenHook", smart))
+        assertEquals("smart", plan.apply(smart).string("video_fit_mode", "center"))
         assertTrue(HostFeaturePlan(config("video_fit_mode" to "smart")).features.isEmpty())
         assertEquals("smart", HostFeaturePlan(smart).apply(smart).string("video_fit_mode"))
         val fill = config("immersive_full_screen" to true, "video_fit_mode" to "fill")

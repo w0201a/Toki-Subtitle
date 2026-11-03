@@ -100,7 +100,7 @@ object ConfigSchema {
                 "subtitle_font" -> require(value in io.github.meiyongai.toki.subtitle.model.SubtitleFonts.names)
                 "subtitle_weight" -> require(value in setOf("normal", "bold", "italic", "bold_italic"))
                 "subtitle_color", "subtitle_background" -> require(value.matches(Regex("#[0-9A-Fa-f]{8}")))
-                "video_fit_mode" -> require(value in setOf("center", "smart", "fill")) { "视频显示模式无效" }
+                "video_fit_mode" -> require(value in io.github.meiyongai.toki.subtitle.model.VideoFitMode.keys) { "视频显示模式无效" }
                 "video_fill_zoom_percent" -> require(value.toIntOrNull() in 100..150) { "填充放大比例必须为 100 至 150 的整数" }
                 "target_region" -> require(value.matches(Regex("[A-Za-z]{2}"))) { "国家代码必须为两个英文字母" }
                 "sim_operator_code" -> require(value.matches(Regex("[0-9]{5,6}"))) { "运营商代码必须为五至六位数字" }

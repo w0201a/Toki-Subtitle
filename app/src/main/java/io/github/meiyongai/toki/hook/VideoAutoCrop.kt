@@ -60,6 +60,10 @@ internal class VideoAutoCrop : AutoCloseable {
         }
     }
 
+    fun unbind(root: View) {
+        states.remove(root)?.let { it.task?.let(main::removeCallbacks); it.release() }
+    }
+
     fun bind(root: View, key: String) {
         if (closed || !enabled || states[root]?.key == key) return
         states.remove(root)?.let { it.task?.let(main::removeCallbacks); it.release() }

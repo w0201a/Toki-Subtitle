@@ -319,7 +319,7 @@
     <string name="host_scan_saving_hint" formatted="false">"Please wait."</string>
     <string name="host_scan_done" formatted="false">"Got it"</string>
     <string name="video_fit_center" formatted="false">"Centered"</string>
-    <string name="video_fit_smart" formatted="false">"Fullscreen"</string>
+    <string name="video_fit_smart" formatted="false">"Smart fit"</string>
     <string name="video_fit_fill" formatted="false">"Fill"</string>
     <string name="host_scan_title_partial">"部分功能尚未适配"</string>
     <string name="host_scan_partial_hint">"可用功能已自动启用；未匹配功能已独立隔离，不影响其他功能。请在诊断中查看缺失项。"</string>

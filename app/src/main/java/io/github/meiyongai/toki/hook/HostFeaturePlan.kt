@@ -110,7 +110,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
             "GpsHook" to setOf("gps_spoof_enabled", "gps_follow_region", "target_region", "custom_latitude", "custom_longitude"),
             "PlaybackSpeedHook" to setOf("fixed_speed_enabled", "speed_expand_enabled", "fixed_speed_value", "speed_expand_list"),
             // 当前沉浸修改没有成对恢复全部宿主布局/背景，明确按会话应用。
-            "ImmersiveFullScreenHook" to setOf("immersive_full_screen", "video_fit_mode"),
+            "ImmersiveFullScreenHook" to setOf("immersive_full_screen"),
         )
         private val fixedSpeedSymbols = setOf(HostSymbol.PLAYER_CONTROLLER, HostSymbol.PLAYER_MANAGER, HostSymbol.SPEED_MANAGER)
         private val speedMenuSymbols = setOf(HostSymbol.SPEED_OPTIONS)

@@ -319,7 +319,7 @@
     <string name="host_scan_saving_hint" formatted="false">"请稍候。"</string>
     <string name="host_scan_done" formatted="false">"知道了"</string>
     <string name="video_fit_center" formatted="false">"居中"</string>
-    <string name="video_fit_smart" formatted="false">"全屏沉浸"</string>
+    <string name="video_fit_smart" formatted="false">"智能适配"</string>
     <string name="video_fit_fill" formatted="false">"填充"</string>
     <string name="host_scan_title_partial">"部分功能待适配"</string>
     <string name="host_scan_partial_hint">"已自动启用可用功能。未匹配功能已独立隔离，可在 Toki 功能状态中查看各条通路。"</string>

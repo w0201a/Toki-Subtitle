@@ -7,6 +7,18 @@ import org.junit.Test
 
 /** 验证简明功能列表的状态语义与自动会话选择，不依赖宿主和设备。 */
 class HookStatusModelTest {
+    @Test fun failedVideoModeAdapterIsNotHiddenBehindAReadyImmersiveWindow() {
+        val reports = mapOf(
+            "ImmersiveFullScreenHook" to HookFeatureReport(true, "已注册", 8, appliedEnabled = true),
+            "ImmersiveVideoModes" to HookFeatureReport(state = "注册失败，已撤销", error = "adapter unavailable"))
+        val current = process(reports).features.single { it.definition.id == "ImmersiveFullScreenHook" }
+        assertEquals(HookVisualState.ISSUE, current.state)
+        assertEquals(R.string.status_problem_unavailable, current.problem)
+        assertEquals(8, current.report?.registered)
+        val historical = process(reports - "ImmersiveVideoModes").features.single { it.definition.id == "ImmersiveFullScreenHook" }
+        assertEquals(HookVisualState.NORMAL, historical.state)
+    }
+
     /** 配置通信失败必须显示准备失败，不能伪装成正常关闭。@return Unit。Callers: JUnit。 */
     @Test fun configurationFailureIsVisibleIndependentlyOfScan() {
         val current = HookProcessReport("com.zhiliaoapp.musically", 1, mapOf(

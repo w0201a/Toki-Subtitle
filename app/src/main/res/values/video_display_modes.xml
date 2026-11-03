@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="video_fit_contain">Show complete frame</string>
+    <string name="video_fit_width">Fit width</string>
+    <string name="video_fit_height">Fit height</string>
+    <string name="video_display_runtime_hint">Once immersive layout and its video adapter are installed, mode/zoom changes reapply the current measured video without reopening TikTok. The immersive master switch itself still requires a host restart. Unmeasured, hidden, rebound or unsupported views wait for native layout; this does not change live or photo pages.</string>
+    <string name="video_fit_center_hint">Use the original host video-adaptation result within the immersive area; removes Toki geometry overrides without accumulating scale.</string>
+    <string name="video_fit_smart_hint">Preserve aspect ratio. Cover suitable portrait frames only when cropping stays within the existing threshold; otherwise show the complete frame.</string>
+    <string name="video_fit_fill_hint">Preserve aspect ratio and cover the measured viewport. Edges can be cropped; extra zoom and optional confirmed black-border cropping apply only in this mode.</string>
+    <string name="video_fit_contain_hint">Preserve the entire frame inside the measured viewport. Side or top/bottom space can remain; no intentional cropping.</string>
+    <string name="video_fit_width_hint">Scale proportionally to viewport width. Tall videos may lose top/bottom edges; short videos leave vertical space.</string>
+    <string name="video_fit_height_hint">Scale proportionally to viewport height. Wide videos may lose side edges; narrow videos leave horizontal space.</string>
+    <string name="video_display_save_failed">Could not save this video setting. Check the configuration connection; changes are not confirmed.</string>
+</resources>

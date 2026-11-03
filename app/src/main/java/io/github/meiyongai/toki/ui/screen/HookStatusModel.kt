@@ -84,13 +84,15 @@ internal enum class HookVisualState(@param:StringRes val label: Int) {
 internal data class HookFeatureStatus(
     val definition: HookFeatureDefinition,
     val report: HookFeatureReport?,
-    private val speedMenu: HookFeatureReport? = null
+    private val speedMenu: HookFeatureReport? = null,
+    private val videoModes: HookFeatureReport? = null
 ) {
     private val menuEnabled = definition.id == "PlaybackSpeedHook" && speedMenu?.enabled == true
     private val menuIssue = definition.id == "PlaybackSpeedHook" && (speedMenu?.hasError == true ||
         (menuEnabled && speedMenu?.state == "倍速菜单数据源未唯一解析；固定倍速独立注册"))
+    private val videoIssue = definition.id == "ImmersiveFullScreenHook" && videoModes?.hasError == true
     val state = when {
-        report?.hasError == true || menuIssue -> HookVisualState.ISSUE
+        report?.hasError == true || menuIssue || videoIssue -> HookVisualState.ISSUE
         report?.restartRequired == true || speedMenu?.restartRequired == true -> HookVisualState.PENDING
         report?.enabled == null -> HookVisualState.PENDING
         report?.appliedEnabled == false -> HookVisualState.DISABLED
@@ -105,6 +107,7 @@ internal data class HookFeatureStatus(
         report?.enabled == false -> R.string.status_problem_disabled
         report?.hasError == true -> if (report.state == "注册失败，已撤销") R.string.status_problem_unavailable else R.string.status_problem_runtime
         menuIssue -> R.string.status_problem_speed_menu
+        videoIssue -> if (videoModes?.state == "注册失败，已撤销") R.string.status_problem_unavailable else R.string.status_problem_runtime
         else -> null
     }
 }
@@ -123,7 +126,8 @@ internal data class HookProcessReport(
 ) {
     val isMain = ':' !in process
     val features = HookStatusCatalog.features.map {
-        HookFeatureStatus(it, reports[it.id], if (it.id == "PlaybackSpeedHook") reports["SpeedOptions"] else null)
+        HookFeatureStatus(it, reports[it.id], if (it.id == "PlaybackSpeedHook") reports["SpeedOptions"] else null,
+            if (it.id == "ImmersiveFullScreenHook") reports["ImmersiveVideoModes"] else null)
     }
     val preparationFailed = reports["HostSymbols"]?.hasError == true || reports["ConfigClient"]?.hasError == true
     @get:StringRes

@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.69-debug
+# Source-only development status — 2.0.70-debug
 
-Updated: 2026-11-04. Source version: **2.0.69-debug / 89**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.70-debug / 90**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -33,6 +33,15 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.70 — six video geometry modes and live mode reapplication
+
+- Six shared persisted keys: original/center, smart, fill, contain, fit_width and fit_height. New modes have real aspect-preserving geometry through the existing host result contract. Containment stays inside the viewport; width/height matching may crop the other axis and the UI states that. Legacy smart/fill algorithms and old keys retain their meaning; invalid/unmeasured/overflow inputs keep native results.
+- Only the video-mode key was removed from startup freezing. Inside an already-installed immersive session, mode/fill zoom/auto-border settings can replay a current measured layout. The immersive window/master switch still requires restart because its existing system-bar/reserved-area edits do not yet have fully paired restoration. No all-feature hot-restart claim is made.
+- A separately owned child geometry adapter is prepared even when starting in center mode. It tracks at most 24 weak component/view bindings, the latest host original and eight weak identities of recent module outputs. Configuration/viewport notifications coalesce to a UI-thread reapply for attached measured actually visible roots. Center returns the original object; cached echoes of recent module outputs resolve to that original instead of compounding scale.
+- Rebind invalidates the previous video's capture; detach/release/destroy stop stale updates and release listeners. Leaving fill or changing its geometry restores old black-border transforms before reapplication. No live/photo modes or arbitrary stretch/rotation are introduced.
+- Settings subscribe to config changes, describe each crop/letterbox tradeoff, preserve in-progress zoom drags and show write failures. Labels distinguish smart fit from the immersive master toggle. Unrecorded/unmeasured/unsupported current pages may still wait for the next native layout; reentry/rotation/surface variants remain unverified.
+- 342 source-only/whitespace checks passed; five original-APK layout/lifecycle signatures and result types were checked. New geometry/config/original-object/replay/echo/rebind/visibility regression sources are NOT executed. No compilation, JUnit/Robolectric, rendered pixel/device checks or APK build was performed.
 
 ## Added in 2.0.69 — subtitle replay/cancel/shared-result source fixes
 
@@ -155,13 +164,13 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 | Author country in videos opened from a profile | New primary-author TextView binding with span preservation, current identity checks and restoration is connected from actual 47.6.3 contracts. Profile/detail variants and runtime behavior remain unverified. |
 | Templates/effects | Existing template-button mapping wired; template implementation presence confirmed in the APK; effect anchors, variants and runtime behavior still need verification. |
 | Individually selectable share actions | 39 named controls, exact custom keys and reversible action/channel adapter filtering now wired to locally inspected 47.6.3 contracts. Runtime, alternative panels and some unnamed actions still need verification; not a whole-panel hide substitute. |
-| Settings synchronization and no-restart use | Late registration and per-key conflict handling added; bidirectional manager/host synchronization and all current-page rebinding remain incomplete. |
+| Settings synchronization and no-restart use | Late registration/per-key conflict handling and current video-mode replay are in source. Bidirectional manager/host synchronization, all current-page rebinding and live immersive-window install/restoration remain incomplete. |
 | Faster/reliable subtitle translation and replay | Cache/track/write paths, observed-rewind ownership, cancelled-request recovery and shared-result retrieval are wired in source. Compilation, real replay/seek/paused/language behavior and measured latency remain unverified. |
 | Offline subtitles and translation persistence | Persistent caches, optional local-only and default hybrid online eligibility/reconnect handling are in source. No local engine; host offline player/time identity and full local UI still need integration. |
 | Offline long-press, export/download and comments | Selected-cell local menu, indexed complete-MP4 export and current-account cached-comment viewer are wired in source. Real cache/gesture/device validation, split-format/API-28 export, additional native comment-entry/layout/host variants and service/device behavior remain incomplete. |
 | Sticker format/source selection | Source-category selection and real static PNG/JPEG/WebP conversion now wired in source; original bytes retained. Runtime, pixels and API 28–29 coverage unverified. Animated re-encoding is not implemented. |
 | Hold-to-speed, downward-slide lock/unlock | Owned native downward-mode path, default-off setting and cancellation lifecycle wired from 47.6.3 contracts. Real gestures, fixed-speed interaction, layout coverage and native-eligibility limitations remain unverified. |
-| More video display modes | Existing center/smart/fill retained; additional modes incomplete. |
+| More video display modes | Six aspect-preserving modes and current-layout reapply inside an installed immersive session are wired. Window master restart, unsupported surfaces/layouts, native lifecycle recursion and actual pixels/device behavior remain unverified. |
 | Search/inbox/live internal cleanup | Dedicated bottom-of-video search suggestions toggle added to existing targets. This is not search-page/inbox/live internal cleanup; more bindings and runtime checks remain. |
 | All comments translatable and translation switching | Ordinary-comment fallback plus cached-comment per-row modes, optional explicit online translation and private persistent results are in source. Native bulk/cell coverage, special comments, deeper native interaction, local engines and all device/service behavior remain incomplete/unverified. |
 | More subtitle styles | New renderer/settings/test sources present; compilation, pixel checks, device behavior and full localization unverified. |
