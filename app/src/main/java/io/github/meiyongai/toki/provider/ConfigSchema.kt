@@ -42,7 +42,7 @@ object ConfigSchema {
     )
     val booleanDefaults: Map<String, Boolean> = featureSwitches.values.flatten().associateWith { false } +
         mapOf("subtitle_drag_enabled" to true, "subtitle_lock_x" to false, "subtitle_lock_y" to false,
-            "subtitle_debug_overlay_enabled" to false, "video_auto_crop_enabled" to true) +
+            "subtitle_debug_overlay_enabled" to false, "subtitle_local_only_enabled" to false, "video_auto_crop_enabled" to true) +
         listOf("language_follow_region", "timezone_follow_region", "gps_follow_region").associateWith { true }
     private val rangePrefixes = listOf("feed_filter_views", "feed_filter_likes", "feed_filter_duration")
     private val stringKeys = setOf("target_region", "sim_operator_code", "sim_operator_name",

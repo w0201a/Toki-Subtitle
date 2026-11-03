@@ -268,11 +268,17 @@ internal object SubtitleFeature {
         }
         var cacheClearRevision = ConfigClient.getString("subtitle_cache_clear_revision", "0")
         var cacheRenderMode = ConfigClient.getString("subtitle_render_mode", "native")
+        var localOnly = ConfigClient.getBoolean(TranslationNetworkPolicy.KEY)
         HookRuntime.subscribe(owner) { snapshot ->
             if (snapshot == null) {
                 translator?.cancel()
                 CaptionDebugOverlay.hide()
                 return@subscribe
+            }
+            val nextLocalOnly = snapshot.boolean(TranslationNetworkPolicy.KEY)
+            if (nextLocalOnly != localOnly) {
+                localOnly = nextLocalOnly
+                translator?.cancel() // Cancel current remote subscriptions and HTTP reads on mode changes.
             }
             CaptionDebugOverlay.enabled = snapshot.boolean("subtitle_debug_overlay_enabled")
             if (!CaptionDebugOverlay.enabled) CaptionDebugOverlay.clear()

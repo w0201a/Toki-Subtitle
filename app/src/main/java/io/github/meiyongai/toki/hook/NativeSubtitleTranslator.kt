@@ -14,9 +14,10 @@ internal class NativeSubtitleTranslator(
     private val enabled: (String) -> Boolean,
     private val translate: (String, (String?) -> Unit) -> AutoCloseable,
     private val report: (String) -> Unit = {},
+    private val access: () -> LocalOnlyRequest = TranslationNetworkPolicy::capture,
 ) : AutoCloseable {
     private class Job(val text: String, var current: () -> Boolean, var deliver: (String) -> Unit,
-        var foreground: Boolean = true, val video: String = "", val trackIdentity: String = "") {
+        var foreground: Boolean = true, val video: String = "", val trackIdentity: String = "", val remote: LocalOnlyRequest) {
         val key = Triple(video, trackIdentity, CaptionTimeline.normalize(text))
         var subscription: AutoCloseable? = null
         var retries = 0
@@ -125,6 +126,15 @@ internal class NativeSubtitleTranslator(
         request("", text, current, deliver)
     }
 
+    private val localMissVideos = linkedSetOf<String>()
+    private fun localMiss(video: String) {
+        report("local translation unavailable; original retained; no local engine")
+        if (localMissVideos.add(video)) {
+            while (localMissVideos.size > 100) localMissVideos.remove(localMissVideos.first())
+            TranslationNetworkPolicy.showMissingTranslation()
+        }
+    }
+
     fun request(videoId: String, text: String, current: () -> Boolean, deliver: (String) -> Unit) {
         if (closed || text.length !in 1..1000 || !text.any(Char::isLetter) || !current()) return
         val sourceTrack = trackIdentity(videoId)
@@ -137,6 +147,8 @@ internal class NativeSubtitleTranslator(
             deliver(it)
             return
         }
+        val remote = access()
+        if (!remote.permitsNetwork()) { localMiss(videoId); return }
         // 先按正文复用，再检查旧代次；同句重现不能取消已经发出的同一请求。
         listOfNotNull(active, background).firstOrNull { it.key == key }?.let {
             it.current = current
@@ -148,7 +160,7 @@ internal class NativeSubtitleTranslator(
         }
         if (active?.current?.invoke() == false) releaseActive()
         // 后来的当前帧替换尚未发送的旧帧，不积累视频/字幕队列。
-        pending = Job(text, current, deliver, video = videoId, trackIdentity = sourceTrack)
+        pending = Job(text, current, deliver, video = videoId, trackIdentity = sourceTrack, remote = remote)
         main.removeCallbacks(pump)
         // 当前句立即排程；同一主线程周期内仍合并为最新句。
         main.post(pump)
@@ -165,12 +177,14 @@ internal class NativeSubtitleTranslator(
 
     internal fun prefetchVideos(texts: List<CaptionTranslationInput>, current: () -> Boolean) {
         ahead.clear()
+        val remote = access()
+        if (!remote.permitsNetwork()) return
         texts.forEach { cache.selectTrack(it.video, trackIdentity(it.video)) }
         val allowed = texts.map { it.video }.distinct().associateWith { it.isBlank() || isEnabled(it) }
         texts.asSequence().filter { it.text.length in 1..1000 && it.text.any(Char::isLetter) &&
                 allowed[it.video] == true }
             .map { Job(it.text, current, {}, foreground = false, video = it.video,
-                trackIdentity = trackIdentity(it.video)) }
+                trackIdentity = trackIdentity(it.video), remote = remote) }
             .filter { cache[it.video, it.text, it.trackIdentity] == null && it.key != active?.key && it.key != background?.key }
             .distinctBy { it.key }.forEach { ahead += it }
         main.removeCallbacks(pump)
@@ -191,6 +205,11 @@ internal class NativeSubtitleTranslator(
         cache[job.video, job.text, job.trackIdentity]?.let {
             if (foreground) pending = null
             if (job.current()) job.deliver(it)
+            main.post(pump)
+            return
+        }
+        if (!job.remote.permitsNetwork()) {
+            if (foreground) { pending = null; localMiss(job.video) }
             main.post(pump)
             return
         }
@@ -226,7 +245,8 @@ internal class NativeSubtitleTranslator(
         job.timeout?.let(main::removeCallbacks)
         if (active === job) active = null else background = null
         try { job.subscription?.close() } catch (_: Exception) { }
-        val translated = result?.trim()?.takeIf { it.isNotEmpty() && it.length <= 4000 }
+        val remoteAllowed = job.remote.permitsNetwork()
+        val translated = result?.trim()?.takeIf { remoteAllowed && it.isNotEmpty() && it.length <= 4000 }
         if (translated != null) {
             failures = 0
             val trackCurrent = trackIdentity(job.video) == job.trackIdentity
@@ -238,6 +258,8 @@ internal class NativeSubtitleTranslator(
             report("success lane=${if (job.foreground) "current" else "prefetch"} chars=${translated.length} current=$current trackCurrent=$trackCurrent cachedVideos=${cache.size} elapsedMs=${SystemClock.uptimeMillis() - job.startedAt}")
             updateDiagnostics()
             if (current) job.deliver(translated)
+        } else if (!remoteAllowed) {
+            report("remote operation revoked; original retained; no retry")
         } else {
             failures = (failures + 1).coerceAtMost(5)
             val delay = (1000L shl (failures - 1)).coerceAtMost(15000L)
@@ -360,7 +382,7 @@ internal class NativeSubtitleTranslator(
         /** 独立请求通道，供评论投票使用；不进入视频字幕的排程或预读队列。 */
         fun transport(loader: ClassLoader): (String, (String?) -> Unit) -> AutoCloseable {
             val facade = loader.adaptiveClass("X.03hV")
-            val service = facade.adaptiveDeclaredField("LIZIZ").get(null)
+            val serviceField = facade.adaptiveDeclaredField("LIZIZ")
             val method = facade.adaptiveDeclaredMethod("LJIIJ", String::class.java)
             val consumer = loader.adaptiveClass("X.02u8")
             check(consumer.isInterface && consumer.adaptiveMethod("accept", Any::class.java).returnType == Void.TYPE)
@@ -380,10 +402,17 @@ internal class NativeSubtitleTranslator(
                     else -> null
                 }
             }
-            return { text, complete ->
+            return request@{ text, complete ->
+                val remote = TranslationNetworkPolicy.capture()
+                if (!remote.permitsNetwork()) {
+                    HookRuntime.event("NativeSubtitleTranslation", "local-only: host transport not invoked")
+                    complete(null)
+                    return@request AutoCloseable { }
+                }
+                val service = serviceField.get(null)
                 val observable = checkNotNull(method.invoke(service, text))
                 val subscription = subscribe.invoke(observable,
-                    callback { value -> complete(if (result.isInstance(value)) content.get(value) as? String else null) },
+                    callback { value -> complete(if (remote.permitsNetwork() && result.isInstance(value)) content.get(value) as? String else null) },
                     callback { error ->
                         HookRuntime.event("NativeSubtitleTranslation", "host-error type=${error?.javaClass?.simpleName}")
                         complete(null)

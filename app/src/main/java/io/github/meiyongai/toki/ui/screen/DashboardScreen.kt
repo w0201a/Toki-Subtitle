@@ -698,6 +698,7 @@ fun DashboardScreen(
             )
         }
 
+        LocalTranslationSection()
         ManualCommentTranslationSection()
         SubtitleSettings()
 

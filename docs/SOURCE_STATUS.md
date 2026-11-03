@@ -1,12 +1,12 @@
-# Source-only development status — 2.0.60-debug
+# Source-only development status — 2.0.61-debug
 
-Updated: 2026-11-03. Source version: **2.0.60-debug / 80**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-03. Source version: **2.0.61-debug / 81**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
 ## Current user-directed ordering
 
-The user supplied the full offline acceptance requirements on 2026-11-03. Offline-video work remains the final integrated feature group, but is **no longer awaiting clarification**. Finish the current online-comment source batch first; then implement and verify the separately isolated offline path. Existing code is retained. No APK build is authorized.
+The user supplied the full offline acceptance requirements on 2026-11-03. Offline-video work remains the final integrated feature group, but is **no longer awaiting clarification**. The online-comment batch is committed; the local-only execution-boundary preparation is now in source. Full offline page integration remains pending. Existing code is retained. No APK build is authorized.
 
 ## Offline acceptance contract (received 2026-11-03; NOT implemented/verified)
 
@@ -19,9 +19,9 @@ This contract supersedes any earlier cache-only interpretation. It is not satisf
 | Comments | Open cached comments with author information/text and scroll cached pages; distinguish empty, not cached and partially cached pages. | Persistent comment snapshots and offline UI not integrated. |
 | Comment translation | Single-comment original/translation/bilingual toggle in the comment area, using only cached output or a ready local engine. | Current manual viewer is online; no bundled local model. |
 | Captions | Read original cues, synchronize to playback/seek/replay, show/hide and switch original/translation/bilingual. | Cached tracks alone do not provide offline page/player integration. |
-| Caption translation | Read saved translations or run a ready local engine; optional local speech recognition only if actually available. | Cache-miss paths can still request remote data; no bundled local translation/ASR model. |
+| Caption translation | Read saved translations or run a ready local engine; optional local speech recognition only if actually available. | Module translation/caption cache misses are denied in local-only mode; no bundled local translation/ASR model, and offline page integration is missing. |
 | Persistence | Reopening the app retains complete local data/translations and per-video identity without applying stale results to another video. | Caption archives exist; full offline video/comment association is missing. |
-| Strict execution | Offline routes must have no remote translation or download fallback, even if Wi-Fi returns mid-operation. Missing data/model/permissions/capability get explicit states. | A unified local-only execution boundary and call-site audit are required. |
+| Strict execution | Offline routes must have no remote translation or download fallback, even if Wi-Fi returns mid-operation. Missing data/model/permissions/capability get explicit states. | Module-owned shared translation/caption fetches have a local-only boundary in source. Host offline-entry classification, native remote operations and the remaining call-site/runtime audit are incomplete. |
 
 Required later runtime checks: airplane-mode cold reopen, no available network, network returning during an offline operation, empty/partial caches, missing models, seek/replay/switching videos, interrupted export, comment pagination/toggles, and packet inspection proving no offline-path requests. No such runtime test has been run. Ordinary TikTok background traffic cannot be treated as proof of this module's behavior; the isolated call path must also be checked.
 
@@ -33,6 +33,14 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.61
+
+- A default-off **Toki translations and subtitle files: local data only** control persists through the existing configuration channel. Cached caption files and translations remain readable; misses do not gain remote fallback. Unknown/unready configuration, missing connectivity permissions/capabilities and disconnected/unvalidated networks deny module-owned remote translation/caption requests. No remote connectivity probe is used.
+- Operation tickets are captured before asynchronous caption work, manual-comment sessions and subtitle queues. A ticket begun local-only or subsequently observed denied cannot become remote when Wi-Fi returns. Foreground subtitle tasks and prefetch batches guard dispatch; caption HTTP guards opening, redirects and reads; the shared translation transport guards host-service invocation.
+- Revoked subtitle results are not displayed, cached or retried. Mode changes cancel subtitle subscriptions and HTTP reads. Missing local translations/engines or subtitle files get foreground notices, with source text retained. Re-entering the video is still advised after changing mode.
+- Scope is deliberately narrow: **not a TikTok firewall or complete offline feature**. TikTok-native translation/background traffic, stickers/native downloads, offline video classification while connected, long-press video menus, validated local export, persistent offline comments and a local translation/ASR engine are NOT implemented by this batch. Enable the explicit local-only control when using an offline entry while the device still has a validated network.
+- Added policy and subtitle cache-only/revocation regression test sources; existing subtitle fixtures explicitly opt into fake online transports. Source-only checks are not runtime privacy/compatibility certification. No compilation, JUnit/Robolectric, APK build, device or packet inspection was run.
 
 ## Added in 2.0.60
 
@@ -77,13 +85,13 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 | Individually selectable share actions | 39 named controls, exact custom keys and reversible action/channel adapter filtering now wired to locally inspected 47.6.3 contracts. Runtime, alternative panels and some unnamed actions still need verification; not a whole-panel hide substitute. |
 | Settings synchronization and no-restart use | Late registration and per-key conflict handling added; bidirectional manager/host synchronization and all current-page rebinding remain incomplete. |
 | Faster/reliable subtitle translation and replay | Cache, track-ownership and write-path changes in source; scheduling, replay/seek and latency need runtime verification. |
-| Offline subtitles and translation persistence | Cached source/translation path added; uncached content needs network, and host playback must still identify the track. |
+| Offline subtitles and translation persistence | Cached source/translation paths and a local-only remote-denial control are in source. No local engine; host offline player/track identity and full local UI still need integration. |
 | Offline long-press, export/download and comments | Detailed acceptance requirements received on 2026-11-03; scheduled as the final integrated group. Still not implemented/verified end-to-end; source models and local-byte export need integration. |
 | Sticker format/source selection | Source-category selection and real static PNG/JPEG/WebP conversion now wired in source; original bytes retained. Runtime, pixels and API 28–29 coverage unverified. Animated re-encoding is not implemented. |
 | Hold-to-speed, downward-slide lock/unlock | Owned native downward-mode path, default-off setting and cancellation lifecycle wired from 47.6.3 contracts. Real gestures, fixed-speed interaction, layout coverage and native-eligibility limitations remain unverified. |
 | More video display modes | Existing center/smart/fill retained; additional modes incomplete. |
 | Search/inbox/live internal cleanup | Dedicated bottom-of-video search suggestions toggle added to existing targets. This is not search-page/inbox/live internal cleanup; more bindings and runtime checks remain. |
-| All comments translatable and translation switching | Default-off ordinary-comment manual fallback viewer with source/translation/bilingual and per-segment retry now connected. Native bulk/cell coverage, special comments and service language quality remain incomplete/unverified. New offline caches deferred to user details. |
+| All comments translatable and translation switching | Default-off ordinary-comment manual fallback viewer with source/translation/bilingual and per-segment retry now connected. Native bulk/cell coverage, special comments and service language quality remain incomplete/unverified. Offline comment snapshots and local-engine integration are pending under the received acceptance contract. |
 | More subtitle styles | New renderer/settings/test sources present; compilation, pixel checks, device behavior and full localization unverified. |
 
 ## Verification performed

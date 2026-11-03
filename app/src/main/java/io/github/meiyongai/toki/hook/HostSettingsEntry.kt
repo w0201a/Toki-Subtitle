@@ -39,6 +39,18 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
         app.registerActivityLifecycleCallbacks(this)
     }
     fun openSubtitle(activity: Activity) = open(activity, subtitleOnly = true)
+    internal fun showMessage(message: Int) {
+        fun show() {
+            val activity = pages.keys.firstOrNull { !it.isFinishing && !it.isDestroyed } ?: return
+            try {
+                val context = localizedContext(activity)
+                android.widget.Toast.makeText(context, context.getString(message), android.widget.Toast.LENGTH_LONG).show()
+            } catch (error: Exception) {
+                HookRuntime.event("HostSettings", "notice unavailable type=" + error.javaClass.simpleName)
+            }
+        }
+        if (Looper.myLooper() == main.looper) show() else main.post { show() }
+    }
     internal fun localizedContext(activity: Activity): android.content.Context {
         val context = resources.createActivityContext(activity)
         return io.github.meiyongai.toki.subtitle.util.LocaleHelper.wrapContext(context,

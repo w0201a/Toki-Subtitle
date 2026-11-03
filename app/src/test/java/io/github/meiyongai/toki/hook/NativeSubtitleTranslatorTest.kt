@@ -25,7 +25,7 @@ class NativeSubtitleTranslatorTest {
     private class Host {
         val requests = mutableListOf<Pair<String, (String?) -> Unit>>()
         var disposed = 0
-        val translator = NativeSubtitleTranslator({ true }, { text, complete ->
+        val translator = fakeOnlineTranslator({ true }, { text, complete ->
             requests += text to complete
             AutoCloseable { disposed++ }
         })
@@ -209,7 +209,7 @@ class NativeSubtitleTranslatorTest {
 
     @Test fun chineseTrackWinsAndDisablingTranslationKeepsOriginalChoice() {
         var enabled = true
-        val translator = NativeSubtitleTranslator({ enabled }, { _, _ -> AutoCloseable {} })
+        val translator = fakeOnlineTranslator({ enabled }, { _, _ -> AutoCloseable {} })
         NativeSubtitleTranslator.noteTrack("test-chinese", "zh-Hans")
         NativeSubtitleTranslator.noteTrack("test-english", "en")
         assertFalse(translator.isEnabled("test-chinese"))

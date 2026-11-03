@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="local_translation_section">Offline preparation: translation network control</string>
+    <string name="local_translation_enable">Toki translations and subtitle files: local data only</string>
+    <string name="local_translation_summary">Use saved subtitle tracks/translations without remote fallback. Disconnected or unknown connectivity also denies remote requests. No local translation model is bundled: missing translations retain the original with a notice. This controls Toki’s translation transport and caption fetches only; it does not block TikTok’s own traffic or implement offline video export/comments. Re-enter the video after changing this option.</string>
+    <string name="local_translation_unavailable">Local-only translation: no saved translation or ready local engine. The original text is retained; no remote request was started for this missing result.</string>
+    <string name="local_caption_unavailable">Local-only captions: no saved subtitle file for this track. No remote file was fetched.</string>
+</resources>

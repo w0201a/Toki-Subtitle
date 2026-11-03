@@ -39,7 +39,7 @@ internal object ManualCommentTranslateHook {
             if (Looper.myLooper() == main.looper) closeDialogs() else main.post { closeDialogs() }
         }
         HookRuntime.subscribe(FEATURE) { snapshot ->
-            if (snapshot?.boolean(KEY) != true) closeDialogs()
+            if (snapshot == null || !snapshot.boolean(KEY) || snapshot.boolean(TranslationNetworkPolicy.KEY)) closeDialogs()
             if (snapshot != null) HookRuntime.appliedConfiguration(FEATURE, snapshot)
         }
         module.trackHook(FEATURE, Activity::class.java.getDeclaredMethod("onPause"), requiresConfiguration = false).intercept { chain ->
@@ -72,7 +72,16 @@ internal object ManualCommentTranslateHook {
                     if (index == 1) nativeMenu() else if (!activity.isFinishing && !activity.isDestroyed &&
                         ConfigClient.isReady && ConfigClient.getBoolean(KEY)) {
                         dialogs.remove(activity)?.dismiss()
-                        val result = ManualCommentDialog.show(activity, source, transport, ::nativeMenu) { closed ->
+                        val remote = TranslationNetworkPolicy.capture()
+                        if (!remote.permitsNetwork()) {
+                            TranslationNetworkPolicy.showMissingTranslation()
+                            return@setItems
+                        }
+                        val guarded: (String, (String?) -> Unit) -> AutoCloseable = { text, done ->
+                            if (remote.permitsNetwork()) transport(text) { done(if (remote.permitsNetwork()) it else null) }
+                            else { done(null); AutoCloseable { } }
+                        }
+                        val result = ManualCommentDialog.show(activity, source, guarded, ::nativeMenu) { closed ->
                             if (dialogs[activity] === closed) dialogs.remove(activity)
                         }
                         dialogs[activity] = result

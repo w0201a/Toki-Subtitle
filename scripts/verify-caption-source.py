@@ -42,7 +42,7 @@ check("uppercase(java.util.Locale.ROOT)" in regions, "country lookup uses locale
 
 prefetch = (JAVA / "hook/CaptionPrefetch.kt").read_text(encoding="utf-8")
 check("rows.mapValues" not in prefetch and ".take(128).toMap()" in prefetch, "track restore no longer calls mapValues on a List")
-check(prefetch.index("CaptionTimelineDiskCache.read(identity)") < prefetch.index("val body = read(location, generation)"), "timeline archive is checked before network")
+check(prefetch.index("CaptionTimelineDiskCache.read(identity)") < prefetch.index("val body = read(location, generation, remote)"), "timeline archive is checked before network")
 cache = (JAVA / "hook/VideoCaptionCache.kt").read_text(encoding="utf-8")
 restore = cache.split("fun restore(", 1)[1].split("fun diagnostic", 1)[0]
 check("activeTracks[video] = source.track" in restore and "clear()" in restore, "restore resets stale state and restores active track ownership")
@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 80' in gradle and 'versionName = "2.0.60"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.60-debug / 80")
+check('versionCode = 81' in gradle and 'versionName = "2.0.61"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.61-debug / 81")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -180,6 +180,24 @@ for relative in ('hook/ManualCommentDialog.kt', 'hook/ManualCommentTranslateHook
     references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
     check(references <= base_names, relative + ' manual-translation strings exist')
 
+local_policy = (JAVA / 'hook/TranslationNetworkPolicy.kt').read_text(encoding='utf-8')
+local_ticket = (JAVA / 'hook/LocalOnlyRequest.kt').read_text(encoding='utf-8')
+check('blocked = !sample()' in local_ticket and 'if (!blocked && !sample()) blocked = true' in local_ticket, 'local-only operation ticket cannot regain remote eligibility after a denial (source only)')
+check('!ConfigClient.isReady' in local_policy and 'NET_CAPABILITY_VALIDATED' in local_policy and 'catch (_: Exception) { false }' in local_policy, 'unknown configuration/connectivity/permissions fail closed without a network probe')
+check('"subtitle_local_only_enabled" to false' in schema and 'LocalTranslationSection()' in (JAVA / 'ui/screen/DashboardScreen.kt').read_text(encoding='utf-8'), 'local-only mode is persistent, default-off and exposed in both full settings surfaces')
+check(native.index('cache[videoId, text, sourceTrack]?.let') < native.index('if (!remote.permitsNetwork()) { localMiss(videoId); return }'), 'subtitle cache hits are checked before denying remote work')
+check('val remote = access()' in native and 'if (!remoteAllowed)' in native and 'job.remote.permitsNetwork()' in native, 'subtitle scheduling and result/retry handling consult operation tickets')
+transport_body = native.split('return request@{ text, complete ->', 1)[1]
+check(transport_body.index('if (!remote.permitsNetwork())') < transport_body.index('serviceField.get(null)') < transport_body.index('method.invoke(service, text)'), 'shared Toki translation transport guards before calling host remote service')
+check('val remote = TranslationNetworkPolicy.capture()' in prefetch and 'loadCues(trackUrl, generation, remote)' in prefetch and 'loadCues(track.url, generation, remote)' in prefetch, 'caption operations capture access before submitting asynchronous work')
+http_body = prefetch.split('private fun read(', 1)[1].split('fun cancel()', 1)[0]
+check(http_body.index('remote.permitsNetwork()') < http_body.index('openConnection()') and http_body.count('remote.permitsNetwork()') >= 3, 'caption redirects/connect/read boundaries contain local-only checks')
+check('nextLocalOnly != localOnly' in (JAVA / 'hook/SubtitleFeature.kt').read_text(encoding='utf-8'), 'changing local-only mode cancels subtitle subscriptions and fetches')
+check('if (!remote.permitsNetwork())' in manual_hook and 'val guarded:' in manual_hook, 'manual translation reports unavailable local capability before opening a remote-only session')
+for relative in ('hook/TranslationNetworkPolicy.kt', 'ui/screen/LocalTranslationSection.kt'):
+    references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
+    check(references <= base_names, relative + ' local-only strings exist')
+
 check('if (source.isBlank()) source else null' in manual_core and 'source.any(Char::isLetter)' not in manual_core, 'explicit manual translation does not silently filter emoji-only or numeric comment text')
 
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
@@ -249,7 +267,8 @@ lexical_files = [
     'hook/AuthorLabelContract.kt', 'hook/AuthorLabelPresentation.kt', 'hook/AuthorLocationLabels.kt', 'hook/QuickCommentCleanupHook.kt',
     'hook/HoldSpeedContract.kt', 'hook/HoldSpeedGestureHook.kt', 'hook/NativeSpeedGestureScope.kt', 'ui/screen/HoldSpeedGestureSection.kt',
     'hook/ManualCommentTranslation.kt', 'hook/ManualCommentTranslateHook.kt', 'hook/ManualCommentDialog.kt',
-    'ui/screen/ManualCommentTranslationSection.kt',
+    'ui/screen/ManualCommentTranslationSection.kt', 'ui/screen/LocalTranslationSection.kt',
+    'hook/LocalOnlyRequest.kt', 'hook/TranslationNetworkPolicy.kt', 'hook/HostSettingsEntry.kt', 'hook/SubtitleFeature.kt',
 ]
 for relative in lexical_files:
     kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8'))
@@ -263,6 +282,8 @@ for relative in (
     'hook/LayoutCleanupPolicyTest.kt', 'hook/ShareListBindingsTest.kt', 'model/SharePanelPolicyTest.kt',
     'ui/screen/HookStatusModelTest.kt', 'hook/AuthorLabelPresentationTest.kt', 'hook/QuickCommentCleanupContractTest.kt',
     'hook/HoldSpeedGestureScopeTest.kt', 'hook/ManualCommentTranslationTest.kt',
+    'hook/LocalOnlyRequestTest.kt', 'hook/LocalSubtitleExecutionTest.kt', 'hook/FakeOnlineTranslator.kt',
+    'hook/NativeSubtitleTranslatorTest.kt', 'hook/SubtitleOverlayTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

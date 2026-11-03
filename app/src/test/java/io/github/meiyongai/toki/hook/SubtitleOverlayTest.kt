@@ -96,7 +96,7 @@ class SubtitleOverlayTest {
         decor.measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
             View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
         decor.layout(0, 0, 1080, 2400)
-        val translator = NativeSubtitleTranslator({ true }, { _, complete -> complete("时间轴译文"); AutoCloseable {} })
+        val translator = fakeOnlineTranslator({ true }, { _, complete -> complete("时间轴译文"); AutoCloseable {} })
         val binding = SubtitleOverlay(video, translator, timelineSource = true) {
             config(mapOf("subtitle_style_enabled" to true, "video_translate_enabled" to true))
         }
@@ -129,7 +129,7 @@ class SubtitleOverlayTest {
             layout(0,0,1080,2400)
         }
         val replies=mutableListOf<(String?) -> Unit>()
-        val translator=NativeSubtitleTranslator({true},{ _,reply -> replies+=reply;AutoCloseable {} })
+        val translator=fakeOnlineTranslator({true},{ _,reply -> replies+=reply;AutoCloseable {} })
         val binding=SubtitleOverlay(source,translator) { config(mapOf("subtitle_style_enabled" to true)) }
         fun layer()=SubtitleOverlay::class.java.getDeclaredField("layer").let { it.isAccessible=true;it.get(binding) as? FrameLayout }
         binding.update("HIDDEN",native.text.toString(),"creator-video")
@@ -162,7 +162,7 @@ class SubtitleOverlayTest {
             View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
         decor.layout(0, 0, 1080, 2400)
         val requests = mutableListOf<(String?) -> Unit>()
-        val translator = NativeSubtitleTranslator({ true }, { _, complete ->
+        val translator = fakeOnlineTranslator({ true }, { _, complete ->
             requests += complete
             AutoCloseable {}
         })
@@ -218,7 +218,7 @@ class SubtitleOverlayTest {
         decor.layout(0, 0, 1080, 2400)
         var enabled = true
         val requests = mutableListOf<(String?) -> Unit>()
-        val translator = NativeSubtitleTranslator({ enabled }, { _, complete -> requests += complete; AutoCloseable {} })
+        val translator = fakeOnlineTranslator({ enabled }, { _, complete -> requests += complete; AutoCloseable {} })
         val binding = SubtitleOverlay(source, translator) { config(mapOf(
             "video_translate_enabled" to enabled, "subtitle_style_enabled" to false,
             "subtitle_size" to "90", "subtitle_color" to "#FFFF0000", "subtitle_x" to "90")) }
@@ -298,7 +298,7 @@ class SubtitleOverlayTest {
         decor.layout(0, 0, 1080, 2400)
         var style = true
         val requests = mutableListOf<Pair<String, (String?) -> Unit>>()
-        val translator = NativeSubtitleTranslator({ true }, { text, complete ->
+        val translator = fakeOnlineTranslator({ true }, { text, complete ->
             requests += text to complete
             AutoCloseable {}
         })

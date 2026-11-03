@@ -68,10 +68,16 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
                 queue()
             }
             if (cues.isEmpty() && trackUrl.isNotBlank()) {
+                val remote = TranslationNetworkPolicy.capture()
                 worker.execute {
                     if (closed || token != generation) return@execute
-                    val parsed = try { loadCues(trackUrl, generation) } catch (error: Exception) {
-                        if (token == generation) HookRuntime.event("CaptionPrefetch", "current fetch failed=${error.javaClass.simpleName}")
+                    val parsed = try { loadCues(trackUrl, generation, remote) } catch (error: Exception) {
+                        if (token == generation) {
+                            HookRuntime.event("CaptionPrefetch", "current fetch failed=${error.javaClass.simpleName}")
+                            if (!remote.permitsNetwork()) main.post {
+                                if (!closed && token == generation) TranslationNetworkPolicy.showMissingCaption()
+                            }
+                        }
                         emptyList()
                     }
                     val keys = parsed.map { CaptionTimeline.normalize(it.text) }
@@ -119,9 +125,10 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             if (track.url.isBlank()) return@forEach
             if ((retryDownloads[track.url] ?: 0L) > android.os.SystemClock.uptimeMillis()) return@forEach
             if (track.url in timelines || !attempted.add(track.url) || !loading.add(track.url)) return@forEach
+            val remote = TranslationNetworkPolicy.capture()
             worker.execute {
                 if (closed || token != generation) return@execute
-                val parsed = try { loadCues(track.url, generation) } catch (error: Exception) {
+                val parsed = try { loadCues(track.url, generation, remote) } catch (error: Exception) {
                     if (token == generation) HookRuntime.event("CaptionPrefetch", "upcoming fetch failed=${error.javaClass.simpleName}")
                     emptyList()
                 }
@@ -159,20 +166,20 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             !closed && token == generation && current() && translator.canPrefetch(video)
         }
     }
-    private fun loadCues(location: String, generation: Long): List<CaptionTimeline.Cue> {
+    private fun loadCues(location: String, generation: Long, remote: LocalOnlyRequest): List<CaptionTimeline.Cue> {
         check(!closed && token == generation)
         val identity = identityFor(location)
         CaptionTimelineDiskCache.read(identity)?.let { stored ->
             val parsed = CaptionTimeline.parse(stored)
             if (parsed.isNotEmpty()) return parsed
         }
-        val body = read(location, generation)
+        val body = read(location, generation, remote)
         val parsed = CaptionTimeline.parse(body)
         if (parsed.isNotEmpty() && !closed && token == generation) CaptionTimelineDiskCache.save(identity, body)
         return parsed
     }
 
-    private fun read(location: String, generation: Long): String {
+    private fun read(location: String, generation: Long, remote: LocalOnlyRequest): String {
         var next = location
         repeat(4) {
             check(!closed && token == generation)
@@ -180,10 +187,12 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             require(address.protocol == "https")
             val host = address.host.lowercase()
             require(domains.any { host == it || host.endsWith(".$it") })
+            check(!closed && token == generation && remote.permitsNetwork()) { "Local-only caption file unavailable" }
             val request = address.openConnection() as HttpURLConnection
             connections.add(request)
             request.connectTimeout = 5000; request.readTimeout = 5000; request.instanceFollowRedirects = false
             try {
+                check(!closed && token == generation && remote.permitsNetwork()) { "Caption network access revoked" }
                 val code = request.responseCode
                 if (code in listOf(301, 302, 303, 307, 308)) {
                     next = URL(address, request.getHeaderField("Location") ?: error("redirect")).toString()
@@ -193,7 +202,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
                         java.io.ByteArrayOutputStream().use { output ->
                             val buffer = ByteArray(8192)
                             while (true) {
-                                check(!closed && token == generation)
+                                check(!closed && token == generation && remote.permitsNetwork())
                                 val size = input.read(buffer); if (size < 0) break
                                 require(output.size() + size <= 1_048_576)
                                 output.write(buffer, 0, size)
