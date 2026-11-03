@@ -1,12 +1,14 @@
-# Source-only development status — 2.0.74-debug
+# Source-only development status — 2.0.75-debug
 
-Updated: 2026-11-04. Source version: **2.0.74-debug / 94**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.75-debug / 95**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
+**For a concise Chinese source/status/limitation matrix, start with [FEATURE_STATUS_ZH.md](FEATURE_STATUS_ZH.md).** The diagnostic ZIP has a separate runtime-evidence overview; the two are not interchangeable.
+
 ## Current user-directed ordering
 
-**Updated user priority (clarified 2026-11-04):** advance only offline-video export, animated sticker conversion, all-setting live application and the pictured template/effect hiding. Offline-video export means saving already-downloaded TikTok offline videos into user-accessible playable files, not adding a cache-format conversion catalogue; track assembly/container handling is implementation work only where the actual export needs it. Other feature expansions are recorded in [USER_WORK_ORDER.md](USER_WORK_ORDER.md) and wait for an explicit user “start”. Existing functionality is retained. None of the four selected items is certified complete. This supersedes the previous ordering for the selected export task; the rest of offline integration is deferred.
+**Updated user priority (clarified 2026-11-04; readable logging additionally requested):** advance only offline-video export, animated sticker conversion, all-setting live application and the pictured template/effect hiding. Offline-video export means saving already-downloaded TikTok offline videos into user-accessible playable files, not adding a cache-format conversion catalogue; track assembly/container handling is implementation work only where the actual export needs it. Other feature expansions are recorded in [USER_WORK_ORDER.md](USER_WORK_ORDER.md) and wait for an explicit user “start”. Existing functionality is retained. None of the four selected items is certified complete. This supersedes the previous ordering for the selected export task; the rest of offline integration is deferred.
 
 ### Earlier offline ordering and policy context
 
@@ -37,6 +39,16 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.75 — readable evidence-first diagnostics and operation logging
+
+- Added a curated Chinese at-a-glance file distinguishing implementation, explicit missing support and verification level for all original requirements. Latest authorization remains the four selected tasks plus readable logging; deferred functionality was not expanded.
+- Runtime ZIP overview lists every ConfigSchema feature: requested/applied/restart/registration/config-revision differences, errors/detail/counters and internal-path summaries. Missing host/feature reports, stale snapshots, version mismatch, unobserved operations and ready hooks are not promoted to business success.
+- Bounded process log uses UTC time, monotonic elapsed milliseconds and sequence numbers. State/config transitions are deduplicated and timestamped. Host snapshot adds module/host version, Android SDK and operation summaries without dumping configuration content.
+- Video export and sticker conversion now have generated per-process operation IDs, recent phase history, elapsed time, numeric metadata, candidate failure counts/types, first-wins terminal outcomes and next-step advice. Code checks/candidate-cache-sample checks/mux/readback/publish and source/animation parse-decode-encode are distinguished. No per-frame/sample event flood; operation tracing is not implemented for every other feature.
+- Queue: 600 lines/96Ki characters. Journal: 64 operations, 16 recent stages each, 48Ki exported summary with explicit truncation. These are process-memory records, not persistent post-crash/restart logs. Reproduce and export while host remains alive.
+- Extra metadata redaction/line escaping covers common URLs, credentials and private paths, but is not a guarantee for arbitrary content. Full logcat remains explicitly optional and may contain system/other-app information. New archives select the current snapshot and explicitly selected capture only, not all historical directories; no historical data is deleted. Per-file 8MiB and aggregate raw 32MiB bounds have a manifest.
+- 490 source-only/whitespace checks passed. Sixteen new regression test cases cover journal phases/terminal/candidate/capacity/error metadata, readable states/revisions/privacy, log bounds and archive history exclusion; NOT executed. No compilation, JUnit/Robolectric, device validation or APK build was performed. Real ZIP/Binder/root/no-root behavior remains unverified; the four selected tasks remain incomplete.
 
 ## Added in 2.0.74 — offline-video export with local remux and readback
 

@@ -1,5 +1,7 @@
 package io.github.meiyongai.toki.subtitle.hook
 
+import io.github.meiyongai.toki.subtitle.provider.OperationDiagnostics
+import io.github.meiyongai.toki.subtitle.provider.OperationJournal
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentValues
@@ -119,17 +121,28 @@ internal object CommentStickerDownloadHook {
                 val directory = if (ConfigClient.getBoolean(DownloadHook.KEY_DOWNLOAD_PATH_ENABLED))
                     ConfigClient.getString(DownloadHook.KEY_DOWNLOAD_IMAGE_PATH, DownloadHook.DEFAULT_IMAGE_RELATIVE_PATH)!!
                 else "Pictures/TikTok/Stickers"
+                val operation = OperationDiagnostics.start(OperationJournal.Kind.STICKER_EXPORT)
+                operation.stage(OperationJournal.Step.QUEUED, mapOf("animated" to if (mode.animated) 1L else 0L,
+                    "sourceCandidates" to candidates.size.toLong()))
                 try {
                     worker.execute {
                         val success = try {
-                            save(app, loader, asset.id, candidates, directory, mode) {
+                            save(app, loader, asset.id, candidates, directory, mode, operation) {
                                 ConfigClient.isReady && ConfigClient.getBoolean(KEY) && HookRuntime.scope(FEATURE).active
                             }
+                            operation.finish(OperationJournal.Result.SUCCESS)
                             true
                         } catch (error: Exception) {
+                            val cancelled = !ConfigClient.isReady || !ConfigClient.getBoolean(KEY) || !HookRuntime.scope(FEATURE).active
+                            operation.failed(error, cancelled)
                             HookRuntime.event(FEATURE, "export failed mode=" + mode.name + " type=" + error.javaClass.simpleName)
                             false
+                        } catch (error: LinkageError) {
+                            operation.failed(error)
+                            HookRuntime.event(FEATURE, "export codec unavailable type=" + error.javaClass.simpleName)
+                            false
                         } catch (_: OutOfMemoryError) {
+                            operation.finish(OperationJournal.Result.UNAVAILABLE, OperationJournal.Reason.MEMORY_LIMIT, "OutOfMemoryError")
                             HookRuntime.event(FEATURE, "export unavailable: insufficient image memory")
                             false
                         } finally { inFlight.remove(key) }
@@ -137,6 +150,7 @@ internal object CommentStickerDownloadHook {
                     }
                     Toast.makeText(activity, context.getString(R.string.sticker_saving), Toast.LENGTH_SHORT).show()
                 } catch (_: java.util.concurrent.RejectedExecutionException) {
+                    operation.finish(OperationJournal.Result.FAILED, OperationJournal.Reason.QUEUE_FULL)
                     inFlight.remove(key)
                     Toast.makeText(activity, failed, Toast.LENGTH_SHORT).show()
                 }
@@ -211,22 +225,31 @@ internal object CommentStickerDownloadHook {
     }
 
     private fun save(context: Context, loader: ClassLoader, id: String, candidates: List<String>, path: String,
-        mode: StickerExportMode, active: () -> Boolean) {
+        mode: StickerExportMode, operation: OperationJournal.Run, active: () -> Boolean) {
         check(active() && !Thread.currentThread().isInterrupted)
-        if (mode.animated) HostAnimatedStickerDecoder.requireInspectedCode(context)
+        if (mode.animated) {
+            operation.stage(OperationJournal.Step.CODE_CHECK)
+            try { HostAnimatedStickerDecoder.requireInspectedCode(context) }
+            catch (error: Exception) {
+                operation.finish(OperationJournal.Result.UNAVAILABLE, OperationJournal.Reason.CODE_MISMATCH, error.javaClass.simpleName)
+                throw error
+            }
+        }
         var exported: StickerImageExporter.Result? = null
+        var lastFailure: Exception? = null
         for (location in candidates) {
             check(active() && !Thread.currentThread().isInterrupted)
             exported = try {
+                operation.stage(OperationJournal.Step.SOURCE_FETCH)
                 val bytes = fetch(location)
                 check(active() && !Thread.currentThread().isInterrupted)
-                if (mode.animated) AnimatedStickerExporter.convert(context, loader, bytes, mode, active)
+                if (mode.animated) AnimatedStickerExporter.convert(context, loader, bytes, mode, active, operation)
                 else StickerImageExporter.convert(bytes, mode)
-            } catch (_: Exception) { null }
+            } catch (error: Exception) { lastFailure = error; operation.attemptFailed(error); null }
             if (exported != null) break
         }
         check(active() && !Thread.currentThread().isInterrupted)
-        val (bytes, format) = checkNotNull(exported) { "No readable image for selected source and format" }
+        val (bytes, format) = exported ?: throw (lastFailure ?: IllegalStateException("No readable image for selected source and format"))
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, CommentStickerMedia.fileName(id, format.extension, UUID.randomUUID().toString()))
             put(MediaStore.Images.Media.MIME_TYPE, format.mime)
@@ -235,6 +258,7 @@ internal object CommentStickerDownloadHook {
                 put(MediaStore.Images.Media.IS_PENDING, 1)
             }
         }
+        operation.stage(OperationJournal.Step.PUBLISH, mapOf("outputBytes" to bytes.size.toLong()))
         val resolver = context.contentResolver
         val uri = checkNotNull(resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values))
         resolver.openOutputStream(uri)?.use { it.write(bytes) } ?: error("Cannot write image")

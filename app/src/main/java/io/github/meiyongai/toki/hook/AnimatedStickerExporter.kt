@@ -1,5 +1,6 @@
 package io.github.meiyongai.toki.subtitle.hook
 
+import io.github.meiyongai.toki.subtitle.provider.OperationJournal
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -25,8 +26,9 @@ internal object AnimatedStickerExporter {
     @Suppress("DEPRECATION")
     private fun webpFormat(): Bitmap.CompressFormat = if (Build.VERSION.SDK_INT >= 30) Bitmap.CompressFormat.WEBP_LOSSLESS else Bitmap.CompressFormat.WEBP
 
-    fun convert(context: Context, loader: ClassLoader, bytes: ByteArray, mode: StickerExportMode, active: () -> Boolean): StickerImageExporter.Result {
+    fun convert(context: Context, loader: ClassLoader, bytes: ByteArray, mode: StickerExportMode, active: () -> Boolean, operation: OperationJournal.Run? = null): StickerImageExporter.Result {
         require(mode == StickerExportMode.ANIMATED_GIF || mode == StickerExportMode.ANIMATED_WEBP)
+        operation?.stage(OperationJournal.Step.ANIMATION_PARSE, mapOf("sourceBytes" to bytes.size.toLong()))
         val source = AnimatedStickerData.parse(bytes)
         require(source.frames.size > 1) { "Selected source contains no animation" }
         val gif = if (mode == StickerExportMode.ANIMATED_GIF) AnimatedStickerContainers.Gif(source) else null
@@ -41,7 +43,10 @@ internal object AnimatedStickerExporter {
             val replace = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC) }
             val clear = Paint().apply { xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC) }
             val pixels = if (gif != null) IntArray(source.width * source.height) else null
+            operation?.stage(OperationJournal.Step.ANIMATION_DECODE, mapOf("frames" to source.frames.size.toLong(),
+                "width" to source.width.toLong(), "height" to source.height.toLong()))
             HostAnimatedStickerDecoder.open(context, loader, source, bytes).use { decoder ->
+                operation?.stage(OperationJournal.Step.ANIMATION_ENCODE, mapOf("frames" to source.frames.size.toLong()))
                 source.frames.forEachIndexed { index, frame ->
                     checkActive()
                     if (frame.disposal == AnimatedStickerData.Disposal.RESTORE) {
@@ -74,6 +79,7 @@ internal object AnimatedStickerExporter {
             }
             checkActive()
             val output = gif?.finish() ?: checkNotNull(webp).finish()
+            operation?.stage(OperationJournal.Step.READBACK, mapOf("outputBytes" to output.size.toLong()))
             val result = AnimatedStickerData.parse(output)
             check(result.frames.size == source.frames.size && result.plays == source.plays &&
                 result.width == source.width && result.height == source.height) { "Encoded animation metadata mismatch" }

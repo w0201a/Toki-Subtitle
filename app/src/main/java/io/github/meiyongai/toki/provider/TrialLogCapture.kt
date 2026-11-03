@@ -76,8 +76,17 @@ internal object TrialLogCapture {
         stop()
         val root = File(context.filesDir, "trial-logs").apply { mkdirs() }
         val dir = File(root, "snapshot-${System.currentTimeMillis()}-${java.util.UUID.randomUUID()}").apply { mkdirs() }
+        File(dir, "00-先看这里-诊断速览.txt").writeText(DiagnosticOverview.render(diagnostics))
+        File(dir, "01-阅读说明.txt").writeText(
+            "阅读顺序：00诊断速览 → 各宿主 operations 操作摘要 → 宿主 hook-log → diagnostics.json。\n" +
+                "已注册只表示拦截安装；请求开不等于已应用，调用计数不等于业务成功。无宿主回复／无操作记录属于证据不足，不默认正常。\n" +
+                "日志使用UTC日期时间、进程相对毫秒、序号；op编号仅在同一进程会话内关联，不能跨进程当同一任务。\n" +
+                "仅本次快照与用户明确选择的当前logcat采集会话进入本包；磁盘历史日志不会被递归全部打包。\n" +
+                "进程日志与操作摘要有容量上限，计数注明覆盖情况；进程退出会丢失内存日志，复现后保留TikTok后台再导出。\n" +
+                "每个文件最多8MiB、包内原始数据合计最多32MiB，截断情况见archive-status.txt。完整logcat可能包含其他应用信息，分享前检查。\n")
         File(dir, "diagnostics.json").writeText(json(diagnostics).toString(2))
         File(dir, "module-log.txt").writeText(TrialLog.snapshot())
+        File(dir, "manager-operations.txt").writeText(OperationDiagnostics.snapshot())
         val missing = mutableListOf<String>()
         val received = mutableListOf<String>()
         for (host in HookDiagnostics.hosts) {
@@ -86,7 +95,9 @@ internal object TrialLogCapture {
             if (hostLog == null) missing.add(host)
             else {
                 received.add(host)
-                File(dir, "$host-hook-log.txt").writeText(hostLog)
+                File(dir, "$host-hook-log.txt").writeText(DiagnosticText.redact(hostLog).take(128 * 1024))
+                File(dir, "$host-operations.txt").writeText(hostReport?.getString("operations")?.let { DiagnosticText.redact(it).take(48 * 1024) }
+                    ?: "未收到新版操作摘要；不能据此判断业务成功。")
             }
         }
         File(dir, "host-log-status.txt").writeText(
@@ -94,12 +105,34 @@ internal object TrialLogCapture {
                 "未回复：${missing.joinToString().ifEmpty { "无" }}（未安装的 TikTok 版本无回复属于正常情况）\n" +
                 "请复现后保留 TikTok 在后台运行，再返回 Toki 导出。管理端日志不能代替宿主日志。")
         if (includeLogcat) dumpLogcat(dir)
+        // Selecting a new export must not silently attach every historical root-logcat session.
+        val capture = if (includeLogcat) synchronized(this) { directory } else null
+        val selected = listOf(dir to "snapshot") + listOfNotNull(capture?.takeIf { it.isDirectory }?.let { it to "selected-capture" })
+        val status = StringBuilder("仅包含本次快照；旧目录仍保留在本地但不自动加入。\n")
+        var remaining = 32L * 1024 * 1024
         ZipOutputStream(output).use { zip ->
-            root.walkTopDown().filter { it.isFile }.forEach { file ->
-                zip.putNextEntry(ZipEntry(file.relativeTo(root).invariantSeparatorsPath))
-                file.inputStream().use { it.copyTo(zip) }
-                zip.closeEntry()
+            for ((source, prefix) in selected) {
+                source.walkTopDown().filter { it.isFile }.sortedBy { it.relativeTo(source).invariantSeparatorsPath }.forEach { file ->
+                    // Reject symlinks escaping the explicitly selected source directory.
+                    if (!file.canonicalFile.toPath().startsWith(source.canonicalFile.toPath())) return@forEach
+                    val name = "$prefix/" + file.relativeTo(source).invariantSeparatorsPath
+                    val limit = minOf(8L * 1024 * 1024, remaining)
+                    if (limit <= 0) { status.append("跳过（总容量上限）：$name\n"); return@forEach }
+                    zip.putNextEntry(ZipEntry(name))
+                    var written = 0L
+                    file.inputStream().use { input ->
+                        val buffer = ByteArray(64 * 1024)
+                        while (written < limit) {
+                            val count = input.read(buffer, 0, minOf(buffer.size.toLong(), limit - written).toInt())
+                            if (count < 0) break
+                            zip.write(buffer, 0, count); written += count
+                        }
+                    }
+                    remaining -= written; zip.closeEntry()
+                    status.append(if (file.length() > written) "截断" else "完整").append(": $name bytes=$written\n")
+                }
             }
+            zip.putNextEntry(ZipEntry("archive-status.txt")); zip.write(status.toString().toByteArray(Charsets.UTF_8)); zip.closeEntry()
         }
     }
 
@@ -122,7 +155,11 @@ internal object TrialLogCapture {
     private fun json(bundle: Bundle): JSONObject = JSONObject().apply {
         bundle.keySet().sorted().forEach { key ->
             val value = bundle.get(key)
-            put(key, if (value is Bundle) json(value) else value ?: JSONObject.NULL)
+            put(DiagnosticText.line(key, 240), when (value) {
+                is Bundle -> json(value)
+                is String -> DiagnosticText.redact(value).take(128 * 1024)
+                else -> value ?: JSONObject.NULL
+            })
         }
     }
 }

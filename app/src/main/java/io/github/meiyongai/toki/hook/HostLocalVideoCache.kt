@@ -1,5 +1,6 @@
 package io.github.meiyongai.toki.subtitle.hook
 
+import io.github.meiyongai.toki.subtitle.provider.OperationJournal
 import android.content.Context
 import java.io.File
 import java.lang.reflect.Modifier
@@ -7,10 +8,14 @@ import java.util.concurrent.TimeUnit
 
 /** Reads MDL cache-index metadata only; never calls preload, URL resolution, native export or download methods. */
 internal class HostLocalVideoCache(private val loader: ClassLoader) {
-    fun resolve(context: Context, aweme: Any, active: () -> Boolean = { true }): LocalVideoTracks.Plan {
-        if (!OfflineCacheCodeGate.verify(context) || !OfflineExportCodeGate.verify(context))
+    fun resolve(context: Context, aweme: Any, active: () -> Boolean = { true }, operation: OperationJournal.Run? = null): LocalVideoTracks.Plan {
+        operation?.stage(OperationJournal.Step.CODE_CHECK)
+        if (!OfflineCacheCodeGate.verify(context) || !OfflineExportCodeGate.verify(context)) {
+            operation?.finish(OperationJournal.Result.UNAVAILABLE, OperationJournal.Reason.CODE_MISMATCH)
             throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.UNSUPPORTED)
+        }
         val candidates = OfflineExportCandidates(loader).read(aweme)
+        operation?.stage(OperationJournal.Step.CANDIDATES, mapOf("candidatePlans" to candidates.size.toLong()))
         val helper = Class.forName("com.ss.ttvideoengine.DataLoaderHelper", false, loader)
         val singleton = helper.getDeclaredMethod("LJIIJJI").apply {
             check(returnType == helper && Modifier.isStatic(modifiers)); isAccessible = true
@@ -32,6 +37,7 @@ internal class HostLocalVideoCache(private val loader: ClassLoader) {
         fun read(candidate: OfflineExportCandidates.Source): LocalVideoTracks.Source {
             inspected[candidate]?.let { return it }
             var reason = LocalVideoFile.Failure.MISSING
+            operation?.stage(OperationJournal.Step.CACHE_LOOKUP, mapOf("candidateKeys" to candidate.keys.size.toLong()))
             for (key in candidate.keys) {
                 check(active() && !Thread.currentThread().isInterrupted)
                 val metadata = query.invoke(null, key, 100L, TimeUnit.MILLISECONDS, singleton) ?: continue
@@ -41,9 +47,10 @@ internal class HostLocalVideoCache(private val loader: ClassLoader) {
                 if (candidate.expected > 0 && candidate.expected != bytes) { reason = LocalVideoFile.Failure.INCOMPLETE; continue }
                 try {
                     val verified = LocalVideoFile.inspect(File(location), bytes, cached.getLong(metadata), roots)
+                    operation?.stage(OperationJournal.Step.SAMPLE_CHECK, mapOf("sourceBytes" to bytes, "fragmented" to if (verified.fragmented) 1L else 0L))
                     return LocalVideoTracks.inspect(verified, active).also { inspected[candidate] = it }
-                } catch (error: LocalVideoFile.Unavailable) { reason = error.reason }
-                catch (_: Exception) { reason = LocalVideoFile.Failure.UNSUPPORTED }
+                } catch (error: LocalVideoFile.Unavailable) { reason = error.reason; operation?.attemptFailed(error) }
+                catch (error: Exception) { reason = LocalVideoFile.Failure.UNSUPPORTED; operation?.attemptFailed(error) }
             }
             throw LocalVideoFile.Unavailable(reason)
         }
@@ -52,9 +59,12 @@ internal class HostLocalVideoCache(private val loader: ClassLoader) {
             try {
                 val video = read(candidate.video)
                 val sound = if (video.tracks.any { it.mime.startsWith("audio/") }) null else candidate.audio?.let(::read)
-                return LocalVideoTracks.plan(video, sound, candidate.requireAudio, candidate.durationMs)
-            } catch (error: LocalVideoFile.Unavailable) { failure = error.reason }
-            catch (_: Exception) { failure = LocalVideoFile.Failure.UNSUPPORTED }
+                return LocalVideoTracks.plan(video, sound, candidate.requireAudio, candidate.durationMs).also { plan ->
+                    operation?.stage(OperationJournal.Step.PLAN_READY, mapOf("tracks" to plan.tracks.size.toLong(),
+                        "samples" to plan.tracks.sumOf { it.second.count }, "sourceBytes" to plan.tracks.sumOf { it.second.bytes }))
+                }
+            } catch (error: LocalVideoFile.Unavailable) { failure = error.reason; operation?.attemptFailed(error) }
+            catch (error: Exception) { failure = LocalVideoFile.Failure.UNSUPPORTED; operation?.attemptFailed(error) }
         }
         throw LocalVideoFile.Unavailable(failure)
     }

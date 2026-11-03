@@ -45,8 +45,10 @@ internal object HookRuntime {
 
     /** 记录不包含用户内容的关键生命周期事件。@param tag 组件名称。@param message 元数据摘要。@return Unit。Callers: HostSymbols、HostScanController、install。 */
     fun event(tag: String, message: String) {
-        io.github.meiyongai.toki.subtitle.provider.TrialLog.add(tag, message)
-        reportEvent(tag, message)
+        val safeTag = io.github.meiyongai.toki.subtitle.provider.DiagnosticText.line(tag, 80)
+        val safeMessage = io.github.meiyongai.toki.subtitle.provider.DiagnosticText.line(message)
+        io.github.meiyongai.toki.subtitle.provider.TrialLog.add(safeTag, safeMessage)
+        reportEvent(safeTag, safeMessage)
     }
 
     /**
@@ -122,7 +124,13 @@ internal object HookRuntime {
 
     /** 更新功能状态。@param feature 功能标识。@param value 状态。@return Unit。Callers: install、TokiModule。 */
     @Synchronized fun state(feature: String, value: String) {
-        entry(feature).putString("state", value)
+        val row = entry(feature)
+        val safe = io.github.meiyongai.toki.subtitle.provider.DiagnosticText.line(value, 240)
+        if (row.getString("state") != safe) {
+            row.putString("state", safe)
+            row.putLong("stateAt", System.currentTimeMillis())
+            io.github.meiyongai.toki.subtitle.provider.TrialLog.add("状态:$feature", "状态=$safe")
+        }
     }
 
     /**
@@ -133,7 +141,7 @@ internal object HookRuntime {
      * Callers: FeedFilterHook.policy。
      */
     @Synchronized fun detail(feature: String, value: String) {
-        entry(feature).putString("detail", value)
+        entry(feature).putString("detail", io.github.meiyongai.toki.subtitle.provider.DiagnosticText.line(value, 2000))
     }
 
     /** 将订阅、页面监听等纳入功能安装事务；撤销时按创建顺序的逆序释放。 */
@@ -169,8 +177,13 @@ internal object HookRuntime {
     /** 记录当前会话已实际应用的配置，避免将最新请求误报为已经生效。 */
     @Synchronized fun appliedConfiguration(feature: String, snapshot: ConfigSnapshot,
         enabled: Boolean = featureEnabled(feature, snapshot)) {
-        entry(feature).putLong("appliedRevision", snapshot.revision)
-        entry(feature).putBoolean("appliedEnabled", enabled)
+        val row = entry(feature)
+        if (!row.containsKey("appliedEnabled") || row.getBoolean("appliedEnabled") != enabled || row.getLong("appliedRevision", -1) != snapshot.revision) {
+            io.github.meiyongai.toki.subtitle.provider.TrialLog.add("配置:$feature", "已应用开关=$enabled 配置版本=${snapshot.revision}；不代表业务效果已验证")
+            row.putLong("appliedAt", System.currentTimeMillis())
+        }
+        row.putLong("appliedRevision", snapshot.revision)
+        row.putBoolean("appliedEnabled", enabled)
     }
 
     /** 是否需重开宿主由启动安装集合与功能自身的更新契约决定。 */
@@ -267,7 +280,8 @@ internal object HookRuntime {
         row.putLong("errorAt", System.currentTimeMillis())
         if (status.endsWith("已撤销")) row.putString("state", status)
         row.putString("error", error.javaClass.name + "\n" + error.stackTrace.take(5).joinToString("\n"))
-        Log.e("TokiHookRuntime", "$feature: $status", error)
+        io.github.meiyongai.toki.subtitle.provider.TrialLog.add("错误:$feature", "阶段=$status 错误类型=${error.javaClass.name}")
+        Log.e("TokiHookRuntime", "$feature: $status type=${error.javaClass.name}\n" + error.stackTrace.take(5).joinToString("\n"))
     }
 
     /**
@@ -286,6 +300,15 @@ internal object HookRuntime {
         putLong("updated", System.currentTimeMillis())
         putString("adaptation", adaptation)
         putString("trialLog", io.github.meiyongai.toki.subtitle.provider.TrialLog.snapshot())
+        putString("operations", io.github.meiyongai.toki.subtitle.provider.OperationDiagnostics.snapshot())
+        putString("moduleVersion", io.github.meiyongai.toki.subtitle.BuildConfig.VERSION_NAME)
+        putInt("moduleVersionCode", io.github.meiyongai.toki.subtitle.BuildConfig.VERSION_CODE)
+        putInt("androidSdk", android.os.Build.VERSION.SDK_INT)
+        hostContext?.let { app ->
+            @Suppress("DEPRECATION")
+            val info = try { app.packageManager.getPackageInfo(app.packageName, 0) } catch (_: Exception) { null }
+            info?.versionName?.let { putString("hostVersion", it) }
+        }
         if (config != null) putLong("configRevision", config.revision)
         putBundle("features", features.deepCopy().apply {
             for (feature in ConfigSchema.featureSwitches.keys) {

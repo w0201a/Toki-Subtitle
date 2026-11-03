@@ -52,3 +52,6 @@ signing.properties
 
 # User-approved execution order and deferred backlog.
 !/docs/USER_WORK_ORDER.md
+
+# Curated Chinese status at a glance, requested by the user.
+!/docs/FEATURE_STATUS_ZH.md

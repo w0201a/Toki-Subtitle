@@ -15,7 +15,7 @@ import kotlinx.coroutines.*
 internal fun TrialLogSection() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    var status by remember { mutableStateOf("字幕版开发预览：TikTok 47.0.3，诊断与日志导出") }
+    var status by remember { mutableStateOf("诊断日志：先看导出包内的‘00-先看这里-诊断速览’，再看操作阶段与失败建议。注册成功不代表实际功能成功。") }
     var busy by remember { mutableStateOf(false) }
     var includeLogcat by remember { mutableStateOf(false) }
     val export = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
@@ -40,6 +40,7 @@ internal fun TrialLogSection() {
         }
     }
     Text(status)
+    Text("无需 root 的导出包含功能请求／应用状态、待重开项和最近操作；选择完整 logcat 可能包含其他应用信息，分享前请检查。")
     TextButton(enabled = !busy, onClick = {
         scope.launch {
             busy = true

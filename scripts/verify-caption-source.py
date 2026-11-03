@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 94' in gradle and 'versionName = "2.0.74"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
+check('versionCode = 95' in gradle and 'versionName = "2.0.75"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -205,7 +205,7 @@ check('OfflinePlaybackContext.state.localOnly' not in local_policy and 'OfflineP
 check(offline_hook.index('chain.thisObject?.let(::select) // Local classification') < offline_hook.index('val result = chain.proceed()'), 'offline selection is classified before native selection callbacks')
 check('state.owns(owner, id)' in offline_hook and 'state.retire(owner)' in offline_hook and 'previous.view.get() !== video.view' in offline_hook, 'progress only refreshes the selected owner and content classification survives unbinding until a known page transition')
 check('ViewConfiguration.getLongPressTimeout()' in offline_hook and 'MotionEvent.ACTION_POINTER_DOWN' in offline_hook and 'MotionEvent.ACTION_CANCEL' in offline_hook and 'videoHit' in offline_hook, 'local menu hold has slop, multitouch, cancellation and interactive-overlay boundaries')
-check('cache.resolve(app, video.model, exportActive)' in offline_hook and 'OfflineVideoExporter.save' in offline_hook and 'ArrayBlockingQueue(1)' in offline_hook, 'offline video export is connected to a bounded local worker and selected playback cancellation')
+check('cache.resolve(app, video.model, exportActive, operation)' in offline_hook and 'OfflineVideoExporter.save' in offline_hook and 'ArrayBlockingQueue(1)' in offline_hook, 'offline video export is connected to a bounded local worker and selected playback cancellation')
 check('OfflineCacheCodeGate.verify(context)' in offline_cache and 'getDeclaredMethod("LIZJ"' in offline_cache and '100L, TimeUnit.MILLISECONDS' in offline_cache, 'local cache reader checks inspected code and uses bounded cache-index locking')
 check('OfflineExportCandidates(loader).read(aweme)' in offline_cache and 'LocalVideoTracks.inspect(verified, active)' in offline_cache and 'LocalVideoTracks.plan' in offline_cache and 'hasVideoModel' not in offline_cache, 'offline video export checks actual complete local tracks instead of rejecting model-based items categorically')
 check('cached != total' in offline_files and 'file.length() != total' in offline_files and '0x6d6f6f66' in offline_files and 'source.file.lastModified() != source.modified' in offline_files, 'local exporter checks indexed completeness, container boundaries and source mutation')
@@ -415,7 +415,7 @@ animation_decoder = (JAVA / 'hook/HostAnimatedStickerDecoder.kt').read_text(enco
 check((ROOT / 'docs/USER_WORK_ORDER.md').is_file() and '!/docs/USER_WORK_ORDER.md' in read('.gitignore'), 'user-selected four-item work order and deferred backlog are saved for publication')
 check('ANIMATED_GIF("gif", "image/gif")' in export_policy and 'ANIMATED_WEBP("webp", "image/webp")' in export_policy and 'val animated:' in export_policy, 'animated GIF and WebP have explicit export intents separate from static modes')
 check('source != StickerSource.STATIC && hasAnimation' in export_policy and 'asset.candidates(StickerSource.ANIMATED)' in sticker, 'animated export choices do not silently fall back to a static preview source')
-check('AnimatedStickerExporter.convert(context, loader, bytes, mode, active)' in sticker and 'HostAnimatedStickerDecoder.requireInspectedCode(context)' in sticker, 'worker dispatch reaches real animation conversion and checks code availability before downloading animation assets')
+check('AnimatedStickerExporter.convert(context, loader, bytes, mode, active, operation)' in sticker and 'HostAnimatedStickerDecoder.requireInspectedCode(context)' in sticker, 'worker dispatch reaches real animation conversion and checks code availability before downloading animation assets')
 check('mode != StickerExportMode.ANIMATED_GIF' in exporter and 'Animation must not use a first-frame encoder' in exporter, 'static encoder rejects animated intent instead of exporting just the first frame')
 check('0x3b ->' in animation_data and 'input.position == bytes.size' in animation_data and 'Unsupported GIF disposal' in animation_data and 'GIF plain-text rendering cannot be preserved' in animation_data, 'GIF parsing requires a complete trailer and understood disposal/rendering semantics')
 check('NETSCAPE2.0' in animation_data and 'repetitions + 1' in animation_data and 'totalCs = (sourceMs + 5) / 10' in animation_containers, 'GIF repetition normalization and cumulative centisecond rounding are explicit')
@@ -460,6 +460,34 @@ check('openFileDescriptor(target, "rw")' in offline_export and 'destination.file
 for relative in ('hook/OfflineExportCandidates.kt', 'hook/OfflineExportCodeGate.kt', 'hook/LocalVideoTracks.kt', 'hook/LocalVideoRemuxer.kt'):
     source = (JAVA / relative).read_text(encoding='utf-8')
     check(not any(token in source for token in ('openConnection(', 'getUrlList(', '.delete(', '.renameTo(', 'clearCache(', 'setVideoModel')), relative + ' does not request missing video bytes or alter source cache (source inspection)')
+
+# Readable logs report what was observed, not an invented all-green feature verdict.
+log_journal = (JAVA / 'provider/OperationJournal.kt').read_text(encoding='utf-8')
+log_text = (JAVA / 'provider/DiagnosticText.kt').read_text(encoding='utf-8')
+log_overview = (JAVA / 'provider/DiagnosticOverview.kt').read_text(encoding='utf-8')
+log_capture = (JAVA / 'provider/TrialLogCapture.kt').read_text(encoding='utf-8')
+trial_log = (JAVA / 'provider/TrialLog.kt').read_text(encoding='utf-8')
+hook_runtime = (JAVA / 'hook/HookRuntime.kt').read_text(encoding='utf-8')
+check('Instant.ofEpochMilli' in trial_log and 'System.nanoTime()' in trial_log and '#${++sequence}' in trial_log, 'module log lines include UTC time, monotonic elapsed time and ordered sequence numbers')
+check('MAX_LINES = 600' in trial_log and 'MAX_CHARACTERS = 96 * 1024' in trial_log and 'dropped++' in trial_log, 'process log line/character budgets declare overwritten history instead of growing indefinitely')
+check('DiagnosticText.line(tag' in trial_log and 'DiagnosticText.line(message)' in trial_log and 'safeMessage' in hook_runtime and 'reportEvent(safeTag, safeMessage)' in hook_runtime, 'module log and framework event sinks both receive redacted one-line technical metadata')
+check(all(token in log_text for token in ('authorization', 'api[_-]?key', 'cookie', 'Bearer', 'sk-', '本地路径已隐藏', '地址已隐藏')), 'metadata redaction includes URL, credential, bearer-key and private-path patterns')
+check('accountId' not in log_journal and 'videoId' not in log_journal and 'OFFLINE_EXPORT' in log_journal and 'STICKER_EXPORT' in log_journal and 'op=${record.kind.name}-${record.id}' in log_journal, 'typed generated operation identifiers correlate video/sticker phases without video/account identifiers')
+check('Reason(val title: String, val suggestion: String)' in log_journal and all(token in log_journal for token in ('CODE_MISMATCH', 'CACHE_INCOMPLETE', 'SOURCE_CHANGED', 'OUTPUT_FAILED', 'QUEUE_FULL', 'MEMORY_LIMIT')), 'operation outcomes include readable reason categories and actionable next-step suggestions')
+check('record.result != Result.RUNNING' in log_journal and 'record.ended = clock()' in log_journal and '最多16条' in log_journal and 'record.history.size == 16' in log_journal, 'each bounded operation keeps recent phase evidence and a first-wins terminal result/time')
+check('capacity: Int = 64' in log_journal and 'overwritten++' in log_journal and 'value.length <= 48 * 1024' in log_journal and 'emitSafely' in log_journal, 'operation journal and exported summary have explicit bounds and logging failures do not fail media work')
+check('stats.size <= 8' in log_journal and 'value >= 0' in log_journal and 'error.javaClass.simpleName' in log_journal and 'error.message' not in log_journal, 'structured operation metrics are numeric and exception messages/user content are not copied into the journal')
+check(all(token in offline_cache for token in ('Step.CODE_CHECK', 'Step.CANDIDATES', 'Step.CACHE_LOOKUP', 'Step.SAMPLE_CHECK', 'Step.PLAN_READY')) and all(token in offline_export for token in ('Step.MUX', 'Step.READBACK', 'Step.PUBLISH')), 'offline video export reports code, candidate/cache, sample, mux, readback and publication stages')
+check('OperationDiagnostics.start(OperationJournal.Kind.OFFLINE_EXPORT)' in offline_hook and 'operation.finish(OperationJournal.Result.SUCCESS)' in offline_hook and 'operation.failed(error, !exportActive())' in offline_hook, 'video export reports business success only after export returns, with cancellation and failures distinguished')
+check('OperationDiagnostics.start(OperationJournal.Kind.STICKER_EXPORT)' in sticker and 'operation.failed(error, cancelled)' in sticker and 'Step.SOURCE_FETCH' in sticker and 'Step.ANIMATION_PARSE' in animation_exporter and 'Step.ANIMATION_ENCODE' in animation_exporter, 'sticker jobs report real source/animation progress and terminal codec/cancellation outcomes, not just menu registration')
+check('row.getString("state") != safe' in hook_runtime and 'stateAt' in hook_runtime and 'appliedAt' in hook_runtime and '不代表业务效果已验证' in hook_runtime, 'runtime state/config transitions are deduplicated and timestamped without per-sample logging')
+check('putString("operations"' in hook_runtime and 'putString("moduleVersion"' in hook_runtime and 'putInt("androidSdk"' in hook_runtime and 'putString("hostVersion"' in hook_runtime, 'host diagnostics include operation summaries and technical module/host/SDK context')
+check('已注册并报告应用；实际业务结果另看操作摘要' in log_overview and '请求开启，但未实际应用' in log_overview and '未收到该功能报告' in log_overview, 'human overview distinguishes registration, effective application, unknown evidence and real operation results')
+check('requested.forEach features@' in log_overview and 'ConfigSchema.featureSwitches.keys' in log_overview and 'row.getLong("appliedRevision") != report.getLong("configRevision")' in log_overview and '快照超过60秒' in log_overview, 'all configured features, config-revision differences and stale snapshots are represented in the overview')
+check((ROOT / 'docs/FEATURE_STATUS_ZH.md').is_file() and 'docs/FEATURE_STATUS_ZH.md' in read('README.md') and '!/docs/FEATURE_STATUS_ZH.md' in read('.gitignore'), 'Chinese at-a-glance source/limitation matrix is saved and linked without declaring runtime completion')
+check('00-先看这里-诊断速览.txt' in log_capture and '01-阅读说明.txt' in log_capture and '-operations.txt' in log_capture and 'archive-status.txt' in log_capture, 'diagnostic archive includes a first-read overview, instructions, host operation reports and an archive manifest')
+check('root.walkTopDown()' not in log_capture and 'selected-capture' in log_capture and 'if (includeLogcat) synchronized(this) { directory }' in log_capture and '8L * 1024 * 1024' in log_capture and '32L * 1024 * 1024' in log_capture, 'export includes only the current snapshot/explicit selected capture and bounds file/archive bytes instead of attaching all history')
+check('DiagnosticText.redact(value)' in log_capture and '完整logcat可能包含其他应用信息' in log_capture and '47.0.3' not in (JAVA / 'ui/screen/TrialLogSection.kt').read_text(encoding='utf-8'), 'JSON is redacted, full-logcat privacy is disclosed and obsolete hardcoded host-version UI is removed')
 
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
@@ -518,6 +546,8 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'provider/DiagnosticText.kt', 'provider/TrialLog.kt', 'provider/OperationJournal.kt', 'provider/DiagnosticOverview.kt',
+    'provider/TrialLogCapture.kt', 'ui/screen/TrialLogSection.kt', 'hook/HookRuntime.kt',
     'hook/OfflineExportCandidates.kt', 'hook/OfflineExportCodeGate.kt', 'hook/LocalVideoTracks.kt', 'hook/LocalVideoRemuxer.kt',
     'hook/AnimatedStickerData.kt', 'hook/AnimatedStickerContainers.kt', 'hook/HostAnimatedStickerDecoder.kt', 'hook/AnimatedStickerExporter.kt',
     'model/RegionEnvironmentPolicy.kt', 'model/CountryCatalog.kt', 'model/RegionPresets.kt', 'hook/SimHook.kt', 'hook/LocaleHook.kt', 'hook/TimeZoneHook.kt',
@@ -574,6 +604,8 @@ for relative in (
     'model/CountryCatalogTest.kt', 'ui/screen/ConfirmedConfigEditsTest.kt',
     'hook/AnimatedStickerFixtures.kt', 'hook/AnimatedStickerDataTest.kt', 'hook/AnimatedStickerContainersTest.kt',
     'hook/OfflineExportFixtures.kt', 'hook/OfflineExportCandidatesTest.kt', 'hook/LocalVideoTracksTest.kt', 'hook/LocalVideoRemuxerTest.kt',
+    'provider/OperationJournalTest.kt', 'provider/DiagnosticTextTest.kt', 'provider/DiagnosticOverviewTest.kt', 'provider/TrialLogCaptureTest.kt',
+    'provider/TrialLogTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

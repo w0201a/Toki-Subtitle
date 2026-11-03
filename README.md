@@ -2,7 +2,9 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
-## Source-only development: 2.0.74-debug
+## Source-only development: 2.0.75-debug
+
+**快速阅读：[中文功能状态与缺口速览](docs/FEATURE_STATUS_ZH.md)**。Exported diagnostic ZIPs now include a first-read Chinese overview, requested/applied/restart/config-revision evidence, and bounded correlated operation traces for video/sticker export. Missing evidence is not treated as success; full logcat may contain other-app data. This source-only logging batch has not been compiled or device-tested.
 
 Current work is restricted to four user-selected items: offline-video export, animated sticker conversion, all-setting live application, and the pictured template/effect cleanup. The user clarified that offline-video export means saving downloaded offline videos as accessible playable files, not adding a format-conversion catalogue. Other feature expansions are deferred until the user explicitly starts them; see [execution order](docs/USER_WORK_ORDER.md). Recent batches add multi-frame GIF/WebP conversion source and a descriptor-only offline-video export path: inspect actual complete local tracks, remux supported complete/initialized-fragment MP4 video and uniquely paired AAC audio, then read back sample fingerprints/timing before gallery publication. Explicit host-code, source-integrity, codec and resource limits apply. This does not complete or certify all four items.
 

@@ -13,6 +13,27 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class TrialLogCaptureTest {
+    @Test fun currentExportHasReadableSummaryAndNeverRecursivelyAttachesHistoricalLogs() {
+        val context = RuntimeEnvironment.getApplication()
+        val old = java.io.File(context.filesDir, "trial-logs/old-${java.util.UUID.randomUUID()}").apply { mkdirs() }
+        java.io.File(old, "private-history.txt").writeText("PRIVATE_OLD_LOG_MARKER")
+        val report = Bundle().apply {
+            putString("trialLog", "url=https://secret.example/video")
+            putString("operations", "op=OFFLINE_EXPORT-1 本次失败 阶段=回读目标文件")
+        }
+        val diagnostics = Bundle().apply { putBundle("com.zhiliaoapp.musically", report) }
+        val output = ByteArrayOutputStream(); TrialLogCapture.export(context, diagnostics, output, false)
+        val files = mutableMapOf<String, String>()
+        ZipInputStream(output.toByteArray().inputStream()).use { zip ->
+            while (true) { val entry = zip.nextEntry ?: break; files[entry.name] = zip.readBytes().toString(Charsets.UTF_8) }
+        }
+        assertTrue(files.keys.any { it.contains("00-先看这里") })
+        assertTrue(files.keys.any { it.endsWith("-operations.txt") })
+        assertTrue(files.containsKey("archive-status.txt"))
+        assertFalse(files.values.any { it.contains("PRIVATE_OLD_LOG_MARKER") || it.contains("secret.example") })
+        assertFalse(files.keys.any { it.contains("private-history") || it.contains("selected-capture") })
+    }
+
     @Test fun rootFreeExportIncludesHostProcessLogAndReportsMissingReply() {
         val host = "com.zhiliaoapp.musically"
         val report = Bundle().apply {

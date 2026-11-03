@@ -1,5 +1,7 @@
 package io.github.meiyongai.toki.subtitle.hook
 
+import io.github.meiyongai.toki.subtitle.provider.OperationDiagnostics
+import io.github.meiyongai.toki.subtitle.provider.OperationJournal
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -79,6 +81,7 @@ internal object OfflineVideoHook {
                 else DownloadHook.DEFAULT_VIDEO_RELATIVE_PATH
             val directory = configured?.takeIf { it.substringBefore('/') in setOf("Movies", "DCIM", "Pictures", "Download") }
                 ?: DownloadHook.DEFAULT_VIDEO_RELATIVE_PATH
+            val operation = OperationDiagnostics.start(OperationJournal.Kind.OFFLINE_EXPORT)
             val selectedRevision = state.revision
             val exportActive = {
                 !life.closed && life.enabled && life.longPress && state.revision == selectedRevision && state.owns(owner, target.id)
@@ -87,10 +90,18 @@ internal object OfflineVideoHook {
                 worker.execute {
                     val message = try {
                         check(!life.closed && life.enabled && life.longPress)
-                        val local = cache.resolve(app, video.model, exportActive)
-                        OfflineVideoExporter.save(app, local, directory, exportActive)
+                        val local = cache.resolve(app, video.model, exportActive, operation)
+                        OfflineVideoExporter.save(app, local, directory, exportActive, operation)
+                        operation.finish(OperationJournal.Result.SUCCESS)
                         R.string.offline_video_saved
                     } catch (error: LocalVideoFile.Unavailable) {
+                        operation.finish(if (!exportActive()) OperationJournal.Result.CANCELLED else OperationJournal.Result.UNAVAILABLE,
+                            if (!exportActive()) OperationJournal.Reason.CANCELLED else when (error.reason) {
+                                LocalVideoFile.Failure.MISSING -> OperationJournal.Reason.CACHE_MISSING
+                                LocalVideoFile.Failure.INCOMPLETE -> OperationJournal.Reason.CACHE_INCOMPLETE
+                                LocalVideoFile.Failure.CHANGED -> OperationJournal.Reason.SOURCE_CHANGED
+                                else -> OperationJournal.Reason.UNSUPPORTED
+                            }, error.javaClass.simpleName)
                         HookRuntime.event(FEATURE, "local export unavailable reason=" + error.reason.name)
                         when (error.reason) {
                             LocalVideoFile.Failure.MISSING -> R.string.offline_video_missing
@@ -99,16 +110,23 @@ internal object OfflineVideoHook {
                             else -> R.string.offline_video_export_failed
                         }
                     } catch (error: LinkageError) {
+                        operation.finish(OperationJournal.Result.UNAVAILABLE, OperationJournal.Reason.UNSUPPORTED, error.javaClass.simpleName)
                         HookRuntime.event(FEATURE, "local export adapter unavailable type=" + error.javaClass.simpleName)
                         R.string.offline_video_unsupported
                     } catch (error: Exception) {
+                        operation.failed(error, !exportActive())
                         HookRuntime.event(FEATURE, "local export failed type=" + error.javaClass.simpleName)
+                        R.string.offline_video_export_failed
+                    } catch (error: OutOfMemoryError) {
+                        operation.failed(error)
+                        HookRuntime.event(FEATURE, "local export unavailable: insufficient sample memory")
                         R.string.offline_video_export_failed
                     } finally { busy.set(false) }
                     main.post { if (!life.closed) HostSettingsEntry.showMessage(message) }
                 }
                 HostSettingsEntry.showMessage(R.string.offline_video_saving)
             } catch (_: java.util.concurrent.RejectedExecutionException) {
+                operation.finish(OperationJournal.Result.FAILED, OperationJournal.Reason.QUEUE_FULL)
                 busy.set(false); HostSettingsEntry.showMessage(R.string.offline_video_busy)
             }
         }
