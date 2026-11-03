@@ -19,10 +19,12 @@ internal fun OfflineVideoSection() {
     val context = LocalContext.current
     var enabled by remember { mutableStateOf(ConfigClient.getBoolean(context, OfflineVideoHook.KEY)) }
     var failed by remember { mutableStateOf(false) }
+    var directEntry by remember { mutableStateOf(ConfigClient.getBoolean(context, OfflineVideoHook.KEY_ENTRY)) }
     var online by remember { mutableStateOf(ConfigClient.getBoolean(context, CachedCommentTranslateHook.KEY)) }
     DisposableEffect(context) {
         val subscription = ConfigClient.addStateListener {
             enabled = ConfigClient.getBoolean(context, OfflineVideoHook.KEY)
+            directEntry = ConfigClient.getBoolean(context, OfflineVideoHook.KEY_ENTRY)
             online = ConfigClient.getBoolean(context, CachedCommentTranslateHook.KEY)
         }
         onDispose { subscription.close() }
@@ -32,6 +34,12 @@ internal fun OfflineVideoSection() {
             summary = context.getString(R.string.offline_video_summary), checked = enabled,
             modifier = Modifier.padding(12.dp), onCheckedChange = {
                 try { ConfigClient.putBoolean(context, OfflineVideoHook.KEY, it); failed = false }
+                catch (_: Exception) { failed = true }
+            })
+        CompactPreferenceSwitch(title = context.getString(R.string.offline_comment_button_enable),
+            summary = context.getString(R.string.offline_comment_button_summary), checked = directEntry,
+            modifier = Modifier.padding(12.dp), onCheckedChange = {
+                try { ConfigClient.putBoolean(context, OfflineVideoHook.KEY_ENTRY, it); failed = false }
                 catch (_: Exception) { failed = true }
             })
         CompactPreferenceSwitch(title = context.getString(R.string.cached_comment_online_feature),

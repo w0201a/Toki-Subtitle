@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 /** Dedicated local actions on the selected offline video; never opens native share/download menus. */
 internal object OfflineVideoHook {
     const val KEY = "offline_video_controls_enabled"
+    const val KEY_ENTRY = "offline_comment_button_enabled"
     private const val FEATURE = "OfflineVideoHook"
     private class Binding(holder: Any, video: OfflineVideoContract.Video, activity: Activity) {
         val owner = WeakReference(holder)
@@ -35,7 +36,7 @@ internal object OfflineVideoHook {
         val offline = video.offline
     }
 
-    private class Lifetime { @Volatile var enabled = false; @Volatile var closed = false }
+    private class Lifetime { @Volatile var enabled = false; @Volatile var longPress = false; @Volatile var closed = false }
 
     fun init(module: XposedModule, loader: ClassLoader) {
         val contract = OfflineVideoContract(loader)
@@ -55,13 +56,19 @@ internal object OfflineVideoHook {
         var comments: AlertDialog? = null
         val life = Lifetime()
         var cancellingNative = false
+        val entryReady = AtomicBoolean(false)
 
         fun cancelTouch() { timer?.let(main::removeCallbacks); timer = null; gesture.cancel() }
         fun closeMenu() { dialog?.dismiss(); dialog = null; comments?.dismiss(); comments = null }
+        HookRuntime.onDispose(FEATURE) {
+            life.closed = true; life.enabled = false; entryReady.set(false); worker.shutdown()
+            fun release() { cancelTouch(); closeMenu(); binding = null; state.clear() }
+            if (Looper.myLooper() == main.looper) release() else main.post { release() }
+        }
         fun current(target: Binding): Boolean = !life.closed && life.enabled && binding === target && target.offline &&
             target.owner.get()?.let { state.owns(it, target.id) } == true
         fun export(target: Binding) {
-            if (!current(target)) return
+            if (!current(target) || !life.longPress) return
             val activity = target.activity.get() ?: return
             val owner = target.owner.get() ?: return
             val video = contract.read(owner)?.takeIf { it.id == target.id && it.offline } ?: return
@@ -75,9 +82,9 @@ internal object OfflineVideoHook {
             try {
                 worker.execute {
                     val message = try {
-                        check(!life.closed && life.enabled)
+                        check(!life.closed && life.enabled && life.longPress)
                         val local = cache.resolve(app, video.model)
-                        OfflineVideoExporter.save(app, local, directory) { !life.closed && life.enabled }
+                        OfflineVideoExporter.save(app, local, directory) { !life.closed && life.enabled && life.longPress }
                         R.string.offline_video_saved
                     } catch (error: LocalVideoFile.Unavailable) {
                         HookRuntime.event(FEATURE, "local export unavailable reason=" + error.reason.name)
@@ -101,6 +108,54 @@ internal object OfflineVideoHook {
                 busy.set(false); HostSettingsEntry.showMessage(R.string.offline_video_busy)
             }
         }
+        fun openComments(target: Binding): Boolean {
+            if (!current(target)) return false
+            val screen = target.activity.get()?.takeIf { !it.isFinishing && !it.isDestroyed } ?: return false
+            val owner = target.owner.get() ?: return false
+            val video = contract.read(owner)?.takeIf { it.id == target.id && it.offline } ?: return false
+            val existing = comments
+            if (existing?.isShowing == true) return true
+            closeMenu()
+            comments = OfflineCommentsDialog.show(screen, target.id, commentReader, commentNetwork, commentReplies, video.model,
+                { current(target) }) { closed -> if (comments === closed) comments = null }
+            return comments?.isShowing == true
+        }
+        val entryFeature = "OfflineCommentButtonEntry"
+        HookRuntime.dependent(FEATURE, entryFeature)
+        HookRuntime.install(entryFeature) {
+            val entry = OfflineCommentEntryContract(loader)
+            module.trackHook(entryFeature, entry.click, requiresConfiguration = false).intercept { chain ->
+                val clicked = chain.args[0] as? View
+                val owner = chain.thisObject
+                val target = binding
+                val consume = if (clicked == null || owner == null || target == null ||
+                    Looper.myLooper() != main.looper || !current(target) || !ConfigClient.isReady ||
+                    !ConfigClient.getBoolean(KEY_ENTRY) || !entryReady.get()) false else try {
+                    val bound = entry.current(owner, clicked)
+                    val screen = target.activity.get()
+                    if (bound != null && screen != null && OfflineCommentEntryPolicy.intercept(
+                            ConfigClient.isReady && ConfigClient.getBoolean(KEY_ENTRY), entryReady.get(), target.id, bound.video,
+                            target.offline, bound.offline, bound.root.rootView === screen.window.decorView &&
+                                clicked.rootView === target.view.get()?.rootView,
+                            clicked.isShown && clicked.isAttachedToWindow && bound.root.isShown && bound.root.isAttachedToWindow)) {
+                        cancelTouch(); openComments(target)
+                    } else false
+                } catch (error: Exception) {
+                    HookRuntime.event(entryFeature, "entry unavailable; native retained type=" + error.javaClass.simpleName); false
+                } catch (error: LinkageError) {
+                    HookRuntime.event(entryFeature, "entry adapter unavailable; native retained type=" + error.javaClass.simpleName); false
+                }
+                if (consume) null else chain.proceed()
+            }
+            val app = checkNotNull(HookRuntime.hostContext)
+            worker.execute {
+                val inspected = OfflineCommentEntryCodeGate.verify(app)
+                if (!life.closed && HookRuntime.scope(entryFeature).active) entryReady.set(inspected)
+                if (!inspected) HookRuntime.state(entryFeature, "代码不匹配，保留原生评论入口")
+                HookRuntime.detail(entryFeature, if (inspected) "Inspected comment-button code ready; option and selected offline owner still required"
+                    else "Unsupported comment-button code; native entry retained")
+            }
+        }
         fun showMenu(target: Binding) {
             if (!current(target)) return
             val activity = target.activity.get()?.takeIf { !it.isFinishing && !it.isDestroyed } ?: return
@@ -114,14 +169,7 @@ internal object OfflineVideoHook {
                             when (action) {
                                 0 -> export(target)
                                 1 -> HostSettingsEntry.openSubtitle(activity)
-                                2 -> {
-                                    comments?.dismiss()
-                                    val owner = target.owner.get()
-                                    val model = owner?.let { contract.getAweme.invoke(it) }
-                                    if (model != null) comments = OfflineCommentsDialog.show(activity, target.id, commentReader, commentNetwork, commentReplies, model, { current(target) }) { closed ->
-                                        if (comments === closed) comments = null
-                                    }
-                                }
+                                2 -> openComments(target)
                             }
                         }
                     } catch (error: Exception) {
@@ -141,7 +189,8 @@ internal object OfflineVideoHook {
                 return true
             }
             val target = binding
-            if (target == null || target.activity.get() !== activity || !current(target) || dialog?.isShowing == true) {
+            if (target == null || target.activity.get() !== activity || !current(target) || !ConfigClient.getBoolean(KEY) ||
+                dialog?.isShowing == true || comments?.isShowing == true) {
                 cancelTouch(); return false
             }
             val view = target.view.get() ?: run { cancelTouch(); return false }
@@ -219,14 +268,11 @@ internal object OfflineVideoHook {
             chain.proceed()
         }
         HookRuntime.subscribe(FEATURE) { snapshot ->
-            life.enabled = snapshot?.boolean(KEY) == true
+            life.enabled = snapshot?.let { it.boolean(KEY) || it.boolean(KEY_ENTRY) } == true
+            life.longPress = snapshot?.boolean(KEY) == true
+            if (snapshot?.boolean(KEY) != true) { cancelTouch(); dialog?.dismiss(); dialog = null }
             if (!life.enabled) { cancelTouch(); closeMenu(); binding = null; state.clear() }
             if (snapshot != null) HookRuntime.appliedConfiguration(FEATURE, snapshot)
-        }
-        HookRuntime.onDispose(FEATURE) {
-            life.closed = true; life.enabled = false; worker.shutdown()
-            fun release() { cancelTouch(); closeMenu(); binding = null; state.clear() }
-            if (Looper.myLooper() == main.looper) release() else main.post { release() }
         }
     }
 

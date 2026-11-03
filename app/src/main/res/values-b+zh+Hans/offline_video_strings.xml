@@ -13,4 +13,6 @@
     <string name="offline_video_incomplete">视频缓存不完整或无法核实完整大小，未联网补齐缺失数据。</string>
     <string name="offline_video_unsupported">暂不支持导出该缓存或设备：需要已核对的 47.6.3 缓存代码、Android 10 及以上和完整非分片 MP4；音视频分离与加密格式仍待支持。</string>
     <string name="offline_video_export_failed">本地保存未完成，原缓存未改动，也未转为联网下载。相册中可能保留一条尚未发布的未完成记录。</string>
+    <string name="offline_comment_button_enable">离线视频评论按钮打开缓存评论</string>
+    <string name="offline_comment_button_summary">默认关闭，与长按菜单独立。开启后请重新进入视频。仅在已核对的 47.6.3 普通评论按钮路径、当前选中离线视频时，打开 Toki 缓存评论窗口；普通在线视频、过期/隐藏/不匹配组件或未适配代码保留原生行为。原评论按钮必须本来可见，此项不强制恢复被隐藏按钮，也不覆盖所有原生布局。先本地读取，在线评论/补译仍需主动点击；关闭即可恢复原生入口，无需重启。</string>
 </resources>

@@ -13,4 +13,6 @@
     <string name="offline_video_incomplete">The local cache is incomplete or its size cannot be verified. Missing bytes were not downloaded.</string>
     <string name="offline_video_unsupported">This cache/device cannot yet be exported locally. The inspected 47.6.3 cache code, Android 10+, and a complete non-fragmented MP4 are required; split/encrypted formats are not supported yet.</string>
     <string name="offline_video_export_failed">Local export was not completed. The source cache is unchanged; no remote fallback was used. An unfinished gallery record may remain unpublished.</string>
+    <string name="offline_comment_button_enable">Offline video comment button opens cached comments</string>
+    <string name="offline_comment_button_summary">Off by default and independent of the long-press menu. After enabling, re-enter the video. On the inspected 47.6.3 ordinary comment-button path, only the currently selected offline video opens Toki’s cached-comment window. Online videos, stale/hidden/unmatched components and unsupported code keep native behavior. The original comment button must already be visible; this does not unhide it or replace every native layout. Cached viewing starts locally; online pages/translations still require explicit actions. Disable to restore native entry without restarting.</string>
 </resources>

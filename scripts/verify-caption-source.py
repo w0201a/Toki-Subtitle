@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 87' in gradle and 'versionName = "2.0.67"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.67-debug / 87")
+check('versionCode = 88' in gradle and 'versionName = "2.0.68"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.68-debug / 88")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -199,7 +199,7 @@ offline_cache = (JAVA / 'hook/HostLocalVideoCache.kt').read_text(encoding='utf-8
 offline_files = (JAVA / 'hook/LocalVideoFile.kt').read_text(encoding='utf-8')
 offline_export = (JAVA / 'hook/OfflineVideoExporter.kt').read_text(encoding='utf-8')
 offline_contract = (JAVA / 'hook/OfflineVideoContract.kt').read_text(encoding='utf-8')
-check('"OfflineVideoHook" to listOf("offline_video_controls_enabled")' in schema and '"OfflineVideoHook" -> OfflineVideoHook.init' in module and '"HoldSpeedGestureHook", "OfflineVideoHook"' in plan, 'offline local controls have an independent live-installable direct-host unit')
+check('"OfflineVideoHook" to listOf("offline_video_controls_enabled", "offline_comment_button_enabled")' in schema and '"OfflineVideoHook" -> OfflineVideoHook.init' in module and '"HoldSpeedGestureHook", "OfflineVideoHook"' in plan, 'offline local controls have an independent live-installable direct-host unit')
 check('getOfflineVideoInfo' in offline_contract and 'isOfflineVideo' in offline_contract and 'offline_mode_page' in offline_contract, 'offline entries use inspected model metadata and exact page event type')
 check('OfflinePlaybackContext.state.localOnly' not in local_policy and 'OfflinePlaybackContext.state.offline' not in local_policy and 'playbackRevision' in local_policy, 'offline content no longer forces local-only networking; playback revision still rejects stale operations')
 check(offline_hook.index('chain.thisObject?.let(::select) // Local classification') < offline_hook.index('val result = chain.proceed()'), 'offline selection is classified before native selection callbacks')
@@ -264,7 +264,7 @@ page_network = (JAVA / 'hook/HostCommentPageNetwork.kt').read_text(encoding='utf
 page_merge = (JAVA / 'hook/CommentPageMerge.kt').read_text(encoding='utf-8')
 snapshot_codec = (JAVA / 'hook/CommentSnapshotCodec.kt').read_text(encoding='utf-8')
 snapshot_store = (JAVA / 'hook/CommentSnapshotStore.kt').read_text(encoding='utf-8')
-check('HostCommentPageNetwork(loader)' in offline_hook and 'commentNetwork, commentReplies, model' in offline_hook, 'offline comment viewer receives the current native video model and explicit page request adapter')
+check('HostCommentPageNetwork(loader)' in offline_hook and 'commentNetwork, commentReplies, video.model' in offline_hook, 'offline comment viewer receives the current native video model and explicit page request adapter')
 check('CommentPageCodeGate.verify(context)' in page_network and 'LJJZZI' in page_network and 'OFFLINE_COMMENT' in page_network and 'contract.request.invoke(null, video, cursor, 20' in page_network, 'comment page adapter uses inspected native request and Rx contracts for one 20-item page')
 check(not any(token in page_network for token in ('OfflineCommentLifecycleListener', 'X.0FTg', 'openConnection(', '.remove(', '.clear(', '.delete(')), 'comment page adapter does not invoke the native predownload/cache-clear manager or construct its own HTTP requests')
 check('remote.permitsNetwork()' in page_network and 'reader.accountMatches(account)' in page_network and 'contract.id.invoke(model) == video' in page_network and 'once.compareAndSet(false, true)' in page_network, 'page dispatch and response acceptance check explicit-network eligibility, identity and duplicate callbacks')
@@ -280,7 +280,7 @@ check('cancelPage()' in comment_dialog and 'pageOperation !== op' in comment_dia
 
 reply_network = (JAVA / 'hook/HostCommentReplyNetwork.kt').read_text(encoding='utf-8')
 reply_merge = (JAVA / 'hook/CommentReplyMerge.kt').read_text(encoding='utf-8')
-check('HostCommentReplyNetwork(loader)' in offline_hook and 'commentReplies, model' in offline_hook and 'replies.fetch(app, reader' in comment_dialog, 'per-root reply request adapter is connected to the selected-video comment dialog')
+check('HostCommentReplyNetwork(loader)' in offline_hook and 'commentReplies, video.model' in offline_hook and 'replies.fetch(app, reader' in comment_dialog, 'per-root reply request adapter is connected to the selected-video comment dialog')
 check('CommentPageCodeGate.verify(context)' in reply_network and 'getDeclaredMethod("LJIJJ"' in reply_network and 'root, cursor, 20' in reply_network, 'native reply adapter checks inspected code and exact authenticated suspend request contracts')
 check('getDeclaredMethod("LIZ", context)' in reply_network and 'getDeclaredMethod("LIZJ", scopeType, CancellationException::class.java)' in reply_network and 'operation.attach(AutoCloseable { c.cancelScope.invoke' in reply_network, 'reply requests create an owned native coroutine Job scope and register real scope cancellation')
 check('"getContext" -> c.getContext.invoke(continuation)' in reply_network and 'resumed.compareAndSet(false, true)' in reply_network and 'c.resume.invoke(continuation, unit)' in reply_network and 'response === suspended' in reply_network, 'suspend reply bridge preserves native context, single resume and immediate/suspended completion paths')
@@ -292,6 +292,19 @@ check('out.writeInt(2)' in snapshot_codec and 'require(version in 1..2)' in snap
 check('adapter.loadReplies =' in comment_dialog and 'cell.loadReplies.setOnClickListener' in comment_adapter and 'comment_reply_online_next' in comment_adapter, 'individual root-row first/next/refresh reply actions use the shared timeout/save lifecycle')
 check('root = replyRoot' in comment_dialog and 'CommentReplyMerge.merge(checkNotNull(old), replyRoot, page, cursor)' in comment_dialog and 'main.postDelayed(it, 15000)' in comment_dialog, 'reply copy/merge keeps root identity and inherits bounded cancellation/persistence behavior')
 check(not any(token in reply_network for token in ('openConnection(', 'OfflineCommentLifecycleListener', '.delete(', 'clearCache(')), 'reply adapter adds no raw HTTP, native predownload or cache-deletion path (source only)')
+
+entry_contract = (JAVA / 'hook/OfflineCommentEntryContract.kt').read_text(encoding='utf-8')
+entry_policy = (JAVA / 'hook/OfflineCommentEntryPolicy.kt').read_text(encoding='utf-8')
+entry_gate = (JAVA / 'hook/OfflineCommentEntryCodeGate.kt').read_text(encoding='utf-8')
+check('KEY_ENTRY = "offline_comment_button_enabled"' in offline_hook and 'it.boolean(KEY) || it.boolean(KEY_ENTRY)' in offline_hook and 'OfflineVideoHook.KEY_ENTRY' in (JAVA / 'ui/screen/OfflineVideoSection.kt').read_text(encoding='utf-8'), 'native offline comment-button option is independently configurable without enabling long press')
+check('instance(component, "vq", Void.TYPE, View::class.java, String::class.java)' in entry_contract and 'getDeclaredMethod("sq")' in entry_contract and 'getMethod("getItem")' in entry_contract and '"mEventType"' in entry_contract, 'entry contract reads the inspected ordinary-button method and bound video model instead of guessing resource IDs')
+check('selectedVideo == clickedVideo' in entry_policy and 'selectedOffline && clickedOffline && samePage && visible' in entry_policy and 'enabled && inspectedCode' in entry_policy, 'entry policy requires matching selected offline video, inspected code, same page and visible button')
+check('module.trackHook(entryFeature, entry.click' in offline_hook and 'if (consume) null else chain.proceed()' in offline_hook and 'entry unavailable; native retained' in offline_hook, 'button hook consumes only a successfully opened cache viewer and otherwise preserves the original call')
+check('worker.execute {' in offline_hook and 'OfflineCommentEntryCodeGate.verify(app)' in offline_hook and 'classes5.dex' in entry_gate and 'SHA-256' in entry_gate, 'comment-button code verification is submitted to a background worker before interception is eligible')
+check('HookRuntime.dependent(FEATURE, entryFeature)' in offline_hook and 'HookRuntime.install(entryFeature)' in offline_hook and 'entryReady.set(false)' in offline_hook, 'optional button-hook handles and readiness share parent cleanup without disabling cache/long-press siblings on entry failure')
+check('fun openComments(target: Binding): Boolean' in offline_hook and 'comments?.isShowing == true' in offline_hook and 'clicked.rootView === target.view.get()?.rootView' in offline_hook, 'long-press and native-button paths reuse the same current-owner dialog and window identity')
+check('!ConfigClient.getBoolean(KEY)' in offline_hook and 'comments?.isShowing == true) {' in offline_hook and 'life.longPress' in offline_hook, 'button-only enablement does not start long-press gestures or keep exports active after that option is disabled')
+check('getMethod("performClick"' not in entry_contract and 'getMethod("dispatchTouchEvent"' not in entry_contract and 'getResourceEntryName(' not in entry_contract, 'native entry adapter does not hook every view click or use guessed labels/resources')
 
 for relative in ('hook/TranslationNetworkPolicy.kt', 'ui/screen/LocalTranslationSection.kt'):
     references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
@@ -377,6 +390,7 @@ lexical_files = [
     'hook/CachedCommentTranslationSession.kt', 'ui/screen/OfflineVideoSection.kt',
     'hook/CommentPageCodeGate.kt', 'hook/HostCommentPageNetwork.kt', 'hook/CommentPageMerge.kt',
     'hook/CommentSnapshotCodec.kt', 'hook/CommentSnapshotStore.kt', 'hook/HostCommentReplyNetwork.kt', 'hook/CommentReplyMerge.kt',
+    'hook/OfflineCommentEntryContract.kt', 'hook/OfflineCommentEntryPolicy.kt', 'hook/OfflineCommentEntryCodeGate.kt',
 ]
 for relative in lexical_files:
     kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8'))
@@ -396,7 +410,7 @@ for relative in (
     'hook/OfflineCommentDataTest.kt', 'hook/OfflineCommentListAdapterTest.kt',
     'hook/CachedCommentTranslationSessionTest.kt', 'hook/CommentTranslationStoreTest.kt', 'hook/CachedCommentOnlineAdapterTest.kt',
     'hook/CommentPageMergeTest.kt', 'hook/CommentSnapshotCodecTest.kt', 'hook/CommentSnapshotStoreTest.kt',
-    'hook/CommentReplyMergeTest.kt', 'hook/CommentReplyCursorCodecTest.kt', 'hook/CommentReplyAdapterTest.kt',
+    'hook/CommentReplyMergeTest.kt', 'hook/CommentReplyCursorCodecTest.kt', 'hook/CommentReplyAdapterTest.kt', 'hook/OfflineCommentEntryPolicyTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))
