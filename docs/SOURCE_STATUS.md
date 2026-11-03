@@ -6,7 +6,7 @@ Updated: 2026-11-04. Source version: **2.0.73-debug / 93**. Latest published pro
 
 ## Current user-directed ordering
 
-**Updated user priority:** advance only additional offline-cache export formats, animated sticker conversion, all-setting live application and the pictured template/effect hiding. Other feature expansions are recorded in [USER_WORK_ORDER.md](USER_WORK_ORDER.md) and wait for an explicit user “start”. Existing functionality is retained. None of the four selected items is certified complete. This supersedes the previous ordering for the selected export task; the rest of offline integration is deferred.
+**Updated user priority (clarified 2026-11-04):** advance only offline-video export, animated sticker conversion, all-setting live application and the pictured template/effect hiding. Offline-video export means saving already-downloaded TikTok offline videos into user-accessible playable files, not adding a cache-format conversion catalogue; track assembly/container handling is implementation work only where the actual export needs it. Other feature expansions are recorded in [USER_WORK_ORDER.md](USER_WORK_ORDER.md) and wait for an explicit user “start”. Existing functionality is retained. None of the four selected items is certified complete. This supersedes the previous ordering for the selected export task; the rest of offline integration is deferred.
 
 ### Earlier offline ordering and policy context
 
