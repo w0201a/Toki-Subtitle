@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.70-debug
+# Source-only development status — 2.0.71-debug
 
-Updated: 2026-11-04. Source version: **2.0.70-debug / 90**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.71-debug / 91**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -33,6 +33,15 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.71 — independent search/inbox/LIVE component presentation
+
+- Six independent default-off controls grouped in settings: search voice floating entrance, Tako/mixed floating entrance, inbox shop-migration banner, LIVE bottom/pinned follow-guide cards and GiftGuideWidget content. The mixed entrance can include other actions; the gift control does not cover separate Lynx popups/windows. No message/data deletion or lifecycle/business suppression is introduced.
+- Direct-host and late-install wiring does not depend on top/bottom navigation discovery. Settings subscribe to shared state and report save failures. Closed controls restore observed host visibility while respecting other visibility owners. First activation/code preparation and unregistered/recycled views may still require page re-entry; this is not an all-feature no-restart claim.
+- Search roots come from actual inflated fields, inbox roots from returned/rebound holder itemView, and LIVE roots only from matching actual contentView/getView. The inspected Widget.getView fallback to a container is refused. Detached holder creation is tracked until attachment; subsequent detach releases ownership/listeners and requires a fresh native bind/create/show callback. Bounded weak-identity records avoid equal-owner collision, stale root reuse and accidental retention.
+- Six expected DEX hashes are checked off-thread per component; missing/unsupported code keeps native UI. Settings diagnostics distinguish checking, requested-but-unavailable components and ready installed controls. All six code digests were independently re-matched against the local original 47.6.3 APK.
+- 371 source checks and whitespace checks passed. Twelve additional regression case sources cover configuration/code requirements, field/widget/holder readers, pending attachment, independent toggles, latest host visibility, shared owners, identity/capacity/reuse/disposal, and diagnostics. They were NOT executed. No Gradle/Kotlin compilation, JUnit/Robolectric, device/UI/pixel verification or APK build was performed.
+- This supplies concrete page-internal targets, not complete search/inbox/LIVE purification. Other page variants, overlays, runtime behavior, complete supported subdivision coverage and the final offline integration remain outstanding.
 
 ## Added in 2.0.70 — six video geometry modes and live mode reapplication
 
@@ -171,7 +180,7 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 | Sticker format/source selection | Source-category selection and real static PNG/JPEG/WebP conversion now wired in source; original bytes retained. Runtime, pixels and API 28–29 coverage unverified. Animated re-encoding is not implemented. |
 | Hold-to-speed, downward-slide lock/unlock | Owned native downward-mode path, default-off setting and cancellation lifecycle wired from 47.6.3 contracts. Real gestures, fixed-speed interaction, layout coverage and native-eligibility limitations remain unverified. |
 | More video display modes | Six aspect-preserving modes and current-layout reapply inside an installed immersive session are wired. Window master restart, unsupported surfaces/layouts, native lifecycle recursion and actual pixels/device behavior remain unverified. |
-| Search/inbox/live internal cleanup | Dedicated bottom-of-video search suggestions toggle added to existing targets. This is not search-page/inbox/live internal cleanup; more bindings and runtime checks remain. |
+| Search/inbox/live internal cleanup | Six independent inspected page-internal component controls are wired in source, separate from existing bottom-video search suggestions. Other variants/overlays, complete page coverage and runtime verification remain incomplete; standalone LIVE Lynx popups/windows are not covered. |
 | All comments translatable and translation switching | Ordinary-comment fallback plus cached-comment per-row modes, optional explicit online translation and private persistent results are in source. Native bulk/cell coverage, special comments, deeper native interaction, local engines and all device/service behavior remain incomplete/unverified. |
 | More subtitle styles | New renderer/settings/test sources present; compilation, pixel checks, device behavior and full localization unverified. |
 

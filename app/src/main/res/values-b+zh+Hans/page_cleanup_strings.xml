@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="page_cleanup_title">页面内部净化</string>
+    <string name="page_cleanup_choose">选择搜索、收件箱与直播组件</string>
+    <string name="page_cleanup_selected">已选择 %1$d 项</string>
+    <string name="page_cleanup_search">搜索页</string>
+    <string name="page_cleanup_inbox">收件箱</string>
+    <string name="page_cleanup_live">直播页</string>
+    <string name="page_cleanup_hint">所有项目默认关闭。仅隐藏已核实组件内容，不删除消息、数据，也不阻止宿主后台业务或引导逻辑。首次开启或代码核验期间请重新进入页面；不匹配时保持原界面，并在诊断中提示。视频底部搜索推荐使用布局净化中的独立开关。</string>
+    <string name="page_hide_search_voice">隐藏搜索语音悬浮按钮</string>
+    <string name="page_hide_search_voice_hint">仅搜索中间页的语音入口，不影响键盘或全部搜索控件。</string>
+    <string name="page_hide_search_tako">隐藏 Tako／混合悬浮入口</string>
+    <string name="page_hide_search_tako_hint">隐藏已核实的整组悬浮入口；混合变体中可能同时包含其他操作。</string>
+    <string name="page_hide_inbox_shop_migration">隐藏商城迁移横幅</string>
+    <string name="page_hide_inbox_shop_migration_hint">仅收件箱商城迁移横幅，不删除或修改会话、通知与订单。</string>
+    <string name="page_hide_live_follow_bottom">隐藏直播底部关注卡片</string>
+    <string name="page_hide_live_follow_bottom_hint">仅已核实的底部关注引导组件，不修改直播播放与关注业务。</string>
+    <string name="page_hide_live_follow_pin">隐藏直播置顶关注卡片</string>
+    <string name="page_hide_live_follow_pin_hint">仅已核实的置顶关注引导组件，不会隐藏全部直播置顶内容。</string>
+    <string name="page_hide_live_gift_guide">隐藏直播礼物引导内容</string>
+    <string name="page_hide_live_gift_guide_hint">仅 GiftGuideWidget 的组件内容，不包含独立 Lynx 弹层或其他窗口；礼物事件和业务逻辑仍正常执行。</string>
+    <string name="page_cleanup_save_error">保存失败，保留之前的设置。</string>
+</resources>

@@ -19,6 +19,7 @@ internal object HookStatusCatalog {
         HookFeatureDefinition("ProgressBarHook", R.string.status_feature_progress),
         HookFeatureDefinition("AutoCleanModeHook", R.string.status_feature_clean),
         HookFeatureDefinition("LayoutCleanupHook", R.string.layout_title),
+        HookFeatureDefinition("PageCleanupHook", R.string.page_cleanup_title),
         HookFeatureDefinition("QuickCommentCleanupHook", R.string.layout_quick_comment),
         HookFeatureDefinition("SharePanelCleanupHook", R.string.share_cleanup_title),
         HookFeatureDefinition("ImmersiveFullScreenHook", R.string.status_feature_immersive),
@@ -94,6 +95,7 @@ internal data class HookFeatureStatus(
     val state = when {
         report?.hasError == true || menuIssue || videoIssue -> HookVisualState.ISSUE
         report?.restartRequired == true || speedMenu?.restartRequired == true -> HookVisualState.PENDING
+        report?.state == "正在核验页面组件" -> HookVisualState.PENDING
         report?.enabled == null -> HookVisualState.PENDING
         report?.appliedEnabled == false -> HookVisualState.DISABLED
         menuEnabled && speedMenu?.state != "菜单数据源已注册；调用次数计入播放倍速" -> HookVisualState.PENDING

@@ -7,6 +7,16 @@ import org.junit.Test
 
 /** 验证简明功能列表的状态语义与自动会话选择，不依赖宿主和设备。 */
 class HookStatusModelTest {
+    @Test fun pageCodePreparationAndPartialSupportAreNotReportedAsDisabledOrNormal() {
+        val definition = HookStatusCatalog.features.single { it.id == "PageCleanupHook" }
+        assertEquals(HookVisualState.PENDING, HookFeatureStatus(definition,
+            HookFeatureReport(true, "正在核验页面组件", 4, appliedEnabled = false)).state)
+        assertEquals(HookVisualState.ISSUE, HookFeatureStatus(definition,
+            HookFeatureReport(true, "部分功能已注册", 4, appliedEnabled = false)).state)
+        assertEquals(HookVisualState.NORMAL, HookFeatureStatus(definition,
+            HookFeatureReport(true, "已注册", 4, appliedEnabled = true)).state)
+    }
+
     @Test fun failedVideoModeAdapterIsNotHiddenBehindAReadyImmersiveWindow() {
         val reports = mapOf(
             "ImmersiveFullScreenHook" to HookFeatureReport(true, "已注册", 8, appliedEnabled = true),

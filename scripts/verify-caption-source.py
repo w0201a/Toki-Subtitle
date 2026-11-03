@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 90' in gradle and 'versionName = "2.0.70"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.70-debug / 90")
+check('versionCode = 91' in gradle and 'versionName = "2.0.71"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.71-debug / 90")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -351,6 +351,35 @@ for relative in ('hook/TranslationNetworkPolicy.kt', 'ui/screen/LocalTranslation
 
 check('if (source.isBlank()) source else null' in manual_core and 'source.any(Char::isLetter)' not in manual_core, 'explicit manual translation does not silently filter emoji-only or numeric comment text')
 
+# Page component cleanup: source contracts only; these checks do not execute Android hooks.
+page_items = (JAVA / 'model/PageCleanupItem.kt').read_text(encoding='utf-8')
+page_bindings = (JAVA / 'hook/PageCleanupBindings.kt').read_text(encoding='utf-8')
+page_contract = (JAVA / 'hook/PageCleanupContract.kt').read_text(encoding='utf-8')
+page_gate = (JAVA / 'hook/PageCleanupCodeGate.kt').read_text(encoding='utf-8')
+page_hook = (JAVA / 'hook/PageCleanupHook.kt').read_text(encoding='utf-8')
+page_ui = (JAVA / 'ui/screen/PageCleanupSection.kt').read_text(encoding='utf-8')
+check(len(re.findall(r'^    (?:SEARCH|INBOX|LIVE)_[A-Z_]+\(PageCleanupGroup', page_items, re.M)) == 6, 'page cleanup catalog has six independent inspected items')
+check('"PageCleanupHook" to io.github.meiyongai.toki.subtitle.model.PageCleanupItem.entries.map { it.key }' in (JAVA / 'provider/ConfigSchema.kt').read_text(encoding='utf-8'), 'all page cleanup switches participate in default-off configuration schema')
+check('"PageCleanupHook"' in (JAVA / 'hook/HostFeaturePlan.kt').read_text(encoding='utf-8').split('val directHost =', 1)[1].split('\n', 1)[0], 'page cleanup can be installed without a navigation symbol scan')
+check('"PageCleanupHook" -> PageCleanupHook.init(this, loader)' in (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8') and 'PageCleanupSection()' in (JAVA / 'ui/screen/DashboardScreen.kt').read_text(encoding='utf-8'), 'page cleanup is connected to module installation and dashboard settings')
+check('getDeclaredField(name)' in page_contract and '"LLJZ"' in page_contract and '"LLJLIL"' in page_contract, 'search cleanup reads inspected inflated fields instead of ViewStub lifecycle arguments')
+check('getField("contentView")' in page_contract and 'actual?.takeIf { root.invoke(instance) === it }' in page_contract, 'widget cleanup refuses getView fallback parent containers')
+check('getField("itemView")' in page_contract and 'it.name == "Ip"' in page_contract and '"Kp"' in page_contract, 'inbox cleanup reads returned or rebound holder itemView only')
+check('WeakReference(component)' in page_bindings and 'it.component.get() === component' in page_bindings and 'root.parent != null' in page_bindings and 'onViewAttachedToWindow(view: View) { activate(binding, view) }' in page_bindings, 'bounded weak-identity bindings wait for holder attachment and distinguish equality collisions')
+check(all(token in page_bindings for token in ('root is ViewStub', 'root is SurfaceView', 'root is TextureView', 'root === root.rootView', 'bindings.size >= capacity')), 'page cleanup excludes stubs, video surfaces and attached window roots and limits retained bindings')
+check('gate.unbind(owners.getValue(binding.item), root)' in page_bindings and 'bindings.toList().forEach(::unbind)' in page_bindings and 'removeOnAttachStateChangeListener' in page_bindings, 'root reuse, detach and disposal release visibility ownership and listeners')
+check('MessageDigest.getInstance("SHA-256")' in page_gate and 'Thread.currentThread().isInterrupted' in page_gate and 'matched.containsAll(required(it))' in page_gate and page_gate.count(' to "') == 6, 'component code gate verifies six expected DEX digests off the UI thread and supports cancellation')
+check('Executors.newSingleThreadExecutor' in page_hook and 'worker.execute' in page_hook and 'main.post' in page_hook and 'worker.shutdownNow()' in page_hook, 'page code verification and disposal are separated from main-thread view updates')
+check('val result = chain.proceed()' in page_hook and 'matches.filter { method in it.bound }' in page_hook and 'bindings.release(owner)' in page_hook, 'page native lifecycle proceeds before root binding and releases on unload')
+check('requested.intersect(supported)' in page_hook and '正在核验页面组件' in page_hook and '部分功能已注册' in page_hook and 'enabled.isNotEmpty()' in page_hook and 'PageCleanupHook.refreshStatus()' in (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8') and 'fun refreshStatus()' in page_hook, 'unverified requested controls retain actual readiness after generic hook diagnostics')
+check('ConfigClient.addStateListener' in page_ui and 'subscription.close()' in page_ui and 'ConfigClient.putBoolean' in page_ui and 'PageCleanupGroup.entries' in page_ui and 'page_cleanup_save_error' in page_ui, 'grouped page settings subscribe, save independently and expose persistence failure')
+for locale in ('values', 'values-b+zh+Hans'):
+    strings = {n.attrib['name']: ''.join(n.itertext()) for n in ET.parse(ROOT / 'app/src/main/res' / locale / 'page_cleanup_strings.xml').getroot() if n.tag == 'string'}
+    references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', page_items + page_ui)) - {'common_done'}
+    check(references <= strings.keys(), locale + ' page cleanup labels and scope limitations exist')
+for relative in ('PageCleanupBindingsTest.kt', 'PageCleanupContractTest.kt', 'PageCleanupPolicyTest.kt'):
+    check((ROOT / 'app/src/test/java/io/github/meiyongai/toki/hook' / relative).exists(), relative + ' regression source exists (not executed)')
+
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
     length = len(source)
@@ -408,6 +437,8 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'model/PageCleanupItem.kt', 'hook/PageCleanupBindings.kt', 'hook/PageCleanupContract.kt',
+    'hook/PageCleanupCodeGate.kt', 'hook/PageCleanupHook.kt', 'ui/screen/PageCleanupSection.kt',
     'hook/HostFeaturePlan.kt', 'hook/TokiModule.kt', 'hook/HostSymbols.kt', 'hook/HostScanSession.kt', 'hook/HostScanController.kt',
     'hook/SubtitleOverlay.kt', 'hook/NativeSubtitleTranslator.kt', 'model/SubtitleAppearance.kt',
     'provider/ConfigSchema.kt', 'provider/ConfigStore.kt', 'provider/ConfigConflictClock.kt',
@@ -454,6 +485,7 @@ for relative in (
     'hook/CommentReplyMergeTest.kt', 'hook/CommentReplyCursorCodecTest.kt', 'hook/CommentReplyAdapterTest.kt', 'hook/OfflineCommentEntryPolicyTest.kt',
     'hook/CaptionPlaybackClockTest.kt', 'hook/SubtitleReplayRecoveryTest.kt',
     'hook/VideoDisplayModesTest.kt', 'hook/VideoLayoutBindingsTest.kt', 'hook/SmartVideoLayoutTest.kt', 'hook/VideoFillGeometryTest.kt',
+    'hook/PageCleanupBindingsTest.kt', 'hook/PageCleanupContractTest.kt', 'hook/PageCleanupPolicyTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

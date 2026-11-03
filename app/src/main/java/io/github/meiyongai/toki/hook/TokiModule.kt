@@ -89,6 +89,8 @@ class TokiModule : XposedModule() {
                     applied && HostFeaturePlan.enabled(feature, effective))
             }
         }
+        // Component code availability is stricter than generic hook installation; retain its actual applied subset.
+        if ("PageCleanupHook" in installed) PageCleanupHook.refreshStatus()
         HookRuntime.configurationReady(if (restart) "配置就绪，等待重新打开" else "配置已就绪")
     }
 
@@ -186,6 +188,7 @@ class TokiModule : XposedModule() {
             "AuthorLocationHook" -> AuthorLocationHook.init(this, loader)
             "ProgressBarHook" -> ProgressBarHook.init(this, loader)
             "AutoCleanModeHook" -> AutoCleanModeHook.init(this, loader)
+            "PageCleanupHook" -> PageCleanupHook.init(this, loader)
             "LayoutCleanupHook" -> LayoutCleanupHook.init(this, loader)
             "QuickCommentCleanupHook" -> QuickCommentCleanupHook.init(this, loader)
             "SharePanelCleanupHook" -> SharePanelCleanupHook.init(this, loader)

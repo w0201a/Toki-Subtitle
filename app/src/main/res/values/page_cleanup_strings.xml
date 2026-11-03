@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="page_cleanup_title">Page cleanup</string>
+    <string name="page_cleanup_choose">Choose search, inbox and LIVE components</string>
+    <string name="page_cleanup_selected">%1$d components selected</string>
+    <string name="page_cleanup_search">Search</string>
+    <string name="page_cleanup_inbox">Inbox</string>
+    <string name="page_cleanup_live">LIVE</string>
+    <string name="page_cleanup_hint">All switches are off by default. Hides inspected component content only, not page data, messages or background business logic. Reopen the page after first enabling or while code verification is preparing. Unsupported code keeps the original UI and is reported in diagnostics. The feed-bottom search suggestion is a separate layout switch.</string>
+    <string name="page_hide_search_voice">Hide search voice floating button</string>
+    <string name="page_hide_search_voice_hint">Search middle-page voice entrance only; not the keyboard or all search controls.</string>
+    <string name="page_hide_search_tako">Hide Tako / mixed floating entrance</string>
+    <string name="page_hide_search_tako_hint">Hides the inspected floating group, including mixed variants which may contain additional actions.</string>
+    <string name="page_hide_inbox_shop_migration">Hide shop migration banner</string>
+    <string name="page_hide_inbox_shop_migration_hint">Only the inbox shop-migration banner; conversations, notifications and orders are untouched.</string>
+    <string name="page_hide_live_follow_bottom">Hide LIVE bottom follow card</string>
+    <string name="page_hide_live_follow_bottom_hint">Only the inspected bottom follow-guide widget; playback and follow actions remain native.</string>
+    <string name="page_hide_live_follow_pin">Hide LIVE pinned follow card</string>
+    <string name="page_hide_live_follow_pin_hint">Only the inspected pinned follow-guide widget, not all pinned room content.</string>
+    <string name="page_hide_live_gift_guide">Hide LIVE gift guide content</string>
+    <string name="page_hide_live_gift_guide_hint">Only GiftGuideWidget content. Separate Lynx popups or windows are not covered; gift events and business logic still run.</string>
+    <string name="page_cleanup_save_error">Could not save; the previous setting is retained.</string>
+</resources>
