@@ -303,6 +303,8 @@
     <string name="feature_background_audio">"Unlock background audio"</string>
     <string name="layout_landscape">"Full-screen button"</string>
     <string name="layout_photo_indicators">"Photo indicators &amp; hints"</string>
+    <string name="layout_video_template">"Video templates &amp; effects"</string>
+    <string name="layout_share_panel">"Share sheet components"</string>
     <string name="layout_quick_message">"Quick messages &amp; shared by"</string>
     <string name="layout_user_card">"Suggested accounts"</string>
     <string name="layout_survey">"Surveys &amp; feedback"</string>
@@ -345,4 +347,6 @@
     <string name="host_scan_background_complete">"Compatibility analysis finished. Available features are active."</string>
     <string name="host_scan_background_partial">"Analysis finished with some unavailable features. Check status in Toki."</string>
     <string name="host_scan_background_failed">"Analysis failed. Check status and retry in Toki."</string>
+    <string name="layout_filter_hint">Find a cleanup option</string>
+    <string name="layout_filter_empty">No matching cleanup options</string>
 </resources>

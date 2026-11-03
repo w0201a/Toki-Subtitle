@@ -2,7 +2,7 @@ package io.github.meiyongai.toki.subtitle.hook
 
 /** Completed videos stay until viewing advances two batches; reading never changes retention. */
 internal class VideoCaptionCache(private val capacity: Int = 100) {
-    private class Video(val track: String, val values: MutableMap<String, String> = linkedMapOf(), var expected: Set<String>? = null) {
+    internal class Video(val track: String, val values: MutableMap<String, String> = linkedMapOf(), var expected: Set<String>? = null) {
         val complete: Boolean get() = expected?.let { it.isNotEmpty() && values.keys.containsAll(it) } ?: false
     }
     private val videos = LinkedHashMap<String, Video>(capacity)
@@ -97,6 +97,28 @@ internal class VideoCaptionCache(private val capacity: Int = 100) {
     }
     val size: Int get() = videos.size
     val partialSize: Int get() = pending.size
+
+    /** 离线持久化需要的视频级快照：保留已完整/进行中的视频，不包括诊断计数。 */
+    fun snapshot(): Map<String, Video> = synchronized(this) {
+        (videos + pending).mapValues { (_, video) ->
+            Video(video.track, LinkedHashMap(video.values), video.expected?.toSet())
+        }
+    }
+
+    /** 进程重启后恢复上次保存的字幕译文，避免再次请求或视频回看时重新等待。 */
+    fun restore(saved: Map<String, Video>) {
+        clear()
+        saved.forEach { (video, source) ->
+            val entry = Video(source.track, LinkedHashMap(source.values), source.expected?.toSet())
+            activeTracks[video] = source.track
+            retain(video, entry)
+        }
+        // 恢复后不把历史视频标记为“最近看过”，只保留可读缓存。
+        selected = ""
+        watched.clear()
+        counted.clear()
+        expired.clear()
+    }
     fun diagnostic(): String = "completed=$size partial=$partialSize hits=$hits misses=$misses trackMismatches=$trackMismatches capacity=$capacity"
     fun clear() {
         videos.clear(); pending.clear(); watched.clear(); counted.clear(); expired.clear(); activeTracks.clear(); selected = ""

@@ -38,7 +38,7 @@ class AuthorLocationContractTest {
         val name = "作者 🌸"
         assertEquals(name, AuthorLocationHook.formatAuthorWithLocation(name, " "))
         val formatted = AuthorLocationHook.formatAuthorWithLocation(name, " us ")
-        assertEquals("[🇺🇸US] $name", formatted)
+        assertEquals("[🇺🇸美国] $name", formatted)
         assertEquals(formatted, AuthorLocationHook.formatAuthorWithLocation(formatted, "US"))
         assertEquals("[🌐Unknown] $name", AuthorLocationHook.formatAuthorWithLocation(name, "Unknown"))
     }

@@ -10,6 +10,9 @@ import android.view.ViewGroup
 import android.view.ViewTreeObserver
 import android.widget.FrameLayout
 import android.widget.TextView
+import io.github.meiyongai.toki.subtitle.model.SubtitleAppearance
+import io.github.meiyongai.toki.subtitle.model.SubtitleCaptionPresentation
+import io.github.meiyongai.toki.subtitle.ui.StyledSubtitleTextView
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
 import java.util.WeakHashMap
@@ -30,7 +33,11 @@ internal class SubtitleOverlay(private val source: View,
     }
     private var layer: FrameLayout? = null
     private var layerHost: ViewGroup? = null
-    private var label: TextView? = null
+    private var label: StyledSubtitleTextView? = null
+    private var appearanceConfiguration: ConfigSnapshot? = null
+    private var appearanceStyled = false
+    private var appliedAppearance: SubtitleAppearance? = null
+    private var appearanceBackground: Int? = null
     private var state = "HIDDEN"
     private var caption = ""
     private var videoId = ""
@@ -144,7 +151,7 @@ internal class SubtitleOverlay(private val source: View,
         if (host.width <= 0 || host.height <= 0) return
         if (layerHost !== host) {
             unmount()
-            val text = TextView(source.context).apply {
+            val text = StyledSubtitleTextView(source.context).apply {
                 gravity = Gravity.CENTER
                 setPadding(8, 4, 8, 4)
                 isClickable = false
@@ -152,6 +159,7 @@ internal class SubtitleOverlay(private val source: View,
                 importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             }
             label = text
+            appearanceBackground = null
             layer = FrameLayout(source.context).apply {
                 isClickable = false
                 isFocusable = false
@@ -177,7 +185,8 @@ internal class SubtitleOverlay(private val source: View,
             requested = false
             trackIdentity = selectedTrack
         }
-        val translating = translator?.isEnabled(videoId) == true
+        val displayMode = settings.string("subtitle_text_mode", "translated")!!
+        val translating = displayMode != "original" && translator?.isEnabled(videoId) == true
         if (!translating) {
             translated = null
             requested = false
@@ -193,8 +202,9 @@ internal class SubtitleOverlay(private val source: View,
                 source.postInvalidateOnAnimation()
             })
         }
-        val displayed = if (translating) translated ?: caption else caption
+        val displayed = SubtitleCaptionPresentation.display(caption, if (translating) translated else null, displayMode)
         if (text.text.toString() != displayed) text.text = displayed
+        val background: Int
         if (styled) {
             val size = settings.string("subtitle_size", "20")!!.toFloat()
             val weight = when (settings.string("subtitle_weight", "normal")) {
@@ -213,9 +223,8 @@ internal class SubtitleOverlay(private val source: View,
             if (text.typeface != font) text.typeface = font
             val color = Color.parseColor(settings.string("subtitle_color", "#FFFFFFFF"))
             if (text.currentTextColor != color) text.setTextColor(color)
-            val background = if (settings.string("subtitle_background_mode", "show") == "hide") Color.TRANSPARENT
+            background = if (settings.string("subtitle_background_mode", "show") == "hide") Color.TRANSPARENT
                 else Color.parseColor(settings.string("subtitle_background", "#80000000"))
-            if ((text.background as? android.graphics.drawable.ColorDrawable)?.color != background) text.setBackgroundColor(background)
         } else {
             val native = nativeTextView()
             val pixels = native?.textSize ?: TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20f, text.resources.displayMetrics)
@@ -224,8 +233,17 @@ internal class SubtitleOverlay(private val source: View,
             if (text.typeface != nativeTypeface) text.typeface = nativeTypeface
             val color = native?.currentTextColor ?: Color.WHITE
             if (text.currentTextColor != color) text.setTextColor(color)
-            val background = ((native?.background ?: source.background) as? android.graphics.drawable.ColorDrawable)?.color ?: Color.TRANSPARENT
-            if ((text.background as? android.graphics.drawable.ColorDrawable)?.color != background) text.setBackgroundColor(background)
+            background = ((native?.background ?: source.background) as? android.graphics.drawable.ColorDrawable)?.color ?: Color.TRANSPARENT
+        }
+        if (appearanceConfiguration !== settings || appearanceStyled != styled || appliedAppearance == null) {
+            appliedAppearance = SubtitleAppearance.from(if (styled) settings else ConfigSnapshot(emptyMap()))
+            appearanceConfiguration = settings
+            appearanceStyled = styled
+            appearanceBackground = null
+        }
+        if (appearanceBackground != background) {
+            text.applyAppearance(checkNotNull(appliedAppearance), background)
+            appearanceBackground = background
         }
         val margin = (12 * text.resources.displayMetrics.density).toInt()
         text.measure(View.MeasureSpec.makeMeasureSpec((overlay.width - margin * 2).coerceAtLeast(1), View.MeasureSpec.AT_MOST),

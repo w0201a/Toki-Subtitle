@@ -131,4 +131,36 @@ class HostScanSessionTest {
         session.progress(99, 100)
         session.saving()
     }
+    @Test fun incrementalScanCanFollowVerifiedTerminalStateButNotAnActiveScan() {
+        val session = HostScanSession()
+        session.begin()
+        assertThrows(IllegalStateException::class.java) { session.begin() }
+        session.extensions()
+        assertThrows(IllegalStateException::class.java) { session.begin() }
+        session.saving()
+        assertThrows(IllegalStateException::class.java) { session.begin() }
+        session.ready()
+        session.begin(2)
+        assertEquals(HostScanPhase.SCANNING, session.status.phase)
+        assertEquals(0, session.status.completed)
+        assertEquals(2, session.status.workers)
+        session.fail()
+        session.begin()
+        assertEquals(HostScanPhase.SCANNING, session.status.phase)
+    }
+
+    @Test fun staleCompletionActionCannotDismissANewlyStartedScan() {
+        val session = HostScanSession()
+        session.begin()
+        session.extensions()
+        session.saving()
+        session.ready()
+        session.begin()
+        assertFalse(session.dismissResultIfTerminal())
+        assertEquals(HostScanPhase.SCANNING, session.status.phase)
+        session.fail()
+        assertTrue(session.dismissResultIfTerminal())
+        assertEquals(HostScanPhase.IDLE, session.status.phase)
+    }
+
 }

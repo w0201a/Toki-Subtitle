@@ -113,7 +113,10 @@ internal class HostScanController private constructor(
         }
         dismissBadge()
         if (dialog == null) {
-            dialog = HostScanDialog(activity, moduleResources, { session.dismissResult(); dismissDialog() }, {
+            dialog = HostScanDialog(activity, moduleResources, {
+                if (session.dismissResultIfTerminal()) dismissDialog()
+                else { backgroundMode = true; dismissDialog(); render() }
+            }, {
                 backgroundMode = true
                 dismissDialog()
                 android.widget.Toast.makeText(moduleResources.createActivityContext(activity), io.github.meiyongai.toki.subtitle.R.string.host_scan_background_hint, android.widget.Toast.LENGTH_LONG).show()

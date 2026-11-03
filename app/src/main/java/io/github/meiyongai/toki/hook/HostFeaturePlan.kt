@@ -6,21 +6,38 @@ import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
 /** 一次宿主会话的安装与配置契约，未安装功能不能经交叉调用局部启用。 */
 internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
     private val rejected = mutableSetOf<String>()
-    val features: Set<String> = ConfigSchema.featureSwitches.keys.filterTo(linkedSetOf()) {
+    private val startupFeatures: Set<String> = ConfigSchema.featureSwitches.keys.filterTo(linkedSetOf()) {
         it != "SpeedOptions" && startup != null && enabled(it, startup)
     }
-    val platformFeatures: Set<String> = features.intersect(platform)
+    private var liveFeatures: Set<String> = emptySet()
+    val features: Set<String>
+        @Synchronized get() = startupFeatures + liveFeatures
+    val platformFeatures: Set<String> get() = features.intersect(platform)
     private val downloadRepair = startup?.boolean("download_force_no_watermark") == true
-    val directHostFeatures: Set<String> = features.intersect(directHost) +
+    val directHostFeatures: Set<String> get() = features.intersect(directHost) +
         if ("DownloadHook" in features && !downloadRepair) setOf("DownloadHook") else emptySet()
-    val adaptedFeatures: Set<String> = features - platform - directHostFeatures
-    val symbols: Set<HostSymbol> = adaptedFeatures.flatMapTo(linkedSetOf()) { feature ->
+    val adaptedFeatures: Set<String> get() = features - platform - directHostFeatures
+    val symbols: Set<HostSymbol> get() = adaptedFeatures.flatMapTo(linkedSetOf()) { feature ->
         if (feature == "PlaybackSpeedHook") buildSet {
             if (checkNotNull(startup).boolean("fixed_speed_enabled")) addAll(fixedSpeedSymbols)
             if (startup.boolean("speed_expand_enabled")) addAll(speedMenuSymbols)
         } else symbolDependencies.getValue(feature)
     }
     val requiresScan: Boolean get() = symbols.isNotEmpty()
+
+    /** Candidate discovery does not enable any business callback before hooks are installed. */
+    @Synchronized fun liveCandidates(requested: ConfigSnapshot): List<String> = liveInstallable.filter {
+        it !in features && it !in rejected && enabled(it, requested)
+    }.sortedBy { if (it == "ProgressBarHook") 0 else 1 }
+
+    /** Admit only after installation succeeds. Failed or startup-frozen features cannot be promoted. */
+    @Synchronized fun admitLive(feature: String): Boolean {
+        require(feature in liveInstallable)
+        if (feature in rejected) return false
+        if (feature == "AutoCleanModeHook" && ("ProgressBarHook" !in features || "ProgressBarHook" in rejected)) return false
+        liveFeatures = liveFeatures + feature
+        return true
+    }
 
     /** 注册失败的安装单元不再提供有效开关；依赖单元同时失去运行资格。 */
     @Synchronized fun reject(feature: String) {
@@ -52,7 +69,8 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
     @Synchronized fun requiresRestart(feature: String, requested: ConfigSnapshot): Boolean {
         val owner = if (feature == "SpeedOptions") "PlaybackSpeedHook" else feature
         if (owner == "DownloadHook" && !downloadRepair && requested.boolean("download_force_no_watermark")) return true
-        if (owner !in features) return enabled(feature, requested)
+        if (owner !in features) return enabled(feature, requested) &&
+            (owner !in liveInstallable || owner in rejected)
         val keys = startupKeys[owner] ?: return false
         val original = checkNotNull(startup)
         if (owner == "PlaybackSpeedHook" && original.importRevision != requested.importRevision) return true
@@ -66,6 +84,15 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
     companion object {
         val platform = setOf("SimHook", "LocaleHook", "TimeZoneHook", "GpsHook")
         val directHost = setOf("StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook")
+        // Startup-sensitive SIM/locale/timezone/GPS, speed, immersive and audio-experiment hooks remain explicit restart cases.
+        val liveInstallable = setOf("LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
+            "CommentCopyHook", "CommentStickerDownloadHook", "VideoTranslateHook", "LiveSwipeLockHook",
+            "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook") + directHost
+
+        fun liveSymbols(features: Collection<String>): Set<HostSymbol> {
+            require(features.all { it in liveInstallable })
+            return features.filter { it !in directHost }.flatMapTo(linkedSetOf()) { symbolDependencies.getValue(it) }
+        }
 
         fun enabled(feature: String, snapshot: ConfigSnapshot): Boolean = when (feature) {
             "ProgressBarHook" -> snapshot.boolean("always_show_progress_bar") || snapshot.boolean("clean_mode_on_play")

@@ -1,14 +1,16 @@
 package io.github.meiyongai.toki.subtitle.hook
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.Base64
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
 
-/** 已选字幕文件的只读预取；正文只在内存保存，切换视频使迟到结果失效。 */
+/** 已选字幕文件优先读取私有离线存档；切换视频使迟到结果失效。 */
 internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator) : AutoCloseable {
     private val main = Handler(Looper.getMainLooper())
     // 当前文件加后五条文件的有界队列；切换视频清除尚未开始的旧任务。
@@ -68,7 +70,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             if (cues.isEmpty() && trackUrl.isNotBlank()) {
                 worker.execute {
                     if (closed || token != generation) return@execute
-                    val parsed = try { CaptionTimeline.parse(read(trackUrl, generation)) } catch (error: Exception) {
+                    val parsed = try { loadCues(trackUrl, generation) } catch (error: Exception) {
                         if (token == generation) HookRuntime.event("CaptionPrefetch", "current fetch failed=${error.javaClass.simpleName}")
                         emptyList()
                     }
@@ -119,7 +121,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             if (track.url in timelines || !attempted.add(track.url) || !loading.add(track.url)) return@forEach
             worker.execute {
                 if (closed || token != generation) return@execute
-                val parsed = try { CaptionTimeline.parse(read(track.url, generation)) } catch (error: Exception) {
+                val parsed = try { loadCues(track.url, generation) } catch (error: Exception) {
                     if (token == generation) HookRuntime.event("CaptionPrefetch", "upcoming fetch failed=${error.javaClass.simpleName}")
                     emptyList()
                 }
@@ -157,6 +159,19 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             !closed && token == generation && current() && translator.canPrefetch(video)
         }
     }
+    private fun loadCues(location: String, generation: Long): List<CaptionTimeline.Cue> {
+        check(!closed && token == generation)
+        val identity = identityFor(location)
+        CaptionTimelineDiskCache.read(identity)?.let { stored ->
+            val parsed = CaptionTimeline.parse(stored)
+            if (parsed.isNotEmpty()) return parsed
+        }
+        val body = read(location, generation)
+        val parsed = CaptionTimeline.parse(body)
+        if (parsed.isNotEmpty() && !closed && token == generation) CaptionTimelineDiskCache.save(identity, body)
+        return parsed
+    }
+
     private fun read(location: String, generation: Long): String {
         var next = location
         repeat(4) {
@@ -221,12 +236,63 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             "byteoversea.com", "ibytedtos.com", "muscdn.com", "tiktok.com", "ibyteimg.com")
         private val tracks = LinkedHashMap<String, String>()
         private val trackIdentities = LinkedHashMap<String, String>()
+        private const val PREF_NAME = "toki_subtitle_tracks"
+        private const val KEY_JSON = "tracks"
+        private var persisted = false
+
+        private fun trackPrefs(): android.content.SharedPreferences? =
+            HookRuntime.hostContext?.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+
+        @Synchronized fun loadTracks() {
+            if (persisted) return
+            try {
+                val preferences = trackPrefs() ?: return
+                persisted = true
+                val raw = preferences.getString(KEY_JSON, null) ?: return
+                if (raw.length > 2 * 1024 * 1024) return
+                val decoded = String(Base64.getDecoder().decode(raw), Charsets.UTF_8)
+                val rows = decoded.lineSequence().filter { it.isNotBlank() }.mapNotNull { line ->
+                    val sep = line.indexOf('\u0001')
+                    if (sep <= 0) null else line.substring(0, sep) to line.substring(sep + 1)
+                }.take(128).toMap()
+                rows.forEach { (video, location) ->
+                    if (video.isNotBlank() && video.length <= 256 && location.length <= 8192 && video !in tracks) {
+                        tracks[video] = location
+                        trackIdentities[video] = trackFingerprint(location)
+                    }
+                }
+                while (tracks.size > 128) {
+                    val oldest = tracks.keys.first()
+                    tracks.remove(oldest)
+                    trackIdentities.remove(oldest)
+                }
+                persisted = true
+                HookRuntime.event("CaptionPrefetch", "track identities restored=${rows.size}")
+            } catch (error: Exception) {
+                HookRuntime.event("CaptionPrefetch", "track restore unavailable type=" + error.javaClass.simpleName)
+            }
+        }
+
+        @Synchronized private fun persistTracks() {
+            try {
+                val preferences = trackPrefs() ?: return
+                val text = buildString {
+                    tracks.forEach { (video, location) -> append(video).append('\u0001').append(location).append('\n') }
+                }
+                val encoded = Base64.getEncoder().encodeToString(text.toByteArray(Charsets.UTF_8))
+                preferences.edit().putString(KEY_JSON, encoded).apply()
+            } catch (error: Exception) {
+                HookRuntime.event("CaptionPrefetch", "track write unavailable type=" + error.javaClass.simpleName)
+            }
+        }
         @Synchronized fun noteCandidate(video: String, location: String?) {
+            loadTracks()
             // Playback selection is authoritative; a stale feed model cannot flip it back.
             if (video !in tracks) note(video, location)
         }
         private fun identityFor(location: String): String = if (location.isBlank()) "" else trackFingerprint(location)
         @Synchronized fun note(video: String, location: String?) {
+            loadTracks()
             if (!location.isNullOrBlank()) {
                 if (tracks[video] == location) return
                 tracks[video] = location
@@ -240,11 +306,12 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
                 tracks.remove(oldest)
                 trackIdentities.remove(oldest)
             }
+            persistTracks()
         }
         @Synchronized private fun track(video: String) = tracks[video]
         @Synchronized fun identity(video: String): String = trackIdentities[video].orEmpty()
 
-        /** URLs remain process-local; only a digest is used to partition subtitle translations. */
+        /** Only the stable digest partitions translations; signed URLs are kept in host-private track preferences. */
         internal fun trackFingerprint(location: String): String {
             val stable = runCatching {
                 val uri = java.net.URI(location).normalize()

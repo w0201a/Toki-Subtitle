@@ -20,6 +20,19 @@ class TokiModule : XposedModule() {
     private var applicationHookInstalled = false
     private var application: Application? = null
     private var pendingHost: (() -> Unit)? = null
+    private val activationHandler = android.os.Handler(android.os.Looper.getMainLooper())
+    private var hostInfo: android.content.pm.ApplicationInfo? = null
+    private var hostLoader: ClassLoader? = null
+    private var activationInFlight = false
+    private val activateRequested = Runnable { activateLiveFeatures() }
+    private val refreshRequested = Runnable {
+        if (ConfigClient.isReady) application?.let { refreshConfiguration(it, publish = false) }
+    }
+
+    private fun scheduleLiveActivation() {
+        activationHandler.removeCallbacks(activateRequested)
+        activationHandler.post(activateRequested)
+    }
 
     companion object {
         private const val TAG = "TokiModule"
@@ -40,7 +53,19 @@ class TokiModule : XposedModule() {
             HookRuntime.state(feature, if (feature in plan.features || feature == "SpeedOptions" && "PlaybackSpeedHook" in plan.features)
                 "等待注册" else "本次会话未安装")
         }
-        HookRuntime.own("HostSession", ConfigClient.addStateListener { updateConfigurationStatus(it) })
+        HookRuntime.own("HostSession", ConfigClient.addStateListener {
+            updateConfigurationStatus(it)
+            activationHandler.removeCallbacks(refreshRequested)
+            activationHandler.post(refreshRequested)
+            scheduleLiveActivation()
+        })
+        HookRuntime.own("HostSession", HostScanController.session.addListener {
+            if (HostScanController.session.status.phase !in setOf(HostScanPhase.SCANNING, HostScanPhase.EXTENSIONS, HostScanPhase.SAVING)) scheduleLiveActivation()
+        })
+        HookRuntime.onDispose("HostSession") {
+            activationHandler.removeCallbacks(activateRequested)
+            activationHandler.removeCallbacks(refreshRequested)
+        }
         updateConfigurationStatus(if (ready) ConfigClient.snapshot() else null)
         log(Log.INFO, TAG, "模块加载成功，process=$processName ready=$ready features=${plan.features} symbols=${plan.symbols.size}")
     }
@@ -50,10 +75,12 @@ class TokiModule : XposedModule() {
         val requested = ConfigClient.requestedSnapshotOrNull()
         if (effective == null || requested == null) return
         var restart = false
+        val livePending = plan.liveCandidates(requested).toSet()
         for (feature in ConfigSchema.featureSwitches.keys) {
             val pending = plan.requiresRestart(feature, requested)
             restart = restart || pending
             HookRuntime.restartRequired(feature, pending)
+            if (feature in livePending) HookRuntime.state(feature, "等待运行时注册")
             val applied = if (feature == "SpeedOptions") "PlaybackSpeedHook" in installed else feature in installed
             if (applied || !HostFeaturePlan.enabled(feature, effective)) {
                 val revision = plan.appliedRevision(if (feature == "SpeedOptions") "PlaybackSpeedHook" else feature, requested)
@@ -100,7 +127,7 @@ class TokiModule : XposedModule() {
         if (ConfigClient.isReady) refreshConfiguration(app)
     }
 
-    private fun refreshConfiguration(app: Application) {
+    private fun refreshConfiguration(app: Application, publish: Boolean = true) {
         val attempted = installed.toList()
         for (feature in attempted) HookRuntime.configure(feature) {
             when (feature) {
@@ -120,8 +147,9 @@ class TokiModule : XposedModule() {
                 "VideoDurationAlertHook" -> VideoDurationAlertHook.refreshConfig(app)
             }
         }
-        for (feature in attempted - installed) plan.reject(feature)
-        ConfigClient.refreshHostSession()
+        val failed = attempted - installed
+        failed.forEach(plan::reject)
+        if (publish || failed.isNotEmpty()) ConfigClient.refreshHostSession()
         updateConfigurationStatus(ConfigClient.snapshot())
     }
 
@@ -194,6 +222,9 @@ class TokiModule : XposedModule() {
     }
 
     private fun prepareHost(param: PackageReadyParam) {
+        hostInfo = param.applicationInfo
+        hostLoader = param.classLoader
+        scheduleLiveActivation()
         if (plan.directHostFeatures.isNotEmpty()) {
             val loader = param.classLoader
             plan.directHostFeatures.forEach { install(it, loader) }
@@ -210,6 +241,64 @@ class TokiModule : XposedModule() {
             }) installAdapted(loader)
     }
 
+    /** Serialize late installs behind actual scan completion; requested settings stay masked until admission. */
+    private fun activateLiveFeatures() {
+        val app = application ?: return
+        val info = hostInfo ?: return
+        val loader = hostLoader ?: return
+        if (processName != app.packageName || !ConfigClient.isReady || activationInFlight) return
+        if (HostScanController.session.status.phase in setOf(HostScanPhase.SCANNING, HostScanPhase.EXTENSIONS, HostScanPhase.SAVING)) return
+        val requested = ConfigClient.requestedSnapshotOrNull() ?: return
+        val candidates = plan.liveCandidates(requested).filter { it !in installed && HookRuntime.scope(it).active }
+        if (candidates.isEmpty()) return
+        activationInFlight = true
+        candidates.forEach { HookRuntime.state(it, "正在准备运行时依赖") }
+        var finished = false
+        fun failed(error: Exception) {
+            if (finished) return
+            finished = true
+            candidates.forEach {
+                plan.reject(it)
+                HookRuntime.failure(it, error, "运行时准备失败，未启用")
+            }
+            activationInFlight = false
+            ConfigClient.refreshHostSession()
+            scheduleLiveActivation()
+        }
+        fun prepared() {
+            if (finished) return
+            finished = true
+            try {
+                val latest = ConfigClient.requestedSnapshotOrNull()
+                for (feature in candidates) {
+                    if (latest == null || !HostFeaturePlan.enabled(feature, latest)) continue
+                    if (feature == "AutoCleanModeHook" && "ProgressBarHook" !in installed) {
+                        plan.reject(feature)
+                        HookRuntime.failure(feature, IllegalStateException("ProgressBarHook unavailable"), "运行时依赖未就绪，未启用")
+                        continue
+                    }
+                    if (feature !in installed) install(feature, loader)
+                    if (feature in installed) check(plan.admitLive(feature)) { "Live feature admission rejected: $feature" }
+                }
+            } catch (error: Exception) {
+                // Successfully admitted siblings remain usable; never activate an uninstalled feature.
+                HookRuntime.failure("LiveFeatureActivation", error, "运行时注册未完成")
+                candidates.filter { it !in installed }.forEach(plan::reject)
+            } finally {
+                activationInFlight = false
+                ConfigClient.refreshHostSession()
+                refreshConfiguration(app)
+                scheduleLiveActivation()
+            }
+        }
+        val dependencies = HostFeaturePlan.liveSymbols(candidates)
+        if (dependencies.isEmpty()) { prepared(); return }
+        try {
+            if (HostSymbols.initialize(info, true, plan.symbols + dependencies,
+                    onFailed = ::failed, onPrepared = ::prepared)) prepared()
+        } catch (error: Exception) { failed(error) }
+    }
+
     private fun installAdapted(loader: ClassLoader, extensions: Boolean = true) {
         // 清屏依赖进度条的安装成功，不能留下半套状态机。
         val ordered = plan.adaptedFeatures.sortedBy { if (it == "ProgressBarHook") 0 else 1 }
@@ -220,7 +309,7 @@ class TokiModule : XposedModule() {
             } else if (feature !in installed && HookRuntime.scope(feature).active) install(feature, loader)
         }
         if (ConfigClient.isReady) {
-            application?.let(::refreshConfiguration)
+            application?.let { refreshConfiguration(it) }
             updateConfigurationStatus(ConfigClient.snapshot())
         }
         if (extensions) HookRuntime.installationOutcome("功能安装检查完成；代码 ${HostSymbols.codeIdentity()}")

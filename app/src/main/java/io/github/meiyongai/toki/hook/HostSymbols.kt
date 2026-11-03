@@ -61,12 +61,13 @@ internal object HostSymbols {
      * @return 是否已经存在与完整代码集合及规则一致的缓存。
      * Callers: TokiModule.onPackageReady。
      */
-    fun initialize(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onCorePrepared: () -> Unit = {}, onPrepared: () -> Unit = {}): Boolean {
+    fun initialize(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onCorePrepared: () -> Unit = {}, onFailed: (Exception) -> Unit = {}, onPrepared: () -> Unit = {}): Boolean {
         try {
-            return prepare(info, scanAllowed, required, onCorePrepared, onPrepared)
+            return prepare(info, scanAllowed, required, onCorePrepared, onFailed, onPrepared)
         } catch (error: Exception) {
             // 同步准备位于框架生命周期内，记录可见状态后仍保留原始异常和严格契约。
             HookRuntime.failure("HostSymbols", error, "适配准备失败")
+            onFailed(error)
             throw error
         }
     }
@@ -79,7 +80,7 @@ internal object HostSymbols {
      * @return 结果是否已可用于当前进程注册。
      * Callers: initialize。
      */
-    private fun prepare(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onCorePrepared: () -> Unit, onPrepared: () -> Unit): Boolean {
+    private fun prepare(info: android.content.pm.ApplicationInfo, scanAllowed: Boolean, required: Set<HostSymbol>, onCorePrepared: () -> Unit, onFailed: (Exception) -> Unit, onPrepared: () -> Unit): Boolean {
         require(required.isNotEmpty()) { "无需符号适配的会话不能启动扫描" }
         val paths = listOf(info.sourceDir) + info.splitSourceDirs.orEmpty()
         val identity = HostDexIndex.identity(paths)
@@ -172,6 +173,7 @@ internal object HostSymbols {
                     HookRuntime.adaptation("适配扫描失败：${error.javaClass.simpleName}；请检查 TokiHostSymbols 日志")
                     Log.e("TokiHostSymbols", "宿主符号扫描失败", error)
                     HostScanController.session.fail()
+                    android.os.Handler(android.os.Looper.getMainLooper()).post { onFailed(error) }
                     HostScanController.onScanFinished()
                 }
             }, "TokiSymbolScan").apply { priority = Thread.NORM_PRIORITY - 1 }.start()

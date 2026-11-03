@@ -1,6 +1,6 @@
 package io.github.meiyongai.toki.subtitle.hook
 
-/** 扫描和缓存发布的有序阶段；完成结果等待用户确认。 */
+/** 扫描和缓存发布的有序阶段；完成结果保留到确认或下一次明确请求的扫描。 */
 internal enum class HostScanPhase { IDLE, SCANNING, EXTENSIONS, SAVING, READY, PARTIAL, FAILED }
 
 /** 单次发布的不可变进度；单位表示已处理工作，不表示预计耗时。 */
@@ -27,7 +27,7 @@ internal class HostScanSession {
 
     /** 开始唯一扫描。@return Unit。Callers: HostSymbols.initialize、单元测试。 */
     @Synchronized fun begin(workers: Int = 1) {
-        check(status.phase == HostScanPhase.IDLE)
+        check(status.phase !in setOf(HostScanPhase.SCANNING, HostScanPhase.EXTENSIONS, HostScanPhase.SAVING))
         status = HostScanStatus(HostScanPhase.SCANNING, workers = workers.coerceAtLeast(1))
     }
 
@@ -85,6 +85,13 @@ internal class HostScanSession {
     @Synchronized fun partial() {
         check(status.phase == HostScanPhase.READY)
         status = status.copy(phase = HostScanPhase.PARTIAL)
+    }
+
+    /** A stale completion button must not dismiss or cancel a newly started incremental scan. */
+    @Synchronized fun dismissResultIfTerminal(): Boolean {
+        if (status.phase !in setOf(HostScanPhase.READY, HostScanPhase.PARTIAL, HostScanPhase.FAILED)) return false
+        status = HostScanStatus()
+        return true
     }
 
     /** 用户关闭结果窗口，不改变缓存和宿主进程。无参数，返回 Unit。Callers: HostScanController、单元测试。 */

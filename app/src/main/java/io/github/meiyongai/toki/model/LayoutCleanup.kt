@@ -58,6 +58,8 @@ enum class LayoutElement(val group: LayoutGroup, val title: Int, val tag: String
     LIVE_NOTICE(LayoutGroup.SIDE, R.string.layout_live_notice),
     LANDSCAPE(LayoutGroup.SIDE, R.string.layout_landscape),
     PHOTO_INDICATORS(LayoutGroup.SIDE, R.string.layout_photo_indicators),
+    VIDEO_TEMPLATE(LayoutGroup.SIDE, R.string.layout_video_template),
+    SHARE_PANEL(LayoutGroup.SIDE, R.string.layout_share_panel),
     QUICK_MESSAGE(LayoutGroup.SIDE, R.string.layout_quick_message),
     USER_CARD(LayoutGroup.SIDE, R.string.layout_user_card),
     SURVEY(LayoutGroup.SIDE, R.string.layout_survey),

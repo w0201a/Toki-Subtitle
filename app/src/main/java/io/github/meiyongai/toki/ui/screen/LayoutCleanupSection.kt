@@ -1,14 +1,17 @@
 package io.github.meiyongai.toki.subtitle.ui.screen
 
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +41,13 @@ internal fun LayoutCleanupSection() {
     val strings = context.resources
     var group by remember { mutableStateOf<LayoutGroup?>(null) }
     var values by remember { mutableStateOf(LayoutElement.entries.associateWith { ConfigClient.getBoolean(context, it.key) }) }
+    DisposableEffect(context) {
+        val subscription = ConfigClient.addStateListener {
+            // Read through the editing context: injected settings must show requested values too.
+            values = LayoutElement.entries.associateWith { ConfigClient.getBoolean(context, it.key) }
+        }
+        onDispose { subscription.close() }
+    }
     PreferenceSection(title = strings.getString(R.string.layout_title)) {
         LayoutGroup.entries.forEachIndexed { index, entry ->
             MorphingPreferenceContainer(shape = getGroupedShape(index, LayoutGroup.entries.size), onClick = { group = entry }) {
@@ -45,17 +55,26 @@ internal fun LayoutCleanupSection() {
             }
         }
     }
-    group?.let { selected -> AlertDialog(
+    group?.let { selected ->
+        var query by remember(selected) { mutableStateOf("") }
+        val filtered = LayoutElement.entries.filter { it.group == selected &&
+            strings.getString(it.title).contains(query.trim(), ignoreCase = true) }
+        AlertDialog(
         onDismissRequest = { group = null },
         title = { Text(strings.getString(selected.title)) },
         text = {
             Column(Modifier.stableDialogHeight(420.dp)) {
                 Text(strings.getString(R.string.layout_hint))
                 Spacer(Modifier.height(12.dp))
+                OutlinedTextField(value = query, onValueChange = { query = it }, singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(strings.getString(R.string.layout_filter_hint)) })
+                Spacer(Modifier.height(8.dp))
                 androidx.compose.runtime.key(group) {
                     Column(Modifier.verticalScroll(rememberScrollState())) {
-                        LayoutOpacityControl(selected)
-                        for (element in LayoutElement.entries.filter { it.group == selected }) {
+                        if (query.isBlank()) LayoutOpacityControl(selected)
+                        if (filtered.isEmpty()) Text(strings.getString(R.string.layout_filter_empty), Modifier.padding(16.dp))
+                        for (element in filtered) {
                             CompactPreferenceSwitch(
                                 title = strings.getString(element.title),
                                 checked = values.getValue(element),

@@ -321,4 +321,85 @@ class ConfigStoreTest {
         assertEquals(1L,restarted.snapshot().revision)
     }
 
+    private fun managerAndHost(): Triple<ConfigStore, ConfigStore, SharedPreferences> {
+        val manager = ConfigStore({}, { throw AssertionError(it) })
+        manager.attachLocal(preferences())
+        manager.update(mapOf("feed_remove_ads" to true, "subtitle_size" to "20"))
+        val source = preferences()
+        manager.connect { source }
+        val readOnly = object : SharedPreferences by source {
+            override fun edit(): SharedPreferences.Editor = throw AssertionError("framework is read-only")
+        }
+        val host = ConfigStore({}, { throw AssertionError(it) })
+        host.attachHost({ readOnly }, {})
+        val local = preferences()
+        host.attachHostOverrides(local)
+        return Triple(manager, host, local)
+    }
+
+    @Test fun explicitSameValueManagerEditSupersedesHostOverrideButUnrelatedEditDoesNot() {
+        val (manager, host, _) = managerAndHost()
+        host.update(mapOf("feed_remove_ads" to false, "subtitle_size" to "28"))
+        manager.update(mapOf("video_translate_enabled" to true))
+        host.reloadHost()
+        assertFalse(host.snapshot().boolean("feed_remove_ads"))
+        assertEquals("28", host.snapshot().string("subtitle_size"))
+        manager.update(mapOf("feed_remove_ads" to true)) // Same manager value is still an explicit later action.
+        host.reloadHost()
+        assertTrue(host.snapshot().boolean("feed_remove_ads"))
+        assertEquals("28", host.snapshot().string("subtitle_size"))
+        host.update(mapOf("feed_remove_ads" to false)) // A new host edit is allowed to take ownership again.
+        assertFalse(host.snapshot().boolean("feed_remove_ads"))
+    }
+
+    @Test fun managerRevertAndProcessRestartCannotResurrectSuppressedHostValues() {
+        val (manager, host, local) = managerAndHost()
+        host.update(mapOf("subtitle_size" to "28"))
+        manager.update(mapOf("subtitle_size" to "32"))
+        host.reloadHost()
+        assertEquals("32", host.snapshot().string("subtitle_size"))
+        manager.update(mapOf("subtitle_size" to "20"))
+        host.reloadHost()
+        assertEquals("20", host.snapshot().string("subtitle_size"))
+        assertEquals("28", local.getString("subtitle_size", null)) // Preserve original stored values for recovery.
+        val source = preferences()
+        manager.connect { source }
+        val restarted = ConfigStore({}, { throw AssertionError(it) })
+        restarted.attachHost({ object : SharedPreferences by source {
+            override fun edit(): SharedPreferences.Editor = throw AssertionError("framework is read-only")
+        } }, {})
+        restarted.attachHostOverrides(local)
+        assertEquals("20", restarted.snapshot().string("subtitle_size"))
+    }
+
+    @Test fun managerRemovalAndReplacementCanOverrideHostTombstonesAndImports() {
+        val (manager, host, _) = managerAndHost()
+        host.update(mapOf("subtitle_size" to null))
+        assertNull(host.snapshot().string("subtitle_size"))
+        manager.update(mapOf("subtitle_size" to "20"))
+        host.reloadHost()
+        assertEquals("20", host.snapshot().string("subtitle_size"))
+        host.update(mapOf("subtitle_size" to "28"), replace = true)
+        assertFalse(host.snapshot().boolean("feed_remove_ads"))
+        manager.update(mapOf("feed_remove_ads" to true, "subtitle_size" to "24"), replace = true)
+        host.reloadHost()
+        assertTrue(host.snapshot().boolean("feed_remove_ads"))
+        assertEquals("24", host.snapshot().string("subtitle_size"))
+        host.update(mapOf("subtitle_size" to "30"))
+        manager.update(mapOf("subtitle_size" to null))
+        host.reloadHost()
+        assertNull(host.snapshot().string("subtitle_size"))
+    }
+
+    @Test fun conflictMetadataNeverLeaksIntoExportedConfiguration() {
+        val (manager, host, _) = managerAndHost()
+        host.update(mapOf("subtitle_size" to "28"))
+        manager.update(mapOf("subtitle_size" to "32"))
+        host.reloadHost()
+        assertFalse(host.snapshot().configuration().keys.any { it.startsWith("__") })
+        assertFalse(manager.snapshot().configuration().keys.any { it.startsWith("__") })
+        val roundTrip = ConfigArchive.decode(ConfigArchive.encode(host.snapshot().configuration()).toString(Charsets.UTF_8))
+        assertEquals(host.snapshot().configuration(), roundTrip)
+    }
+
 }

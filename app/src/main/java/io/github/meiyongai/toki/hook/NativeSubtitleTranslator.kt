@@ -1,9 +1,11 @@
 package io.github.meiyongai.toki.subtitle.hook
 
+import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
+import java.util.Base64
 import java.lang.reflect.Proxy
 import java.util.Locale
 
@@ -24,6 +26,78 @@ internal class NativeSubtitleTranslator(
     }
     private val main = Handler(Looper.getMainLooper())
     private val cache = VideoCaptionCache(100)
+
+    init {
+        CaptionPrefetch.loadTracks()
+        restorePersistentCache()
+    }
+
+    private fun prefs(): android.content.SharedPreferences? = HookRuntime.hostContext?.getSharedPreferences(
+        "toki_subtitle_persist", Context.MODE_PRIVATE)
+
+    private fun restorePersistentCache() {
+        try { readPersistentCache() } catch (error: Exception) {
+            HookRuntime.event("NativeSubtitleTranslation", "cache restore unavailable type=" + error.javaClass.simpleName)
+        }
+    }
+
+    private fun readPersistentCache() {
+        val preferences = prefs() ?: return
+        if (preferences.contains("videos_v2")) {
+            CaptionCacheStorage.load(preferences, "videos_v2")?.let(cache::restore)
+            return
+        }
+        // Best-effort migration only; retain the original archive for recovery.
+        val stored = preferences.getString("videos", null) ?: return
+        if (stored.length > 12 * 1024 * 1024) return
+        val restored = runCatching {
+            val decoded = String(Base64.getDecoder().decode(stored), Charsets.UTF_8)
+            val videos = linkedMapOf<String, VideoCaptionCache.Video>()
+            var currentVideo: String? = null
+            var currentTrack = ""
+            var currentValues = linkedMapOf<String, String>()
+            var currentExpected: MutableSet<String>? = null
+            fun flush() {
+                val id = currentVideo ?: return
+                videos[id] = VideoCaptionCache.Video(currentTrack, LinkedHashMap(currentValues), currentExpected?.toSet())
+                currentValues = linkedMapOf(); currentExpected = null; currentVideo = null; currentTrack = ""
+            }
+            decoded.lineSequence().forEach { line ->
+                when {
+                    line.startsWith("V:") -> { flush(); currentVideo = line.removePrefix("V:"); }
+                    line.startsWith("T:") -> currentTrack = line.removePrefix("T:")
+                    line.startsWith("E:") -> { currentExpected = (currentExpected ?: mutableSetOf()).also { it.add(line.removePrefix("E:")) } }
+                    line.startsWith("C:") -> { val cSep = '\u0001'; val sep = line.indexOf(cSep); if (sep > 0) currentValues[line.substring(2, sep)] = line.substring(sep + 1) }
+                }
+            }
+            flush()
+            videos
+        }.getOrNull() ?: return
+        cache.restore(restored)
+        CaptionCacheStorage.save(preferences, "videos_v2", cache.snapshot())
+        HookRuntime.event("NativeSubtitleTranslation", "persistent cache restored videos=${restored.size}")
+    }
+
+    private var persistenceScheduled = false
+    private val flushPersistence = Runnable {
+        persistenceScheduled = false
+        try {
+            prefs()?.let { CaptionCacheStorage.save(it, "videos_v2", cache.snapshot()) }
+        } catch (error: Exception) {
+            HookRuntime.event("NativeSubtitleTranslation", "cache submission unavailable type=" + error.javaClass.simpleName)
+        }
+    }
+
+    private fun persistCache() {
+        if (persistenceScheduled) return
+        persistenceScheduled = true
+        main.postDelayed(flushPersistence, 400)
+    }
+
+    private fun flushCache() {
+        main.removeCallbacks(flushPersistence)
+        flushPersistence.run()
+    }
     private var pending: Job? = null
     private var active: Job? = null
     private var background: Job? = null
@@ -156,7 +230,10 @@ internal class NativeSubtitleTranslator(
         if (translated != null) {
             failures = 0
             val trackCurrent = trackIdentity(job.video) == job.trackIdentity
-            if (trackCurrent) cache.put(job.video, job.text, translated, job.trackIdentity)
+            if (trackCurrent) {
+                cache.put(job.video, job.text, translated, job.trackIdentity)
+                persistCache()
+            }
             val current = job.current() && trackCurrent
             report("success lane=${if (job.foreground) "current" else "prefetch"} chars=${translated.length} current=$current trackCurrent=$trackCurrent cachedVideos=${cache.size} elapsedMs=${SystemClock.uptimeMillis() - job.startedAt}")
             updateDiagnostics()
@@ -180,6 +257,7 @@ internal class NativeSubtitleTranslator(
     }
 
     fun cancel() {
+        if (persistenceScheduled) flushCache()
         trackPrefetch.cancel()
         main.removeCallbacks(pump)
         pending = null
@@ -199,7 +277,7 @@ internal class NativeSubtitleTranslator(
         try { subscription?.close() } catch (_: Exception) { }
     }
 
-    override fun close() { closed = true; cancel(); trackPrefetch.close(); cache.clear() }
+    override fun close() { flushCache(); closed = true; cancel(); trackPrefetch.close(); cache.clear() }
 
     internal fun completed(video: String, texts: List<String>) = cache.complete(video, texts, trackIdentity(video))
     internal fun expect(video: String, texts: List<String>) {
@@ -213,6 +291,7 @@ internal class NativeSubtitleTranslator(
     internal fun clearCache() {
         cancel()
         cache.clear()
+        flushCache()
         report("cache cleared")
         updateDiagnostics()
     }
@@ -239,7 +318,10 @@ internal class NativeSubtitleTranslator(
     internal fun selectVideo(video: String) {
         selectedVideo = video
         val released = cache.select(video)
-        if (released > 0) report("watched batch released=$released completedCache=${cache.size}/100")
+        if (released > 0) {
+            persistCache()
+            report("watched batch released=$released completedCache=${cache.size}/100")
+        }
     }
 
     companion object {
@@ -265,6 +347,7 @@ internal class NativeSubtitleTranslator(
             if (automaticPreference == null) HookRuntime.event("NativeSubtitleTranslation", "optional automatic preference unavailable; module switch and per-video override remain active")
             return NativeSubtitleTranslator(enabled = { videoId ->
                 ConfigClient.getBoolean("video_translate_enabled") &&
+                    ConfigClient.getString("subtitle_text_mode", "translated") != "original" &&
                     ConfigClient.getString("subtitle_render_mode", "native") == "custom" &&
                     when ((override.invoke(service, videoId) as? Enum<*>)?.name) {
                         "OVERRIDE_TO_ORIGINAL" -> false

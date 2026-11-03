@@ -45,7 +45,8 @@ object ConfigSchema {
         "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode", "video_fill_zoom_percent") +
         rangePrefixes.flatMap { listOf("${it}_min", "${it}_max") } +
         io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityKey }
-    private val subtitleKeys = setOf("subtitle_size", "subtitle_x", "subtitle_y", "subtitle_font", "subtitle_weight", "subtitle_color", "subtitle_background", "subtitle_background_mode")
+    private val subtitleKeys = setOf("subtitle_size", "subtitle_x", "subtitle_y", "subtitle_font", "subtitle_weight", "subtitle_color", "subtitle_background", "subtitle_background_mode") +
+        io.github.meiyongai.toki.subtitle.model.SubtitleAppearance.defaults.keys
     val keys: Set<String> = booleanDefaults.keys + stringKeys + subtitleKeys
 
     /**
@@ -74,7 +75,15 @@ object ConfigSchema {
                 require(value.toIntOrNull() in 0..100) { "$key 必须为 0 至 100 的整数" }
             }
             require(value.length <= if (key == "feed_filter_keywords_json") 131072 else 4096) { "$key 内容过长" }
+            io.github.meiyongai.toki.subtitle.model.SubtitleAppearance.ranges[key]?.let { range ->
+                number(key, value, range.start, range.endInclusive)
+            }
             when (key) {
+                in io.github.meiyongai.toki.subtitle.model.SubtitleAppearance.colorKeys ->
+                    require(value.matches(Regex("#[0-9A-Fa-f]{8}")))
+                "subtitle_alignment" -> require(value in setOf("start", "center", "end"))
+                "subtitle_text_mode" -> require(value in setOf("original", "translated", "bilingual"))
+                "subtitle_max_lines" -> require(value.toIntOrNull() in 0..12)
                 "subtitle_size" -> number(key, value, 6.0, 160.0)
                 "subtitle_x", "subtitle_y" -> number(key, value, -1000.0, 1000.0)
                 "subtitle_background_mode" -> require(value in setOf("show", "hide"))

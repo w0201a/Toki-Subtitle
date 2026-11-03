@@ -35,6 +35,11 @@ internal object HookRuntime {
     private var adaptation = "等待宿主解析"
     private lateinit var reportEvent: (String, String) -> Unit
 
+    /** 宿主进程上下文，供字幕缓存等需要持久化路径的组件使用；不含用户内容。 */
+    @Volatile
+    var hostContext: Context? = null
+        private set
+
     /** 设置进程标识和持久诊断出口。@param name 进程名。@param reporter 框架日志出口。@return Unit。Callers: TokiModule。 */
     fun start(name: String, reporter: (String, String) -> Unit) { process = name; reportEvent = reporter }
 
@@ -51,6 +56,7 @@ internal object HookRuntime {
      * Callers: TokiModule.hookApplication。
      */
     @Synchronized fun attach(value: Context) {
+        if (hostContext == null) hostContext = value.applicationContext
         if (receiver != null || process != value.packageName) return
         receiver = HookDiagnostics.register(value.applicationContext, ::snapshot)
     }

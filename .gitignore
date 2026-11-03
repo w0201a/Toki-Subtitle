@@ -48,3 +48,4 @@ signing.properties
 /docs/*
 !/docs/ISSUES_AND_FIXES.md
 !/docs/LINKS.md
+!/docs/SOURCE_STATUS.md

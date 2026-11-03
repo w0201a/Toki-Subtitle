@@ -98,7 +98,7 @@ class HostFeaturePlanTest {
             "clean_mode_show_progress_bar" to true, revision = 2)
         assertFalse(progress.apply(requested).boolean("clean_mode_on_play"))
         assertFalse(progress.apply(requested).boolean("clean_mode_show_progress_bar"))
-        assertTrue(progress.requiresRestart("AutoCleanModeHook", requested))
+        assertFalse(progress.requiresRestart("AutoCleanModeHook", requested))
         val clean = HostFeaturePlan(config("clean_mode_on_play" to true))
         val immersive = config("clean_mode_on_play" to true, "immersive_full_screen" to true)
         assertFalse(clean.apply(immersive).boolean("immersive_full_screen"))
@@ -214,4 +214,42 @@ class HostFeaturePlanTest {
                 (digest.matches(row[2]) || (row[2].startsWith("semantic-v1:") && digest.matches(row[2].removePrefix("semantic-v1:"))))
         })
     }
+    @Test fun lateCleanupStaysMaskedUntilVerifiedInstallationIsAdmitted() {
+        val plan = HostFeaturePlan(config())
+        val requested = config("layout_hide_quick_comment" to true, revision = 2)
+        assertEquals(listOf("LayoutCleanupHook"), plan.liveCandidates(requested))
+        assertFalse(plan.apply(requested).boolean("layout_hide_quick_comment"))
+        assertFalse(plan.requiresRestart("LayoutCleanupHook", requested))
+        assertTrue(plan.admitLive("LayoutCleanupHook"))
+        assertTrue(plan.apply(requested).boolean("layout_hide_quick_comment"))
+        assertTrue(plan.liveCandidates(requested).isEmpty())
+        val disabled = config("layout_hide_quick_comment" to false, revision = 3)
+        assertFalse(plan.apply(disabled).boolean("layout_hide_quick_comment"))
+        assertTrue(plan.apply(requested).boolean("layout_hide_quick_comment"))
+    }
+
+    @Test fun liveCleanRequiresProgressAdmissionAndFailedPreparationDoesNotLoop() {
+        val plan = HostFeaturePlan(config())
+        val request = config("clean_mode_on_play" to true)
+        assertEquals(listOf("ProgressBarHook", "AutoCleanModeHook"), plan.liveCandidates(request))
+        assertFalse(plan.admitLive("AutoCleanModeHook"))
+        assertTrue(plan.admitLive("ProgressBarHook"))
+        assertTrue(plan.admitLive("AutoCleanModeHook"))
+        assertTrue(plan.apply(request).boolean("clean_mode_on_play"))
+        val failure = HostFeaturePlan(config())
+        failure.reject("ProgressBarHook")
+        assertTrue(failure.liveCandidates(request).isEmpty())
+        assertFalse(failure.apply(request).boolean("clean_mode_on_play"))
+    }
+
+    @Test fun startupSensitiveSettingsCannotBeAdmittedAsLiveFeatures() {
+        val plan = HostFeaturePlan(config())
+        for (feature in listOf("SimHook", "LocaleHook", "PlaybackSpeedHook", "ImmersiveFullScreenHook", "DownloadHook")) {
+            assertThrows(IllegalArgumentException::class.java) { plan.admitLive(feature) }
+        }
+        assertTrue(HostFeaturePlan.liveSymbols(listOf("StatusBarHook", "ScreenCaptureHook")).isEmpty())
+        assertEquals(setOf(HostSymbol.LAYOUT_TOP_TABS, HostSymbol.LAYOUT_TOOLBAR, HostSymbol.LAYOUT_BOTTOM_ITEM),
+            HostFeaturePlan.liveSymbols(listOf("LayoutCleanupHook")))
+    }
+
 }

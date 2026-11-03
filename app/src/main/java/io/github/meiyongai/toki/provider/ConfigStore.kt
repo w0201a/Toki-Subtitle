@@ -36,19 +36,52 @@ internal class ConfigStore(
         reloadHost()
     }
 
+    private fun managerValues(): Map<String, *> {
+        val source = remote?.all.orEmpty()
+        // An injector may not offer a manager service at all. A partially published manager snapshot is not accepted.
+        if (source.isEmpty()) return emptyMap<String, Any>()
+        require(source[PROTOCOL] == 1) { "Manager configuration protocol unavailable" }
+        val revision = source[REVISION]
+        val imported = source[IMPORT_REVISION] ?: 0L
+        require(revision is Long && revision >= 0 && imported is Long && imported in 0..revision)
+        ConfigArchive.validate(source.filterKeys { it in ConfigSchema.keys }.mapValues { requireNotNull(it.value) })
+        ConfigConflictClock.revisions(source[ConfigConflictClock.KEY_REVISIONS], revision)
+        return source
+    }
+
     private fun hostValues(): Map<String, Any?> {
-        val overrides = local?.all
-        val base = if (overrides?.get("__host_replace") == true) emptyMap() else remote?.all.orEmpty()
-        val merged = base.toMutableMap()
-        overrides?.forEach { (key, value) -> if (key in ConfigSchema.keys) merged[key] = value }
-        if (overrides != null) {
-            val removed = overrides["__host_removed"] as? Set<*> ?: emptySet<String>()
-            removed.filterIsInstance<String>().forEach(merged::remove)
-            val baseRevision = (base[REVISION] as? Long) ?: 0L
-            val localRevision = (overrides[REVISION] as? Long) ?: 0L
-            merged[REVISION] = maxOf(baseRevision, localRevision, current?.revision ?: 0L)
-            merged[IMPORT_REVISION] = minOf((overrides[IMPORT_REVISION] as? Long) ?: (base[IMPORT_REVISION] as? Long) ?: 0L, merged[REVISION] as Long)
+        val base = managerValues()
+        val preferences = local ?: return base
+        val overrides = preferences.all
+        val removed = (overrides["__host_removed"] as? Set<*>)?.filterIsInstance<String>()?.toSet().orEmpty()
+        val keys = overrides.keys.filter { it in ConfigSchema.keys }.toSet() + removed.filter { it in ConfigSchema.keys } +
+            if (overrides["__host_replace"] == true) ConfigSchema.keys else emptySet()
+        val revisions = ConfigConflictClock.revisions(base[ConfigConflictClock.KEY_REVISIONS], base[REVISION] as? Long ?: 0L)
+        val baselines = ConfigConflictClock.baselines(overrides[ConfigConflictClock.HOST_BASELINES]).toMutableMap()
+        val suppressed = ((overrides[ConfigConflictClock.HOST_SUPPRESSED] as? Set<*>)
+            ?.filterIsInstance<String>()?.filter { it in ConfigSchema.keys }?.toSet().orEmpty()).toMutableSet()
+        var metadataChanged = false
+        keys.forEach { key ->
+            val now = ConfigConflictClock.fingerprint(base, key, revisions)
+            val previous = baselines[key]
+            if (previous == null) { baselines[key] = now; metadataChanged = true }
+            else if (base.isNotEmpty() && previous != now && suppressed.add(key)) metadataChanged = true
         }
+        val merged = base.toMutableMap()
+        keys.filter { it !in suppressed }.forEach { key ->
+            if (key in removed || key !in overrides) merged.remove(key)
+            else merged[key] = overrides[key]
+        }
+        ConfigArchive.validate(merged.filterKeys { it in ConfigSchema.keys }.mapValues { requireNotNull(it.value) })
+        val baseRevision = base[REVISION] as? Long ?: 0L
+        val localRevision = overrides[REVISION] as? Long ?: 0L
+        merged[REVISION] = maxOf(baseRevision, localRevision, current?.revision ?: 0L)
+        merged[IMPORT_REVISION] = minOf(maxOf(overrides[IMPORT_REVISION] as? Long ?: 0L,
+            base[IMPORT_REVISION] as? Long ?: 0L), merged[REVISION] as Long)
+        // Keep old user values for recovery. Only conflict metadata changes; a reverted manager value cannot resurrect them.
+        if (metadataChanged) check(preferences.edit()
+            .putString(ConfigConflictClock.HOST_BASELINES, ConfigConflictClock.encode(baselines))
+            .putStringSet(ConfigConflictClock.HOST_SUPPRESSED, suppressed).commit()) { "Conflict metadata was not saved" }
         return merged
     }
 
@@ -166,6 +199,16 @@ internal class ConfigStore(
         val importRevision = if (replace) revision else snapshot().importRevision
         val editor = preferences.edit()
         if (host) {
+            val base = managerValues()
+            val clocks = ConfigConflictClock.revisions(base[ConfigConflictClock.KEY_REVISIONS], base[REVISION] as? Long ?: 0L)
+            val baselines = ConfigConflictClock.baselines(preferences.all[ConfigConflictClock.HOST_BASELINES]).toMutableMap()
+            val suppressed = preferences.getStringSet(ConfigConflictClock.HOST_SUPPRESSED, emptySet())!!.toMutableSet()
+            (if (replace) ConfigSchema.keys else changes.keys).forEach { key ->
+                baselines[key] = ConfigConflictClock.fingerprint(base, key, clocks)
+                suppressed.remove(key)
+            }
+            editor.putString(ConfigConflictClock.HOST_BASELINES, ConfigConflictClock.encode(baselines))
+                .putStringSet(ConfigConflictClock.HOST_SUPPRESSED, suppressed)
             val removed = (preferences.getStringSet("__host_removed", emptySet()) ?: emptySet()).toMutableSet()
             if (replace) {
                 editor.putBoolean("__host_replace", true)
@@ -180,8 +223,11 @@ internal class ConfigStore(
             }
             editor.putStringSet("__host_removed", removed).putLong(REVISION, revision).putLong(IMPORT_REVISION, importRevision)
         } else {
+            val clocks = ConfigConflictClock.revisions(preferences.all[ConfigConflictClock.KEY_REVISIONS], snapshot().revision).toMutableMap()
+            (if (replace) ConfigSchema.keys else changes.keys).forEach { clocks[it] = revision }
             editor.clear()
             putConfiguration(editor, checked, revision, importRevision)
+            editor.putString(ConfigConflictClock.KEY_REVISIONS, ConfigConflictClock.encode(clocks))
         }
         check(editor.commit()) { "配置保存失败，版本 $revision 未确认" }
         if (accept(if (host) hostValues() else preferences.all, requireProtocol = false)) changed()
@@ -209,6 +255,7 @@ internal class ConfigStore(
         val revision = values[REVISION] ?: if (requireProtocol) error("配置缺少版本") else 0L
         val imported = values[IMPORT_REVISION] ?: 0L
         require(revision is Long && revision >= 0 && imported is Long && imported in 0..revision) { "配置版本无效" }
+        ConfigConflictClock.revisions(values[ConfigConflictClock.KEY_REVISIONS], revision)
         // 升级后只读取当前支持的持久化字段；不修改旧数据，文件导入仍严格校验。
         val checked = ConfigArchive.validate(values.filterKeys { it in ConfigSchema.keys }
             .mapValues { requireNotNull(it.value) { "配置项 ${it.key} 为空" } })
@@ -230,6 +277,8 @@ internal class ConfigStore(
         val snapshot = snapshot()
         val editor = checkNotNull(remote).edit().clear().putInt(PROTOCOL, 1)
         putConfiguration(editor, snapshot.configuration(), snapshot.revision, snapshot.importRevision)
+        val clocks = ConfigConflictClock.revisions(local?.all?.get(ConfigConflictClock.KEY_REVISIONS), snapshot.revision)
+        editor.putString(ConfigConflictClock.KEY_REVISIONS, ConfigConflictClock.encode(clocks))
         check(editor.commit()) { "框架未确认配置版本 ${snapshot.revision}" }
         syncError = null
     }

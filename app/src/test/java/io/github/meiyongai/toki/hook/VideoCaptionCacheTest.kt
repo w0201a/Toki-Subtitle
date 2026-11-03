@@ -93,6 +93,21 @@ class VideoCaptionCacheTest {
         assertNull(cache["v2", "last"])
     }
 
+
+    @Test fun snapshotRestoreKeepsTranslationsForOfflineReopen() {
+        val cache = VideoCaptionCache()
+        cache.select("v1")
+        cache.expect("v1", listOf("first", "second"))
+        cache.put("v1", "first", "a")
+        cache.put("v1", "second", "b")
+        val saved = cache.snapshot()
+        val reopened = VideoCaptionCache()
+        reopened.restore(saved)
+        assertEquals("a", reopened["v1", "first"])
+        assertEquals("b", reopened["v1", "second"])
+        assertTrue(reopened.complete("v1", listOf("first", "second")))
+    }
+
     @Test fun changedCaptionTrackInvalidatesTranslationsAndRejectsLateResults() {
         val cache = VideoCaptionCache()
         cache.selectTrack("video", "english-track")
@@ -110,4 +125,51 @@ class VideoCaptionCacheTest {
         assertEquals("Russian translation", cache["video", "shared phrase", "russian-track"])
         assertTrue(cache.diagnostic().contains("trackMismatches=1"))
     }
+    @Test fun restoredPartialTrackAcceptsRemainingTranslation() {
+        val cache = VideoCaptionCache()
+        cache.expect("v1", listOf("first", "second"), "track-a")
+        cache.put("v1", "first", "one", "track-a")
+        val reopened = VideoCaptionCache()
+        reopened.restore(cache.snapshot())
+        reopened.put("v1", "second", "two", "track-a")
+        assertTrue(reopened.complete("v1", listOf("first", "second"), "track-a"))
+    }
+
+    @Test fun restoringReplacesOldTrackOwnershipAndRejectsLateResults() {
+        val old = VideoCaptionCache()
+        old.expect("v1", listOf("first"), "old-track")
+        old.put("v1", "first", "old", "old-track")
+        val current = VideoCaptionCache()
+        current.expect("v1", listOf("first"), "current-track")
+        current.put("v1", "first", "current", "current-track")
+        old.restore(current.snapshot())
+        old.put("v1", "first", "late old result", "old-track")
+        assertEquals("current", old["v1", "first", "current-track"])
+        old.selectTrack("v1", "new-track")
+        assertNull(old["v1", "first", "current-track"])
+    }
+
+    @Test fun archiveSnapshotDoesNotShareMutableCaptionEntries() {
+        val cache = VideoCaptionCache()
+        cache.expect("v1", listOf("first", "second"))
+        cache.put("v1", "first", "one")
+        val snapshot = cache.snapshot()
+        cache.put("v1", "first", "updated")
+        assertEquals("one", snapshot.getValue("v1").values["first"])
+        val reopened = VideoCaptionCache()
+        reopened.restore(snapshot)
+        snapshot.getValue("v1").values["first"] = "external change"
+        assertEquals("one", reopened["v1", "first"])
+    }
+
+    @Test fun restoringEmptyArchiveReplacesPreviousValues() {
+        val cache = VideoCaptionCache()
+        cache.expect("v1", listOf("first"), "old-track")
+        cache.put("v1", "first", "old", "old-track")
+        cache.restore(emptyMap())
+        assertEquals(0, cache.size)
+        assertEquals(0, cache.partialSize)
+        assertNull(cache["v1", "first", "old-track"])
+    }
+
 }

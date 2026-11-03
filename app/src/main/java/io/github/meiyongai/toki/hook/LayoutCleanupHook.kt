@@ -113,7 +113,7 @@ object LayoutCleanupHook {
             "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.PlayListStandardBannerAssem" to LayoutElement.PLAYLIST,
             "com.ss.android.ugc.aweme.feed.assem.duetbutton.VideoDuetButtonAssem" to LayoutElement.CREATION_BUTTONS,
             "com.ss.android.ugc.aweme.feed.assem.stitchbutton.VideoStitchButtonAssem" to LayoutElement.CREATION_BUTTONS,
-            "com.ss.android.ugc.aweme.feed.assem.pugc.VideoTemplateButtonAssem" to LayoutElement.CREATION_BUTTONS,
+            "com.ss.android.ugc.aweme.feed.assem.pugc.VideoTemplateButtonAssem" to LayoutElement.VIDEO_TEMPLATE,
             "com.ss.android.ugc.aweme.feed.assem.addyours.AddYoursEntranceButtonAssem" to LayoutElement.CREATION_BUTTONS,
             "com.ss.android.ugc.aweme.feed.assem.live.LiveNoticeCTAButtonAssem" to LayoutElement.LIVE_NOTICE,
             "com.ss.android.ugc.feed.platform.cell.interact.bottom.bar.AdFeedSearchBottomBarAssem" to LayoutElement.SEARCH_LABEL,
@@ -138,6 +138,10 @@ object LayoutCleanupHook {
             for ((name, element) in mapOf(
                 "com.ss.android.ugc.aweme.feed.assem.duetbutton.VideoDuetStandardButtonAssem" to LayoutElement.CREATION_BUTTONS,
                 "com.ss.android.ugc.aweme.feed.assem.quickcomment.HelpPostQuickCommentAssem" to LayoutElement.QUICK_COMMENT,
+                "com.ss.android.ugc.aweme.feed.assem.template.VideoTemplateAssem" to LayoutElement.VIDEO_TEMPLATE,
+                "com.ss.android.ugc.aweme.feed.assem.template.TemplateAssem" to LayoutElement.VIDEO_TEMPLATE,
+                "com.ss.android.ugc.aweme.share.panel.SharePanelAssem" to LayoutElement.SHARE_PANEL,
+                "com.ss.android.ugc.aweme.internalshare.impl.panel.SharePanelAssem" to LayoutElement.SHARE_PANEL,
             )) {
                 val variant = try {
                     loader.loadClass(name)
@@ -175,7 +179,10 @@ object LayoutCleanupHook {
                 if (snapshot?.boolean(group.opacityEnabledKey) == true)
                     checkNotNull(snapshot.string(group.opacityKey, "100")).toInt() / 100f else 1f
             })
-            owners.forEach { (element, owner) -> owner.clean = snapshot?.boolean(element.key) == true }
+            owners.forEach { (element, owner) ->
+                owner.clean = snapshot?.boolean(element.key) == true ||
+                    element == LayoutElement.VIDEO_TEMPLATE && snapshot?.boolean(LayoutElement.CREATION_BUTTONS.key) == true
+            }
             gate.refresh()
             if (snapshot != null) HookRuntime.appliedConfiguration(FEATURE, snapshot)
         }

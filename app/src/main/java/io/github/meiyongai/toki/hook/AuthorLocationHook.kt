@@ -2,6 +2,7 @@ package io.github.meiyongai.toki.subtitle.hook
 
 import android.content.Context
 import android.util.Log
+import io.github.meiyongai.toki.subtitle.model.RegionPresets
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.libxposed.api.XposedModule
 import java.util.Locale
@@ -111,11 +112,13 @@ object AuthorLocationHook {
             trimmedRegion
         }
         val flag = flagFor(upperRegion)
-        val prefix = "[$flag$upperRegion] "
-        if (originalText.startsWith(prefix)) {
+        val display = RegionPresets.resolveDisplayName(upperRegion).ifBlank { upperRegion }
+        val codePrefix = "[$flag$upperRegion] "
+        val zhPrefix = "[$flag$display] "
+        if (originalText.startsWith(codePrefix) || originalText.startsWith(zhPrefix)) {
             return originalText
         }
-        return prefix + originalText
+        return zhPrefix + originalText
     }
 
     /**
