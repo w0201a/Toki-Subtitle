@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manual_comment_feature">Manual comment translation</string>
+    <string name="manual_comment_enable">Offer fallback translation on comment long press</string>
+    <string name="manual_comment_setting_hint">Off by default. Long-press a comment with text and choose manual translation to send it to TikTok’s online service. Switch original/translation/bilingual or retry failed segments; full native actions remain accessible. No offline or persistent cache is added.</string>
+    <string name="manual_comment_privacy_hint">Only the comment you select is submitted through TikTok’s translation channel. Failed segments retain their source text. Closing cancels further requests; no persistent cache is saved here.</string>
+    <string name="manual_comment_menu_title">Comment actions</string>
+    <string name="manual_comment_translate">Translate comment with Toki</string>
+    <string name="manual_comment_native_actions">TikTok native actions</string>
+    <string name="manual_comment_dialog_title">Comment translation</string>
+    <string name="manual_comment_original">Original</string>
+    <string name="manual_comment_translated">Translation</string>
+    <string name="manual_comment_bilingual">Bilingual</string>
+    <string name="manual_comment_retry">Retry failed segments</string>
+    <string name="manual_comment_progress">Completed %1$d / %2$d segments</string>
+    <string name="manual_comment_failed_segments">%1$d segments could not be translated. Their original text is retained; retry is available.</string>
+    <string name="manual_comment_complete">Finished. Content without a different translation retains the original text.</string>
+    <string name="manual_comment_save_error">Could not save this option. Check the configuration connection.</string>
+    <string name="manual_comment_native_failed">Native comment actions could not be opened.</string>
+</resources>

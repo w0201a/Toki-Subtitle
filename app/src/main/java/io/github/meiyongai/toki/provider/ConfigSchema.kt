@@ -12,6 +12,7 @@ object ConfigSchema {
         "PlaybackSpeedHook" to listOf("fixed_speed_enabled", "speed_expand_enabled"),
         "SpeedOptions" to listOf("speed_expand_enabled"),
         "CommentTranslateHook" to listOf("comment_translate_enabled"),
+        "ManualCommentTranslateHook" to listOf("comment_manual_translate_enabled"),
         "VideoTranslateHook" to listOf("video_translate_enabled", "subtitle_style_enabled"),
         "BackgroundAudioHook" to listOf("background_audio_unlock"),
         "CommentCopyHook" to listOf("copy_comment_text_only"),

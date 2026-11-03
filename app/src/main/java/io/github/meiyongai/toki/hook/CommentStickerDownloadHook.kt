@@ -76,7 +76,7 @@ internal object CommentStickerDownloadHook {
             chain.proceed()
         }
         module.trackHook(FEATURE, contract.menu).intercept { chain ->
-            if (bypass.get() == true || !ConfigClient.getBoolean(KEY)) return@intercept chain.proceed()
+            if (CommentNativeMenuScope.active || bypass.get() == true || !ConfigClient.getBoolean(KEY)) return@intercept chain.proceed()
             val args = chain.args.toTypedArray()
             val comment = args[contract.itemIndex]?.let { contract.getComment.invoke(it) }
             val asset = reader.read(comment) ?: return@intercept chain.proceed()
@@ -88,7 +88,7 @@ internal object CommentStickerDownloadHook {
             fun nativeMenu() {
                 if (activity.isFinishing || activity.isDestroyed) return
                 bypass.set(true)
-                try { contract.menu.invoke(null, *args) }
+                try { CommentNativeMenuScope.native { contract.menu.invoke(null, *args) } }
                 catch (error: Exception) {
                     HookRuntime.event(FEATURE, "native menu failed=${error.javaClass.simpleName}")
                     Toast.makeText(activity, context.getString(R.string.sticker_save_failed), Toast.LENGTH_SHORT).show()

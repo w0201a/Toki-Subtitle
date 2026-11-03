@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="manual_comment_feature">普通评论手动翻译</string>
+    <string name="manual_comment_enable">长按评论提供备用翻译入口</string>
+    <string name="manual_comment_setting_hint">默认关闭。开启后长按有正文的普通评论，可手动发送正文给 TikTok 在线翻译服务；支持原文/译文/双语和失败段重试，仍可返回完整原生操作。本项不增加离线或持久缓存。</string>
+    <string name="manual_comment_privacy_hint">仅处理你选择的评论正文，使用 TikTok 翻译通道。网络或服务失败时保留原文，关闭窗口即取消后续请求；本窗口不保存持久缓存。</string>
+    <string name="manual_comment_menu_title">评论操作</string>
+    <string name="manual_comment_translate">Toki 手动翻译正文</string>
+    <string name="manual_comment_native_actions">TikTok 原生操作</string>
+    <string name="manual_comment_dialog_title">评论翻译</string>
+    <string name="manual_comment_original">原文</string>
+    <string name="manual_comment_translated">译文</string>
+    <string name="manual_comment_bilingual">原文与译文</string>
+    <string name="manual_comment_retry">重试失败段</string>
+    <string name="manual_comment_progress">已完成 %1$d / %2$d 段</string>
+    <string name="manual_comment_failed_segments">%1$d 段未翻译成功，已保留对应原文；可重试失败段。</string>
+    <string name="manual_comment_complete">处理结束。没有返回不同译文的内容仍显示原文。</string>
+    <string name="manual_comment_save_error">设置保存失败，请检查配置连接。</string>
+    <string name="manual_comment_native_failed">暂时无法打开 TikTok 原生评论操作。</string>
+</resources>

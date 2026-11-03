@@ -698,6 +698,7 @@ fun DashboardScreen(
             )
         }
 
+        ManualCommentTranslationSection()
         SubtitleSettings()
 
         // === 分组 4: 动态流与精准过滤 (共 11 项) ===

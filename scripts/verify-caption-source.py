@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 79' in gradle and 'versionName = "2.0.59"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.59-debug / 79")
+check('versionCode = 80' in gradle and 'versionName = "2.0.60"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.60-debug / 80")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -161,6 +161,27 @@ for relative in ('ui/screen/HoldSpeedGestureSection.kt',):
 
 check('HoldSpeedThreshold.pixels(native' in hold_hook and 'maxOf(72f * density, touchSlop * 3f)' in hold_scope, 'disabled experiment thresholds have a local nonzero fallback rather than altering global experiment values')
 
+manual_core = (JAVA / 'hook/ManualCommentTranslation.kt').read_text(encoding='utf-8')
+manual_hook = (JAVA / 'hook/ManualCommentTranslateHook.kt').read_text(encoding='utf-8')
+manual_dialog = (JAVA / 'hook/ManualCommentDialog.kt').read_text(encoding='utf-8')
+check('"ManualCommentTranslateHook" to listOf' in schema and '"ManualCommentTranslateHook" -> ManualCommentTranslateHook.init' in module, 'ordinary-comment fallback is independently configured and installed')
+check('"ManualCommentTranslateHook" to setOf(HostSymbol.COMMENT_COPY, HostSymbol.COMMENT_TRANSLATION)' in plan, 'manual translation requires verified comment-menu and translation contracts')
+check('"VideoTranslateHook", "CommentTranslateHook", "ManualCommentTranslateHook"' in module, 'manual translation waits for extension preparation rather than failing during core-only installation')
+check('comment.getMethod("getText")' in manual_hook and 'getText.invoke(comment)' in manual_hook, 'manual translation reads actual comment-model source text rather than assuming the visible translation is original')
+check('Mode.ORIGINAL' in manual_dialog and 'Mode.TRANSLATED' in manual_dialog and 'Mode.BILINGUAL' in manual_dialog, 'manual viewer exposes original, translated and bilingual presentation')
+check('ChunkedDescriptionTranslation.split(text)' in manual_core and '6000' in manual_core and 'retryFailed' in manual_core, 'manual translation has bounded segmentation, request timeout and explicit failed-segment retry')
+check('generation != token' in manual_core and 'AtomicBoolean(false)' in manual_core and 'session.close()' in manual_dialog, 'closed/restarted dialogs reject stale or duplicate callbacks')
+check('if (closed || generation != token || index != current) return\n        try' in manual_core and manual_core.count('if (!closed && generation == token)') >= 3, 'manual state observers are guarded before request dispatch and after rendering (source only)')
+check('CommentNativeMenuScope.active' in manual_hook and 'CommentNativeMenuScope.active' in sticker, 'manual and sticker interceptors share the explicit native-menu bypass')
+check('CommentNativeMenuScope.native' in manual_hook and 'CommentNativeMenuScope.native' in sticker, 'returning to native actions bypasses both module menus to avoid chooser recursion')
+check('SharedPreferences' not in manual_core and 'getSharedPreferences' not in manual_hook and 'CaptionCacheStorage' not in manual_core, 'this batch adds no offline/disk-cache path')
+check('ManualCommentTranslationSection()' in (JAVA / 'ui/screen/DashboardScreen.kt').read_text(encoding='utf-8'), 'standalone and injected settings expose the manual-comment option')
+for relative in ('hook/ManualCommentDialog.kt', 'hook/ManualCommentTranslateHook.kt', 'ui/screen/ManualCommentTranslationSection.kt'):
+    references = set(re.findall(r'R\.string\.([A-Za-z0-9_]+)', (JAVA / relative).read_text(encoding='utf-8')))
+    check(references <= base_names, relative + ' manual-translation strings exist')
+
+check('if (source.isBlank()) source else null' in manual_core and 'source.any(Char::isLetter)' not in manual_core, 'explicit manual translation does not silently filter emoji-only or numeric comment text')
+
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
     length = len(source)
@@ -227,6 +248,8 @@ lexical_files = [
     'hook/SharePanelCleanupHook.kt', 'hook/ShareListBindings.kt', 'model/SharePanelItem.kt', 'ui/screen/SharePanelCleanupSection.kt',
     'hook/AuthorLabelContract.kt', 'hook/AuthorLabelPresentation.kt', 'hook/AuthorLocationLabels.kt', 'hook/QuickCommentCleanupHook.kt',
     'hook/HoldSpeedContract.kt', 'hook/HoldSpeedGestureHook.kt', 'hook/NativeSpeedGestureScope.kt', 'ui/screen/HoldSpeedGestureSection.kt',
+    'hook/ManualCommentTranslation.kt', 'hook/ManualCommentTranslateHook.kt', 'hook/ManualCommentDialog.kt',
+    'ui/screen/ManualCommentTranslationSection.kt',
 ]
 for relative in lexical_files:
     kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8'))
@@ -239,7 +262,7 @@ for relative in (
     'hook/CommentStickerMediaTest.kt', 'hook/StickerExportPolicyTest.kt', 'hook/StickerImageExporterTest.kt',
     'hook/LayoutCleanupPolicyTest.kt', 'hook/ShareListBindingsTest.kt', 'model/SharePanelPolicyTest.kt',
     'ui/screen/HookStatusModelTest.kt', 'hook/AuthorLabelPresentationTest.kt', 'hook/QuickCommentCleanupContractTest.kt',
-    'hook/HoldSpeedGestureScopeTest.kt',
+    'hook/HoldSpeedGestureScopeTest.kt', 'hook/ManualCommentTranslationTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))

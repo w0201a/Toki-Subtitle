@@ -1,8 +1,29 @@
-# Source-only development status — 2.0.59-debug
+# Source-only development status — 2.0.60-debug
 
-Updated: 2026-11-03. Source version: **2.0.59-debug / 79**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-03. Source version: **2.0.60-debug / 80**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
+
+## Current user-directed ordering
+
+The user supplied the full offline acceptance requirements on 2026-11-03. Offline-video work remains the final integrated feature group, but is **no longer awaiting clarification**. Finish the current online-comment source batch first; then implement and verify the separately isolated offline path. Existing code is retained. No APK build is authorized.
+
+## Offline acceptance contract (received 2026-11-03; NOT implemented/verified)
+
+This contract supersedes any earlier cache-only interpretation. It is not satisfied by hiding network errors or by invoking the online host translation service.
+
+| Area | Required offline behavior | Current gap |
+| --- | --- | --- |
+| Video menu | Long press while playing or paused opens locally executable actions; no connectivity-wide disable. | Offline page/menu binding not integrated. |
+| Save/export | Export only complete, validated local video bytes to user-accessible storage. Never fetch missing bytes; report incomplete/missing/unsupported caches. Offline cache and user export remain distinct. | Host cache discovery/completeness and local-only export not integrated. |
+| Comments | Open cached comments with author information/text and scroll cached pages; distinguish empty, not cached and partially cached pages. | Persistent comment snapshots and offline UI not integrated. |
+| Comment translation | Single-comment original/translation/bilingual toggle in the comment area, using only cached output or a ready local engine. | Current manual viewer is online; no bundled local model. |
+| Captions | Read original cues, synchronize to playback/seek/replay, show/hide and switch original/translation/bilingual. | Cached tracks alone do not provide offline page/player integration. |
+| Caption translation | Read saved translations or run a ready local engine; optional local speech recognition only if actually available. | Cache-miss paths can still request remote data; no bundled local translation/ASR model. |
+| Persistence | Reopening the app retains complete local data/translations and per-video identity without applying stale results to another video. | Caption archives exist; full offline video/comment association is missing. |
+| Strict execution | Offline routes must have no remote translation or download fallback, even if Wi-Fi returns mid-operation. Missing data/model/permissions/capability get explicit states. | A unified local-only execution boundary and call-site audit are required. |
+
+Required later runtime checks: airplane-mode cold reopen, no available network, network returning during an offline operation, empty/partial caches, missing models, seek/replay/switching videos, interrupted export, comment pagination/toggles, and packet inspection proving no offline-path requests. No such runtime test has been run. Ordinary TikTok background traffic cannot be treated as proof of this module's behavior; the isolated call path must also be checked.
 
 ## Changes present in source
 
@@ -12,6 +33,13 @@ Updated: 2026-11-03. Source version: **2.0.59-debug / 79**. Latest published pro
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.60
+
+- Default-off **Manual comment translation** offers a long-press fallback viewer with an explicit route to native comment actions. It reads Comment.getText() directly, not a rendered translation, and never changes the host comment model or list.
+- Original/translation/bilingual display, selectable text, segmented progress and retry-only-failed controls are wired. Requests are explicit per comment, use the existing host translation channel, and have no new disk/offline cache. A 16000-character source cap, <=700-character Unicode-safe chunks, six-second request timeouts and generation/duplicate guards bound the work. Pure numeric/emoji text is not silently excluded; unchanged service results keep the original.
+- Closing, pause or disabling cancels work; reentrant rendering callbacks cannot dispatch or requeue work after close/restart; successful segments are retained only within the dialog. Manual and sticker menus share native-return scope to avoid recursive choosers. Menu and translation dependency preparation is ordered behind extension readiness; this is the 19th reversible installation unit.
+- Getter signatures were inspected offline and regression sources added, not executed. This is an opt-in fallback window, not a claim that every native comment cell, bulk-translation path, language or offline page is fixed.
 
 ## Added in 2.0.59
 
@@ -50,12 +78,12 @@ Updated: 2026-11-03. Source version: **2.0.59-debug / 79**. Latest published pro
 | Settings synchronization and no-restart use | Late registration and per-key conflict handling added; bidirectional manager/host synchronization and all current-page rebinding remain incomplete. |
 | Faster/reliable subtitle translation and replay | Cache, track-ownership and write-path changes in source; scheduling, replay/seek and latency need runtime verification. |
 | Offline subtitles and translation persistence | Cached source/translation path added; uncached content needs network, and host playback must still identify the track. |
-| Offline long-press, export/download and comments | Not implemented end-to-end. Comments/replies/translations need persistent models and offline UI integration; downloaded bytes must be proven local. |
+| Offline long-press, export/download and comments | Detailed acceptance requirements received on 2026-11-03; scheduled as the final integrated group. Still not implemented/verified end-to-end; source models and local-byte export need integration. |
 | Sticker format/source selection | Source-category selection and real static PNG/JPEG/WebP conversion now wired in source; original bytes retained. Runtime, pixels and API 28–29 coverage unverified. Animated re-encoding is not implemented. |
 | Hold-to-speed, downward-slide lock/unlock | Owned native downward-mode path, default-off setting and cancellation lifecycle wired from 47.6.3 contracts. Real gestures, fixed-speed interaction, layout coverage and native-eligibility limitations remain unverified. |
 | More video display modes | Existing center/smart/fill retained; additional modes incomplete. |
 | Search/inbox/live internal cleanup | Dedicated bottom-of-video search suggestions toggle added to existing targets. This is not search-page/inbox/live internal cleanup; more bindings and runtime checks remain. |
-| All comments translatable and translation switching | Existing native gates/poll path retained; ordinary-comment fallback/cache/toggling incomplete. |
+| All comments translatable and translation switching | Default-off ordinary-comment manual fallback viewer with source/translation/bilingual and per-segment retry now connected. Native bulk/cell coverage, special comments and service language quality remain incomplete/unverified. New offline caches deferred to user details. |
 | More subtitle styles | New renderer/settings/test sources present; compilation, pixel checks, device behavior and full localization unverified. |
 
 ## Verification performed
