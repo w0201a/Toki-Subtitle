@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_video_feature">离线视频：本地操作（实验性）</string>
+    <string name="offline_video_enable">离线长按菜单与完整缓存导出</string>
+    <string name="offline_video_summary">默认关闭。启用后请重新进入视频。识别到离线条目时，播放或暂停均可长按画面打开本地菜单；即使连着 Wi-Fi，Toki 翻译与字幕获取也只走本地。当前导出仅支持已核对的 47.6.3 缓存代码、Android 10 及以上和完整的非分片本地 MP4；不完整、加密、音视频分离或未适配缓存不会联网补齐。尚未包含离线评论区与本地翻译模型。</string>
+    <string name="offline_video_menu">离线视频：本地操作</string>
+    <string name="offline_video_save">将完整缓存视频保存到相册</string>
+    <string name="offline_video_subtitles">Toki 字幕设置</string>
+    <string name="offline_video_saving">正在检查本地缓存并保存，不发起视频下载请求。</string>
+    <string name="offline_video_saved">完整缓存视频已保存到相册。</string>
+    <string name="offline_video_busy">已有一个本地视频保存任务正在进行。</string>
+    <string name="offline_video_missing">没有找到这个视频的完整本地文件，未尝试联网下载。</string>
+    <string name="offline_video_incomplete">视频缓存不完整或无法核实完整大小，未联网补齐缺失数据。</string>
+    <string name="offline_video_unsupported">暂不支持导出该缓存或设备：需要已核对的 47.6.3 缓存代码、Android 10 及以上和完整非分片 MP4；音视频分离与加密格式仍待支持。</string>
+    <string name="offline_video_export_failed">本地保存未完成，原缓存未改动，也未转为联网下载。相册中可能保留一条尚未发布的未完成记录。</string>
+</resources>

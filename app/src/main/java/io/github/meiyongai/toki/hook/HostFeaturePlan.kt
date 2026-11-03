@@ -83,7 +83,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
 
     companion object {
         val platform = setOf("SimHook", "LocaleHook", "TimeZoneHook", "GpsHook")
-        val directHost = setOf("StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook", "SharePanelCleanupHook", "AuthorLocationHook", "QuickCommentCleanupHook", "HoldSpeedGestureHook")
+        val directHost = setOf("StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook", "SharePanelCleanupHook", "AuthorLocationHook", "QuickCommentCleanupHook", "HoldSpeedGestureHook", "OfflineVideoHook")
         // Startup-sensitive SIM/locale/timezone/GPS, speed, immersive and audio-experiment hooks remain explicit restart cases.
         val liveInstallable = setOf("LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
             "CommentCopyHook", "CommentStickerDownloadHook", "ManualCommentTranslateHook", "VideoTranslateHook", "LiveSwipeLockHook",

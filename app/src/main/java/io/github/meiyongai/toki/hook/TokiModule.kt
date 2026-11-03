@@ -177,6 +177,7 @@ class TokiModule : XposedModule() {
             "PlaybackSpeedHook" -> PlaybackSpeedHook.init(this, loader, ConfigClient.snapshot())
             "CommentTranslateHook" -> CommentTranslateHook.init(this, loader)
             "ManualCommentTranslateHook" -> ManualCommentTranslateHook.init(this, loader)
+            "OfflineVideoHook" -> OfflineVideoHook.init(this, loader)
             "VideoTranslateHook" -> VideoTranslateHook.init(this, loader)
             "BackgroundAudioHook" -> BackgroundAudioHook.init(this, loader)
             "CommentCopyHook" -> CommentCopyHook.init(this, loader)

@@ -10,10 +10,13 @@ import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 internal object TranslationNetworkPolicy {
     const val KEY = "subtitle_local_only_enabled"
 
-    fun capture(): LocalOnlyRequest = LocalOnlyRequest(::remoteAllowed)
+    fun capture(): LocalOnlyRequest {
+        val playbackRevision = OfflinePlaybackContext.state.revision
+        return LocalOnlyRequest { OfflinePlaybackContext.state.revision == playbackRevision && remoteAllowed() }
+    }
 
     private fun remoteAllowed(): Boolean {
-        if (!ConfigClient.isReady || ConfigClient.getBoolean(KEY)) return false
+        if (!ConfigClient.isReady || ConfigClient.getBoolean(KEY) || OfflinePlaybackContext.state.localOnly) return false
         val context = HookRuntime.hostContext ?: return false
         return try {
             val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return false

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_video_feature">Offline video: local controls (experimental)</string>
+    <string name="offline_video_enable">Local long-press menu and saved-video export</string>
+    <string name="offline_video_summary">Off by default. Re-enter a video after enabling. On recognized offline entries, long-press the video while playing or paused for local actions; Toki translation/caption fetches remain local even if Wi-Fi is connected. Export currently requires the inspected 47.6.3 cache code, Android 10+, and a complete non-fragmented local MP4. Partial, encrypted, split audio/video and unsupported caches are not fetched or exported. Offline comments and a local translation model are not yet included.</string>
+    <string name="offline_video_menu">Offline video: local actions</string>
+    <string name="offline_video_save">Save complete cached video to gallery</string>
+    <string name="offline_video_subtitles">Toki subtitle settings</string>
+    <string name="offline_video_saving">Checking local cache and saving. No video download request is used.</string>
+    <string name="offline_video_saved">Complete cached video saved to the gallery.</string>
+    <string name="offline_video_busy">A local video export is already running.</string>
+    <string name="offline_video_missing">No complete local file was found for this video. No network download was attempted.</string>
+    <string name="offline_video_incomplete">The local cache is incomplete or its size cannot be verified. Missing bytes were not downloaded.</string>
+    <string name="offline_video_unsupported">This cache/device cannot yet be exported locally. The inspected 47.6.3 cache code, Android 10+, and a complete non-fragmented MP4 are required; split/encrypted formats are not supported yet.</string>
+    <string name="offline_video_export_failed">Local export was not completed. The source cache is unchanged; no remote fallback was used. An unfinished gallery record may remain unpublished.</string>
+</resources>

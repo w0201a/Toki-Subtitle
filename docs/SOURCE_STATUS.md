@@ -1,12 +1,12 @@
-# Source-only development status — 2.0.61-debug
+# Source-only development status — 2.0.62-debug
 
-Updated: 2026-11-03. Source version: **2.0.61-debug / 81**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-03. Source version: **2.0.62-debug / 82**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
 ## Current user-directed ordering
 
-The user supplied the full offline acceptance requirements on 2026-11-03. Offline-video work remains the final integrated feature group, but is **no longer awaiting clarification**. The online-comment batch is committed; the local-only execution-boundary preparation is now in source. Full offline page integration remains pending. Existing code is retained. No APK build is authorized.
+The user supplied the full offline acceptance requirements on 2026-11-03. Offline-video work remains the final integrated feature group, but is **no longer awaiting clarification**. The online-comment batch is committed; the local-only execution-boundary preparation is now in source. Selected-cell offline classification, a local menu and complete-MP4 export have now been wired in source; full offline comments/engine/player integration remains pending. Existing code is retained. No APK build is authorized.
 
 ## Offline acceptance contract (received 2026-11-03; NOT implemented/verified)
 
@@ -14,14 +14,14 @@ This contract supersedes any earlier cache-only interpretation. It is not satisf
 
 | Area | Required offline behavior | Current gap |
 | --- | --- | --- |
-| Video menu | Long press while playing or paused opens locally executable actions; no connectivity-wide disable. | Offline page/menu binding not integrated. |
-| Save/export | Export only complete, validated local video bytes to user-accessible storage. Never fetch missing bytes; report incomplete/missing/unsupported caches. Offline cache and user export remain distinct. | Host cache discovery/completeness and local-only export not integrated. |
+| Video menu | Long press while playing or paused opens locally executable actions; no connectivity-wide disable. | Experimental selected VideoViewCell local menu is wired; alternative layouts, paused gestures and conflicts remain unverified. |
+| Save/export | Export only complete, validated local video bytes to user-accessible storage. Never fetch missing bytes; report incomplete/missing/unsupported caches. Offline cache and user export remain distinct. | Read-only indexed MP4 cache discovery, completeness checks and Android 10+ local export are wired. Split/encrypted/special MDL caches and API 28 still unsupported. |
 | Comments | Open cached comments with author information/text and scroll cached pages; distinguish empty, not cached and partially cached pages. | Persistent comment snapshots and offline UI not integrated. |
 | Comment translation | Single-comment original/translation/bilingual toggle in the comment area, using only cached output or a ready local engine. | Current manual viewer is online; no bundled local model. |
 | Captions | Read original cues, synchronize to playback/seek/replay, show/hide and switch original/translation/bilingual. | Cached tracks alone do not provide offline page/player integration. |
 | Caption translation | Read saved translations or run a ready local engine; optional local speech recognition only if actually available. | Module translation/caption cache misses are denied in local-only mode; no bundled local translation/ASR model, and offline page integration is missing. |
 | Persistence | Reopening the app retains complete local data/translations and per-video identity without applying stale results to another video. | Caption archives exist; full offline video/comment association is missing. |
-| Strict execution | Offline routes must have no remote translation or download fallback, even if Wi-Fi returns mid-operation. Missing data/model/permissions/capability get explicit states. | Module-owned shared translation/caption fetches have a local-only boundary in source. Host offline-entry classification, native remote operations and the remaining call-site/runtime audit are incomplete. |
+| Strict execution | Offline routes must have no remote translation or download fallback, even if Wi-Fi returns mid-operation. Missing data/model/permissions/capability get explicit states. | Module-owned shared translation/caption fetches have a local-only boundary in source. Selected-cell offline metadata/page classification now forces local module paths. Native remote operations, alternative offline pages and the full call-site/runtime audit remain incomplete. |
 
 Required later runtime checks: airplane-mode cold reopen, no available network, network returning during an offline operation, empty/partial caches, missing models, seek/replay/switching videos, interrupted export, comment pagination/toggles, and packet inspection proving no offline-path requests. No such runtime test has been run. Ordinary TikTok background traffic cannot be treated as proof of this module's behavior; the isolated call path must also be checked.
 
@@ -33,6 +33,15 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.62
+
+- Independent default-off **Offline video: local controls (experimental)** unit, live-installable without unrelated scan dependencies. Re-enter the video after enabling. Inspected named VideoViewCell/Aweme/OfflineVideoInfo contracts classify the selected holder before native selection callbacks; exact offline_mode_page is also recognized. Background/adjacent progress cannot replace the owner. Known offline denial survives unbinding until a known next selection/page exit; translation tickets bind the playback revision as well as network eligibility.
+- Playing or paused offline video surfaces can open a dedicated local hold menu with complete-cache save and subtitle-settings actions. Ordinary taps/scrolling remain native; movement, multitouch, cancellation, stale holders, page exit and settings disable cancel pending holds. Interactive overlays/inputs are excluded. Native touch cancellation precedes showing the local dialog. No native share/download menu is called.
+- Save reads only exact media-key MDL cache-index metadata, with a 100ms lock bound and known DEX SHA-256 gates for the two obfuscated cache-reader files. It does not invoke preload, URL resolution, download, native online export or cache deletion. Native index byte counts, actual file length, canonical storage roots, non-fragmented MP4 box structure and descriptor-based local video-track inspection are checked before copying.
+- Android 10+ exports use MediaStore pending rows; publication follows successful local copy. Source length/mtime and operation eligibility are checked while copying. Source caches remain untouched; failed pending outputs are retained rather than silently deleted. Default video export directory or an eligible configured public media directory is used.
+- Partial scope: unsupported code variants, API 28 export, model-based/DASH split media, encryption, fragmented/special MDL formats and alternative offline pages are NOT solved by this batch. Missing/incomplete/unsupported caches report their state without network fallback. Offline comments, persistent comment snapshots, in-cell translation toggles, local translation/ASR models and full offline subtitle/player synchronization remain incomplete.
+- New policy/admission/hold/file-integrity/hit-target regression sources are unexecuted. Static checks do NOT prove native cache format compatibility, complete playback of a saved file, gesture correctness or zero remote traffic on a device. No compilation, test execution, build, device or packet inspection was performed.
 
 ## Added in 2.0.61
 
@@ -86,7 +95,7 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 | Settings synchronization and no-restart use | Late registration and per-key conflict handling added; bidirectional manager/host synchronization and all current-page rebinding remain incomplete. |
 | Faster/reliable subtitle translation and replay | Cache, track-ownership and write-path changes in source; scheduling, replay/seek and latency need runtime verification. |
 | Offline subtitles and translation persistence | Cached source/translation paths and a local-only remote-denial control are in source. No local engine; host offline player/track identity and full local UI still need integration. |
-| Offline long-press, export/download and comments | Detailed acceptance requirements received on 2026-11-03; scheduled as the final integrated group. Still not implemented/verified end-to-end; source models and local-byte export need integration. |
+| Offline long-press, export/download and comments | Selected-cell local menu and indexed complete-MP4 export are wired in source. Real cache/gesture/device validation, split-format/API-28 export and offline comments remain incomplete. |
 | Sticker format/source selection | Source-category selection and real static PNG/JPEG/WebP conversion now wired in source; original bytes retained. Runtime, pixels and API 28–29 coverage unverified. Animated re-encoding is not implemented. |
 | Hold-to-speed, downward-slide lock/unlock | Owned native downward-mode path, default-off setting and cancellation lifecycle wired from 47.6.3 contracts. Real gestures, fixed-speed interaction, layout coverage and native-eligibility limitations remain unverified. |
 | More video display modes | Existing center/smart/fill retained; additional modes incomplete. |

@@ -698,6 +698,7 @@ fun DashboardScreen(
             )
         }
 
+        OfflineVideoSection()
         LocalTranslationSection()
         ManualCommentTranslationSection()
         SubtitleSettings()
