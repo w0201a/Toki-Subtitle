@@ -5,7 +5,7 @@ import android.location.Location
 import android.location.LocationManager
 import android.os.SystemClock
 import android.util.Log
-import io.github.meiyongai.toki.subtitle.model.RegionPresets
+import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.libxposed.api.XposedModule
 import java.lang.reflect.Modifier
@@ -21,17 +21,7 @@ object GpsHook {
 
     private const val TAG = "TokiGpsHook"
 
-    /** 功能开关状态 */
-    @Volatile
-    private var isEnabled: Boolean = false
-
-    /** 当前运行时的生效纬度 */
-    @Volatile
-    private var activeLatitude: Double = 35.6762
-
-    /** 当前运行时的生效经度 */
-    @Volatile
-    private var activeLongitude: Double = 139.6503
+    @Volatile private var current: EnvironmentRuntimeConfig.Coordinates? = null
 
     /**
      * 从跨进程配置服务同步最新设定的定位伪装配置。
@@ -45,34 +35,14 @@ object GpsHook {
      * - `io.github.meiyongai.toki.subtitle.hook.TokiModule.hookApplication`: 宿主启动时触发配置加载。
      */
     fun refreshConfig(context: Context) {
-        val requestedEnabled = ConfigClient.getBoolean(context, "gps_spoof_enabled")
-        if (!requestedEnabled) {
-            isEnabled = false
-            Log.i(TAG, "系统 GPS 伪装功能处于关闭状态")
-            return
-        }
+        ConfigClient.init(context)
+        applyConfiguration(ConfigClient.snapshot())
+    }
 
-        val followRegion = ConfigClient.getBoolean(context, "gps_follow_region")
-        if (followRegion) {
-            val targetRegion = ConfigClient.getString(context, "target_region", defaultValue = "JP") ?: "JP"
-            val latitude = RegionPresets.resolveLatitudeForIso(targetRegion)
-            val longitude = RegionPresets.resolveLongitudeForIso(targetRegion)
-            if (latitude == null || longitude == null) {
-                isEnabled = false
-                Log.w(TAG, "地区没有坐标预设；保持宿主原始定位，请使用自定义坐标")
-                return
-            }
-            activeLatitude = latitude
-            activeLongitude = longitude
-        } else {
-            val customLatStr = ConfigClient.getString(context, "custom_latitude", defaultValue = "35.6762") ?: "35.6762"
-            val customLngStr = ConfigClient.getString(context, "custom_longitude", defaultValue = "139.6503") ?: "139.6503"
-            activeLatitude = customLatStr.toDoubleOrNull() ?: 35.6762
-            activeLongitude = customLngStr.toDoubleOrNull() ?: 139.6503
-        }
-
-        isEnabled = true
-        Log.i(TAG, "已同步伪装 GPS 坐标 -> ($activeLatitude, $activeLongitude) (followRegion=$followRegion)")
+    internal fun applyConfiguration(config: ConfigSnapshot) {
+        current = EnvironmentRuntimeConfig.coordinates(config)
+        EnvironmentApplicationStatus.record("GpsHook", config, current != null)
+        HookRuntime.detail("GpsHook", "运行时配置已处理；revision=${config.revision}; active=${current != null}; 后续读取应用，不改原生最后定位对象，不记录坐标；宿主已有值不撤回")
     }
 
     /**
@@ -83,7 +53,7 @@ object GpsHook {
      * Callers:
      * - `io.github.meiyongai.toki.subtitle.hook.GpsHook.hookLocationMethods`: 方法拦截分发时校验。
      */
-    fun isFeatureEnabled(): Boolean = isEnabled
+    fun isFeatureEnabled(): Boolean = current != null
 
     /**
      * 构建包含当前伪装坐标与合理精度的合法 [Location] 实例。
@@ -94,10 +64,19 @@ object GpsHook {
      * Callers:
      * - `io.github.meiyongai.toki.subtitle.hook.GpsHook.hookLocationManagerMethods`: 兜底返回合法定位数据。
      */
-    fun createSpoofedLocation(provider: String = LocationManager.GPS_PROVIDER): Location {
+    fun createSpoofedLocation(provider: String = LocationManager.GPS_PROVIDER): Location =
+        createLocation(provider, checkNotNull(current) { "GPS override is not active" })
+
+    internal fun overrideLastKnown(real: Location?, provider: String): Location? {
+        val coordinates = current ?: return real
+        return if (real == null) createLocation(provider, coordinates)
+        else Location(real).apply { latitude = coordinates.latitude; longitude = coordinates.longitude }
+    }
+
+    private fun createLocation(provider: String, coordinates: EnvironmentRuntimeConfig.Coordinates): Location {
         return Location(provider).apply {
-            latitude = activeLatitude
-            longitude = activeLongitude
+            latitude = coordinates.latitude
+            longitude = coordinates.longitude
             altitude = 35.0
             accuracy = 5.0f
             time = System.currentTimeMillis()
@@ -119,8 +98,9 @@ object GpsHook {
         // 1. Hook getLatitude()
         val getLatMethod = locationClass.getMethod("getLatitude")
         module.trackHook("GpsHook", getLatMethod).intercept { chain ->
-            if (isFeatureEnabled()) {
-                activeLatitude
+            val coordinates = current
+            if (coordinates != null) {
+                coordinates.latitude
             } else {
                 chain.proceed()
             }
@@ -129,8 +109,9 @@ object GpsHook {
         // 2. Hook getLongitude()
         val getLngMethod = locationClass.getMethod("getLongitude")
         module.trackHook("GpsHook", getLngMethod).intercept { chain ->
-            if (isFeatureEnabled()) {
-                activeLongitude
+            val coordinates = current
+            if (coordinates != null) {
+                coordinates.longitude
             } else {
                 chain.proceed()
             }
@@ -168,19 +149,9 @@ object GpsHook {
             }
             if (method.name == "getLastKnownLocation" && method.parameterCount == 1) {
                 module.trackHook("GpsHook", method).intercept { chain ->
-                    if (isFeatureEnabled()) {
-                        val realResult = chain.proceed() as? Location
-                        if (realResult != null) {
-                            realResult.latitude = activeLatitude
-                            realResult.longitude = activeLongitude
-                            realResult
-                        } else {
-                            val provider = chain.args[0] as? String ?: LocationManager.GPS_PROVIDER
-                            createSpoofedLocation(provider)
-                        }
-                    } else {
-                        chain.proceed()
-                    }
+                    val realResult = chain.proceed() as? Location
+                    val provider = chain.args[0] as? String ?: LocationManager.GPS_PROVIDER
+                    overrideLastKnown(realResult, provider)
                 }
             }
         }
@@ -196,6 +167,7 @@ object GpsHook {
      * - `io.github.meiyongai.toki.subtitle.hook.TokiModule.onPackageLoaded`: 目标包加载时触发。
      */
     fun init(module: XposedModule) {
+        HookRuntime.onDispose("GpsHook") { current = null; EnvironmentApplicationStatus.clear("GpsHook") }
         hookLocationMethods(module)
         hookLocationManagerMethods(module)
         Log.i(TAG, "系统 GPS 伪装子系统就绪")

@@ -2,9 +2,9 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
-## Source-only development: 2.0.76-debug
+## Source-only development: 2.0.77-debug
 
-This source batch reviews an uncommitted template-cleanup draft: shared FCP schema renderers are no longer treated as video-template-specific components. Their class-wide mappings are rejected before registration; full per-instance template/effect-anchor support remains incomplete. No build or device verification was run.
+The latest source batch makes existing SIM/locale/timezone/GPS read overrides eligible for independent live installation, current-revision payload refresh and disable/re-enable. It avoids global timezone writes and last-known-location mutation, and reports actual application receipts instead of treating installation as application. This affects subsequent intercepted platform reads, not already-cached host data, sent requests or existing page language. All-setting no-restart support and per-instance template/effect-anchor coverage remain incomplete. No build or device verification was run. The earlier shared-renderer misclassification guard remains in place.
 
 **快速阅读：[中文功能状态与缺口速览](docs/FEATURE_STATUS_ZH.md)**。Exported diagnostic ZIPs now include a first-read Chinese overview, requested/applied/restart/config-revision evidence, and bounded correlated operation traces for video/sticker export. Missing evidence is not treated as success; full logcat may contain other-app data. This source-only logging batch has not been compiled or device-tested.
 

@@ -105,15 +105,15 @@ class HostFeaturePlanTest {
         assertTrue(clean.requiresRestart("ImmersiveFullScreenHook", immersive))
     }
 
-    @Test fun startupSettingsKeepAppliedStateAndReportRestartOnlyForRelevantFields() {
+    @Test fun installedLanguageSettingsApplyCurrentRevisionAndDisableWithoutStartupFreezing() {
         val plan = HostFeaturePlan(config("language_spoof_enabled" to true, "custom_language" to "ja", revision = 3))
         val disabled = config("language_spoof_enabled" to false, "custom_language" to "en", revision = 4)
-        assertTrue(plan.apply(disabled).boolean("language_spoof_enabled"))
-        assertEquals("ja", plan.apply(disabled).string("custom_language"))
-        assertTrue(plan.requiresRestart("LocaleHook", disabled))
-        assertEquals(3L, plan.appliedRevision("LocaleHook", disabled))
-        val unrelated = config("language_spoof_enabled" to true, "custom_language" to "ja", "feed_remove_live" to true, revision = 5)
-        assertFalse(plan.requiresRestart("LocaleHook", unrelated))
+        assertFalse(plan.apply(disabled).boolean("language_spoof_enabled"))
+        assertEquals("en", plan.apply(disabled).string("custom_language"))
+        assertFalse(plan.requiresRestart("LocaleHook", disabled))
+        assertEquals(4L, plan.appliedRevision("LocaleHook", disabled))
+        val changed = config("language_spoof_enabled" to true, "custom_language" to "fr", revision = 5)
+        assertEquals("fr", plan.apply(changed).string("custom_language"))
     }
 
     @Test fun installedLiveFeaturesCanDisableAndReenableWithinTheirSession() {
@@ -144,12 +144,15 @@ class HostFeaturePlanTest {
         assertEquals(3L, plan.appliedRevision("PlaybackSpeedHook", imported))
     }
 
-    @Test fun unavailableStartupHasNoInstallationOrLateActivation() {
+    @Test fun unavailableStartupStaysMaskedUntilLatePlatformAdmission() {
         val plan = HostFeaturePlan(null)
         assertTrue(plan.features.isEmpty())
         val later = config("sim_spoof_enabled" to true)
         assertFalse(plan.apply(later).boolean("sim_spoof_enabled"))
-        assertTrue(plan.requiresRestart("SimHook", later))
+        assertFalse(plan.requiresRestart("SimHook", later))
+        assertEquals(listOf("SimHook"), plan.liveCandidates(later))
+        assertTrue(plan.admitLive("SimHook"))
+        assertTrue(plan.apply(later).boolean("sim_spoof_enabled"))
     }
 
     @Test fun failedInstallationRemovesItsEffectiveScopeAndDependentCleanState() {
@@ -244,10 +247,15 @@ class HostFeaturePlanTest {
 
     @Test fun startupSensitiveSettingsCannotBeAdmittedAsLiveFeatures() {
         val plan = HostFeaturePlan(config())
-        for (feature in listOf("SimHook", "LocaleHook", "PlaybackSpeedHook", "ImmersiveFullScreenHook", "DownloadHook")) {
+        for (feature in listOf("BackgroundAudioHook", "PlaybackSpeedHook", "ImmersiveFullScreenHook")) {
             assertThrows(IllegalArgumentException::class.java) { plan.admitLive(feature) }
         }
         assertTrue(HostFeaturePlan.liveSymbols(listOf("StatusBarHook", "ScreenCaptureHook")).isEmpty())
+        val download = config("download_path_enabled" to true)
+        assertTrue(plan.admitLive("DownloadHook"))
+        assertFalse(plan.requiresRestart("DownloadHook", download))
+        assertTrue(plan.requiresRestart("DownloadHook", config("download_force_no_watermark" to true)))
+
         assertEquals(setOf(HostSymbol.LAYOUT_TOP_TABS, HostSymbol.LAYOUT_TOOLBAR, HostSymbol.LAYOUT_BOTTOM_ITEM),
             HostFeaturePlan.liveSymbols(listOf("LayoutCleanupHook")))
     }

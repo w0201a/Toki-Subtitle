@@ -61,14 +61,14 @@ class CountryCatalogTest {
         assertEquals("ja-JP", RegionPresets.resolveLanguageForIso("jp"))
         assertEquals("Asia/Tokyo", RegionPresets.resolveTimeZoneForIso("JP"))
     }
-    @Test fun countryOnlyDoesNotInstallSimAloneAndRemainsStartupSensitiveWithItsOwner() {
+    @Test fun countryOnlyDoesNotInstallSimAloneAndChangesLiveWithItsInstalledOwner() {
         assertFalse(ConfigSchema.booleanDefault("sim_country_only_enabled"))
         assertTrue(HostFeaturePlan(ConfigSnapshot(mapOf("sim_country_only_enabled" to true))).features.isEmpty())
         val initial = ConfigSnapshot(mapOf("sim_spoof_enabled" to true, "target_region" to "JP"))
         val plan = HostFeaturePlan(initial)
         val changed = ConfigSnapshot(initial.configuration() + mapOf("sim_country_only_enabled" to true))
-        assertTrue(plan.requiresRestart("SimHook", changed))
-        assertFalse(plan.apply(changed).boolean("sim_country_only_enabled"))
+        assertFalse(plan.requiresRestart("SimHook", changed))
+        assertTrue(plan.apply(changed).boolean("sim_country_only_enabled"))
     }
     @Test fun customValidationDoesNotReplaceBlankDataWithInventedDefaultsOrUseTurkishCaseRules() {
         assertThrows(IllegalArgumentException::class.java) { CountryCatalog.custom("", "", "", false) }

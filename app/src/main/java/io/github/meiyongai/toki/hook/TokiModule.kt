@@ -83,6 +83,17 @@ class TokiModule : XposedModule() {
             if (feature in livePending) HookRuntime.state(feature, "等待运行时注册")
             val applied = if (feature == "SpeedOptions") "PlaybackSpeedHook" in installed else feature in installed
             val missingEnvironment = io.github.meiyongai.toki.subtitle.model.RegionEnvironmentPolicy.missingPreset(feature, effective)
+            if (applied && feature in HostFeaturePlan.platform) {
+                val receipt = EnvironmentApplicationStatus.get(feature)
+                HookRuntime.state(feature, when {
+                    receipt == null || receipt.revision != effective.revision -> "环境配置待应用"
+                    missingEnvironment -> "地区环境预设缺失"
+                    else -> "已注册"
+                })
+                if (receipt != null) HookRuntime.appliedConfiguration(feature,
+                    ConfigSnapshot(emptyMap(), receipt.revision), receipt.enabled)
+                continue
+            }
             if (applied && io.github.meiyongai.toki.subtitle.model.RegionEnvironmentPolicy.owns(feature)) {
                 HookRuntime.state(feature, if (missingEnvironment) "地区环境预设缺失" else "已注册")
             }
@@ -254,15 +265,36 @@ class TokiModule : XposedModule() {
             }) installAdapted(loader)
     }
 
-    /** Serialize late installs behind actual scan completion; requested settings stay masked until admission. */
+    /** Environment platform reads need neither host classes nor an unrelated DEX scan, including in child processes. */
+    private fun activatePlatformFeatures(app: Application) {
+        val requested = ConfigClient.requestedSnapshotOrNull() ?: return
+        val candidates = plan.liveCandidates(requested).filter {
+            it in HostFeaturePlan.platform && it !in installed && HookRuntime.scope(it).active
+        }
+        if (candidates.isEmpty()) return
+        for (feature in candidates) {
+            val latest = ConfigClient.requestedSnapshotOrNull() ?: continue
+            if (!HostFeaturePlan.enabled(feature, latest)) continue
+            install(feature)
+            if (feature in installed) check(plan.admitLive(feature)) { "Platform live admission rejected: $feature" }
+        }
+        // Publish effective settings only after successful installation/admission; failure keeps that feature masked.
+        ConfigClient.refreshHostSession()
+        refreshConfiguration(app, publish = false)
+        HookRuntime.event("EnvironmentLiveSettings", "平台环境设置运行时安装处理完成；requested=${candidates.size}; active=${candidates.count { it in installed }}; 不重启进程，不撤回宿主已缓存数据")
+    }
+
+    /** Serialize adapted late installs behind scans; independent platform setup is handled before those prerequisites. */
     private fun activateLiveFeatures() {
         val app = application ?: return
+        if (!ConfigClient.isReady) return
+        activatePlatformFeatures(app)
         val info = hostInfo ?: return
         val loader = hostLoader ?: return
         if (processName != app.packageName || !ConfigClient.isReady || activationInFlight) return
         if (HostScanController.session.status.phase in setOf(HostScanPhase.SCANNING, HostScanPhase.EXTENSIONS, HostScanPhase.SAVING)) return
         val requested = ConfigClient.requestedSnapshotOrNull() ?: return
-        val candidates = plan.liveCandidates(requested).filter { it !in installed && HookRuntime.scope(it).active }
+        val candidates = plan.liveCandidates(requested).filter { it !in HostFeaturePlan.platform && it !in installed && HookRuntime.scope(it).active }
         if (candidates.isEmpty()) return
         activationInFlight = true
         candidates.forEach { HookRuntime.state(it, "正在准备运行时依赖") }

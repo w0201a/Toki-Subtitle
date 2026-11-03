@@ -3,7 +3,7 @@ package io.github.meiyongai.toki.subtitle.hook
 import android.app.Application
 import android.content.Context
 import android.util.Log
-import io.github.meiyongai.toki.subtitle.model.RegionPresets
+import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.libxposed.api.XposedModule
 import java.lang.reflect.Modifier
@@ -20,25 +20,8 @@ object TimeZoneHook {
 
     private const val TAG = "TokiTimeZoneHook"
 
-    /** 功能开关状态 */
-    @Volatile
-    private var isEnabled: Boolean = false
-
-    /** 当前运行时的时区 IANA 标识 */
-    @Volatile
-    private var activeZoneIdString: String = "Asia/Tokyo"
-
-    /** 当前运行时的 Java 经典 TimeZone 实例 */
-    @Volatile
-    private var activeTimeZone: TimeZone = TimeZone.getTimeZone("Asia/Tokyo")
-
-    /** 当前运行时的 Java 8+ ZoneId 实例 */
-    @Volatile
-    private var activeZoneId: ZoneId = ZoneId.of("Asia/Tokyo")
-
-    /** 当前运行时的 Android ICU TimeZone 实例 */
-    @Volatile
-    private var activeIcuTimeZone: android.icu.util.TimeZone = android.icu.util.TimeZone.getTimeZone("Asia/Tokyo")
+    private class Values(val java: TimeZone, val zoneId: ZoneId, val icu: android.icu.util.TimeZone)
+    @Volatile private var current: Values? = null
 
     /**
      * 从跨进程配置服务同步最新设定的时区伪装配置。
@@ -52,37 +35,23 @@ object TimeZoneHook {
      * - `io.github.meiyongai.toki.subtitle.hook.TokiModule.hookApplication`: 宿主启动时触发配置加载。
      */
     fun refreshConfig(context: Context) {
-        val requestedEnabled = ConfigClient.getBoolean(context, "timezone_spoof_enabled")
-        if (!requestedEnabled) {
-            isEnabled = false
-            Log.i(TAG, "系统时区伪装功能处于关闭状态")
-            return
-        }
+        ConfigClient.init(context)
+        applyConfiguration(ConfigClient.snapshot())
+    }
 
-        val followRegion = ConfigClient.getBoolean(context, "timezone_follow_region")
-        val requestedValue = if (followRegion) {
-            val targetRegion = ConfigClient.getString(context, "target_region", defaultValue = "JP") ?: "JP"
-            RegionPresets.resolveTimeZoneForIso(targetRegion)
-        } else {
-            ConfigClient.getString(context, "custom_timezone", defaultValue = "Asia/Tokyo") ?: "Asia/Tokyo"
+    internal fun applyConfiguration(config: ConfigSnapshot) {
+        val id = EnvironmentRuntimeConfig.timeZone(config)
+        // Construct all representations before publishing one complete payload.
+        current = id?.let {
+            val zone = TimeZone.getTimeZone(it)
+            Values(zone, zone.toZoneId(), android.icu.util.TimeZone.getTimeZone(it))
         }
-
-        if (requestedValue == null) {
-            isEnabled = false
-            Log.w(TAG, "地区未收录环境预设；保持宿主原始值，请使用自定义参数")
-            return
-        }
-        activeZoneIdString = requestedValue
-
-        activeTimeZone = TimeZone.getTimeZone(activeZoneIdString)
-        activeZoneId = ZoneId.of(activeZoneIdString)
-        activeIcuTimeZone = android.icu.util.TimeZone.getTimeZone(activeZoneIdString)
-        isEnabled = true
-        Log.i(TAG, "已同步伪装时区配置 -> $activeZoneIdString (followRegion=$followRegion)")
+        EnvironmentApplicationStatus.record("TimeZoneHook", config, current != null)
+        HookRuntime.detail("TimeZoneHook", "运行时配置已处理；revision=${config.revision}; active=${current != null}; 不写进程全局默认值；关闭后读取走原路径，宿主已有时间对象不强制重建")
     }
 
     /**
-     * 向宿主全局 JVM 运行时设置伪装的默认时区。
+     * 确认当前读取策略；不再写入宿主进程全局默认时区。
      *
      * @param app 宿主 Application 实例。
      *
@@ -90,11 +59,8 @@ object TimeZoneHook {
      * - `io.github.meiyongai.toki.subtitle.hook.TokiModule.hookApplication`: 宿主 Application 创建时注入生效。
      */
     fun applyToApplication(app: Application) {
-        if (!isEnabled) {
-            return
-        }
-        TimeZone.setDefault(activeTimeZone)
-        Log.i(TAG, "宿主全局默认时区设置完成 -> $activeZoneIdString")
+        // No global mutation to undo: null makes each intercepted getter call downstream.
+        Log.i(TAG, "时区读取策略已刷新，未写进程默认值")
     }
 
     /**
@@ -105,7 +71,12 @@ object TimeZoneHook {
      * Callers:
      * - `io.github.meiyongai.toki.subtitle.hook.TimeZoneHook.hookTimeZoneMethods`: 方法拦截分发时校验。
      */
-    fun isFeatureEnabled(): Boolean = isEnabled
+    fun isFeatureEnabled(): Boolean = current != null
+
+    internal fun javaOverride(): TimeZone? = current?.java?.clone() as? TimeZone
+    internal fun zoneOverride(): ZoneId? = current?.zoneId
+    internal fun icuOverride(): android.icu.util.TimeZone? = current?.icu?.clone() as? android.icu.util.TimeZone
+
 
     /**
      * 注册 Java 与 ICU 时区相关的 Hook 拦截器。
@@ -121,8 +92,9 @@ object TimeZoneHook {
         for (method in tzClass.declaredMethods) {
             if (Modifier.isStatic(method.modifiers) && method.name == "getDefault" && method.parameterCount == 0) {
                 module.trackHook("TimeZoneHook", method).intercept { chain ->
-                    if (isFeatureEnabled()) {
-                        activeTimeZone
+                    val value = javaOverride()
+                    if (value != null) {
+                        value
                     } else {
                         chain.proceed()
                     }
@@ -135,8 +107,9 @@ object TimeZoneHook {
         for (method in zoneIdClass.declaredMethods) {
             if (Modifier.isStatic(method.modifiers) && method.name == "systemDefault" && method.parameterCount == 0) {
                 module.trackHook("TimeZoneHook", method).intercept { chain ->
-                    if (isFeatureEnabled()) {
-                        activeZoneId
+                    val value = zoneOverride()
+                    if (value != null) {
+                        value
                     } else {
                         chain.proceed()
                     }
@@ -149,8 +122,9 @@ object TimeZoneHook {
         for (method in icuTzClass.declaredMethods) {
             if (Modifier.isStatic(method.modifiers) && method.name == "getDefault" && method.parameterCount == 0) {
                 module.trackHook("TimeZoneHook", method).intercept { chain ->
-                    if (isFeatureEnabled()) {
-                        activeIcuTimeZone
+                    val value = icuOverride()
+                    if (value != null) {
+                        value
                     } else {
                         chain.proceed()
                     }
@@ -169,6 +143,7 @@ object TimeZoneHook {
      * - `io.github.meiyongai.toki.subtitle.hook.TokiModule.onPackageLoaded`: 目标包加载时触发。
      */
     fun init(module: XposedModule) {
+        HookRuntime.onDispose("TimeZoneHook") { current = null; EnvironmentApplicationStatus.clear("TimeZoneHook") }
         hookTimeZoneMethods(module)
         Log.i(TAG, "系统时区伪装子系统就绪")
     }

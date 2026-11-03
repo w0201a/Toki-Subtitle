@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.os.LocaleList
 import android.util.Log
-import io.github.meiyongai.toki.subtitle.model.RegionPresets
+import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.libxposed.api.XposedModule
 import java.lang.reflect.Modifier
@@ -35,17 +35,8 @@ object LocaleHook {
 
     private const val TAG = "TokiLocaleHook"
 
-    /** 功能开关状态缓存 */
-    @Volatile
-    private var isEnabled: Boolean = false
-
-    /** 当前运行时的伪装语言标签（如 "ja-JP"、"en-US"） */
-    @Volatile
-    private var activeLanguageTag: String = "ja-JP"
-
-    /** 当前运行时的 Java 标准 Locale 实例 */
-    @Volatile
-    private var activeLocale: Locale = Locale.forLanguageTag("ja-JP")
+    /** Immutable Locale published atomically; null restores downstream getters. */
+    @Volatile private var activeLocale: Locale? = null
 
     /**
      * 在安装任何拦截器之前捕获的真实系统 [LocaleList]。
@@ -91,31 +82,14 @@ object LocaleHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.TokiModule.hookApplication`: 宿主启动时触发配置加载。
      */
     fun refreshConfig(context: Context) {
-        val requestedEnabled = ConfigClient.getBoolean(context, "language_spoof_enabled")
-        if (!requestedEnabled) {
-            isEnabled = false
-            Log.i(TAG, "系统语言伪装功能处于关闭状态")
-            return
-        }
+        ConfigClient.init(context)
+        applyConfiguration(ConfigClient.snapshot())
+    }
 
-        val followRegion = ConfigClient.getBoolean(context, "language_follow_region")
-        val requestedValue = if (followRegion) {
-            val targetRegion = ConfigClient.getString(context, "target_region", defaultValue = "JP") ?: "JP"
-            RegionPresets.resolveLanguageForIso(targetRegion)
-        } else {
-            ConfigClient.getString(context, "custom_language", defaultValue = "ja-JP") ?: "ja-JP"
-        }
-
-        if (requestedValue == null) {
-            isEnabled = false
-            Log.w(TAG, "地区未收录环境预设；保持宿主原始值，请使用自定义参数")
-            return
-        }
-        activeLanguageTag = requestedValue
-
-        activeLocale = parseLocale(activeLanguageTag)
-        isEnabled = true
-        Log.i(TAG, "已同步伪装语言配置 -> $activeLanguageTag (Locale: $activeLocale, followRegion=$followRegion)")
+    internal fun applyConfiguration(config: ConfigSnapshot) {
+        activeLocale = EnvironmentRuntimeConfig.language(config)
+        EnvironmentApplicationStatus.record("LocaleHook", config, activeLocale != null)
+        HookRuntime.detail("LocaleHook", "运行时配置已处理；revision=${config.revision}; active=${activeLocale != null}; 只影响后续业务层读取；不重建资源／页面，不撤回宿主已缓存值")
     }
 
     /**
@@ -138,10 +112,10 @@ object LocaleHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.TokiModule.hookApplication`: 宿主 Application 创建时调用。
      */
     fun applyToApplication(app: Application) {
-        if (!isEnabled) {
+        if (activeLocale == null) {
             return
         }
-        Log.i(TAG, "宿主 Application 语言伪装就绪 -> $activeLanguageTag (仅 Java 拦截，Native 排版引擎保持原生)")
+        Log.i(TAG, "宿主 Application 语言伪装就绪 -> ${activeLocale?.toLanguageTag()} (仅 Java 拦截，Native 排版引擎保持原生)")
     }
 
     /**
@@ -154,7 +128,7 @@ object LocaleHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.LocaleHook.hookLocaleMethods`: Locale 拦截器运行时状态校验。
      *     - `io.github.meiyongai.toki.subtitle.hook.LocaleHook.hookLocaleListMethods`: LocaleList 拦截器运行时状态校验。
      */
-    fun isFeatureEnabled(): Boolean = isEnabled
+    fun isFeatureEnabled(): Boolean = activeLocale != null
 
     /**
      * 注册 [Locale.getDefault] 拦截器（业务层伪装）。
@@ -178,8 +152,9 @@ object LocaleHook {
         for (method in localeClass.declaredMethods) {
             if (Modifier.isStatic(method.modifiers) && method.name == "getDefault") {
                 module.trackHook("LocaleHook", method).intercept { chain ->
-                    if (isFeatureEnabled()) {
-                        activeLocale
+                    val locale = activeLocale
+                    if (locale != null) {
+                        locale
                     } else {
                         chain.proceed()
                     }
@@ -252,6 +227,7 @@ object LocaleHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.TokiModule.onPackageLoaded`: 目标包加载时触发。
      */
     fun init(module: XposedModule) {
+        HookRuntime.onDispose("LocaleHook") { activeLocale = null; EnvironmentApplicationStatus.clear("LocaleHook") }
         realSystemLocaleList = LocaleList.getDefault()
         Log.i(TAG, "已捕获真实系统 LocaleList: $realSystemLocaleList")
 

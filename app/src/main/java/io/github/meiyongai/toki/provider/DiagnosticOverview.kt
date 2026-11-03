@@ -24,7 +24,7 @@ internal object DiagnosticOverview {
         if (!row.getString("error").isNullOrBlank() || !row.getString("errorStatus").isNullOrBlank() ||
             state in setOf("注册失败，已撤销", "部分功能已注册", "子功能均未安装", "地区环境预设缺失")) return "有异常／部分不可用"
         if (row.getBoolean("restartRequired")) return "已保存，仍需重开宿主"
-        if (state.contains("正在") || state.contains("等待") || state == "注册中") return "准备中／等待条件"
+        if (state.contains("正在") || state.contains("等待") || state in setOf("注册中", "环境配置待应用")) return "准备中／等待条件"
         if (!row.containsKey("requestedEnabled") && !row.containsKey("enabled")) return "请求状态未知"
         val requested = if (row.containsKey("requestedEnabled")) row.getBoolean("requestedEnabled") else row.getBoolean("enabled")
         if (!requested) return if (row.getBoolean("appliedEnabled")) "请求关闭，宿主仍报告已启用，需核查" else "用户未开启（不是故障证明）"
@@ -95,6 +95,7 @@ internal object DiagnosticOverview {
         appendLine("- 当前只优先：离线视频导出、动态贴图转换、全设置实时生效、截图模板／特效完整隐藏；另补日志可读性。")
         appendLine("- 离线导出：已有本地轨道校验／MP4封装／回读源码；Android9、加密、分散片段、未解析模型等仍有限制。")
         appendLine("- 动态贴图：GIF／WebP逐帧源码已接；有颜色／透明／资源与宿主解码器限制。")
+        appendLine("- SIM／语言／时区／GPS已有运行时安装与后续平台读取刷新源码；不会重建宿主已缓存值／已发请求或切换现有页面语言，仍未设备验证。")
         appendLine("- 全设置无重开、模板／特效全覆盖仍未完成，不能由一次绿色注册状态推断实现。")
         appendLine("- 当前源码批次未编译／未真机验收；具体业务成功以本次操作终态及导出文件实测为准。")
         appendLine("- 数字说明：candidatePlans=候选方案数，candidateKeys=缓存候选键数，tracks=轨道数，samples=编码样本数，sourceBytes/outputBytes=字节数，frames=动画帧数，width/height=画布像素。")

@@ -7,6 +7,12 @@ import org.junit.Test
 
 /** 验证简明功能列表的状态语义与自动会话选择，不依赖宿主和设备。 */
 class HookStatusModelTest {
+    @Test fun pendingEnvironmentPayloadIsNotGreenMerelyBecauseTheHooksAreRegistered() {
+        val definition = HookStatusCatalog.features.single { it.id == "SimHook" }
+        assertEquals(HookVisualState.PENDING, HookFeatureStatus(definition,
+            HookFeatureReport(true, "环境配置待应用", 4, appliedEnabled = true)).state)
+    }
+
     @Test fun missingRegionEnvironmentIsVisibleWithASpecificExplanationNotFalseDisabled() {
         val definition = HookStatusCatalog.features.single { it.id == "GpsHook" }
         val status = HookFeatureStatus(definition, HookFeatureReport(true, "地区环境预设缺失", 4, appliedEnabled = false))

@@ -1,6 +1,6 @@
-# Source-only development status — 2.0.76-debug
+# Source-only development status — 2.0.77-debug
 
-Updated: 2026-11-04. Source version: **2.0.76-debug / 96**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Source version: **2.0.77-debug / 97**. Latest published production release referenced by this repository remains **2.0.51**.
 
 **No APK was built for this source batch.** Gradle, Kotlin compilation, JUnit/Robolectric and device verification were not run. Source-check success is not compatibility certification for TikTok 47.6.3.
 
@@ -39,6 +39,14 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 - Dependency preparation and late admission for 15 reversible feature installation units. Requested settings remain masked until successful installation. Startup-sensitive settings retain their restart contract; existing views may require re-entry or another binding callback.
 - Shared subtitle preview/playback renderer: outline, shadow, line/letter spacing, corner radius, padding, alignment, line limits and original/translated/bilingual modes. Defaults preserve unrestricted lines and no outline/shadow.
 - Per-key manager change clocks and durable suppression of superseded injected overrides. Unrelated changes preserve local choices; an explicit later edit of the same manager setting wins. Stored override values are retained for recovery. Host changes never write into framework read-only preferences. This is **not automatic two-way synchronization**.
+
+## Added in 2.0.77 — live platform environment reads with reversible payloads
+
+- Existing SIM/locale/timezone/GPS overrides join live-install eligibility and no longer freeze their parameter keys at startup. Platform-only installation/admission occurs before host classloader, main-process-only and unrelated scan prerequisites; a failed feature remains masked and healthy siblings remain eligible. No new country or deferred feature was added.
+- Each hook resolves one immutable effective configuration snapshot and atomically publishes a nullable payload. Off, missing-preset and disposal paths remove the override; actual payload application records its revision/enabled receipt. Diagnostics distinguish a registered hook from a pending/current payload and do not report requested settings as already applied.
+- Timezone no longer writes global process defaults; Java/ICU results are copies and ZoneId derives from the resolved timezone, including short aliases. Locale still avoids global default/resource mutation and retains native font-locale protection. GPS copies the downstream last-known Location instead of overwriting it; coordinate pairs share a snapshot and are not logged.
+- Scope: subsequent intercepted platform reads, not retroactive replacement of host caches, already-created objects, account/server region, sent requests or current page resources. Real hook interception, multi-process delivery and render/permission behavior remain unverified. This is not all-setting live restoration: speed, immersive-window and audio-experiment restrictions remain for later work.
+- 530 source-only/whitespace checks passed. Fifteen new test-source cases cover platform admission/dependencies/current revisions, resolver data/absence, production payload helpers/copies/disable, actual receipts and pending diagnostics. Existing freezing tests were updated, not falsely marked executed. No Kotlin/Gradle compilation, JUnit/Robolectric, device verification or APK build was performed.
 
 ## Added in 2.0.76 — review correction of uncommitted shared-renderer mappings
 
@@ -229,7 +237,7 @@ Required later runtime checks: airplane-mode cold reopen, no available network, 
 | Author country in videos opened from a profile | New primary-author TextView binding with span preservation, current identity checks and restoration is connected from actual 47.6.3 contracts. Profile/detail variants and runtime behavior remain unverified. |
 | Templates/effects | Existing template-button mapping wired; template implementation presence confirmed in the APK; effect anchors, variants and runtime behavior still need verification. |
 | Individually selectable share actions | 39 named controls, exact custom keys and reversible action/channel adapter filtering now wired to locally inspected 47.6.3 contracts. Runtime, alternative panels and some unnamed actions still need verification; not a whole-panel hide substitute. |
-| Settings synchronization and no-restart use | Late registration/per-key conflicts, current video-mode replay, one-snapshot updates for 58 dashboard controls and confirmed atomic related-field saves are in source. Actual bidirectional manager/host synchronization, all-page rebinding and live immersive-window restoration remain incomplete; startup-sensitive environment hooks still require restart. |
+| Settings synchronization and no-restart use | Late registration/per-key conflicts, current video-mode replay, 58-control requested-snapshot updates, confirmed saves and now live SIM/locale/timezone/GPS installation/payload application receipts are in source. Subsequent platform reads update without module startup freezing; actual bidirectional/cross-process behavior, host caches, all-page rebinding and speed/immersive/audio restoration remain incomplete and unverified. |
 | Faster/reliable subtitle translation and replay | Cache/track/write paths, observed-rewind ownership, cancelled-request recovery and shared-result retrieval are wired in source. Compilation, real replay/seek/paused/language behavior and measured latency remain unverified. |
 | Offline subtitles and translation persistence | Persistent caches, optional local-only and default hybrid online eligibility/reconnect handling are in source. No local engine; host offline player/time identity and full local UI still need integration. |
 | Offline long-press, export/download and comments | Selected-cell local menu, indexed descriptor-based MP4 export/remux/readback and account-isolated cached-comment viewer are in source. Export can inspect complete initialized fragments and uniquely paired video/AAC tracks; real playback/cache/device validation, dispersed init/media and unresolved model-only/API-28 export remain incomplete. Other offline comment/layout integration stays deferred by latest user order. |

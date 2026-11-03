@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="country_catalog_choose">Countries / territories</string>
-    <string name="country_catalog_hint">Includes system ISO countries and existing presets; not a TikTok service/account whitelist. Entries without a carrier preset set only the country code. State/province support is a separate model and is not inferred from a two-letter country code. SIM, language, timezone and GPS startup settings still require reopening TikTok.</string>
+    <string name="country_catalog_hint">Includes system ISO countries and existing presets; not a TikTok service/account whitelist. Entries without a carrier preset set only the country code. State/province support is a separate model and is not inferred from a two-letter country code. SIM, language, timezone and GPS overrides can update subsequent platform reads without reopening TikTok. Previously cached host values or already-sent requests are not rebuilt or retracted; this does not translate the existing app UI.</string>
     <string name="country_catalog_empty">No matching country or territory</string>
     <string name="region_country_only">Only override the country code</string>
     <string name="region_country_only_hint">Keep original carrier and SIM/phone state; do not invent MCC/MNC or a carrier name.</string>

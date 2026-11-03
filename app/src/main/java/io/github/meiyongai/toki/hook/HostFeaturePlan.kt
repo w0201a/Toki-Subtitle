@@ -84,14 +84,14 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
     companion object {
         val platform = setOf("SimHook", "LocaleHook", "TimeZoneHook", "GpsHook")
         val directHost = setOf("StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook", "SharePanelCleanupHook", "AuthorLocationHook", "QuickCommentCleanupHook", "PageCleanupHook", "HoldSpeedGestureHook", "OfflineVideoHook")
-        // Startup-sensitive SIM/locale/timezone/GPS, speed, immersive and audio-experiment hooks remain explicit restart cases.
+        // Platform environment reads can install/update live. Speed, immersive and audio experiment still need separate restoration work.
         val liveInstallable = setOf("LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
             "CommentCopyHook", "CommentStickerDownloadHook", "ManualCommentTranslateHook", "CachedCommentTranslateHook", "VideoTranslateHook", "LiveSwipeLockHook",
-            "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook") + directHost
+            "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook") + directHost + platform
 
         fun liveSymbols(features: Collection<String>): Set<HostSymbol> {
             require(features.all { it in liveInstallable })
-            return features.filter { it !in directHost }.flatMapTo(linkedSetOf()) { symbolDependencies.getValue(it) }
+            return features.filter { it !in directHost && it !in platform }.flatMapTo(linkedSetOf()) { symbolDependencies.getValue(it) }
         }
 
         fun enabled(feature: String, snapshot: ConfigSnapshot): Boolean = when (feature) {
@@ -104,10 +104,6 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
 
         private val startupKeys = mapOf(
             "BackgroundAudioHook" to setOf("background_audio_unlock"),
-            "SimHook" to setOf("sim_spoof_enabled", "sim_country_only_enabled", "target_region", "sim_operator_code", "sim_operator_name"),
-            "LocaleHook" to setOf("language_spoof_enabled", "language_follow_region", "target_region", "custom_language"),
-            "TimeZoneHook" to setOf("timezone_spoof_enabled", "timezone_follow_region", "target_region", "custom_timezone"),
-            "GpsHook" to setOf("gps_spoof_enabled", "gps_follow_region", "target_region", "custom_latitude", "custom_longitude"),
             "PlaybackSpeedHook" to setOf("fixed_speed_enabled", "speed_expand_enabled", "fixed_speed_value", "speed_expand_list"),
             // 当前沉浸修改没有成对恢复全部宿主布局/背景，明确按会话应用。
             "ImmersiveFullScreenHook" to setOf("immersive_full_screen"),

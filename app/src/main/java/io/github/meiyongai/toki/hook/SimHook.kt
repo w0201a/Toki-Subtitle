@@ -1,10 +1,10 @@
 package io.github.meiyongai.toki.subtitle.hook
 
-import android.app.Application
 import android.content.Context
 import android.telephony.TelephonyManager
 import android.util.Log
 import io.github.meiyongai.toki.subtitle.model.RegionPresets
+import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.libxposed.api.XposedModule
 import java.lang.reflect.Modifier
@@ -32,17 +32,8 @@ object SimHook {
 
     private const val TAG = "TokiSimHook"
 
-    /** 功能总开关状态，默认为开启 */
-    @Volatile
-    private var isEnabled: Boolean = false
-
-    /** 当前运行时的运营商伪装数据载荷 */
-    @Volatile
-    private var activeCarrier: CarrierInfo = CarrierInfo(
-        countryIso = "jp",
-        operatorCode = "44010",
-        operatorName = "NTT DOCOMO"
-    )
+    /** One atomic nullable payload; disabling does not race a separate enabled flag. */
+    @Volatile private var activeCarrier: CarrierInfo? = null
 
     /**
      * 根据地区代号及自定义参数解析完整的运营商信息。
@@ -94,24 +85,14 @@ object SimHook {
      * - `io.github.meiyongai.toki.subtitle.hook.SimHook.hookApplication`: 宿主 Application 创建时触发同步。
      */
     fun refreshConfig(context: Context) {
-        val requestedEnabled = ConfigClient.getBoolean(context, "sim_spoof_enabled")
-        if (!requestedEnabled) {
-            isEnabled = false
-            Log.i(TAG, "SIM 卡与地域伪装功能处于关闭状态")
-            return
-        }
+        ConfigClient.init(context)
+        applyConfiguration(ConfigClient.snapshot())
+    }
 
-        val targetRegion = ConfigClient.getString(context, "target_region", defaultValue = "JP") ?: "JP"
-        val customOpCode = ConfigClient.getString(context, "sim_operator_code", defaultValue = null)
-        val customOpName = ConfigClient.getString(context, "sim_operator_name", defaultValue = null)
-
-        activeCarrier = resolveCarrier(targetRegion, customOpCode, customOpName,
-            ConfigClient.getBoolean(context, "sim_country_only_enabled"))
-        isEnabled = true
-        Log.i(
-            TAG,
-            "已同步目标国家/地区配置 -> ${activeCarrier.countryIso.uppercase()} | ${activeCarrier.operatorName} (${activeCarrier.operatorCode})"
-        )
+    internal fun applyConfiguration(config: ConfigSnapshot) {
+        activeCarrier = EnvironmentRuntimeConfig.carrier(config)
+        EnvironmentApplicationStatus.record("SimHook", config, activeCarrier != null)
+        HookRuntime.detail("SimHook", "运行时配置已处理；revision=${config.revision}; active=${activeCarrier != null}; 后续平台读取应用，不改账号地区／IP，不撤回宿主已缓存值")
     }
 
     /**
@@ -122,7 +103,7 @@ object SimHook {
      * Callers:
      * - `io.github.meiyongai.toki.subtitle.hook.SimHook.hookTelephonyManager`: 各 TelephonyManager 拦截器调用。
      */
-    fun getActiveCarrier(): CarrierInfo = activeCarrier
+    fun getActiveCarrier(): CarrierInfo? = activeCarrier
 
     /**
      * 获取当前伪装功能是否开启。
@@ -132,7 +113,7 @@ object SimHook {
      * Callers:
      * - `io.github.meiyongai.toki.subtitle.hook.SimHook.hookTelephonyManager`: 执行前校验开关状态。
      */
-    fun isFeatureEnabled(): Boolean = isEnabled
+    fun isFeatureEnabled(): Boolean = activeCarrier != null
 
     /**
      * 注册 TelephonyManager 相关系统方法的 Hook 拦截器。
@@ -154,8 +135,9 @@ object SimHook {
             when (method.name) {
                 "getSimCountryIso", "getNetworkCountryIso" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled()) {
-                            getActiveCarrier().countryIso
+                        val carrier = activeCarrier
+                        if (carrier != null) {
+                            carrier.countryIso
                         } else {
                             chain.proceed()
                         }
@@ -163,8 +145,9 @@ object SimHook {
                 }
                 "getSimOperator", "getNetworkOperator" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled() && getActiveCarrier().operatorCode.isNotBlank()) {
-                            getActiveCarrier().operatorCode
+                        val carrier = activeCarrier
+                        if (carrier != null && carrier.operatorCode.isNotBlank()) {
+                            carrier.operatorCode
                         } else {
                             chain.proceed()
                         }
@@ -172,8 +155,9 @@ object SimHook {
                 }
                 "getSimOperatorName", "getNetworkOperatorName" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled() && getActiveCarrier().operatorName.isNotBlank()) {
-                            getActiveCarrier().operatorName
+                        val carrier = activeCarrier
+                        if (carrier != null && carrier.operatorName.isNotBlank()) {
+                            carrier.operatorName
                         } else {
                             chain.proceed()
                         }
@@ -181,7 +165,8 @@ object SimHook {
                 }
                 "getSimState" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled() && getActiveCarrier().operatorCode.isNotBlank()) {
+                        val carrier = activeCarrier
+                        if (carrier != null && carrier.operatorCode.isNotBlank()) {
                             TelephonyManager.SIM_STATE_READY
                         } else {
                             chain.proceed()
@@ -190,7 +175,8 @@ object SimHook {
                 }
                 "hasIccCard" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled() && getActiveCarrier().operatorCode.isNotBlank()) {
+                        val carrier = activeCarrier
+                        if (carrier != null && carrier.operatorCode.isNotBlank()) {
                             true
                         } else {
                             chain.proceed()
@@ -199,7 +185,8 @@ object SimHook {
                 }
                 "getPhoneType" -> {
                     module.trackHook("SimHook", method).intercept { chain ->
-                        if (isFeatureEnabled() && getActiveCarrier().operatorCode.isNotBlank()) {
+                        val carrier = activeCarrier
+                        if (carrier != null && carrier.operatorCode.isNotBlank()) {
                             TelephonyManager.PHONE_TYPE_GSM
                         } else {
                             chain.proceed()
@@ -220,6 +207,7 @@ object SimHook {
      * - `io.github.meiyongai.toki.subtitle.hook.TokiModule.onPackageLoaded`: 目标包加载时触发。
      */
     fun init(module: XposedModule) {
+        HookRuntime.onDispose("SimHook") { activeCarrier = null; EnvironmentApplicationStatus.clear("SimHook") }
         hookTelephonyManager(module)
         Log.i(TAG, "SIM 卡地域伪装子系统就绪")
     }

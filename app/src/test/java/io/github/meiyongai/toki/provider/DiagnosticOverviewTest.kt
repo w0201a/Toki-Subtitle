@@ -10,6 +10,11 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class DiagnosticOverviewTest {
+    @Test fun environmentRevisionWaitingCannotBeMistakenForSuccessfulCurrentApplication() {
+        val row = registered().apply { putString("state", "环境配置待应用"); putBoolean("appliedEnabled", true) }
+        assertEquals("准备中／等待条件", DiagnosticOverview.featureState(row))
+    }
+
     private fun registered() = Bundle().apply {
         putBoolean("requestedEnabled", true); putBoolean("appliedEnabled", true); putInt("registered", 4); putString("state", "已注册")
     }

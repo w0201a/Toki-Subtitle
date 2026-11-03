@@ -52,7 +52,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 96' in gradle and 'versionName = "2.0.76"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.76-debug / 96")
+check('versionCode = 97' in gradle and 'versionName = "2.0.77"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.77-debug / 97")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -388,13 +388,13 @@ sim_hook = (JAVA / 'hook/SimHook.kt').read_text(encoding='utf-8')
 check('Locale.getISOCountries().toSet() + RegionPresets.ALL_PRESETS.map { it.isoCode }' in country_catalog, 'country directory includes all available platform ISO countries plus existing presets, not just carrier records')
 check('Normalizer.Form.NFD' in country_catalog and 'lowercase(Locale.ROOT)' in country_catalog and 'item.chineseName, item.displayName(locale)' in country_catalog, 'country directory search handles Chinese, English, local names, codes and accent/case normalization')
 check('"sim_country_only_enabled", item.preset == null' in country_catalog and 'item.preset?.let' in country_catalog and '"00000"' not in country_catalog, 'directory selection writes one country-only or complete-carrier configuration without fake defaults')
-check('"sim_country_only_enabled" to false' in schema and '"SimHook" to setOf("sim_spoof_enabled", "sim_country_only_enabled"' in (JAVA / 'hook/HostFeaturePlan.kt').read_text(encoding='utf-8'), 'country-only is default-off, not an independent installation trigger, and follows the SIM startup contract')
+check('"sim_country_only_enabled" to false' in schema and '"SimHook" to listOf("sim_spoof_enabled")' in schema and '+ directHost + platform' in (JAVA / 'hook/HostFeaturePlan.kt').read_text(encoding='utf-8'), 'country-only is default-off and subordinate to the live-installable SIM control rather than installing hooks independently')
 check('countryOnly: Boolean = false' in sim_hook and 'if (countryOnly) ""' in sim_hook and '"00000"' not in sim_hook and 'normalizedIso = regionCode.trim().lowercase(java.util.Locale.ROOT)' in sim_hook, 'country-only SIM resolution preserves unavailable operator data and is locale-independent')
-check(sim_hook.count('getActiveCarrier().operatorCode.isNotBlank()') == 4 and 'getActiveCarrier().operatorName.isNotBlank()' in sim_hook, 'native operator, name and SIM/phone state are called when country-only has no carrier override')
+check(sim_hook.count('carrier.operatorCode.isNotBlank()') == 4 and 'carrier.operatorName.isNotBlank()' in sim_hook and 'val carrier = activeCarrier' in sim_hook, 'native operator, name and SIM/phone state are called when country-only has no carrier override')
 check(all('fun resolve' + kind + 'ForIso(isoCode: String): ' + value + '?' in regions for kind, value in (('Language', 'String'), ('TimeZone', 'String'), ('Latitude', 'Double'), ('Longitude', 'Double'))) and '?: 35.6762' not in regions and '?: 139.6503' not in regions, 'missing preset metadata is explicit absence, not a different country or coordinate')
-for relative, token in (('hook/LocaleHook.kt', 'requestedValue == null'), ('hook/TimeZoneHook.kt', 'requestedValue == null'), ('hook/GpsHook.kt', 'latitude == null || longitude == null')):
+for relative, resolver in (('hook/LocaleHook.kt', 'language'), ('hook/TimeZoneHook.kt', 'timeZone'), ('hook/GpsHook.kt', 'coordinates')):
     source = (JAVA / relative).read_text(encoding='utf-8')
-    check(token in source and 'isEnabled = false' in source, relative + ' leaves native environment values when follow-region metadata is missing')
+    check('EnvironmentRuntimeConfig.' + resolver + '(config)' in source and 'chain.proceed()' in source and 'EnvironmentApplicationStatus.clear' in source, relative + ' uses nullable resolved payloads and restores the downstream path on disable/disposal')
 check('fun reloadDashboard()' in dashboard and 'val current = checkNotNull(ConfigClient.requestedSnapshotOrNull())' in dashboard and 'ConfigClient.addStateListener { value -> if (value != null) reloadDashboard() }' in dashboard and 'subscription.close()' in dashboard and 'Snapshot.withMutableSnapshot' in dashboard, 'dashboard subscribes and reloads one requested snapshot without replacing disconnected values with fake defaults')
 reload_body = dashboard.split('fun reloadDashboard() {', 1)[1].split('    DisposableEffect(context)', 1)[0]
 check(len(re.findall(r'^            [A-Za-z][A-Za-z0-9]* = current\.(?:boolean|string)\(', reload_body, re.M)) == 58, 'dashboard synchronization covers all 58 persisted top-level fields rather than only newly added controls')
@@ -501,6 +501,35 @@ check('genericStandardRenderersAreRejectedBeforeClassWideTemplateRegistration' i
 check(not re.search(r'^### .*### ', read('CHANGELOG.md'), re.M), 'changelog headings do not contain duplicated markdown/version prefixes')
 check('<CURRENT_COMMIT>' not in read('docs/USER_WORK_ORDER.md'), 'work order identifies a real review baseline rather than a current-commit placeholder')
 
+# Live platform environment settings: installation/admission, immutable payloads and reversible downstream reads.
+environment_runtime = (JAVA / 'hook/EnvironmentRuntimeConfig.kt').read_text(encoding='utf-8')
+environment_module = (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8')
+environment_plan = (JAVA / 'hook/HostFeaturePlan.kt').read_text(encoding='utf-8')
+check('+ directHost + platform' in environment_plan and 'it !in directHost && it !in platform' in environment_plan, 'platform environment controls are live-installable and excluded from unrelated host-symbol dependency resolution')
+startup_contract = environment_plan.split('private val startupKeys = mapOf(', 1)[1].split('private val fixedSpeedSymbols', 1)[0]
+check(all(('"' + feature + '" to ') not in startup_contract for feature in ('SimHook', 'LocaleHook', 'TimeZoneHook', 'GpsHook')), 'environment keys are no longer frozen to startup values once their hooks are installed')
+check(all(feature in startup_contract for feature in ('BackgroundAudioHook', 'PlaybackSpeedHook', 'ImmersiveFullScreenHook')), 'unresolved audio/speed/immersive startup restrictions are retained rather than falsely marked live')
+activation_body = environment_module.split('private fun activateLiveFeatures() {', 1)[1].split('private fun installAdapted', 1)[0]
+check(activation_body.index('activatePlatformFeatures(app)') < activation_body.index('val info = hostInfo') < activation_body.index('HostScanPhase.SCANNING'), 'platform late setup precedes host-classloader and DEX scan prerequisites')
+platform_body = environment_module.split('private fun activatePlatformFeatures(app: Application) {', 1)[1].split('private fun activateLiveFeatures()', 1)[0]
+check(platform_body.index('install(feature)') < platform_body.index('plan.admitLive(feature)') < platform_body.index('ConfigClient.refreshHostSession()'), 'platform business settings stay masked until installation and explicit admission succeed')
+check('processName != app.packageName' not in platform_body and 'activationInFlight' not in activation_body.split('activatePlatformFeatures(app)')[0], 'platform-only activation is not blocked by a main-process-only rule or an in-flight unrelated adapted installation')
+check('private val receipts = mutableMapOf' in environment_runtime and 'Receipt(config.revision, enabled)' in environment_runtime and 'EnvironmentApplicationStatus.get(feature)' in environment_module, 'actual environment payload receipts keep applied revision/activation separate from requested settings')
+check('receipt == null || receipt.revision != effective.revision' in environment_module and '环境配置待应用' in environment_module and 'receipt.enabled' in environment_module, 'pending payload updates are not reported as already applied just because hooks exist')
+for relative, payload in (('hook/SimHook.kt', 'activeCarrier'), ('hook/LocaleHook.kt', 'activeLocale'), ('hook/TimeZoneHook.kt', 'current'), ('hook/GpsHook.kt', 'current')):
+    source = (JAVA / relative).read_text(encoding='utf-8')
+    check('@Volatile private var ' + payload in source and 'applyConfiguration(ConfigClient.snapshot())' in source and 'EnvironmentApplicationStatus.record' in source and 'EnvironmentApplicationStatus.clear' in source, relative + ' publishes one nullable payload from one effective revision and clears its receipt on disposal')
+zone_runtime = (JAVA / 'hook/TimeZoneHook.kt').read_text(encoding='utf-8')
+gps_runtime = (JAVA / 'hook/GpsHook.kt').read_text(encoding='utf-8')
+check('TimeZone.setDefault(' not in zone_runtime and 'Locale.setDefault(' not in (JAVA / 'hook/LocaleHook.kt').read_text(encoding='utf-8'), 'live environment application does not rewrite process-global timezone/locale defaults')
+check('current?.java?.clone()' in zone_runtime and 'current?.icu?.clone()' in zone_runtime and 'val value = javaOverride()' in zone_runtime and 'val value = icuOverride()' in zone_runtime, 'mutable Java/ICU timezone results are copies while null returns to native getter paths')
+check('Location(real).apply' in gps_runtime and 'realResult.latitude =' not in gps_runtime and 'val coordinates = current ?: return real' in gps_runtime and 'overrideLastKnown(realResult, provider)' in gps_runtime, 'GPS late changes never overwrite the downstream last-known Location object and disable returns the original')
+check('latitude == null || longitude == null' in environment_runtime and 'latitude.isFinite()' in environment_runtime and 'if (!config.boolean(' in environment_runtime, 'missing or invalid environment data resolves to no override rather than stale foreign-region payloads')
+check('运行时配置已处理' in sim_hook and '不记录坐标' in gps_runtime and '宿主已有时间对象不强制重建' in zone_runtime, 'environment diagnostics state the actual later-read scope without logging coordinates or promising host-cache reconstruction')
+for locale in ('values', 'values-b+zh+Hans'):
+    hint = ET.parse(ROOT / 'app/src/main/res' / locale / 'country_catalog_strings.xml').getroot().find("string[@name='country_catalog_hint']").text
+    check('still require reopening' not in hint and '启动设置仍需重新打开' not in hint, locale + ' country/environment hint no longer claims the old module startup freeze')
+
 # A lexical sanity check, not Kotlin syntax/type analysis or compilation.
 def kotlin_delimiters(source):
     length = len(source)
@@ -558,6 +587,7 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'hook/EnvironmentRuntimeConfig.kt', 'hook/HostFeaturePlan.kt', 'hook/TokiModule.kt',
     'hook/TemplateComponentSemantics.kt',
     'provider/DiagnosticText.kt', 'provider/TrialLog.kt', 'provider/OperationJournal.kt', 'provider/DiagnosticOverview.kt',
     'provider/TrialLogCapture.kt', 'ui/screen/TrialLogSection.kt', 'hook/HookRuntime.kt',
@@ -620,6 +650,8 @@ for relative in (
     'provider/OperationJournalTest.kt', 'provider/DiagnosticTextTest.kt', 'provider/DiagnosticOverviewTest.kt', 'provider/TrialLogCaptureTest.kt',
     'provider/TrialLogTest.kt',
     'hook/LayoutComponentSelectorTest.kt',
+    'hook/EnvironmentLivePlanTest.kt', 'hook/EnvironmentRuntimeConfigTest.kt', 'hook/EnvironmentOverridesTest.kt',
+    'hook/HostFeaturePlanTest.kt', 'model/CountryCatalogTest.kt', 'provider/DiagnosticOverviewTest.kt', 'ui/screen/HookStatusModelTest.kt',
 ):
     test = ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative
     kotlin_delimiters(test.read_text(encoding='utf-8'))
