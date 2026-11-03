@@ -46,6 +46,7 @@ internal object OfflineVideoHook {
         val worker = ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS, ArrayBlockingQueue(1), ThreadPoolExecutor.AbortPolicy())
         val cache = HostLocalVideoCache(loader)
         val commentReader = HostOfflineComments(loader)
+        val commentNetwork = HostCommentPageNetwork(loader)
         val activities = mutableSetOf<Method>()
         var binding: Binding? = null
         var timer: Runnable? = null
@@ -114,7 +115,9 @@ internal object OfflineVideoHook {
                                 1 -> HostSettingsEntry.openSubtitle(activity)
                                 2 -> {
                                     comments?.dismiss()
-                                    comments = OfflineCommentsDialog.show(activity, target.id, commentReader, { current(target) }) { closed ->
+                                    val owner = target.owner.get()
+                                    val model = owner?.let { contract.getAweme.invoke(it) }
+                                    if (model != null) comments = OfflineCommentsDialog.show(activity, target.id, commentReader, commentNetwork, model, { current(target) }) { closed ->
                                         if (comments === closed) comments = null
                                     }
                                 }

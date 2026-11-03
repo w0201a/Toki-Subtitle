@@ -5,7 +5,7 @@ internal object OfflineCommentData {
     enum class Mode { ORIGINAL, TRANSLATED, BILINGUAL }
     data class Row(val id: String, val author: String, val handle: String, val authorId: String,
         val source: String, val translation: String?, val language: String, val depth: Int,
-        val replyCount: Long, val sourceTruncated: Boolean = false) {
+        val replyCount: Long, val sourceTruncated: Boolean = false, val parentId: String = "") {
         fun text(mode: Mode): String = when {
             mode == Mode.ORIGINAL || translation.isNullOrBlank() || translation == source -> source
             mode == Mode.BILINGUAL -> source + "\n\n" + translation
@@ -13,7 +13,8 @@ internal object OfflineCommentData {
         }
     }
     data class Snapshot(val account: String, val video: String, val capturedAt: Long,
-        val rows: List<Row>, val total: Long, val hasMore: Boolean, val truncated: Boolean)
+        val rows: List<Row>, val total: Long, val hasMore: Boolean, val truncated: Boolean,
+        val nextCursor: Long? = null, val retainedOlder: Boolean = false)
     enum class Failure { MISSING, UNSUPPORTED, CORRUPT, ACCOUNT_CHANGED, CANCELLED }
     class Unavailable(val reason: Failure) : Exception(reason.name)
     const val MAX_ROWS = 500

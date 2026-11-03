@@ -2,14 +2,14 @@
 <resources>
     <string name="offline_comments_open">Browse cached comments</string>
     <string name="offline_comments_title">Cached comments</string>
-    <string name="offline_comments_hint">Only comments already saved by TikTok for the current account are shown. Reload reads local storage; it does not download missing comments. Text, author names and cached replies are available; images and profiles are not fetched. Cached translations can be switched per comment. Enable the separate online-translation option to explicitly translate a selected comment when connected; complete results are saved for offline reuse. Missing-comment fetching is not connected.</string>
+    <string name="offline_comments_hint">Local reload reads this account’s saved TikTok/Toki snapshots without downloading. Online first/next-page buttons explicitly request one native comment-list page and save copied rows to Toki’s private archive. Text, author names and cached replies are available; images and profiles are not fetched. Cached translations can be switched per comment. Enable the separate online-translation option to explicitly translate a selected comment when connected; complete results are saved for offline reuse. No automatic network pagination is started by scrolling; separate reply-thread requests and native comment-button replacement are not connected.</string>
     <string name="offline_comments_more">More cached rows</string>
     <string name="offline_comments_reload">Reload local cache</string>
     <string name="offline_comments_loading">Reading this account’s saved comments…</string>
     <string name="offline_comments_count">Showing %1$d of %2$d cached rows. Snapshot total: %3$d. Cached: %4$s</string>
     <string name="offline_comments_partial">Only part of the data is cached or within the display limits. Uncached comments/replies have not been loaded.</string>
     <string name="offline_comments_empty">This snapshot contains no readable cached rows. This does not prove the video has no comments online.</string>
-    <string name="offline_comments_missing">No saved comment snapshot was found for this video and account. Open its comments online first; TikTok must have saved a snapshot. No comments were downloaded by this viewer.</string>
+    <string name="offline_comments_missing">No saved snapshot was found for this video/account. When connected, use Load first page online, or let TikTok save its own comment snapshot. Local reload itself downloaded nothing.</string>
     <string name="offline_comments_corrupt">The saved snapshot is invalid, incomplete or belongs to another video. It was not shown as a successful comment load.</string>
     <string name="offline_comments_unsupported">This app’s persisted comment format cannot be read by the current adapter. Native comments were not modified or downloaded.</string>
     <string name="offline_comments_account_changed">The account changed or cannot be verified. Previous rows were cleared from this window. Reload for the current account.</string>
@@ -33,4 +33,16 @@
     <string name="cached_comment_translation_full">Translation is visible, but the private cache is full. Existing saved results were not evicted; this result was not saved.</string>
     <string name="cached_comment_translation_save_failed">Translation is visible, but saving was not confirmed. It may not survive reopening.</string>
     <string name="cached_comment_translation_unchanged">The service returned no different translation. Original text is retained; no new translation was saved.</string>
+    <string name="comment_page_online_first">Load first page online</string>
+    <string name="comment_page_online_next">Load next page online</string>
+    <string name="comment_page_loading">Explicitly loading one comment page online. Existing cached rows are retained…</string>
+    <string name="comment_page_saved">This page was loaded and saved for disconnected use or reopening.</string>
+    <string name="comment_page_not_saved_full">This page is visible, but the private comment archive is full and saving was not confirmed. Earlier caches were not deleted to make room.</string>
+    <string name="comment_page_not_saved">This page is visible, but saving was not confirmed. It may not survive reopening.</string>
+    <string name="comment_page_failed">The page failed, the account/video changed, or its pagination cursor was invalid. Previous rows/cache remain; check connectivity and retry.</string>
+    <string name="comment_page_network_unavailable">Online access is unavailable or local-data-only is enabled. Saved comments remain readable.</string>
+    <string name="comment_page_cancelled">This online load was cancelled. An unfinished result was not shown as successful.</string>
+    <string name="comment_page_capacity">This video reached the cached-row limit. The new page was not merged and earlier rows were not deleted.</string>
+    <string name="comment_page_retained_older">Includes older cached rows whose continued existence was not revalidated by this online page.</string>
+    <string name="comment_page_reply_to">Reply to cached comment %1$s</string>
 </resources>

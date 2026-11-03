@@ -2,14 +2,14 @@
 <resources>
     <string name="offline_comments_open">浏览已缓存评论</string>
     <string name="offline_comments_title">已缓存评论</string>
-    <string name="offline_comments_hint">只显示 TikTok 为当前账号已保存的评论。重新读取只访问本地，不下载缺失评论；显示正文、作者名称和已存回复，不请求头像或主页。已有缓存译文可逐条切换；开启独立在线翻译选项后，有网时可主动翻译单条评论，完整成功的译文会保存以便离线读取；尚未接入缺失评论的在线抓取。</string>
+    <string name="offline_comments_hint">本地重新读取访问当前账号的 TikTok/Toki 已存快照，不下载评论；“联网加载首页/下一页”每次主动请求一页原生评论并复制到 Toki 私有存档。显示正文、作者名称和已存回复，不请求头像或主页。已有缓存译文可逐条切换；开启独立在线翻译选项后，有网时可主动翻译单条评论，完整成功的译文会保存以便离线读取；滚动只展开已有缓存，不自动联网翻页；独立回复线程请求和原生评论按钮完整替换仍未接入。</string>
     <string name="offline_comments_more">更多已缓存条目</string>
     <string name="offline_comments_reload">重新读取本地缓存</string>
     <string name="offline_comments_loading">正在读取当前账号已保存的评论…</string>
     <string name="offline_comments_count">显示 %1$d / %2$d 条缓存条目。快照记录总数：%3$d。缓存时间：%4$s</string>
     <string name="offline_comments_partial">只缓存了部分数据或已达到展示上限；未缓存的评论和回复没有加载。</string>
     <string name="offline_comments_empty">这份快照没有可读取的缓存条目，不代表视频在线评论数为零。</string>
-    <string name="offline_comments_missing">没有找到当前账号下这个视频的评论快照。需先在线打开评论并由 TikTok 保存快照；此窗口没有下载评论。</string>
+    <string name="offline_comments_missing">没有找到当前账号下这个视频的评论快照。有网时可点“联网加载首页”，也可由 TikTok 保存原生快照；本地重新读取本身没有下载评论。</string>
     <string name="offline_comments_corrupt">评论快照无效、不完整或属于其他视频，未将其显示为加载成功。</string>
     <string name="offline_comments_unsupported">当前适配器无法读取这个应用的已存评论格式，未修改或联网下载原生评论。</string>
     <string name="offline_comments_account_changed">账号已改变或无法核实，窗口已清除上一账号的条目，请重新读取当前账号缓存。</string>
@@ -33,4 +33,16 @@
     <string name="cached_comment_translation_full">译文可查看，但私有缓存已满；未淘汰已有结果，本次未保存。</string>
     <string name="cached_comment_translation_save_failed">译文可查看，但未确认保存成功，重开后可能无法恢复。</string>
     <string name="cached_comment_translation_unchanged">服务没有返回不同译文，保留原文，未保存为新译文。</string>
+    <string name="comment_page_online_first">联网加载首页</string>
+    <string name="comment_page_online_next">联网加载下一页</string>
+    <string name="comment_page_loading">正在主动联网加载一页评论，已有缓存仍保留…</string>
+    <string name="comment_page_saved">本页评论已加载并保存，可断网或重开后读取。</string>
+    <string name="comment_page_not_saved_full">本页可查看，但私有评论缓存已满，未确认保存；未删除已有缓存腾空间。</string>
+    <string name="comment_page_not_saved">本页可查看，但未确认保存成功，重开后可能无法恢复。</string>
+    <string name="comment_page_failed">本页未加载成功、账号/视频已变化或分页游标异常，保留原有显示与缓存；可检查网络后重试。</string>
+    <string name="comment_page_network_unavailable">当前无法联网，或已开启“仅使用本地数据”；仍可读取已有缓存评论。</string>
+    <string name="comment_page_cancelled">本次联网加载已取消，没有将未完成结果显示为加载成功。</string>
+    <string name="comment_page_capacity">当前视频已达到评论缓存条目上限，未继续合并；已有条目没有被删除。</string>
+    <string name="comment_page_retained_older">包含旧快照中保留的条目，未在本次在线页中重新核实其是否仍存在。</string>
+    <string name="comment_page_reply_to">回复缓存评论 %1$s</string>
 </resources>

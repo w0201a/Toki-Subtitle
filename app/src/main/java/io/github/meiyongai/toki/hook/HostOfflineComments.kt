@@ -34,14 +34,32 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         } catch (_: Exception) { throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT) }
         if (contract.snapshotId.get(native) != video) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
         val response = contract.response.get(native) ?: throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
-        if (contract.status.getInt(response) != 0 || contract.error.getInt(response) != 0) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
+        return copyResponse(context, video, accountToken(account), response, contract.cachedTime.getLong(native), active)
+    }
+
+    fun account(context: Context): String {
+        if (!OfflineCommentCodeGate.verify(context)) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.UNSUPPORTED)
+        return accountToken(reflected.value.account())
+    }
+
+    fun copyResponse(context: Context, video: String, account: String, response: Any, capturedAt: Long,
+        active: () -> Boolean): OfflineCommentData.Snapshot {
+        val contract = reflected.value
+        fun requireCurrent() {
+            if (!active() || Thread.currentThread().isInterrupted)
+                throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CANCELLED)
+        }
+        requireCurrent()
+        if (!OfflineCommentCodeGate.verify(context) || !accountMatches(account))
+            throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.ACCOUNT_CHANGED)
+        if (!contract.list.isInstance(response) || contract.status.getInt(response) != 0 || contract.error.getInt(response) != 0) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
         val sourceRows = contract.items.invoke(response) as? List<*>
             ?: throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
         val result = mutableListOf<OfflineCommentData.Row>()
         val seen = mutableSetOf<String>()
         var truncated = false
         var visited = 0
-        fun append(items: List<*>, depth: Int) {
+        fun append(items: List<*>, depth: Int, parentId: String = "") {
             for (item in items) {
                 requireCurrent()
                 if (++visited > 1000 || result.size >= OfflineCommentData.MAX_ROWS) { truncated = true; return }
@@ -62,20 +80,21 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
                     OfflineCommentData.bounded(user?.let { contract.handle.invoke(it) as? String }, 128),
                     OfflineCommentData.bounded(user?.let { contract.uid.invoke(it) as? String }, 128),
                     source, translation, OfflineCommentData.bounded(contract.language.invoke(item) as? String, 64),
-                    depth, (contract.replyCount.invoke(item) as Int).toLong().coerceAtLeast(0), shortened)
+                    depth, (contract.replyCount.invoke(item) as Int).toLong().coerceAtLeast(0), shortened, parentId)
                 val replies = contract.replies.invoke(item) as? List<*>
                 if ((contract.replyCount.invoke(item) as Int).toLong() > replies.orEmpty().size) truncated = true
                 if (!replies.isNullOrEmpty()) {
-                    if (depth < 3) append(replies, depth + 1) else truncated = true
+                    if (depth < 3) append(replies, depth + 1, id) else truncated = true
                 }
             }
         }
         append(sourceRows, 0)
         requireCurrent()
-        if (contract.account() != account) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.ACCOUNT_CHANGED)
+        if (!accountMatches(account)) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.ACCOUNT_CHANGED)
         val total = (contract.total.invoke(response) as Long).coerceAtLeast(0)
-        return OfflineCommentData.Snapshot(accountToken(account), video, contract.cachedTime.getLong(native).coerceAtLeast(0),
-            result.toList(), total, contract.hasMore.invoke(response) == true || total > sourceRows.size, truncated)
+        return OfflineCommentData.Snapshot(account, video, capturedAt.coerceAtLeast(0),
+            result.toList(), total, contract.hasMore.invoke(response) == true, truncated || total > sourceRows.size,
+            nextCursor = (contract.cursor.invoke(response) as Long).takeIf { it >= 0 })
     }
 
     private class Contract(loader: ClassLoader) {
@@ -98,7 +117,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         val gson = store.getDeclaredField("LJ").apply { check(type == gsonType && Modifier.isStatic(modifiers)); isAccessible = true }
         val parse = method(gsonType, "LJI", Any::class.java, String::class.java, Class::class.java)
         val snapshot = type("X.0XJO")
-        private val list = type("com.ss.android.ugc.aweme.comment.model.CommentItemList")
+        val list = type("com.ss.android.ugc.aweme.comment.model.CommentItemList")
         val snapshotId = snapshot.getDeclaredField("LIZ").apply { check(type == String::class.java); isAccessible = true }
         val response = snapshot.getDeclaredField("LIZIZ").apply { check(type == list); isAccessible = true }
         val cachedTime = snapshot.getDeclaredField("LIZJ").apply { check(type == java.lang.Long.TYPE); isAccessible = true }
@@ -106,6 +125,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         val error = list.getField("error_code").apply { check(type == java.lang.Integer.TYPE); isAccessible = true }
         val items = method(list, "getItems", List::class.java)
         val total = method(list, "getTotal", java.lang.Long.TYPE)
+        val cursor = method(list, "getCursor", java.lang.Long.TYPE)
         val hasMore = method(list, "isHasMore", java.lang.Boolean.TYPE)
         val comment = type("com.ss.android.ugc.aweme.comment.model.Comment")
         val id = method(comment, "getCid", String::class.java)

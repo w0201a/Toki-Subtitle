@@ -61,7 +61,8 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
         val dp = context.resources.displayMetrics.density
         cell.root.setPadding(((12 + row.depth * 14) * dp).toInt(), (8 * dp).toInt(), (12 * dp).toInt(), (8 * dp).toInt())
         val name = row.author.ifBlank { context.getString(R.string.offline_comments_unknown_author) }
-        cell.author.text = name + if (row.handle.isBlank()) "" else "  @" + row.handle
+        cell.author.text = name + (if (row.handle.isBlank()) "" else "  @" + row.handle) +
+            if (row.parentId.isBlank()) "" else "  " + context.getString(R.string.comment_page_reply_to, row.parentId)
         fun selectedMode() = modes[row.id] ?: OfflineCommentData.Mode.ORIGINAL
         fun render() {
             val mode = selectedMode()
