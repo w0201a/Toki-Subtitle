@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 110' in gradle and 'versionName = "2.0.90"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.90-debug / 110")
+check('versionCode = 111' in gradle and 'versionName = "2.0.91"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.91-debug / 111")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -115,6 +115,9 @@ check('output.size().toLong() + length <= CommentStickerMedia.MAX_BYTES' in expo
 check('drawColor(Color.WHITE)' in exporter and 'StickerExportMode.JPEG && bitmap.hasAlpha()' in exporter, 'JPEG conversion has an explicit transparency-flattening path')
 cleanup = (JAVA / 'hook/LayoutCleanupHook.kt').read_text(encoding='utf-8')
 cleanup_policy = (JAVA / 'hook/LayoutCleanupPolicy.kt').read_text(encoding='utf-8')
+danmaku = (JAVA / 'hook/DanmakuEntranceHook.kt').read_text(encoding='utf-8')
+check('DanmakuCreateEntranceAssem' in danmaku and 'DanmakuSwitchAssem' in danmaku and 'candidate === root' in danmaku, 'danmaku cleanup targets verified entrance fields and refuses shared lifecycle roots')
+check('"DanmakuEntranceHook" -> DanmakuEntranceHook.init' in (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8') and 'DANMAKU_ENTRANCE(LayoutGroup.SIDE' in (JAVA / 'model/LayoutCleanup.kt').read_text(encoding='utf-8'), 'danmaku entrance has independent settings and host installation wiring')
 hdr_hook = (JAVA / 'hook/HdrPlaybackHook.kt').read_text(encoding='utf-8')
 check('module.deoptimize(target)' in hdr_hook and 'module.deoptimize(contract.select)' in hdr_hook, 'HDR policy callers are deoptimized so ART cannot silently bypass registered getter hooks')
 check('HdrSelectionContract.verify' in hdr_hook and 'selection.selecting(true)' in hdr_hook and 'selection.gate(chain.proceed() as Boolean)' in hdr_hook, 'HDR outer experiment is overridden only inside the inspected enabled selection call')
@@ -184,7 +187,7 @@ for name, markers in {
 quick_hook = (JAVA / 'hook/QuickCommentCleanupHook.kt').read_text(encoding='utf-8')
 check('NewBottomDefaultCommentInputAssem' in quick_hook and 'getDeclaredMethod("sq", ViewGroup::class.java)' in quick_hook, 'detail-page bottom input has its own inspected creation and attachment path')
 check('"QuickCommentCleanupHook" to listOf' in schema and '"QuickCommentCleanupHook" -> QuickCommentCleanupHook.init' in module, 'quick-comment switch is installed independently of layout navigation')
-check('.filter { it !in setOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.QUICK_COMMENT,' in schema and 'LayoutElement.VIDEO_TEMPLATE) }.map' in schema, 'quick-comment and template keys are excluded from the second navigation feature owner')
+check('.filter { it !in setOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.QUICK_COMMENT,' in schema and 'LayoutElement.VIDEO_TEMPLATE,' in schema and 'LayoutElement.DANMAKU_ENTRANCE) }.map' in schema, 'quick-comment and template keys are excluded from the second navigation feature owner')
 check('tracked.size >= 384' in quick_hook and 'gate.unbind(owner, view)' in quick_hook and 'gate.detach(owner)' in quick_hook, 'quick-comment visibility has bounded tracking and reversible lifetime ownership')
 
 hold_hook = (JAVA / 'hook/HoldSpeedGestureHook.kt').read_text(encoding='utf-8')
@@ -672,7 +675,7 @@ check('roots.configure(desired && ready)' in template_hook and 'if (!ready) retu
 check('if (owner == null || closed.get() || reading' in template_hook and 'reading = true' in template_hook and 'finally { reading = false }' in template_hook and 'val result = chain.proceed()' in template_hook, 'template lifecycle always proceeds natively and reflective root observation suppresses recursive getter callbacks')
 check('codeReady=$ready' in template_hook and 'owners.size >= 256' in template_hook and 'worker.shutdownNow()' in template_hook and 'roots.close()' in template_hook, 'template readiness/capacity metadata and asynchronous disposal are explicit without logging source identities')
 check(all(name in template_gate for name in ('classes4.dex', 'classes5.dex', 'classes6.dex', 'classes41.dex')) and 'found == hashes.keys' in template_gate and 'isInterrupted' in template_gate, 'template business/root contracts are gated by all four inspected DEX files with cancellation support')
-check('"TemplateCleanupHook" to listOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.VIDEO_TEMPLATE.key)' in schema and 'LayoutElement.VIDEO_TEMPLATE) }.map' in schema, 'template switch has its own configuration installation owner and is excluded from navigation-cleanup switches')
+check('"TemplateCleanupHook" to listOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.VIDEO_TEMPLATE.key)' in schema and 'LayoutElement.VIDEO_TEMPLATE,' in schema and 'LayoutElement.DANMAKU_ENTRANCE) }.map' in schema, 'template switch has its own configuration installation owner and is excluded from navigation-cleanup switches')
 check('"QuickCommentCleanupHook", "TemplateCleanupHook"' in environment_plan and '"TemplateCleanupHook" -> TemplateCleanupHook.init(this, loader)' in environment_module, 'template business control is direct/live-installable without unrelated host-symbol scanning')
 prepare_host = environment_module.split('private fun prepareHost(param: PackageReadyParam) {', 1)[1].split('private fun activatePlatformFeatures', 1)[0]
 check(prepare_host.index('install("TemplateCleanupHook", param.classLoader)') < prepare_host.index('if (!plan.requiresScan && !manualRequest)') and 'plan.admitLive("TemplateCleanupHook")' in prepare_host and 'if (it !in installed) install(it, loader)' in prepare_host, 'main-feed observation is prepared while disabled and admitted once without duplicate direct-hook installation')
@@ -760,7 +763,7 @@ lexical_files = [
     'provider/ConfigSchema.kt', 'provider/ConfigStore.kt', 'provider/ConfigConflictClock.kt',
     'ui/StyledSubtitleTextView.kt', 'ui/screen/SubtitleSettings.kt',
     'hook/CommentStickerDownloadHook.kt', 'hook/StickerImageExporter.kt', 'hook/StickerExportPolicy.kt',
-    'hook/HdrPlaybackHook.kt', 'hook/HdrSelectionScope.kt', 'hook/HdrSelectionContract.kt', 'ui/screen/HdrPlaybackSection.kt', 'hook/PhotoIndicatorTargets.kt', 'hook/LayoutCleanupHook.kt', 'hook/LayoutCleanupPolicy.kt', 'model/LayoutCleanup.kt', 'ui/screen/LayoutCleanupSection.kt',
+    'hook/DanmakuEntranceHook.kt', 'hook/HdrPlaybackHook.kt', 'hook/HdrSelectionScope.kt', 'hook/HdrSelectionContract.kt', 'ui/screen/HdrPlaybackSection.kt', 'hook/PhotoIndicatorTargets.kt', 'hook/LayoutCleanupHook.kt', 'hook/LayoutCleanupPolicy.kt', 'model/LayoutCleanup.kt', 'ui/screen/LayoutCleanupSection.kt',
     'hook/SharePanelCleanupHook.kt', 'hook/ShareListBindings.kt', 'model/SharePanelItem.kt', 'ui/screen/SharePanelCleanupSection.kt',
     'hook/AuthorLabelContract.kt', 'hook/AuthorLabelPresentation.kt', 'hook/AuthorLocationLabels.kt', 'hook/QuickCommentCleanupHook.kt',
     'hook/HoldSpeedContract.kt', 'hook/HoldSpeedGestureHook.kt', 'hook/NativeSpeedGestureScope.kt', 'ui/screen/HoldSpeedGestureSection.kt',
@@ -812,7 +815,7 @@ for relative in (
     'hook/OfflineExportFixtures.kt', 'hook/OfflineExportCandidatesTest.kt', 'hook/LocalVideoTracksTest.kt', 'hook/LocalVideoRemuxerTest.kt',
     'provider/OperationJournalTest.kt', 'provider/DiagnosticTextTest.kt', 'provider/DiagnosticOverviewTest.kt', 'provider/TrialLogCaptureTest.kt',
     'provider/TrialLogTest.kt',
-    'hook/HdrPlaybackHookTest.kt', 'hook/HdrSelectionScopeTest.kt', 'hook/HdrSelectionCodeGateTest.kt', 'hook/PhotoIndicatorTargetsTest.kt', 'hook/LayoutComponentSelectorTest.kt',
+    'hook/DanmakuEntranceHookTest.kt', 'hook/HdrPlaybackHookTest.kt', 'hook/HdrSelectionScopeTest.kt', 'hook/HdrSelectionCodeGateTest.kt', 'hook/PhotoIndicatorTargetsTest.kt', 'hook/LayoutComponentSelectorTest.kt',
     'hook/EnvironmentLivePlanTest.kt', 'hook/EnvironmentRuntimeConfigTest.kt', 'hook/EnvironmentOverridesTest.kt',
     'hook/TemplateAnchorContractTest.kt', 'hook/TemplateRootBindingsTest.kt', 'hook/TemplateCleanupPlanTest.kt',
     'hook/HostFeaturePlanTest.kt', 'model/CountryCatalogTest.kt', 'provider/DiagnosticOverviewTest.kt', 'ui/screen/HookStatusModelTest.kt',

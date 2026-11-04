@@ -7,6 +7,7 @@ import java.time.Instant
 internal object DiagnosticOverview {
     private val titles = mapOf(
         "OfflineVideoHook" to "离线视频导出／已有本地操作", "CommentStickerDownloadHook" to "贴图下载与转换", "LayoutCleanupHook" to "布局净化（含旧模板按钮映射）",
+        "DanmakuEntranceHook" to "弹幕入口隐藏",
         "TemplateCleanupHook" to "模板／特效业务锚点隐藏",
         "PageCleanupHook" to "搜索／收件箱／直播既有净化", "QuickCommentCleanupHook" to "快速评论隐藏", "SharePanelCleanupHook" to "分享项隐藏",
         "VideoTranslateHook" to "字幕显示与翻译", "CommentTranslateHook" to "评论翻译", "ManualCommentTranslateHook" to "手动评论翻译",

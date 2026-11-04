@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_danmaku_entrance">弹幕入口</string>
+    <string name="layout_danmaku_entrance_hint">仅隐藏视频上的弹幕入口按钮，不关闭弹幕内容、不隐藏视频。首次启用时若当前页已打开，重新进入视频一次。</string>
+</resources>

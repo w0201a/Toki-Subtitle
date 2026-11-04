@@ -1,3 +1,11 @@
+# Verified build — 2.0.91-debug /111: danmaku entrance added, real hide effect pending
+
+The user identified the center screenshot control as the danmaku entrance. The prior cleanup catalog and hook had no such option. This batch adds a dedicated layout_hide_danmaku_entrance key under side-control cleanup with independent direct-host installation and the shared manager/injected dashboard. It does not require navigation adaptation.
+
+Original 47.6.3 classes33.dex confirms the create-entry LLLF/LLLFF and switch-entry LLLFFI/LLLI view fields. Only actual descendants of the current lifecycle root are bound; callback roots and unrelated/detached controls are rejected. Native video/photo containers, touch handling and danmaku-content preferences remain unchanged. Visibility ownership preserves native hidden values on restore and suppresses native reshow while requested. Existing pages can require one re-entry after first live installation.
+
+742 source checks and 31 focused tests passed (three entrance tests and 28 status-model tests). No full regression was repeated. The unified APK passed signature, ZIP CRC, alignment, payload/namespace/new-class and 525 production input checks. APK: Toki-2.0.91-debug.apk; 86,884,596 bytes; SHA-256 `cc15e801e4ebba53ddf13d97881fe79b4fe2992b70f3083ac30798fc437da6e3`. Installation and real entrance acceptance remain pending; the user should update/restart the host and enable Layout cleanup / Side controls / Danmaku entrance. No phone switches were changed. HDR production code is unchanged: subsequent sample evidence again showed HLG/HDR, so the paused-frame off observation is not accepted as HDR-off success. HDR investigation is deferred for the user's current entrance request. Raw host sources, captures and logs stay local/ignored.
+
 # Verified build — 2.0.90-debug /110: getter bypass corrected; real SDR output pending
 
 The user reports 89 still outputs HDR. A read-only in-process diagnostic snapshot confirms HdrPlaybackHook was enabled and committed, but PlayerConfigImpl.isForceHdrOff had zero calls. Configuration delivery and registration were never evidence of real SDR output. Native code has an outer experiment gate and cold/local early returns; ART may also inline the tiny getter. The evidence does not isolate which bypass occurred yet.

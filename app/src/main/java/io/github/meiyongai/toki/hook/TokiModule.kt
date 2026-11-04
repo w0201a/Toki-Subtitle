@@ -226,6 +226,7 @@ class TokiModule : XposedModule() {
             "TemplateCleanupHook" -> TemplateCleanupHook.init(this, loader)
             "PageCleanupHook" -> PageCleanupHook.init(this, loader)
             "LayoutCleanupHook" -> LayoutCleanupHook.init(this, loader)
+            "DanmakuEntranceHook" -> DanmakuEntranceHook.init(this, loader)
             "QuickCommentCleanupHook" -> QuickCommentCleanupHook.init(this, loader)
             "SharePanelCleanupHook" -> SharePanelCleanupHook.init(this, loader)
             "ImmersiveFullScreenHook" -> ImmersiveFullScreenHook.init(this, loader)
