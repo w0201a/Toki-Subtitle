@@ -6,7 +6,7 @@ The existing desktop report records 1,067 tests: 1,064 passed, zero failed and t
 
 ADB confirms the installed manager is 2.0.87-debug / 107. This confirms installation, not acceptance of every runtime hook. This build contains inspected share adapter resolution, sticker/text menu routing, offline gesture targeting, live touch rule, bounded same-author region evidence, absent-only historical host configuration reconciliation and 25 curated city/state location representatives. Earlier Root font-size mirroring evidence does not establish no-root or all-field correctness.
 
-The latest order remains HDR first, offline video second. End-to-end HDR stream/decoder/output evidence and offline device acceptance remain open. No HDR fix or all-feature completion is claimed. Original host code, account content, device captures, logs and configuration remain local and ignored.
+The latest independent user message raises blank photo posts (download thumbnails remain visible) to priority 100, ahead of HDR and offline video. The user will operate requested switches; automated phone navigation/switch changes are stopped. A single temporary immersive-mode toggle comparison is awaiting user feedback. End-to-end HDR stream/decoder/output evidence and offline device acceptance remain open. No HDR fix or all-feature completion is claimed. Original host code, account content, device captures, logs and configuration remain local and ignored.
 
 # Verified Debug checkpoint — 2.0.86-debug
 
