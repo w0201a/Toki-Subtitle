@@ -10,6 +10,10 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
         startup != null && enabled(it, startup)
     }
     private var liveFeatures: Set<String> = emptySet()
+    private var immersiveLiveCapability = false
+    @Synchronized fun permitImmersiveLive() { immersiveLiveCapability = true }
+    private fun canInstallLive(feature: String) = feature in liveInstallable &&
+        (feature != "ImmersiveFullScreenHook" || immersiveLiveCapability)
     val features: Set<String>
         @Synchronized get() = startupFeatures + liveFeatures
     val platformFeatures: Set<String> get() = features.intersect(platform)
@@ -24,14 +28,14 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
 
     /** Candidate discovery does not enable any business callback before hooks are installed. */
     @Synchronized fun liveCandidates(requested: ConfigSnapshot): List<String> = liveInstallable.filter {
-        it !in features && it !in rejected && enabled(it, requested) &&
+        it !in features && it !in rejected && canInstallLive(it) && enabled(it, requested) &&
             (it != "DownloadHook" || downloadRepair || requested.boolean("download_path_enabled"))
     }.sortedBy { if (it == "ProgressBarHook") 0 else 1 }
 
     /** Admit only after installation succeeds. Failed or startup-frozen features cannot be promoted. */
     @Synchronized fun admitLive(feature: String): Boolean {
         require(feature in liveInstallable)
-        if (feature in rejected) return false
+        if (feature in rejected || !canInstallLive(feature)) return false
         if (feature == "AutoCleanModeHook" && ("ProgressBarHook" !in features || "ProgressBarHook" in rejected)) return false
         liveFeatures = liveFeatures + feature
         return true
@@ -52,7 +56,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
         if ("AutoCleanModeHook" !in features || "AutoCleanModeHook" in rejected) values["clean_mode_show_progress_bar"] = false
         if (!downloadRepair) values["download_force_no_watermark"] = false
         for ((feature, keys) in startupKeys) {
-            if (feature !in features || feature in rejected) continue
+            if (feature !in features || feature in rejected || feature in liveFeatures) continue
             val original = checkNotNull(startup).configuration()
             for (key in keys) {
                 if (key in original) values[key] = original.getValue(key) else values.remove(key)
@@ -67,7 +71,8 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
         if (owner in rejected) return enabled(feature, requested)
         if (owner == "DownloadHook" && !downloadRepair && requested.boolean("download_force_no_watermark")) return true
         if (owner !in features) return enabled(feature, requested) &&
-            (owner !in liveInstallable || owner in rejected)
+            (!canInstallLive(owner) || owner in rejected)
+        if (owner in liveFeatures) return false
         val keys = startupKeys[owner] ?: return false
         val original = checkNotNull(startup)
         return keys.any { value(original, it) != value(requested, it) }
@@ -83,7 +88,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
         // Environment, fixed rate, menu reads and audio group reads update live; immersive window restoration remains separate.
         val liveInstallable = setOf("LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
             "CommentCopyHook", "CommentStickerDownloadHook", "ManualCommentTranslateHook", "CachedCommentTranslateHook", "VideoTranslateHook", "LiveSwipeLockHook",
-            "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook", "PlaybackSpeedHook", "SpeedOptions", "BackgroundAudioHook", "DownloadHook") + directHost + platform
+            "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook", "PlaybackSpeedHook", "SpeedOptions", "BackgroundAudioHook", "DownloadHook", "ImmersiveFullScreenHook") + directHost + platform
 
         fun liveSymbols(features: Collection<String>): Set<HostSymbol> {
             require(features.all { it in liveInstallable })

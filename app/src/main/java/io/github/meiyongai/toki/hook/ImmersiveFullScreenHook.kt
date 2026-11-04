@@ -109,13 +109,17 @@ object ImmersiveFullScreenHook {
         HookRuntime.dependent("ImmersiveFullScreenHook", VideoDisplayRuntime.FEATURE)
         HookRuntime.install(VideoDisplayRuntime.FEATURE) { VideoDisplayRuntime.install(module, classLoader, feed) }
 
-        module.trackHook("ImmersiveFullScreenHook", layout.screenConstructor).intercept { chain ->
-            if (enabled()) {
-                val args = chain.args.toTypedArray()
-                args[0] = 0
-                args[1] = 0
-                chain.proceed(args)
-            } else chain.proceed()
+        val hot = ImmersiveLayoutPreparation.supported
+        if (hot) ImmersiveLiveRuntime.install(module, classLoader, feed, classLoader.loadClass(SCREEN), mainActivity, views)
+        else {
+            module.trackHook("ImmersiveFullScreenHook", layout.screenConstructor).intercept { chain ->
+                if (enabled()) {
+                    val args = chain.args.toTypedArray()
+                    args[0] = 0
+                    args[1] = 0
+                    chain.proceed(args)
+                } else chain.proceed()
+            }
         }
         module.trackHook("ImmersiveFullScreenHook", layout.reserve).intercept { chain ->
             if (enabled()) 0.0f else chain.proceed()
@@ -131,16 +135,18 @@ object ImmersiveFullScreenHook {
                     chain.args[3] as Int, chain.args[4] as Int)
             } else chain.proceed()
         }
-        module.trackHook("ImmersiveFullScreenHook", views.bottomView).intercept { chain ->
-            val view = chain.proceed() as? ViewGroup
-            if (view != null && enabled()) view.background = null
-            view
-        }
-        module.trackHook("ImmersiveFullScreenHook", resume).intercept { chain ->
-            val result = chain.proceed()
-            val activity = chain.thisObject as Activity
-            if (mainActivity.isInstance(activity) && enabled()) applyEdgeToEdge(activity)
-            result
+        if (!hot) {
+            module.trackHook("ImmersiveFullScreenHook", views.bottomView).intercept { chain ->
+                val view = chain.proceed() as? ViewGroup
+                if (view != null && enabled()) view.background = null
+                view
+            }
+            module.trackHook("ImmersiveFullScreenHook", resume).intercept { chain ->
+                val result = chain.proceed()
+                val activity = chain.thisObject as Activity
+                if (mainActivity.isInstance(activity) && enabled()) applyEdgeToEdge(activity)
+                result
+            }
         }
         Log.i(TAG, "沉浸布局入口已注册：${layout.reserve.declaringClass.name}.${layout.reserve.name}；卡片输入=${views.paddingInputs.size}；图文=${photos.calculate.declaringClass.name}.${photos.calculate.name}")
     }

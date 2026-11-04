@@ -2,6 +2,14 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
+## Verified Debug checkpoint: 2.0.83-debug
+
+The inspected TikTok 47.6.3 path adds paired immersive-window/layout update code, enabled only after its code gate and hook registration succeed. It keeps immutable native results intact, records original cache identities, recalculates known current panels/cells, preserves native window/background baselines and defers hidden-panel restoration until that panel returns. Unsupported hosts retain startup behavior; this is not a claim that every setting or page is live.
+
+663 source checks, whitespace, 217 XML parses, 83 focused cases and the full desktop suite (988 total: 985 passed, 0 failed, 3 native-media capability skips) passed. The Android test target compiled but did not run on a device. The unified APK passed version, both entries, payload/profile/namespace, signatures, ZIP/alignment and 494 source-input checks. APK: Toki-2.0.83-debug.apk / 82.52 MiB / SHA-256 e64dbd2a8546c28a001a24f8e0ef986acba700897403090d839ab8de04b36a8a.
+
+**No real TikTok/device acceptance has run.** Hidden-getter access, unknown targets, native-direct setter variants, conflicting window policies and the full original requirement list still need work/verification. No automatic installation, uninstall or data clearing occurred. Earlier checkpoints follow.
+
 ## Verified Debug checkpoint: 2.0.82-debug
 
 Current-caption timeline failures now retry with bounded backoff; current/future downloads use independent bounded lanes, rejected tasks release loading markers, and timeline memory survives signed URL refreshes through stable track identities. New retries use the newest observed URL; old-track/selection/cancel callbacks cannot replace the current timeline. Parsing stays on the worker. Cache-first hybrid networking and optional local-only policy are unchanged.

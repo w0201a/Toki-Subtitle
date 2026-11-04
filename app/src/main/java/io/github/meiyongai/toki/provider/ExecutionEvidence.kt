@@ -12,6 +12,7 @@ internal class ExecutionEvidence(
         MENU("SpeedOptions", "倍速菜单", "只影响后续菜单数据源读取；已打开且缓存列表的菜单可能需重新打开。"),
         TEMPLATE("TemplateCleanupHook", "模板／特效", "只覆盖已核实类型和已观察根；根数量或刷新返回不证明完整截图覆盖／像素效果。"),
         AUTHOR("AuthorLocationHook", "作者国家标签", "仅处理已核对的主作者标签；按原生显示用户和当前昵称匹配，不推测缺失地区，也不证明所有页面变体已覆盖。"),
+        IMMERSIVE("ImmersiveFullScreenHook", "沉浸热应用", "只证明已观察窗口／原生屏幕与卡片刷新调用返回；未观察当前页面、系统隐藏getter或实际像素仍需检查。"),
         AUDIO("BackgroundAudioHook", "后台音频读取", "只证明这次实验getter返回；不重建宿主缓存，也不证明后台播放已启动或停止。")
     }
     enum class Action(val title: String) { APPLY("应用设置"), RELEASE("关闭／失效恢复"), READ("原生数据读取"), NATIVE_REQUEST("原生调速回调"), BIND("视图绑定／刷新") }

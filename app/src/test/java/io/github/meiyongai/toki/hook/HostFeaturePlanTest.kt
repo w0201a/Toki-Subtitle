@@ -79,6 +79,35 @@ class HostFeaturePlanTest {
         assertFalse(pathOnly.apply(requested).boolean("download_force_no_watermark"))
     }
 
+    @Test fun immersiveLivePromotionRequiresVerifiedCapabilityAndSuccessfulAdmission() {
+        val original = config("immersive_full_screen" to true, revision = 1)
+        val off = config("immersive_full_screen" to false, revision = 2)
+        val plan = HostFeaturePlan(original)
+        assertTrue(plan.requiresRestart("ImmersiveFullScreenHook", off))
+        assertTrue(plan.apply(off).boolean("immersive_full_screen"))
+        assertFalse(plan.admitLive("ImmersiveFullScreenHook"))
+        plan.permitImmersiveLive()
+        assertTrue(plan.admitLive("ImmersiveFullScreenHook"))
+        assertFalse(plan.requiresRestart("ImmersiveFullScreenHook", off))
+        assertFalse(plan.apply(off).boolean("immersive_full_screen"))
+        assertEquals(2L, plan.appliedRevision("ImmersiveFullScreenHook", off))
+    }
+    @Test fun immersiveCanStartLateOnlyAfterCodeVerificationAndKeepsOtherSettingsUnchanged() {
+        val plan = HostFeaturePlan(config())
+        val on = config("immersive_full_screen" to true, "video_fit_mode" to "fill", revision = 7)
+        assertFalse(plan.liveCandidates(on).contains("ImmersiveFullScreenHook"))
+        assertTrue(plan.requiresRestart("ImmersiveFullScreenHook", on))
+        plan.permitImmersiveLive()
+        assertTrue(plan.liveCandidates(on).contains("ImmersiveFullScreenHook"))
+        assertFalse(plan.apply(on).boolean("immersive_full_screen"))
+        assertTrue(plan.admitLive("ImmersiveFullScreenHook"))
+        assertTrue(plan.apply(on).boolean("immersive_full_screen"))
+        assertEquals("fill", plan.apply(on).string("video_fit_mode"))
+        plan.reject("ImmersiveFullScreenHook")
+        assertFalse(plan.apply(on).boolean("immersive_full_screen"))
+        assertTrue(plan.requiresRestart("ImmersiveFullScreenHook", on))
+    }
+
     private fun config(vararg values: Pair<String, Any>, revision: Long = 1) = ConfigSnapshot(mapOf(*values), revision)
 
     @Test fun platformAndDirectFeaturesNeverRequireDexAdaptation() {
@@ -274,9 +303,10 @@ class HostFeaturePlanTest {
         assertFalse(failure.apply(request).boolean("clean_mode_on_play"))
     }
 
-    @Test fun startupSensitiveSettingsCannotBeAdmittedAsLiveFeatures() {
+    @Test fun immersiveAdmissionRequiresEvidenceWhileOtherLiveFeaturesStayIndependent() {
         val plan = HostFeaturePlan(config())
-        assertThrows(IllegalArgumentException::class.java) { plan.admitLive("ImmersiveFullScreenHook") }
+        assertFalse(plan.admitLive("ImmersiveFullScreenHook"))
+        assertFalse(plan.apply(config("immersive_full_screen" to true)).boolean("immersive_full_screen"))
         for (feature in listOf("BackgroundAudioHook", "PlaybackSpeedHook", "SpeedOptions")) {
             assertTrue(plan.admitLive(feature))
         }

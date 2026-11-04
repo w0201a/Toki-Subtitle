@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 102' in gradle and 'versionName = "2.0.82"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.82-debug / 102")
+check('versionCode = 103' in gradle and 'versionName = "2.0.83"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.83-debug / 103")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -623,7 +623,7 @@ environment_plan = (JAVA / 'hook/HostFeaturePlan.kt').read_text(encoding='utf-8'
 check('+ directHost + platform' in environment_plan and 'it !in directHost && it !in platform' in environment_plan, 'platform environment controls are live-installable and excluded from unrelated host-symbol dependency resolution')
 startup_contract = environment_plan.split('private val startupKeys = mapOf(', 1)[1].split('private val fixedSpeedSymbols', 1)[0]
 check(all(('"' + feature + '" to ') not in startup_contract for feature in ('SimHook', 'LocaleHook', 'TimeZoneHook', 'GpsHook')), 'environment keys are no longer frozen to startup values once their hooks are installed')
-check('ImmersiveFullScreenHook' in startup_contract, 'unresolved immersive window restoration retains its startup restriction')
+check('ImmersiveFullScreenHook' in startup_contract and 'feature in liveFeatures' in plan and 'permitImmersiveLive' in plan, 'unverified immersive hosts retain startup values; code-verified installed live paths are promoted explicitly')
 check(all(feature not in startup_contract for feature in ('BackgroundAudioHook', 'PlaybackSpeedHook', 'SpeedOptions')), 'fixed speed, independent menu and audio read settings are no longer frozen to startup')
 activation_body = environment_module.split('private fun activateLiveFeatures() {', 1)[1].split('private fun installAdapted', 1)[0]
 check(activation_body.index('activatePlatformFeatures(app)') < activation_body.index('val info = hostInfo') < activation_body.index('HostScanPhase.SCANNING'), 'platform late setup precedes host-classloader and DEX scan prerequisites')
@@ -818,5 +818,22 @@ check('DiscardOldestPolicy' not in prefetch and 'ThreadPoolExecutor.AbortPolicy(
 check('foregroundWorker.execute' in prefetch and 'worker.execute' in prefetch and 'foregroundWorker.queue.clear()' in prefetch, 'current timeline has its own bounded lane and selection clears obsolete queued work')
 check('ensureCurrentTimeline()\n            warmUpcoming()' in prefetch and 'currentRetryAt =' in prefetch and 'retryDelay(currentFailures)' in prefetch, 'missing current timelines have bounded retries even when the cue does not change')
 check('timelines[track.url]' not in prefetch and 'timelines[identity]' in prefetch, 'timeline memory reuse keys on stable track identity rather than signed URL tokens')
+
+immersive_windows = read('app/src/main/java/io/github/meiyongai/toki/hook/ImmersiveWindowBindings.kt')
+immersive_screen = read('app/src/main/java/io/github/meiyongai/toki/hook/ImmersiveScreenBindings.kt')
+immersive_runtime = read('app/src/main/java/io/github/meiyongai/toki/hook/ImmersiveLiveRuntime.kt')
+immersive_prepare = read('app/src/main/java/io/github/meiyongai/toki/hook/ImmersiveLayoutPreparation.kt')
+check('decorFitsSystemWindows' in immersive_windows and 'row.owned' in immersive_windows and 'LAYOUT_MASK.inv()' in immersive_windows, 'immersive window restoration reads the native decor-fit baseline and preserves unrelated flag bits')
+check('nativeBackground' in immersive_windows and 'nativeAttributes' in immersive_windows and 'beforeWrite(property)' in immersive_windows, 'immersive native writes and per-field failure isolation retain restoration bookkeeping')
+check('copy.invoke(original' in immersive_screen and 'cache.set(handler, entry.original)' in immersive_screen and 'current !== input' in immersive_screen, 'immersive screen projection is copied and restores only exact still-owned cache objects')
+check('CONTAINER_ADAPTION' in immersive_screen and 'reason.invoke(feed, changed.get(null), null, null)' in immersive_screen, 'current cells use the inspected native invalidation reason without guessed video dimensions')
+check('2757ca393a37b513c91d4cbea971b9933e6bee17985a6cbb4d9f31c9b2f60c10' in immersive_prepare and '60d095d1bf85b222fa691453133c29b976b274d4ceed215a30603858ac5e18ff' in immersive_prepare, 'immersive live code requires the inspected original classes4 and classes5 fingerprints')
+check('ImmersiveRefreshPlan' in immersive_runtime and 'layoutRefresh.panelApplied(owner, screens.original' in immersive_runtime and 'screens.restoreCaches()' in immersive_runtime, 'runtime records actual projection ownership for deferred disable restoration')
+for relative in ('hook/ImmersiveWindowBindings.kt','hook/ImmersiveScreenBindings.kt','hook/ImmersiveLiveRuntime.kt','hook/ImmersiveLayoutPreparation.kt','hook/ImmersiveRefreshPlan.kt'):
+    kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8-sig'))
+    check(True, relative + ' lexical delimiters are balanced (not compilation)')
+for relative in ('hook/ImmersiveWindowBindingsTest.kt','hook/ImmersiveScreenBindingsTest.kt','hook/ImmersiveRefreshPlanTest.kt'):
+    kotlin_delimiters((ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative).read_text(encoding='utf-8-sig'))
+    check(True, relative + ' test delimiters balanced (not executed)')
 
 print("SOURCE CHECKS ONLY: this script does not verify compilation, JUnit, device runtime or TikTok 47.6.3 hook behavior.")

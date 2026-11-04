@@ -1,3 +1,13 @@
+# Verified Debug checkpoint — 2.0.83-debug
+
+Updated: 2026-11-04. Current source and checked local APK: **2.0.83-debug / 103**. Earlier APKs are retained.
+
+This batch adds an inspected-code immersive live capability, early read-only observations, immutable screen copies with identity-based cache ownership, paired window/background restoration and native panel/cell recalculation. The installed session is promoted only after the classes4/classes5 gate and hook registration succeed; unmatched hosts retain their startup contract. Unknown decor-fits values are not guessed. Deferred hidden-panel restoration survives until the same current panel returns.
+
+663 source checks, whitespace, 217 XML parses, 83 focused cases and the full desktop suite (988 total: 985 passed, 0 failed, 3 native-media capability skips) passed. The Android test target compiled but did not run on a device. The unified APK passed version, both entries, payload/profile/namespace, signatures, ZIP/alignment and 494 source-input checks. APK: Toki-2.0.83-debug.apk / 82.52 MiB / SHA-256 e64dbd2a8546c28a001a24f8e0ef986acba700897403090d839ab8de04b36a8a.
+
+The first 62-case run failed six mutable-color assumptions under target-35 enforcement. Restoration assertions were retained, mutable and enforced windows were tested separately, then the expanded focused/full runs passed. UI calls and simulated state transitions are not real TikTok or injector/pixel acceptance. Unknown players, cached menus, unmatched hosts, restricted hidden getters, unobserved roots, unhooked/native-direct writes and the other original feature requests remain open. No install, uninstall, clearing or deletion occurred.
+
 # Verified Debug checkpoint — 2.0.82-debug
 
 Updated: 2026-11-04. Current source: **2.0.82-debug / 102**; verified local APK: **2.0.82-debug / 102**. Prior APKs are retained.

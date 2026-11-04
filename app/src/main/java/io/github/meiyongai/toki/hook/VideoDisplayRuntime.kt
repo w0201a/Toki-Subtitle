@@ -50,7 +50,7 @@ internal object VideoDisplayRuntime {
             val owner = chain.thisObject
             val reason = chain.args[1] as? String ?: ""
             val original = bindings.original(owner, chain.args[0], reason)
-            val mode = if (ConfigClient.getBoolean(ImmersiveFullScreenHook.KEY_IMMERSIVE_FULL_SCREEN))
+            val mode = if (HookRuntime.scope("ImmersiveFullScreenHook").active && ConfigClient.getBoolean(ImmersiveFullScreenHook.KEY_IMMERSIVE_FULL_SCREEN))
                 VideoFitMode.from(ConfigClient.getString(ImmersiveFullScreenHook.KEY_VIDEO_FIT_MODE, "center")) else VideoFitMode.CENTER
             val root = bindings.root(owner)
             if (mode != VideoFitMode.FILL) root?.let(crop::unbind)

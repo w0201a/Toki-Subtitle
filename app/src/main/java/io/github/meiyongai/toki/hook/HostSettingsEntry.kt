@@ -17,6 +17,7 @@ internal object HostSettingsEntry : Application.ActivityLifecycleCallbacks {
     private lateinit var resources: ModuleResources
     private val hooked = mutableSetOf<java.lang.reflect.Method>()
     private val pages = WeakHashMap<Activity, Page>()
+    internal fun activeActivities(): List<Activity> = pages.keys.filter { !it.isFinishing && !it.isDestroyed }
     private val main = Handler(Looper.getMainLooper())
     private var dialog: HostSettingsDialog? = null
     private var dialogActivity: Activity? = null

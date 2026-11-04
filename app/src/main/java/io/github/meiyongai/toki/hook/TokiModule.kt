@@ -108,6 +108,7 @@ class TokiModule : XposedModule() {
         if ("PageCleanupHook" in installed) PageCleanupHook.refreshStatus()
         if ("TemplateCleanupHook" in installed) TemplateCleanupHook.refreshStatus()
         if ("AuthorLocationHook" in installed) AuthorLocationLabels.refreshStatus()
+        if ("ImmersiveFullScreenHook" in installed && ImmersiveLayoutPreparation.supported) ImmersiveLiveRuntime.refreshStatus()
         HookRuntime.configurationReady(if (restart) "配置就绪，等待重新打开" else "配置已就绪")
     }
 
@@ -173,6 +174,10 @@ class TokiModule : XposedModule() {
     }
 
     private fun install(feature: String, loader: ClassLoader? = null) {
+        if (feature == "ImmersiveFullScreenHook" && ImmersiveLayoutPreparation.started && ImmersiveLayoutPreparation.pending) {
+            HookRuntime.state(feature, "等待沉浸代码核验，不提前改变窗口")
+            return
+        }
         HookRuntime.install(feature) {
             when (feature) {
                 "SimHook" -> SimHook.init(this)
@@ -183,6 +188,10 @@ class TokiModule : XposedModule() {
             }
             installed.add(feature)
             HookRuntime.onDispose(feature) { installed.remove(feature) }
+        }
+        if (feature == "ImmersiveFullScreenHook" && feature in installed && ImmersiveLayoutPreparation.supported) {
+            plan.permitImmersiveLive()
+            check(plan.admitLive(feature))
         }
         if (feature !in installed) {
             plan.reject(feature)
@@ -252,6 +261,17 @@ class TokiModule : XposedModule() {
     private fun prepareHost(param: PackageReadyParam) {
         hostInfo = param.applicationInfo
         hostLoader = param.classLoader
+        if (processName == param.packageName) {
+            ImmersiveLayoutPreparation.prepare(this, param.classLoader, checkNotNull(application)) { supported ->
+                if (supported) plan.permitImmersiveLive()
+                val dependencies = listOf(HostSymbol.RESERVED_AREA, HostSymbol.FEED_ADAPTION, HostSymbol.PHOTO_LAYOUT)
+                if ("ImmersiveFullScreenHook" in plan.features && "ImmersiveFullScreenHook" !in installed && dependencies.all(HostSymbols::available)) {
+                    install("ImmersiveFullScreenHook", param.classLoader)
+                    application?.let { refreshConfiguration(it) }
+                }
+                scheduleLiveActivation()
+            }
+        }
         // Observe main-feed roots while the switch is off: a later toggle can update already-known current views.
         if (processName == param.packageName && HookRuntime.scope("TemplateCleanupHook").active) {
             if ("TemplateCleanupHook" !in installed) install("TemplateCleanupHook", param.classLoader)
