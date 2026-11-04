@@ -2,6 +2,14 @@
 
 Subtitle edition contributors: **154Er · Gi-Ai154M**. This credit covers improvements and maintenance of the local subtitle edition; original project attribution and license are retained.
 
+## Verified Debug checkpoint: 2.0.82-debug
+
+Current-caption timeline failures now retry with bounded backoff; current/future downloads use independent bounded lanes, rejected tasks release loading markers, and timeline memory survives signed URL refreshes through stable track identities. New retries use the newest observed URL; old-track/selection/cancel callbacks cannot replace the current timeline. Parsing stays on the worker. Cache-first hybrid networking and optional local-only policy are unchanged.
+
+Source checks (649), whitespace, 217 XML parses, 52 focused tests and the full desktop suite (961 total: 958 passed, 0 failed, 3 native-media capability skips) passed before distribution packaging. The current Android instrumentation target compiled but did not run on a device. Both runtime entries, payload/profile/namespace, version, signatures, ZIP/alignment and 489 source inputs passed verification. Local APK: `Toki-2.0.82-debug.apk`, versionCode 102, 82.41 MiB, SHA-256 `2ff6aca2f18e2b2f3a1f073640b481bb1f077ee65ca664d10ec3c02dbb24dbaf`.
+
+**Real TikTok behavior and the complete original feature list are not fully accepted.** Region analysis did not find an authoritative supported-country/subdivision list in the optional LIVE mock data; ISO/payment directories are not substituted. Old APKs and earlier checkpoints are retained. No automatic install, uninstall or data clearing occurred.
+
 ## Verified Debug checkpoint: 2.0.81-debug
 
 Current changes address an inspected author-label gap: ordinary native nickname callbacks can write the primary TextView directly, bypassing the previously hooked rich-text helper. The new observer also follows the native homepage collaborator selection rather than assuming the displayed person is always Aweme.author, checks the current label/name/model, restores only module-owned spans, and prepares known views while the option is off. Display-only ISO3/UK normalization expands Chinese labels without changing SIM/server settings or claiming TikTok availability. Basic source checks (644), real main/test compilation and 58 focused tests passed; the full desktop regression passed (951 cases: 948 passed, no failures, 3 native-media capability skips). The unified module APK was built and verified: `Toki-2.0.81-debug.apk`, versionCode 101, 82.41 MiB, SHA-256 `9a13f5ebc3fb7d31e205df7ea318693bf192c0568d7833a9bca46bcc6a135607`. Both runtime entries, private payload/profile match, valid debug signature, ZIP/alignment and 489 source inputs were checked. **Real TikTok/device behavior and full-goal acceptance remain unverified. The 2.0.80 checkpoint below is retained as history.**

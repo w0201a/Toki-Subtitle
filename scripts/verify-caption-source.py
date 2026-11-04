@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 101' in gradle and 'versionName = "2.0.81"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.81-debug / 101")
+check('versionCode = 102' in gradle and 'versionName = "2.0.82"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.82-debug / 102")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -224,7 +224,7 @@ check(native.index('cache[videoId, text, sourceTrack]?.let') < native.index('if 
 check('val remote = access()' in native and 'if (!remoteAllowed)' in native and 'job.remote.permitsNetwork()' in native, 'subtitle scheduling and result/retry handling consult operation tickets')
 transport_body = native.split('return request@{ text, complete ->', 1)[1]
 check(transport_body.index('if (!remote.permitsNetwork())') < transport_body.index('serviceField.get(null)') < transport_body.index('method.invoke(service, text)'), 'shared Toki translation transport guards before calling host remote service')
-check('val remote = TranslationNetworkPolicy.capture()' in prefetch and 'loadCues(trackUrl, generation, remote)' in prefetch and 'loadCues(track.url, generation, remote)' in prefetch, 'caption operations capture access before submitting asynchronous work')
+check('val remote = TranslationNetworkPolicy.capture()' in prefetch and 'fetch(trackUrl, generation, remote)' in prefetch and 'fetch(track.url, generation, remote)' in prefetch and '?: loadCues(location, generation, remote)' in prefetch, 'caption operations capture access before submitting asynchronous work')
 http_body = prefetch.split('private fun read(', 1)[1].split('fun cancel()', 1)[0]
 check(http_body.index('remote.permitsNetwork()') < http_body.index('openConnection()') and http_body.count('remote.permitsNetwork()') >= 3, 'caption redirects/connect/read boundaries contain local-only checks')
 check('nextLocalOnly != localOnly' in (JAVA / 'hook/SubtitleFeature.kt').read_text(encoding='utf-8'), 'changing local-only mode cancels subtitle subscriptions and fetches')
@@ -794,7 +794,7 @@ for relative in (
     'hook/CachedCommentTranslationSessionTest.kt', 'hook/CommentTranslationStoreTest.kt', 'hook/CachedCommentOnlineAdapterTest.kt',
     'hook/CommentPageMergeTest.kt', 'hook/CommentSnapshotCodecTest.kt', 'hook/CommentSnapshotStoreTest.kt',
     'hook/CommentReplyMergeTest.kt', 'hook/CommentReplyCursorCodecTest.kt', 'hook/CommentReplyAdapterTest.kt', 'hook/OfflineCommentEntryPolicyTest.kt',
-    'hook/CaptionPlaybackClockTest.kt', 'hook/SubtitleReplayRecoveryTest.kt',
+    'hook/CaptionPlaybackClockTest.kt', 'hook/SubtitleReplayRecoveryTest.kt', 'hook/CaptionTimelineFetchTest.kt',
     'hook/VideoDisplayModesTest.kt', 'hook/VideoLayoutBindingsTest.kt', 'hook/SmartVideoLayoutTest.kt', 'hook/VideoFillGeometryTest.kt',
     'hook/PageCleanupBindingsTest.kt', 'hook/PageCleanupContractTest.kt', 'hook/PageCleanupPolicyTest.kt',
     'model/CountryCatalogTest.kt', 'ui/screen/ConfirmedConfigEditsTest.kt',
@@ -813,5 +813,10 @@ for relative in (
 
 kotlin_delimiters(device_media)
 check(True, 'real-device MP4 integration test-source delimiters are balanced; execution still requires Android')
+
+check('DiscardOldestPolicy' not in prefetch and 'ThreadPoolExecutor.AbortPolicy()' in prefetch and 'catch (_: RejectedExecutionException)' in prefetch, 'caption downloads never silently discard accepted loading markers')
+check('foregroundWorker.execute' in prefetch and 'worker.execute' in prefetch and 'foregroundWorker.queue.clear()' in prefetch, 'current timeline has its own bounded lane and selection clears obsolete queued work')
+check('ensureCurrentTimeline()\n            warmUpcoming()' in prefetch and 'currentRetryAt =' in prefetch and 'retryDelay(currentFailures)' in prefetch, 'missing current timelines have bounded retries even when the cue does not change')
+check('timelines[track.url]' not in prefetch and 'timelines[identity]' in prefetch, 'timeline memory reuse keys on stable track identity rather than signed URL tokens')
 
 print("SOURCE CHECKS ONLY: this script does not verify compilation, JUnit, device runtime or TikTok 47.6.3 hook behavior.")

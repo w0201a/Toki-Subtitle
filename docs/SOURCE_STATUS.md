@@ -1,3 +1,15 @@
+# Verified Debug checkpoint — 2.0.82-debug
+
+Updated: 2026-11-04. Current source: **2.0.82-debug / 102**; verified local APK: **2.0.82-debug / 102**. Prior APKs are retained.
+
+This batch fixes missing-current-caption timeline retries, independent bounded current/future download lanes, rejected-job marker recovery, and stable-identity memory reuse after signed URL refresh. Parsing/normalization remain on the worker before UI delivery. Selection/track changes and cancellation reject stale callbacks. Cache-first hybrid policy is unchanged; local-only remains optional.
+
+649 source/wiring/lexical checks, whitespace checks, 217 XML parses and the 52-case focused suite passed after the new test fixture initialized the runtime reporter. The first fixture run failed (9/52); assertions were retained, initialization repaired, and the suite rerun. Full regression passed: 961 total, 958 passed, 0 failed, 3 native-media capability skips. The Android test target compiled; it did not run on a device. Unified packaging, both entries, payload/profile/namespace, version, signatures, ZIP/alignment and 489 source inputs passed verification. APK: Toki-2.0.82-debug.apk / 82.41 MiB / SHA-256 2ff6aca2f18e2b2f3a1f073640b481bb1f077ee65ca664d10ec3c02dbb24dbaf.
+
+Read-only region investigation found the optional LIVE mock list falls back to an asset absent from this original APK. No external assignments establishing a complete supported-country list were found by the targeted member-reference scan. This is not evidence that TikTok has no such server list, and it is not a basis for inventing country/subdivision support from ISO/payment data. The full requirement remains open.
+
+No phone installation, real TikTok interaction or native-media device test ran for this checkpoint. Prior checkpoints and remaining requirements follow.
+
 # Verified Debug checkpoint — 2.0.81-debug
 
 Updated: 2026-11-04. Current source: **2.0.81-debug / 101**; last verified local APK: **2.0.81-debug / 101**. Latest published production release referenced by this repository remains **2.0.51**.

@@ -9,13 +9,21 @@ import java.util.Base64
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.RejectedExecutionException
 
 /** 已选字幕文件优先读取私有离线存档；切换视频使迟到结果失效。 */
-internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator) : AutoCloseable {
+internal class CaptionPrefetch(
+    private val translator: NativeSubtitleTranslator,
+    private val foregroundWorker: ThreadPoolExecutor = downloadWorker(1),
+    private val worker: ThreadPoolExecutor = downloadWorker(5),
+    private val fetchTimeline: ((String, Long, LocalOnlyRequest) -> List<CaptionTimeline.Cue>)? = null,
+) : AutoCloseable {
     private val main = Handler(Looper.getMainLooper())
-    // 当前文件加后五条文件的有界队列；切换视频清除尚未开始的旧任务。
-    private val worker = ThreadPoolExecutor(2, 2, 0, TimeUnit.MILLISECONDS,
-        ArrayBlockingQueue(6), ThreadPoolExecutor.DiscardOldestPolicy())
+    // 当前文件独占一条通道，后五条共用另一条；拒绝可重试，不静默丢弃已标记的任务。
+    private var currentLoading = false
+    private var currentRetryAt = 0L
+    private var currentFailures = 0
+    private var missingTimelineNotified = false
     private var video = ""
     private var url = ""
     @Volatile private var token = 0L
@@ -40,6 +48,7 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
     private val refreshAhead = object : Runnable {
         override fun run() {
             if (closed || !current() || !translator.canPrefetch(video)) return
+            ensureCurrentTimeline()
             warmUpcoming()
             main.postDelayed(this, 1500)
         }
@@ -56,48 +65,27 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         val networkResumed = remoteResume.observe(android.os.SystemClock.uptimeMillis(), TranslationNetworkPolicy::remoteAvailable)
         if (video != id || identityFor(url) != identityFor(trackUrl) || networkResumed && cues.isEmpty()) {
             video = id; url = trackUrl; cues = emptyList(); normalized = emptyList(); index = -1
-            val generation = ++token
+            token++
             disconnectAll()
+            foregroundWorker.queue.clear()
             worker.queue.clear()
+            currentLoading = false; currentRetryAt = 0L; currentFailures = 0
+            missingTimelineNotified = false
             loading.clear()
             attempted.clear()
             upcoming = emptyList()
             batches.reset()
             retryDownloads.clear()
             checkedAheadAt = 0L
-            timelines[trackUrl]?.let {
+            timelines[identityFor(trackUrl)]?.let {
                 cues = it; normalized = it.map { cue -> CaptionTimeline.normalize(cue.text) }
                 queue()
-            }
-            if (cues.isEmpty() && trackUrl.isNotBlank()) {
-                val remote = TranslationNetworkPolicy.capture()
-                worker.execute {
-                    if (closed || token != generation) return@execute
-                    val parsed = try { loadCues(trackUrl, generation, remote) } catch (error: Exception) {
-                        if (token == generation) {
-                            HookRuntime.event("CaptionPrefetch", "current fetch failed=${error.javaClass.simpleName}")
-                            if (!remote.permitsNetwork()) main.post {
-                                if (!closed && token == generation) TranslationNetworkPolicy.showMissingCaption()
-                            }
-                        }
-                        emptyList()
-                    }
-                    val keys = parsed.map { CaptionTimeline.normalize(it.text) }
-                    main.post {
-                        if (!closed && token == generation) {
-                            cues = parsed
-                            normalized = keys
-                            if (parsed.isNotEmpty()) timelines[trackUrl] = parsed
-                            HookRuntime.event("CaptionPrefetch", "timeline cues=${parsed.size}")
-                            queue()
-                        }
-                    }
-                }
             }
         } else {
             url = trackUrl // Signed URL refresh must not cancel a valid timeline or batch.
             if (changed) queue()
         }
+        ensureCurrentTimeline()
         val now = android.os.SystemClock.uptimeMillis()
         if (now >= checkedAheadAt) {
             checkedAheadAt = now + 1500
@@ -106,10 +94,61 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         main.removeCallbacks(refreshAhead)
         main.postDelayed(refreshAhead, 1500)
     }
+    private fun fetch(location: String, generation: Long, remote: LocalOnlyRequest): List<CaptionTimeline.Cue> =
+        fetchTimeline?.invoke(location, generation, remote) ?: loadCues(location, generation, remote)
+
+    private fun ensureCurrentTimeline() {
+        if (closed || !current() || !translator.canPrefetch(video) || cues.isNotEmpty() ||
+            url.isBlank() || currentLoading || android.os.SystemClock.uptimeMillis() < currentRetryAt) return
+        val generation = token
+        val trackUrl = url // A retry uses the newest signed URL, not the first failed one.
+        val identity = identityFor(trackUrl)
+        val remote = TranslationNetworkPolicy.capture()
+        currentLoading = true
+        try {
+            foregroundWorker.execute {
+                if (closed || token != generation) return@execute
+                val parsed = try { fetch(trackUrl, generation, remote) } catch (error: Exception) {
+                    if (token == generation) HookRuntime.event("CaptionPrefetch", "current fetch failed=${error.javaClass.simpleName}")
+                    emptyList()
+                }
+                if (closed || token != generation) return@execute
+                val keys = parsed.map { CaptionTimeline.normalize(it.text) }
+                main.post {
+                    if (closed || token != generation) return@post
+                    currentLoading = false
+                    if (parsed.isNotEmpty()) {
+                        cues = parsed; normalized = keys
+                        timelines[identity] = parsed
+                        currentFailures = 0; currentRetryAt = 0L
+                        HookRuntime.event("CaptionPrefetch", "current timeline ready cues=${parsed.size}")
+                        queue()
+                    } else {
+                        retryCurrentTimeline()
+                        if (!remote.permitsNetwork() && !missingTimelineNotified) {
+                            missingTimelineNotified = true
+                            TranslationNetworkPolicy.showMissingCaption()
+                        }
+                    }
+                }
+            }
+        } catch (_: RejectedExecutionException) {
+            currentLoading = false
+            retryCurrentTimeline()
+        }
+    }
+
+    private fun retryCurrentTimeline() {
+        currentFailures = (currentFailures + 1).coerceAtMost(5)
+        val delay = retryDelay(currentFailures)
+        currentRetryAt = android.os.SystemClock.uptimeMillis() + delay
+        HookRuntime.event("CaptionPrefetch", "current timeline unavailable backoffStep=$currentFailures retryMs=$delay; original retained")
+    }
+
     private fun warmUpcoming() {
         if (!current()) return
         if (upcoming.isNotEmpty() && upcoming.all { track ->
-                track.url.isBlank() || timelines[track.url]?.let { cues -> translator.completed(track.video, cues.map { it.text }) } == true
+                track.url.isBlank() || timelines[identityFor(track.url)]?.let { cues -> translator.completed(track.video, cues.map { it.text }) } == true
             }) {
             HookRuntime.event("CaptionPrefetch", "batch complete videos=${upcoming.size} completedCache=${translator.completedVideos}/100")
             batches.complete(upcoming.size, translator.completedVideos)
@@ -125,24 +164,31 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
         val generation = token
         upcoming.forEach { track ->
             if (track.url.isBlank()) return@forEach
-            if ((retryDownloads[track.url] ?: 0L) > android.os.SystemClock.uptimeMillis()) return@forEach
-            if (track.url in timelines || !attempted.add(track.url) || !loading.add(track.url)) return@forEach
+            val identity = identityFor(track.url)
+            if ((retryDownloads[identity] ?: 0L) > android.os.SystemClock.uptimeMillis()) return@forEach
+            if (identity in timelines || !attempted.add(identity) || !loading.add(identity)) return@forEach
             val remote = TranslationNetworkPolicy.capture()
-            worker.execute {
-                if (closed || token != generation) return@execute
-                val parsed = try { loadCues(track.url, generation, remote) } catch (error: Exception) {
-                    if (token == generation) HookRuntime.event("CaptionPrefetch", "upcoming fetch failed=${error.javaClass.simpleName}")
-                    emptyList()
-                }
-                main.post {
-                    if (!closed && token == generation) {
-                        loading.remove(track.url)
-                        if (parsed.isNotEmpty()) timelines[track.url] = parsed
-                        else { attempted.remove(track.url); retryDownloads[track.url] = android.os.SystemClock.uptimeMillis() + 15_000 }
-                        HookRuntime.event("CaptionPrefetch", "upcoming timeline cues=${parsed.size}")
-                        queue()
+            try {
+                worker.execute {
+                    if (closed || token != generation) return@execute
+                    val parsed = try { fetch(track.url, generation, remote) } catch (error: Exception) {
+                        if (token == generation) HookRuntime.event("CaptionPrefetch", "upcoming fetch failed=${error.javaClass.simpleName}")
+                        emptyList()
+                    }
+                    main.post {
+                        if (!closed && token == generation) {
+                            loading.remove(identity)
+                            if (parsed.isNotEmpty()) timelines[identity] = parsed
+                            else { attempted.remove(identity); retryDownloads[identity] = android.os.SystemClock.uptimeMillis() + 15_000 }
+                            HookRuntime.event("CaptionPrefetch", "upcoming timeline cues=${parsed.size}")
+                            queue()
+                        }
                     }
                 }
+            } catch (_: RejectedExecutionException) {
+                loading.remove(identity); attempted.remove(identity)
+                retryDownloads[identity] = android.os.SystemClock.uptimeMillis() + 1500
+                HookRuntime.event("CaptionPrefetch", "upcoming queue busy; retry scheduled")
             }
         }
         queue()
@@ -154,15 +200,15 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
             ?: normalized.indexOf(text).takeIf { it >= 0 }
         if (found != null) index = found
         val generation = token
-        val planKey = listOf(generation, found, cues.size, upcoming.map { Triple(it.video, it.url, timelines[it.url]?.size) })
+        val planKey = listOf(generation, found, cues.size, upcoming.map { Triple(it.video, identityFor(it.url), timelines[identityFor(it.url)]?.size) })
         if (queuedPlan == planKey && !translator.prefetchIdle) return
         queuedPlan = planKey
         val currentTexts = cues.subList(found ?: 0, cues.size).map { it.text }
         translator.expect(video, cues.map { it.text })
         val refill = if (translator.completedVideos < 100) upcoming else emptyList()
-        for (track in refill) translator.expect(track.video, timelines[track.url].orEmpty().map { it.text })
+        for (track in refill) translator.expect(track.video, timelines[identityFor(track.url)].orEmpty().map { it.text })
         val planned = planVideos(video, currentTexts, refill.map { track ->
-            track.video to timelines[track.url].orEmpty().map { cue -> cue.text }
+            track.video to timelines[identityFor(track.url)].orEmpty().map { cue -> cue.text }
         })
         translator.prefetchVideos(planned) {
             !closed && token == generation && current() && translator.canPrefetch(video)
@@ -221,16 +267,21 @@ internal class CaptionPrefetch(private val translator: NativeSubtitleTranslator)
     }
     fun cancel() {
         main.removeCallbacks(refreshAhead)
-        token++; disconnectAll(); worker.queue.clear()
+        token++; disconnectAll(); foregroundWorker.queue.clear(); worker.queue.clear()
+        currentLoading = false; currentRetryAt = 0L; currentFailures = 0; missingTimelineNotified = false
         video = ""; url = ""; latestText = ""; index = -1
         cues = emptyList(); normalized = emptyList(); current = { false }
         upcoming = emptyList(); loading.clear(); attempted.clear(); checkedAheadAt = 0L
         batches.reset(); retryDownloads.clear()
         queuedPlan = null
     }
-    override fun close() { closed = true; cancel(); worker.shutdown(); timelines.clear() }
+    override fun close() { closed = true; cancel(); foregroundWorker.shutdown(); worker.shutdown(); timelines.clear() }
 
     companion object {
+        private fun downloadWorker(capacity: Int) = ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
+            ArrayBlockingQueue(capacity), ThreadPoolExecutor.AbortPolicy())
+        internal fun retryDelay(failures: Int): Long = (1500L shl (failures.coerceIn(1, 5) - 1)).coerceAtMost(15_000)
+
         internal fun plan(current: List<String>, upcoming: List<List<String>>): List<String> {
             return planVideos("current", current, upcoming.mapIndexed { index, texts -> "next$index" to texts })
                 .map { it.text }.distinct()
