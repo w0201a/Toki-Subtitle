@@ -73,11 +73,9 @@ object LayoutCleanupHook {
         val components = mapOf(
             "com.ss.android.ugc.aweme.feed.landscape.LandscapeEntranceAssem" to LayoutElement.LANDSCAPE,
             "com.ss.android.ugc.aweme.ui.feed.photos.assem.PhotoNumIndicatorAssem" to LayoutElement.PHOTO_INDICATORS,
-            "com.ss.android.ugc.aweme.ui.feed.photos.assem.PhotoSlideIndicatorAssem" to LayoutElement.PHOTO_INDICATORS,
             "com.ss.android.ugc.aweme.ui.feed.photos.assem.AbsPhotosDotIndicatorAssem" to LayoutElement.PHOTO_INDICATORS,
             "com.ss.android.ugc.aweme.ui.feed.photos.assem.TopPhotosDotIndicatorAssem" to LayoutElement.PHOTO_INDICATORS,
             "com.ss.android.ugc.aweme.ui.feed.photos.assem.TabletsPhotosDotIndicatorAssem" to LayoutElement.PHOTO_INDICATORS,
-            "com.ss.android.ugc.aweme.ui.feed.photos.assem.PhotoSwipeHintAssem" to LayoutElement.PHOTO_INDICATORS,
             "com.ss.android.ugc.aweme.feed.assem.quickreply.QuickDMBoxAssem" to LayoutElement.QUICK_MESSAGE,
             "com.ss.android.ugc.aweme.feed.assem.quickreply.MUFQuickDMBoxAssem" to LayoutElement.QUICK_MESSAGE,
             "com.ss.android.ugc.aweme.feed.assem.quickreply.MUFQuickDMBoxAssemV2" to LayoutElement.QUICK_MESSAGE,
@@ -162,6 +160,9 @@ object LayoutCleanupHook {
             }
         }
         val componentTypes = components.map { it.second to it.third }
+        val photoIndicators = PhotoIndicatorTargets.resolve(loader) { name, error ->
+            HookRuntime.event(FEATURE, "图片指示器子控件契约不可用，保留轮播：$name type=${error.javaClass.simpleName}")
+        }
         val avatar = loader.loadClass("com.ss.android.ugc.aweme.feed.assem.avatar.FeedAvatarDefaultAssem")
         val follow = avatar.declaredFields.single { it.type == ViewGroup::class.java }.apply { isAccessible = true }
         val avatarCreated = avatar.getMethod("onViewCreated", View::class.java)
@@ -223,8 +224,12 @@ object LayoutCleanupHook {
         for (method in components.map { it.first }.distinct()) {
             module.trackHook(FEATURE, method, requiresConfiguration = false).intercept { chain ->
                 val result = chain.proceed()
-                LayoutComponentSelector.select(checkNotNull(chain.thisObject), componentTypes)?.let {
-                    bind(chain.args[0] as View, it)
+                val instance = checkNotNull(chain.thisObject)
+                LayoutComponentSelector.select(instance, componentTypes)?.let { element ->
+                    val root = chain.args[0] as View
+                    if (element == LayoutElement.PHOTO_INDICATORS) {
+                        photoIndicators.targets(instance, root).forEach { bind(it, element) }
+                    } else bind(root, element)
                 }
                 result
             }

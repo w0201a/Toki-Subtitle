@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 107' in gradle and 'versionName = "2.0.87"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.87-debug / 105")
+check('versionCode = 108' in gradle and 'versionName = "2.0.88"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.88-debug / 108")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -115,6 +115,11 @@ check('output.size().toLong() + length <= CommentStickerMedia.MAX_BYTES' in expo
 check('drawColor(Color.WHITE)' in exporter and 'StickerExportMode.JPEG && bitmap.hasAlpha()' in exporter, 'JPEG conversion has an explicit transparency-flattening path')
 cleanup = (JAVA / 'hook/LayoutCleanupHook.kt').read_text(encoding='utf-8')
 cleanup_policy = (JAVA / 'hook/LayoutCleanupPolicy.kt').read_text(encoding='utf-8')
+photo_targets = (JAVA / 'hook/PhotoIndicatorTargets.kt').read_text(encoding='utf-8')
+check('PhotoSwipeHintAssem" to LayoutElement.PHOTO_INDICATORS' not in cleanup and 'PhotoSlideIndicatorAssem" to LayoutElement.PHOTO_INDICATORS' not in cleanup, 'photo behavior owners are never hidden as whole indicator roots')
+check('if (element == LayoutElement.PHOTO_INDICATORS)' in cleanup and 'photoIndicators.targets(instance, root).forEach { bind(it, element) }' in cleanup, 'photo cleanup binds inspected indicator children rather than the carousel lifecycle root')
+check('candidate === lifecycleRoot' in photo_targets and 'cursor === lifecycleRoot' in photo_targets, 'photo indicator targets exclude callback roots and detached/reused views')
+
 for name in ('FeedSearchBottomBarAssem', 'AdFeedSearchBottomBarAssem', 'FeedEcSearchBottomBarAssem'):
     check(name + '\" to LayoutElement.BOTTOM_SEARCH_RECOMMENDATIONS' in cleanup, name + ' existing binding uses the dedicated bottom-search setting')
 check('LayoutElement.BOTTOM_SEARCH_RECOMMENDATIONS -> config.boolean(LayoutElement.SEARCH_LABEL.key)' in cleanup_policy, 'legacy search-suggestion setting remains compatible')
@@ -750,7 +755,7 @@ lexical_files = [
     'provider/ConfigSchema.kt', 'provider/ConfigStore.kt', 'provider/ConfigConflictClock.kt',
     'ui/StyledSubtitleTextView.kt', 'ui/screen/SubtitleSettings.kt',
     'hook/CommentStickerDownloadHook.kt', 'hook/StickerImageExporter.kt', 'hook/StickerExportPolicy.kt',
-    'hook/LayoutCleanupHook.kt', 'hook/LayoutCleanupPolicy.kt', 'model/LayoutCleanup.kt', 'ui/screen/LayoutCleanupSection.kt',
+    'hook/PhotoIndicatorTargets.kt', 'hook/LayoutCleanupHook.kt', 'hook/LayoutCleanupPolicy.kt', 'model/LayoutCleanup.kt', 'ui/screen/LayoutCleanupSection.kt',
     'hook/SharePanelCleanupHook.kt', 'hook/ShareListBindings.kt', 'model/SharePanelItem.kt', 'ui/screen/SharePanelCleanupSection.kt',
     'hook/AuthorLabelContract.kt', 'hook/AuthorLabelPresentation.kt', 'hook/AuthorLocationLabels.kt', 'hook/QuickCommentCleanupHook.kt',
     'hook/HoldSpeedContract.kt', 'hook/HoldSpeedGestureHook.kt', 'hook/NativeSpeedGestureScope.kt', 'ui/screen/HoldSpeedGestureSection.kt',
@@ -802,7 +807,7 @@ for relative in (
     'hook/OfflineExportFixtures.kt', 'hook/OfflineExportCandidatesTest.kt', 'hook/LocalVideoTracksTest.kt', 'hook/LocalVideoRemuxerTest.kt',
     'provider/OperationJournalTest.kt', 'provider/DiagnosticTextTest.kt', 'provider/DiagnosticOverviewTest.kt', 'provider/TrialLogCaptureTest.kt',
     'provider/TrialLogTest.kt',
-    'hook/LayoutComponentSelectorTest.kt',
+    'hook/PhotoIndicatorTargetsTest.kt', 'hook/LayoutComponentSelectorTest.kt',
     'hook/EnvironmentLivePlanTest.kt', 'hook/EnvironmentRuntimeConfigTest.kt', 'hook/EnvironmentOverridesTest.kt',
     'hook/TemplateAnchorContractTest.kt', 'hook/TemplateRootBindingsTest.kt', 'hook/TemplateCleanupPlanTest.kt',
     'hook/HostFeaturePlanTest.kt', 'model/CountryCatalogTest.kt', 'provider/DiagnosticOverviewTest.kt', 'ui/screen/HookStatusModelTest.kt',

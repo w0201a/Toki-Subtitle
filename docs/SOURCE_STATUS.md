@@ -1,12 +1,22 @@
+# Current verified build checkpoint — 2.0.88-debug
+
+Updated: 2026-11-04. Current source and verified local APK: **2.0.88-debug / 108**.
+
+The photo-indicator cleanup previously treated PhotoSwipeHintAssem's lifecycle root as an indicator view, although the inspected native class configures the photo pager/scroller/touch listeners. The behavior-only class and abstract slide-indicator class are no longer root-hide mappings. Concrete number/dot cleanup now resolves inspected indicator child fields, rejects callback-root aliases and detached/external reused views, and retains the native carousel. No display-mode or user switch change is required by this patch. Native swipe-hint behavior is retained rather than hiding a guessed visual root.
+
+727 source checks and eight targeted tests passed (three new photo-target tests plus five existing selector tests). No full regression was rerun. The unified APK and embedded relocated payload passed namespace/new-selector-presence checks, matching signatures, ZIP CRC and alignment; all 514 production input hashes matched. APK: Toki-2.0.88-debug.apk; 86,829,748 bytes; SHA-256 `d559659a335d493a29e7446a89c37d54a6e5f9a314547056225246cc4c1fd561`.
+
+The APK has not been installed or device-accepted in this batch. Source inspection and the original GONE/zero-size photo-pager hierarchy support the diagnosis, but do not prove the patched device result. No phone switch was changed or host restarted. Photo-post priority 100 remains ahead of HDR and offline work. Raw diagnostics and original host code remain local/ignored. The first build wrapper invocation incorrectly bound --offline as its AAR argument and stopped before compilation; the corrected explicit cached-AAR invocation completed successfully. No test assertion was removed or full suite repeated.
+
 # Current verified build checkpoint — 2.0.87-debug
 
-Updated: 2026-11-04. Current source and verified local APK: **2.0.87-debug / 107**.
+Updated: 2026-11-04. Source and verified local APK at that historical checkpoint: **2.0.87-debug / 107**.
 
 The existing desktop report records 1,067 tests: 1,064 passed, zero failed and three native-media tests skipped. The 722 source checks and APK signature, ZIP CRC, alignment, embedded payload and 513 production input checks passed. The resumed chat rechecked all 513 input hashes and the APK hash without repeating the full suite. APK: Toki-2.0.87-debug.apk; 86,808,860 bytes; SHA-256 `35a271e3933ed637e9a612ab96edac822d31e6577847392b2298125b4c321b94`.
 
 ADB confirms the installed manager is 2.0.87-debug / 107. This confirms installation, not acceptance of every runtime hook. This build contains inspected share adapter resolution, sticker/text menu routing, offline gesture targeting, live touch rule, bounded same-author region evidence, absent-only historical host configuration reconciliation and 25 curated city/state location representatives. Earlier Root font-size mirroring evidence does not establish no-root or all-field correctness.
 
-The latest independent user message raises blank photo posts (download thumbnails remain visible) to priority 100, ahead of HDR and offline video. The user will operate requested switches; automated phone navigation/switch changes are stopped. A single temporary immersive-mode toggle comparison is awaiting user feedback. End-to-end HDR stream/decoder/output evidence and offline device acceptance remain open. No HDR fix or all-feature completion is claimed. Original host code, account content, device captures, logs and configuration remain local and ignored.
+The latest independent user message raises blank photo posts (download thumbnails remain visible) to priority 100, ahead of HDR and offline video. The user will operate requested switches; automated phone navigation/switch changes are stopped. The user clarified that the whole multi-photo carousel is absent, not merely a fit-mode problem. The temporary immersive toggle comparison was withdrawn; the investigation targets photo container/lifecycle/binding and visibility code directly. End-to-end HDR stream/decoder/output evidence and offline device acceptance remain open. No HDR fix or all-feature completion is claimed. Original host code, account content, device captures, logs and configuration remain local and ignored.
 
 # Verified Debug checkpoint — 2.0.86-debug
 
