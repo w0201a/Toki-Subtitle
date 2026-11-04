@@ -21,6 +21,18 @@ internal object LiveSwipeLockHook {
     /** 解析直播页唯一竖向翻页容器的两个触摸入口并校验完整契约。 */
     fun init(module: XposedModule, classLoader: ClassLoader) {
         val type = HostSymbols.resolve(classLoader, HostSymbol.LIVE_VERTICAL_PAGER)
+        if (View.OnTouchListener::class.java.isAssignableFrom(type)) {
+            val method = type.getDeclaredMethod("onTouch", View::class.java, MotionEvent::class.java).apply {
+                check(returnType == Boolean::class.javaPrimitiveType && !Modifier.isStatic(modifiers)); isAccessible = true
+            }
+            module.trackHook(FEATURE, method).intercept { chain ->
+                val view = chain.args[0] as? View
+                val event = chain.args[1] as? MotionEvent
+                if (view != null && event != null && enabled() && shouldBlock(view, event)) true else chain.proceed()
+            }
+            HookRuntime.detail(FEATURE, "直播原生触摸监听器已注册；仅接管已越过阈值的上下滑，保留点击与横向手势")
+            return
+        }
         check(ViewGroup::class.java.isAssignableFrom(type)) { "直播翻页容器类型不符合契约" }
         val intercept = touchMethod(type, "onInterceptTouchEvent")
         val touch = touchMethod(type, "onTouchEvent")
@@ -82,7 +94,7 @@ internal object LiveSwipeLockHook {
                 }
                 return true
             }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> gestures.remove(owner)
+            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> return gestures.remove(owner)?.blocked == true
         }
         return false
     }

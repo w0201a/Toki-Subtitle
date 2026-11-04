@@ -232,8 +232,9 @@ internal class ConfigStore(
                     }
                 }
                 editor.putStringSet("__host_removed", removed).putLong(REVISION, revision).putLong(IMPORT_REVISION, importRevision)
-                val mirrorKeys = preferences.getStringSet(HostSettingsWire.PENDING, emptySet()).orEmpty() +
-                    (if (replace) ConfigSchema.keys else changes.keys)
+                val previousPending = if (preferences.getBoolean(HostSettingsWire.RECONCILE, false)) emptySet()
+                    else preferences.getStringSet(HostSettingsWire.PENDING, emptySet()).orEmpty()
+                val mirrorKeys = previousPending + (if (replace) ConfigSchema.keys else changes.keys)
                 val mirrorReplace = replace || preferences.getBoolean(HostSettingsWire.REPLACE, false)
                 val mirrorValues = if (mirrorReplace) checked else mirrorKeys.associateWith { checked[it] }
                 // Validate the exact eventual envelope before committing any part of the host edit.
@@ -242,7 +243,7 @@ internal class ConfigStore(
                     put("values", org.json.JSONObject(HostSettingsWire.valuesJson(mirrorValues)))
                 }.toString())
                 editor.putStringSet(HostSettingsWire.PENDING, mirrorKeys).putString(HostSettingsWire.REQUEST, java.util.UUID.randomUUID().toString())
-                    .putBoolean(HostSettingsWire.REPLACE, mirrorReplace).putString(HostSettingsWire.PAYLOAD, HostSettingsWire.valuesJson(mirrorValues))
+                    .putBoolean(HostSettingsWire.REPLACE, mirrorReplace).putBoolean(HostSettingsWire.RECONCILE, false).putString(HostSettingsWire.PAYLOAD, HostSettingsWire.valuesJson(mirrorValues))
             } else {
                 val clocks = ConfigConflictClock.revisions(preferences.all[ConfigConflictClock.KEY_REVISIONS], snapshot().revision).toMutableMap()
                 (if (replace) ConfigSchema.keys else changes.keys).forEach { clocks[it] = revision }
@@ -268,13 +269,35 @@ internal class ConfigStore(
         }
     }
 
+    /** Upgrade reconciliation mirrors only active local keys absent from the manager, never suppressed conflicts. */
+    @Synchronized fun queueUnsyncedHostValues(): Int {
+        if (!host || !isReady) return 0
+        val preferences = local ?: return 0
+        synchronized(preferences) {
+            if (!preferences.getStringSet(HostSettingsWire.PENDING, emptySet()).isNullOrEmpty()) return 0
+            val localValues = preferences.all
+            val base = managerValues()
+            val suppressed = preferences.getStringSet(ConfigConflictClock.HOST_SUPPRESSED, emptySet()).orEmpty()
+            val values = localValues.filterKeys { it in ConfigSchema.keys && it !in base && it !in suppressed }
+                .mapValues { requireNotNull(it.value) }
+            if (values.isEmpty()) return 0
+            ConfigArchive.validate(values)
+            HostSettingsWire.bounded(HostSettingsWire.valuesJson(values))
+            check(preferences.edit().putStringSet(HostSettingsWire.PENDING, values.keys)
+                .putString(HostSettingsWire.REQUEST, java.util.UUID.randomUUID().toString())
+                .putBoolean(HostSettingsWire.REPLACE, false).putBoolean(HostSettingsWire.RECONCILE, true)
+                .putString(HostSettingsWire.PAYLOAD, HostSettingsWire.valuesJson(values)).commit())
+            return values.size
+        }
+    }
+
     /** Manager receipt and configuration share one commit; an ACK-lost retry never reapplies old values. */
     @Synchronized fun applyHostPatch(patch: HostSettingsPatch): Long {
         check(!host)
         HostSettingsWire.validate(patch)
         val preferences = checkNotNull(local)
         HostSettingsWire.receipt(preferences.getString(HostSettingsWire.RECEIPTS, null), patch)?.let { return it }
-        val changes = patch.values.toMutableMap()
+        val changes = (if (patch.onlyAbsent) patch.values.filterKeys { it !in snapshot().configuration() } else patch.values).toMutableMap()
         // A host can request its own rescan, never overwrite another installed host’s pending nonce.
         if (ManualHostAdaptation.KEY in changes || patch.replace) {
             val before = snapshot().string(ManualHostAdaptation.KEY)

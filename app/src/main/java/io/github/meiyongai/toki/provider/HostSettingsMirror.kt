@@ -23,8 +23,14 @@ internal class HostSettingsMirrorPump(
     private fun pending() = preferences.getStringSet(HostSettingsWire.PENDING, emptySet()).orEmpty().toSet()
     @Synchronized fun kick() { if (stopped) return; attempts = 0; publish(); queue(120) }
     @Synchronized fun stop() { stopped = true }
-    private fun publish(error: String? = null) = report(HostSettingsSyncStatus(pending().size,
-        preferences.getLong(HostSettingsWire.ACK, -1L).takeIf { it >= 0 }, error))
+    private fun publish(error: String? = null) {
+        val ackHost = preferences.getLong("__host_mirror_ack_host_v1", -1L)
+        val localRevision = preferences.getLong(ConfigStore.REVISION, 0L)
+        val count = pending().size
+        report(HostSettingsSyncStatus(count,
+            preferences.getLong(HostSettingsWire.ACK, -1L).takeIf { it >= 0 },
+            error ?: if (count == 0 && ackHost < localRevision && localRevision > 0) "HistoricalLocalValuesNotConfirmed" else null))
+    }
     @Synchronized private fun queue(delay: Long) {
         if (stopped || scheduled || pending().isEmpty()) return
         scheduled = true
@@ -52,7 +58,7 @@ internal class HostSettingsMirrorPump(
                 if (preferences.getString(HostSettingsWire.REQUEST, null) != id) { publish(); queue(120); return }
             }
             val values = HostSettingsWire.values(checkNotNull(saved[HostSettingsWire.PAYLOAD] as? String))
-            val ack = deliver(HostSettingsWire.encode(HostSettingsPatch(host, id, values, replace)))
+            val ack = deliver(HostSettingsWire.encode(HostSettingsPatch(host, id, values, replace, saved[HostSettingsWire.RECONCILE] == true)))
             check(ack.id == id && ack.revision >= 0) { "Unconfirmed configuration delivery" }
             synchronized(this) {
                 if (stopped) return
@@ -60,7 +66,8 @@ internal class HostSettingsMirrorPump(
                 synchronized(preferences) {
                     if (preferences.getString(HostSettingsWire.REQUEST, null) == id) {
                         check(preferences.edit().remove(HostSettingsWire.PENDING).remove(HostSettingsWire.REQUEST)
-                            .remove(HostSettingsWire.REPLACE).remove(HostSettingsWire.PAYLOAD).putLong(HostSettingsWire.ACK, ack.revision).commit())
+                            .remove(HostSettingsWire.REPLACE).remove(HostSettingsWire.RECONCILE).remove(HostSettingsWire.PAYLOAD).putLong(HostSettingsWire.ACK, ack.revision)
+                            .putLong("__host_mirror_ack_host_v1", (saved[ConfigStore.REVISION] as? Long) ?: 0L).commit())
                     }
                 }
                 attempts = 0; publish(); queue(120)
@@ -98,6 +105,7 @@ internal object HostSettingsMirror {
                 current.value = it
                 if (previous != it) Log.i("TokiSettingsSync", "pending=${it.pending} revision=${it.revision} error=${it.error ?: "none"}")
             })
+        ConfigClient.queueUnsyncedHostValues()
         pump?.kick()
     }
     @Synchronized fun kick() { pump?.kick() }

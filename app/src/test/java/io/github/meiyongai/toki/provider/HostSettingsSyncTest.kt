@@ -187,4 +187,25 @@ class HostSettingsSyncTest {
         assertEquals("31", target.snapshot().string("subtitle_size"))
         assertTrue(local.getStringSet(HostSettingsWire.PENDING, emptySet()).isNullOrEmpty())
     }
+    @Test fun historicalLocalOnlySettingsAreReconciledWithoutReplayingManagerConflicts() {
+        val local=prefs();local.edit().putString("subtitle_size","27").putLong(ConfigStore.REVISION,5).commit()
+        val source=hostStore(local);assertEquals(1,source.queueUnsyncedHostValues())
+        assertEquals(0,source.queueUnsyncedHostValues())
+        val target=manager();val tasks=mutableListOf<() -> Unit>();val status=mutableListOf<HostSettingsSyncStatus>()
+        pump(local,source,tasks,{ raw -> val p=HostSettingsWire.decode(raw);HostSettingsAck(p.id,target.applyHostPatch(p)) },status).kick()
+        run(tasks);assertEquals("27",target.snapshot().string("subtitle_size"));assertNull(status.last().error)
+    }
+    @Test fun upgradeReconciliationNeverQueuesSuppressedOverrides() {
+        val local=prefs();local.edit().putString("subtitle_size","27").putLong(ConfigStore.REVISION,5)
+            .putStringSet(ConfigConflictClock.HOST_SUPPRESSED,setOf("subtitle_size")).commit()
+        val source=hostStore(local);assertEquals(0,source.queueUnsyncedHostValues())
+        assertTrue(local.getStringSet(HostSettingsWire.PENDING,emptySet()).isNullOrEmpty())
+    }
+    @Test fun delayedHistoricalReconciliationDoesNotOverwriteAnExistingManagerValue() {
+        val target=manager();target.update(mapOf("subtitle_size" to "33"))
+        val patch=HostSettingsPatch(host,"historical",mapOf("subtitle_size" to "27","subtitle_x" to "5"),onlyAbsent=true)
+        assertEquals(patch,HostSettingsWire.decode(HostSettingsWire.encode(patch)))
+        target.applyHostPatch(patch)
+        assertEquals("33",target.snapshot().string("subtitle_size"));assertEquals("5",target.snapshot().string("subtitle_x"))
+    }
 }

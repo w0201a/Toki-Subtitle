@@ -5,4 +5,5 @@
     <string name="host_settings_sync_saved">Settings saved and synced to standalone Toki.</string>
     <string name="host_settings_sync_error">%1$d settings are not synced yet. Install/update standalone Toki and retry. Host changes are preserved.</string>
     <string name="host_settings_sync_retry">Retry sync</string>
+    <string name="host_settings_sync_history">Some historical local-only settings have not been verified in standalone Toki. New edits sync automatically; later manager edits are not overwritten.</string>
 </resources>

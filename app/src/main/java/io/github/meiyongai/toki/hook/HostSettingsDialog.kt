@@ -72,12 +72,14 @@ internal class HostSettingsDialog(activity: Activity, resources: ModuleResources
                                 Text(stringResource(R.string.host_settings_hint), style = MaterialTheme.typography.bodySmall)
                                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                     Text(stringResource(when {
+                                        settingsSync.error == "HistoricalLocalValuesNotConfirmed" -> R.string.host_settings_sync_history
                                         settingsSync.error != null -> R.string.host_settings_sync_error
                                         settingsSync.pending > 0 -> R.string.host_settings_sync_pending
                                         settingsSync.revision != null -> R.string.host_settings_sync_saved
                                         else -> R.string.host_settings_sync_ready
                                     }, settingsSync.pending), Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
-                                    if (settingsSync.pending > 0) TextButton(onClick = {
+                                    if (settingsSync.pending > 0 || settingsSync.error != null) TextButton(onClick = {
+                                        io.github.meiyongai.toki.subtitle.provider.ConfigClient.queueUnsyncedHostValues()
                                         io.github.meiyongai.toki.subtitle.provider.HostSettingsMirror.kick()
                                     }) { Text(stringResource(R.string.host_settings_sync_retry)) }
                                 }

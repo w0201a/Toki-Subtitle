@@ -180,6 +180,7 @@ fun DashboardScreen(
     var customSpeedListStr by remember {
         mutableStateOf(ConfigClient.getString(context, "speed_expand_list", defaultValue = "0.5,1.0,1.5,2.0") ?: "0.5,1.0,1.5,2.0")
     }
+    var showLocationPresets by remember { mutableStateOf(false) }
     var showAddSpeedDialog by remember { mutableStateOf(false) }
     var editingSpeedTarget by remember { mutableStateOf<Float?>(null) }
 
@@ -560,6 +561,10 @@ fun DashboardScreen(
             )
         }
 
+        OutlinedButton(onClick = { showLocationPresets = true }, modifier = Modifier.fillMaxWidth()) {
+            Text(strings.getString(R.string.location_presets_title))
+        }
+
         // === 分组 2: 播放与交互体验 (共 8 项) ===
         PreferenceSection(title = strings.getString(R.string.feature_playback_section)) {
             PlaybackSpeedCard(
@@ -923,6 +928,9 @@ fun DashboardScreen(
     }
 
     // === 弹窗集合 ===
+    if (showLocationPresets) LocationPresetDialog(regionCode, { values ->
+        if (saveValues(values)) showLocationPresets = false
+    }) { showLocationPresets = false }
     if (showSelectDialog) {
         RegionSelectionDialog(
             currentIso = regionCode,

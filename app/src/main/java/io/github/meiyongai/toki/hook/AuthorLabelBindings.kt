@@ -84,7 +84,8 @@ internal class AuthorLabelBindings(
             notifyChange()
         }
         val native = AuthorLabelPresentation.original(view.text).toString()
-        if (!rawName.isNullOrBlank() && rawName.length <= 8192 && native.endsWith(rawName.toString()) && (before !== view.text || native == rawName.toString())) {
+        if (!rawName.isNullOrBlank() && rawName.length <= 8192 && (native.endsWith(rawName.toString()) || native.startsWith(rawName.toString())) &&
+            (before !== view.text || native == rawName.toString())) {
             entry.witnessName = rawName.toString(); entry.witnessBody = native
         } else if (entry.witnessBody != null && entry.witnessBody != native) {
             entry.witnessName = null; entry.witnessBody = null

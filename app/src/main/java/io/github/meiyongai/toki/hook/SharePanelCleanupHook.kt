@@ -18,6 +18,10 @@ internal object SharePanelCleanupHook {
     private const val FEATURE = "SharePanelCleanupHook"
     private const val RECIPIENTS = "SharePanelRecipients"
 
+    internal fun adapterType(recycler: Class<*>): Class<*> = recycler.getMethod("getAdapter").returnType.also {
+        check(it != Any::class.java && it != Void.TYPE && !it.isPrimitive)
+    }
+
     internal fun dataMethod(type: Class<*>, expectedBase: Class<*>): Method {
         check(expectedBase.isAssignableFrom(type))
         return type.getMethod("setData", List::class.java).apply {
@@ -32,8 +36,10 @@ internal object SharePanelCleanupHook {
         val actionItem = loader.loadClass("X.0Fzx")
         val channelItem = loader.loadClass("X.0Fzt")
         val recycler = loader.loadClass("androidx.recyclerview.widget.RecyclerView")
-        val adapter = loader.loadClass("androidx.recyclerview.widget.RecyclerView\$Adapter")
-        check(adapter.isAssignableFrom(actionBase) && adapter.isAssignableFrom(channelBase))
+        // TikTok keeps RecyclerView named but obfuscates its nested Adapter (47.6.3: X.00IC).
+        val getAdapter = recycler.getMethod("getAdapter")
+        val adapter = adapterType(recycler)
+        check(adapter != Any::class.java && adapter.isAssignableFrom(actionBase) && adapter.isAssignableFrom(channelBase))
         check(actionItem.isInterface && channelItem.isInterface)
         val actionKey = actionItem.getMethod("key").apply { check(returnType == String::class.java) }
         val channelKey = channelItem.getMethod("key").apply { check(returnType == String::class.java) }
@@ -44,7 +50,6 @@ internal object SharePanelCleanupHook {
         val panel = loader.loadClass("com.ss.android.ugc.aweme.share.core.ui.SkeletonSharePanelFragment")
         val created = panel.getDeclaredMethod("onViewCreated", View::class.java, Bundle::class.java)
         val destroyed = panel.getMethod("onDestroyView")
-        val getAdapter = recycler.getMethod("getAdapter")
         val main = Handler(Looper.getMainLooper())
         val methods = mutableSetOf<Method>()
         val panels = WeakHashMap<Any, List<WeakReference<Any>>>()

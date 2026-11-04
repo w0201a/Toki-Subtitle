@@ -240,6 +240,7 @@ object ConfigClient {
         if (host) HostSettingsMirror.kick()
         return revision
     }
+    internal fun queueUnsyncedHostValues() { if (host) store.queueUnsyncedHostValues() }
     /** Only the authenticated provider in the standalone manager may apply a host patch. */
     internal fun applyHostPatch(context: Context, patch: HostSettingsPatch): Long {
         init(context); check(!host)

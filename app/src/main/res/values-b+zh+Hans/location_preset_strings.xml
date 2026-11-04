@@ -1,0 +1,6 @@
+<resources>
+    <string name="location_presets_title">城市／州／省定位预设</string>
+    <string name="location_presets_search">搜索城市或州省</string>
+    <string name="location_presets_note">选择后使用该城市的坐标和时区，不改变 VPN／IP，也不保证 TikTok 服务可用。运营商沿用所选国家的已有预设。</string>
+    <string name="location_presets_missing">该国家暂未收录可靠的城市预设，可使用自定义坐标和时区；缺失项不伪造。</string>
+</resources>

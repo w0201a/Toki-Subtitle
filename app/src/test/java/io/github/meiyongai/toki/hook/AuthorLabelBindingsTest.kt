@@ -129,4 +129,10 @@ class AuthorLabelBindingsTest {
         f.bindings.observe(f.owner);f.bindings.configure(true)
         assertEquals("Alice",f.primary.text.toString());assertEquals(1,f.bindings.statistics().missingRegion)
     }
+    @Test fun profileAuthorTimestampSuffixRetainsTheProvenRawNameWitness() {
+        val f=fixture();val before=f.primary.text;f.primary.text="Alice · 1天前"
+        f.bindings.observe(f.owner,"Alice",before);f.bindings.configure(true)
+        assertEquals("[🇺🇸美国] Alice · 1天前",f.primary.text.toString())
+        f.bindings.configure(false);assertEquals("Alice · 1天前",f.primary.text.toString())
+    }
 }

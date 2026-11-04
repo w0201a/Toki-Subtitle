@@ -30,6 +30,10 @@ internal object CommentStickerDownloadHook {
     private val inFlight = java.util.concurrent.ConcurrentHashMap.newKeySet<String>()
     private val dialogs = java.util.WeakHashMap<Activity, AlertDialog>()
 
+    internal fun isStickerComment(comment: Any): Boolean = try {
+        comment.javaClass.getMethod("getStickerStruct").invoke(comment) != null
+    } catch (_: ReflectiveOperationException) { false }
+
     internal class Reader(private val comment: Class<*>) {
         constructor(loader: ClassLoader) : this(loader.loadClass("com.ss.android.ugc.aweme.comment.model.Comment"))
         private val sticker = comment.getMethod("getStickerStruct")

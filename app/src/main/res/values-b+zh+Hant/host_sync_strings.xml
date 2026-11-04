@@ -5,4 +5,5 @@
     <string name="host_settings_sync_saved">設定已儲存並同步到獨立 Toki。</string>
     <string name="host_settings_sync_error">還有 %1$d 項設定未同步。請安裝／更新外面的 Toki 本體後重試，宿主內的修改仍保留。</string>
     <string name="host_settings_sync_retry">重試同步</string>
+    <string name="host_settings_sync_history">有舊版本遺留的本機設定尚未核對。新修改會自動同步，不會強行覆寫本體後來修改的衝突項。</string>
 </resources>

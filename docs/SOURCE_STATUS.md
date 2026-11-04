@@ -1,6 +1,16 @@
+# Current verified build checkpoint — 2.0.87-debug
+
+Updated: 2026-11-04. Current source and verified local APK: **2.0.87-debug / 107**.
+
+The existing desktop report records 1,067 tests: 1,064 passed, zero failed and three native-media tests skipped. The 722 source checks and APK signature, ZIP CRC, alignment, embedded payload and 513 production input checks passed. The resumed chat rechecked all 513 input hashes and the APK hash without repeating the full suite. APK: Toki-2.0.87-debug.apk; 86,808,860 bytes; SHA-256 `35a271e3933ed637e9a612ab96edac822d31e6577847392b2298125b4c321b94`.
+
+ADB confirms the installed manager is 2.0.87-debug / 107. This confirms installation, not acceptance of every runtime hook. This build contains inspected share adapter resolution, sticker/text menu routing, offline gesture targeting, live touch rule, bounded same-author region evidence, absent-only historical host configuration reconciliation and 25 curated city/state location representatives. Earlier Root font-size mirroring evidence does not establish no-root or all-field correctness.
+
+The latest order remains HDR first, offline video second. End-to-end HDR stream/decoder/output evidence and offline device acceptance remain open. No HDR fix or all-feature completion is claimed. Original host code, account content, device captures, logs and configuration remain local and ignored.
+
 # Verified Debug checkpoint — 2.0.86-debug
 
-Updated: 2026-11-04. Current source and verified local APK: **2.0.86-debug / 106**.
+Updated: 2026-11-04. Source and local APK at that historical checkpoint: **2.0.86-debug / 106**.
 
 713项源码／接线／词法检查、差异检查、223份XML解析、92项定向回归通过；完整桌面1054项为1051通过、0失败、3项原生媒体能力跳过。统一模块APK的版本／双入口／私有载荷／profiles／签名／ZIP CRC／对齐／507源输入一致性检查通过。
 

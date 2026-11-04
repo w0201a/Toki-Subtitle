@@ -222,6 +222,7 @@ internal object OfflineVideoHook {
                     cancelTouch()
                     if (event.pointerCount != 1 || !videoHit(view, event.rawX, event.rawY) ||
                         !activity.hasWindowFocus()) return false
+                    HookRuntime.count(FEATURE, "离线长按候选已命中")
                     val token = gesture.begin(event.rawX, event.rawY)
                     val down = event.downTime
                     val x = event.x; val y = event.y
@@ -239,11 +240,12 @@ internal object OfflineVideoHook {
                             HookRuntime.event(FEATURE, "native gesture cancellation failed type=" + error.javaClass.simpleName)
                             cancelTouch(); return@Runnable
                         } finally { cancellingNative = false; cancel.recycle() }
+                        HookRuntime.count(FEATURE, "离线长按已接管，取消原生禁用提示")
                         try { showMenu(target) } catch (error: Exception) {
                             HookRuntime.event(FEATURE, "local menu failed type=" + error.javaClass.simpleName)
                             cancelTouch()
                         }
-                    }.also { main.postDelayed(it, ViewConfiguration.getLongPressTimeout().toLong()) }
+                    }.also { main.postDelayed(it, maxOf(200L, ViewConfiguration.getLongPressTimeout().toLong() - 100L)) }
                 }
                 MotionEvent.ACTION_MOVE -> gesture.move(event.rawX, event.rawY, event.pointerCount, slop)
                 MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_POINTER_DOWN -> cancelTouch()
@@ -311,7 +313,8 @@ internal object OfflineVideoHook {
     internal fun videoHit(video: View, x: Float, y: Float): Boolean {
         if (!x.isFinite() || !y.isFinite() || !video.isShown || !video.isAttachedToWindow) return false
         val rect = Rect()
-        if (!video.getGlobalVisibleRect(rect) || !rect.contains(x.toInt(), y.toInt())) return false
+        val videoBounds = Rect()
+        if (!video.getGlobalVisibleRect(videoBounds) || !videoBounds.contains(x.toInt(), y.toInt())) return false
         fun related(view: View): Boolean = view === video ||
             generateSequence(view.parent) { it.parent }.any { it === video } ||
             generateSequence(video.parent) { it.parent }.any { it === view }
@@ -321,7 +324,13 @@ internal object OfflineVideoHook {
             if (++visited > 1200) return false
             val view = queue.removeFirst()
             if (!view.isShown || !view.getGlobalVisibleRect(rect) || !rect.contains(x.toInt(), y.toInt())) continue
-            if (!related(view) && (view.isClickable || view.isLongClickable || view is EditText)) return false
+            if (!related(view) && (view.isClickable || view.isLongClickable || view is EditText)) {
+                // Native full-surface gesture hosts are siblings of the player, not its ancestors.
+                // Still inspect their children and reject buttons, text input and focused overlays.
+                val surfaceHost = view is ViewGroup && view !is android.widget.AbsListView &&
+                    !view.isFocusable && rect.contains(videoBounds)
+                if (!surfaceHost || view is EditText) return false
+            }
             if (view is ViewGroup) for (i in 0 until view.childCount) queue.add(view.getChildAt(i))
         }
         return true

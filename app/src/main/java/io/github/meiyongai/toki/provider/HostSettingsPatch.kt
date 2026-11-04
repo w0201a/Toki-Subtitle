@@ -6,7 +6,7 @@ import org.json.JSONTokener
 import java.security.MessageDigest
 
 /** Local Binder payload only: no remote server, diagnostic data or caller-supplied storage paths. */
-internal data class HostSettingsPatch(val host: String, val id: String, val values: Map<String, Any?>, val replace: Boolean = false)
+internal data class HostSettingsPatch(val host: String, val id: String, val values: Map<String, Any?>, val replace: Boolean = false, val onlyAbsent: Boolean = false)
 internal data class HostSettingsAck(val id: String, val revision: Long)
 internal data class HostSettingsSyncStatus(val pending: Int = 0, val revision: Long? = null, val error: String? = null)
 
@@ -15,12 +15,14 @@ internal object HostSettingsWire {
     const val PENDING = "__host_mirror_pending_v1"
     const val PAYLOAD = "__host_mirror_values_v1"
     const val REQUEST = "__host_mirror_request_v1"
+    const val RECONCILE = "__host_mirror_reconcile_v1"
     const val REPLACE = "__host_mirror_replace_v1"
     const val ACK = "__host_mirror_ack_v1"
     const val RECEIPTS = "__host_mirror_receipts_v1"
     private val nonce = Regex("[A-Za-z0-9-]{1,128}")
     fun validate(patch: HostSettingsPatch) {
         require(patch.host in ManualHostAdaptation.packages && nonce.matches(patch.id))
+        require(!patch.onlyAbsent || !patch.replace)
         require(patch.values.size <= ConfigSchema.keys.size)
         require(patch.values.keys.all { it in ConfigSchema.keys })
         ConfigArchive.validate(patch.values.filterValues { it != null }.mapValues { requireNotNull(it.value) })
@@ -40,6 +42,7 @@ internal object HostSettingsWire {
         validate(patch)
         return JSONObject().apply {
             put("protocol", 1); put("host", patch.host); put("id", patch.id); put("replace", patch.replace)
+            if (patch.onlyAbsent) put("onlyAbsent", true)
             put("values", JSONObject().apply { patch.values.toSortedMap().forEach { (key, value) -> put(key, value ?: JSONObject.NULL) } })
         }.toString().also { require(it.toByteArray(Charsets.UTF_8).size <= ConfigArchive.MAX_BYTES) }
     }
@@ -48,14 +51,17 @@ internal object HostSettingsWire {
         val reader = JSONTokener(text)
         val root = reader.nextValue()
         require(root is JSONObject && reader.nextClean().code == 0)
-        require(root.keys().asSequence().toSet() == setOf("protocol", "host", "id", "replace", "values"))
+        val keys = root.keys().asSequence().toSet()
+        val required = setOf("protocol", "host", "id", "replace", "values")
+        require(keys == required || keys == required + "onlyAbsent")
+        require(!root.has("onlyAbsent") || root.get("onlyAbsent") is Boolean)
         require(root.get("protocol") == 1 && root.get("host") is String && root.get("id") is String && root.get("replace") is Boolean)
         val values = root.get("values"); require(values is JSONObject)
         return HostSettingsPatch(root.getString("host"), root.getString("id"), values.keys().asSequence().associateWith {
             val value = values.get(it)
             require(value === JSONObject.NULL || value is String || value is Boolean)
             if (value === JSONObject.NULL) null else value
-        }, root.getBoolean("replace")).also(::validate)
+        }, root.getBoolean("replace"), root.optBoolean("onlyAbsent", false)).also(::validate)
     }
     fun bounded(text: String): String {
         require(text.toByteArray(Charsets.UTF_8).size <= ConfigArchive.MAX_BYTES)

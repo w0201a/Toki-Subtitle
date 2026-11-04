@@ -55,6 +55,9 @@ internal object ManualCommentTranslateHook {
                 return@intercept chain.proceed()
             val args = chain.args.toTypedArray()
             val comment = args[contract.itemIndex]?.let { contract.getComment.invoke(it) } ?: return@intercept chain.proceed()
+            // Sticker download owns sticker menus; the ordinary-text fallback must not replace its entry.
+            if (ConfigClient.getBoolean(CommentStickerDownloadHook.KEY) &&
+                CommentStickerDownloadHook.isStickerComment(comment)) return@intercept chain.proceed()
             val source = try { sourceText(comment, getText) } catch (error: Exception) {
                 HookRuntime.event(FEATURE, "当前评论原文不可读，保留原生菜单；type=" + error.javaClass.simpleName)
                 null

@@ -38,4 +38,17 @@ class OfflineVideoHitTest {
         assertFalse(OfflineVideoHook.videoHit(video, x, y))
         controller.pause().stop().destroy()
     }
+    @Test fun fullPlayerGestureSiblingDoesNotRejectHoldButItsButtonsStillDo() {
+        val controller=Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity=controller.get();val root=FrameLayout(activity);val video=View(activity)
+        root.addView(video,FrameLayout.LayoutParams(400,600))
+        val gestures=FrameLayout(activity).apply { isClickable=true;isFocusable=false }
+        root.addView(gestures,FrameLayout.LayoutParams(400,600));activity.setContentView(root)
+        fun layout(){activity.window.decorView.apply { measure(View.MeasureSpec.makeMeasureSpec(500,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(800,View.MeasureSpec.EXACTLY));layout(0,0,500,800) }}
+        layout();val point=IntArray(2);video.getLocationOnScreen(point)
+        assertTrue(OfflineVideoHook.videoHit(video,point[0]+40f,point[1]+40f))
+        gestures.addView(View(activity).apply { isClickable=true },FrameLayout.LayoutParams(100,100));layout()
+        assertFalse(OfflineVideoHook.videoHit(video,point[0]+40f,point[1]+40f))
+        controller.pause().stop().destroy()
+    }
 }

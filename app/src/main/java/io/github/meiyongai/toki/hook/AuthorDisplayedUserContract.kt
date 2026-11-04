@@ -45,6 +45,7 @@ internal class AuthorDisplayedUserContract(
         val event: String, val sourceEvent: String, val nickname: String?, val unique: String?)
     private class CachedName(item: Any, val key: NameKey, val value: String?) { val item = WeakReference(item) }
     private val names = WeakHashMap<Any, CachedName>()
+    private val regions = AuthorRegionMemory()
     fun invalidate(owner: Any) { names.remove(owner) }
 
 
@@ -77,6 +78,8 @@ internal class AuthorDisplayedUserContract(
                 profileParam?.let { pageUid.invoke(it) as? String }.orEmpty() != profileId || context?.let { route.get(it) as? String }.orEmpty() != event)) return null
         val latestUser = selectedUser() ?: return null
         if (uid.invoke(latestUser) != userId) return null
-        return AuthorLabelContract.Data(videoId, userId, region.invoke(latestUser) as? String, nativeName)
+        val supplied = (region.invoke(latestUser) as? String)?.takeIf { it.isNotBlank() }
+            ?: author.invoke(video)?.takeIf { uid.invoke(it) == userId }?.let { region.invoke(it) as? String }
+        return AuthorLabelContract.Data(videoId, userId, regions.resolve(userId, supplied), nativeName)
     }
 }
