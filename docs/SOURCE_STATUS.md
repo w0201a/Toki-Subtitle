@@ -1,10 +1,24 @@
-# Development checkpoint — 2.0.80-debug
+# Verified Debug checkpoint — 2.0.81-debug
 
-Updated: 2026-11-04. Source version: **2.0.80-debug / 100**. Latest published production release referenced by this repository remains **2.0.51**.
+Updated: 2026-11-04. Current source: **2.0.81-debug / 101**; last verified local APK: **2.0.81-debug / 101**. Latest published production release referenced by this repository remains **2.0.51**.
 
-**Desktop verification passed before APK packaging.** 628 source assertions/lexical checks, whitespace checks and 215 XML syntax checks passed. The full `:app:testDebugUnitTest` run completed 931 cases: 928 passed, 0 failed, 3 native-media capability skips. Those three are retained as real Android instrumentation cases and are not counted as actual native-media passes. The instrumentation test APK and unified Debug module APK were built successfully; the native-media device tests were NOT run. Package/entry/payload/profile/signature/ZIP/source consistency checks passed. No real-device acceptance or all-goal completion is claimed.
+**Desktop verification passed before APK packaging.** 644 source/wiring/lexical checks and whitespace checks passed. Main/test compilation, 58 focused cases and the full desktop run (951 total: 948 passed, 0 failed, 3 native-media capability skips) passed. The unified 2.0.81 module APK built successfully and package/entry/payload/profile/signature/ZIP/source checks passed. Those three platform-media cases still require actual Android execution, and no real TikTok/device acceptance or full-goal completion is claimed.
 
 **For a concise Chinese source/status/limitation matrix, start with [FEATURE_STATUS_ZH.md](FEATURE_STATUS_ZH.md).** The diagnostic ZIP has a separate runtime-evidence overview; the two are not interchangeable.
+
+## 2.0.81 author-route source and verified build
+
+- Current source version: 2.0.81-debug / 101, based on 3e8198726f960e6e569cebdd4c70d421ba8bf3ce. The verified distributable is now 2.0.81; the prior 2.0.80 checkpoint remains below as history.
+- Fresh local inspection confirmed the target Manifest 47.6.3 / 2024706030 and classes5.dex SHA-256 60d095d1bf85b222fa691453133c29b976b274d4ceed215a30603858ac5e18ff. Native method/field inventories and caller inspection show direct primary-label setText branches as well as Mq. Existing Mq-only interception misses the former.
+- New observer covers inspected view/item lifecycle and both nickname callbacks; it only binds the exact primary TextView, current cellProxy.LL item and matching native name. Homepage collaboration follows the native profile-mode gate/selected User, not an assumed original author. Rich badges require an actual raw binding witness, module prefixes have owned spans, and synchronous native rebinds are rechecked after module writes.
+- Known-host observation can prepare disabled views for later toggles; code-identity verification precedes native helper invocation. Weak observation and bounded name caching avoid retaining native span callbacks or formatting every frame. Missing data, mismatch and absent region remain explicit, never filled from viewer/SIM settings.
+- Display-only ISO3/UK aliases reuse Chinese country names and flags. No new server availability or subdivision claim. 644 source/lexical/wiring checks passed; main/test compilation and 58 focused JVM/Robolectric cases passed; full regression passed (951 total, 948 passed, 0 failed, 3 native-media skips); the unified APK built and passed packaging/signature/source checks, not device acceptance.
+
+## Verified 2.0.81 Debug artifact
+
+- Local module: `Toki-2.0.81-debug.apk`, 86411922 bytes (82.41 MiB), versionCode 101. SHA-256 `9a13f5ebc3fb7d31e205df7ea318693bf192c0568d7833a9bca46bcc6a135607`.
+- aapt confirmed the same package and 2.0.81-debug / 101 for both outer and payload; valid matching v2 debug certificates, inner/outer ZIP CRC, zipalign and exact payload-byte checks passed. Modern entry, legacy bootstrap, private API namespace and equal profiles were verified.
+- 489 non-signing source/resource/build input files matched the frozen pre-build manifest. No phone installation, actual TikTok profile-route test or native-media execution occurred. Existing 2.0.80 APK was preserved.
 
 ## Verified 2.0.80 Debug artifact
 

@@ -2,119 +2,125 @@ package io.github.meiyongai.toki.subtitle.hook
 
 import android.os.Handler
 import android.os.Looper
-import android.text.Spanned
-import android.text.SpannedString
 import android.view.View
 import android.widget.TextView
 import io.github.libxposed.api.XposedModule
-import java.lang.ref.WeakReference
-import java.util.WeakHashMap
+import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
+import io.github.meiyongai.toki.subtitle.provider.ExecutionEvidence
+import java.lang.reflect.Method
+import java.lang.reflect.Modifier
+import java.util.concurrent.Executors
+import java.util.concurrent.atomic.AtomicBoolean
 
-/** Display-only labels with bounded state; refresh is rejected after holder reuse or a native text replacement. */
+/** Cover both direct native setText callbacks and the rich Mq route; never decorate every TextView globally. */
 internal object AuthorLocationLabels {
     private const val FEATURE = "AuthorLocationHook"
-    private data class Entry(val owner: WeakReference<Any>, val original: CharSequence,
-        val video: String, val author: String, var rendered: CharSequence, var renderedText: String)
-
-    fun resolve(loader: ClassLoader): AuthorLabelContract? = try {
-        AuthorLabelContract(
-            loader.loadClass("com.ss.android.ugc.aweme.feed.assem.videoauthorinfo.VideoAuthorInfoRelationAssem"),
-            loader.loadClass("com.ss.android.ugc.aweme.feed.model.VideoItemParams"),
-            loader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme"),
-            loader.loadClass("com.ss.android.ugc.aweme.profile.model.User"))
+    private const val COMPONENT = "com.ss.android.ugc.aweme.feed.assem.videoauthorinfo.VideoAuthorInfoRelationAssem"
+    internal class Resolved(val component: Class<*>, val label: AuthorLabelContract,
+        val created: Method, val itemBound: Method, val nickname: Method, val userUpdated: Method, val invalidate: (Any) -> Unit)
+    private var updateStatus: (() -> Unit)? = null
+    fun refreshStatus() { updateStatus?.invoke() }
+    fun resolve(loader: ClassLoader, quiet: Boolean = false): Resolved? = try {
+        val component = loader.loadClass(COMPONENT)
+        val params = loader.loadClass("com.ss.android.ugc.aweme.feed.model.VideoItemParams")
+        val aweme = loader.loadClass("com.ss.android.ugc.aweme.feed.model.Aweme")
+        val user = loader.loadClass("com.ss.android.ugc.aweme.profile.model.User")
+        val native = AuthorDisplayedUserContract(component, loader.loadClass("com.bytedance.assem.arch.reused.ReusedAssem"),
+            params, aweme, user, loader.loadClass("X.090D"), loader.loadClass("X.08zj"))
+        fun callback(type: Class<*>, name: String, result: Class<*>, vararg arguments: Class<*>): Method =
+            type.getDeclaredMethod(name, *arguments).apply {
+                check(!Modifier.isStatic(modifiers) && returnType == result); isAccessible = true
+            }
+        Resolved(component, AuthorLabelContract(component, params, aweme, user, native::current),
+            callback(component, "onViewCreated", Void.TYPE, View::class.java),
+            callback(component, "i4", Void.TYPE, Any::class.java),
+            callback(loader.loadClass("X.093W"), "invoke", Any::class.java, Any::class.java, Any::class.java),
+            callback(loader.loadClass("X.093E"), "invoke", Any::class.java, Any::class.java, Any::class.java), native::invalidate)
     } catch (error: Exception) {
-        HookRuntime.event(FEATURE, "author label contract unavailable type=" + error.javaClass.simpleName)
+        if (!quiet) HookRuntime.event(FEATURE, "作者原生绑定契约不可用；type=" + error.javaClass.simpleName)
         null
     } catch (error: LinkageError) {
-        HookRuntime.event(FEATURE, "author label contract unavailable type=" + error.javaClass.simpleName)
+        if (!quiet) HookRuntime.event(FEATURE, "作者原生绑定契约不可用；type=" + error.javaClass.simpleName)
         null
     }
 
-    fun install(module: XposedModule, contract: AuthorLabelContract) {
+    fun install(module: XposedModule, resolved: Resolved) {
         val main = Handler(Looper.getMainLooper())
-        val entries = WeakHashMap<TextView, Entry>()
-        var enabled = false
-        var applying = false
-        var closed = false
-        var attachmentChanged: ((TextView, Boolean) -> Unit)? = null
-        val detach = object : View.OnAttachStateChangeListener {
-            override fun onViewAttachedToWindow(view: View) {
-                (view as? TextView)?.let { attachmentChanged?.invoke(it, enabled) }
-            }
-            override fun onViewDetachedFromWindow(view: View) {
-                // Restore only this owned label while detached, then redecorate on attachment if still current.
-                (view as? TextView)?.let { attachmentChanged?.invoke(it, false) }
-            }
-        }
-        fun forget(view: TextView) {
-            entries.remove(view)
-            view.removeOnAttachStateChangeListener(detach)
-        }
-        fun release() {
-            entries.keys.toList().forEach(::forget)
-            attachmentChanged = null
-        }
-        fun refreshView(view: TextView, active: Boolean) {
-            val entry = entries[view] ?: return
+        val closed = AtomicBoolean(false)
+        val worker = Executors.newSingleThreadExecutor { task -> Thread(task, "toki-author-code-check").apply { isDaemon = true } }
+        var ready = false; var checked = false; var configuration: ConfigSnapshot? = null
+        var publishing = false
+        lateinit var bindings: AuthorLabelBindings
+        fun publish() {
+            if (closed.get() || publishing) return
+            publishing = true
             try {
-                val owner = entry.owner.get()
-                val current = owner?.let(contract::current)
-                if (owner == null || current == null || contract.label.get(owner) !== view || current.video != entry.video ||
-                    current.author != entry.author || view.text !== entry.rendered || view.text.toString() != entry.renderedText) {
-                    forget(view)
-                } else {
-                    val text = AuthorLabelPresentation.display(entry.original, current.region, active)
-                    applying = true
-                    try { contract.bind.invoke(owner, view, text) } finally { applying = false }
-                    entry.rendered = view.text
-                    entry.renderedText = view.text.toString()
+                val wanted = configuration?.boolean(AuthorLocationHook.KEY_SHOW_AUTHOR_LOCATION) == true
+                val stats = bindings.statistics()
+                HookRuntime.state(FEATURE, when {
+                    wanted && !checked -> "正在核验作者显示代码"
+                    wanted && !ready -> "部分功能已注册"
+                    wanted && stats.decorated == 0 -> "等待作者标签或地区数据"
+                    else -> "已注册"
+                })
+                val outcome = when {
+                    configuration == null -> ExecutionEvidence.Outcome.CONFIG_MISSING
+                    !wanted -> ExecutionEvidence.Outcome.DISABLED
+                    !checked -> ExecutionEvidence.Outcome.CODE_PENDING
+                    !ready -> ExecutionEvidence.Outcome.CODE_UNSUPPORTED
+                    stats.known == 0 -> ExecutionEvidence.Outcome.NO_TARGET
+                    stats.waiting + stats.mismatch + stats.missingRegion > 0 -> ExecutionEvidence.Outcome.PARTIAL
+                    stats.decorated == 0 -> ExecutionEvidence.Outcome.NO_TARGET
+                    else -> ExecutionEvidence.Outcome.RULE_REFRESHED
                 }
-            } catch (error: Exception) {
-                forget(view)
-                HookRuntime.event(FEATURE, "author label refresh skipped type=" + error.javaClass.simpleName)
-            }
+                HookRuntime.execution(FEATURE, ExecutionEvidence(ExecutionEvidence.Scope.AUTHOR, ExecutionEvidence.Action.BIND, outcome,
+                    configuration?.revision, configuration?.let { wanted && ready }, mapOf(
+                        ExecutionEvidence.Metric.KNOWN to stats.known.toLong(), ExecutionEvidence.Metric.DECORATED to stats.decorated.toLong(),
+                        ExecutionEvidence.Metric.WAITING_MODEL to stats.waiting.toLong(), ExecutionEvidence.Metric.NAME_MISMATCH to stats.mismatch.toLong(),
+                        ExecutionEvidence.Metric.MISSING_REGION to stats.missingRegion.toLong())))
+                configuration?.let { HookRuntime.appliedConfiguration(FEATURE, it, wanted && ready) }
+            } finally { publishing = false }
         }
-        attachmentChanged = { view, active -> if (!closed) refreshView(view, active) }
-        fun refresh(active: Boolean) {
-            entries.keys.toList().forEach { view -> refreshView(view, active && view.isAttachedToWindow) }
+        bindings = AuthorLabelBindings({ owner -> resolved.label.label.get(owner) as? TextView },
+            { owner -> if (ready) resolved.label.current(owner) else null }, ::publish, { error ->
+                HookRuntime.event(FEATURE, "作者标签读取／刷新失败，保留原生内容；type=" + error.javaClass.simpleName)
+            })
+        fun configure() {
+            if (closed.get()) return
+            bindings.configure(ready && configuration?.boolean(AuthorLocationHook.KEY_SHOW_AUTHOR_LOCATION) == true)
+            publish()
         }
         HookRuntime.onDispose(FEATURE) {
-            closed = true
-            if (Looper.myLooper() == main.looper) { refresh(false); release() }
-            else main.post { refresh(false); release() }
+            closed.set(true); worker.shutdownNow(); updateStatus = null
+            if (Looper.myLooper() == main.looper) bindings.close() else main.post { bindings.close() }
         }
-        module.trackHook(FEATURE, contract.bind, requiresConfiguration = false).intercept { chain ->
-            if (closed || applying || Looper.myLooper() != main.looper) return@intercept chain.proceed()
-            val owner = checkNotNull(chain.thisObject)
-            val view = chain.args[0] as? TextView ?: return@intercept chain.proceed()
-            if (contract.label.get(owner) !== view) return@intercept chain.proceed()
-            val source = chain.args[1] as? CharSequence ?: run {
+        for (method in listOf(resolved.created, resolved.itemBound, resolved.label.bind, resolved.nickname, resolved.userUpdated)) {
+            module.trackHook(FEATURE, method, requiresConfiguration = false).intercept { chain ->
+                if (closed.get() || Looper.myLooper() != main.looper) return@intercept chain.proceed()
+                val owner = if (method == resolved.nickname || method == resolved.userUpdated) chain.args[0] else chain.thisObject
+                if (owner == null || !resolved.component.isInstance(owner)) return@intercept chain.proceed()
+                val before = (resolved.label.label.get(owner) as? TextView)?.text
                 val result = chain.proceed()
-                forget(view)
-                return@intercept result
+                resolved.invalidate(owner)
+                val raw = when (method) {
+                    resolved.label.bind -> chain.args[1] as? CharSequence
+                    resolved.nickname -> chain.args[1] as? CharSequence
+                    else -> null
+                }
+                bindings.observe(owner, raw, before)
+                HookRuntime.count(FEATURE, if (method == resolved.label.bind) "富文本作者绑定回调" else "直接作者／生命周期绑定回调")
+                result
             }
-            val data = try { contract.current(owner) } catch (error: ReflectiveOperationException) {
-                HookRuntime.event(FEATURE, "author model not ready type=" + error.javaClass.simpleName)
-                null
-            } ?: run {
-                val result = chain.proceed(arrayOf(view, AuthorLabelPresentation.original(source)))
-                forget(view)
-                return@intercept result
+        }
+        updateStatus = { if (Looper.myLooper() == main.looper) configure() else main.post { configure() } }
+        HookRuntime.subscribe(FEATURE) { snapshot -> configuration = snapshot; configure() }
+        val app = checkNotNull(HookRuntime.hostContext)
+        worker.execute {
+            val supported = AuthorLocationCodeGate.verify(app)
+            main.post {
+                if (!closed.get() && HookRuntime.scope(FEATURE).active) { checked = true; ready = supported; configure() }
             }
-            if (view !in entries && entries.size >= 256)
-                return@intercept chain.proceed(arrayOf(view, AuthorLabelPresentation.original(source)))
-            val unwrapped = AuthorLabelPresentation.original(source)
-            val original = if (unwrapped is Spanned) SpannedString(unwrapped) else unwrapped.toString()
-            val result = chain.proceed(arrayOf(view, AuthorLabelPresentation.display(original, data.region, enabled && view.isAttachedToWindow)))
-            if (view !in entries) view.addOnAttachStateChangeListener(detach)
-            entries[view] = Entry(WeakReference(owner), original, data.video, data.author, view.text, view.text.toString())
-            result
         }
-        HookRuntime.subscribe(FEATURE) { snapshot ->
-            enabled = snapshot?.boolean(AuthorLocationHook.KEY_SHOW_AUTHOR_LOCATION) == true
-            if (!closed) refresh(enabled)
-            if (snapshot != null) HookRuntime.appliedConfiguration(FEATURE, snapshot)
-        }
-        HookRuntime.event(FEATURE, "primary author label contract registered; model values unchanged")
+        HookRuntime.detail(FEATURE, "观察真实直接setText及Mq分支、当前cellProxy及原生主页协作者选择；仅写已核对主作者TextView，不改User／Aweme，不记录昵称、账号或视频ID。")
     }
 }

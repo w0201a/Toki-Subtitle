@@ -7,6 +7,13 @@ import android.text.Spanned
 internal object AuthorLabelPresentation {
     private class Prefix(val text: String)
 
+    fun ownedPrefix(value: CharSequence): String? {
+        val spanned = value as? Spanned ?: return null
+        return spanned.getSpans(0, spanned.length, Prefix::class.java).firstOrNull {
+            spanned.getSpanStart(it) == 0 && spanned.getSpanEnd(it) == it.text.length && value.toString().startsWith(it.text)
+        }?.text
+    }
+
     fun original(value: CharSequence): CharSequence {
         val spanned = value as? Spanned ?: return value
         val marker = spanned.getSpans(0, spanned.length, Prefix::class.java).firstOrNull {

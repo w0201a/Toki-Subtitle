@@ -325,7 +325,7 @@ object RegionPresets {
      * Callers: AuthorLocationHook、DashboardScreen。
      */
     fun resolveDisplayName(isoCode: String): String {
-        val trimmed = isoCode.trim()
+        val trimmed = CountryDisplayCode.resolve(isoCode)
         if (trimmed.isEmpty()) return ""
         val preset = findByIso(trimmed)
         if (preset != null) return preset.countryName

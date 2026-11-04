@@ -11,6 +11,7 @@ internal class ExecutionEvidence(
         PLAYER("PlaybackSpeedHook", "固定倍速", "只观察请求及调用返回，不测量真实播放速率；未观察实例不猜原速，并发结果需再确认。"),
         MENU("SpeedOptions", "倍速菜单", "只影响后续菜单数据源读取；已打开且缓存列表的菜单可能需重新打开。"),
         TEMPLATE("TemplateCleanupHook", "模板／特效", "只覆盖已核实类型和已观察根；根数量或刷新返回不证明完整截图覆盖／像素效果。"),
+        AUTHOR("AuthorLocationHook", "作者国家标签", "仅处理已核对的主作者标签；按原生显示用户和当前昵称匹配，不推测缺失地区，也不证明所有页面变体已覆盖。"),
         AUDIO("BackgroundAudioHook", "后台音频读取", "只证明这次实验getter返回；不重建宿主缓存，也不证明后台播放已启动或停止。")
     }
     enum class Action(val title: String) { APPLY("应用设置"), RELEASE("关闭／失效恢复"), READ("原生数据读取"), NATIVE_REQUEST("原生调速回调"), BIND("视图绑定／刷新") }
@@ -25,6 +26,7 @@ internal class ExecutionEvidence(
     enum class Metric(val title: String) {
         KNOWN("已观察实例"), COMMANDS("调用返回次数"), UNCHANGED("记录中无需新写入"), DEFERRED("暂缓或观察已变化"),
         FAILED("调用失败"), RACED("并发结果未确认"), FIELD_FAILURES("字段恢复异常组"), TRACKED("本次实例有记录"),
+        DECORATED("已有国家前缀标签"), WAITING_MODEL("等待当前模型"), NAME_MISMATCH("原生昵称尚未匹配"), MISSING_REGION("原生地区缺失"),
         OPTIONS("返回自定义档位数"), ROOTS("已观察目标根"), ATTACHED("已挂载目标根"), ADJUSTED("本次改写实验值")
     }
     val metrics = metrics.toMap()

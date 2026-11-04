@@ -3,6 +3,7 @@ package io.github.meiyongai.toki.subtitle.hook
 import android.content.Context
 import android.util.Log
 import io.github.meiyongai.toki.subtitle.model.RegionPresets
+import io.github.meiyongai.toki.subtitle.model.CountryDisplayCode
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.libxposed.api.XposedModule
 import java.util.Locale
@@ -102,8 +103,8 @@ object AuthorLocationHook {
      *     - `io.github.meiyongai.toki.subtitle.hook.AuthorLocationHook.init`: 拦截昵称生成时调用。
      */
     fun formatAuthorWithLocation(originalText: String, region: String): String {
-        val trimmedRegion = region.trim()
-        if (trimmedRegion.isEmpty()) {
+        val trimmedRegion = CountryDisplayCode.resolve(region)
+        if (trimmedRegion.isEmpty() || trimmedRegion.length > 128 || trimmedRegion.any(Char::isISOControl)) {
             return originalText
         }
         val upperRegion = if (trimmedRegion.length == 2) {

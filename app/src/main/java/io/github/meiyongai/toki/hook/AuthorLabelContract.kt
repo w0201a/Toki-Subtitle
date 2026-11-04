@@ -4,7 +4,8 @@ import android.widget.TextView
 import java.lang.reflect.Modifier
 
 /** Inspected 47.6.3 label binding; the primary author field and current Aweme identity must both match. */
-internal class AuthorLabelContract(component: Class<*>, params: Class<*>, aweme: Class<*>, user: Class<*>) {
+internal class AuthorLabelContract(component: Class<*>, params: Class<*>, aweme: Class<*>, user: Class<*>,
+    private val nativeCurrent: ((Any) -> Data?)? = null) {
     val label = component.getDeclaredField("LLLIIII").apply {
         check(TextView::class.java.isAssignableFrom(type) && !Modifier.isStatic(modifiers))
         isAccessible = true
@@ -36,9 +37,10 @@ internal class AuthorLabelContract(component: Class<*>, params: Class<*>, aweme:
         check(returnType == String::class.java); isAccessible = true
     }
     private val paramsType = params
-    data class Data(val video: String, val author: String, val region: String?)
+    data class Data(val video: String, val author: String, val region: String?, val nativeName: String? = null)
 
     fun current(owner: Any): Data? {
+        nativeCurrent?.let { return it(owner) }
         val model = viewModel.invoke(owner) ?: return null
         val params = item.invoke(model) ?: return null
         if (!paramsType.isInstance(params)) return null

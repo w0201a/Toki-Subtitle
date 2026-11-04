@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 100' in gradle and 'versionName = "2.0.80"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.80-debug / 100")
+check('versionCode = 101' in gradle and 'versionName = "2.0.81"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.81-debug / 101")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -151,10 +151,26 @@ author_contract = (JAVA / 'hook/AuthorLabelContract.kt').read_text(encoding='utf
 author_presentation = (JAVA / 'hook/AuthorLabelPresentation.kt').read_text(encoding='utf-8')
 check('AuthorLocationLabels.resolve(classLoader)' in author_hook and 'AuthorLocationLabels.install(module, contract)' in author_hook, 'primary author labels are connected before the legacy formatter fallback')
 check('getDeclaredMethod("Mq", label.type, CharSequence::class.java)' in author_contract and 'getDeclaredField("LLLIIII")' in author_contract, 'author hook targets the inspected primary text binding rather than all nickname getters')
-check('contract.label.get(owner) !== view' in author_labels and 'current.author != entry.author' in author_labels and 'current.video != entry.video' in author_labels, 'hot author refresh verifies both current label and video/author identity')
-check('view.text !== entry.rendered' in author_labels and 'view.text.toString() != entry.renderedText' in author_labels, 'native replacement or mutation prevents stale author text restoration')
+author_bindings = (JAVA / 'hook/AuthorLabelBindings.kt').read_text(encoding='utf-8')
+author_native = (JAVA / 'hook/AuthorDisplayedUserContract.kt').read_text(encoding='utf-8')
+check('label(owner) !== view' in author_bindings and 'current(owner) != data' in author_bindings and 'uid.invoke(latestUser) != userId' in author_native, 'author refresh rechecks the primary label and actual displayed-user identity after module writes')
+check('body == expected' in author_bindings and 'entry.witnessBody == body' in author_bindings and 'AuthorLabelPresentation.ownedPrefix' in author_bindings, 'native text changes require a current native-name match or a genuine raw binding witness; restoration strips only owned spans')
 check('SpannableStringBuilder' in author_presentation and 'private class Prefix' in author_presentation, 'region decoration preserves spans and identifies only module-owned prefixes')
-check('view.removeOnAttachStateChangeListener' in author_labels and 'entries.size >= 256' in author_labels, 'author-label state has detach cleanup and a capacity limit')
+check('view.removeOnAttachStateChangeListener' in author_bindings and 'entries.size >= capacity' in author_bindings and 'WeakReference(view)' in author_bindings, 'bounded author-label state detaches observers and does not retain views through listener values')
+check('loader.loadClass("X.093W")' in author_labels and 'loader.loadClass("X.093E")' in author_labels and 'resolved.itemBound' in author_labels, 'author installation observes the inspected direct setText callbacks as well as Mq and item/view lifecycle paths')
+check('field(reused, "cellProxy")' in author_native and 'field(cell.type, "LL")' in author_native and 'usesProfileUser.invoke' in author_native and 'selected.invoke' in author_native, 'native author data comes from the currently bound cell and honors the actual homepage collaborator experiment')
+check('getNickname' in author_native and 'getUniqueId' in author_native and 'WeakReference(item)' in author_native and 'it.item.get() === item' in author_native and 'names.size >= 256' in author_native, 'native display-name caching is bounded, weak and tied to item/name/context rather than invoking the formatter every frame')
+author_gate = (JAVA / 'hook/AuthorLocationCodeGate.kt').read_text(encoding='utf-8')
+check('60d095d1bf85b222fa691453133c29b976b274d4ceed215a30603858ac5e18ff' in author_gate and 'classes5.dex' in author_gate and 'AuthorLocationCodeGate.verify(app)' in author_labels and 'bindings.configure(ready' in author_labels, 'new native author helpers remain inactive until the inspected 47.6.3 code is matched')
+check('AuthorLocationLabels.resolve(param.classLoader, quiet = true)' in module and 'AuthorLocationLabels.refreshStatus()' in module, 'known-host author observation prepares while disabled and republishes actual readiness after generic status updates')
+country_display = (JAVA / 'model/CountryDisplayCode.kt').read_text(encoding='utf-8')
+check('getISO3Country()' in country_display and 'Locale.ROOT' in country_display and 'code == "UK"' in country_display and 'CountryDisplayCode.resolve(region)' in author_hook, 'country label display canonicalizes known alpha-three codes and UK without changing environment configuration')
+for name, markers in {
+ 'hook/AuthorDisplayedUserContractTest.kt': ('homepageCollaboratorRegionBelongsToTheActuallyDisplayedUser', 'nativeProfileExperimentAndFallbackAreHonoredRatherThanForcingAProfileUser', 'rebindingWhileFormattingDropsTheOldResult'),
+ 'hook/AuthorLabelBindingsTest.kt': ('directNativeTextRouteDecoratesOnlyTheProvenPrimaryLabel', 'holderReuseCannotPutTheNextCountryOnThePreviousNativeName', 'synchronousNativeRebindDuringModuleWriteNeverKeepsTheOldCountry'),
+ 'model/CountryDisplayCodeTest.kt': ('alphaThreeCodesAndUkAliasUseCanonicalChineseDisplayWithoutChangingEnvironmentSelection', 'unknownSubdivisionAndOrdinaryNamesArePreservedNotFabricatedAsCountries'),
+}.items():
+ check(all(marker in read('app/src/test/java/io/github/meiyongai/toki/' + name) for marker in markers), name + ' covers native author routes and conservative label identity (source only)')
 quick_hook = (JAVA / 'hook/QuickCommentCleanupHook.kt').read_text(encoding='utf-8')
 check('NewBottomDefaultCommentInputAssem' in quick_hook and 'getDeclaredMethod("sq", ViewGroup::class.java)' in quick_hook, 'detail-page bottom input has its own inspected creation and attachment path')
 check('"QuickCommentCleanupHook" to listOf' in schema and '"QuickCommentCleanupHook" -> QuickCommentCleanupHook.init' in module, 'quick-comment switch is installed independently of layout navigation')
@@ -712,6 +728,8 @@ def kotlin_delimiters(source):
     code(0)
 
 lexical_files = [
+    'hook/AuthorDisplayedUserContract.kt', 'hook/AuthorLabelBindings.kt', 'hook/AuthorLocationCodeGate.kt', 'model/CountryDisplayCode.kt',
+
     'provider/ExecutionEvidence.kt', 'hook/BackgroundAudioHook.kt', 'hook/ManualCommentTranslateHook.kt',
 
     'hook/PlaybackSpeedHook.kt', 'hook/PlaybackRateScope.kt', 'hook/PlayerRateOverrides.kt', 'hook/SpeedFieldLease.kt',
@@ -758,6 +776,7 @@ for relative in lexical_files:
 
 for relative in (
     'provider/ExecutionEvidenceTest.kt', 'hook/HookRuntimeExecutionTest.kt',
+    'hook/AuthorDisplayedUserContractTest.kt', 'hook/AuthorLabelBindingsTest.kt', 'model/CountryDisplayCodeTest.kt',
     'hook/LocalVideoRemuxerGuardTest.kt', 'hook/CaptionTrackFingerprintTest.kt',
     'hook/PlaybackSpeedRegistrationTest.kt', 'hook/PlaybackSpeedMemoryTest.kt',
     'hook/PlaybackRateScopeTest.kt', 'hook/PlayerRateOverridesTest.kt', 'hook/SpeedFieldLeaseTest.kt',

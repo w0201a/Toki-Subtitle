@@ -107,6 +107,7 @@ class TokiModule : XposedModule() {
         // Component code availability is stricter than generic hook installation; retain its actual applied subset.
         if ("PageCleanupHook" in installed) PageCleanupHook.refreshStatus()
         if ("TemplateCleanupHook" in installed) TemplateCleanupHook.refreshStatus()
+        if ("AuthorLocationHook" in installed) AuthorLocationLabels.refreshStatus()
         HookRuntime.configurationReady(if (restart) "配置就绪，等待重新打开" else "配置已就绪")
     }
 
@@ -256,6 +257,15 @@ class TokiModule : XposedModule() {
             if ("TemplateCleanupHook" !in installed) install("TemplateCleanupHook", param.classLoader)
             if ("TemplateCleanupHook" in installed && "TemplateCleanupHook" !in plan.features) {
                 check(plan.admitLive("TemplateCleanupHook")) { "Template observer admission failed" }
+                ConfigClient.refreshHostSession()
+            }
+        }
+        // Capture proven primary labels while disabled so a later toggle can update an already-known page.
+        if (processName == param.packageName && HookRuntime.scope("AuthorLocationHook").active &&
+            AuthorLocationLabels.resolve(param.classLoader, quiet = true) != null) {
+            if ("AuthorLocationHook" !in installed) install("AuthorLocationHook", param.classLoader)
+            if ("AuthorLocationHook" in installed && "AuthorLocationHook" !in plan.features) {
+                check(plan.admitLive("AuthorLocationHook")) { "Author observer admission failed" }
                 ConfigClient.refreshHostSession()
             }
         }
