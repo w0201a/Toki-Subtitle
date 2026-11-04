@@ -1,3 +1,11 @@
+# Verified build — 2.0.90-debug /110: getter bypass corrected; real SDR output pending
+
+The user reports 89 still outputs HDR. A read-only in-process diagnostic snapshot confirms HdrPlaybackHook was enabled and committed, but PlayerConfigImpl.isForceHdrOff had zero calls. Configuration delivery and registration were never evidence of real SDR output. Native code has an outer experiment gate and cold/local early returns; ART may also inline the tiny getter. The evidence does not isolate which bypass occurred yet.
+
+The 90 patch verifies original classes2/classes4 hashes before admitting the obfuscated selector/gate, scopes the outer gate to the enabled synchronous selection only, and deoptimizes the exact policy/caller so inline execution cannot bypass the hooks. Nested/thread-local scopes restore on exceptions. Selection diagnostics record policy/gate reads and SDR/HDR candidate counts, not media contents. A return or changed list still does not prove physical output. Unsupported original code fails closed. Cache-only/HDR-only paths remain explicit limitations.
+
+738 source checks and 10 focused tests passed; the exact native members and code digests were additionally verified against the full original APK. The unified APK and relocated payload passed signature, ZIP CRC, alignment, namespace/new-class and 521 production input checks. APK: Toki-2.0.90-debug.apk; 86,861,876 bytes; SHA-256 `c966d5f8527578bc1f5349778e921e592c0de45bebc8a28c6376349b4d0e62f3`. No full regression was repeated. The user must update the module and fully restart TikTok to load the new code; the existing enabled HDR-off toggle does not need repeated switching. No phone switches, host preferences, brightness, system HDR capabilities or media colorspace flags were changed. No automatic install/restart was performed. Real SDR output remains unverified and offline work stays deferred.
+
 # Verified build — 2.0.89-debug / 109: disable HDR playback; SDR output pending
 
 The user clarified that the requirement is to remove HDR playback, not enable it. Previous physical HLG/HBM observations prove the baseline HDR state only and do not satisfy this requirement. Offline work is deferred until the HDR-off path is addressed.

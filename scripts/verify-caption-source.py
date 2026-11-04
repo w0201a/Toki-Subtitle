@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 109' in gradle and 'versionName = "2.0.89"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.89-debug / 109")
+check('versionCode = 110' in gradle and 'versionName = "2.0.90"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.90-debug / 110")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -116,6 +116,8 @@ check('drawColor(Color.WHITE)' in exporter and 'StickerExportMode.JPEG && bitmap
 cleanup = (JAVA / 'hook/LayoutCleanupHook.kt').read_text(encoding='utf-8')
 cleanup_policy = (JAVA / 'hook/LayoutCleanupPolicy.kt').read_text(encoding='utf-8')
 hdr_hook = (JAVA / 'hook/HdrPlaybackHook.kt').read_text(encoding='utf-8')
+check('module.deoptimize(target)' in hdr_hook and 'module.deoptimize(contract.select)' in hdr_hook, 'HDR policy callers are deoptimized so ART cannot silently bypass registered getter hooks')
+check('HdrSelectionContract.verify' in hdr_hook and 'selection.selecting(true)' in hdr_hook and 'selection.gate(chain.proceed() as Boolean)' in hdr_hook, 'HDR outer experiment is overridden only inside the inspected enabled selection call')
 check('nativeOff || disabled' in hdr_hook and 'isForceHdrOff' in hdr_hook, 'HDR disable preserves native off preference and requests native SDR policy rather than relabeling frames')
 check('HdrPlaybackSection()' in (JAVA / 'ui/screen/DashboardScreen.kt').read_text(encoding='utf-8') and '"HdrPlaybackHook" -> HdrPlaybackHook.init' in (JAVA / 'hook/TokiModule.kt').read_text(encoding='utf-8'), 'HDR disable UI and host installation are wired')
 photo_targets = (JAVA / 'hook/PhotoIndicatorTargets.kt').read_text(encoding='utf-8')
@@ -758,7 +760,7 @@ lexical_files = [
     'provider/ConfigSchema.kt', 'provider/ConfigStore.kt', 'provider/ConfigConflictClock.kt',
     'ui/StyledSubtitleTextView.kt', 'ui/screen/SubtitleSettings.kt',
     'hook/CommentStickerDownloadHook.kt', 'hook/StickerImageExporter.kt', 'hook/StickerExportPolicy.kt',
-    'hook/HdrPlaybackHook.kt', 'ui/screen/HdrPlaybackSection.kt', 'hook/PhotoIndicatorTargets.kt', 'hook/LayoutCleanupHook.kt', 'hook/LayoutCleanupPolicy.kt', 'model/LayoutCleanup.kt', 'ui/screen/LayoutCleanupSection.kt',
+    'hook/HdrPlaybackHook.kt', 'hook/HdrSelectionScope.kt', 'hook/HdrSelectionContract.kt', 'ui/screen/HdrPlaybackSection.kt', 'hook/PhotoIndicatorTargets.kt', 'hook/LayoutCleanupHook.kt', 'hook/LayoutCleanupPolicy.kt', 'model/LayoutCleanup.kt', 'ui/screen/LayoutCleanupSection.kt',
     'hook/SharePanelCleanupHook.kt', 'hook/ShareListBindings.kt', 'model/SharePanelItem.kt', 'ui/screen/SharePanelCleanupSection.kt',
     'hook/AuthorLabelContract.kt', 'hook/AuthorLabelPresentation.kt', 'hook/AuthorLocationLabels.kt', 'hook/QuickCommentCleanupHook.kt',
     'hook/HoldSpeedContract.kt', 'hook/HoldSpeedGestureHook.kt', 'hook/NativeSpeedGestureScope.kt', 'ui/screen/HoldSpeedGestureSection.kt',
@@ -810,7 +812,7 @@ for relative in (
     'hook/OfflineExportFixtures.kt', 'hook/OfflineExportCandidatesTest.kt', 'hook/LocalVideoTracksTest.kt', 'hook/LocalVideoRemuxerTest.kt',
     'provider/OperationJournalTest.kt', 'provider/DiagnosticTextTest.kt', 'provider/DiagnosticOverviewTest.kt', 'provider/TrialLogCaptureTest.kt',
     'provider/TrialLogTest.kt',
-    'hook/HdrPlaybackHookTest.kt', 'hook/PhotoIndicatorTargetsTest.kt', 'hook/LayoutComponentSelectorTest.kt',
+    'hook/HdrPlaybackHookTest.kt', 'hook/HdrSelectionScopeTest.kt', 'hook/HdrSelectionCodeGateTest.kt', 'hook/PhotoIndicatorTargetsTest.kt', 'hook/LayoutComponentSelectorTest.kt',
     'hook/EnvironmentLivePlanTest.kt', 'hook/EnvironmentRuntimeConfigTest.kt', 'hook/EnvironmentOverridesTest.kt',
     'hook/TemplateAnchorContractTest.kt', 'hook/TemplateRootBindingsTest.kt', 'hook/TemplateCleanupPlanTest.kt',
     'hook/HostFeaturePlanTest.kt', 'model/CountryCatalogTest.kt', 'provider/DiagnosticOverviewTest.kt', 'ui/screen/HookStatusModelTest.kt',
