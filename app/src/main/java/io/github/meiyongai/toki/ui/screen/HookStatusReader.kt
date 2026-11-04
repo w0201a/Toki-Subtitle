@@ -23,6 +23,7 @@ internal fun readHookSessions(source: Bundle): List<HookProcessReport> = source.
                 appliedEnabled = feature.diagnosticValue<Boolean>("appliedEnabled"),
                 appliedRevision = feature.diagnosticValue<Long>("appliedRevision"),
                 restartRequired = feature.diagnosticValue<Boolean>("restartRequired") ?: false,
+                registrationCommitted = feature.diagnosticValue<Boolean>("registrationCommitted"),
             )
         }
     )

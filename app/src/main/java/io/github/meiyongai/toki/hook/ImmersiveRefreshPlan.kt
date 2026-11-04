@@ -20,29 +20,32 @@ internal class ImmersiveRefreshPlan(
         private set
     private var dirty = false
     fun invalidate() { dirty = true }
+    fun requiresRestoration(): Boolean = active || applied.values.any { it }
     fun panelApplied(owner: Any, ownedProjection: Boolean) { applied[owner] = ownedProjection }
     fun refresh(wanted: Boolean): Result {
         var commands = 0; var failures = 0; var deferred = 0
-        fun attempt(action: () -> Unit) { try { action() } catch (error: Exception) { failures++; report(error) } }
+        fun attempt(phase: ImmersiveFailure.Phase, field: ImmersiveFailure.Field, action: () -> Unit) {
+            try { action() } catch (error: Exception) { failures++; report(ImmersiveFailure.wrap(phase, field, error)) }
+        }
         val changed = active != wanted
         active = wanted
-        attempt { windows(wanted) }
+        attempt(ImmersiveFailure.Phase.WINDOW_REFRESH, ImmersiveFailure.Field.WINDOW) { windows(wanted) }
         val rows = targets()
         val panels = rows.count { it.panel && visible(it.root) && current(it) }
         val pending = rows.any { it.panel && applied[it.owner] != wanted && (wanted || applied[it.owner] == true) }
         if (changed || dirty && wanted || pending) {
             dirty = false
-            if (!wanted) attempt(releaseCaches)
+            if (!wanted) attempt(ImmersiveFailure.Phase.CACHE_RESTORE, ImmersiveFailure.Field.CACHE, releaseCaches)
             for (target in rows.filter { it.panel }) {
                 if (!current(target) || !visible(target.root)) {
                     if (applied[target.owner] != wanted && (wanted || applied[target.owner] == true)) deferred++
                     continue
                 }
-                attempt { panel(target.owner); target.root.requestLayout(); commands++ }
+                attempt(ImmersiveFailure.Phase.PANEL_REFRESH, ImmersiveFailure.Field.SCREEN) { panel(target.owner); target.root.requestLayout(); commands++ }
             }
             for (target in rows.filter { !it.panel }) {
                 if (!current(target) || !visible(target.root)) continue
-                attempt { cell(target.owner); target.root.requestLayout(); commands++ }
+                attempt(ImmersiveFailure.Phase.CELL_REFRESH, ImmersiveFailure.Field.CELL) { cell(target.owner); target.root.requestLayout(); commands++ }
             }
         }
         if (wanted && panels == 0) deferred = maxOf(1, deferred)

@@ -24,6 +24,7 @@ internal object DiagnosticOverview {
         val state = row.getString("state").orEmpty()
         if (!row.getString("error").isNullOrBlank() || !row.getString("errorStatus").isNullOrBlank() ||
             state in setOf("注册失败，已撤销", "部分功能已注册", "子功能均未安装", "地区环境预设缺失")) return "有异常／部分不可用"
+        if (row.containsKey("registrationCommitted") && !row.getBoolean("registrationCommitted")) return "注册事务尚未完成／已撤销，不能按拦截点数量判定生效"
         if (row.getBoolean("restartRequired")) return "已保存，仍需重开宿主"
         if (state.contains("正在") || state.contains("等待") || state in setOf("注册中", "环境配置待应用")) return "准备中／等待条件"
         if (!row.containsKey("requestedEnabled") && !row.containsKey("enabled")) return "请求状态未知"

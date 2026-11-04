@@ -66,6 +66,7 @@ internal data class HookFeatureReport(
     val appliedEnabled: Boolean? = null,
     val appliedRevision: Long? = null,
     val restartRequired: Boolean = false,
+    val registrationCommitted: Boolean? = null,
 ) {
     val hasError = !error.isNullOrBlank() || !errorStatus.isNullOrBlank() ||
         state in setOf("注册失败，已撤销", "部分功能已注册", "子功能均未安装", "地区环境预设缺失")
@@ -98,6 +99,7 @@ internal data class HookFeatureStatus(
     private val videoIssue = definition.id == "ImmersiveFullScreenHook" && videoModes?.hasError == true
     val state = when {
         report?.hasError == true || menuIssue || videoIssue -> HookVisualState.ISSUE
+        report?.registrationCommitted == false || speedMenu?.registrationCommitted == false || videoModes?.registrationCommitted == false -> HookVisualState.PENDING
         report?.restartRequired == true || speedMenu?.restartRequired == true -> HookVisualState.PENDING
         report?.state in setOf("正在核验页面组件", "环境配置待应用") -> HookVisualState.PENDING
         speedGroup && menuEnabled && !menuReady -> HookVisualState.PENDING
@@ -173,6 +175,7 @@ internal object TranslationPathCatalog {
     )
     fun state(report: HookFeatureReport): HookVisualState = when {
         report.hasError -> HookVisualState.ISSUE
+        report.registrationCommitted == false -> HookVisualState.PENDING
         report.registered > 0 && report.state == "已注册" -> HookVisualState.NORMAL
         else -> HookVisualState.PENDING
     }

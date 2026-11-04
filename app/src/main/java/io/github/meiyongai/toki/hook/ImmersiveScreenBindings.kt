@@ -74,7 +74,7 @@ internal class ImmersiveScreenBindings(val contract: Contract, private val repor
             try {
                 publishing = true
                 contract.publish.invoke(handler, output)
-            } catch (error: Exception) { report(error) }
+            } catch (error: Exception) { report(ImmersiveFailure.wrap(ImmersiveFailure.Phase.PUBLISH, ImmersiveFailure.Field.SCREEN, error)) }
             finally { publishing = false }
         }
         return output
@@ -88,7 +88,7 @@ internal class ImmersiveScreenBindings(val contract: Contract, private val repor
                 publishing = true
                 try { contract.publish.invoke(handler, entry.original) } finally { publishing = false }
             }
-        } catch (error: Exception) { report(error) } }
+        } catch (error: Exception) { report(ImmersiveFailure.wrap(ImmersiveFailure.Phase.CACHE_RESTORE, ImmersiveFailure.Field.CACHE, error)) } }
         owned.clear()
     }
 }

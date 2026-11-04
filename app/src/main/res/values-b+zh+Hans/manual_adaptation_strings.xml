@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="manual_adaptation_title">手动选择适配</string>
+    <string name="manual_adaptation_summary">选择已安装宿主，重新检索手机内的实际适配。</string>
+    <string name="manual_adaptation_hint">选择实际安装的应用。适配会读取该宿主的真实代码，不强套其他版本，也不清空应用数据。</string>
+    <string name="manual_adaptation_global">TikTok 国际版</string>
+    <string name="manual_adaptation_trill">TikTok（Trill）</string>
+    <string name="manual_adaptation_host_info">%1$s · v%2$s</string>
+    <string name="manual_adaptation_not_installed">%1$s · 当前安卓用户未安装</string>
+    <string name="manual_adaptation_loading">正在读取已安装宿主…</string>
+    <string name="manual_adaptation_load_error">读取宿主失败，请关闭弹窗后重试。</string>
+    <string name="manual_adaptation_none">没有可选择的宿主，请确认 TikTok 安装在当前安卓用户中。</string>
+    <string name="manual_adaptation_confirm">重新适配</string>
+    <string name="manual_adaptation_app_info">应用信息</string>
+    <string name="manual_adaptation_open">打开所选宿主</string>
+    <string name="manual_adaptation_saved">请求已保存：%1$s。请在系统“应用信息”中强行停止该宿主（不要清除数据），再重新打开。仅返回桌面或划掉最近任务，可能不会重新加载模块。</string>
+    <string name="manual_adaptation_save_error">尚未确认请求送达。LSPosed 请检查配置同步；注入版请进入 TikTok 内的 Toki 设置，点击“手动选择适配”。没有配置服务时，仅保存在独立 Toki 中不会触发宿主重扫。</string>
+    <string name="manual_adaptation_open_error">无法打开该页面，请从系统应用列表手动进入。</string>
+    <string name="manual_adaptation_scope_note">保存请求不等于扫描完成。宿主下次完整启动时将跳过旧缓存和内置适配，完整检索已知基础与扩展规则；未匹配项仍会明确显示不可用。</string>
+    <string name="manual_adaptation_registration_note">重新适配不会自动修复原生类或方法签名变化。若功能仍无效，请再导出一份新的模块日志。</string>
+</resources>

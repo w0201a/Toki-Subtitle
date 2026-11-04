@@ -46,6 +46,12 @@ internal class HostSettingsDialog(activity: Activity, resources: ModuleResources
                         var subtitles by remember { mutableStateOf(false) }
                         var diagnostics by remember { mutableStateOf(false) }
                         var languages by remember { mutableStateOf(false) }
+                        var manualAdaptation by remember { mutableStateOf(false) }
+                        val settingsSync by io.github.meiyongai.toki.subtitle.provider.HostSettingsMirror.status.collectAsState()
+                        DisposableEffect(Unit) {
+                            io.github.meiyongai.toki.subtitle.provider.HostSettingsMirror.kick()
+                            onDispose { }
+                        }
                         val localizedContext = LocalContext.current
                         val language = LocalAppLanguage.current.language
                         var scan by remember { mutableStateOf(HostScanController.session.status) }
@@ -64,6 +70,20 @@ internal class HostSettingsDialog(activity: Activity, resources: ModuleResources
                                     TextButton(onClick = { dismiss() }) { Text(stringResource(R.string.common_close)) }
                                 }
                                 Text(stringResource(R.string.host_settings_hint), style = MaterialTheme.typography.bodySmall)
+                                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    Text(stringResource(when {
+                                        settingsSync.error != null -> R.string.host_settings_sync_error
+                                        settingsSync.pending > 0 -> R.string.host_settings_sync_pending
+                                        settingsSync.revision != null -> R.string.host_settings_sync_saved
+                                        else -> R.string.host_settings_sync_ready
+                                    }, settingsSync.pending), Modifier.weight(1f), style = MaterialTheme.typography.bodySmall)
+                                    if (settingsSync.pending > 0) TextButton(onClick = {
+                                        io.github.meiyongai.toki.subtitle.provider.HostSettingsMirror.kick()
+                                    }) { Text(stringResource(R.string.host_settings_sync_retry)) }
+                                }
+                                TextButton(onClick = { manualAdaptation = true }) {
+                                    Text(stringResource(R.string.manual_adaptation_title))
+                                }
                                 TextButton(onClick = { languages = !languages }) {
                                     Text("Toki · " + stringResource(R.string.language_title) + " · " +
                                         (if (language == AppLanguage.SYSTEM) stringResource(R.string.language_system) else language.displayName))
@@ -95,6 +115,8 @@ internal class HostSettingsDialog(activity: Activity, resources: ModuleResources
                                 confirmButton = { TextButton(onClick = { performance = null }) { Text("关闭") } })
                         }
                         if (subtitles) SubtitleDialog { subtitles = false }
+                        if (manualAdaptation) io.github.meiyongai.toki.subtitle.ui.screen.ManualHostAdaptationDialog(
+                            localizedContext.packageName) { manualAdaptation = false }
                     }
                 }
             }

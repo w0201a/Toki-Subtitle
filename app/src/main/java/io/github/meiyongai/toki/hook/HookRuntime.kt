@@ -26,7 +26,18 @@ internal object HookRuntime {
     internal class RegistrationScope {
         @Volatile var active = true
             private set
-        fun revoke() { active = false }
+        @Volatile var committed = false
+            private set
+        private var pending = 0
+        @Synchronized fun begin() { check(active); pending++; committed = false }
+        @Synchronized fun commit(): Boolean {
+            if (!active) return false
+            check(pending > 0)
+            pending--
+            committed = pending == 0
+            return committed
+        }
+        @Synchronized fun revoke() { active = false; committed = false; pending = 0 }
     }
     @Synchronized fun scope(feature: String): RegistrationScope =
         scopes.getOrPut(feature) { RegistrationScope() }
@@ -107,18 +118,24 @@ internal object HookRuntime {
         val scope = synchronized(this) {
             scope(feature).also {
                 check(it.active) { "本次会话已撤销功能 $feature，不能重新安装" }
+                it.begin()
+                entry(feature).putBoolean("registrationCommitted", false)
                 state(feature, "注册中")
             }
         }
         try {
             install()
-            synchronized(this) { if (scope.active) state(feature, "已注册") }
+            synchronized(this) {
+                val committed = scope.commit()
+                entry(feature).putBoolean("registrationCommitted", committed)
+                if (scope.active) state(feature, if (committed) "已注册" else "注册中")
+            }
         } catch (error: Throwable) {
             dispose(feature, error)
             if (error !is Exception && error !is LinkageError) throw error
             failure(feature, error, "注册失败，已撤销")
         } finally {
-            event("TokiHookRuntime", "结束注册 feature=$feature elapsedMs=${SystemClock.elapsedRealtime() - installStarted} active=${scope.active}")
+            event("TokiHookRuntime", "结束注册 feature=$feature elapsedMs=${SystemClock.elapsedRealtime() - installStarted} active=${scope.active} committed=${scope.committed}")
         }
     }
 
@@ -228,6 +245,7 @@ internal object HookRuntime {
             scope(feature).revoke()
             handles.remove(feature)
             entry(feature).putInt("registered", 0)
+            entry(feature).putBoolean("registrationCommitted", false)
             entry(feature).remove("appliedEnabled")
             entry(feature).remove("appliedRevision")
             resources.remove(feature).orEmpty().asReversed()

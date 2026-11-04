@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="host_settings_sync_ready">宿主設定修改會自動同步到獨立 Toki，Root 與免 Root 均支援。</string>
+    <string name="host_settings_sync_pending">正在同步 %1$d 項設定到獨立 Toki…</string>
+    <string name="host_settings_sync_saved">設定已儲存並同步到獨立 Toki。</string>
+    <string name="host_settings_sync_error">還有 %1$d 項設定未同步。請安裝／更新外面的 Toki 本體後重試，宿主內的修改仍保留。</string>
+    <string name="host_settings_sync_retry">重試同步</string>
+</resources>

@@ -138,6 +138,8 @@ class TokiModule : XposedModule() {
         plan = HostFeaturePlan(ConfigClient.requestedSnapshotOrNull())
         plan.platformFeatures.forEach { if (it !in installed) install(it) }
         if (processName == app.packageName) {
+            io.github.meiyongai.toki.subtitle.provider.HostSettingsMirror.attach(app)
+            HookRuntime.onDispose("HostSession") { io.github.meiyongai.toki.subtitle.provider.HostSettingsMirror.detach() }
             val resources = ModuleResources(moduleApplicationInfo, checkNotNull(TokiModule::class.java.classLoader))
             HostSettingsEntry.attach(app, this, resources)
             HostScanController.attach(app, ModuleResources(moduleApplicationInfo,
@@ -192,6 +194,12 @@ class TokiModule : XposedModule() {
         if (feature == "ImmersiveFullScreenHook" && feature in installed && ImmersiveLayoutPreparation.supported) {
             plan.permitImmersiveLive()
             check(plan.admitLive(feature))
+            ConfigClient.refreshHostSession()
+            if (!ImmersiveLiveRuntime.admit()) {
+                plan.reject(feature)
+                ConfigClient.refreshHostSession()
+                HookRuntime.state(feature, "注册资格已失效，未启用")
+            }
         }
         if (feature !in installed) {
             plan.reject(feature)
@@ -294,13 +302,15 @@ class TokiModule : XposedModule() {
             val loader = param.classLoader
             plan.directHostFeatures.forEach { if (it !in installed) install(it, loader) }
         }
-        if (!plan.requiresScan) {
+        val info = param.applicationInfo
+        val manualRequest = processName == param.packageName && HostSymbols.pendingManualRequest(info)
+        if (!plan.requiresScan && !manualRequest) {
             if (ConfigClient.isReady) updateConfigurationStatus(ConfigClient.snapshot())
             return
         }
-        val info = param.applicationInfo
+        val required = if (manualRequest) HostSymbol.entries.toSet() else plan.symbols
         val loader = param.classLoader
-        if (HostSymbols.initialize(info, processName == param.packageName, plan.symbols,
+        if (HostSymbols.initialize(info, processName == param.packageName, required,
                 onCorePrepared = { installAdapted(loader, extensions = false) }) {
                 installAdapted(loader)
             }) installAdapted(loader)

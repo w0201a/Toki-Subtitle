@@ -27,6 +27,18 @@ class HookRuntimeOwnershipTest {
         if (method.name == "unhook") { unhook(); null } else throw AssertionError(method.name)
     } as XposedInterface.HookHandle
 
+    @Test fun transactionReceiptIsFalseDuringNestedInstallationAndTrueOnlyAfterTheWholeBodyReturns() {
+        val name = "commit-receipt-nested"
+        HookRuntime.install(name) {
+            assertFalse(HookRuntime.scope(name).committed)
+            HookRuntime.install(name) { assertFalse(HookRuntime.scope(name).committed) }
+            assertFalse(HookRuntime.scope(name).committed)
+        }
+        assertTrue(HookRuntime.scope(name).committed)
+        HookRuntime.disableAfterCallbackFailure(name, IllegalStateException("retired"))
+        assertFalse(HookRuntime.scope(name).committed)
+    }
+
     @Test fun failedInstallReleasesHooksSubscriptionsAndStateInReverseOrder() {
         val released = mutableListOf<String>()
         HookRuntime.install("ownership-test") {
@@ -59,7 +71,8 @@ class HookRuntimeOwnershipTest {
         val observer = "display-observer-test"
         val language = "independent-language-test"
         var released = false
-        HookRuntime.install(language) { HookRuntime.registered(language, handle { fail("language must remain installed") }) }
+        var languageReleased = false
+        HookRuntime.install(language) { HookRuntime.registered(language, handle { languageReleased = true }) }
         HookRuntime.install(parent) {
             HookRuntime.dependent(parent, observer)
             HookRuntime.install(observer) { HookRuntime.registered(observer, handle { released = true }) }
@@ -68,6 +81,7 @@ class HookRuntimeOwnershipTest {
         assertTrue(released)
         assertFalse(HookRuntime.scope(observer).active)
         assertTrue(HookRuntime.scope(language).active)
+        assertFalse(languageReleased)
     }
 
     @Test fun cleanupFailureIsAttachedAndDoesNotPreventOtherResourcesFromClosing() {

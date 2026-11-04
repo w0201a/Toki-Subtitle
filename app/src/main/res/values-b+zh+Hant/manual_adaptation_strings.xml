@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="manual_adaptation_title">手動選擇適配</string>
+    <string name="manual_adaptation_summary">選擇已安裝宿主，重新檢索手機內的實際適配。</string>
+    <string name="manual_adaptation_hint">選擇實際安裝的應用程式。適配會讀取該宿主的真實程式碼，不強套其他版本，也不清除應用程式資料。</string>
+    <string name="manual_adaptation_global">TikTok 國際版</string>
+    <string name="manual_adaptation_trill">TikTok（Trill）</string>
+    <string name="manual_adaptation_host_info">%1$s · v%2$s</string>
+    <string name="manual_adaptation_not_installed">%1$s · 目前 Android 使用者未安裝</string>
+    <string name="manual_adaptation_loading">正在讀取已安裝宿主…</string>
+    <string name="manual_adaptation_load_error">讀取宿主失敗，請關閉視窗後重試。</string>
+    <string name="manual_adaptation_none">沒有可選擇的宿主，請確認 TikTok 安裝於目前的 Android 使用者中。</string>
+    <string name="manual_adaptation_confirm">重新適配</string>
+    <string name="manual_adaptation_app_info">應用程式資訊</string>
+    <string name="manual_adaptation_open">開啟所選宿主</string>
+    <string name="manual_adaptation_saved">請求已儲存：%1$s。請在系統「應用程式資訊」中強制停止該宿主（不要清除資料），再重新開啟。僅返回桌面或移除最近工作，可能不會重新載入模組。</string>
+    <string name="manual_adaptation_save_error">尚未確認請求送達。LSPosed 請檢查設定同步；注入版請進入 TikTok 內的 Toki 設定，點擊「手動選擇適配」。沒有設定服務時，僅儲存在獨立 Toki 中不會觸發宿主重新掃描。</string>
+    <string name="manual_adaptation_open_error">無法開啟該頁面，請從系統應用程式清單手動進入。</string>
+    <string name="manual_adaptation_scope_note">儲存請求不等於掃描完成。宿主下次完整啟動時會略過舊快取與內建適配，完整檢索已知基礎及擴充規則；未匹配項仍會明確顯示無法使用。</string>
+    <string name="manual_adaptation_registration_note">重新適配不會自動修復原生類別或方法簽章變更。若功能仍無效，請再匯出一份新的模組記錄。</string>
+</resources>

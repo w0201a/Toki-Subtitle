@@ -10,6 +10,13 @@ import org.robolectric.annotation.Config
 @RunWith(RobolectricTestRunner::class)
 @Config(manifest = Config.NONE, sdk = [35])
 class DiagnosticOverviewTest {
+    @Test fun positiveHookCountsAndAnOldAppliedReceiptCannotHideAnUncommittedRegistration() {
+        val row = registered().apply { putBoolean("registrationCommitted", false) }
+        assertTrue(DiagnosticOverview.featureState(row).contains("注册事务尚未完成"))
+        row.putBoolean("registrationCommitted", true)
+        assertTrue(DiagnosticOverview.featureState(row).contains("实际业务结果另看操作摘要"))
+    }
+
     @Test fun environmentRevisionWaitingCannotBeMistakenForSuccessfulCurrentApplication() {
         val row = registered().apply { putString("state", "环境配置待应用"); putBoolean("appliedEnabled", true) }
         assertEquals("准备中／等待条件", DiagnosticOverview.featureState(row))

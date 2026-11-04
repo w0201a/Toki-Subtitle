@@ -297,8 +297,12 @@ private fun LSPosedStatusCard(lsposedStatus: LSPosedStatus) {
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun HostStatusSection(tikTokStatus: TikTokInstallStatus) {
+internal fun HostStatusSection(
+    tikTokStatus: TikTokInstallStatus,
+    adaptationDialog: @Composable (String?, () -> Unit) -> Unit = { host, dismiss -> ManualHostAdaptationDialog(host, onDismiss = dismiss) },
+) {
     val strings = LocalContext.current.resources
+    var manualAdaptation by remember { mutableStateOf(false) }
     PreferenceSection(title = strings.getString(R.string.home_host_section)) {
         // 第一项：宿主应用安装与版本
         PreferenceItem(
@@ -308,7 +312,7 @@ private fun HostStatusSection(tikTokStatus: TikTokInstallStatus) {
             } else {
                 strings.getString(R.string.home_host_missing)
             },
-            shape = getGroupedShape(0, 1),
+            shape = getGroupedShape(0, 2),
             icon = if (tikTokStatus.isInstalled) Icons.Outlined.CheckCircle else Icons.Outlined.ErrorOutline,
             iconTint = if (tikTokStatus.isInstalled) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error,
             trailingContent = {
@@ -326,9 +330,14 @@ private fun HostStatusSection(tikTokStatus: TikTokInstallStatus) {
                 }
             }
         )
-
-
+        PreferenceItem(
+            title = strings.getString(R.string.manual_adaptation_title),
+            summary = strings.getString(R.string.manual_adaptation_summary),
+            shape = getGroupedShape(1, 2), icon = Icons.Outlined.Code,
+            onClick = { manualAdaptation = true }
+        )
     }
+    if (manualAdaptation) adaptationDialog(tikTokStatus.packageName) { manualAdaptation = false }
 }
 
 /**

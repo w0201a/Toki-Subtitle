@@ -56,26 +56,18 @@ object TikTokVersionHelper {
      * - `io.github.meiyongai.toki.subtitle.ui.screen.HomeScreen`: 首页顶部 TikTok 状态卡片展示。
      */
     fun getInstalledTikTokStatus(context: Context): TikTokInstallStatus {
-        val packageManager = context.packageManager
-        for (pkg in CANDIDATE_PACKAGES) {
-            try {
-                val packageInfo = packageManager.getPackageInfo(pkg, 0)
-                val versionCode = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                    packageInfo.longVersionCode
-                } else {
-                    @Suppress("DEPRECATION")
-                    packageInfo.versionCode.toLong()
-                }
-                return TikTokInstallStatus(
-                    isInstalled = true,
-                    packageName = pkg,
-                    versionName = packageInfo.versionName,
-                    versionCode = versionCode
-                )
-            } catch (_: PackageManager.NameNotFoundException) {
-                // 当前候选包名未在此设备安装，继续探测下一个候选包名
+        return getInstalledTikTokStatuses(context).firstOrNull { it.isInstalled } ?: TikTokInstallStatus(isInstalled = false)
+    }
+
+    /** Both whitelisted hosts remain individually selectable; never launch or scan an arbitrary package. */
+    fun getInstalledTikTokStatuses(context: Context): List<TikTokInstallStatus> = CANDIDATE_PACKAGES.map { pkg ->
+        try {
+            val info = context.packageManager.getPackageInfo(pkg, 0)
+            val code = if (android.os.Build.VERSION.SDK_INT >= 28) info.longVersionCode else {
+                @Suppress("DEPRECATION")
+                info.versionCode.toLong()
             }
-        }
-        return TikTokInstallStatus(isInstalled = false)
+            TikTokInstallStatus(true, pkg, info.versionName, code)
+        } catch (_: PackageManager.NameNotFoundException) { TikTokInstallStatus(false, pkg) }
     }
 }

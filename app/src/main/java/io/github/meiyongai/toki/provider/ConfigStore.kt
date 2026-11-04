@@ -21,6 +21,15 @@ internal class ConfigStore(
     private var remote: SharedPreferences? = null
     private var host = false
 
+    /** Confirm a persisted request is readable by its host, not merely saved in the manager app. */
+    @Synchronized fun deliveryConfirmed(changes: Map<String, Any>): Boolean {
+        if (!isReady || syncError != null || changes.isEmpty()) return false
+        val target = (if (host) local else remote) ?: return false
+        val saved = target.all
+        return (host || saved[PROTOCOL] == 1) && saved[REVISION] == current?.revision &&
+            changes.all { (key, value) -> saved[key] == value }
+    }
+
     companion object {
         const val GROUP = "toki_configuration"
         const val LOCAL_NAME = "toki_config"
@@ -187,60 +196,95 @@ internal class ConfigStore(
      * @return 完成保存的配置版本；本地保存失败不发布成功状态。
      * Callers: ConfigClient 的写入接口、ConfigStoreTest。
      */
-    @Synchronized fun update(changes: Map<String, Any?>, replace: Boolean = false): Long {
+    @Synchronized fun update(changes: Map<String, Any?>, replace: Boolean = false, receipt: HostSettingsPatch? = null): Long {
         val preferences = checkNotNull(local) { "宿主配置只读" }
-        val values = if (replace) mutableMapOf<String, Any>() else snapshot().configuration().toMutableMap()
-        changes.forEach { (key, value) ->
-            require(key in ConfigSchema.keys) { "不支持的配置项：$key" }
-            if (value == null) values.remove(key) else values[key] = value
-        }
-        val checked = ConfigArchive.validate(values)
-        val revision = Math.addExact(snapshot().revision, 1L)
-        val importRevision = if (replace) revision else snapshot().importRevision
-        val editor = preferences.edit()
-        if (host) {
-            val base = managerValues()
-            val clocks = ConfigConflictClock.revisions(base[ConfigConflictClock.KEY_REVISIONS], base[REVISION] as? Long ?: 0L)
-            val baselines = ConfigConflictClock.baselines(preferences.all[ConfigConflictClock.HOST_BASELINES]).toMutableMap()
-            val suppressed = preferences.getStringSet(ConfigConflictClock.HOST_SUPPRESSED, emptySet())!!.toMutableSet()
-            (if (replace) ConfigSchema.keys else changes.keys).forEach { key ->
-                baselines[key] = ConfigConflictClock.fingerprint(base, key, clocks)
-                suppressed.remove(key)
+        return synchronized(preferences) {
+            val values = if (replace) mutableMapOf<String, Any>() else snapshot().configuration().toMutableMap()
+            changes.forEach { (key, value) ->
+                require(key in ConfigSchema.keys) { "不支持的配置项：$key" }
+                if (value == null) values.remove(key) else values[key] = value
             }
-            editor.putString(ConfigConflictClock.HOST_BASELINES, ConfigConflictClock.encode(baselines))
-                .putStringSet(ConfigConflictClock.HOST_SUPPRESSED, suppressed)
-            val removed = (preferences.getStringSet("__host_removed", emptySet()) ?: emptySet()).toMutableSet()
-            if (replace) {
-                editor.putBoolean("__host_replace", true)
-                ConfigSchema.keys.forEach { key -> if (key !in checked) { editor.remove(key); removed.add(key) } }
-            }
-            (if (replace) checked else changes).forEach { (key, value) ->
-                when (value) {
-                    null -> { editor.remove(key); removed.add(key) }
-                    is Boolean -> { editor.putBoolean(key, value); removed.remove(key) }
-                    is String -> { editor.putString(key, value); removed.remove(key) }
+            val checked = ConfigArchive.validate(values)
+            val revision = Math.addExact(snapshot().revision, 1L)
+            val importRevision = if (replace) revision else snapshot().importRevision
+            val editor = preferences.edit()
+            if (host) {
+                val base = managerValues()
+                val clocks = ConfigConflictClock.revisions(base[ConfigConflictClock.KEY_REVISIONS], base[REVISION] as? Long ?: 0L)
+                val baselines = ConfigConflictClock.baselines(preferences.all[ConfigConflictClock.HOST_BASELINES]).toMutableMap()
+                val suppressed = preferences.getStringSet(ConfigConflictClock.HOST_SUPPRESSED, emptySet())!!.toMutableSet()
+                (if (replace) ConfigSchema.keys else changes.keys).forEach { key ->
+                    baselines[key] = ConfigConflictClock.fingerprint(base, key, clocks)
+                    suppressed.remove(key)
                 }
+                editor.putString(ConfigConflictClock.HOST_BASELINES, ConfigConflictClock.encode(baselines))
+                    .putStringSet(ConfigConflictClock.HOST_SUPPRESSED, suppressed)
+                val removed = (preferences.getStringSet("__host_removed", emptySet()) ?: emptySet()).toMutableSet()
+                if (replace) {
+                    editor.putBoolean("__host_replace", true)
+                    ConfigSchema.keys.forEach { key -> if (key !in checked) { editor.remove(key); removed.add(key) } }
+                }
+                (if (replace) checked else changes).forEach { (key, value) ->
+                    when (value) {
+                        null -> { editor.remove(key); removed.add(key) }
+                        is Boolean -> { editor.putBoolean(key, value); removed.remove(key) }
+                        is String -> { editor.putString(key, value); removed.remove(key) }
+                    }
+                }
+                editor.putStringSet("__host_removed", removed).putLong(REVISION, revision).putLong(IMPORT_REVISION, importRevision)
+                val mirrorKeys = preferences.getStringSet(HostSettingsWire.PENDING, emptySet()).orEmpty() +
+                    (if (replace) ConfigSchema.keys else changes.keys)
+                val mirrorReplace = replace || preferences.getBoolean(HostSettingsWire.REPLACE, false)
+                val mirrorValues = if (mirrorReplace) checked else mirrorKeys.associateWith { checked[it] }
+                // Validate the exact eventual envelope before committing any part of the host edit.
+                HostSettingsWire.bounded(org.json.JSONObject().apply {
+                    put("protocol", 1); put("host", ManualHostAdaptation.packages[0]); put("id", "0".repeat(128)); put("replace", mirrorReplace)
+                    put("values", org.json.JSONObject(HostSettingsWire.valuesJson(mirrorValues)))
+                }.toString())
+                editor.putStringSet(HostSettingsWire.PENDING, mirrorKeys).putString(HostSettingsWire.REQUEST, java.util.UUID.randomUUID().toString())
+                    .putBoolean(HostSettingsWire.REPLACE, mirrorReplace).putString(HostSettingsWire.PAYLOAD, HostSettingsWire.valuesJson(mirrorValues))
+            } else {
+                val clocks = ConfigConflictClock.revisions(preferences.all[ConfigConflictClock.KEY_REVISIONS], snapshot().revision).toMutableMap()
+                (if (replace) ConfigSchema.keys else changes.keys).forEach { clocks[it] = revision }
+                editor.clear()
+                putConfiguration(editor, checked, revision, importRevision)
+                editor.putString(ConfigConflictClock.KEY_REVISIONS, ConfigConflictClock.encode(clocks))
+                val receipts = preferences.getString(HostSettingsWire.RECEIPTS, null)
+                if (receipt != null) editor.putString(HostSettingsWire.RECEIPTS, HostSettingsWire.remember(receipts, receipt, revision))
+                else if (receipts != null) editor.putString(HostSettingsWire.RECEIPTS, receipts)
             }
-            editor.putStringSet("__host_removed", removed).putLong(REVISION, revision).putLong(IMPORT_REVISION, importRevision)
-        } else {
-            val clocks = ConfigConflictClock.revisions(preferences.all[ConfigConflictClock.KEY_REVISIONS], snapshot().revision).toMutableMap()
-            (if (replace) ConfigSchema.keys else changes.keys).forEach { clocks[it] = revision }
-            editor.clear()
-            putConfiguration(editor, checked, revision, importRevision)
-            editor.putString(ConfigConflictClock.KEY_REVISIONS, ConfigConflictClock.encode(clocks))
-        }
-        check(editor.commit()) { "配置保存失败，版本 $revision 未确认" }
-        if (accept(if (host) hostValues() else preferences.all, requireProtocol = false)) changed()
-        if (!host && remote != null) {
-            try {
-                publish()
-            } catch (error: Exception) {
-                publicationFailed(error)
-                return revision
+            check(editor.commit()) { "配置保存失败，版本 $revision 未确认" }
+            if (accept(if (host) hostValues() else preferences.all, requireProtocol = false)) changed()
+            if (!host && remote != null) {
+                try {
+                    publish()
+                } catch (error: Exception) {
+                    publicationFailed(error)
+                    return revision
+                }
+                changed()
             }
-            changed()
+            revision
         }
-        return revision
+    }
+
+    /** Manager receipt and configuration share one commit; an ACK-lost retry never reapplies old values. */
+    @Synchronized fun applyHostPatch(patch: HostSettingsPatch): Long {
+        check(!host)
+        HostSettingsWire.validate(patch)
+        val preferences = checkNotNull(local)
+        HostSettingsWire.receipt(preferences.getString(HostSettingsWire.RECEIPTS, null), patch)?.let { return it }
+        val changes = patch.values.toMutableMap()
+        // A host can request its own rescan, never overwrite another installed host’s pending nonce.
+        if (ManualHostAdaptation.KEY in changes || patch.replace) {
+            val before = snapshot().string(ManualHostAdaptation.KEY)
+            val incoming = changes[ManualHostAdaptation.KEY] as? String
+            val merged = if (ManualHostAdaptation.requested(incoming, patch.host))
+                ManualHostAdaptation.values(before, patch.host, ManualHostAdaptation.token(incoming, patch.host, ""))
+                    .getValue(ManualHostAdaptation.KEY) else before
+            if (merged == null) changes.remove(ManualHostAdaptation.KEY) else changes[ManualHostAdaptation.KEY] = merged
+        }
+        return update(changes, patch.replace, patch)
     }
 
     /**

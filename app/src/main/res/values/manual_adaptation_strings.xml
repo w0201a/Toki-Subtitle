@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="manual_adaptation_title">Select host adaptation manually</string>
+    <string name="manual_adaptation_summary">Choose an installed host and request a fresh on-device compatibility scan.</string>
+    <string name="manual_adaptation_hint">Select the actual installed app. Adaptation reads its code; it never forces a profile from another version or clears app data.</string>
+    <string name="manual_adaptation_global">TikTok International</string>
+    <string name="manual_adaptation_trill">TikTok (Trill)</string>
+    <string name="manual_adaptation_host_info">%1$s · v%2$s</string>
+    <string name="manual_adaptation_not_installed">%1$s · Not installed for this Android user</string>
+    <string name="manual_adaptation_loading">Reading installed hosts…</string>
+    <string name="manual_adaptation_load_error">Could not read the installed hosts. Close this dialog and retry.</string>
+    <string name="manual_adaptation_none">No selectable host found. Install TikTok for the current Android user first.</string>
+    <string name="manual_adaptation_confirm">Request adaptation again</string>
+    <string name="manual_adaptation_app_info">App info</string>
+    <string name="manual_adaptation_open">Open selected host</string>
+    <string name="manual_adaptation_saved">Request saved for %1$s. In system App info, Force stop this host (do not clear its data), then open it again. Returning Home or swiping away Recents may not reload the module.</string>
+    <string name="manual_adaptation_save_error">Request delivery was not confirmed. With LSPosed, check configuration sync. For an injected build, use Select host adaptation manually inside TikTok’s Toki settings; saving only in the standalone app cannot reach an injector without a configuration service.</string>
+    <string name="manual_adaptation_open_error">Could not open this screen. Use the system app list instead.</string>
+    <string name="manual_adaptation_scope_note">Saving is not scan completion. The next full host startup bypasses old and bundled mappings and checks all known core and extension rules. Unmatched items remain visibly unsupported.</string>
+    <string name="manual_adaptation_registration_note">A rescan does not automatically fix changed native class or method contracts. Export a new module log if features still fail.</string>
+</resources>

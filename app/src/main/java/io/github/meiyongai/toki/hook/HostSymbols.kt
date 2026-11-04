@@ -87,16 +87,20 @@ internal object HostSymbols {
         val rulesIdentity = HostDexIndex.digest(rules)
         val key = HostDexIndex.digest("$INDEX_FORMAT\n$identity\n" + rulesIdentity)
         val cache = storageFile(java.io.File(info.dataDir))
-        val retryToken = if (io.github.meiyongai.toki.subtitle.provider.ConfigClient.isReady)
-            io.github.meiyongai.toki.subtitle.provider.ConfigClient.getString("adaptation_retry_token", "").orEmpty() else ""
         val previous = HostSymbolCache.read(cache)
-        val retryRequested = previous.getProperty("cache.retryToken", "") != retryToken
+        val oldRetryToken = previous.getProperty("cache.retryToken", "")
+        val request = io.github.meiyongai.toki.subtitle.provider.ConfigClient.effectiveSnapshotOrNull()
+            ?.string(io.github.meiyongai.toki.subtitle.provider.ManualHostAdaptation.KEY)
+        val retryToken = io.github.meiyongai.toki.subtitle.provider.ManualHostAdaptation.token(request, info.packageName.orEmpty(), oldRetryToken)
+        val retryRequested = io.github.meiyongai.toki.subtitle.provider.ManualHostAdaptation.pending(request, info.packageName.orEmpty(), oldRetryToken)
+        val effectiveRequired = if (retryRequested) HostSymbol.entries.toSet() else required
+        if (retryRequested) HookRuntime.event("TokiHostSymbols", "手动重新适配：选定宿主请求已命中；跳过旧缓存与内置适配，完整检索${effectiveRequired.size}项基础依赖及扩展")
         val local = if (retryRequested) java.util.Properties() else previous
-        val bundled = if (retryRequested || HostScanPlan(local, rules, identity, INDEX_FORMAT, required).pending.isEmpty()) null
+        val bundled = if (retryRequested || HostScanPlan(local, rules, identity, INDEX_FORMAT, effectiveRequired).pending.isEmpty()) null
             else HostBundledProfiles.load(identity, rules)
         val stored = bundled ?: local
-        val plan = HostScanPlan(stored, rules, identity, INDEX_FORMAT, required)
-        val needsExtensions = required.any { it in setOf(HostSymbol.CAPTION_CONSUMER, HostSymbol.COMMENT_TRANSLATION) }
+        val plan = HostScanPlan(stored, rules, identity, INDEX_FORMAT, effectiveRequired)
+        val needsExtensions = effectiveRequired.any { it in setOf(HostSymbol.CAPTION_CONSUMER, HostSymbol.COMMENT_TRANSLATION) }
         val extensionsReady = !needsExtensions || ExtensionSymbols.load(identity, checkNotNull(cache.parentFile), retryToken)
         if (plan.pending.isEmpty() && extensionsReady) {
             if (bundled != null && scanAllowed) HostSymbolCache.write(cache, bundled)
@@ -159,7 +163,7 @@ internal object HostSymbols {
                     android.os.Handler(android.os.Looper.getMainLooper()).post {
                         try {
                             HostScanController.session.ready(onPrepared)
-                            if (HookRuntime.hasInstallationFailures()) HostScanController.session.partial()
+                            if (failures.isNotEmpty() || HookRuntime.hasInstallationFailures()) HostScanController.session.partial()
                             HookRuntime.installationOutcome("自动适配结果已应用到当前进程\n代码标识：$identity\n未匹配目标：${failures.joinToString().ifEmpty { "无" }}")
                         } catch (error: Exception) {
                             HookRuntime.failure("HostSymbols", error, "适配结果已保存，功能安装失败")
@@ -213,6 +217,16 @@ internal object HostSymbols {
         val present = selected.mapTo(hashSetOf()) { it.substringBefore('\t') }
         check(present.containsAll(names)) { "模块缺少依赖的特征规则：${names - present}" }
         return selected.joinToString("\n", postfix = "\n")
+    }
+
+    /** Explicit retry can run even when every optional feature is currently disabled. */
+    internal fun pendingManualRequest(info: android.content.pm.ApplicationInfo): Boolean {
+        val request = io.github.meiyongai.toki.subtitle.provider.ConfigClient.effectiveSnapshotOrNull()
+            ?.string(io.github.meiyongai.toki.subtitle.provider.ManualHostAdaptation.KEY)
+        val host = info.packageName.orEmpty()
+        if (!io.github.meiyongai.toki.subtitle.provider.ManualHostAdaptation.requested(request, host)) return false
+        val previous = HostSymbolCache.read(storageFile(java.io.File(info.dataDir))).getProperty("cache.retryToken", "")
+        return io.github.meiyongai.toki.subtitle.provider.ManualHostAdaptation.pending(request, host, previous)
     }
 
     /**

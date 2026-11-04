@@ -319,6 +319,16 @@ class ConfigStoreTest {
         restarted.attachHostOverrides(local)
         assertTrue(restarted.snapshot().boolean("video_translate_enabled"))
         assertEquals(1L,restarted.snapshot().revision)
+        val request = ManualHostAdaptation.values(null, ManualHostAdaptation.packages[0], "rootless-retry")
+        restarted.update(request)
+        assertTrue(restarted.deliveryConfirmed(request))
+        val secondRestart = ConfigStore({}, {})
+        assertFalse(secondRestart.attachHost({ throw UnsupportedOperationException("no manager service") }, {}))
+        secondRestart.attachHostOverrides(local)
+        assertTrue(ManualHostAdaptation.pending(secondRestart.snapshot().string(ManualHostAdaptation.KEY),
+            ManualHostAdaptation.packages[0], ""))
+        assertFalse(ManualHostAdaptation.pending(secondRestart.snapshot().string(ManualHostAdaptation.KEY),
+            ManualHostAdaptation.packages[1], ""))
     }
 
     private fun managerAndHost(): Triple<ConfigStore, ConfigStore, SharedPreferences> {
@@ -402,4 +412,53 @@ class ConfigStoreTest {
         assertEquals(host.snapshot().configuration(), roundTrip)
     }
 
+    @Test fun manualRequestSavedOnlyInStandaloneStorageIsNotDelivered() {
+        val store = ConfigStore({}, {})
+        store.attachLocal(preferences())
+        val request = ManualHostAdaptation.values(null, ManualHostAdaptation.packages[0], "manual")
+        store.update(request)
+        assertEquals(request[ManualHostAdaptation.KEY], store.snapshot().string(ManualHostAdaptation.KEY))
+        assertFalse(store.deliveryConfirmed(request))
+        assertNull(store.syncError)
+    }
+
+    @Test fun manualRequestNeedsMatchingPublishedValueAndRevision() {
+        val store = ConfigStore({}, { throw AssertionError(it) })
+        store.attachLocal(preferences())
+        val remote = preferences()
+        store.connect { remote }
+        val request = ManualHostAdaptation.values(null, ManualHostAdaptation.packages[0], "manual")
+        store.update(request)
+        assertTrue(store.deliveryConfirmed(request))
+        assertFalse(store.deliveryConfirmed(ManualHostAdaptation.values(null, ManualHostAdaptation.packages[0], "stale")))
+        remote.edit().putLong(ConfigStore.REVISION, store.snapshot().revision + 1).commit()
+        assertFalse(store.deliveryConfirmed(request))
+    }
+
+    @Test fun injectedHostRequestIsDeliveredToItsOwnPersistentOverrides() {
+        val store = ConfigStore({}, { throw AssertionError(it) })
+        val remote = published()
+        assertTrue(store.attachHost({ remote }, {}))
+        val privateSettings = preferences()
+        store.attachHostOverrides(privateSettings)
+        val request = ManualHostAdaptation.values(null, ManualHostAdaptation.packages[1], "manual")
+        store.update(request)
+        assertTrue(store.deliveryConfirmed(request))
+        assertEquals(request[ManualHostAdaptation.KEY], privateSettings.getString(ManualHostAdaptation.KEY, null))
+        assertFalse(remote.contains(ManualHostAdaptation.KEY))
+        val restarted = ConfigStore({}, { throw AssertionError(it) })
+        assertTrue(restarted.attachHost({ remote }, {})); restarted.attachHostOverrides(privateSettings)
+        assertTrue(ManualHostAdaptation.pending(restarted.snapshot().string(ManualHostAdaptation.KEY),
+            ManualHostAdaptation.packages[1], ""))
+    }
+
+    @Test fun disconnectedFrameworkCannotConfirmDeliveryFromAStaleSnapshot() {
+        val store = ConfigStore({}, {})
+        store.attachLocal(preferences()); store.connect { preferences() }
+        val request = ManualHostAdaptation.values(null, ManualHostAdaptation.packages[0], "manual")
+        store.update(request); assertTrue(store.deliveryConfirmed(request))
+        store.disconnect()
+        assertFalse(store.deliveryConfirmed(request))
+        assertFalse(store.deliveryConfirmed(emptyMap()))
+    }
 }

@@ -7,6 +7,13 @@ import org.junit.Test
 
 /** 验证简明功能列表的状态语义与自动会话选择，不依赖宿主和设备。 */
 class HookStatusModelTest {
+    @Test fun incompleteRegistrationIsPendingEvenWithPositiveCountsAndAppliedEnabled() {
+        val definition = HookStatusCatalog.features.single { it.id == "ImmersiveFullScreenHook" }
+        val report = HookFeatureReport(true, "已注册", 12, appliedEnabled = true, registrationCommitted = false)
+        assertEquals(HookVisualState.PENDING, HookFeatureStatus(definition, report).state)
+        assertEquals(HookVisualState.NORMAL, HookFeatureStatus(definition, report.copy(registrationCommitted = true)).state)
+    }
+
     @Test fun pendingEnvironmentPayloadIsNotGreenMerelyBecauseTheHooksAreRegistered() {
         val definition = HookStatusCatalog.features.single { it.id == "SimHook" }
         assertEquals(HookVisualState.PENDING, HookFeatureStatus(definition,

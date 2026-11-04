@@ -31,6 +31,7 @@ class TokiStartupTest {
     private val hooks = mutableListOf<Pair<Executable, XposedInterface.Hooker>>()
 
     @Before @After fun resetHostProcess() {
+        io.github.meiyongai.toki.subtitle.provider.HostSettingsMirror.detach()
         shadowOf(Looper.getMainLooper()).idle()
         fun field(type: Class<*>, name: String) = type.getDeclaredField(name).apply { isAccessible = true }
         @Suppress("UNCHECKED_CAST")

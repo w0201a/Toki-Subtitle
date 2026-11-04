@@ -19,6 +19,7 @@ internal class ImmersiveWindowBindings(private val report: (Exception) -> Unit =
     private class Row(activity: Activity, val baseline: EnumMap<Property, Any>) {
         val activity = WeakReference(activity)
         val owned = mutableSetOf<Property>()
+        var prepared = false
     }
     private class Background(view: View, var baseline: Drawable?) {
         val view = WeakReference(view)
@@ -46,7 +47,11 @@ internal class ImmersiveWindowBindings(private val report: (Exception) -> Unit =
             try {
                 // Capture every supported baseline before the first write; never guess decor-fits=true.
                 val baseline = EnumMap<Property, Any>(Property::class.java)
-                properties().forEach { baseline[it] = read(window, it) }
+                properties().forEach { property ->
+                    try { baseline[property] = read(window, property) }
+                    catch (error: Exception) { throw ImmersiveFailure.wrap(ImmersiveFailure.Phase.CAPTURE,
+                        ImmersiveFailure.Field.valueOf(property.name), error) }
+                }
                 windows[window] = Row(activity, baseline)
             } catch (error: Exception) { failed(error); return }
         }
@@ -56,7 +61,7 @@ internal class ImmersiveWindowBindings(private val report: (Exception) -> Unit =
         if (closed) return
         var row = backgrounds[view]
         if (row == null) {
-            if (backgrounds.size >= 24) { failed(IllegalStateException("Background observation capacity reached")); return }
+            if (backgrounds.size >= 24) { failed(IllegalStateException("Background observation capacity reached"), field = ImmersiveFailure.Field.BACKGROUND); return }
             row = Background(view, view.background)
             backgrounds[view] = row
             row.listener = object : View.OnAttachStateChangeListener {
@@ -143,27 +148,42 @@ internal class ImmersiveWindowBindings(private val report: (Exception) -> Unit =
     }
     private fun apply(window: Window, row: Row) {
         val beforeWrites = writes; val beforeRestored = restored
+        val captured = EnumMap<Property, Any>(Property::class.java)
+        if (enabled) {
+            // Read all fields before any write: a decor-fits setter may also change legacy layout flags.
+            for (property in row.baseline.keys.toList()) try { captured[property] = read(window, property) }
+            catch (error: Exception) { failed(error, ImmersiveFailure.Phase.CAPTURE, ImmersiveFailure.Field.valueOf(property.name)) }
+            for ((property, current) in captured) {
+                val before = row.baseline.getValue(property)
+                if (!row.prepared || current != imposed(property, before)) {
+                    row.baseline[property] = if (property == Property.FLAGS && row.prepared &&
+                        ((current as Int) and LAYOUT_MASK) == LAYOUT_MASK)
+                        (current and LAYOUT_MASK.inv()) or ((before as Int) and LAYOUT_MASK) else current
+                }
+            }
+            row.prepared = true
+        }
         for (property in row.baseline.keys.toList()) try {
+            if (enabled && property !in captured) continue
             val current = read(window, property)
             val baseline = row.baseline.getValue(property)
             val target = imposed(property, baseline)
             if (enabled) {
-                // Catch non-setter native updates too. A module projection is never the new baseline.
-                if (property in row.owned && current != target) row.baseline[property] = current
-                else if (property !in row.owned) row.baseline[property] = current
-                val desired = imposed(property, row.baseline.getValue(property))
+                val desired = if (property == Property.FLAGS) ((current as Int) and LAYOUT_MASK.inv()) or LAYOUT_MASK else target
                 if (current != desired) { write(window, property, desired); writes++ }
                 row.owned += property
             } else if (property in row.owned) {
-                val original = row.baseline.getValue(property)
                 val restoredValue = if (property == Property.FLAGS)
-                    ((current as Int) and LAYOUT_MASK.inv()) or ((original as Int) and LAYOUT_MASK)
-                else if (current == target) original else current
+                    ((current as Int) and LAYOUT_MASK.inv()) or ((baseline as Int) and LAYOUT_MASK)
+                else if (current == target) baseline else current
                 if (current != restoredValue) { write(window, property, restoredValue); restored++ }
                 row.owned -= property
             }
-        } catch (error: Exception) { failed(error) }
-        if (writes > beforeWrites || restored > beforeRestored) window.decorView.requestApplyInsets()
+        } catch (error: Exception) { failed(error, if (enabled) ImmersiveFailure.Phase.APPLY else ImmersiveFailure.Phase.RESTORE,
+            ImmersiveFailure.Field.valueOf(property.name)) }
+        if (!enabled && row.owned.isEmpty()) row.prepared = false
+        if (writes > beforeWrites || restored > beforeRestored) try { window.decorView.requestApplyInsets() }
+        catch (error: Exception) { failed(error, ImmersiveFailure.Phase.WINDOW_REFRESH) }
     }
     private fun applyBackground(view: View, row: Background) {
         try {
@@ -177,10 +197,14 @@ internal class ImmersiveWindowBindings(private val report: (Exception) -> Unit =
                 }
                 row.owned = false
             }
-        } catch (error: Exception) { failed(error) }
+        } catch (error: Exception) { failed(error, if (enabled) ImmersiveFailure.Phase.BACKGROUND_APPLY else ImmersiveFailure.Phase.BACKGROUND_RESTORE,
+            ImmersiveFailure.Field.BACKGROUND) }
     }
     private inline fun changing(block: () -> Unit) { writing++; try { block() } finally { writing-- } }
-    private fun failed(error: Exception) { failures++; report(error) }
+    private fun failed(error: Exception, phase: ImmersiveFailure.Phase = ImmersiveFailure.Phase.CAPTURE,
+        field: ImmersiveFailure.Field = ImmersiveFailure.Field.WINDOW) {
+        failures++; report(ImmersiveFailure.wrap(phase, field, error))
+    }
     fun release(activity: Activity) { windows.remove(activity.window)?.let { row ->
         val before = enabled; enabled = false
         try { apply(activity.window, row) } finally { enabled = before }

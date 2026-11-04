@@ -1,5 +1,19 @@
 package io.github.meiyongai.toki.subtitle.ui.component
 
+import androidx.compose.ui.test.isRoot
+import androidx.compose.ui.test.printToString
+import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotEnabled
+import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertIsNotSelected
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.performScrollTo
+import io.github.meiyongai.toki.subtitle.ui.screen.HostStatusSection
+import io.github.meiyongai.toki.subtitle.ui.screen.ManualHostAdaptationContent
+import io.github.meiyongai.toki.subtitle.provider.ManualHostAdaptation
+import io.github.meiyongai.toki.subtitle.util.TikTokInstallStatus
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Looper
@@ -125,6 +139,135 @@ class MultilingualLayoutTest {
      * @return Unit；无入参。
      * Callers: JUnit。
      */
+    @Test fun manualAdaptationEntryAppearsImmediatelyBelowHost() {
+        language = AppLanguage.entries.first { it.languageTag == "zh-Hans" }
+        setScene { HostStatusSection(TikTokInstallStatus(true, ManualHostAdaptation.packages[0], "47.6.3", 476030)) }
+        val host = compose.onNodeWithText("v47.6.3").fetchSemanticsNode().boundsInRoot
+        val entry = compose.onNodeWithText("手动选择适配").fetchSemanticsNode().boundsInRoot
+        assertTrue(entry.top >= host.bottom)
+        assertNoTextOverflow("manual-home")
+        saveScreenshot("manual-adaptation-home-zh-Hans")
+    }
+
+    @Test fun manualAdaptationHostChoicesAreExclusiveAndUnavailableHostIsDisabled() {
+        val global = ManualHostAdaptation.packages[0]; val trill = ManualHostAdaptation.packages[1]
+        var hosts by mutableStateOf(listOf(TikTokInstallStatus(true, global, "47.6.3"), TikTokInstallStatus(false, trill)))
+        var selected by mutableStateOf<String?>(global)
+        setScene(horizontalPadding = 16.dp) {
+            ManualHostAdaptationContent(hosts, selected, null, false, null, { selected = it }, {})
+        }
+        compose.onNodeWithTag("manual-host:$global").assertIsSelected().assertIsEnabled()
+        compose.onNodeWithTag("manual-host:$trill").assertIsNotEnabled().assertIsNotSelected()
+        compose.runOnIdle { hosts = listOf(hosts[0], TikTokInstallStatus(true, trill, "47.5.3")) }
+        compose.onNodeWithTag("manual-host:$trill").performClick().assertIsSelected()
+        compose.onNodeWithTag("manual-host:$global").assertIsNotSelected()
+        compose.runOnIdle { assertEquals(trill, selected) }
+    }
+
+    @Test fun manualAdaptationContentFitsNarrowScreensAndLargeFonts() {
+        val global = ManualHostAdaptation.packages[0]; val trill = ManualHostAdaptation.packages[1]
+        setScene(horizontalPadding = 16.dp) {
+            ManualHostAdaptationContent(listOf(TikTokInstallStatus(true, global, "47.6.3"),
+                TikTokInstallStatus(false, trill)), global, null, false, null, {}, {})
+        }
+        for (tag in listOf("en", "zh-Hans", "zh-Hant-TW")) for (scale in listOf(1f, 1.5f)) {
+            compose.runOnIdle { language = AppLanguage.entries.first { it.languageTag == tag }; fontScale = scale }
+            compose.waitForIdle()
+            assertNoTextOverflow("manual-dialog/$tag/$scale")
+            saveScreenshot("manual-adaptation-$tag-$scale")
+        }
+    }
+
+    @Test fun savedAdaptationIsARequestNotASuccessReceiptAndLocksChoices() {
+        val host = ManualHostAdaptation.packages[0]
+        var opened: String? = null
+        language = AppLanguage.entries.first { it.languageTag == "zh-Hans" }
+        setScene(horizontalPadding = 16.dp) {
+            ManualHostAdaptationContent(listOf(TikTokInstallStatus(true, host, "47.6.3")), host, host, false, null,
+                { fail("Saved selection must stay locked") }, { opened = it })
+        }
+        compose.onNodeWithTag("manual-host:$host").assertIsNotEnabled()
+        val message = compose.onNodeWithTag("manual-adaptation-saved").fetchSemanticsNode().config[SemanticsProperties.Text].joinToString()
+        assertTrue(message.contains("请求已保存")); assertTrue(message.contains("强行停止"))
+        assertTrue(message.contains("不要清除数据")); assertFalse(message.contains("适配成功"))
+        compose.onNodeWithText("打开所选宿主").performScrollTo().assertIsDisplayed().performClick()
+        compose.runOnIdle { assertEquals(host, opened) }
+        assertNoTextOverflow("manual-saved")
+        saveScreenshot("manual-adaptation-saved-zh-Hans")
+    }
+
+    @Test fun homeDialogSavesAndPublishesAnActualManualRequestWithoutLaunchingHost() {
+        val host = ManualHostAdaptation.packages[0]
+        val activity = controller.get()
+        shadowOf(activity.packageManager).installPackage(android.content.pm.PackageInfo().apply {
+            packageName = host; versionName = "47.6.3"; longVersionCode = 476030
+            applicationInfo = android.content.pm.ApplicationInfo().apply { packageName = host }
+        })
+        // Other full-suite host-entry tests use this process-wide singleton; this scene is a fresh manager process.
+        fun field(type: Class<*>, name: String) = type.getDeclaredField(name).apply { isAccessible = true }
+        val client = io.github.meiyongai.toki.subtitle.provider.ConfigClient::class.java
+        val storage = io.github.meiyongai.toki.subtitle.provider.ConfigStore::class.java
+        for (name in listOf("listeners", "stateListeners")) (field(client, name).get(null) as MutableCollection<*>).clear()
+        for (name in listOf("initialized", "host")) field(client, name).set(null, false)
+        for (name in listOf("connectionChanged", "hostSessionTransform", "effectiveCache")) field(client, name).set(null, null)
+        val store = field(client, "store").get(null)
+        for (name in listOf("current", "syncError", "local", "remote")) field(storage, name).set(store, null)
+        for (name in listOf("isReady", "host")) field(storage, name).set(store, false)
+        io.github.meiyongai.toki.subtitle.provider.ConfigClient.init(activity)
+        val published = activity.getSharedPreferences("manual-request-published", android.content.Context.MODE_PRIVATE)
+        io.github.meiyongai.toki.subtitle.provider.ConfigClient.connectFramework { published }
+        language = AppLanguage.entries.first { it.languageTag == "zh-Hans" }
+        setScene {
+            HostStatusSection(TikTokInstallStatus(true, host, "47.6.3", 476030), adaptationDialog = { initial, dismiss ->
+                io.github.meiyongai.toki.subtitle.ui.screen.ManualHostAdaptationDialog(initial,
+                    loadHosts = { ctx -> io.github.meiyongai.toki.subtitle.util.TikTokVersionHelper.getInstalledTikTokStatuses(ctx) },
+                    saveRequest = { ctx, target -> io.github.meiyongai.toki.subtitle.ui.screen.saveManualHostAdaptation(ctx, target) },
+                    onDismiss = dismiss)
+            })
+        }
+        compose.onNodeWithText("手动选择适配").performClick()
+        try {
+            compose.waitUntil(10_000) {
+                org.robolectric.shadows.ShadowDialog.getLatestDialog()?.window?.decorView?.let { view ->
+                    compose.runOnUiThread {
+                        view.measure(android.view.View.MeasureSpec.makeMeasureSpec(320, android.view.View.MeasureSpec.EXACTLY),
+                            android.view.View.MeasureSpec.makeMeasureSpec(1000, android.view.View.MeasureSpec.AT_MOST))
+                        view.layout(0, 0, view.measuredWidth, view.measuredHeight)
+                    }
+                }
+                compose.mainClock.advanceTimeByFrame()
+                shadowOf(Looper.getMainLooper()).idleFor(java.time.Duration.ofMillis(16))
+                compose.onAllNodesWithTag("manual-host:$host").fetchSemanticsNodes().isNotEmpty()
+            }
+        } catch (error: Throwable) {
+            val dialog = org.robolectric.shadows.ShadowDialog.getLatestDialog()
+            val roots = compose.onAllNodes(isRoot(), useUnmergedTree = true).printToString(maxDepth = 20)
+            throw AssertionError("Dialog=${dialog?.isShowing}; installed=${io.github.meiyongai.toki.subtitle.util.TikTokVersionHelper.getInstalledTikTokStatuses(activity)}; roots=$roots", error)
+        }
+        compose.onNodeWithTag("manual-host:$host").assertIsSelected()
+        compose.onNodeWithText("重新适配").assertIsEnabled().performClick()
+        compose.waitUntil(10_000) {
+            compose.mainClock.advanceTimeByFrame()
+            shadowOf(Looper.getMainLooper()).idleFor(java.time.Duration.ofMillis(16))
+            compose.onAllNodesWithTag("manual-adaptation-saved").fetchSemanticsNodes().isNotEmpty()
+        }
+        compose.onNodeWithText("应用信息").assertIsEnabled()
+        val savedMessage = compose.onNodeWithTag("manual-adaptation-saved").fetchSemanticsNode().config[SemanticsProperties.Text].joinToString()
+        assertTrue("Dialog body must keep the selected Chinese locale", savedMessage.contains("请求已保存"))
+        assertTrue(ManualHostAdaptation.pending(published.getString(ManualHostAdaptation.KEY, null), host, ""))
+        assertFalse(ManualHostAdaptation.requested(published.getString(ManualHostAdaptation.KEY, null), ManualHostAdaptation.packages[1]))
+        assertNull(shadowOf(activity).nextStartedActivity)
+        val bitmap = compose.runOnIdle {
+            val view = requireNotNull(org.robolectric.shadows.ShadowDialog.getLatestDialog().window).decorView
+            Bitmap.createBitmap(view.width, view.height, Bitmap.Config.ARGB_8888).also { view.draw(Canvas(it)) }
+        }
+        val directory = File("build/reports/ui-polish")
+        check(directory.isDirectory || directory.mkdirs())
+        File(directory, "manual-adaptation-real-dialog-saved.png").outputStream().use {
+            check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it))
+        }
+    }
+
     @Before fun createHost() {
         controller = Robolectric.buildActivity(ComponentActivity::class.java).setup().visible()
         composeView = ComposeView(controller.get())

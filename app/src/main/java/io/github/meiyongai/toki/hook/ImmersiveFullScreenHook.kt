@@ -83,7 +83,8 @@ object ImmersiveFullScreenHook {
     }
 
     /** @return 当前会话的沉浸开关。无参数。Callers: init 中注册的 Hook。 */
-    private fun enabled(): Boolean = ConfigClient.getBoolean(KEY_IMMERSIVE_FULL_SCREEN)
+    internal fun enabled(): Boolean = ConfigClient.getBoolean(KEY_IMMERSIVE_FULL_SCREEN) &&
+        (!ImmersiveLayoutPreparation.supported || ImmersiveLiveRuntime.admitted())
 
     /**
      * 完成全部契约检查后注册输入修正和首页底栏/窗口处理。

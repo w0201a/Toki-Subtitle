@@ -1,3 +1,13 @@
+# Verified Debug checkpoint — 2.0.86-debug
+
+Updated: 2026-11-04. Current source and verified local APK: **2.0.86-debug / 106**.
+
+713项源码／接线／词法检查、差异检查、223份XML解析、92项定向回归通过；完整桌面1054项为1051通过、0失败、3项原生媒体能力跳过。统一模块APK的版本／双入口／私有载荷／profiles／签名／ZIP CRC／对齐／507源输入一致性检查通过。
+
+Home now exposes installed-host manual adaptation. Package-scoped nonces bypass cached and bundled mappings, request all known core/extension rules, and are consumed only with saved scan results. Delivery is read back from the actual framework publication or host-private overrides; local-only standalone saves are not reported as delivered. Injected settings expose the same flow without a manager service. Rooted and no-root host settings now also mirror through an authenticated local provider with a durable immutable outbox and transactional replay receipts; manager UI listens to the resulting config publication. Settings mirroring needs no restart. A manual code rescan still requires a full user-controlled host restart, never app-data clearing.
+
+APK: Toki-2.0.86-debug.apk / 82.72 MiB / SHA-256 35bea85600faaef9c8908a10585a8d95d213a2cd9474ff349e981b3bbd583c21. Earlier artifacts and pre-existing worktree changes were retained. The registration/window guards carried from the unpublished 84 worktree are covered by the full desktop regression. Real TikTok, injector behavior and the native-media device tests were not executed. Manual rescan does not prove changed native contracts are fixed, nor that the original full requirements are complete.
+
 # Verified Debug checkpoint — 2.0.83-debug
 
 Updated: 2026-11-04. Current source and checked local APK: **2.0.83-debug / 103**. Earlier APKs are retained.

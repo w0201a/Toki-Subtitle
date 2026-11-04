@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 103' in gradle and 'versionName = "2.0.83"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.83-debug / 103")
+check('versionCode = 106' in gradle and 'versionName = "2.0.86"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.86-debug / 105")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -665,7 +665,7 @@ check(all(name in template_gate for name in ('classes4.dex', 'classes5.dex', 'cl
 check('"TemplateCleanupHook" to listOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.VIDEO_TEMPLATE.key)' in schema and 'LayoutElement.VIDEO_TEMPLATE) }.map' in schema, 'template switch has its own configuration installation owner and is excluded from navigation-cleanup switches')
 check('"QuickCommentCleanupHook", "TemplateCleanupHook"' in environment_plan and '"TemplateCleanupHook" -> TemplateCleanupHook.init(this, loader)' in environment_module, 'template business control is direct/live-installable without unrelated host-symbol scanning')
 prepare_host = environment_module.split('private fun prepareHost(param: PackageReadyParam) {', 1)[1].split('private fun activatePlatformFeatures', 1)[0]
-check(prepare_host.index('install("TemplateCleanupHook", param.classLoader)') < prepare_host.index('if (!plan.requiresScan)') and 'plan.admitLive("TemplateCleanupHook")' in prepare_host and 'if (it !in installed) install(it, loader)' in prepare_host, 'main-feed observation is prepared while disabled and admitted once without duplicate direct-hook installation')
+check(prepare_host.index('install("TemplateCleanupHook", param.classLoader)') < prepare_host.index('if (!plan.requiresScan && !manualRequest)') and 'plan.admitLive("TemplateCleanupHook")' in prepare_host and 'if (it !in installed) install(it, loader)' in prepare_host, 'main-feed observation is prepared while disabled and admitted once without duplicate direct-hook installation')
 check('TemplateCleanupHook.refreshStatus()' in environment_module and 'HookFeatureDefinition("TemplateCleanupHook"' in (JAVA / 'ui/screen/HookStatusModel.kt').read_text(encoding='utf-8') and 'layout_template_business_hint' in (JAVA / 'ui/screen/LayoutCleanupSection.kt').read_text(encoding='utf-8'), 'template diagnostic readiness and precise current-page/unknown-business scope are visible in existing settings/status surfaces')
 for locale in ('values', 'values-b+zh+Hans'):
     names = {n.attrib['name'] for n in ET.parse(ROOT / 'app/src/main/res' / locale / 'template_business_strings.xml').getroot() if n.tag == 'string'}
@@ -836,4 +836,68 @@ for relative in ('hook/ImmersiveWindowBindingsTest.kt','hook/ImmersiveScreenBind
     kotlin_delimiters((ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative).read_text(encoding='utf-8-sig'))
     check(True, relative + ' test delimiters balanced (not executed)')
 
+live_gate = read('app/src/main/java/io/github/meiyongai/toki/hook/LiveApplicationGate.kt')
+background_guard = read('app/src/main/java/io/github/meiyongai/toki/hook/BackgroundWriteGuard.kt')
+check('scope.committed' in live_gate and 'if (!ready()) return null' in live_gate and 'return if (ready()) snapshot else null' in live_gate, 'live business activation requires committed registration, admission and a still-current scope')
+check('ConfigClient.refreshHostSession()\n            if (!ImmersiveLiveRuntime.admit())' in read('app/src/main/java/io/github/meiyongai/toki/hook/TokiModule.kt'), 'immersive admission follows effective-session refresh and fails closed without crashing host callbacks')
+check('gate.configuration()' in immersive_runtime and 'effectiveSnapshotOrNull()' in immersive_runtime and 'configuration = config' not in immersive_runtime, 'immersive work reads the latest nullable effective snapshot rather than a stale registration callback')
+check('listOf("setBackground", "setBackgroundDrawable")' in immersive_runtime and 'IdentityHashMap<View, Unit>' in background_guard and 'finally { active.remove(view) }' in background_guard, 'both native background setters share a per-view exception-safe delegation guard')
+check(immersive_windows.index('val captured = EnumMap') < immersive_windows.index('for (property in row.baseline.keys.toList()) try {\n            if (enabled'), 'window baseline fields are sampled together before coupled native setters can change another field')
+for relative in ('hook/LiveApplicationGate.kt','hook/BackgroundWriteGuard.kt','hook/ImmersiveFailure.kt'):
+    kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8-sig'))
+    check(True, relative + ' lexical delimiters balanced (not compilation)')
+for relative in ('hook/LiveApplicationGateTest.kt','hook/BackgroundWriteGuardTest.kt','hook/ImmersiveFailureTest.kt'):
+    kotlin_delimiters((ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative).read_text(encoding='utf-8-sig'))
+    check(True, relative + ' test delimiters balanced (not executed)')
+
+manual_request = read('app/src/main/java/io/github/meiyongai/toki/provider/ManualHostAdaptation.kt')
+manual_dialog = read('app/src/main/java/io/github/meiyongai/toki/ui/screen/ManualHostAdaptationDialog.kt')
+manual_home = read('app/src/main/java/io/github/meiyongai/toki/ui/screen/HomeScreen.kt')
+manual_host = read('app/src/main/java/io/github/meiyongai/toki/hook/HostSymbols.kt')
+check('const val KEY = "adaptation_retry_token"' in manual_request and 'hosts-v1|' in manual_request, 'manual adaptation reuses the existing schema with package-scoped nonces')
+check('pair[0] in result' in manual_request and 'previousToken' in manual_request, 'malformed or duplicate requests never silently become global retries')
+check(manual_home.index('R.string.home_host_current') < manual_home.index('R.string.manual_adaptation_title'), 'manual adaptation entry follows the current-host row')
+check('adaptationDialog(tikTokStatus.packageName)' in manual_home and 'ManualHostAdaptationDialog(host, onDismiss = dismiss)' in manual_home, 'home entry opens actual installed-host selection')
+check('saveManualHostAdaptation' in manual_dialog and 'ConfigClient.syncError?.let { throw it }' in manual_dialog, 'request saving is confirmed before presenting restart instructions')
+check('getInstalledTikTokStatuses(context).any' in manual_dialog and 'host.isInstalled && !saving && savedHost == null' in manual_dialog, 'uninstalled hosts cannot be requested and saved selections are locked')
+check('if (retryRequested) HostSymbol.entries.toSet()' in manual_host and 'if (retryRequested) java.util.Properties()' in manual_host, 'manual retry bypasses prior mappings and requests all known symbols')
+check('retryRequested || HostScanPlan' in manual_host and 'ExtensionSymbols.load(identity, checkNotNull(cache.parentFile), retryToken)' in manual_host, 'manual retry also bypasses bundled profiles and invalidates extension cache by nonce')
+check('!plan.requiresScan && !manualRequest' in read('app/src/main/java/io/github/meiyongai/toki/hook/TokiModule.kt'), 'explicit manual retry can run with optional features disabled')
+check(manual_host.index('HostSymbolCache.write(cache, result)') > manual_host.index('result.setProperty("cache.retryToken", retryToken)'), 'retry nonce is consumed with verified scan-result publication')
+for locale in ('values', 'values-b+zh+Hans', 'values-b+zh+Hant'):
+    entries = catalog(ROOT / 'app/src/main/res' / locale / 'manual_adaptation_strings.xml')
+    check(len(entries) == len(dict(entries)) == 18, locale + ' manual-adaptation strings have unique complete keys')
+for relative in ('provider/ManualHostAdaptation.kt', 'ui/screen/ManualHostAdaptationDialog.kt'):
+    kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8-sig'))
+    check(True, relative + ' lexical delimiters are balanced (not compilation)')
+for relative in ('provider/ManualHostAdaptationTest.kt', 'util/TikTokVersionHelperTest.kt', 'hook/HostManualAdaptationPlanTest.kt'):
+    kotlin_delimiters((ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative).read_text(encoding='utf-8-sig'))
+    check(True, relative + ' test delimiters balanced (not executed)')
+
+check('ConfigClient.deliveryConfirmed(changes)' in manual_dialog, 'standalone local persistence is not mistaken for delivery to the injected host')
+check('context.packageName == target' in manual_dialog and 'it.packageName == context.packageName' in manual_dialog, 'host-private adaptation cannot silently target another installed package')
+check('ManualHostAdaptationDialog(' in read('app/src/main/java/io/github/meiyongai/toki/hook/HostSettingsDialog.kt'), 'injected settings expose the same manual adaptation flow without a manager service')
+check('(if (host) local else remote)' in read('app/src/main/java/io/github/meiyongai/toki/provider/ConfigStore.kt'), 'delivery readback verifies host-private storage or the actual framework publication')
+check('CompositionLocalProvider(LocalContext provides context)' in manual_dialog, 'actual dialog body retains the chosen module language instead of reverting to window locale')
+mirror = read('app/src/main/java/io/github/meiyongai/toki/provider/HostSettingsMirror.kt')
+wire = read('app/src/main/java/io/github/meiyongai/toki/provider/HostSettingsPatch.kt')
+provider = read('app/src/main/java/io/github/meiyongai/toki/provider/SubtitlePositionProvider.kt')
+check('HostSettingsMirror.kick()' in read('app/src/main/java/io/github/meiyongai/toki/provider/ConfigClient.kt'), 'host setting mutations schedule the root and no-root mirror after local commit')
+check('HostSettingsWire.PENDING' in store and 'HostSettingsWire.PAYLOAD' in store and 'HostSettingsWire.REQUEST' in store, 'user values, immutable pending patch and request id share the host commit')
+check('HostSettingsWire.remember(receipts, receipt, revision)' in store and 'applyHostPatch' in store, 'standalone config and idempotence receipt share one commit')
+check('it.host in allowed' in provider and 'Binder.getCallingUid()' in provider and 'Binder.clearCallingIdentity()' in provider and 'Binder.restoreCallingIdentity(identity)' in provider, 'local settings provider authenticates host uid before applying as manager and restores identity')
+check('attempts <= 3' in mirror and 'getString(HostSettingsWire.REQUEST, null) == id' in mirror, 'retries are bounded and old acknowledgements cannot erase newer pending edits')
+check('HostSettingsSyncStatus' in mirror and 'HostSettingsMirror.status.collectAsState()' in read('app/src/main/java/io/github/meiyongai/toki/hook/HostSettingsDialog.kt'), 'host UI exposes pending, acknowledged and failed standalone delivery')
+for relative in ('provider/HostSettingsPatch.kt', 'provider/HostSettingsMirror.kt'):
+    kotlin_delimiters((JAVA / relative).read_text(encoding='utf-8-sig'))
+    check(True, relative + ' lexical delimiters balanced (not compilation)')
+for relative in ('provider/HostSettingsSyncTest.kt', 'provider/HostSettingsProviderTest.kt'):
+    kotlin_delimiters((ROOT / 'app/src/test/java/io/github/meiyongai/toki' / relative).read_text(encoding='utf-8-sig'))
+    check(True, relative + ' test delimiters balanced (not executed)')
+check('preferences.getString(HostSettingsWire.REQUEST, null) != id' in mirror and 'draining = true' in mirror, 'host mirror checks generation before IPC and has one in-flight delivery')
+for locale in ('values', 'values-b+zh+Hans', 'values-b+zh+Hant'):
+    entries = catalog(ROOT / 'app/src/main/res' / locale / 'host_sync_strings.xml')
+    check(len(entries) == len(dict(entries)) == 5, locale + ' host-sync state strings are unique and complete')
+check('return synchronized(preferences)' in store and 'synchronized(preferences)' in mirror, 'local host configuration commit and ACK compare-and-clear share one monitor')
+check('ManualHostAdaptation.values(before, patch.host' in store, 'mirroring one authenticated host preserves another hosts pending rescan request')
 print("SOURCE CHECKS ONLY: this script does not verify compilation, JUnit, device runtime or TikTok 47.6.3 hook behavior.")

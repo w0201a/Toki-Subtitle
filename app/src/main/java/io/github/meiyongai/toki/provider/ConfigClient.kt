@@ -8,7 +8,7 @@ import android.util.Log
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-/** 管理端私有配置与宿主框架只读快照的统一接口，不通过 ContentProvider 同步设置。 */
+/** 管理端私有配置与宿主框架只读快照的统一接口，宿主修改通过鉴权本地通道回写本体。 */
 object ConfigClient {
     private val main = Handler(Looper.getMainLooper())
     private val listeners = java.util.concurrent.CopyOnWriteArrayList<() -> Unit>()
@@ -182,6 +182,9 @@ object ConfigClient {
     /** 取得已验证配置。@return 不可变快照。Callers: 业务 Hook、ConfigTransferSection、HookRuntime。 */
     fun snapshot(): ConfigSnapshot = effectiveSnapshot(store.snapshot())
 
+    /** Atomic nullable effective read; do not race a separate isReady check against snapshot(). */
+    fun effectiveSnapshotOrNull(): ConfigSnapshot? = store.snapshotOrNull()?.let(::effectiveSnapshot)
+
     /** 管理端最新完整请求，诊断不将当前会话安装限制误报为用户开关。 */
     fun requestedSnapshot(): ConfigSnapshot = store.snapshot()
 
@@ -217,21 +220,33 @@ object ConfigClient {
     }
 
     /** 保存开关。@param context 管理端上下文。@param key 配置键。@param value 值。@return Unit。Callers: DashboardScreen。 */
-    fun putBoolean(context: Context, key: String, value: Boolean) { init(context); store.update(mapOf(key to value)) }
+    fun putBoolean(context: Context, key: String, value: Boolean) { init(context); updateAndMirror(mapOf(key to value)) }
 
     /** 保存分区透明度及安装开关。@param context 管理端。@param group 分区。@param percent 不透明百分比。@return Unit。Callers: LayoutOpacityControl。 */
     fun putLayoutOpacity(context: Context, group: io.github.meiyongai.toki.subtitle.model.LayoutGroup, percent: Int) {
         require(percent in 0..100)
         init(context)
-        store.update(mapOf(group.opacityKey to percent.toString(), group.opacityEnabledKey to (percent != 100)))
+        updateAndMirror(mapOf(group.opacityKey to percent.toString(), group.opacityEnabledKey to (percent != 100)))
     }
 
     /** 保存字符串。@param context 管理端上下文。@param key 配置键。@param value 值，null 删除。@return Unit。Callers: DashboardScreen。 */
-    fun putString(context: Context, key: String, value: String?) { init(context); store.update(mapOf(key to value)) }
+    fun putString(context: Context, key: String, value: String?) { init(context); updateAndMirror(mapOf(key to value)) }
 
     /** 保存关联字段。@param context 管理端上下文。@param values 同批字段。@return Unit。Callers: DashboardScreen。 */
-    fun putStrings(context: Context, values: Map<String, String?>) { init(context); store.update(values) }
-    fun putValues(context: Context, values: Map<String, Any>) { init(context); store.update(values) }
+    fun putStrings(context: Context, values: Map<String, String?>) { init(context); updateAndMirror(values) }
+    fun putValues(context: Context, values: Map<String, Any>) { init(context); updateAndMirror(values) }
+    private fun updateAndMirror(values: Map<String, Any?>, replace: Boolean = false): Long {
+        val revision = store.update(values, replace)
+        if (host) HostSettingsMirror.kick()
+        return revision
+    }
+    /** Only the authenticated provider in the standalone manager may apply a host patch. */
+    internal fun applyHostPatch(context: Context, patch: HostSettingsPatch): Long {
+        init(context); check(!host)
+        return store.applyHostPatch(patch)
+    }
+    /** Read back the actual framework publication or current host-private overrides. */
+    fun deliveryConfirmed(values: Map<String, Any>): Boolean = store.deliveryConfirmed(values)
 
     /**
      * 验证并全量导入，保存成功后通知功能配置页重新读取。
@@ -242,6 +257,6 @@ object ConfigClient {
      */
     fun replace(context: Context, values: Map<String, Any>) {
         init(context)
-        importedRevisionState.value = store.update(values, replace = true)
+        importedRevisionState.value = updateAndMirror(values, replace = true)
     }
 }

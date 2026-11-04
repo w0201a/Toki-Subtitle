@@ -33,6 +33,31 @@ class ImmersiveWindowBindingsTest {
     }
     private fun fits(activity: Activity) = activity.window.javaClass.getMethod("decorFitsSystemWindows").invoke(activity.window) as Boolean
 
+    @Test fun coupledDecorFitsWritesCannotBecomeTheLayoutFlagsRestoreBaseline() {
+        val activity = host(); val decor = activity.window.decorView
+        val before = decor.systemUiVisibility
+        val state = ImmersiveWindowBindings(beforeWrite = { property ->
+            if (property == ImmersiveWindowBindings.Property.FITS) decor.systemUiVisibility = decor.systemUiVisibility or ImmersiveWindowBindings.LAYOUT_MASK
+        })
+        state.observe(activity); state.configure(true); state.configure(true); state.configure(false)
+        assertEquals(before, decor.systemUiVisibility); state.close()
+    }
+    @Test @Config(manifest = Config.NONE, sdk = [28]) fun androidNineUsesOnlyItsSupportedWindowFieldsAndRestoresThem() {
+        val activity = Robolectric.buildActivity(Activity::class.java).setup().get()
+        activity.window.statusBarColor = Color.GREEN; activity.window.navigationBarColor = Color.BLUE
+        val state = ImmersiveWindowBindings(); state.observe(activity); state.configure(true); state.configure(false)
+        assertEquals(Color.GREEN, activity.window.statusBarColor); assertEquals(Color.BLUE, activity.window.navigationBarColor)
+        state.close()
+    }
+    @Test fun windowFailureRecordsTheExactFieldPhaseAndNativeCauseType() {
+        val activity = host(); var fail = false; val errors = mutableListOf<Exception>()
+        val state = ImmersiveWindowBindings(errors::add) { if (fail && it == ImmersiveWindowBindings.Property.STATUS) throw SecurityException("private") }
+        state.observe(activity); state.configure(true); fail = true; state.configure(false)
+        val text = (errors.last() as ImmersiveFailure).summary()
+        assertTrue(text.contains("恢复窗口")); assertTrue(text.contains("状态栏颜色")); assertTrue(text.contains("SecurityException")); assertFalse(text.contains("private"))
+        fail = false; state.close()
+    }
+
     @Test fun target35EnforcedTransparentBarsKeepTheirActualNativeBaseline() {
         val activity = host(35)
         val beforeStatus = activity.window.statusBarColor

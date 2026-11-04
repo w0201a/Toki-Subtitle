@@ -16,6 +16,14 @@ class HookStatusReaderTest {
      * @return Unit；无入参。
      * Callers: JUnit。
      */
+    @Test fun optionalCommitReceiptRoundTripsAndWrongTypesAreNotTreatedAsReady() {
+        val feature = Bundle().apply { putBoolean("registrationCommitted", false) }
+        val features = Bundle().apply { putBundle("ImmersiveFullScreenHook", feature) }
+        assertEquals(false, readHookSessions(snapshot(features)).single().reports.getValue("ImmersiveFullScreenHook").registrationCommitted)
+        feature.putString("registrationCommitted", "true")
+        assertThrows(IllegalArgumentException::class.java) { readHookSessions(snapshot(features)) }
+    }
+
     @Test fun emptySnapshotContainsNoSessions() {
         assertTrue(readHookSessions(Bundle()).isEmpty())
     }

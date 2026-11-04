@@ -10,13 +10,19 @@ import android.view.View
 import android.view.Window
 import android.view.WindowManager
 import io.github.libxposed.api.XposedModule
-import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
 import io.github.meiyongai.toki.subtitle.provider.ExecutionEvidence
 
 /** Paired window and native-panel updates, admitted only after the inspected 47.6.3 code gate. */
 internal object ImmersiveLiveRuntime {
     private const val FEATURE = "ImmersiveFullScreenHook"
     private var updateStatus: (() -> Unit)? = null
+    @Volatile private var applicationGate: LiveApplicationGate? = null
+    fun admitted(): Boolean = applicationGate?.ready() == true
+    fun admit(): Boolean {
+        if (applicationGate?.admit() != true) return false
+        refreshStatus()
+        return true
+    }
     fun refreshStatus() { updateStatus?.invoke() }
     fun install(module: XposedModule, loader: ClassLoader, feed: Class<*>, screen: Class<*>,
         mainActivity: Class<*>, bottom: ImmersiveFullScreenHook.ViewContract) {
@@ -24,15 +30,19 @@ internal object ImmersiveLiveRuntime {
         val panel = Class.forName(ImmersiveLayoutPreparation.PANEL, false, loader)
         val contract = ImmersiveScreenBindings.Contract(panel, feed, screen)
         val main = Handler(Looper.getMainLooper())
+        val scope = HookRuntime.scope(FEATURE)
         var failures = 0
-        val failed: (Exception) -> Unit = { failures++; HookRuntime.event(FEATURE, "hot restore/refresh unavailable type=${it.javaClass.simpleName}") }
+        val failed: (Exception) -> Unit = { failures++; HookRuntime.event(FEATURE, ImmersiveFailure.describe(it)) }
+        val gate = LiveApplicationGate(scope,
+            latest = { io.github.meiyongai.toki.subtitle.provider.ConfigClient.effectiveSnapshotOrNull() },
+            failed = { failed(ImmersiveFailure.wrap(ImmersiveFailure.Phase.CONFIGURATION, ImmersiveFailure.Field.CONFIGURATION, it)) })
+        applicationGate = gate
         val windows = ImmersiveWindowBindings(failed)
         val screens = ImmersiveScreenBindings(contract, failed)
         val bottomOwner = bottom.bottomView.declaringClass.getDeclaredField("LL").apply {
             check(java.lang.reflect.Modifier.isStatic(modifiers) && type == bottom.bottomView.declaringClass)
             isAccessible = true
         }
-        var configuration: ConfigSnapshot? = null
         var closed = false
         fun visible(root: View) = root.isAttachedToWindow && root.isShown && root.width > 0 && root.height > 0 && root.getGlobalVisibleRect(Rect())
         fun updateWindows(wanted: Boolean) {
@@ -44,8 +54,8 @@ internal object ImmersiveLiveRuntime {
             ImmersiveLayoutPreparation::current, ::updateWindows, screens::restoreCaches,
             { owner -> contract.refresh.invoke(owner) }, contract::invalidate, failed)
         val refresh = Runnable {
-            if (closed) return@Runnable
-            val config = configuration
+            if (closed || !gate.ready()) return@Runnable
+            val config = gate.configuration()
             val wanted = config?.boolean(ImmersiveFullScreenHook.KEY_IMMERSIVE_FULL_SCREEN) == true
             val beforeFailures = failures
             val layout = layoutRefresh.refresh(wanted)
@@ -66,12 +76,23 @@ internal object ImmersiveLiveRuntime {
             if (config != null) HookRuntime.appliedConfiguration(FEATURE, config, wanted && failures == beforeFailures && layout.panels > 0)
         }
         fun schedule() { main.removeCallbacks(refresh); main.post(refresh) }
+        HookRuntime.onDispose(FEATURE) {
+            gate.close()
+            if (applicationGate === gate) applicationGate = null
+            fun restore() {
+                if (closed) return
+                if (layoutRefresh.requiresRestoration()) { layoutRefresh.invalidate(); layoutRefresh.refresh(false) }
+                screens.restoreCaches(); windows.close(); main.removeCallbacks(refresh); closed = true
+                updateStatus = null
+            }
+            if (Looper.myLooper() == main.looper) restore() else main.post { restore() }
+        }
         module.trackHook(FEATURE, contract.apply, requiresConfiguration = false).intercept { chain ->
             val input = chain.args[0]
             val owner = chain.thisObject
-            if (closed || owner == null || input == null || Looper.myLooper() != main.looper) return@intercept chain.proceed()
+            if (closed || !gate.ready() || owner == null || input == null || Looper.myLooper() != main.looper) return@intercept chain.proceed()
             val args = chain.args.toTypedArray()
-            args[0] = screens.project(owner, input, layoutRefresh.active)
+            args[0] = screens.project(owner, input, gate.configuration()?.boolean(ImmersiveFullScreenHook.KEY_IMMERSIVE_FULL_SCREEN) == true)
             val result = chain.proceed(args)
             layoutRefresh.panelApplied(owner, screens.original(checkNotNull(args[0])) !== args[0])
             result
@@ -88,57 +109,49 @@ internal object ImmersiveLiveRuntime {
             val argument = if (property in setOf(ImmersiveWindowBindings.Property.STATUS, ImmersiveWindowBindings.Property.NAVIGATION))
                 Int::class.javaPrimitiveType else Boolean::class.javaPrimitiveType
             module.trackHook(FEATURE, phoneWindow.getMethod(name, argument), requiresConfiguration = false).intercept { chain ->
-                if (Looper.myLooper() != main.looper) return@intercept chain.proceed()
+                if (!gate.ready() || Looper.myLooper() != main.looper) return@intercept chain.proceed()
                 val args = chain.args.toTypedArray()
                 args[0] = windows.native(chain.thisObject as Window, property, args[0]!!)
                 chain.proceed(args)
             }
         }
         module.trackHook(FEATURE, phoneWindow.getMethod("setAttributes", WindowManager.LayoutParams::class.java), requiresConfiguration = false).intercept { chain ->
-            if (Looper.myLooper() != main.looper) return@intercept chain.proceed()
+            if (!gate.ready() || Looper.myLooper() != main.looper) return@intercept chain.proceed()
             val args = chain.args.toTypedArray()
             args[0] = windows.nativeAttributes(chain.thisObject as Window, args[0] as WindowManager.LayoutParams)
             chain.proceed(args)
         }
         module.trackHook(FEATURE, View::class.java.getMethod("setSystemUiVisibility", Int::class.javaPrimitiveType), requiresConfiguration = false).intercept { chain ->
-            if (Looper.myLooper() != main.looper) return@intercept chain.proceed()
+            if (!gate.ready() || Looper.myLooper() != main.looper) return@intercept chain.proceed()
             val args = chain.args.toTypedArray(); args[0] = windows.nativeFlags(chain.thisObject as View, args[0] as Int)
             chain.proceed(args)
         }
-        module.trackHook(FEATURE, View::class.java.getMethod("setBackground", Drawable::class.java), requiresConfiguration = false).intercept { chain ->
-            if (Looper.myLooper() != main.looper) return@intercept chain.proceed()
-            val args = chain.args.toTypedArray(); args[0] = windows.nativeBackground(chain.thisObject as View, args[0] as? Drawable)
-            chain.proceed(args)
+        val backgroundWrites = BackgroundWriteGuard()
+        for (name in listOf("setBackground", "setBackgroundDrawable")) module.trackHook(FEATURE,
+            View::class.java.getMethod(name, Drawable::class.java), requiresConfiguration = false).intercept { chain ->
+            if (!gate.ready() || Looper.myLooper() != main.looper) return@intercept chain.proceed()
+            val args = chain.args.toTypedArray()
+            val view = chain.thisObject as View
+            backgroundWrites.apply(view, args[0] as? Drawable, { windows.nativeBackground(view, it) }) { value ->
+                args[0] = value; chain.proceed(args)
+            }
         }
         module.trackHook(FEATURE, bottom.bottomView, requiresConfiguration = false).intercept { chain ->
             val view = chain.proceed() as? View
-            if (!closed && view != null && Looper.myLooper() == main.looper) windows.background(view)
+            if (!closed && gate.ready() && view != null && Looper.myLooper() == main.looper) windows.background(view)
             view
         }
         for (method in listOf("onPostResume", "onDestroy")) module.trackHook(FEATURE,
             Activity::class.java.getDeclaredMethod(method).apply { isAccessible = true }, requiresConfiguration = false).intercept { chain ->
             val result = chain.proceed()
             val activity = chain.thisObject as Activity
-            if (!closed && mainActivity.isInstance(activity) && Looper.myLooper() == main.looper) {
+            if (!closed && gate.ready() && mainActivity.isInstance(activity) && Looper.myLooper() == main.looper) {
                 if (method == "onDestroy") windows.release(activity) else { windows.observe(activity); layoutRefresh.invalidate(); schedule() }
             }
             result
         }
         HookRuntime.own(FEATURE, ImmersiveLayoutPreparation.subscribe { layoutRefresh.invalidate(); schedule() })
-        HookRuntime.onDispose(FEATURE) {
-            fun restore() {
-                if (closed) return
-                configuration = null
-                layoutRefresh.invalidate(); layoutRefresh.refresh(false)
-                screens.restoreCaches(); windows.close(); main.removeCallbacks(refresh); closed = true
-                updateStatus = null
-            }
-            if (Looper.myLooper() == main.looper) restore() else main.post { restore() }
-        }
-        HookRuntime.subscribe(FEATURE) { config ->
-            configuration = config
-            schedule()
-        }
+        HookRuntime.subscribe(FEATURE) { schedule() }
         updateStatus = { if (Looper.myLooper() == main.looper) schedule() else main.post { schedule() } }
     }
 }
