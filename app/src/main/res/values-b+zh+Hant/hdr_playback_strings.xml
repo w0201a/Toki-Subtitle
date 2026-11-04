@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hdr_section">HDR 影片播放</string>
+    <string name="hdr_disable_title">關閉 HDR 播放</string>
+    <string name="hdr_disable_summary">讓原生播放器優先以 SDR 播放 HDR 影片。</string>
+    <string name="hdr_disable_scope">開啟後離開並重新進入影片，讓播放器重新選流；已播放或預載的影片可能仍保留 HDR。僅提供 HDR 來源時不保證有 SDR 回退。關閉此開關恢復原生偏好，不強制開啟 HDR；不轉換已下載檔案、不改變螢幕亮度。</string>
+    <string name="hdr_save_error">HDR 設定儲存失敗。</string>
+</resources>

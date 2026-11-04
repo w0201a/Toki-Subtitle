@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hdr_section">HDR playback</string>
+    <string name="hdr_disable_title">Disable HDR playback</string>
+    <string name="hdr_disable_summary">Ask the native player to select SDR playback instead of HDR.</string>
+    <string name="hdr_disable_scope">After enabling, leave and reopen the video so playback selection runs again. Already-playing or preloaded video may retain HDR. An SDR fallback is not guaranteed for HDR-only content. Turning this off restores the native HDR preference; it does not force HDR on. This does not change downloaded files or screen brightness.</string>
+    <string name="hdr_save_error">Could not save the HDR setting.</string>
+</resources>

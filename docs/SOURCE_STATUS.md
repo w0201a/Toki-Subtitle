@@ -1,3 +1,11 @@
+# Verified build — 2.0.89-debug / 109: disable HDR playback; SDR output pending
+
+The user clarified that the requirement is to remove HDR playback, not enable it. Previous physical HLG/HBM observations prove the baseline HDR state only and do not satisfy this requirement. Offline work is deferred until the HDR-off path is addressed.
+
+The new opt-in hdr_playback_disabled setting requests PlayerConfigImpl.isForceHdrOff through the inspected ISimPlayerConfig contract. Original 47.6.3 caller instructions confirm that the native true branch selects bitrate entries with getHdrType()==0 when such entries exist. Toggle-off preserves the native off preference (nativeOff || disabled), not forced HDR-on. The module does not relabel decoded frames, change display capabilities, modify brightness or convert downloads. UI/config mirroring and normal late installation share the existing standalone/injected paths.
+
+This is a next-playback selection policy: existing/preloaded decoders can remain HDR until reselected, and HDR-only content is not guaranteed to have SDR fallback. 732 source checks and 56 focused tests passed; no full regression was repeated. The unified APK and relocated payload passed signature, ZIP CRC, alignment, namespace and 519 production input checks. APK: Toki-2.0.89-debug.apk; 86,839,416 bytes; SHA-256 `3fce68feffb71bbd3daec5290c8cd2967a29b366c1cbb69e48494d783272f13a`. Installation and real HDR-to-SDR output acceptance remain pending. The user must install the new module, enable Disable HDR playback, and reload the same HDR video before read-only output verification. The new switch is default-off and no phone setting is changed automatically.
+
 # Current verified build checkpoint — 2.0.88-debug
 
 Updated: 2026-11-04. Current source and verified local APK: **2.0.88-debug / 108**.

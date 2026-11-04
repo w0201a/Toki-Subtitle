@@ -25,6 +25,7 @@ internal object HookStatusCatalog {
         HookFeatureDefinition("SharePanelCleanupHook", R.string.share_cleanup_title),
         HookFeatureDefinition("ImmersiveFullScreenHook", R.string.status_feature_immersive),
         HookFeatureDefinition("LiveSwipeLockHook", R.string.status_feature_live_swipe_lock),
+        HookFeatureDefinition("HdrPlaybackHook", R.string.hdr_disable_title),
         HookFeatureDefinition("HoldSpeedGestureHook", R.string.hold_speed_down_lock),
         HookFeatureDefinition("AutoScrollHook", R.string.status_feature_scroll),
         HookFeatureDefinition("VideoDurationAlertHook", R.string.status_feature_duration),

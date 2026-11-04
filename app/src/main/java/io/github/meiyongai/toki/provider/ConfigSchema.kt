@@ -33,6 +33,7 @@ object ConfigSchema {
             io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityEnabledKey },
         "ImmersiveFullScreenHook" to listOf("immersive_full_screen"),
         "LiveSwipeLockHook" to listOf("live_swipe_lock_enabled"),
+        "HdrPlaybackHook" to listOf("hdr_playback_disabled"),
         "HoldSpeedGestureHook" to listOf("hold_speed_down_lock_enabled"),
         "AutoScrollHook" to listOf("auto_scroll_unlock"),
         "DownloadHook" to listOf("download_force_no_watermark", "download_path_enabled"),

@@ -13,6 +13,7 @@ internal object DiagnosticOverview {
         "CachedCommentTranslateHook" to "缓存评论主动补译", "AuthorLocationHook" to "作者国家显示", "PlaybackSpeedHook" to "播放倍速", "SpeedOptions" to "倍速菜单",
         "ImmersiveFullScreenHook" to "沉浸与视频显示模式", "ProgressBarHook" to "进度条", "AutoCleanModeHook" to "播放净屏",
         "SimHook" to "国家／SIM设置", "LocaleHook" to "语言设置", "TimeZoneHook" to "时区设置", "GpsHook" to "位置设置",
+        "HdrPlaybackHook" to "关闭HDR播放（原生选流策略，不代表输出已变SDR）",
         "BackgroundAudioHook" to "后台音频", "HoldSpeedGestureHook" to "长按倍速锁定手势", "LiveSwipeLockHook" to "直播滑动锁定",
         "AutoScrollHook" to "自动滚动", "DownloadHook" to "在线下载设置", "MusicUnlockHook" to "音乐限制设置", "StatusBarHook" to "状态栏",
         "ScreenCaptureHook" to "截图兼容", "VideoDurationAlertHook" to "视频时长提示", "FeedFilterHook" to "信息流过滤")

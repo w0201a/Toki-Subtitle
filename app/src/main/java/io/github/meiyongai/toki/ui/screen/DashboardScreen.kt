@@ -672,6 +672,7 @@ fun DashboardScreen(
             )
         }
 
+        HdrPlaybackSection()
         HoldSpeedGestureSection()
         LayoutCleanupSection()
         SharePanelCleanupSection()

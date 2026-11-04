@@ -3,6 +3,8 @@
 
 ## Toki Subtitle edition
 
+[当前功能状态与验证范围](docs/FEATURE_STATUS_ZH.md) · [更新记录](CHANGELOG.md)
+
 An MIT-licensed derivative of [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki). Upstream attribution and community links are retained below; download and issue links target this edition.
 
 This edition adds subtitle drag controls and independent axis locks, subtitle display during clean-screen playback, translation scheduling and feed prefetch improvements, comment poll translation, long-description translation with final-layout rendering, and a home-screen sponsor selector with original WeChat Pay / Alipay images.
