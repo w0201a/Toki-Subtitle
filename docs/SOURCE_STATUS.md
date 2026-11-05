@@ -1,3 +1,9 @@
+# Device capability follow-up — 2026-11-05
+
+The reconnected device completed explicit HEVC Main10 / HLG configure-only queries requesting SDR transfer 3. OMX.qcom.video.decoder.hevc returned an input format without color-transfer-request; c2.android.hevc.decoder returned color-transfer-request=0. Neither result affirmatively accepted the request. No media frames were submitted, so these observations do not establish all-decoder impossibility or successful SDR frame output.
+
+No production hook, phone setting, source color label, decoder routing or brightness was changed. No new module was built. This does not justify another speculative package using the system request alone. Actual player tone mapping or genuine SDR-source evidence remains required, and HDR-off is still unaccepted. User-confirmed photo and danmaku fixes are unchanged. Raw local query output and temporary capability helpers remain ignored.
+
 # Follow-up — 2026-11-05: danmaku accepted; HDR decoder capability pending
 
 The user confirmed the danmaku entrance is fixed and authorized continuing. HDR-off is still unaccepted: later observations contain an active HLG layer despite native selection-policy calls. Original classes4.dex analysis identifies com.ss.ttm.player.AJMediaCodec.configure as a real call site of system MediaCodec.configure; no existing color-transfer-request was found in that bridge. Local SDK metadata exposes KEY_COLOR_TRANSFER_REQUEST from API31. A disposable HEVC configuration query is compiled locally, not deployed or executed; online API documentation could not be fetched. No hardware acceptance or true frame tone mapping has been proven.
