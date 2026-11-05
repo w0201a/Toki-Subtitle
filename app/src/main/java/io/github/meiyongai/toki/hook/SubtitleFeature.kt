@@ -96,7 +96,7 @@ internal object SubtitleFeature {
                                 selection.current(id) && translating()
                             }
                         }
-                        val cue = if (translating() && translator.isEnabled(id) && !translator.hasNativeFrame(id))
+                        val cue = if (translating() && translator.canPrefetch(id))
                             translator.cueAt(id, chain.args[1] as Long) else null
                         if (CaptionDebugOverlay.enabled) {
                             val debugView = getVideoView.invoke(chain.thisObject) as? View
@@ -221,8 +221,9 @@ internal object SubtitleFeature {
                 val frameVideo = (videoKey?.invoke(null, viewModel.invoke(instance))
                     ?: directVideoKey?.invoke(viewModel.invoke(instance))) as? String ?: ""
                 val frame = chain.args[0]
-                if (frame != null && (frameState.get(frame) as? Enum<*>)?.name == "EXPANDED" &&
-                    !(frameText.get(frame) as? String).isNullOrBlank()) translator?.noteNativeFrame(frameVideo)
+                if (frame != null) translator?.noteNativeFrame(frameVideo,
+                    (frameState.get(frame) as? Enum<*>)?.name == "EXPANDED" &&
+                        !(frameText.get(frame) as? String).isNullOrBlank())
                 rendererField.get(instance)?.let { verifiedRenderers[it] = true; frameVideos[it] = frameVideo }
                 val previousRoot = rendererField.get(instance)?.let { rootField.get(it) as View }
                 val previousBinding = previousRoot?.let { bindings[it]?.get() }
@@ -265,8 +266,8 @@ internal object SubtitleFeature {
             }
             val id = (videoField?.get(chain.thisObject) as? String)?.takeIf(String::isNotBlank)
                 ?: frameVideos[chain.thisObject].orEmpty()
-            if ((chain.args[1] as? Enum<*>)?.name == "EXPANDED" &&
-                !(chain.args[2] as? String).isNullOrBlank()) translator?.noteNativeFrame(id)
+            translator?.noteNativeFrame(id, (chain.args[1] as? Enum<*>)?.name == "EXPANDED" &&
+                !(chain.args[2] as? String).isNullOrBlank())
             binding.update((chain.args[1] as? Enum<*>)?.name ?: "UNKNOWN", chain.args[2] as? String ?: "", id)
             result
         }

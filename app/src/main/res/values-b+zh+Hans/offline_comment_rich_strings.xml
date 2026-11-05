@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_comment_image">评论图片</string>
+    <string name="offline_comment_sticker">评论贴图</string>
+    <string name="offline_comment_media_missing">媒体尚未缓存，断网时无法加载</string>
+    <string name="offline_comment_media_preview">评论图片／贴图</string>
+    <string name="offline_comment_media_save">保存图片／贴图</string>
+    <string name="offline_comment_media_original">保存原文件（保留动图）</string>
+    <string name="offline_comment_media_animated_webp">动态 WebP</string>
+    <string name="offline_comment_media_save_missing">保存未完成，请确认媒体已缓存；离线保存不会联网下载</string>
+    <string name="offline_comment_replies_expand">展开 %1$d 条已缓存回复</string>
+    <string name="offline_comment_replies_collapse">收起回复</string>
+    <string name="offline_comment_replies_missing">回复尚未缓存</string>
+    <string name="offline_comment_limit_rows">按条数</string>
+    <string name="offline_comment_limit_pages">按页数</string>
+    <string name="offline_comment_limit_title">每视频评论缓存上限</string>
+    <string name="offline_comment_limit_hint">主评论与回复合计最多2500条；按页输入时每页换算20条。图片和贴图随所选评论缓存。降低上限不会删除已有缓存。</string>
+    <string name="offline_comment_limit_error">条数请输入1～2500；页数请输入1～125</string>
+    <string name="offline_comment_limit_inherit">使用默认上限</string>
+    <string name="offline_comment_limit_current">默认每视频：%1$d条（约%2$d页）</string>
+    <string name="offline_comment_limit_this_video">调整本视频的缓存上限</string>
+    <string name="offline_comment_media_status">图片／贴图就绪：%1$d个视频；默认上限：%2$d条</string>
+    <string name="offline_comment_mode_translated">翻译</string>
+    <string name="offline_comment_mode_original">原文</string>
+    <string name="offline_comment_mode_bilingual">翻译与原文</string>
+    <string name="offline_comment_limit_reached">已达到本视频缓存上限，可先调整上限。</string>
+</resources>

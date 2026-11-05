@@ -25,4 +25,15 @@ class CaptionTimelineTest {
         assertTrue(CaptionTimeline.parse("unrecognized").isEmpty())
         assertTrue(CaptionTimeline.parse("x".repeat(1_048_577)).isEmpty())
     }
+    @Test fun shortOverlappingMovieCueDoesNotHideTheStillActiveLongCue() {
+        val index = CaptionTimeline.Index(listOf(CaptionTimeline.Cue(1000, 10000, "long dialogue"),
+            CaptionTimeline.Cue(2000, 2500, "short overlay"), CaptionTimeline.Cue(12000, 13000, "next")))
+        assertEquals("short overlay", index.at(2400))
+        assertEquals("long dialogue", index.at(2500))
+        assertEquals("long dialogue", index.at(9999))
+        assertNull(index.at(10000))
+        assertNull(index.at(11999))
+        assertEquals("next", index.at(12000))
+        assertEquals("long dialogue", index.at(1500))
+    }
 }

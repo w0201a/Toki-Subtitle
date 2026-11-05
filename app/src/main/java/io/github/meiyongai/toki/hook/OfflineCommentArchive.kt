@@ -24,6 +24,14 @@ internal object OfflineCommentArchive {
                 if(file.name.matches(Regex("[a-f0-9]{64}\\.bin(?:\\.bak|\\.new)?|(?:index|model)\\.json(?:\\.bak|\\.new)?")))
                     check(file.delete()||!file.exists())
             }
+            val media = File(dir, "media")
+            if (media.isDirectory && media.canonicalFile.parentFile == dir.canonicalFile) {
+                for (file in media.listFiles().orEmpty()) {
+                    if (!file.isDirectory && file.canonicalFile.parentFile == media.canonicalFile &&
+                        file.name.matches(Regex("[a-f0-9]{64}\\.(?:bin|json)(?:\\.new)?"))) check(file.delete() || !file.exists())
+                }
+                if (media.listFiles().isNullOrEmpty()) check(media.delete() || !media.exists())
+            }
             if(dir.listFiles().isNullOrEmpty())check(dir.delete()||!dir.exists())
         }
     }
@@ -100,47 +108,77 @@ internal object OfflineCommentArchive {
         }
         return OfflineCommentDownloadProgress.complete(m.optLong("total"),top.size.toLong(),expected,replies.mapValues{it.value.size.toLong()})
     }
-    @Synchronized fun window(context: Context, account: String, video: String, offset: Int=0): Window? {
-        require(offset>=0);val dir=folder(context,account,video);val manifest=index(dir)
+    @Synchronized fun window(context: Context, account: String, video: String, offset: Int=0, limit: Int=2500, windowSize: Int=OfflineCommentData.MAX_ROWS): Window? {
+        require(offset>=0 && limit in 1..2500 && windowSize in 1..2500);val dir=folder(context,account,video);val manifest=index(dir)
         val pages=manifest.getJSONObject("pages");if(pages.length()==0)return null
         val groups=pages.keys().asSequence().toList().groupBy{pages.getJSONObject(it).getString("root")}
             .mapValues{(_,names)->names.sortedBy{pages.getJSONObject(it).getLong("cursor")}}
         val rows=ArrayList<OfflineCommentData.Row>();val seen=HashSet<String>();var unique=0;var first:OfflineCommentData.Snapshot?=null
         fun read(name:String):OfflineCommentData.Snapshot=CommentSnapshotCodec.decode(AtomicFile(File(dir,"$name.bin")).openRead().use{it.readBytes()})
             .also{require(it.account==account&&it.video==video)}
-        fun append(row:OfflineCommentData.Row){if(seen.add(row.id)){if(unique++>=offset&&rows.size<OfflineCommentData.MAX_ROWS)rows.add(row)}}
+        fun append(row:OfflineCommentData.Row){if(unique < limit && seen.add(row.id)){if(unique++>=offset&&rows.size<windowSize)rows.add(row)}}
         outer@for(name in groups[""].orEmpty()){
             val page=read(name);if(first==null)first=page
             for(row in page.rows){
                 append(row)
                 if(row.depth==0&&row.parentId.isBlank())for(replyPage in groups[row.id].orEmpty())for(reply in read(replyPage).rows){
-                    append(reply);if(unique>offset+rows.size)break@outer
+                    append(reply);if(unique>=limit || unique>offset+rows.size)break@outer
                 }
-                if(unique>offset+rows.size)break@outer
+                if(unique>=limit || unique>offset+rows.size)break@outer
             }
         }
         val base=first?:return null
         return Window(base.copy(rows=rows,total=manifest.optLong("total",base.total),capturedAt=manifest.optLong("updated"),
-            hasMore=false,nextCursor=null,truncated=manifest.optString("state")!="complete"),offset,
-            if(unique>offset+rows.size)offset+rows.size else null)
+            hasMore=false,nextCursor=null,truncated=manifest.optString("state")!="complete" || manifest.optBoolean("limited")),offset,
+            if(unique>offset+rows.size && offset+rows.size<limit)offset+rows.size else null)
     }
+    /** UI-only aggregate. Individual stored/server pages retain the bounded codec row limit. */
+    @Synchronized fun display(context: Context, account: String, video: String, limit: Int): Window? =
+        window(context, account, video, 0, limit, limit)
     data class TranslationWork(val page: OfflineCommentData.Snapshot, val row: OfflineCommentData.Row)
-    @Synchronized fun nextTranslation(context: Context, account: String, video: String, target: String): TranslationWork? {
+    @Synchronized fun selectedRows(context: Context, account: String, video: String, limit: Int = 2500): List<OfflineCommentData.Row> {
+        val result = ArrayList<OfflineCommentData.Row>(); var offset = 0
+        while (result.size < limit) {
+            val value = window(context, account, video, offset, limit) ?: break
+            result.addAll(value.snapshot.rows)
+            offset = value.next ?: break
+        }
+        return result.take(limit)
+    }
+    data class Page(val cursor: Long, val root: String)
+    @Synchronized fun metadataPage(context: Context, account: String, video: String, limit: Int, refreshMissing: Boolean = false): Page? {
+        val missing = selectedRows(context, account, video, limit).filter { !it.mediaKnown || refreshMissing && it.media.any { asset -> OfflineCommentMediaStore.file(context, account, video, asset) == null } }.mapTo(hashSetOf()) { it.id }
+        if (missing.isEmpty()) return null
         val dir = folder(context, account, video); val pages = index(dir).getJSONObject("pages")
-        for (name in pages.keys().asSequence().toList().sorted()) {
+        for (name in pages.keys()) {
             val page = CommentSnapshotCodec.decode(AtomicFile(File(dir, "$name.bin")).openRead().use { it.readBytes() })
-            require(page.account == account && page.video == video)
-            val row = page.rows.firstOrNull { it.source.isNotBlank() && (it.sourceTruncated || it.translation.isNullOrBlank() ||
-                CommentTranslationKey.normalizedTarget(it.language) != target) }
-            if (row != null) return TranslationWork(page, row)
+            if (page.rows.any { it.id in missing }) return pages.getJSONObject(name).let { Page(it.getLong("cursor"), it.getString("root")) }
         }
         return null
     }
-    @Synchronized fun translationsReady(context: Context, account: String, video: String, target: String): Boolean {
-        val dir = folder(context, account, video)
-        if (index(dir).getJSONObject("pages").length() == 0) return false
-        return nextTranslation(context, account, video, target) == null
+    @Synchronized fun nextTranslation(context: Context, account: String, video: String, target: String, limit: Int = 2500): TranslationWork? {
+        val rows = selectedRows(context, account, video, limit)
+        val row = rows.firstOrNull { it.source.isNotBlank() && (it.sourceTruncated || it.translation.isNullOrBlank() ||
+            CommentTranslationKey.normalizedTarget(it.language) != target) } ?: return null
+        val first = window(context, account, video, 0, limit) ?: return null
+        return TranslationWork(first.snapshot.copy(rows = listOf(row)), row)
     }
+    @Synchronized fun translationsReady(context: Context, account: String, video: String, target: String, limit: Int = 2500): Boolean {
+        if (page(context, account, video, 0L) == null) return false
+        return nextTranslation(context, account, video, target, limit) == null
+    }
+    @Synchronized fun bounded(context: Context, account: String, video: String, limit: Int, limited: Boolean) {
+        val dir = folder(context, account, video); val manifest = index(dir)
+        manifest.put("cacheLimit", limit).put("limited", limited)
+        write(File(dir, "index.json"), manifest.toString().toByteArray(Charsets.UTF_8))
+    }
+    @Synchronized fun nextMedia(context: Context, account: String, video: String, limit: Int): OfflineCommentData.Media? =
+        selectedRows(context, account, video, limit).asSequence().flatMap { it.media.asSequence() }
+            .firstOrNull { OfflineCommentMediaStore.file(context, account, video, it) == null }
+    @Synchronized fun mediaReady(context: Context, account: String, video: String, limit: Int): Boolean =
+        page(context, account, video, 0L) != null && selectedRows(context, account, video, limit).all { row ->
+            row.mediaKnown && row.media.all { OfflineCommentMediaStore.file(context, account, video, it) != null }
+        }
     /** Background completion may only update rows that still exist with the same source. It never creates a guessed page. */
     @Synchronized fun commitTranslation(context: Context, account: String, video: String, row: OfflineCommentData.Row,
         target: String, translated: String, active: () -> Boolean): Boolean {

@@ -59,11 +59,13 @@ internal object OfflineVideoHook {
         val life = Lifetime()
         var cancellingNative = false
         val entryReady = AtomicBoolean(false)
+        val speedReady = AtomicBoolean(false)
+        val speedPress = OfflineHoldArbiter()
 
         fun cancelTouch() { timer?.let(main::removeCallbacks); timer = null; gesture.cancel() }
         fun closeMenu() { dialog?.dismiss(); dialog = null; comments?.dismiss(); comments = null }
         HookRuntime.onDispose(FEATURE) {
-            life.closed = true; life.enabled = false; entryReady.set(false); worker.shutdown()
+            life.closed = true; life.enabled = false; entryReady.set(false); speedReady.set(false); speedPress.clear(); worker.shutdown()
             fun release() { cancelTouch(); closeMenu(); binding = null; state.clear() }
             if (Looper.myLooper() == main.looper) release() else main.post { release() }
         }
@@ -147,6 +149,40 @@ internal object OfflineVideoHook {
             comments = OfflineCommentsDialog.show(screen, target.id, commentReader, commentNetwork, commentReplies, video.model,
                 { current(target) }) { closed -> if (comments === closed) comments = null }
             return comments?.isShowing == true
+        }
+        val speedFeature = "OfflineHoldSpeedArbitration"
+        HookRuntime.dependent(FEATURE, speedFeature)
+        HookRuntime.install(speedFeature) {
+            val speed = HoldSpeedContract(loader)
+            module.deoptimize(speed.touch)
+            module.deoptimize(speed.begin)
+            module.trackHook(speedFeature, speed.touch, requiresConfiguration = false).intercept { chain ->
+                val owner = chain.thisObject?.let { speed.owner.get(it) }
+                val event = chain.args[1] as? MotionEvent
+                val result = chain.proceed()
+                val target = binding
+                if (owner != null && event != null && Looper.myLooper() == main.looper) {
+                    if (event.actionMasked == MotionEvent.ACTION_DOWN && speedReady.get() && target != null && current(target)) {
+                        val player = target.view.get(); val screen = target.activity.get()
+                        val root = target.owner.get()?.let { contract.rootView.invoke(it) as? View }
+                        val surface = chain.thisObject?.let { speed.view.get(it) as? View }
+                        if (player != null && screen != null && root != null && surface != null &&
+                            OfflineNativeHoldContract.belongs(surface, root, player, screen.window.decorView))
+                            speedPress.candidate(owner, player, state.revision)
+                    } else if (event.actionMasked in setOf(MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_POINTER_DOWN)) speedPress.finish(owner)
+                }
+                result
+            }
+            module.trackHook(speedFeature, speed.begin, requiresConfiguration = false).intercept { chain ->
+                val result = chain.proceed()
+                chain.thisObject?.let { speedPress.began(it, speed.active.invoke(it) == true) }
+                result
+            }
+            for (method in listOf(speed.finish, speed.rebound, speed.destroyed)) {
+                module.trackHook(speedFeature, method, requiresConfiguration = false).intercept { chain ->
+                    try { chain.proceed() } finally { chain.thisObject?.let(speedPress::finish) }
+                }
+            }
         }
         val entryFeature = "OfflineCommentButtonEntry"
         HookRuntime.dependent(FEATURE, entryFeature)
@@ -234,6 +270,7 @@ internal object OfflineVideoHook {
                 if (fresh == null || !fresh.offline || fresh.id != target.id || fresh.view !== player)
                     return@intercept chain.proceed()
                 if (dialog?.isShowing == true || comments?.isShowing == true) return@intercept chain.proceed()
+                if (speedPress.owns(player, state.revision)) { cancelTouch(); return@intercept null }
                 cancelTouch()
                 if (!showMenu(target)) return@intercept chain.proceed()
                 // Native hold is mature: drain its trailing up without a click or the disabled-action toast.
@@ -245,6 +282,7 @@ internal object OfflineVideoHook {
             module.deoptimize(native.run)
             worker.execute {
                 val checked = OfflineNativeHoldContract.verify(checkNotNull(HookRuntime.hostContext))
+                speedReady.set(OfflineSpeedGestureCodeGate.verify(checkNotNull(HookRuntime.hostContext)))
                 if (!life.closed && HookRuntime.scope(nativeFeature).active) ready.set(checked)
                 HookRuntime.detail(nativeFeature, if (checked) "代码已核对，等待当前离线卡片原生长按"
                     else "原生长按代码不匹配，保留宿主行为")
@@ -282,6 +320,7 @@ internal object OfflineVideoHook {
                     val revision = state.revision
                     timer = Runnable {
                         timer = null
+                        if (speedPress.owns(view, revision)) { cancelTouch(); return@Runnable }
                         if (!current(target) || state.revision != revision || !view.isAttachedToWindow || !view.isShown ||
                             !activity.hasWindowFocus() || !gesture.claim(token)) return@Runnable
                         // Cancel the native video/speed gesture before opening a local action window.

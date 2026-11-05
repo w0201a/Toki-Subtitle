@@ -27,7 +27,9 @@ internal class CaptionPrefetch(
     private var video = ""
     private var url = ""
     @Volatile private var token = 0L
+    private var cueIndex = CaptionTimeline.Index(emptyList())
     private var cues = emptyList<CaptionTimeline.Cue>()
+        set(value) { field = value; cueIndex = CaptionTimeline.Index(value) }
     private var normalized = emptyList<String>()
     private var latestText = ""
     private var current: () -> Boolean = { false }
@@ -55,7 +57,7 @@ internal class CaptionPrefetch(
     }
     private fun disconnectAll() { connections.toList().forEach { it.disconnect() }; connections.clear() }
     fun cueAt(id: String, positionMs: Long): String? =
-        if (id == video) CaptionTimeline.at(cues, positionMs) else null
+        if (id == video) cueIndex.at(positionMs) else null
 
     fun update(id: String, text: String, valid: () -> Boolean) {
         if (closed) return

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_comment_image">Comment image</string>
+    <string name="offline_comment_sticker">Comment sticker</string>
+    <string name="offline_comment_media_missing">Media not cached; unavailable offline</string>
+    <string name="offline_comment_media_preview">Comment image or sticker</string>
+    <string name="offline_comment_media_save">Save image or sticker</string>
+    <string name="offline_comment_media_original">Original file (preserve animation)</string>
+    <string name="offline_comment_media_animated_webp">Animated WebP</string>
+    <string name="offline_comment_media_save_missing">Save incomplete. The media must already be cached; offline saving never downloads it.</string>
+    <string name="offline_comment_replies_expand">Show %1$d cached replies</string>
+    <string name="offline_comment_replies_collapse">Hide replies</string>
+    <string name="offline_comment_replies_missing">Replies not cached</string>
+    <string name="offline_comment_limit_rows">Comment count</string>
+    <string name="offline_comment_limit_pages">Page count</string>
+    <string name="offline_comment_limit_title">Per-video comment cache limit</string>
+    <string name="offline_comment_limit_hint">Up to 2500 comments and replies combined. Page entry converts each page to 20 comments. Images and stickers are cached with those comments. Lowering a limit retains existing data.</string>
+    <string name="offline_comment_limit_error">Enter 1–2500 comments or 1–125 pages</string>
+    <string name="offline_comment_limit_inherit">Use default limit</string>
+    <string name="offline_comment_limit_current">Default per video: %1$d comments (about %2$d pages)</string>
+    <string name="offline_comment_limit_this_video">Set this video’s cache limit</string>
+    <string name="offline_comment_media_status">Media ready: %1$d videos; default limit: %2$d comments</string>
+    <string name="offline_comment_mode_translated">Translation</string>
+    <string name="offline_comment_mode_original">Original</string>
+    <string name="offline_comment_mode_bilingual">Translation + original</string>
+    <string name="offline_comment_limit_reached">This video reached its cache limit. Adjust the limit first.</string>
+</resources>

@@ -35,18 +35,26 @@ internal class OfflineCommentJobStore(private val preferences: SharedPreferences
         if (current.optLong("sourceRevision") != sourceRevision) return false
         return change(key, epoch) {
             it.put("translationReady", true).put("translationAttempts", 0).put("translationRetryAt", 0L)
-            it.put("state", if (it.optBoolean("sourceReady")) "complete" else "pending")
+            it.put("state", if (it.optBoolean("sourceReady") && it.optBoolean("mediaReady", true)) "complete" else "pending")
+        }
+    }
+    @Synchronized fun finishMedia(key: String, epoch: Long, sourceRevision: Long): Boolean {
+        val current = get(key) ?: return false
+        if (current.optLong("sourceRevision") != sourceRevision) return false
+        return change(key, epoch) {
+            it.put("mediaReady", true).put("mediaAttempts", 0).put("mediaRetryAt", 0L)
+            it.put("state", if (it.optBoolean("sourceReady") && it.optBoolean("translationReady")) "complete" else "pending")
         }
     }
     @Synchronized fun retry(account: String) {
         for ((key, row) in rows(account)) {
-            row.put("sourceRetryAt", 0L).put("translationRetryAt", 0L)
+            row.put("sourceRetryAt", 0L).put("translationRetryAt", 0L).put("mediaRetryAt", 0L)
             put(key, row)
         }
     }
     fun plans(account: String, lane: OfflineCommentWorkPlan.Lane): List<OfflineCommentWorkPlan.Job> = rows(account).map { (key, row) ->
-        val prefix = if (lane == OfflineCommentWorkPlan.Lane.SOURCE) "source" else "translation"
+        val prefix = when (lane) { OfflineCommentWorkPlan.Lane.SOURCE -> "source"; OfflineCommentWorkPlan.Lane.TRANSLATION -> "translation"; OfflineCommentWorkPlan.Lane.MEDIA -> "media" }
         OfflineCommentWorkPlan.Job(key, row.optBoolean("firstPage"), row.optBoolean("sourceReady"), row.optBoolean("translationReady"),
-            row.optLong(prefix + "RetryAt"), row.optLong(prefix + "LastRun"))
+            row.optLong(prefix + "RetryAt"), row.optLong(prefix + "LastRun"), row.optBoolean("mediaReady", true))
     }
 }

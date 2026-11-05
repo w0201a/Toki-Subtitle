@@ -3,9 +3,12 @@ package io.github.meiyongai.toki.subtitle.hook
 /** Immutable copies only: the offline viewer never changes native Comment models. */
 internal object OfflineCommentData {
     enum class Mode { ORIGINAL, TRANSLATED, BILINGUAL }
+    enum class MediaKind { IMAGE, STICKER }
+    data class Media(val id: String, val kind: MediaKind, val urls: List<String>, val animated: Boolean = false)
     data class Row(val id: String, val author: String, val handle: String, val authorId: String,
         val source: String, val translation: String?, val language: String, val depth: Int,
-        val replyCount: Long, val sourceTruncated: Boolean = false, val parentId: String = "") {
+        val replyCount: Long, val sourceTruncated: Boolean = false, val parentId: String = "",
+        val media: List<Media> = emptyList(), val mediaKnown: Boolean = false) {
         fun text(mode: Mode): String = when {
             mode == Mode.ORIGINAL || translation.isNullOrBlank() || translation == source -> source
             mode == Mode.BILINGUAL -> source + "\n\n" + translation

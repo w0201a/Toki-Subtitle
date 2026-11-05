@@ -10,6 +10,10 @@ import android.widget.LinearLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import io.github.meiyongai.toki.subtitle.model.OfflineCommentPreferences
+import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.meiyongai.toki.subtitle.R
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
@@ -35,6 +39,21 @@ internal object OfflineCommentsDialog {
         val networkStatus = TextView(context).apply { textSize = 12f }
         val online = Button(context).apply { text = context.getString(R.string.comment_page_online_first) }
         val nextPage = Button(context).apply { text = context.getString(R.string.comment_page_online_next) }
+        val modes = RadioGroup(context).apply { orientation = RadioGroup.HORIZONTAL }
+        val modeButtons = listOf(
+            OfflineCommentData.Mode.TRANSLATED to R.string.offline_comment_mode_translated,
+            OfflineCommentData.Mode.ORIGINAL to R.string.offline_comment_mode_original,
+            OfflineCommentData.Mode.BILINGUAL to R.string.offline_comment_mode_bilingual).associate { (mode, label) ->
+                mode to RadioButton(context).apply { id = android.view.View.generateViewId(); setText(label); textSize = 12f }.also {
+                    modes.addView(it, RadioGroup.LayoutParams(0, -2, 1f))
+                }
+            }
+        fun configuredMode(): OfflineCommentData.Mode = when (ConfigClient.getString(OfflineCommentPreferences.MODE, "translated")) {
+            "original" -> OfflineCommentData.Mode.ORIGINAL
+            "bilingual" -> OfflineCommentData.Mode.BILINGUAL
+            else -> OfflineCommentData.Mode.TRANSLATED
+        }
+        val limitButton = Button(context).apply { setText(R.string.offline_comment_limit_this_video) }
         val list = ListView(context)
         var shown: AlertDialog? = null
         var pageOperation: CommentPageOperation? = null
@@ -109,8 +128,31 @@ internal object OfflineCommentsDialog {
             }
         }
         adapter = OfflineCommentListAdapter(context, ::valid, ::requestTranslation, ::renderSummary)
+        val mediaRefresh = Runnable { if (!closed.get() && valid()) adapter.notifyDataSetChanged() }
+        val mediaSubscription = OfflineCommentMediaStore.observe { main.removeCallbacks(mediaRefresh); main.postDelayed(mediaRefresh, 120L) }
+        adapter.mediaLoader = model.javaClass.classLoader ?: context.classLoader
+        adapter.setMode(configuredMode())
+        modes.check(modeButtons.getValue(configuredMode()).id)
+        var syncingMode = false
+        modes.setOnCheckedChangeListener { _, selected ->
+            if (syncingMode) return@setOnCheckedChangeListener
+            val mode = modeButtons.entries.firstOrNull { it.value.id == selected }?.key ?: return@setOnCheckedChangeListener
+            adapter.setMode(mode)
+            val value = when (mode) { OfflineCommentData.Mode.ORIGINAL -> "original"; OfflineCommentData.Mode.BILINGUAL -> "bilingual"; else -> "translated" }
+            try { ConfigClient.putString(context, OfflineCommentPreferences.MODE, value) } catch (_: Exception) { }
+        }
         val cancelSubscription = CachedCommentTranslateHook.watch { translation.cancel(); adapter.cancelPending() }
         val configSubscription = io.github.meiyongai.toki.subtitle.provider.ConfigClient.addStateListener { snapshot ->
+            if (snapshot != null) main.post {
+                if (valid()) {
+                    val mode = configuredMode()
+                    if (adapter.mode() != mode) {
+                        adapter.setMode(mode)
+                        syncingMode = true
+                        try { modes.check(modeButtons.getValue(mode).id) } finally { syncingMode = false }
+                    }
+                }
+            }
             if (snapshot == null || snapshot.boolean(TranslationNetworkPolicy.KEY)) {
                 val wasFetching = fetching; cancelPage()
                 if (wasFetching) networkStatus.text = context.getString(R.string.comment_page_cancelled)
@@ -128,7 +170,7 @@ internal object OfflineCommentsDialog {
             orientation = LinearLayout.HORIZONTAL
             addView(online, LinearLayout.LayoutParams(0, -2, 1f)); addView(nextPage, LinearLayout.LayoutParams(0, -2, 1f))
         }
-        container.addView(status); container.addView(hint); container.addView(actions); container.addView(networkStatus)
+        container.addView(modes); container.addView(limitButton); container.addView(status); container.addView(hint); container.addView(actions); container.addView(networkStatus)
         val height = minOf((360 * density).toInt(), (context.resources.displayMetrics.heightPixels * .42f).toInt())
         container.addView(list, LinearLayout.LayoutParams(-1, height.coerceAtLeast((120 * density).toInt())))
         val dialog = AlertDialog.Builder(context).setTitle(context.getString(R.string.offline_comments_title)).setView(container)
@@ -151,7 +193,7 @@ internal object OfflineCommentsDialog {
                         var savedReadFailed = false
                         var archiveReadFailed = false
                         val saved = try { CommentSnapshotStore.read(app, account, video) } catch (_: Exception) { savedReadFailed = true; null }
-                        val archived = try { OfflineCommentArchive.window(app,account,video,archiveOffset) }
+                        val archived = try { OfflineCommentArchive.display(app,account,video,OfflineCommentLimitOverrides.effective(app,account,video,OfflineCommentPreferences.limit(ConfigClient.getString(OfflineCommentPreferences.LIMIT)))) }
                             catch (_: Exception) { archiveReadFailed = true; savedReadFailed = true; null }
                         val native = archived?.snapshot ?: try { reader.read(app, video) { !closed.get() && generation.get() == token } }
                             catch (error: Exception) {
@@ -196,6 +238,9 @@ internal object OfflineCommentsDialog {
             }
         }
         fun requestPage(cursor: Long, replyRoot: String? = null) {
+            val selected = adapter.snapshot
+            val limit = selected?.let { OfflineCommentLimitOverrides.effective(app, it.account, video, OfflineCommentPreferences.limit(ConfigClient.getString(OfflineCommentPreferences.LIMIT))) } ?: 2500
+            if (selected != null && selected.rows.size >= limit) { networkStatus.text = context.getString(R.string.offline_comment_limit_reached); return }
             if (closed.get() || !current() || loadingLocal || fetching) return
             if (translation.busy) { networkStatus.text = context.getString(R.string.cached_comment_translation_busy); return }
             val old = adapter.snapshot
@@ -264,6 +309,17 @@ internal object OfflineCommentsDialog {
                 }
             } catch (error: java.util.concurrent.RejectedExecutionException) { failed(error) }
         }
+        limitButton.setOnClickListener {
+            val snapshot = adapter.snapshot ?: return@setOnClickListener
+            val fallback = OfflineCommentPreferences.limit(ConfigClient.getString(OfflineCommentPreferences.LIMIT))
+            val selected = OfflineCommentLimitOverrides.effective(app, snapshot.account, video, fallback)
+            OfflineCommentLimitDialog.show(context, selected, true) save@{ value ->
+                if (!valid() || adapter.snapshot?.account != snapshot.account || !reader.accountMatches(snapshot.account)) return@save
+                OfflineCommentLimitOverrides.set(app, snapshot.account, video, value)
+                OfflineCommentDownloadHook.refresh(model)
+                archiveOffset = 0; load()
+            }
+        }
         adapter.loadReplies = { snapshot, row ->
             if (adapter.snapshot === snapshot) {
                 val saved = snapshot.replyCursors[row.id]
@@ -286,7 +342,7 @@ internal object OfflineCommentsDialog {
         }
         fun release() {
             closed.set(true); generation.incrementAndGet(); cancelPage(); translation.close()
-            cancelSubscription.close(); configSubscription.close(); translatingSnapshot = null
+            cancelSubscription.close(); configSubscription.close(); mediaSubscription.close(); translatingSnapshot = null
             worker.shutdown(); worker.queue.clear(); main.removeCallbacksAndMessages(null)
             adapter.submit(null); shown = null
         }

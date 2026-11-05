@@ -206,7 +206,7 @@ internal object CommentStickerDownloadHook {
         }
     }
 
-    private fun fetch(location: String): ByteArray {
+    internal fun fetch(location: String): ByteArray {
         var next = location
         repeat(5) {
             require(CommentStickerMedia.allowed(next))
@@ -220,7 +220,9 @@ internal object CommentStickerDownloadHook {
                 } else {
                     check(code == 200 && request.contentLengthLong <= CommentStickerMedia.MAX_BYTES)
                     return request.inputStream.use { input ->
-                        CommentStickerMedia.read(input)
+                        CommentStickerMedia.read(input).also { bytes ->
+                            if (request.contentLengthLong >= 0L) check(bytes.size.toLong() == request.contentLengthLong) { "Incomplete image source" }
+                        }
                     }
                 }
             } finally { request.disconnect() }
@@ -254,6 +256,23 @@ internal object CommentStickerDownloadHook {
         }
         check(active() && !Thread.currentThread().isInterrupted)
         val (bytes, format) = exported ?: throw (lastFailure ?: IllegalStateException("No readable image for selected source and format"))
+        publish(context, id, path, StickerImageExporter.Result(bytes, format), operation, active)
+        HookRuntime.count(FEATURE, "保存贴纸成功")
+        HookRuntime.event(FEATURE, "export success mode=" + mode.name + " format=" + format.extension)
+    }
+    internal fun saveCached(context: Context, loader: ClassLoader, id: String, source: ByteArray, path: String,
+        mode: StickerExportMode, operation: OperationJournal.Run, active: () -> Boolean) {
+        check(active())
+        val exported = if (mode.animated) {
+            HostAnimatedStickerDecoder.requireInspectedCode(context)
+            AnimatedStickerExporter.convert(context, loader, source, mode, active, operation)
+        } else StickerImageExporter.convert(source, mode)
+        publish(context, id, path, exported, operation, active)
+    }
+    private fun publish(context: Context, id: String, path: String, exported: StickerImageExporter.Result,
+        operation: OperationJournal.Run, active: () -> Boolean) {
+        check(active() && !Thread.currentThread().isInterrupted)
+        val (bytes, format) = exported
         val values = ContentValues().apply {
             put(MediaStore.Images.Media.DISPLAY_NAME, CommentStickerMedia.fileName(id, format.extension, UUID.randomUUID().toString()))
             put(MediaStore.Images.Media.MIME_TYPE, format.mime)
@@ -270,7 +289,6 @@ internal object CommentStickerDownloadHook {
         if (Build.VERSION.SDK_INT >= 29) check(resolver.update(uri, ContentValues().apply {
             put(MediaStore.Images.Media.IS_PENDING, 0)
         }, null, null) > 0)
-        HookRuntime.count(FEATURE, "保存贴纸成功")
-        HookRuntime.event(FEATURE, "export success mode=" + mode.name + " format=" + format.extension)
     }
+
 }

@@ -63,4 +63,27 @@ class OfflineCommentJobStoreTest {
         assertTrue(store.finishTranslation("key", 0L, 3L))
     }
 
+    @Test fun completionRequiresMediaAndStaleMediaCannotFinishANewSourceRevision() {
+        val store = OfflineCommentJobStore(prefs())
+        store.put("rich", row().put("sourceReady", true).put("mediaReady", false))
+        assertTrue(store.finishTranslation("rich", 0L, 1L))
+        assertEquals("pending", store.get("rich")!!.getString("state"))
+        store.change("rich", 0L) { it.put("sourceRevision", 2L) }
+        assertFalse(store.finishMedia("rich", 0L, 1L))
+        assertFalse(store.get("rich")!!.getBoolean("mediaReady"))
+        assertTrue(store.finishMedia("rich", 0L, 2L))
+        assertEquals("complete", store.get("rich")!!.getString("state"))
+        assertTrue(store.get("rich")!!.getBoolean("translationReady"))
+    }
+    @Test fun mediaLaneHasItsOwnRetryClockAndDoesNotWaitForTranslation() {
+        val store = OfflineCommentJobStore(prefs())
+        store.put("media", row().put("mediaReady", false).put("translationRetryAt", 9000L).put("mediaRetryAt", 0L))
+        assertEquals(listOf("media"), OfflineCommentWorkPlan.batch(store.plans("a", OfflineCommentWorkPlan.Lane.MEDIA),
+            OfflineCommentWorkPlan.Lane.MEDIA, 1L).map { it.key })
+        assertTrue(OfflineCommentWorkPlan.batch(store.plans("a", OfflineCommentWorkPlan.Lane.TRANSLATION),
+            OfflineCommentWorkPlan.Lane.TRANSLATION, 1L).isEmpty())
+        assertTrue(store.finishMedia("media", 0L, 1L))
+        assertEquals("pending", store.get("media")!!.getString("state"))
+        assertFalse(store.get("media")!!.getBoolean("translationReady"))
+    }
 }

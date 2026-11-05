@@ -7,18 +7,32 @@ internal object CaptionTimeline {
     private val whitespace = Regex("[\\s\u00A0]+")
     fun normalize(text: String): String = text.replace(whitespace, " ").trim()
     data class Cue(val startMs: Long, val endMs: Long, val text: String)
-    fun at(cues: List<Cue>, positionMs: Long): String? {
-        if (positionMs < 0) return null
-        var low = 0
-        var high = cues.lastIndex
-        var index = -1
-        while (low <= high) {
-            val middle = (low + high).ushr(1)
-            if (cues[middle].startMs <= positionMs) { index = middle; low = middle + 1 }
-            else high = middle - 1
+    /** Prefix end bounds keep gaps cheap while retaining a longer cue underneath a short overlap. */
+    class Index(cues: List<Cue>) {
+        private val cues = cues.sortedBy { it.startMs }
+        private val ends = LongArray(cues.size)
+        init {
+            var end = -1L
+            this.cues.forEachIndexed { i, cue -> end = maxOf(end, cue.endMs); ends[i] = end }
         }
-        return cues.getOrNull(index)?.takeIf { positionMs < it.endMs }?.text
+        fun at(positionMs: Long): String? {
+            if (positionMs < 0) return null
+            var low = 0
+            var high = cues.lastIndex
+            var index = -1
+            while (low <= high) {
+                val middle = (low + high).ushr(1)
+                if (cues[middle].startMs <= positionMs) { index = middle; low = middle + 1 }
+                else high = middle - 1
+            }
+            while (index >= 0 && ends[index] > positionMs) {
+                val cue = cues[index--]
+                if (positionMs < cue.endMs) return cue.text
+            }
+            return null
+        }
     }
+    fun at(cues: List<Cue>, positionMs: Long): String? = Index(cues).at(positionMs)
     fun parse(body: String): List<Cue> {
         if (body.length > 1_048_576) return emptyList()
         val source = body.removePrefix("\uFEFF").replace("\r\n", "\n")

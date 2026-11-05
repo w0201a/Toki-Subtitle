@@ -19,7 +19,7 @@ internal object CommentSnapshotCodec {
                 require(encoded.size <= 320000 && encoded.toString(Charsets.UTF_8) == value)
                 out.writeInt(encoded.size); out.write(encoded); require(bytes.size() <= MAX_BYTES)
             }
-            out.writeInt(0x54434d31); out.writeInt(2)
+            out.writeInt(0x54434d31); out.writeInt(3)
             text(snapshot.account); text(snapshot.video)
             out.writeLong(snapshot.capturedAt); out.writeLong(snapshot.total)
             out.writeBoolean(snapshot.hasMore); out.writeBoolean(snapshot.truncated)
@@ -34,6 +34,13 @@ internal object CommentSnapshotCodec {
                 text(row.id); text(row.author); text(row.handle); text(row.authorId); text(row.source)
                 out.writeBoolean(row.translation != null); row.translation?.let(::text)
                 text(row.language); out.writeInt(row.depth); out.writeLong(row.replyCount); out.writeBoolean(row.sourceTruncated); text(row.parentId)
+                require(row.media.size <= 12)
+                out.writeBoolean(row.mediaKnown); out.writeInt(row.media.size)
+                row.media.forEach { media ->
+                    require(media.id.matches(Regex("[a-f0-9]{64}")) && media.urls.size in 1..12 && media.urls.all { it.length <= 4096 && CommentStickerMedia.allowed(it) })
+                    text(media.id); out.writeInt(media.kind.ordinal); out.writeBoolean(media.animated); out.writeInt(media.urls.size)
+                    media.urls.forEach(::text)
+                }
                 require(bytes.size() <= MAX_BYTES)
             }
             require(snapshot.replyCursors.size <= OfflineCommentData.MAX_ROWS)
@@ -58,7 +65,7 @@ internal object CommentSnapshotCodec {
                 return value
             }
             require(input.readInt() == 0x54434d31)
-            val version = input.readInt(); require(version in 1..2)
+            val version = input.readInt(); require(version in 1..3)
             val account = text(64); val video = text(128)
             require(account.matches(Regex("[a-f0-9]{64}")) && video.isNotBlank())
             val capturedAt = input.readLong(); val total = input.readLong()
@@ -75,7 +82,19 @@ internal object CommentSnapshotCodec {
                 val language = text(64); val depth = input.readInt(); val replies = input.readLong()
                 require(depth in 0..3 && replies >= 0)
                 val shortened = input.readBoolean(); val parent = text(128)
-                OfflineCommentData.Row(id, author, handle, user, source, translated, language, depth, replies, shortened, parent)
+                val mediaKnown = version >= 3 && input.readBoolean()
+                val media = if (version < 3) emptyList() else {
+                    val count = input.readInt(); require(count in 0..12)
+                    (0 until count).map {
+                        val asset = text(64); require(asset.matches(Regex("[a-f0-9]{64}")))
+                        val kind = input.readInt(); require(kind in OfflineCommentData.MediaKind.entries.indices)
+                        val animated = input.readBoolean(); val urls = input.readInt(); require(urls in 1..12)
+                        OfflineCommentData.Media(asset, OfflineCommentData.MediaKind.entries[kind], (0 until urls).map {
+                            text(4096).also { require(CommentStickerMedia.allowed(it)) }
+                        }, animated)
+                    }
+                }
+                OfflineCommentData.Row(id, author, handle, user, source, translated, language, depth, replies, shortened, parent, media, mediaKnown)
             }
             val replies = linkedMapOf<String, OfflineCommentData.ReplyCursor>()
             if (version >= 2) {

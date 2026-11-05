@@ -15,6 +15,7 @@ internal class NativeSubtitleTranslator(
     private val translate: (String, (String?) -> Unit) -> AutoCloseable,
     private val report: (String) -> Unit = {},
     private val access: () -> LocalOnlyRequest = TranslationNetworkPolicy::capture,
+    private val timelineEnabled: (String) -> Boolean = enabled,
 ) : AutoCloseable {
     private class Job(val text: String, var current: () -> Boolean, var deliver: (String) -> Unit,
         var foreground: Boolean = true, val video: String = "", val trackIdentity: String = "", val remote: LocalOnlyRequest) {
@@ -140,7 +141,7 @@ internal class NativeSubtitleTranslator(
         enabled(videoId) && !isChinese(trackLanguage(videoId))
     } catch (_: Exception) { false }
     fun canPrefetch(videoId: String): Boolean = !closed && videoId.isNotBlank() &&
-        try { enabled(videoId) } catch (_: Exception) { false }
+        try { timelineEnabled(videoId) } catch (_: Exception) { false }
 
     fun request(text: String, current: () -> Boolean, deliver: (String) -> Unit) {
         request("", text, current, deliver)
@@ -351,8 +352,9 @@ internal class NativeSubtitleTranslator(
     }
     internal fun diagnosticSummary(): String = "${cache.diagnostic()} active=${active != null} background=${background != null} queued=${ahead.size}"
     internal fun trackSummary(video: String): String = trackIdentity(video).take(8).ifBlank { "pending" }
-    internal fun noteNativeFrame(video: String) {
+    internal fun noteNativeFrame(video: String, visible: Boolean = true) {
         if (video.isBlank()) return
+        if (!visible) { nativeFrames.remove(video); return }
         nativeFrames[video] = SystemClock.uptimeMillis()
         while (nativeFrames.size > 100) nativeFrames.remove(nativeFrames.keys.first())
     }
@@ -390,16 +392,19 @@ internal class NativeSubtitleTranslator(
                     loader.adaptiveClass("com.ss.android.ugc.aweme.translation.service.ITranslationKevaService").adaptiveMethod("LIZ")
             }.getOrNull()
             if (automaticPreference == null) HookRuntime.event("NativeSubtitleTranslation", "optional automatic preference unavailable; module switch and per-video override remain active")
-            return NativeSubtitleTranslator(enabled = { videoId ->
+            fun captionEnabled(videoId: String): Boolean =
                 ConfigClient.getBoolean("video_translate_enabled") &&
-                    ConfigClient.getString("subtitle_text_mode", "translated") != "original" &&
-                    ConfigClient.getString("subtitle_render_mode", "native") == "custom" &&
                     when ((override.invoke(service, videoId) as? Enum<*>)?.name) {
                         "OVERRIDE_TO_ORIGINAL" -> false
                         "OVERRIDE_TO_TRANSLATED" -> true
                         else -> automaticPreference?.let { (holder, automatic) -> automatic.invoke(holder.invoke(null)) == true } ?: true
                     }
-            }, translate = transport(loader), report = { HookRuntime.event("NativeSubtitleTranslation", it) })
+            return NativeSubtitleTranslator(enabled = { videoId ->
+                captionEnabled(videoId) &&
+                    ConfigClient.getString("subtitle_text_mode", "translated") != "original" &&
+                    ConfigClient.getString("subtitle_render_mode", "native") == "custom"
+            }, translate = transport(loader), report = { HookRuntime.event("NativeSubtitleTranslation", it) },
+                timelineEnabled = ::captionEnabled)
         }
 
         /** 独立请求通道，供评论投票使用；不进入视频字幕的排程或预读队列。 */

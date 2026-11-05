@@ -8,6 +8,7 @@ import java.security.MessageDigest
 /** Read only the host's account-specific persisted snapshot; never invoke its network/cache-population jobs. */
 internal class HostOfflineComments(private val loader: ClassLoader) {
     private val reflected = lazy { Contract(loader) }
+    private val media = lazy { OfflineCommentMediaReader(loader) }
 
     fun accountMatches(token: String): Boolean = try {
         reflected.isInitialized() && token == accountToken(reflected.value.account())
@@ -91,7 +92,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
                     OfflineCommentData.bounded(user?.let { contract.handle.invoke(it) as? String }, 128),
                     OfflineCommentData.bounded(user?.let { contract.uid.invoke(it) as? String }, 128),
                     source, translation, OfflineCommentData.bounded(contract.language.invoke(item) as? String, 64),
-                    depth, (contract.replyCount.invoke(item) as Int).toLong().coerceAtLeast(0), shortened, parentId)
+                    depth, (contract.replyCount.invoke(item) as Int).toLong().coerceAtLeast(0), shortened, parentId, media.value.read(item), true)
                 val replies = contract.replies.invoke(item) as? List<*>
                 if ((contract.replyCount.invoke(item) as Int).toLong() > replies.orEmpty().size) truncated = true
                 if (!replies.isNullOrEmpty()) {

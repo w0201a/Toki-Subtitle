@@ -82,6 +82,8 @@ internal class SubtitleOverlay(private val source: View,
             trackIdentity = translator?.trackIdentity(video).orEmpty()
         }
         framePlaybackRevision = playback
+        if (!timelineSource) translator?.noteNativeFrame(video,
+            displayState == "EXPANDED" && text.isNotBlank())
         state = displayState
         caption = text
         videoId = video
@@ -164,7 +166,7 @@ internal class SubtitleOverlay(private val source: View,
                 binding.videoId == videoId && binding.caption.isNotBlank() && binding.frameVisible() &&
                     (binding.translator == null || binding.translator.hasNativeFrame(videoId)) &&
                     (binding.translator == null || binding.framePlaybackRevision == binding.translator.playbackRevision) &&
-                    binding.visiblePage() != null && binding.configuration()?.let(binding::presentationEnabled) == true
+                    binding.visiblePage() != null
             }) {
             resetTranslation(); unmount(); return
         }
@@ -316,7 +318,8 @@ internal class SubtitleOverlay(private val source: View,
     }
 
     private fun presentationEnabled(settings: ConfigSnapshot): Boolean = settings.boolean("subtitle_style_enabled") ||
-        (settings.boolean("video_translate_enabled") && translator?.isEnabled(videoId) == true)
+        (settings.boolean("video_translate_enabled") &&
+            (translator?.isEnabled(videoId) == true || timelineSource && translator?.canPrefetch(videoId) == true))
 
     /** Creator captions can be visibly rendered while the auto-caption state is HIDDEN.
      * Require matching native text with a visible ancestor chain; never show stale hidden frames. */

@@ -55,6 +55,7 @@ internal fun OfflineCommentStatusSection() {
                     Text(host, Modifier.padding(top = 16.dp), style = MaterialTheme.typography.titleSmall)
                     Text(context.getString(R.string.offline_comment_status_values, report.getInt("videos"), report.getInt("originals"),
                         report.getInt("sourcesReady"), report.getInt("ready"), report.getInt("retrying"), report.getInt("queued"), report.getInt("batchSize")))
+                    if (report.containsKey("mediaReady")) Text(context.getString(R.string.offline_comment_media_status, report.getInt("mediaReady"), report.getInt("commentLimit")))
                     if (!report.getBoolean("verified")) Text(context.getString(R.string.offline_comment_status_preparing))
                     else if (!report.getBoolean("network") && report.getInt("ready") < report.getInt("videos")) Text(context.getString(R.string.offline_comment_status_wait_network))
                     val failure = report.getString("failure").orEmpty()

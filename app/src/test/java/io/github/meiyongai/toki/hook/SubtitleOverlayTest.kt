@@ -566,4 +566,50 @@ class SubtitleOverlayTest {
         assertEquals(2, page.childCount)
         controller.pause().stop().destroy()
     }
+    @Test fun hiddenNativeCaptionImmediatelyReleasesCachedTimelineInBothStylesWithoutRemoteTranslation() {
+        for (mode in listOf("native", "custom")) {
+            val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
+            val activity = controller.get()
+            val page = FrameLayout(activity)
+            val video = SurfaceView(activity)
+            val source = FrameLayout(activity)
+            val nativeText = TextView(activity).apply { text = "native cue" }
+            source.addView(nativeText, FrameLayout.LayoutParams(600, 100))
+            page.addView(video, FrameLayout.LayoutParams(1080, 2400))
+            page.addView(source, FrameLayout.LayoutParams(600, 100))
+            activity.setContentView(page)
+            activity.window.decorView.apply {
+                measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+                layout(0, 0, 1080, 2400); settleWindowFrame()
+            }
+            var requests = 0
+            val translator = NativeSubtitleTranslator(enabled = { false },
+                translate = { _, _ -> requests++; AutoCloseable { } }, timelineEnabled = { true })
+            val settings = ConfigSnapshot(mapOf("subtitle_render_mode" to mode,
+                "subtitle_style_enabled" to false, "video_translate_enabled" to true))
+            val native = SubtitleOverlay(source, translator, configuration = { settings })
+            val timeline = SubtitleOverlay(video, translator, timelineSource = true, configuration = { settings })
+            val layer = SubtitleOverlay::class.java.getDeclaredField("layer").apply { isAccessible = true }
+            translator.selectVideo("movie", video)
+            translator.noteNativeFrame("movie")
+            native.update("EXPANDED", "native cue", "movie")
+            timeline.update("EXPANDED", "cached movie cue", "movie")
+            native.onPreDraw(); timeline.onPreDraw()
+            assertNull(layer.get(timeline))
+            translator.noteNativeFrame("movie", false)
+            assertFalse(translator.hasNativeFrame("movie"))
+            nativeText.text = ""
+            native.update("HIDDEN", "", "movie")
+            timeline.onPreDraw(); native.onPreDraw()
+            val overlay = layer.get(timeline) as FrameLayout
+            assertEquals("cached movie cue", (overlay.getChildAt(0) as TextView).text.toString())
+            assertEquals(View.VISIBLE, overlay.visibility)
+            assertEquals(0, requests)
+            timeline.update("HIDDEN", "", "movie"); timeline.onPreDraw()
+            assertEquals(View.INVISIBLE, overlay.visibility)
+            assertEquals(1f, video.alpha)
+            native.close(); timeline.close(); translator.close(); controller.pause().stop().destroy()
+        }
+    }
 }

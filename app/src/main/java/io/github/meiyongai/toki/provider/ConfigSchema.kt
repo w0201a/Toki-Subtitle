@@ -59,7 +59,8 @@ object ConfigSchema {
     private val stringKeys = setOf("target_region", "sim_operator_code", "sim_operator_name",
         "adaptation_retry_token", "subtitle_cache_clear_revision", "subtitle_render_mode", "custom_language", "custom_timezone", "custom_latitude", "custom_longitude",
         "share_hidden_custom_keys", "fixed_speed_value", "speed_expand_list", "download_video_path", "download_image_path",
-        "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode", "video_fill_zoom_percent") +
+        "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode", "video_fill_zoom_percent",
+        "offline_comment_display_mode", "offline_comment_cache_limit") +
         rangePrefixes.flatMap { listOf("${it}_min", "${it}_max") } +
         io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityKey }
     private val subtitleKeys = setOf("subtitle_size", "subtitle_x", "subtitle_y", "subtitle_font", "subtitle_font_asset", "subtitle_font_asset_name", "subtitle_weight", "subtitle_color", "subtitle_background", "subtitle_background_mode") +
@@ -101,6 +102,8 @@ object ConfigSchema {
                     require(value.matches(Regex("#[0-9A-Fa-f]{8}")))
                 "subtitle_alignment" -> require(value in setOf("start", "center", "end"))
                 "subtitle_text_mode" -> require(value in setOf("original", "translated", "bilingual"))
+                "offline_comment_display_mode" -> require(value in io.github.meiyongai.toki.subtitle.model.OfflineCommentPreferences.modes)
+                "offline_comment_cache_limit" -> require(value.toIntOrNull() in 1..2500)
                 "subtitle_max_lines" -> require(value.toIntOrNull() in 0..12)
                 "subtitle_size" -> number(key, value, 6.0, 160.0)
                 "subtitle_x", "subtitle_y" -> number(key, value, -1000.0, 1000.0)
