@@ -339,6 +339,7 @@ internal object HookRuntime {
         putInt("pid", Process.myPid())
         putLong("started", started)
         putLong("updated", System.currentTimeMillis())
+        OfflineCommentDownloadHook.statusSnapshot()?.let { putBundle("offlineComments", it) }
         putString("adaptation", adaptation)
         putString("trialLog", io.github.meiyongai.toki.subtitle.provider.TrialLog.snapshot())
         val operations = io.github.meiyongai.toki.subtitle.provider.OperationDiagnostics.capture()

@@ -69,6 +69,7 @@ internal fun OfflineVideoSection() {
             summary=context.getString(R.string.offline_comment_passive_hint),checked=passiveFill,modifier=Modifier.padding(12.dp),onCheckedChange={
                 try{ConfigClient.putBoolean(context,OfflineCommentDownloadHook.PASSIVE,it);failed=false}catch(_:Exception){failed=true}
             })
+        OfflineCommentStatusSection()
         if (failed) Text(context.getString(R.string.manual_comment_save_error), Modifier.padding(12.dp), color = MaterialTheme.colorScheme.error)
     }
 }

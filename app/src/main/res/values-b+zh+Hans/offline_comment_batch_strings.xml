@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_comment_status_open">查看离线评论缓存状态</string>
+    <string name="offline_comment_status_title">离线评论缓存</string>
+    <string name="offline_comment_status_hint">后台分批处理，不在播放页面显示进度或弹窗。这里仅查看状态；返回主页后任务仍继续。视频下载完成不代表评论和译文已全部就绪。</string>
+    <string name="offline_comment_status_values">已登记视频：%1$d\n已有首批原文：%2$d\n原文与回复齐全：%3$d\n原文及译文全部就绪：%4$d\n等待重试：%5$d\n待登记：%6$d\n每批处理：%7$d 个视频</string>
+    <string name="offline_comment_status_unavailable">当前没有宿主状态。宿主需已运行并加载本版模块；查看状态不会启动应用。</string>
+    <string name="offline_comment_status_preparing">模块正在准备，尚未开始评论请求。</string>
+    <string name="offline_comment_status_wait_network">等待网络或下载评论缓存开关开启，已有内容继续保留。</string>
+    <string name="offline_comment_status_translation_retry">部分译文等待后台重试，已保存的原文保留。</string>
+    <string name="offline_comment_status_source_retry">部分评论请求未完成，后台会按间隔继续重试。</string>
+    <string name="offline_comment_status_retry">部分任务尚未完成，等待后台继续处理。</string>
+    <string name="offline_comment_status_refresh">刷新状态</string>
+</resources>

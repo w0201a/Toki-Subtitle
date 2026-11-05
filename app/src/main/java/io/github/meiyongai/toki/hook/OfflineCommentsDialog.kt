@@ -149,8 +149,10 @@ internal object OfflineCommentsDialog {
                     val result = try {
                         val account = reader.account(app)
                         var savedReadFailed = false
+                        var archiveReadFailed = false
                         val saved = try { CommentSnapshotStore.read(app, account, video) } catch (_: Exception) { savedReadFailed = true; null }
-                        val archived=OfflineCommentArchive.window(app,account,video,archiveOffset)
+                        val archived = try { OfflineCommentArchive.window(app,account,video,archiveOffset) }
+                            catch (_: Exception) { archiveReadFailed = true; savedReadFailed = true; null }
                         val native = archived?.snapshot ?: try { reader.read(app, video) { !closed.get() && generation.get() == token } }
                             catch (error: Exception) {
                                 if (saved == null) {
@@ -165,9 +167,9 @@ internal object OfflineCommentsDialog {
                             else -> CommentPageMerge.cached(native, saved)
                         }
                         val readable = if (savedReadFailed) snapshot.copy(truncated = true) else snapshot
-                        if(archived==null)try{OfflineCommentArchive.save(app,readable,0L)}catch(_:Exception){}
-                        val restored = if(archived!=null)readable else try { CommentTranslationStore.restore(app, readable, preferredTarget) } catch (_: Exception) { readable }
-                        Result.success(Triple(restored,archived?.next,OfflineCommentArchive.state(app,account,video)))
+                        if(archived==null && !archiveReadFailed)try{OfflineCommentArchive.save(app,readable,0L)}catch(_:Exception){}
+                        val restored = try { CommentTranslationStore.restore(app, readable, preferredTarget) } catch (_: Exception) { readable }
+                        Result.success(Triple(restored,archived?.next,try { OfflineCommentArchive.state(app,account,video) } catch (_: Exception) { "partial" }))
                     } catch (error: Exception) { Result.failure<Triple<OfflineCommentData.Snapshot,Int?,String>>(error) }
                       catch (error: LinkageError) { Result.failure<Triple<OfflineCommentData.Snapshot,Int?,String>>(error) }
                     main.post {

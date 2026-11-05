@@ -124,6 +124,43 @@ internal object OfflineCommentArchive {
             hasMore=false,nextCursor=null,truncated=manifest.optString("state")!="complete"),offset,
             if(unique>offset+rows.size)offset+rows.size else null)
     }
+    data class TranslationWork(val page: OfflineCommentData.Snapshot, val row: OfflineCommentData.Row)
+    @Synchronized fun nextTranslation(context: Context, account: String, video: String, target: String): TranslationWork? {
+        val dir = folder(context, account, video); val pages = index(dir).getJSONObject("pages")
+        for (name in pages.keys().asSequence().toList().sorted()) {
+            val page = CommentSnapshotCodec.decode(AtomicFile(File(dir, "$name.bin")).openRead().use { it.readBytes() })
+            require(page.account == account && page.video == video)
+            val row = page.rows.firstOrNull { it.source.isNotBlank() && (it.sourceTruncated || it.translation.isNullOrBlank() ||
+                CommentTranslationKey.normalizedTarget(it.language) != target) }
+            if (row != null) return TranslationWork(page, row)
+        }
+        return null
+    }
+    @Synchronized fun translationsReady(context: Context, account: String, video: String, target: String): Boolean {
+        val dir = folder(context, account, video)
+        if (index(dir).getJSONObject("pages").length() == 0) return false
+        return nextTranslation(context, account, video, target) == null
+    }
+    /** Background completion may only update rows that still exist with the same source. It never creates a guessed page. */
+    @Synchronized fun commitTranslation(context: Context, account: String, video: String, row: OfflineCommentData.Row,
+        target: String, translated: String, active: () -> Boolean): Boolean {
+        require(!row.sourceTruncated && translated.isNotBlank() && translated.length <= 80000)
+        if (!active()) return false
+        val dir = folder(context, account, video); val pages = index(dir).getJSONObject("pages"); var updated = false
+        for (name in pages.keys()) {
+            val file = File(dir, "$name.bin")
+            val old = CommentSnapshotCodec.decode(AtomicFile(file).openRead().use { it.readBytes() })
+            require(old.account == account && old.video == video)
+            if (old.rows.any { it.id == row.id && it.source == row.source }) {
+                if (!active()) return false
+                write(file, CommentSnapshotCodec.encode(old.copy(rows = old.rows.map {
+                    if (it.id == row.id && it.source == row.source) it.copy(translation = translated, language = target) else it
+                })))
+                updated = true
+            }
+        }
+        return updated
+    }
     @Synchronized fun status(context: Context, account:String, video:String, state:String, detail:String="") {
         require(state in setOf("pending","fetching","translating","partial","complete","failed"))
         val dir=folder(context,account,video);check(dir.isDirectory||dir.mkdirs());val m=index(dir)

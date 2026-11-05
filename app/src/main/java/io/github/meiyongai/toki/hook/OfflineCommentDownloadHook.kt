@@ -4,197 +4,332 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import io.github.libxposed.api.XposedModule
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
-import org.json.JSONObject
 import org.json.JSONArray
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
-import java.util.concurrent.Executors
-import java.util.concurrent.atomic.AtomicBoolean
+import org.json.JSONObject
 import java.lang.reflect.Modifier
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
+import java.io.IOException
+import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
+import java.util.concurrent.atomic.AtomicLong
 
-/** Download-bound durable jobs. Does not depend on visible playback, dialog lifetime or the old translation toggle. */
+/** Download-owned background companions. Ingestion, comment pages and subtitle-channel translation never block each other. */
 internal object OfflineCommentDownloadHook {
-    const val FEATURE="OfflineCommentDownloadHook"
-    const val KEY="offline_comment_download_cache"
-    const val BACKFILL="offline_comment_backfill_active"
-    const val PASSIVE="offline_comment_backfill_passive"
-    private val running=AtomicBoolean(false)
-
-    private var enqueueVisible:((Any)->Unit)?=null
-    fun passive(model:Any){if(ConfigClient.isReady&&ConfigClient.getBoolean(PASSIVE))enqueueVisible?.invoke(model)}
-    private fun prefs(context:Context)=context.getSharedPreferences("toki_offline_comment_jobs_v1",Context.MODE_PRIVATE)
-    fun networkAllowed():Boolean {
-        if(!ConfigClient.isReady||!ConfigClient.getBoolean(KEY))return false
-        return try{
-            val manager=HookRuntime.hostContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?:return false
-            val caps=manager.getNetworkCapabilities(manager.activeNetwork?:return false)?:return false
-            caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)&&caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-        }catch(_:Exception){false}
+    private class IncompleteCoverage : IllegalStateException()
+    private const val FEATURE = "OfflineCommentDownloadHook"
+    const val KEY = "offline_comment_download_cache"
+    const val BACKFILL = "offline_comment_backfill_active"
+    const val PASSIVE = "offline_comment_backfill_passive"
+    private var enqueueVisible: ((Any) -> Unit)? = null
+    private val progress = AtomicReference<Bundle?>()
+    fun statusSnapshot(): Bundle? = progress.get()?.let(::Bundle)
+    fun passive(model: Any) { if (ConfigClient.isReady && ConfigClient.getBoolean(PASSIVE)) enqueueVisible?.invoke(model) }
+    private fun prefs(context: Context) = context.getSharedPreferences("toki_offline_comment_jobs_v1", Context.MODE_PRIVATE)
+    fun networkAllowed(): Boolean {
+        return try {
+            if (!ConfigClient.isReady || !ConfigClient.getBoolean(KEY)) return false
+            val manager = HookRuntime.hostContext?.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager ?: return false
+            val caps = manager.getNetworkCapabilities(manager.activeNetwork ?: return false) ?: return false
+            caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) && caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        } catch (_: Exception) { false }
     }
-    fun capture()=LocalOnlyRequest{networkAllowed()}
-    fun init(module:XposedModule,loader:ClassLoader){
-        val app=checkNotNull(HookRuntime.hostContext);val main=Handler(Looper.getMainLooper())
-        val worker=Executors.newSingleThreadExecutor{task->Thread(task,"toki-offline-comment-download").apply{isDaemon=true}}
-        val reader=HostOfflineComments(loader);val network=HostCommentPageNetwork(loader);val replies=HostCommentReplyNetwork(loader)
-        val aweme=Class.forName("com.ss.android.ugc.aweme.feed.model.Aweme",false,loader)
-        val id=aweme.getMethod("getAid");val repository=Class.forName("X.0A6x",false,loader)
-        val list=repository.getDeclaredMethod("LJIJI").apply{check(Modifier.isStatic(modifiers)&&List::class.java.isAssignableFrom(returnType))}
-        val completion=Class.forName("X.0rF7",false,loader).getDeclaredMethod("LIZ",aweme,String::class.java).apply{
-            check(Modifier.isStatic(modifiers)&&returnType==Void.TYPE);isAccessible=true
+    fun capture() = LocalOnlyRequest { networkAllowed() }
+    fun init(module: XposedModule, loader: ClassLoader) {
+        val app = checkNotNull(HookRuntime.hostContext); val main = Handler(Looper.getMainLooper())
+        fun worker(name: String) = Executors.newSingleThreadExecutor { task -> Thread(task, name).apply { isDaemon = true } }
+        val indexWorker = worker("toki-comment-index")
+        val sourceWorker = worker("toki-comment-pages")
+        val translationWorker = worker("toki-comment-translations")
+        val reader = HostOfflineComments(loader); val network = HostCommentPageNetwork(loader); val replies = HostCommentReplyNetwork(loader)
+        data class IngressModel(val model: Any, val generation: Long)
+        val ingressGeneration = AtomicLong(0L)
+        val registrationRetryAt = AtomicLong(0L)
+        val jobs = OfflineCommentJobStore(prefs(app)); val ingress = OfflineCommentIngress<IngressModel>()
+        val aweme = Class.forName("com.ss.android.ugc.aweme.feed.model.Aweme", false, loader)
+        val id = aweme.getMethod("getAid")
+        val repository = Class.forName("X.0A6x", false, loader)
+        val list = repository.getDeclaredMethod("LJIJI").apply { check(Modifier.isStatic(modifiers) && List::class.java.isAssignableFrom(returnType)) }
+        val completion = Class.forName("X.0rF7", false, loader).getDeclaredMethod("LIZ", aweme, String::class.java).apply {
+            check(Modifier.isStatic(modifiers) && returnType == Void.TYPE); isAccessible = true
         }
-        val transport by lazy{NativeSubtitleTranslator.transport(loader,::capture)}
-        val facade by lazy{loader.adaptiveClass("X.03hV")};val service by lazy{facade.adaptiveDeclaredField("LIZIZ")}
-        val language by lazy{facade.adaptiveDeclaredMethod("LLILLIZIL")}
-        fun target():String=CommentTranslationKey.normalizedTarget(language.invoke(service.get(null)) as String)?:error("Translation target unavailable")
-        val closedFlag=AtomicBoolean(false);val readyFlag=AtomicBoolean(false)
-        fun closed()=closedFlag.get()
-        fun ready()=readyFlag.get()
-        fun record(model:Any){
-            if(closed()||!ready()||!ConfigClient.isReady||!ConfigClient.getBoolean(KEY)||!aweme.isInstance(model))return
-            try{
-                val video=id.invoke(model) as? String?:return
-                val account=reader.account(app);val key=CommentSnapshotStore.key(account,video)
-                var previous=prefs(app).getString(key,null)?.let(::JSONObject)
-                val nowTarget=try{target()}catch(_:Exception){null}
-                if(nowTarget!=null&&previous?.optString("target")?.takeIf{it.isNotBlank()}?.let{it!=nowTarget}==true)previous=null
-                if(previous?.optString("state")=="complete"||previous?.optString("state")=="pending")return
-                val job=previous?:JSONObject().put("account",account).put("video",video).put("cursor",0L).put("roots",JSONArray())
-                job.put("epoch",prefs(app).getLong("epoch:"+account,0L))
-                OfflineCommentArchive.saveModel(app,account,video,reader.serializeModel(model))
-                job.put("state","pending").put("attempts",0)
-                check(prefs(app).edit().putString(key,job.toString()).commit())
-                OfflineCommentArchive.status(app,account,video,"pending")
-            }catch(e:Exception){HookRuntime.event(FEATURE,"下载任务记录失败 type="+e.javaClass.simpleName)}
-        }
-        fun <T> await(start:((Result<T>)->Unit)->AutoCloseable):T{
-            val latch=CountDownLatch(1);var result:Result<T>?=null
-            val handle=start{value->result=value;latch.countDown()}
-            try{check(latch.await(20,TimeUnit.SECONDS)){"Offline comment request timeout"};return checkNotNull(result).getOrThrow()}
-            finally{handle.close()}
-        }
-        fun translatePage(page:OfflineCommentData.Snapshot,lang:String,cursor:Long,root:String,active:()->Boolean):OfflineCommentData.Snapshot{
-            val rows=page.rows.toMutableList()
-            for(i in rows.indices){
-                check(active());val row=rows[i]
-                if(row.source.isBlank())continue
-                require(!row.sourceTruncated){"Comment source too long; original is incomplete"}
-                if(!row.translation.isNullOrBlank()&&CommentTranslationKey.normalizedTarget(row.language)==lang)continue
-                val translated=await<String>{done->
-                    var task:ManualCommentTranslation?=null
-                    val cancelled=AtomicBoolean(false)
-                    main.post{
-                        if(cancelled.get()||!active()){done(Result.failure(IllegalStateException("Cancelled")));return@post}
-                        val once=AtomicBoolean(false)
-                        task=ManualCommentTranslation(translate={text,complete->
-                            if(cancelled.get()||!active()){complete(null);AutoCloseable{}}else transport(text,complete)
-                        },post={r,delay->main.postDelayed(r,delay);Unit},remove={main.removeCallbacks(it)},changed={state->
-                            if(!state.busy&&once.compareAndSet(false,true)){
-                                val value=state.translated?:if(state.failed==0&&state.completed==state.total)state.original else null
-                                done(if(value!=null&&state.failed==0)Result.success(value) else Result.failure(IllegalStateException("Translation incomplete")))
-                            }
-                        })
-                        task?.start(row.source)
-                    }
-                    AutoCloseable{cancelled.set(true);main.post{task?.close()}}
-                }
-                check(active());rows[i]=row.copy(translation=translated,language=lang)
-                // Checkpoint every finished row so a process exit cannot discard already translated comments.
-                OfflineCommentArchive.save(app,page.copy(rows=rows.toList()),cursor,root,active)
-            }
-            return page.copy(rows=rows.toList())
-        }
-        fun execute(key:String,job:JSONObject){
-            val account=job.getString("account");val video=job.getString("video");val model=reader.parseModel(OfflineCommentArchive.model(app,account,video))
-            val lang=job.optString("target").takeIf{it.isNotBlank()}?:target().also{job.put("target",it)}
-            fun active()=!closed()&&networkAllowed()&&reader.accountMatches(account)&&target()==lang&&
-                prefs(app).getLong("epoch:"+account,0L)==job.optLong("epoch")
-            check(active())
-            val cursor=job.getLong("cursor");val roots=job.getJSONArray("roots")
-            val root=if(job.optBoolean("rootPhase")&&roots.length()>0)roots.getJSONObject(0).getString("id") else ""
-            val position=if(root.isNotEmpty())roots.getJSONObject(0).getLong("cursor") else cursor
-            OfflineCommentArchive.status(app,account,video,"fetching")
-            val remote=capture();val op=CommentPageOperation()
-            val saved=OfflineCommentArchive.page(app,account,video,position,root)
-            val rawPage=saved?:await<Any>{done->
-                if(root.isEmpty())network.fetch(app,reader,video,model,position,account,remote,op,done)
-                else replies.fetch(app,reader,video,model,root,position,account,remote,op,done)
-                op
-            }.let{reader.copyResponse(app,video,account,it,System.currentTimeMillis(),root.takeIf{it.isNotEmpty()},::active)}
-            val page=if(root.isEmpty()||saved!=null)rawPage else rawPage.copy(rows=rawPage.rows.map{
-                it.copy(depth=(it.depth+1).coerceAtMost(3),parentId=it.parentId.ifBlank{root})
+        val transport by lazy { NativeSubtitleTranslator.transport(loader, ::capture) }
+        val facade by lazy { loader.adaptiveClass("X.03hV") }; val service by lazy { facade.adaptiveDeclaredField("LIZIZ") }
+        val language by lazy { facade.adaptiveDeclaredMethod("LLILLIZIL") }
+        fun target(): String = CommentTranslationKey.normalizedTarget(language.invoke(service.get(null)) as String)
+            ?: error("Translation target unavailable")
+        val closedFlag = AtomicBoolean(false); val readyFlag = AtomicBoolean(false)
+        val draining = AtomicBoolean(false); val scanning = AtomicBoolean(false)
+        val fetching = AtomicBoolean(false); val translating = AtomicBoolean(false)
+        val failureRuns = OfflineCommentWorkPlan.Lane.entries.associateWith { AtomicInteger(0) }
+        val cooldowns = OfflineCommentWorkPlan.Lane.entries.associateWith { AtomicLong(0L) }
+        val lastFailure = AtomicReference("")
+        fun closed() = closedFlag.get()
+        fun ready() = readyFlag.get()
+        lateinit var pump: () -> Unit
+        lateinit var drain: () -> Unit
+        fun publish() {
+            if (closed()) return
+            val rows = try { jobs.rows(reader.account(app)).map { it.second } } catch (_: Exception) { emptyList() }
+            progress.set(Bundle().apply {
+                putInt("batchSize", OfflineCommentWorkPlan.BATCH_SIZE); putInt("videos", rows.size)
+                putInt("originals", rows.count { it.optBoolean("firstPage") })
+                putInt("sourcesReady", rows.count { it.optBoolean("sourceReady") })
+                putInt("ready", rows.count { it.optBoolean("sourceReady") && it.optBoolean("translationReady") })
+                putInt("retrying", rows.count { it.optString("state") == "partial" })
+                putInt("queued", ingress.size()); putBoolean("network", networkAllowed()); putBoolean("verified", ready())
+                putString("failure", lastFailure.get()); putLong("updated", System.currentTimeMillis())
             })
-            check(active());OfflineCommentArchive.save(app,page,position,root,::active)
-            OfflineCommentArchive.status(app,account,video,"translating")
-            val translated=translatePage(page,lang,position,root,::active)
-            OfflineCommentArchive.save(app,translated,position,root,::active)
-            val nextCursor=OfflineCommentDownloadProgress.advance(position,page)
-            require(OfflineCommentDownloadProgress.translated(translated,lang)){"Some translations missing"}
-            if(root.isEmpty()){
-                val known=(0 until roots.length()).map{roots.getJSONObject(it).getString("id")}.toMutableSet()
-                page.rows.filter{it.depth==0&&it.parentId.isBlank()&&it.replyCount>page.rows.count{child->child.parentId==it.id}}.forEach{
-                    if(known.add(it.id))roots.put(JSONObject().put("id",it.id).put("cursor",0L))
+            HookRuntime.detail(FEATURE, "batch=5 videos=${rows.size} sourceReady=${rows.count { it.optBoolean("sourceReady") }} " +
+                "ready=${rows.count { it.optBoolean("sourceReady") && it.optBoolean("translationReady") }} queued=${ingress.size()}; " + lastFailure.get())
+        }
+        fun record(model: Any) {
+            if (closed() || !ready() || !ConfigClient.isReady || !ConfigClient.getBoolean(KEY) || !aweme.isInstance(model)) return
+            val video = id.invoke(model) as? String ?: return
+            val account = reader.account(app); val key = CommentSnapshotStore.key(account, video)
+            val seed = JSONObject().put("account", account).put("video", video).put("cursor", 0L).put("roots", JSONArray())
+                .put("epoch", prefs(app).getLong("epoch:" + account, 0L))
+            OfflineCommentArchive.saveModel(app, account, video, reader.serializeModel(model))
+            jobs.register(key, seed) { row ->
+                val first = try { OfflineCommentArchive.page(app, account, video, 0L) != null } catch (_: Exception) { false }
+                if (row.optInt("schema") != 2) {
+                    row.put("schema", 2).put("firstPage", first).put("sourceRevision", 1L)
+                    val sourceReady = row.optBoolean("rootPhase") && row.getJSONArray("roots").length() == 0 && first &&
+                        try { OfflineCommentArchive.coverage(app, account, video) } catch (_: Exception) { false }
+                    row.put("sourceReady", sourceReady).put("translationReady", false).put("state", "pending")
+                        .put("sourceRetryAt", 0L).put("translationRetryAt", 0L)
                 }
-                if(nextCursor!=null)job.put("cursor",nextCursor) else job.put("rootPhase",true)
-            }else{
-                if(nextCursor!=null)roots.getJSONObject(0).put("cursor",nextCursor)
-                else{val remaining=JSONArray();for(i in 1 until roots.length())remaining.put(roots.get(i));job.put("roots",remaining)}
+                if (!first && (row.optBoolean("firstPage") || row.optBoolean("sourceReady") || row.optLong("cursor") > 0L || row.optBoolean("rootPhase") || row.getJSONArray("roots").length() > 0)) {
+                    row.put("cursor", 0L).put("roots", JSONArray()).put("rootPhase", false)
+                        .put("sourceReady", false).put("translationReady", false).put("state", "pending")
+                        .put("sourceRevision", row.optLong("sourceRevision") + 1L)
+                }
+                row.put("firstPage", first)
             }
-            val complete=job.optBoolean("rootPhase")&&job.getJSONArray("roots").length()==0
-            if(complete)check(OfflineCommentArchive.coverage(app,account,video)){"Server totals exceed saved comment coverage"}
-            job.put("state",if(complete)"complete" else "pending").put("attempts",0)
-            check(active())
-            check(prefs(app).edit().putString(key,job.toString()).commit())
-            OfflineCommentArchive.status(app,account,video,if(complete)"complete" else "pending")
-            HookRuntime.count(FEATURE,if(complete)"原文与译文下载阶段缓存完成" else "已持久保存一页原文与译文")
         }
-        lateinit var pump:()->Unit
-        pump={
-            if(!closed()&&ready()&&networkAllowed()&&running.compareAndSet(false,true))worker.execute{
-                var more=false
-                try{
-                    val account=reader.account(app)
-                    val entries=prefs(app).all.entries.sortedBy { (_,v)->try{JSONObject(v as String).optLong("lastRun")}catch(_:Exception){Long.MAX_VALUE} }
-                    for((key,value)in entries){
-                        val job=try{JSONObject(value as String)}catch(_:Exception){continue}
-                        if(job.optString("account")!=account||job.optString("state")=="complete"||job.optInt("attempts")>=3||job.optLong("retryAt")>System.currentTimeMillis())continue
-                        job.put("lastRun",System.currentTimeMillis())
-                        try{execute(key,job)}catch(e:Exception){
-                            job.put("state","partial").put("attempts",job.optInt("attempts")+1).put("retryAt",System.currentTimeMillis()+5000)
-                            if(prefs(app).getLong("epoch:"+account,0L)==job.optLong("epoch")) {
-                                prefs(app).edit().putString(key,job.toString()).commit()
-                                OfflineCommentArchive.status(app,account,job.getString("video"),"partial",e.javaClass.simpleName)
-                            }
-                            HookRuntime.event(FEATURE,"评论预缓存暂停 type="+e.javaClass.simpleName)
-                        }
-                        more=true;break // one bounded page per scheduling turn; durable list has no drop-oldest queue
+        val ingressTick = Runnable { drain() }
+
+        drain = {
+            val wait = registrationRetryAt.get() - System.currentTimeMillis()
+            if (wait > 0L && !closed()) { main.removeCallbacks(ingressTick); main.postDelayed(ingressTick, wait) }
+            else if (!closed() && ready() && ConfigClient.isReady && ConfigClient.getBoolean(KEY) && draining.compareAndSet(false, true)) indexWorker.execute {
+                try { ingress.take(true).forEach { item ->
+                    if (item.generation == ingressGeneration.get()) try { record(item.model) } catch (error: Exception) {
+                        (id.invoke(item.model) as? String)?.let { ingress.offer(it, item) }
+                        registrationRetryAt.set(System.currentTimeMillis() + 30_000L)
+                        lastFailure.set(OfflineCommentRequestFailure.describe("register", error))
+                        HookRuntime.event(FEATURE, lastFailure.get())
                     }
-                }catch(e:Exception){HookRuntime.event(FEATURE,"下载缓存调度失败 type="+e.javaClass.simpleName)}
-                finally{running.set(false);if(more&&!closed())main.postDelayed({pump()},5000)}
+                } } finally {
+                    draining.set(false); publish()
+                    main.post { if (ingress.size() > 0) drain(); pump() }
+                }
             }
         }
-        enqueueVisible={model->if(!closed())worker.execute{record(model);main.post{pump()}}}
-        module.trackHook(FEATURE,completion,requiresConfiguration=false).intercept{chain->
-            val model=chain.args[0];val result=chain.proceed()
-            if(model!=null&&!closed()&&ConfigClient.isReady&&ConfigClient.getBoolean(KEY))worker.execute{record(model);main.post{pump()}}
+        fun offer(model: Any) {
+            if (closed() || !aweme.isInstance(model)) return
+            if (ConfigClient.isReady && !ConfigClient.getBoolean(KEY)) return
+            val video = id.invoke(model) as? String ?: return
+            ingress.offer(video, IngressModel(model, ingressGeneration.get())); drain()
+        }
+        enqueueVisible = ::offer
+        fun backfill() {
+            if (!closed() && ready() && ConfigClient.isReady && ConfigClient.getBoolean(KEY) &&
+                ConfigClient.getBoolean(BACKFILL) && scanning.compareAndSet(false, true)) indexWorker.execute {
+                try {
+                    val generation = ingressGeneration.get()
+                    (list.invoke(null) as? List<*>)?.filterNotNull()?.forEach { model ->
+                        if (aweme.isInstance(model)) (id.invoke(model) as? String)?.let { ingress.offer(it, IngressModel(model, generation)) }
+                    }
+                } catch (error: Exception) { lastFailure.set(OfflineCommentRequestFailure.describe("download_list", error)) }
+                finally { scanning.set(false); main.post { drain() } }
+            }
+        }
+        fun <T> await(start: ((Result<T>) -> Unit) -> AutoCloseable): T {
+            val latch = CountDownLatch(1); val result = AtomicReference<Result<T>?>()
+            val handle = start { value -> result.set(value); latch.countDown() }
+            try {
+                if (!latch.await(20, TimeUnit.SECONDS)) throw TimeoutException("Offline comment request timeout")
+                return checkNotNull(result.get()).getOrThrow()
+            } finally { handle.close() }
+        }
+        fun active(job: JSONObject): Boolean = !closed() && networkAllowed() && reader.accountMatches(job.getString("account")) &&
+            prefs(app).getLong("epoch:" + job.getString("account"), 0L) == job.optLong("epoch")
+        fun sourcePage(key: String, job: JSONObject) {
+            check(active(job))
+            val account = job.getString("account"); val video = job.getString("video")
+            val model = reader.parseModel(OfflineCommentArchive.model(app, account, video))
+            val roots = job.getJSONArray("roots")
+            val root = if (job.optBoolean("rootPhase") && roots.length() > 0) roots.getJSONObject(0).getString("id") else ""
+            val cursor = if (root.isNotEmpty()) roots.getJSONObject(0).getLong("cursor") else job.optLong("cursor")
+            val saved = try { OfflineCommentArchive.page(app, account, video, cursor, root) } catch (_: Exception) { null }
+            val page = saved ?: run {
+                val op = CommentPageOperation(); val remote = capture()
+                val response = await<Any> { done ->
+                    if (root.isEmpty()) network.fetch(app, reader, video, model, cursor, account, remote, op, done)
+                    else replies.fetch(app, reader, video, model, root, cursor, account, remote, op, done)
+                    op
+                }
+                val raw = reader.copyResponse(app, video, account, response, System.currentTimeMillis(), root.takeIf { it.isNotEmpty() }) { active(job) }
+                (if (root.isEmpty()) raw else raw.copy(rows = raw.rows.map {
+                    it.copy(depth = (it.depth + 1).coerceAtMost(3), parentId = it.parentId.ifBlank { root })
+                })).also { OfflineCommentArchive.save(app, it, cursor, root) { active(job) } }
+            }
+            val next = OfflineCommentDownloadProgress.advance(cursor, page)
+            if (root.isEmpty()) {
+                val known = (0 until roots.length()).map { roots.getJSONObject(it).getString("id") }.toMutableSet()
+                page.rows.filter { it.depth == 0 && it.parentId.isBlank() && it.replyCount > page.rows.count { child -> child.parentId == it.id } }
+                    .forEach { if (known.add(it.id)) roots.put(JSONObject().put("id", it.id).put("cursor", 0L)) }
+                if (next != null) job.put("cursor", next) else job.put("rootPhase", true)
+            } else if (next != null) roots.getJSONObject(0).put("cursor", next) else {
+                val remaining = JSONArray(); for (i in 1 until roots.length()) remaining.put(roots.get(i)); job.put("roots", remaining)
+            }
+            val ended = job.optBoolean("rootPhase") && job.getJSONArray("roots").length() == 0
+            val covered = ended && OfflineCommentArchive.coverage(app, account, video)
+            check(active(job))
+            jobs.change(key, job.optLong("epoch")) { row ->
+                if (ended && !covered) row.put("coverageFailures", row.optInt("coverageFailures") + 1)
+                else if (covered) row.put("coverageFailures", 0)
+                row.put("cursor", if (ended && !covered) 0L else job.optLong("cursor"))
+                    .put("roots", if (ended && !covered) JSONArray() else job.getJSONArray("roots"))
+                    .put("rootPhase", ended && covered || !ended && job.optBoolean("rootPhase"))
+                    .put("firstPage", true).put("sourceReady", covered).put("translationReady", false)
+                    .put("sourceRevision", row.optLong("sourceRevision") + 1L)
+                    .put("sourceAttempts", 0).put("sourceRetryAt", 0L).put("state", "pending")
+            }
+            if (ended && !covered) throw IncompleteCoverage()
+            OfflineCommentArchive.status(app, account, video, "pending")
+        }
+        fun translateRow(key: String, job: JSONObject) {
+            check(active(job)); val lang = target()
+            if (job.optString("target") != lang) jobs.change(key, job.optLong("epoch")) { it.put("target", lang).put("translationReady", false) }
+            val account = job.getString("account"); val video = job.getString("video")
+            val work = OfflineCommentArchive.nextTranslation(app, account, video, lang)
+            if (work == null) {
+                if (OfflineCommentArchive.translationsReady(app, account, video, lang) &&
+                    jobs.finishTranslation(key, job.optLong("epoch"), job.optLong("sourceRevision"))) {
+                    val state = jobs.get(key)?.optString("state") ?: "pending"
+                    OfflineCommentArchive.status(app, account, video, state)
+                }
+                return
+            }
+            require(!work.row.sourceTruncated) { "Comment original is incomplete" }
+            val restored = CommentTranslationStore.restore(app, work.page, lang).rows.first { it.id == work.row.id && it.source == work.row.source }
+            val known = restored.translation?.takeIf { it.isNotBlank() && CommentTranslationKey.normalizedTarget(restored.language) == lang }
+            val translated = known ?: await<String> { done ->
+                val cancelled = AtomicBoolean(false); var task: ManualCommentTranslation? = null
+                main.post {
+                    if (cancelled.get() || !active(job)) { done(Result.failure(IllegalStateException("Cancelled"))); return@post }
+                    val once = AtomicBoolean(false)
+                    task = ManualCommentTranslation(translate = { text, complete ->
+                        if (cancelled.get() || !active(job)) { complete(null); AutoCloseable { } } else transport(text, complete)
+                    }, post = { action, delay -> main.postDelayed(action, delay); Unit }, remove = { main.removeCallbacks(it) }, changed = { state ->
+                        if (!state.busy && once.compareAndSet(false, true)) {
+                            val value = state.translated ?: if (state.failed == 0 && state.completed == state.total) state.original else null
+                            done(if (value != null && state.failed == 0) Result.success(value) else Result.failure(IllegalStateException("Translation incomplete")))
+                        }
+                    })
+                    task?.start(work.row.source)
+                }
+                AutoCloseable { cancelled.set(true); main.post { task?.close() } }
+            }
+            check(active(job) && target() == lang)
+            check(OfflineCommentArchive.commitTranslation(app, account, video, work.row, lang, translated) { active(job) && target() == lang })
+            jobs.change(key, job.optLong("epoch")) { it.put("translationAttempts", 0).put("translationRetryAt", 0L).put("state", "pending") }
+        }
+        fun failed(key: String, job: JSONObject, lane: OfflineCommentWorkPlan.Lane, error: Exception) {
+            val prefix = if (lane == OfflineCommentWorkPlan.Lane.SOURCE) "source" else "translation"
+            val detail = OfflineCommentRequestFailure.describe(prefix, error)
+            lastFailure.set(detail)
+            jobs.change(key, job.optLong("epoch")) {
+                val attempt = maxOf(it.optInt(prefix + "Attempts") + 1,
+                    if (lane == OfflineCommentWorkPlan.Lane.SOURCE) it.optInt("coverageFailures") else 0)
+                it.put(prefix + "Attempts", attempt).put(prefix + "RetryAt", System.currentTimeMillis() + OfflineCommentWorkPlan.retryDelay(attempt))
+                    .put("state", "partial").put("lastFailure", detail)
+            }
+            if (active(job)) OfflineCommentArchive.status(app, job.getString("account"), job.getString("video"), "partial", detail)
+            val remoteFailure = generateSequence(error as Throwable?) { it.cause }.take(8)
+                .any { it is IOException || it is TimeoutException }
+            if (remoteFailure) {
+                val failures = failureRuns.getValue(lane).incrementAndGet()
+                if (failures >= 3) cooldowns.getValue(lane).set(System.currentTimeMillis() + OfflineCommentWorkPlan.retryDelay(failures))
+            }
+            HookRuntime.event(FEATURE, detail)
+        }
+        val sourceTick = Runnable { pump() }; val translationTick = Runnable { pump() }
+        fun launch(lane: OfflineCommentWorkPlan.Lane) {
+            val running = if (lane == OfflineCommentWorkPlan.Lane.SOURCE) fetching else translating
+            val wait = cooldowns.getValue(lane).get() - System.currentTimeMillis()
+            if (wait > 0L && !closed()) {
+                val tick = if (lane == OfflineCommentWorkPlan.Lane.SOURCE) sourceTick else translationTick
+                main.removeCallbacks(tick); main.postDelayed(tick, wait); return
+            }
+            if (closed() || !ready() || !networkAllowed() || !running.compareAndSet(false, true)) return
+            val executor = if (lane == OfflineCommentWorkPlan.Lane.SOURCE) sourceWorker else translationWorker
+            executor.execute {
+                var scheduleFailed = false
+                try {
+                    val account = reader.account(app)
+                    if (lane == OfflineCommentWorkPlan.Lane.TRANSLATION) {
+                        val lang = target()
+                        for ((key, row) in jobs.rows(account)) if (row.optString("target") != lang) {
+                            jobs.change(key, row.optLong("epoch")) {
+                                it.put("target", lang).put("translationReady", false).put("translationRetryAt", 0L).put("state", "pending")
+                            }
+                        }
+                    }
+                    val batch = OfflineCommentWorkPlan.batch(jobs.plans(account, lane), lane, System.currentTimeMillis())
+                    for (item in batch) {
+                        if (closed() || !networkAllowed() || cooldowns.getValue(lane).get() > System.currentTimeMillis()) break
+                        val job = jobs.get(item.key) ?: continue
+                        if (!active(job)) break
+                        val prefix = if (lane == OfflineCommentWorkPlan.Lane.SOURCE) "source" else "translation"
+                        jobs.change(item.key, job.optLong("epoch")) { it.put(prefix + "LastRun", System.currentTimeMillis()) }
+                        try {
+                            if (lane == OfflineCommentWorkPlan.Lane.SOURCE) sourcePage(item.key, job) else translateRow(item.key, job)
+                            failureRuns.getValue(lane).set(0)
+                        }
+                        catch (error: Exception) { failed(item.key, job, lane, error) }
+                    }
+                } catch (error: Exception) { scheduleFailed = true; lastFailure.set(OfflineCommentRequestFailure.describe("schedule", error)) }
+                finally {
+                    running.set(false)
+                    if (!closed()) {
+                        indexWorker.execute { publish() }
+                        val delay = try { OfflineCommentWorkPlan.nextDelay(jobs.plans(reader.account(app), lane), lane, System.currentTimeMillis()) } catch (_: Exception) { 5_000L }
+                        val tick = if (lane == OfflineCommentWorkPlan.Lane.SOURCE) sourceTick else translationTick
+                        main.removeCallbacks(tick)
+                        if (delay != null || scheduleFailed) main.postDelayed(tick, if (scheduleFailed) maxOf(5_000L, delay ?: 5_000L) else delay!!)
+                    }
+                }
+            }
+        }
+        pump = { launch(OfflineCommentWorkPlan.Lane.SOURCE); launch(OfflineCommentWorkPlan.Lane.TRANSLATION) }
+        module.trackHook(FEATURE, completion, requiresConfiguration = false).intercept { chain ->
+            val model = chain.args[0]; val result = chain.proceed()
+            if (model != null) offer(model)
             result
         }
         module.deoptimize(completion)
-        // This event is emitted by the inspected native clearUserCache path only for CLICK_CLEAR_ICON.
-        // Do not invoke it here or react to automatic per-video invalidation/low-storage deletion.
         val clearReason=Class.forName("X.0A9I",false,loader)
         val manualClear=clearReason.enumConstants!!.single{(it as Enum<*>).name=="CLICK_CLEAR_ICON"}
         val clearEvent=Class.forName("X.0A9A",false,loader).getDeclaredMethod("LJIIIZ",Int::class.javaPrimitiveType,Long::class.javaPrimitiveType,clearReason)
         module.trackHook(FEATURE,clearEvent,requiresConfiguration=false).intercept{chain->
             val result=chain.proceed()
             if(ready()&&chain.args[2]===manualClear) {
+                ingressGeneration.incrementAndGet(); ingress.clear()
                 val account=reader.account(app)
                 // Epoch barrier is synchronous; outstanding fetch/translation callbacks cannot repopulate cleared data.
                 check(prefs(app).edit().putLong("epoch:"+account,prefs(app).getLong("epoch:"+account,0L)+1).commit())
-                worker.execute {
+                indexWorker.execute {
                     val edit=prefs(app).edit()
                     for((key,value)in prefs(app).all)try{if(JSONObject(value as String).optString("account")==account)edit.remove(key)}catch(_:Exception){}
                     edit.commit()
@@ -205,40 +340,42 @@ internal object OfflineCommentDownloadHook {
             result
         }
 
-        val scanning=AtomicBoolean(false)
-        fun backfill(){if(ready()&&ConfigClient.isReady&&ConfigClient.getBoolean(KEY)&&ConfigClient.getBoolean(BACKFILL)&&scanning.compareAndSet(false,true))worker.execute{
-            try{(list.invoke(null) as? List<*>)?.filterNotNull()?.forEach(::record)}catch(e:Exception){HookRuntime.event(FEATURE,"已下载列表补缓存失败 type="+e.javaClass.simpleName)}
-            finally{scanning.set(false)}
-            main.post{pump()}
-        }}
-        fun retryPending(){worker.execute{
-            val edit=prefs(app).edit()
-            for((key,value)in prefs(app).all)try{
-                val job=JSONObject(value as String)
-                if(job.optString("state")!="complete"){job.put("attempts",0).put("retryAt",0L);edit.putString(key,job.toString())}
-            }catch(_:Exception){}
-            edit.commit();main.post{pump()}
-        }}
-        val cm=app.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        var validated:Network?=null
-        val callback=object:ConnectivityManager.NetworkCallback(){
-            override fun onCapabilitiesChanged(network:Network,caps:NetworkCapabilities){
-                if(caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)&&validated!=network){validated=network;main.post{retryPending();backfill()}}
-                else if(!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)&&validated==network)validated=null
+        val cm = app.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        var validated: Network? = null
+        val callback = object : ConnectivityManager.NetworkCallback() {
+            override fun onCapabilitiesChanged(network: Network, caps: NetworkCapabilities) {
+                if (caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) && validated != network) {
+                    validated = network
+                    indexWorker.execute {
+                        try { jobs.retry(reader.account(app)) } catch (_: Exception) { }
+                        main.post { backfill(); drain(); pump() }
+                    }
+                } else if (!caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) && validated == network) validated = null
             }
-            override fun onLost(network:Network){if(validated==network)validated=null}
+            override fun onLost(network: Network) { if (validated == network) validated = null }
         }
-        try{cm.registerDefaultNetworkCallback(callback)}catch(_:Exception){}
-        HookRuntime.onDispose(FEATURE){closedFlag.set(true);enqueueVisible=null;worker.shutdownNow();try{cm.unregisterNetworkCallback(callback)}catch(_:Exception){}}
-        worker.execute{
+        try { cm.registerDefaultNetworkCallback(callback) } catch (_: Exception) { }
+        HookRuntime.onDispose(FEATURE) {
+            closedFlag.set(true); enqueueVisible = null; progress.set(null); ingress.clear()
+            main.removeCallbacks(sourceTick); main.removeCallbacks(translationTick); main.removeCallbacks(ingressTick)
+            indexWorker.shutdownNow(); sourceWorker.shutdownNow(); translationWorker.shutdownNow()
+            try { cm.unregisterNetworkCallback(callback) } catch (_: Exception) { }
+        }
+        indexWorker.execute {
             readyFlag.set(OfflineCommentDownloadContract.verify(app))
-            main.post{if(ready()){backfill();pump()}else HookRuntime.state(FEATURE,"下载回调代码不匹配，未自动联网")}
+            publish()
+            main.post {
+                if (ready()) { drain(); backfill(); pump() }
+                else HookRuntime.state(FEATURE, "下载回调代码不匹配，未自动联网")
+            }
         }
-        var signature:List<Boolean>?=null
-        HookRuntime.subscribe(FEATURE){snapshot->if(snapshot!=null){
-            val next=listOf(snapshot.boolean(KEY),snapshot.boolean(BACKFILL),snapshot.boolean(PASSIVE))
-            if(next!=signature){signature=next;if(snapshot.boolean(KEY)){retryPending();backfill();pump()}}
-            HookRuntime.appliedConfiguration(FEATURE,snapshot)
-        }}
+        var signature: List<Boolean>? = null
+        HookRuntime.subscribe(FEATURE) { snapshot -> if (snapshot != null) {
+            val next = listOf(snapshot.boolean(KEY), snapshot.boolean(BACKFILL), snapshot.boolean(PASSIVE))
+            if (next != signature) { signature = next; if (snapshot.boolean(KEY)) backfill() }
+            if (snapshot.boolean(KEY)) { drain(); pump() }
+            else { ingressGeneration.incrementAndGet(); ingress.clear() }
+            HookRuntime.appliedConfiguration(FEATURE, snapshot)
+        } }
     }
 }

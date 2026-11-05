@@ -1,3 +1,17 @@
+# Verified build — 2.0.99-debug /119: batched offline comment companions (2026-11-06)
+
+User accepted 2.0.98 cleanup controls and LIVE swipe restriction. Offline comments are now explicitly resumed. Repeated redownloads still yielded only the first few videos with comments; preparation must continue after returning to the home feed and must not depend on re-encountering the same videos. Work in five-video batches; use subtitle translation patterns; expose progress only through an explicitly opened settings dialog.
+
+Source fixes: retain completion identities across code/config readiness; split ingestion, source/reply requests and translation into separate workers; persist source progress without waiting for whole-page translation; retain per-row exact-original translation checkpoints through the existing subtitle transport; merge durable lane fields with epoch/source-revision guards; preserve wakeups and capped retry/backoff after failures. Reuse existing companion storage and opted-in backfill. Do not evict or redownload media. Local reads restore persisted translations and preserve native/saved fallbacks when an archive cannot be read, without overwriting valid pages after a corrupt read.
+
+The retained target DEX identifies the old recurring exception as a native IOException wrapper with HTTP/engine codes. New diagnostics include only stage, cause types and numeric codes, never messages, request logs, URLs or body data. No connected device was available, so current codes and the specific historical transport failure remain unknown. The native request scene and scoped ordinary-comment button are retained; no speculative API replacement or global click hook.
+
+Status is read-only via the existing signature-protected diagnostic receiver, or the local in-process summary. Only opening/refreshing the settings dialog queries it; no playback UI, popups, notifications, host launch or requests are triggered by viewing status. Counts distinguish first-page originals, complete source/replies and complete translations.
+
+Validation: 82 focused tests passed, 0 failures/skips; 799 source checks; 564 production inputs matched. This includes a simulated 60-video persistence/reopen fixture, not a live batch download. Unified/private payload version/signature/CRC/alignment/namespace/new classes, previous font manifests and geographical assets passed. No full regression or instrumentation rerun. No installation, restart, phone switch changes, translation/media requests on a device, redownloads, or destructive clear-all testing.
+
+Artifact: Toki-2.0.99-debug.apk; 87842386 bytes; SHA-256 849f32d4a97ed147fe335cb704b72e839bfd0bcc2795b8cfc2cdc35b8bf87bd0. Native/build evidence remains private under ignored work/offline-comments-batches-20261106/. Actual whole-batch offline originals/translations/replies, ordinary button routing and process-restart behavior remain device acceptance pending.
+
 # Verified build — 2.0.98-debug /118: independent cleanup controls and actual LIVE pager lock (2026-11-06)
 
 User scope is the remaining cleanup settings and LIVE vertical swipe restriction. Add 23 default-off controls: 16 individual components formerly grouped under aggregates, 5 inspected anchor categories and 2 dedicated LIVE gift trays. Preserve existing aggregate scope. Shared roots revalidate category as well as anchor/video/root identity. Unknown types and shared parent containers stay native. Exact inventory: CLEANUP_COMPONENTS_ZH.md.

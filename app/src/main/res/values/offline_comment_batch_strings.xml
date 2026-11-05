@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_comment_status_open">View offline comment cache status</string>
+    <string name="offline_comment_status_title">Offline comment cache</string>
+    <string name="offline_comment_status_hint">Prepared in background batches without playback overlays or popups. This screen only reads status. Work continues on the home feed. Video download completion does not mean all comments and translations are ready.</string>
+    <string name="offline_comment_status_values">Registered videos: %1$d\nFirst comments saved: %2$d\nAll originals and replies: %3$d\nOriginals and translations ready: %4$d\nWaiting to retry: %5$d\nAwaiting registration: %6$d\nVideos per batch: %7$d</string>
+    <string name="offline_comment_status_unavailable">No current host report. The host must be running with this module loaded. Viewing status does not start it.</string>
+    <string name="offline_comment_status_preparing">The module is preparing; comment requests have not started.</string>
+    <string name="offline_comment_status_wait_network">Waiting for network or the download-comment cache option. Saved content is retained.</string>
+    <string name="offline_comment_status_translation_retry">Some translations await background retry. Saved originals are retained.</string>
+    <string name="offline_comment_status_source_retry">Some comment requests are incomplete and will retry after a delay.</string>
+    <string name="offline_comment_status_retry">Some tasks are incomplete and await background processing.</string>
+    <string name="offline_comment_status_refresh">Refresh status</string>
+</resources>
