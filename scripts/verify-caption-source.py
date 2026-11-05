@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 113' in gradle and 'versionName = "2.0.93"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.93-debug / 113")
+check('versionCode = 114' in gradle and 'versionName = "2.0.94"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.94-debug / 114")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -246,6 +246,14 @@ offline_hook = (JAVA / 'hook/OfflineVideoHook.kt').read_text(encoding='utf-8')
 offline_cache = (JAVA / 'hook/HostLocalVideoCache.kt').read_text(encoding='utf-8')
 offline_files = (JAVA / 'hook/LocalVideoFile.kt').read_text(encoding='utf-8')
 offline_export = (JAVA / 'hook/OfflineVideoExporter.kt').read_text(encoding='utf-8')
+mdl_files = (JAVA / 'hook/OfflineMdlFile.kt').read_text(encoding='utf-8')
+mdl_source = (JAVA / 'hook/OfflineMdlDataSource.kt').read_text(encoding='utf-8')
+native_files = (JAVA / 'hook/HostOfflineVideoFiles.kt').read_text(encoding='utf-8')
+check('WHERE sec_uid=? AND aid=? AND has_cached=1 LIMIT 2' in native_files and 'OPEN_READONLY' in native_files and 'LJIIIIZZ' in native_files, 'native offline export binds current account, selected video and complete record without a broad scan')
+check(offline_cache.index('HostOfflineVideoFiles(loader).find') < offline_cache.index('val helper = Class.forName') and 'OfflineMdlFile.inspect' in offline_cache, 'native offline record and retained-header media take precedence over ordinary MDL index')
+check('q(56) != total || q(64) != total' in mdl_files and 'contentEquals(keyBytes)' in mdl_files and 'prefix.any' in mdl_files and 'source != it.canonicalFile' in mdl_files, 'retained-header reader rejects incomplete, wrong-key, conflicting-prefix and outside-storage input')
+check('MediaDataSource()' in mdl_source and 'readFully(buffer, offset, count)' in mdl_source and 'restoration?.overlay' in mdl_source and '"r"' in mdl_source, 'virtual local MP4 restores exact header ranges using read-only media access')
+
 offline_contract = (JAVA / 'hook/OfflineVideoContract.kt').read_text(encoding='utf-8')
 check('"OfflineVideoHook" to listOf("offline_video_controls_enabled", "offline_comment_button_enabled")' in schema and '"OfflineVideoHook" -> OfflineVideoHook.init' in module and '"HoldSpeedGestureHook", "OfflineVideoHook"' in plan, 'offline local controls have an independent live-installable direct-host unit')
 check('getOfflineVideoInfo' in offline_contract and 'isOfflineVideo' in offline_contract and 'offline_mode_page' in offline_contract, 'offline entries use inspected model metadata and exact page event type')
@@ -259,7 +267,7 @@ check('OfflineExportCandidates(loader).read(aweme)' in offline_cache and 'LocalV
 check('cached != total' in offline_files and 'file.length() != total' in offline_files and '0x6d6f6f66' in offline_files and 'source.file.lastModified() != source.modified' in offline_files, 'local exporter checks indexed completeness, container boundaries and source mutation')
 check('IS_PENDING, 1' in offline_export and offline_export.index('LocalVideoRemuxer.write') < offline_export.index('LocalVideoRemuxer.verifyOutput') < offline_export.index('IS_PENDING, 0'), 'gallery publication follows successful local mux and destination readback rather than publishing partial bytes')
 check('Build.VERSION.SDK_INT < 29' in offline_export, 'pre-Android-10 export is explicitly unsupported rather than silently using an unsafe fallback')
-for relative in ('hook/OfflineVideoHook.kt', 'hook/HostLocalVideoCache.kt', 'hook/OfflineVideoExporter.kt', 'hook/LocalVideoFile.kt'):
+for relative in ('hook/OfflineVideoHook.kt', 'hook/HostLocalVideoCache.kt', 'hook/OfflineVideoExporter.kt', 'hook/LocalVideoFile.kt', 'hook/HostOfflineVideoFiles.kt', 'hook/OfflineMdlFile.kt', 'hook/OfflineMdlDataSource.kt'):
     source = (JAVA / relative).read_text(encoding='utf-8')
     check(not any(token in source for token in ('openConnection(', 'NativeSubtitleTranslator.transport(', '.delete(', 'clearCache(', '.renameTo(')), relative + ' has no module network fallback or cache-deletion call (source inspection only)')
 for relative in ('hook/OfflineVideoHook.kt', 'ui/screen/OfflineVideoSection.kt'):
@@ -487,11 +495,12 @@ for locale in ('values', 'values-b+zh+Hans'):
 export_candidates = (JAVA / 'hook/OfflineExportCandidates.kt').read_text(encoding='utf-8')
 export_tracks = (JAVA / 'hook/LocalVideoTracks.kt').read_text(encoding='utf-8')
 export_mux = (JAVA / 'hook/LocalVideoRemuxer.kt').read_text(encoding='utf-8')
+check('OfflineMdlDataSource(source.file, active)' in export_mux and 'extractor.setDataSource(local)' in export_mux and 'restoration?.verify(true)' in export_mux, 'actual remux readers use the same retained-header local adapter as source validation')
 export_gate = (JAVA / 'hook/OfflineExportCodeGate.kt').read_text(encoding='utf-8')
 check('getDeclaredField' in export_candidates and '"bitRateList"' in export_candidates and '"bitRateAudio"' in export_candidates and '"playAddrValue"' in export_candidates, 'offline export reads inspected raw video/rate/audio fields without computed model expansion')
 check('"hitDashAudioBitrate"' in export_candidates and '"hitDashVideoBitrate"' in export_candidates and 'sounds.singleOrNull()' in export_candidates and 'rawSounds.isNotEmpty() || urls.any { selectedAudio.get(it) != null }' in export_candidates, 'explicit host track pairs take precedence and ambiguous/malformed required audio is not silently dropped')
 check('"fileHash"' in export_candidates and 'val keys = boundedKeys(listOf(audioHash.get(data)))' in export_candidates and 'fileId/quality are not interchangeable' in export_candidates, 'DASH audio cache lookup uses the hash identified in the native cache reader rather than a guessed fileId')
-check('OfflineExportCodeGate.verify(context)' in offline_cache and all(name in export_gate for name in ('classes2.dex', 'classes4.dex', 'classes6.dex', 'classes12.dex')) and 'matched == hashes.keys' in export_gate, 'new raw-field contracts require all four inspected model DEX hashes in addition to existing cache-index gates')
+check('OfflineExportCodeGate.verify(context)' in offline_cache and all(name in export_gate for name in ('classes2.dex', 'classes4.dex', 'classes6.dex', 'classes12.dex')) and 'matched == hashes.keys' in export_gate, 'native offline contracts require all four inspected model DEX hashes; legacy index keeps independent gates')
 check('fragmented = true; waitingForData = true' in offline_files and 'if (waitingForData)' in offline_files and 'if (!moov || waitingForData' in offline_files, 'complete initialized fragment envelopes reach sample validation while missing init/dangling media remains incomplete')
 check('LocalVideoFile.verify(file, active)' in export_tracks and 'extractor.psshInfo' in export_tracks and 'SAMPLE_FLAG_ENCRYPTED' in export_tracks and 'SAMPLE_FLAG_PARTIAL_FRAME' in export_tracks, 'local descriptor sampling rejects DRM/encrypted/partial samples and observes source/cancellation checks')
 check('MAX_SAMPLE = 16 * 1024 * 1024' in export_tracks and 'MAX_SAMPLES = 2_000_000L' in export_tracks and 'extractor.readSampleData(buffer, 0)' in export_tracks, 'encoded sample memory/count and actual readable sample sizes are bounded before muxing')
@@ -558,7 +567,7 @@ check('selected.keys.any { it in own.keys }' in (JAVA / 'hook/OfflineExportCandi
 check('ShadowChoreographer.setFrameDelay(Duration.ofMillis(16))' in read('app/src/test/java/io/github/meiyongai/toki/hook/SubtitleOverlayTest.kt'), 'manual-frame subtitle tests do not spin indefinitely on automatic zero-delay vsync')
 check(read('app/src/test/java/io/github/meiyongai/toki/hook/OfflineExportFixtures.kt') == read('app/src/androidTest/java/io/github/meiyongai/toki/hook/OfflineExportFixtures.kt'), 'desktop/device media fixtures are byte-identical source data rather than silently drifting samples')
 device_media = read('app/src/androidTest/java/io/github/meiyongai/toki/hook/LocalVideoRemuxerDeviceTest.kt')
-check('AndroidJUnit4::class' in device_media and 'Assume' not in device_media and device_media.count('@Test') == 3, 'three required native remux/readback cases are retained without assumptions in the real Android test target')
+check('AndroidJUnit4::class' in device_media and 'Assume' not in device_media and device_media.count('@Test') == 4 and 'retainedHeaderMdlUsesSameVirtualSourceForValidationAndActualMuxing' in device_media, 'three original native remux/readback cases plus retained-header MDL integration are kept without assumptions')
 check('org.junit.Assume.assumeTrue' in read('app/src/test/java/io/github/meiyongai/toki/hook/LocalVideoRemuxerTest.kt') and 'LocalVideoRemuxerDeviceTest' in read('app/src/test/java/io/github/meiyongai/toki/hook/LocalVideoRemuxerTest.kt'), 'desktop media shadow limitations are explicit capability skips, not mock successes or deleted assertions')
 
 builder = read('scripts/build-lspatch.ps1')
@@ -771,7 +780,7 @@ lexical_files = [
     'ui/screen/ManualCommentTranslationSection.kt', 'ui/screen/LocalTranslationSection.kt',
     'hook/LocalOnlyRequest.kt', 'hook/TranslationNetworkPolicy.kt', 'hook/HostSettingsEntry.kt', 'hook/SubtitleFeature.kt',
     'hook/OfflinePlaybackState.kt', 'hook/OfflineVideoContract.kt', 'hook/OfflineCacheCodeGate.kt',
-    'hook/LocalVideoFile.kt', 'hook/HostLocalVideoCache.kt', 'hook/OfflineVideoExporter.kt',
+    'hook/OfflineMdlFile.kt', 'hook/OfflineMdlDataSource.kt', 'hook/HostOfflineVideoFiles.kt', 'hook/LocalVideoFile.kt', 'hook/HostLocalVideoCache.kt', 'hook/OfflineVideoExporter.kt',
     'hook/OfflineCommentArchive.kt', 'hook/OfflineCommentDownloadHook.kt', 'hook/OfflineCommentDownloadContract.kt', 'hook/OfflineCommentDownloadProgress.kt', 'hook/OfflineNativeHoldContract.kt', 'hook/OfflineLongPressState.kt', 'hook/OfflineVideoHook.kt', 'ui/screen/OfflineVideoSection.kt', 'hook/SubtitleRemoteResume.kt',
     'hook/OfflineCommentData.kt', 'hook/OfflineCommentCodeGate.kt', 'hook/HostOfflineComments.kt',
     'hook/OfflineCommentListAdapter.kt', 'hook/OfflineCommentsDialog.kt',
@@ -802,7 +811,7 @@ for relative in (
     'hook/HoldSpeedGestureScopeTest.kt', 'hook/ManualCommentTranslationTest.kt',
     'hook/LocalOnlyRequestTest.kt', 'hook/LocalSubtitleExecutionTest.kt', 'hook/FakeOnlineTranslator.kt',
     'hook/NativeSubtitleTranslatorTest.kt', 'hook/SubtitleOverlayTest.kt',
-    'hook/OfflineCommentArchiveTest.kt', 'hook/OfflineCommentDownloadProgressTest.kt', 'hook/OfflineNativeHoldContractTest.kt', 'hook/OfflinePlaybackStateTest.kt', 'hook/OfflineLongPressStateTest.kt', 'hook/LocalVideoFileTest.kt', 'hook/OfflineVideoHitTest.kt', 'hook/SubtitleRemoteResumeTest.kt',
+    'hook/OfflineMdlFileTest.kt', 'hook/OfflineCommentArchiveTest.kt', 'hook/OfflineCommentDownloadProgressTest.kt', 'hook/OfflineNativeHoldContractTest.kt', 'hook/OfflinePlaybackStateTest.kt', 'hook/OfflineLongPressStateTest.kt', 'hook/LocalVideoFileTest.kt', 'hook/OfflineVideoHitTest.kt', 'hook/SubtitleRemoteResumeTest.kt',
     'hook/OfflineCommentDataTest.kt', 'hook/OfflineCommentListAdapterTest.kt',
     'hook/CachedCommentTranslationSessionTest.kt', 'hook/CommentTranslationStoreTest.kt', 'hook/CachedCommentOnlineAdapterTest.kt',
     'hook/CommentPageMergeTest.kt', 'hook/CommentSnapshotCodecTest.kt', 'hook/CommentSnapshotStoreTest.kt',

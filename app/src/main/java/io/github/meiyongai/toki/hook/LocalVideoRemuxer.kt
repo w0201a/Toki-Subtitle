@@ -12,7 +12,8 @@ import java.nio.ByteBuffer
 internal object LocalVideoRemuxer {
     private class Reader(val source: LocalVideoTracks.Source, val track: LocalVideoTracks.Track,
         private val active: () -> Boolean) : AutoCloseable {
-        private val input = FileInputStream(source.file.file)
+        private val input = if (source.file.restoration == null) FileInputStream(source.file.file) else null
+        private val local = if (source.file.restoration != null) OfflineMdlDataSource(source.file, active) else null
         val extractor = MediaExtractor()
         val digest = LocalVideoTracks.Digest()
         var buffer: ByteBuffer = ByteBuffer.allocate(0)
@@ -22,13 +23,14 @@ internal object LocalVideoRemuxer {
         init {
             try {
                 LocalVideoFile.verify(source.file, active)
-                extractor.setDataSource(input.fd, 0, source.file.size)
+                source.file.restoration?.verify(true)
+                if (local != null) extractor.setDataSource(local) else extractor.setDataSource(input!!.fd, 0, source.file.size)
                 if (!extractor.psshInfo.isNullOrEmpty()) LocalVideoTracks.unavailable()
                 val format = extractor.getTrackFormat(track.index)
                 if (format.getString(MediaFormat.KEY_MIME) != track.mime) LocalVideoTracks.unavailable()
                 extractor.selectTrack(track.index)
             } catch (error: Throwable) {
-                try { extractor.release() } finally { input.close() }
+                try { extractor.release() } finally { try { input?.close() } finally { local?.close() } }
                 throw error
             }
         }
@@ -50,11 +52,12 @@ internal object LocalVideoRemuxer {
         }
         fun verify() {
             LocalVideoFile.verify(source.file, active)
+            source.file.restoration?.verify(true)
             if (digest.count != track.count || digest.bytes != track.bytes || digest.firstUs != track.firstUs ||
                 digest.lastUs != track.lastUs || digest.finish() != track.fingerprint)
                 throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.CHANGED)
         }
-        override fun close() { try { extractor.release() } finally { input.close() } }
+        override fun close() { try { extractor.release() } finally { try { input?.close() } finally { local?.close() } } }
     }
     fun write(plan: LocalVideoTracks.Plan, output: FileDescriptor, active: () -> Boolean) {
         plan.verify(active)

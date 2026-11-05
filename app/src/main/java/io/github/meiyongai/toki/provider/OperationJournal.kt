@@ -8,6 +8,7 @@ internal class OperationJournal(private val emit: (String) -> Unit, private val 
     enum class Kind(val title: String) { OFFLINE_EXPORT("离线视频导出"), STICKER_EXPORT("贴图导出／转换") }
     enum class Step(val title: String) {
         QUEUED("进入工作队列"), CODE_CHECK("核对宿主代码"), CANDIDATES("读取候选数据"), CACHE_LOOKUP("查找本地缓存"),
+        OFFLINE_LOOKUP("读取原生离线视频记录"), HEADER_RESTORE("只读还原离线文件头"),
         SAMPLE_CHECK("校验本地轨道与样本"), PLAN_READY("已确定完整导出方案"), MUX("写入单个视频文件"), READBACK("回读目标文件"),
         PUBLISH("发布到相册"), SOURCE_FETCH("读取贴图源数据"), ANIMATION_PARSE("解析动画帧与限制"),
         ANIMATION_DECODE("打开逐帧解码器"), ANIMATION_ENCODE("逐帧合成与编码"), FINISHED("处理结束")

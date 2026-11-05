@@ -106,7 +106,14 @@ internal object LocalVideoTracks {
     }
     fun <T> withExtractor(file: LocalVideoFile.Verified, active: () -> Boolean, action: (MediaExtractor) -> T): T {
         LocalVideoFile.verify(file, active)
-        val result = FileInputStream(file.file).use { input -> withDescriptor(input.fd, file.size, action) }
+        file.restoration?.verify(true)
+        val result = if (file.restoration == null) {
+            FileInputStream(file.file).use { input -> withDescriptor(input.fd, file.size, action) }
+        } else OfflineMdlDataSource(file, active).use { input ->
+            val extractor = MediaExtractor()
+            try { extractor.setDataSource(input); action(extractor) } finally { extractor.release() }
+        }
+        file.restoration?.verify(true)
         LocalVideoFile.verify(file, active); return result
     }
     fun unavailable(): Nothing = throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.UNSUPPORTED)
