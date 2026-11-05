@@ -178,9 +178,9 @@ internal object OfflineVideoHook {
                     else "Unsupported comment-button code; native entry retained")
             }
         }
-        fun showMenu(target: Binding) {
-            if (!current(target)) return
-            val activity = target.activity.get()?.takeIf { !it.isFinishing && !it.isDestroyed } ?: return
+        fun showMenu(target: Binding): Boolean {
+            if (!current(target)) return false
+            val activity = target.activity.get()?.takeIf { !it.isFinishing && !it.isDestroyed } ?: return false
             val context = HostSettingsEntry.localizedContext(activity)
             closeMenu()
             val shown = AlertDialog.Builder(context).setTitle(context.getString(R.string.offline_video_menu))
@@ -202,6 +202,48 @@ internal object OfflineVideoHook {
             dialog = shown
             shown.setOnDismissListener { if (dialog === shown) dialog = null }
             shown.show()
+            return shown.isShowing
+        }
+        val nativeFeature = "OfflineNativeHold"
+        HookRuntime.dependent(FEATURE, nativeFeature)
+        HookRuntime.install(nativeFeature) {
+            val native = OfflineNativeHoldContract(loader)
+            val ready = AtomicBoolean(false)
+            module.trackHook(nativeFeature, native.run, requiresConfiguration = false).intercept { chain ->
+                val target = binding
+                if (!ready.get() || life.closed || !life.enabled || !life.longPress || !ConfigClient.isReady ||
+                    !ConfigClient.getBoolean(KEY) || Looper.myLooper() != main.looper ||
+                    target == null || !current(target)) return@intercept chain.proceed()
+                val screen = target.activity.get()
+                val owner = target.owner.get()
+                val player = target.view.get()
+                val source = chain.thisObject?.let(native::surface)
+                val root = owner?.let { contract.rootView.invoke(it) as? View }
+                if (screen == null || owner == null || player == null || source == null || root == null ||
+                    screen.isFinishing || screen.isDestroyed || !screen.hasWindowFocus() ||
+                    !OfflineNativeHoldContract.belongs(source, root, player, screen.window.decorView))
+                    return@intercept chain.proceed()
+                // Re-read metadata at the native timeout boundary; never consume an online/stale card.
+                val fresh = contract.read(owner)
+                if (fresh == null || !fresh.offline || fresh.id != target.id || fresh.view !== player)
+                    return@intercept chain.proceed()
+                if (dialog?.isShowing == true || comments?.isShowing == true) return@intercept chain.proceed()
+                cancelTouch()
+                if (!showMenu(target)) return@intercept chain.proceed()
+                // Native hold is mature: drain its trailing up without a click or the disabled-action toast.
+                gesture.claim(gesture.begin(0f, 0f))
+                HookRuntime.count(nativeFeature, "已接管当前离线卡片的原生长按")
+                HookRuntime.detail(FEATURE, "原生长按已成立，本地操作菜单已显示；未执行保存／导出")
+                null
+            }
+            module.deoptimize(native.run)
+            worker.execute {
+                val checked = OfflineNativeHoldContract.verify(checkNotNull(HookRuntime.hostContext))
+                if (!life.closed && HookRuntime.scope(nativeFeature).active) ready.set(checked)
+                HookRuntime.detail(nativeFeature, if (checked) "代码已核对，等待当前离线卡片原生长按"
+                    else "原生长按代码不匹配，保留宿主行为")
+            }
+            HookRuntime.onDispose(nativeFeature) { ready.set(false) }
         }
         fun touch(activity: Activity, event: MotionEvent): Boolean {
             if (cancellingNative) return false
@@ -213,6 +255,8 @@ internal object OfflineVideoHook {
             val target = binding
             if (target == null || target.activity.get() !== activity || !current(target) || !ConfigClient.getBoolean(KEY) ||
                 dialog?.isShowing == true || comments?.isShowing == true) {
+                if (event.actionMasked == MotionEvent.ACTION_DOWN)
+                    HookRuntime.count(FEATURE, if (target == null) "长按无当前绑定" else if (!target.offline) "长按当前非离线卡片" else "长按当前窗口或会话不符")
                 cancelTouch(); return false
             }
             val view = target.view.get() ?: run { cancelTouch(); return false }
@@ -221,7 +265,10 @@ internal object OfflineVideoHook {
                 MotionEvent.ACTION_DOWN -> {
                     cancelTouch()
                     if (event.pointerCount != 1 || !videoHit(view, event.rawX, event.rawY) ||
-                        !activity.hasWindowFocus()) return false
+                        !activity.hasWindowFocus()) {
+                        HookRuntime.count(FEATURE, "保守命中未通过，等待原生长按回调")
+                        return false
+                    }
                     HookRuntime.count(FEATURE, "离线长按候选已命中")
                     val token = gesture.begin(event.rawX, event.rawY)
                     val down = event.downTime
@@ -255,6 +302,7 @@ internal object OfflineVideoHook {
         fun select(owner: Any) {
             if (life.closed || !life.enabled || Looper.myLooper() != main.looper) return
             val video = contract.read(owner) ?: run {
+                HookRuntime.count(FEATURE, "卡片绑定缺少模型或播放器")
                 cancelTouch(); closeMenu(); binding = null; state.select(owner, "", true); return
             }
             state.select(owner, video.id, video.offline)
@@ -262,7 +310,10 @@ internal object OfflineVideoHook {
             val previous = binding
             val changed = previous == null || previous.owner.get() !== owner || previous.id != video.id ||
                 previous.offline != video.offline || previous.view.get() !== video.view || previous.activity.get() !== activity
-            if (changed) { cancelTouch(); closeMenu(); binding = Binding(owner, video, activity) }
+            if (changed) {
+                cancelTouch(); closeMenu(); binding = Binding(owner, video, activity)
+                HookRuntime.count(FEATURE, if (video.offline) "已绑定选中离线卡片" else "已绑定选中在线卡片")
+            }
             val dispatch = activity.javaClass.getMethod("dispatchTouchEvent", MotionEvent::class.java)
             if (activities.add(dispatch)) module.trackHook(FEATURE, dispatch, requiresConfiguration = false).intercept { chain ->
                 if (touch(chain.thisObject as Activity, chain.args[0] as MotionEvent)) true else chain.proceed()

@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 111' in gradle and 'versionName = "2.0.91"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.91-debug / 111")
+check('versionCode = 112' in gradle and 'versionName = "2.0.92"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.92-debug / 112")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -772,7 +772,7 @@ lexical_files = [
     'hook/LocalOnlyRequest.kt', 'hook/TranslationNetworkPolicy.kt', 'hook/HostSettingsEntry.kt', 'hook/SubtitleFeature.kt',
     'hook/OfflinePlaybackState.kt', 'hook/OfflineVideoContract.kt', 'hook/OfflineCacheCodeGate.kt',
     'hook/LocalVideoFile.kt', 'hook/HostLocalVideoCache.kt', 'hook/OfflineVideoExporter.kt',
-    'hook/OfflineLongPressState.kt', 'hook/OfflineVideoHook.kt', 'ui/screen/OfflineVideoSection.kt', 'hook/SubtitleRemoteResume.kt',
+    'hook/OfflineNativeHoldContract.kt', 'hook/OfflineLongPressState.kt', 'hook/OfflineVideoHook.kt', 'ui/screen/OfflineVideoSection.kt', 'hook/SubtitleRemoteResume.kt',
     'hook/OfflineCommentData.kt', 'hook/OfflineCommentCodeGate.kt', 'hook/HostOfflineComments.kt',
     'hook/OfflineCommentListAdapter.kt', 'hook/OfflineCommentsDialog.kt',
     'hook/CachedCommentTranslateHook.kt', 'hook/CommentTranslationKey.kt', 'hook/CommentTranslationStore.kt',
@@ -802,7 +802,7 @@ for relative in (
     'hook/HoldSpeedGestureScopeTest.kt', 'hook/ManualCommentTranslationTest.kt',
     'hook/LocalOnlyRequestTest.kt', 'hook/LocalSubtitleExecutionTest.kt', 'hook/FakeOnlineTranslator.kt',
     'hook/NativeSubtitleTranslatorTest.kt', 'hook/SubtitleOverlayTest.kt',
-    'hook/OfflinePlaybackStateTest.kt', 'hook/OfflineLongPressStateTest.kt', 'hook/LocalVideoFileTest.kt', 'hook/OfflineVideoHitTest.kt', 'hook/SubtitleRemoteResumeTest.kt',
+    'hook/OfflineNativeHoldContractTest.kt', 'hook/OfflinePlaybackStateTest.kt', 'hook/OfflineLongPressStateTest.kt', 'hook/LocalVideoFileTest.kt', 'hook/OfflineVideoHitTest.kt', 'hook/SubtitleRemoteResumeTest.kt',
     'hook/OfflineCommentDataTest.kt', 'hook/OfflineCommentListAdapterTest.kt',
     'hook/CachedCommentTranslationSessionTest.kt', 'hook/CommentTranslationStoreTest.kt', 'hook/CachedCommentOnlineAdapterTest.kt',
     'hook/CommentPageMergeTest.kt', 'hook/CommentSnapshotCodecTest.kt', 'hook/CommentSnapshotStoreTest.kt',
@@ -914,6 +914,10 @@ for locale in ('values', 'values-b+zh+Hans', 'values-b+zh+Hant'):
 check('return synchronized(preferences)' in store and 'synchronized(preferences)' in mirror, 'local host configuration commit and ACK compare-and-clear share one monitor')
 check('ManualHostAdaptation.values(before, patch.host' in store, 'mirroring one authenticated host preserves another hosts pending rescan request')
 check('CommentStickerDownloadHook.isStickerComment(comment)' in read('app/src/main/java/io/github/meiyongai/toki/hook/ManualCommentTranslateHook.kt'), 'ordinary manual translation preserves sticker-menu ownership')
+native_offline = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineNativeHoldContract.kt')
+offline_hold = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineVideoHook.kt')
+check('OfflineNativeHoldContract.verify' in offline_hold and 'fresh.id != target.id' in offline_hold and '!fresh.offline' in offline_hold, 'offline native hold requires matched code and re-read selected offline identity before consumption')
+check('surface === selectedRoot' in native_offline and 'surface.rootView !== window' in native_offline and 'descendant(surface) && descendant(player)' in native_offline, 'native offline hold belongs to selected card/window without loosening generic overlay hit checks')
 check('rect.contains(videoBounds)' in read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineVideoHook.kt'), 'offline holds allow a native full-player sibling while still inspecting its interactive children')
 check('maxOf(200L, ViewConfiguration.getLongPressTimeout().toLong() - 100L)' in read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineVideoHook.kt'), 'offline local hold claims before the native disabled-action toast deadline')
 check('LiveRoomFragment;->mY(IIZ)Z' in read('app/src/main/resources/toki-host-rules.tsv'), 'live lock follows the inspected room touch listener rather than removed UX(float) contract')

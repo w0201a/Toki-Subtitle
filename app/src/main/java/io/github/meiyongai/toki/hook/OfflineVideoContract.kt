@@ -19,6 +19,7 @@ internal class OfflineVideoContract(loader: ClassLoader) {
     private val isOffline = method(info, "isOfflineVideo", Boolean::class.javaPrimitiveType!!)
     private val eventType = method(holder, "getEventType", String::class.java)
     val videoView = method(holder, "getVideoView", View::class.java)
+    val rootView = method(holder, "getRootView", View::class.java)
     val selected = method(holder, "onPageSelected", Void.TYPE, Int::class.javaPrimitiveType!!)
     val resumed = method(holder, "onResumePlay", Void.TYPE, String::class.java)
     val progress = method(holder, "onPlayProgressChange", Void.TYPE, String::class.java,
