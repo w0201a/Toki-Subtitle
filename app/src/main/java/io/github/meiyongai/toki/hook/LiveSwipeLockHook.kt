@@ -1,63 +1,43 @@
 package io.github.meiyongai.toki.subtitle.hook
 
 import android.view.MotionEvent
-import android.view.View
-import android.view.ViewConfiguration
 import android.view.ViewGroup
 import io.github.libxposed.api.XposedModule
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
-import java.util.WeakHashMap
 
-/** 在直播竖向翻页容器上拦截上下滑，保留点击、横向手势与程序化切页。 */
+/** Lock the actual LIVE pager and its listener together; clicks, horizontal gestures and programmatic paging retain native handling. */
 internal object LiveSwipeLockHook {
     private const val FEATURE = "LiveSwipeLockHook"
     const val KEY_LIVE_SWIPE_LOCK = "live_swipe_lock_enabled"
-    private val gestures = java.util.Collections.synchronizedMap(WeakHashMap<Any, Gesture>())
-
-    private class Gesture(var x: Float, var y: Float, var blocked: Boolean = false)
-
-    /** 解析直播页唯一竖向翻页容器的两个触摸入口并校验完整契约。 */
+    private val touches = LiveSwipeTouchController(
+        { HookRuntime.count(FEATURE, "已阻止直播上下滑") },
+        { HookRuntime.event(FEATURE, "直播原生触摸清理未完成：" + it.javaClass.simpleName) })
     fun init(module: XposedModule, classLoader: ClassLoader) {
-        val type = HostSymbols.resolve(classLoader, HostSymbol.LIVE_VERTICAL_PAGER)
-        if (View.OnTouchListener::class.java.isAssignableFrom(type)) {
-            val method = type.getDeclaredMethod("onTouch", View::class.java, MotionEvent::class.java).apply {
-                check(returnType == Boolean::class.javaPrimitiveType && !Modifier.isStatic(modifiers)); isAccessible = true
-            }
+        val contract = LiveSwipeLockContract.resolve(HostSymbols.resolve(classLoader, HostSymbol.LIVE_VERTICAL_PAGER))
+        for ((method, entry) in listOf(contract.intercept to LiveSwipeTouchController.Entry.INTERCEPT,
+            contract.touch to LiveSwipeTouchController.Entry.TOUCH)) {
             module.trackHook(FEATURE, method).intercept { chain ->
-                val view = chain.args[0] as? View
-                val event = chain.args[1] as? MotionEvent
-                if (view != null && event != null && enabled() && shouldBlock(view, event)) true else chain.proceed()
+                val view = chain.thisObject as? ViewGroup
+                val event = chain.args[0] as? MotionEvent
+                if (view == null || event == null || !contract.pager.isInstance(view)) chain.proceed()
+                else touches.route(view, event, ConfigClient.getBoolean(KEY_LIVE_SWIPE_LOCK), entry) { chain.proceed() as Boolean }
             }
-            HookRuntime.detail(FEATURE, "直播原生触摸监听器已注册；仅接管已越过阈值的上下滑，保留点击与横向手势")
-            return
         }
-        check(ViewGroup::class.java.isAssignableFrom(type)) { "直播翻页容器类型不符合契约" }
-        val intercept = touchMethod(type, "onInterceptTouchEvent")
-        val touch = touchMethod(type, "onTouchEvent")
-        module.trackHook(FEATURE, intercept).intercept { chain ->
-            val view = chain.thisObject as View
-            val event = chain.args[0] as MotionEvent
-            if (enabled() && shouldBlock(view, event)) false else chain.proceed()
+        contract.listener?.let { method ->
+            module.trackHook(FEATURE, method).intercept { chain ->
+                val view = chain.args[0] as? ViewGroup
+                val event = chain.args[1] as? MotionEvent
+                if (view != null && event != null && contract.ownsListener(chain.thisObject, view))
+                    touches.route(view, event, ConfigClient.getBoolean(KEY_LIVE_SWIPE_LOCK), LiveSwipeTouchController.Entry.LISTENER) {
+                        chain.proceed() as Boolean
+                    } else chain.proceed()
+            }
         }
-        module.trackHook(FEATURE, touch).intercept { chain ->
-            val view = chain.thisObject as View
-            val event = chain.args[0] as MotionEvent
-            if (enabled() && shouldBlock(view, event)) false else chain.proceed()
-        }
+        HookRuntime.onDispose(FEATURE) { touches.clear() }
+        HookRuntime.detail(FEATURE, "已绑定直播实际翻页容器及触摸监听器；纵向锁定整段手势，保留点击、横向及程序切页")
     }
-
-    /** @return 当前会话是否开启直播上下滑限制。无参数。Callers: 两个触摸钩子。 */
-    private fun enabled(): Boolean = ConfigClient.getBoolean(KEY_LIVE_SWIPE_LOCK)
-
-    /**
-     * 解析公开的 Android 触摸覆盖方法，不接受同名但签名不同的宿主方法。
-     * @param type 已唯一解析的直播翻页容器。
-     * @param name onInterceptTouchEvent 或 onTouchEvent。
-     * @return 可挂载的方法。
-     * Callers: init；LiveSwipeLockContractTest。
-     */
     internal fun touchMethod(type: Class<*>, name: String): Method {
         require(name == "onInterceptTouchEvent" || name == "onTouchEvent")
         return type.getDeclaredMethod(name, MotionEvent::class.java).apply {
@@ -66,36 +46,5 @@ internal object LiveSwipeLockHook {
             }
             isAccessible = true
         }
-    }
-
-    /**
-     * 按当前手势状态决定是否阻断；只记录手指坐标，不读取或保存用户内容。
-     * @param view 当前直播翻页容器实例。
-     * @param event 原生触摸事件。
-     * @return true 表示本事件不交给宿主翻页容器。
-     * Callers: init 中注册的两个 Hook；LiveSwipeLockContractTest。
-     */
-    internal fun shouldBlock(view: View, event: MotionEvent): Boolean {
-        val owner = view as Any
-        when (event.actionMasked) {
-            MotionEvent.ACTION_DOWN -> {
-                gestures[owner] = Gesture(event.getX(0), event.getY(0))
-                return false
-            }
-            MotionEvent.ACTION_MOVE -> {
-                val gesture = gestures[owner] ?: return false
-                val dx = event.getX(0) - gesture.x
-                val dy = event.getY(0) - gesture.y
-                val slop = ViewConfiguration.get(view.context).scaledTouchSlop.toFloat()
-                if (!LiveSwipePolicy.blocks(dx, dy, slop)) return false
-                if (!gesture.blocked) {
-                    gesture.blocked = true
-                    HookRuntime.count(FEATURE, "已阻止直播上下滑")
-                }
-                return true
-            }
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> return gestures.remove(owner)?.blocked == true
-        }
-        return false
     }
 }

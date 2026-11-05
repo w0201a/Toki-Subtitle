@@ -108,4 +108,24 @@ class TemplateRootBindingsTest {
         assertEquals(View.VISIBLE, a.root.visibility); assertEquals(View.GONE, b.root.visibility); assertEquals(1, reports)
         bindings.close(); bindings.configure(true); assertEquals(View.VISIBLE, b.root.visibility)
     }
+    @Test fun independentCategoriesSwitchLiveAndRecycledBusinessReleasesThePreviousRule() {
+        val models = IdentityHashMap<Any, TemplateRootBindings.Snapshot>()
+        val bindings = TemplateRootBindings(CleanViewGate(), { models[it] })
+        val effect = Any(); val capcut = Any(); val effectView = child(); val capcutView = child()
+        val effectValue = value(effectView).copy(element = io.github.meiyongai.toki.subtitle.model.LayoutElement.ANCHOR_EFFECT)
+        val capcutValue = value(capcutView).copy(element = io.github.meiyongai.toki.subtitle.model.LayoutElement.ANCHOR_CAPCUT)
+        models[effect] = effectValue; models[capcut] = capcutValue
+        bindings.observe(effect, effectValue); bindings.observe(capcut, capcutValue)
+        bindings.configure(setOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.ANCHOR_EFFECT))
+        assertEquals(View.GONE, effectView.visibility); assertEquals(View.VISIBLE, capcutView.visibility)
+        bindings.configure(setOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.ANCHOR_CAPCUT))
+        assertEquals(View.VISIBLE, effectView.visibility); assertEquals(View.GONE, capcutView.visibility)
+        // Even unchanged root/model/video identities cannot inherit the previous business category's rule.
+        models[capcut] = capcutValue.copy(element = io.github.meiyongai.toki.subtitle.model.LayoutElement.ANCHOR_EFFECT)
+        bindings.configure(setOf(io.github.meiyongai.toki.subtitle.model.LayoutElement.ANCHOR_CAPCUT))
+        assertEquals(View.VISIBLE, capcutView.visibility)
+        bindings.observe(capcut, models[capcut]); assertEquals(View.VISIBLE, capcutView.visibility)
+        bindings.close(); assertEquals(View.VISIBLE, effectView.visibility)
+    }
+
 }

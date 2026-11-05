@@ -8,6 +8,7 @@ internal object LayoutCleanupPolicy {
     fun hidden(element: LayoutElement, config: ConfigSnapshot?): Boolean {
         if (config == null) return false
         if (config.boolean(element.key)) return true
+        element.aggregate?.let { if (config.boolean(it.key)) return true }
         return when (element) {
             LayoutElement.BOTTOM_SEARCH_RECOMMENDATIONS -> config.boolean(LayoutElement.SEARCH_LABEL.key)
             LayoutElement.VIDEO_TEMPLATE -> config.boolean(LayoutElement.CREATION_BUTTONS.key)

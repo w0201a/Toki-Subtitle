@@ -68,4 +68,24 @@ class PageCleanupContractTest {
         assertNull(contract.root(instance, arrayOf(view), null))
         assertEquals(setOf("Kp", "Ip"), contract.bound.map { it.name }.toSet())
     }
+    open class DirectWidget {
+        @JvmField var contentView: View? = null
+        fun getView(): View? = contentView
+        fun onLoad(args: Array<Any>) = Unit
+        fun onUnload() = Unit
+    }
+    class DirectGiftWidget : DirectWidget()
+    @Test fun directGiftLifecycleUsesItsInspectedInheritedOverloadsWithoutRecycleSource() {
+        val view = FrameLayout(RuntimeEnvironment.getApplication()); val instance = DirectGiftWidget()
+        instance.contentView = view
+        for (item in listOf(PageCleanupItem.LIVE_GIFT_TRAY, PageCleanupItem.LIVE_EXTENDED_GIFT_TRAY)) {
+            val contract = PageCleanupContract.widget(item, DirectGiftWidget::class.java, null)
+            assertSame(view, contract.root(instance, emptyArray(), null))
+            assertEquals(listOf("onLoad"), contract.bound.map { it.name })
+            assertEquals(listOf(Array<Any>::class.java), contract.bound.single().parameterTypes.toList())
+            assertEquals(listOf("onUnload"), contract.released.map { it.name })
+            assertEquals(0, contract.released.single().parameterCount)
+        }
+    }
+
 }

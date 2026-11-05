@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_duet_button">Duet button</string>
+    <string name="layout_stitch_button">Stitch button</string>
+    <string name="layout_add_yours_button">Add Yours button</string>
+    <string name="layout_story_button">Add to Story button</string>
+    <string name="layout_collab_button">Collaboration invitation button</string>
+    <string name="layout_inspiration_button">Creation inspiration button</string>
+    <string name="layout_referral_reward">Referral reward banner</string>
+    <string name="layout_gift_bag">Gift bag entry</string>
+    <string name="layout_live_task">LIVE task bar</string>
+    <string name="layout_ad_product">Ad product tile</string>
+    <string name="layout_ad_interactive">Interactive ad component</string>
+    <string name="layout_ad_playable">Playable ad component</string>
+    <string name="layout_commodity_card">Video product card</string>
+    <string name="layout_ad_live_shopping">LIVE shopping ad banner</string>
+    <string name="layout_push_survey">Push survey component</string>
+    <string name="layout_feedback_survey">Content feedback survey button</string>
+    <string name="layout_anchor_effect">Effect and prop anchors</string>
+    <string name="layout_anchor_capcut">CapCut template anchor</string>
+    <string name="layout_anchor_ai">AI template anchor</string>
+    <string name="layout_anchor_photo">Photo template anchors</string>
+    <string name="layout_anchor_other_template">Other video template entries</string>
+    <string name="layout_individual_component_hint">Only this component. The “%1$s” aggregate also hides it when enabled.</string>
+    <string name="layout_individual_anchor_hint">Matches only the inspected current business type. The template/effect aggregate still includes this entry. Unknown links and other anchors keep native visibility.</string>
+    <string name="page_hide_live_gift_tray">Hide LIVE gift combo tray</string>
+    <string name="page_hide_live_gift_tray_hint">Only the inspected gift combo tray content. Gift controls, panels, player and native gift processing remain available.</string>
+    <string name="page_hide_live_extended_gift_tray">Hide LIVE extended gift tray</string>
+    <string name="page_hide_live_extended_gift_tray_hint">Only the inspected extended-screen gift tray content; other full-screen gift effects and separate windows retain native behavior.</string>
+</resources>

@@ -13,7 +13,9 @@ enum class PageCleanupItem(val group: PageCleanupGroup, val title: Int, val summ
     INBOX_SHOP_MIGRATION(PageCleanupGroup.INBOX, R.string.page_hide_inbox_shop_migration, R.string.page_hide_inbox_shop_migration_hint),
     LIVE_FOLLOW_BOTTOM(PageCleanupGroup.LIVE, R.string.page_hide_live_follow_bottom, R.string.page_hide_live_follow_bottom_hint),
     LIVE_FOLLOW_PIN(PageCleanupGroup.LIVE, R.string.page_hide_live_follow_pin, R.string.page_hide_live_follow_pin_hint),
-    LIVE_GIFT_GUIDE(PageCleanupGroup.LIVE, R.string.page_hide_live_gift_guide, R.string.page_hide_live_gift_guide_hint);
+    LIVE_GIFT_GUIDE(PageCleanupGroup.LIVE, R.string.page_hide_live_gift_guide, R.string.page_hide_live_gift_guide_hint),
+    LIVE_GIFT_TRAY(PageCleanupGroup.LIVE, R.string.page_hide_live_gift_tray, R.string.page_hide_live_gift_tray_hint),
+    LIVE_EXTENDED_GIFT_TRAY(PageCleanupGroup.LIVE, R.string.page_hide_live_extended_gift_tray, R.string.page_hide_live_extended_gift_tray_hint);
 
     val key: String = "page_hide_" + name.lowercase(java.util.Locale.ROOT)
 }

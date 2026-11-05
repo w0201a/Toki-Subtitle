@@ -13,7 +13,7 @@ internal object LiveSwipePolicy {
      * Callers: LiveSwipeLockHook.shouldBlock；LiveSwipePolicyTest。
      */
     fun blocks(dx: Float, dy: Float, touchSlop: Float): Boolean {
-        if (!touchSlop.isFinite() || touchSlop <= 0f) return false
+        if (!dx.isFinite() || !dy.isFinite() || !touchSlop.isFinite() || touchSlop <= 0f) return false
         return abs(dy) >= touchSlop && abs(dy) > abs(dx)
     }
 }

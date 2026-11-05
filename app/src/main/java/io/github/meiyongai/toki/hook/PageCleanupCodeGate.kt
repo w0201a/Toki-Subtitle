@@ -20,7 +20,7 @@ internal object PageCleanupCodeGate {
         PageCleanupItem.SEARCH_TAKO -> setOf("classes8.dex", "classes34.dex")
         PageCleanupItem.INBOX_SHOP_MIGRATION -> setOf("classes11.dex")
         PageCleanupItem.LIVE_FOLLOW_BOTTOM, PageCleanupItem.LIVE_FOLLOW_PIN -> setOf("classes27.dex", "classes10.dex")
-        PageCleanupItem.LIVE_GIFT_GUIDE -> setOf("classes30.dex", "classes10.dex")
+        PageCleanupItem.LIVE_GIFT_GUIDE, PageCleanupItem.LIVE_GIFT_TRAY, PageCleanupItem.LIVE_EXTENDED_GIFT_TRAY -> setOf("classes30.dex", "classes10.dex")
     }
     internal fun supported(matched: Set<String>): Set<PageCleanupItem> =
         PageCleanupItem.entries.filterTo(linkedSetOf()) { matched.containsAll(required(it)) }

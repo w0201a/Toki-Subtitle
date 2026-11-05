@@ -12,5 +12,7 @@ class LiveSwipePolicyTest {
         assertFalse(LiveSwipePolicy.blocks(30f, 20f, 8f))
         assertFalse(LiveSwipePolicy.blocks(0f, 24f, 0f))
         assertFalse(LiveSwipePolicy.blocks(Float.NaN, 24f, 8f))
+        assertFalse(LiveSwipePolicy.blocks(0f, Float.POSITIVE_INFINITY, 8f))
+        assertFalse(LiveSwipePolicy.blocks(Float.NEGATIVE_INFINITY, 24f, 8f))
     }
 }

@@ -61,6 +61,27 @@ enum class LayoutElement(val group: LayoutGroup, val title: Int, val tag: String
     PHOTO_INDICATORS(LayoutGroup.SIDE, R.string.layout_photo_indicators),
     DANMAKU_ENTRANCE(LayoutGroup.SIDE, R.string.layout_danmaku_entrance),
     VIDEO_TEMPLATE(LayoutGroup.SIDE, R.string.layout_video_template),
+    DUET_BUTTON(LayoutGroup.SIDE, R.string.layout_duet_button),
+    STITCH_BUTTON(LayoutGroup.SIDE, R.string.layout_stitch_button),
+    ADD_YOURS_BUTTON(LayoutGroup.SIDE, R.string.layout_add_yours_button),
+    STORY_BUTTON(LayoutGroup.SIDE, R.string.layout_story_button),
+    COLLAB_BUTTON(LayoutGroup.SIDE, R.string.layout_collab_button),
+    INSPIRATION_BUTTON(LayoutGroup.SIDE, R.string.layout_inspiration_button),
+    REFERRAL_REWARD(LayoutGroup.SIDE, R.string.layout_referral_reward),
+    GIFT_BAG(LayoutGroup.SIDE, R.string.layout_gift_bag),
+    LIVE_TASK(LayoutGroup.SIDE, R.string.layout_live_task),
+    AD_PRODUCT(LayoutGroup.SIDE, R.string.layout_ad_product),
+    AD_INTERACTIVE(LayoutGroup.SIDE, R.string.layout_ad_interactive),
+    AD_PLAYABLE(LayoutGroup.SIDE, R.string.layout_ad_playable),
+    COMMODITY_CARD(LayoutGroup.SIDE, R.string.layout_commodity_card),
+    AD_LIVE_SHOPPING(LayoutGroup.SIDE, R.string.layout_ad_live_shopping),
+    PUSH_SURVEY(LayoutGroup.SIDE, R.string.layout_push_survey),
+    FEEDBACK_SURVEY(LayoutGroup.SIDE, R.string.layout_feedback_survey),
+    ANCHOR_EFFECT(LayoutGroup.SIDE, R.string.layout_anchor_effect),
+    ANCHOR_CAPCUT(LayoutGroup.SIDE, R.string.layout_anchor_capcut),
+    ANCHOR_AI(LayoutGroup.SIDE, R.string.layout_anchor_ai),
+    ANCHOR_PHOTO(LayoutGroup.SIDE, R.string.layout_anchor_photo),
+    ANCHOR_OTHER_TEMPLATE(LayoutGroup.SIDE, R.string.layout_anchor_other_template),
     SHARE_PANEL(LayoutGroup.SIDE, R.string.layout_share_panel),
     QUICK_MESSAGE(LayoutGroup.SIDE, R.string.layout_quick_message),
     USER_CARD(LayoutGroup.SIDE, R.string.layout_user_card),
@@ -70,6 +91,28 @@ enum class LayoutElement(val group: LayoutGroup, val title: Int, val tag: String
     ACTIVITIES(LayoutGroup.SIDE, R.string.layout_activities);
 
     val key: String = "layout_hide_" + name.lowercase(java.util.Locale.ROOT)
+
+
+    /** A legacy aggregate still includes its inspected individual components. */
+    val aggregate: LayoutElement? get() = when (this) {
+        DUET_BUTTON -> CREATION_BUTTONS
+        STITCH_BUTTON -> CREATION_BUTTONS
+        ADD_YOURS_BUTTON -> CREATION_BUTTONS
+        STORY_BUTTON -> CREATION_BUTTONS
+        COLLAB_BUTTON -> CREATION_BUTTONS
+        INSPIRATION_BUTTON -> CREATION_BUTTONS
+        REFERRAL_REWARD -> REWARDS
+        GIFT_BAG -> REWARDS
+        LIVE_TASK -> REWARDS
+        AD_PRODUCT -> AD_CARDS
+        AD_INTERACTIVE -> AD_CARDS
+        AD_PLAYABLE -> AD_CARDS
+        COMMODITY_CARD -> AD_CARDS
+        AD_LIVE_SHOPPING -> AD_CARDS
+        PUSH_SURVEY -> SURVEY
+        FEEDBACK_SURVEY -> SURVEY
+        else -> null
+    }
 
     companion object {
         /**

@@ -36,7 +36,7 @@ internal object TemplateCleanupHook {
         })
         fun recordEvidence(failed: Boolean = false, deferred: Boolean = false) {
             val counts = roots.statistics()
-            val desired = config?.boolean(LayoutElement.VIDEO_TEMPLATE.key)
+            val desired = config?.let { TemplateAnchorPolicy.enabled(it).isNotEmpty() }
             val outcome = when {
                 failed || deferred -> ExecutionEvidence.Outcome.PARTIAL
                 config == null -> ExecutionEvidence.Outcome.CONFIG_MISSING
@@ -77,8 +77,9 @@ internal object TemplateCleanupHook {
         }
         fun configure() {
             if (closed.get() || !HookRuntime.scope(FEATURE).active) return
-            val desired = config?.boolean(LayoutElement.VIDEO_TEMPLATE.key) == true
-            roots.configure(desired && ready)
+            val requested = TemplateAnchorPolicy.enabled(config)
+            val desired = requested.isNotEmpty()
+            roots.configure(if (ready) requested else emptySet())
             HookRuntime.state(FEATURE, when {
                 desired && !checked -> "正在核验页面组件"
                 desired && !ready -> "部分功能已注册"

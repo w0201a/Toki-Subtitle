@@ -9,7 +9,7 @@ import org.junit.Test
 class TemplateCleanupPlanTest {
     @Test fun dedicatedSwitchHasOneBusinessOwnerAndDoesNotRequireNavigationScan() {
         val key = LayoutElement.VIDEO_TEMPLATE.key
-        assertEquals(listOf(key), ConfigSchema.featureSwitches.getValue("TemplateCleanupHook"))
+        assertEquals(listOf(key) + TemplateAnchorPolicy.controls.map { it.key }, ConfigSchema.featureSwitches.getValue("TemplateCleanupHook"))
         assertFalse(key in ConfigSchema.featureSwitches.getValue("LayoutCleanupHook"))
         assertFalse(ConfigSchema.booleanDefault(key))
         val request = ConfigSnapshot(mapOf(key to true))

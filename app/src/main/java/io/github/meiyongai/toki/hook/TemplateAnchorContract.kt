@@ -1,6 +1,7 @@
 package io.github.meiyongai.toki.subtitle.hook
 
 import android.view.View
+import io.github.meiyongai.toki.subtitle.model.LayoutElement
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier
 
@@ -33,7 +34,10 @@ internal class TemplateAnchorContract(val type: Class<*>, val bound: List<Method
                 val item = source?.let { video.invoke(it) }
                 val view = root.invoke(owner) as? View
                 if (selected == null || item == null || view == null) null else
-                    TemplateRootBindings.Snapshot(view, selected, item, (kind.invoke(selected) as Int) in allowed)
+                    (kind.invoke(selected) as Int).let { code ->
+                        TemplateRootBindings.Snapshot(view, selected, item, code in allowed,
+                            TemplateAnchorPolicy.element(code) ?: LayoutElement.VIDEO_TEMPLATE)
+                    }
             }
         }
         internal fun specificButton(type: Class<*>): TemplateAnchorContract {
@@ -53,7 +57,7 @@ internal class TemplateAnchorContract(val type: Class<*>, val bound: List<Method
                 var depth = 0
                 while (cursor != null && cursor !== view && depth++ < 32) cursor = cursor.parent as? View
                 if (view == null || child == null || cursor !== view) null else
-                    TemplateRootBindings.Snapshot(view, owner, owner, true)
+                    TemplateRootBindings.Snapshot(view, owner, owner, true, LayoutElement.ANCHOR_OTHER_TEMPLATE)
             }
         }
         fun resolve(loader: ClassLoader): List<TemplateAnchorContract> {

@@ -1,3 +1,17 @@
+# Verified build — 2.0.98-debug /118: independent cleanup controls and actual LIVE pager lock (2026-11-06)
+
+User scope is the remaining cleanup settings and LIVE vertical swipe restriction. Add 23 default-off controls: 16 individual components formerly grouped under aggregates, 5 inspected anchor categories and 2 dedicated LIVE gift trays. Preserve existing aggregate scope. Shared roots revalidate category as well as anchor/video/root identity. Unknown types and shared parent containers stay native. Exact inventory: CLEANUP_COMPONENTS_ZH.md.
+
+The resolved LIVE symbol was a listener. Follow its inspected listener -> fragment -> pager fields to bind actual interception, touch and owned listener together. Cancel native drag/velocity state once; latch vertical ownership through UP/CANCEL; track each pointer ID because native interception and touch may adopt different fingers. Drain an already blocked sequence when disabled and restore native handling on the next gesture. Clicks, horizontal gestures, child scrolling and programmatic changes retain native handling.
+
+Target DEX inspection verified both ownership fields, declared pager methods and new gift widgets' inherited lifecycle/content-root contracts. The gift widgets use onLoad(Object[]) / onUnload(), not the earlier follow-guide RecycleSource overload. Native lifecycle proceeds; only inspected content roots receive reversible visibility ownership after code fingerprint success.
+
+Verification: 58 focused tests passed, 0 failures/skips; 790 source checks; 557 production input hashes unchanged across build. Outer/private payload version, signature, CRC, alignment, namespace, new-class, font manifest and geographical asset checks passed. No full regression rerun or instrumentation. No phone operations, installation, restart, settings changes, translation calls, downloads or destructive cleanup. Actual page coverage and LIVE gestures remain device acceptance pending; other independent popups and host variants are not certified.
+
+Artifact: Toki-2.0.98-debug.apk; 87726574 bytes; SHA-256 287c1765624c7a92adda36fa3838f1e26ff997931fe56667e5ac9f7110e6fbab. Native/build evidence remains under ignored work/cleanup-live-20261105/.
+
+Offline comments remain paused. Retain the user's repeated-redownload reproduction: first few videos have comments, later ones do not, usually returning to the home feed after starting downloads. Read-only source inspection confirms media completion is separate from page-wise background comment preparation and three failures pause a job; remaining on the offline page is not an explicit execution condition. This is source evidence, not a live job diagnosis. No comment implementation or switch was changed and no video was redownloaded.
+
 # User acceptance — 2026-11-05: custom-font import and bilingual line-order switching
 
 After delivery of2.0.97, the user reports “完成”. Record both font-file import and original/translated vertical-order switching as accepted in this round's observed use. This supersedes the pending-device wording in the historical build evidence below; it does not claim every font format, device or source-language combination. Offline-comment work remains explicitly paused; HDR remains stopped. This acceptance update changes documentation only: no new implementation, build, tests, installation, phone action or settings change. Other remaining work is retained rather than automatically started.

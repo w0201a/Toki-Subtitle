@@ -30,9 +30,11 @@ internal class PageCleanupContract(val item: PageCleanupItem, val type: Class<*>
             } } catch (_: NoSuchMethodException) { null }
             return PageCleanupContract(item, type, listOf(created), listOfNotNull(destroyed)) { instance, _, _ -> view.get(instance) as? View }
         }
-        internal fun widget(item: PageCleanupItem, type: Class<*>, source: Class<*>): PageCleanupContract {
-            val load = method(type, "onLoad", Void.TYPE, source, Array<Any>::class.java)
-            val unload = method(type, "onUnload", Void.TYPE, source)
+        internal fun widget(item: PageCleanupItem, type: Class<*>, source: Class<*>?): PageCleanupContract {
+            val load = if (source == null) method(type, "onLoad", Void.TYPE, Array<Any>::class.java)
+                else method(type, "onLoad", Void.TYPE, source, Array<Any>::class.java)
+            val unload = if (source == null) method(type, "onUnload", Void.TYPE)
+                else method(type, "onUnload", Void.TYPE, source)
             val show = try { method(type, "show", Void.TYPE) } catch (_: NoSuchMethodException) { null }
             val onShow = try { method(type, "onShow", Void.TYPE) } catch (_: NoSuchMethodException) { null }
             val root = type.getMethod("getView").apply {
@@ -75,6 +77,10 @@ internal class PageCleanupContract(val item: PageCleanupItem, val type: Class<*>
                 PageCleanupItem.LIVE_FOLLOW_PIN -> widget(item,
                     type("com.bytedance.android.livesdk.chatroom.widget.followguide.FollowGuidePinCardWidget"),
                     type("com.bytedance.ies.sdk.widgets.RecycleSource"))
+                PageCleanupItem.LIVE_GIFT_TRAY -> widget(item,
+                    type("com.bytedance.android.livesdk.gift.base.platform.business.tray.LiveGiftTrayWidgetV2"), null)
+                PageCleanupItem.LIVE_EXTENDED_GIFT_TRAY -> widget(item,
+                    type("com.bytedance.android.livesdk.gift.base.platform.business.tray.ExtendScreenGiftTrayWidget"), null)
                 PageCleanupItem.LIVE_GIFT_GUIDE -> widget(item,
                     type("com.bytedance.android.livesdk.guide.GiftGuideWidget"), type("com.bytedance.ies.sdk.widgets.RecycleSource"))
             }

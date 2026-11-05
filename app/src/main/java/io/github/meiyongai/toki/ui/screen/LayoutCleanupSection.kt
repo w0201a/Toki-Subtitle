@@ -82,7 +82,9 @@ internal fun LayoutCleanupSection() {
                                     LayoutElement.DANMAKU_ENTRANCE -> strings.getString(R.string.layout_danmaku_entrance_hint)
                                     LayoutElement.QUICK_COMMENT -> strings.getString(R.string.layout_quick_comment_hint)
                                     LayoutElement.VIDEO_TEMPLATE -> strings.getString(R.string.layout_template_business_hint)
-                                    else -> null
+                                    else -> element.aggregate?.let { strings.getString(R.string.layout_individual_component_hint, strings.getString(it.title)) }
+                                        ?: if (element in io.github.meiyongai.toki.subtitle.hook.TemplateAnchorPolicy.controls)
+                                            strings.getString(R.string.layout_individual_anchor_hint) else null
                                 },
                                 checked = values.getValue(element),
                                 onCheckedChange = { enabled ->

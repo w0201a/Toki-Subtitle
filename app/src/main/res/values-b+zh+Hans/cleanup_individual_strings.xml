@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="layout_duet_button">合拍按钮</string>
+    <string name="layout_stitch_button">拼接按钮</string>
+    <string name="layout_add_yours_button">Add Yours 接龙按钮</string>
+    <string name="layout_story_button">发布到动态按钮</string>
+    <string name="layout_collab_button">协作邀请按钮</string>
+    <string name="layout_inspiration_button">创作灵感按钮</string>
+    <string name="layout_referral_reward">邀请奖励横幅</string>
+    <string name="layout_gift_bag">礼包入口</string>
+    <string name="layout_live_task">直播任务条</string>
+    <string name="layout_ad_product">广告商品卡片</string>
+    <string name="layout_ad_interactive">广告互动组件</string>
+    <string name="layout_ad_playable">广告试玩组件</string>
+    <string name="layout_commodity_card">视频商品卡片</string>
+    <string name="layout_ad_live_shopping">直播购物广告条</string>
+    <string name="layout_push_survey">推送调查组件</string>
+    <string name="layout_feedback_survey">内容反馈调查按钮</string>
+    <string name="layout_anchor_effect">特效／道具入口</string>
+    <string name="layout_anchor_capcut">CapCut 模板入口</string>
+    <string name="layout_anchor_ai">AI 模板入口</string>
+    <string name="layout_anchor_photo">照片／相册模板入口</string>
+    <string name="layout_anchor_other_template">其他视频模板入口</string>
+    <string name="layout_individual_component_hint">仅此组件；“%1$s”总开关开启时也会隐藏此项。</string>
+    <string name="layout_individual_anchor_hint">仅匹配已核实的当前业务类型；“模板／特效入口”总开关仍包含此项。未知链接和其他锚点保持原样。</string>
+    <string name="page_hide_live_gift_tray">隐藏直播礼物连击横幅</string>
+    <string name="page_hide_live_gift_tray_hint">仅已核实的礼物连击横幅组件，不隐藏送礼按钮、礼物面板或直播播放器；礼物业务继续运行。</string>
+    <string name="page_hide_live_extended_gift_tray">隐藏直播扩展礼物横幅</string>
+    <string name="page_hide_live_extended_gift_tray_hint">仅已核实的扩展屏礼物横幅内容，不处理其他全屏礼物特效或独立窗口。</string>
+</resources>

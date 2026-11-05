@@ -7,9 +7,9 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class PageCleanupPolicyTest {
-    @Test fun allSixDefaultOffAndIndependentOfNavigationAndStartupSensitiveHooks() {
+    @Test fun allEightDefaultOffAndIndependentOfNavigationAndStartupSensitiveHooks() {
         val keys = PageCleanupItem.entries.map { it.key }
-        assertEquals(6, keys.size); assertEquals(keys.size, keys.toSet().size)
+        assertEquals(8, keys.size); assertEquals(keys.size, keys.toSet().size)
         assertEquals(keys, ConfigSchema.featureSwitches.getValue("PageCleanupHook"))
         for (key in keys) {
             assertFalse(ConfigSchema.booleanDefault(key))
@@ -38,4 +38,11 @@ class PageCleanupPolicyTest {
         assertTrue(PageCleanupCodeGate.supported(setOf("classes27.dex")).isEmpty())
         assertEquals(setOf(PageCleanupItem.INBOX_SHOP_MIGRATION), PageCleanupCodeGate.supported(setOf("classes11.dex")))
     }
+    @Test fun giftTraysNeedTheirOwnComponentCodeAndTheInspectedWidgetRootBase() {
+        val gift = setOf(PageCleanupItem.LIVE_GIFT_GUIDE, PageCleanupItem.LIVE_GIFT_TRAY, PageCleanupItem.LIVE_EXTENDED_GIFT_TRAY)
+        assertEquals(gift, PageCleanupCodeGate.supported(setOf("classes30.dex", "classes10.dex")))
+        assertTrue(PageCleanupCodeGate.supported(setOf("classes30.dex")).isEmpty())
+        for (item in gift) assertEquals(setOf("classes30.dex", "classes10.dex"), PageCleanupCodeGate.required(item))
+    }
+
 }
