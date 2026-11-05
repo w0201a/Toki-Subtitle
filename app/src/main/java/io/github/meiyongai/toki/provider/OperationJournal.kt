@@ -9,7 +9,7 @@ internal class OperationJournal(private val emit: (String) -> Unit, private val 
     enum class Step(val title: String) {
         QUEUED("进入工作队列"), CODE_CHECK("核对宿主代码"), CANDIDATES("读取候选数据"), CACHE_LOOKUP("查找本地缓存"),
         OFFLINE_LOOKUP("读取原生离线视频记录"), HEADER_RESTORE("只读还原离线文件头"),
-        SAMPLE_CHECK("校验本地轨道与样本"), PLAN_READY("已确定完整导出方案"), MUX("写入单个视频文件"), READBACK("回读目标文件"),
+        SAMPLE_CHECK("校验本地轨道与样本"), PLAN_READY("已确定完整导出方案"), MUX("写入单个视频文件"), LOCAL_COPY("还原复制完整离线视频"), READBACK("回读目标文件"),
         PUBLISH("发布到相册"), SOURCE_FETCH("读取贴图源数据"), ANIMATION_PARSE("解析动画帧与限制"),
         ANIMATION_DECODE("打开逐帧解码器"), ANIMATION_ENCODE("逐帧合成与编码"), FINISHED("处理结束")
     }
@@ -20,6 +20,8 @@ internal class OperationJournal(private val emit: (String) -> Unit, private val 
         CACHE_MISSING("没有找到对应本地缓存", "确认视频已下载供离线播放；导出不会联网补视频。"),
         CACHE_INCOMPLETE("缓存／必要音轨不完整或无法配对", "确认离线下载完成；多音轨或缺初始化信息可能尚未支持。"),
         UNSUPPORTED("编码、结构或设备接口不受支持", "查看阶段及错误类型；不要改后缀或把静态预览当成功。"),
+        TIMELINE("音视频时间戳不符合文件元数据", "查看音轨声明的编码预留时间及样本时间戳。"),
+        PLATFORM("当前Android版本不支持相册保存接口", "此项只适用于Android 10以下设备。"),
         CANCELLED("页面／设置变化或任务取消", "保持目标页面与功能开启，确认后重试。"),
         SOURCE_CHANGED("源文件或结果与校验信息不一致", "保留原缓存，重新选择视频后重试；查看回读校验阶段。"),
         OUTPUT_FAILED("目标写入／封装／发布失败", "检查剩余空间、相册／文档接口；未完成记录不会被自动发布。"),

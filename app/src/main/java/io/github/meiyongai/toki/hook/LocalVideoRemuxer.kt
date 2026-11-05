@@ -15,7 +15,7 @@ internal object LocalVideoRemuxer {
         private val input = if (source.file.restoration == null) FileInputStream(source.file.file) else null
         private val local = if (source.file.restoration != null) OfflineMdlDataSource(source.file, active) else null
         val extractor = MediaExtractor()
-        val digest = LocalVideoTracks.Digest()
+        val digest = LocalVideoTracks.Digest(track.minimumUs)
         var buffer: ByteBuffer = ByteBuffer.allocate(0)
         var outputIndex = -1
         val available: Boolean get() = extractor.sampleTrackIndex >= 0
@@ -36,7 +36,7 @@ internal object LocalVideoRemuxer {
         }
         fun write(muxer: MediaMuxer, origin: Long) {
             LocalVideoFile.verify(source.file, active)
-            val count = LocalVideoTracks.checkedSampleSize(extractor)
+            val count = LocalVideoTracks.checkedSampleSize(extractor, track.minimumUs)
             if (buffer.capacity() < count) buffer = ByteBuffer.allocateDirect(count)
             buffer.clear()
             if (extractor.readSampleData(buffer, 0) != count) throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.INCOMPLETE)
@@ -59,8 +59,18 @@ internal object LocalVideoRemuxer {
         }
         override fun close() { try { extractor.release() } finally { try { input?.close() } finally { local?.close() } } }
     }
+    /** A complete native muxed file already has its edit lists, AAC priming and B-frame timing. */
+    fun preservesContainer(plan: LocalVideoTracks.Plan): Boolean = plan.audio == null &&
+        plan.video.file.restoration != null && !plan.video.file.fragmented
     fun write(plan: LocalVideoTracks.Plan, output: FileDescriptor, active: () -> Boolean) {
         plan.verify(active)
+        if (preservesContainer(plan)) {
+            android.os.ParcelFileDescriptor.AutoCloseOutputStream(android.os.ParcelFileDescriptor.dup(output)).use { stream ->
+                LocalVideoFile.copy(plan.video.file, stream, active)
+            }
+            plan.verify(active)
+            return
+        }
         val readers = mutableListOf<Reader>()
         var muxer: MediaMuxer? = null
         var failed: Throwable? = null
@@ -95,7 +105,9 @@ internal object LocalVideoRemuxer {
         check(size in 1..16L * 1024 * 1024 * 1024)
         plan.verify(active)
         val expected = plan.tracks.map { it.second }
-        val origin = expected.minOf { it.firstUs }
+        val preserve = preservesContainer(plan)
+        if (preserve && size != plan.video.file.size) throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.INCOMPLETE)
+        val origin = if (preserve) 0L else expected.minOf { it.firstUs }
         LocalVideoTracks.withDescriptor(output, size) { extractor ->
             if (!extractor.psshInfo.isNullOrEmpty() || extractor.trackCount != expected.size) LocalVideoTracks.unavailable()
             val remaining = expected.toMutableList()
@@ -103,13 +115,15 @@ internal object LocalVideoRemuxer {
                 val format = extractor.getTrackFormat(index)
                 val track = remaining.singleOrNull { it.mime == format.getString(MediaFormat.KEY_MIME) } ?: LocalVideoTracks.unavailable()
                 remaining.remove(track)
+                val minimumUs = if (preserve) LocalVideoTracks.minimumSampleTime(format) else 0L
+                if (preserve && minimumUs != track.minimumUs) throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.TIMELINE)
                 LocalVideoTracks.withDescriptor(output, size) { samples ->
                     samples.selectTrack(index)
                     var buffer = ByteBuffer.allocateDirect(1024 * 1024)
-                    val digest = LocalVideoTracks.Digest()
+                    val digest = LocalVideoTracks.Digest(minimumUs)
                     while (samples.sampleTrackIndex >= 0) {
                         plan.verify(active)
-                        val count = LocalVideoTracks.checkedSampleSize(samples)
+                        val count = LocalVideoTracks.checkedSampleSize(samples, minimumUs)
                         if (buffer.capacity() < count) buffer = ByteBuffer.allocateDirect(count)
                         buffer.clear()
                         if (samples.readSampleData(buffer, 0) != count) throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.INCOMPLETE)

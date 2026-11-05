@@ -12,13 +12,13 @@ internal object LocalVideoTracks {
     const val MAX_SAMPLE = 16 * 1024 * 1024
     const val MAX_SAMPLES = 2_000_000L
     data class Track(val index: Int, val mime: String, val durationUs: Long, val rotation: Int,
-        val count: Long, val bytes: Long, val firstUs: Long, val lastUs: Long, val fingerprint: String)
+        val count: Long, val bytes: Long, val firstUs: Long, val lastUs: Long, val fingerprint: String, val minimumUs: Long = 0)
     data class Source(val file: LocalVideoFile.Verified, val tracks: List<Track>)
     data class Plan(val video: Source, val audio: Source? = null, val expectedDurationMs: Int = 0) {
         val tracks: List<Pair<Source, Track>> get() = listOf(video).plus(listOfNotNull(audio)).flatMap { source -> source.tracks.map { source to it } }
         fun verify(active: () -> Boolean) { LocalVideoFile.verify(video.file, active); audio?.let { LocalVideoFile.verify(it.file, active) } }
     }
-    class Digest {
+    class Digest(private val minimumUs: Long = 0) {
         private val hash = MessageDigest.getInstance("SHA-256")
         private val scratch = ByteArray(64 * 1024)
         var count = 0L; private set
@@ -26,7 +26,7 @@ internal object LocalVideoTracks {
         var firstUs = Long.MAX_VALUE; private set
         var lastUs = Long.MIN_VALUE; private set
         fun sample(buffer: ByteBuffer, size: Int, time: Long) {
-            require(size in 1..MAX_SAMPLE && time >= 0)
+            require(size in 1..MAX_SAMPLE && time >= minimumUs)
             check(++count <= MAX_SAMPLES)
             bytes += size; firstUs = minOf(firstUs, time); lastUs = maxOf(lastUs, time)
             // Include sample boundaries; concatenated payload equality alone does not establish equivalent packetization.
@@ -40,6 +40,19 @@ internal object LocalVideoTracks {
     }
     fun supportedVideo(mime: String): Boolean = mime in setOf("video/avc", "video/hevc", "video/mp4v-es", "video/3gpp", "video/av01")
     fun supportedAudio(mime: String): Boolean = mime == "audio/mp4a-latm"
+    /** Negative AAC priming timestamps are valid only within the declared encoder delay. */
+    fun minimumSampleTime(mime: String, sampleRate: Int, delaySamples: Int): Long {
+        if (mime != "audio/mp4a-latm" || delaySamples == 0) return 0
+        if (sampleRate !in 1..384_000 || delaySamples < 0 || delaySamples.toLong() > sampleRate.toLong() * 2)
+            throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.TIMELINE)
+        return -((delaySamples.toLong() * 1_000_000 + sampleRate - 1) / sampleRate)
+    }
+    fun minimumSampleTime(format: MediaFormat): Long {
+        val mime = format.getString(MediaFormat.KEY_MIME) ?: unavailable()
+        val rate = if (format.containsKey(MediaFormat.KEY_SAMPLE_RATE)) format.getInteger(MediaFormat.KEY_SAMPLE_RATE) else 0
+        val delay = if (format.containsKey(MediaFormat.KEY_ENCODER_DELAY)) format.getInteger(MediaFormat.KEY_ENCODER_DELAY) else 0
+        return minimumSampleTime(mime, rate, delay)
+    }
     fun inspect(file: LocalVideoFile.Verified, active: () -> Boolean): Source {
         val formats = withExtractor(file, active) { extractor ->
             if (!extractor.psshInfo.isNullOrEmpty() || extractor.trackCount !in 1..8) unavailable()
@@ -56,13 +69,14 @@ internal object LocalVideoTracks {
             if (duration < 0 || duration > 24L * 60 * 60 * 1_000_000) unavailable()
             val rotation = if (mime.startsWith("video/") && format.containsKey("rotation-degrees")) format.getInteger("rotation-degrees") else 0
             if (rotation !in setOf(0, 90, 180, 270)) unavailable()
-            val summary = Digest()
+            val minimumUs = minimumSampleTime(format)
+            val summary = Digest(minimumUs)
             withExtractor(file, active) { extractor ->
                 extractor.selectTrack(index)
                 var buffer = ByteBuffer.allocateDirect(1024 * 1024)
                 while (extractor.sampleTrackIndex >= 0) {
                     LocalVideoFile.verify(file, active)
-                    val size = checkedSampleSize(extractor)
+                    val size = checkedSampleSize(extractor, minimumUs)
                     if (summary.count == 0L && mime.startsWith("video/") && extractor.sampleFlags and MediaExtractor.SAMPLE_FLAG_SYNC == 0)
                         throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.INCOMPLETE)
                     if (buffer.capacity() < size) buffer = ByteBuffer.allocateDirect(size)
@@ -74,7 +88,7 @@ internal object LocalVideoTracks {
                 }
             }
             if (summary.count == 0L || summary.bytes <= 0 || summary.bytes > file.size) unavailable()
-            Track(index, mime, duration, rotation, summary.count, summary.bytes, summary.firstUs, summary.lastUs, summary.finish())
+            Track(index, mime, duration, rotation, summary.count, summary.bytes, summary.firstUs, summary.lastUs, summary.finish(), minimumUs)
         }
         return Source(file, tracks)
     }
@@ -94,10 +108,11 @@ internal object LocalVideoTracks {
             throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.INCOMPLETE)
         return plan
     }
-    fun checkedSampleSize(extractor: MediaExtractor): Int {
+    fun checkedSampleSize(extractor: MediaExtractor, minimumUs: Long = 0): Int {
         if (extractor.sampleFlags and (MediaExtractor.SAMPLE_FLAG_ENCRYPTED or MediaExtractor.SAMPLE_FLAG_PARTIAL_FRAME) != 0) unavailable()
         val size = extractor.sampleSize
-        if (size !in 1..MAX_SAMPLE.toLong() || extractor.sampleTime < 0) unavailable()
+        if (size !in 1..MAX_SAMPLE.toLong()) unavailable()
+        if (extractor.sampleTime < minimumUs) throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.TIMELINE)
         return size.toInt()
     }
     fun <T> withDescriptor(descriptor: FileDescriptor, size: Long, action: (MediaExtractor) -> T): T {

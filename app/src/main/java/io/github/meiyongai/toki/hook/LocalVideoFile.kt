@@ -6,7 +6,7 @@ import java.io.RandomAccessFile
 
 /** Local bytes only. Cache completeness must come from the cache index, never from file existence alone. */
 internal object LocalVideoFile {
-    enum class Failure { MISSING, INCOMPLETE, UNSUPPORTED, OUTSIDE_STORAGE, CHANGED }
+    enum class Failure { MISSING, INCOMPLETE, UNSUPPORTED, OUTSIDE_STORAGE, CHANGED, TIMELINE, CODE_MISMATCH, PLATFORM }
     class Unavailable(val reason: Failure) : Exception(reason.name)
     data class Verified(val file: File, val size: Long, val modified: Long, val fragmented: Boolean = false,
         val restoration: OfflineMdlFile.Restoration? = null)

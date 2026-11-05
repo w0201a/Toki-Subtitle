@@ -114,4 +114,13 @@ class OfflineMdlFileTest {
         fails(LocalVideoFile.Failure.OUTSIDE_STORAGE) { OfflineMdlFile.inspect(f.media, f.sidecar, key, listOf(other)) }
         fails(LocalVideoFile.Failure.OUTSIDE_STORAGE) { OfflineMdlFile.inspect(File(other, "missing"), f.sidecar, key, listOf(other)) }
     }
+    @Test fun completeNativeContainerCopyIsSelectedOnlyWithoutSeparateTracksOrFragments() {
+        val f = fixture(); val verified = inspect(f)
+        val source = LocalVideoTracks.Source(verified, emptyList())
+        val plan = LocalVideoTracks.Plan(source)
+        assertTrue(LocalVideoRemuxer.preservesContainer(plan))
+        assertFalse(LocalVideoRemuxer.preservesContainer(plan.copy(audio = source)))
+        assertFalse(LocalVideoRemuxer.preservesContainer(plan.copy(video = source.copy(file = verified.copy(fragmented = true)))))
+        assertFalse(LocalVideoRemuxer.preservesContainer(plan.copy(video = source.copy(file = verified.copy(restoration = null)))))
+    }
 }

@@ -81,10 +81,13 @@ class LocalVideoRemuxerDeviceTest {
             assertEquals(-1, input.readAt(original.size.toLong(), bytes, 0, 1))
         }
         val plan = LocalVideoTracks.plan(LocalVideoTracks.inspect(verified) { true }, null, false, 1000)
-        RandomAccessFile(folder.newFile("native-result.mp4"), "rw").use { output ->
+        assertTrue(LocalVideoRemuxer.preservesContainer(plan))
+        val result = folder.newFile("native-result.mp4")
+        RandomAccessFile(result, "rw").use { output ->
             LocalVideoRemuxer.write(plan, output.fd) { true }
             LocalVideoRemuxer.verifyOutput(plan, output.fd, output.length()) { true }
         }
+        assertArrayEquals(original, result.readBytes())
         assertArrayEquals(masked, media.readBytes()); assertArrayEquals(node, sidecar.readBytes())
     }
 }

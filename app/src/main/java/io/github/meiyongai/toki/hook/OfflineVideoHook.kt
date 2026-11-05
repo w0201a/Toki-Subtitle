@@ -100,6 +100,9 @@ internal object OfflineVideoHook {
                                 LocalVideoFile.Failure.MISSING -> OperationJournal.Reason.CACHE_MISSING
                                 LocalVideoFile.Failure.INCOMPLETE -> OperationJournal.Reason.CACHE_INCOMPLETE
                                 LocalVideoFile.Failure.CHANGED -> OperationJournal.Reason.SOURCE_CHANGED
+                                LocalVideoFile.Failure.CODE_MISMATCH -> OperationJournal.Reason.CODE_MISMATCH
+                                LocalVideoFile.Failure.TIMELINE -> OperationJournal.Reason.TIMELINE
+                                LocalVideoFile.Failure.PLATFORM -> OperationJournal.Reason.PLATFORM
                                 else -> OperationJournal.Reason.UNSUPPORTED
                             }, error.javaClass.simpleName)
                         HookRuntime.event(FEATURE, "local export unavailable reason=" + error.reason.name)
@@ -107,6 +110,9 @@ internal object OfflineVideoHook {
                             LocalVideoFile.Failure.MISSING -> R.string.offline_video_missing
                             LocalVideoFile.Failure.INCOMPLETE -> R.string.offline_video_incomplete
                             LocalVideoFile.Failure.UNSUPPORTED -> R.string.offline_video_unsupported
+                            LocalVideoFile.Failure.TIMELINE -> R.string.offline_video_timeline_failed
+                            LocalVideoFile.Failure.CODE_MISMATCH -> R.string.offline_video_code_mismatch
+                            LocalVideoFile.Failure.PLATFORM -> R.string.offline_video_android_required
                             else -> R.string.offline_video_export_failed
                         }
                     } catch (error: LinkageError) {

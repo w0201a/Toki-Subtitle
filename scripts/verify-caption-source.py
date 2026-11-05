@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 114' in gradle and 'versionName = "2.0.94"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.94-debug / 114")
+check('versionCode = 115' in gradle and 'versionName = "2.0.95"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.95-debug / 115")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -502,6 +502,9 @@ check('"hitDashAudioBitrate"' in export_candidates and '"hitDashVideoBitrate"' i
 check('"fileHash"' in export_candidates and 'val keys = boundedKeys(listOf(audioHash.get(data)))' in export_candidates and 'fileId/quality are not interchangeable' in export_candidates, 'DASH audio cache lookup uses the hash identified in the native cache reader rather than a guessed fileId')
 check('OfflineExportCodeGate.verify(context)' in offline_cache and all(name in export_gate for name in ('classes2.dex', 'classes4.dex', 'classes6.dex', 'classes12.dex')) and 'matched == hashes.keys' in export_gate, 'native offline contracts require all four inspected model DEX hashes; legacy index keeps independent gates')
 check('fragmented = true; waitingForData = true' in offline_files and 'if (waitingForData)' in offline_files and 'if (!moov || waitingForData' in offline_files, 'complete initialized fragment envelopes reach sample validation while missing init/dangling media remains incomplete')
+check('minimumSampleTime(format)' in export_tracks and 'Digest(minimumUs)' in export_tracks and 'sampleTime < minimumUs' in export_tracks and 'KEY_ENCODER_DELAY' in export_tracks, 'AAC priming is bounded by declared encoder delay; unknown negative timestamps still fail')
+check('if (preservesContainer(plan))' in export_mux and 'LocalVideoFile.copy(plan.video.file, stream, active)' in export_mux and 'val origin = if (preserve) 0L' in export_mux and 'minimumUs != track.minimumUs' in export_mux, 'complete native MP4 copies retain edit lists and AAC timing with independent sample readback')
+check('Failure.PLATFORM' in offline_export and 'Failure.CODE_MISMATCH -> R.string.offline_video_code_mismatch' in offline_hook and 'Failure.TIMELINE -> R.string.offline_video_timeline_failed' in offline_hook, 'export errors identify actual platform, adaptation and timestamp failures separately')
 check('LocalVideoFile.verify(file, active)' in export_tracks and 'extractor.psshInfo' in export_tracks and 'SAMPLE_FLAG_ENCRYPTED' in export_tracks and 'SAMPLE_FLAG_PARTIAL_FRAME' in export_tracks, 'local descriptor sampling rejects DRM/encrypted/partial samples and observes source/cancellation checks')
 check('MAX_SAMPLE = 16 * 1024 * 1024' in export_tracks and 'MAX_SAMPLES = 2_000_000L' in export_tracks and 'extractor.readSampleData(buffer, 0)' in export_tracks, 'encoded sample memory/count and actual readable sample sizes are bounded before muxing')
 check('requireAudio' in export_candidates and 'needsAudio && !nativeAudio && audio == null' in export_tracks and 'video.tracks.count' in export_tracks and 'audio.file.file == video.file.file' in export_tracks, 'export plan requires one video and any required uniquely paired audio without duplicated source tracks')

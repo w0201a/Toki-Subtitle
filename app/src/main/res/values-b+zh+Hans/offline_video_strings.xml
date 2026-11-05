@@ -2,7 +2,7 @@
 <resources>
     <string name="offline_video_feature">离线视频：本地操作（实验性）</string>
     <string name="offline_video_enable">离线长按菜单与完整缓存导出</string>
-    <string name="offline_video_summary">默认关闭。启用后请重新进入视频。识别到离线条目时，播放或暂停均可长按画面打开本地菜单；有网络时允许在线翻译和补充字幕数据，断网时读取已有缓存；只有主动开启“仅使用本地数据”才禁止这些联网请求。离线视频导出使用已核对的宿主缓存／模型代码和 Android 10 及以上接口；可将完整本地 MP4 或可唯一配对的 MP4 视频／AAC 音轨重新封装成一个视频，完整分片须同时具备初始化与媒体数据。导出逐样本检查并回读验证，不完整、加密、缺必要音轨或不支持的编码不会联网补齐。菜单可打开当前账号已有评论缓存并切换已存译文；可另开启单条评论在线补译并保存结果，可主动联网加载评论首页/下一页并保存，可对顶层评论单独加载回复并缓存；原生评论按钮完整替换和本地翻译模型仍未接入。</string>
+    <string name="offline_video_summary">默认关闭。启用后请重新进入视频。识别到离线条目时，播放或暂停均可长按画面打开本地菜单；有网络时允许在线翻译和补充字幕数据，断网时读取已有缓存；只有主动开启“仅使用本地数据”才禁止这些联网请求。将已下载的离线视频保存到相册，不重复下载。完整原生文件保留原来的音画时间关系；可唯一配对的独立音视频轨道会合并保存。保存后校验成功才会显示在相册，不完整、加密、缺必要音轨或不支持的编码不会联网补齐。菜单可打开当前账号已有评论缓存并切换已存译文；可另开启单条评论在线补译并保存结果，可主动联网加载评论首页/下一页并保存，可对顶层评论单独加载回复并缓存；原生评论按钮完整替换和本地翻译模型仍未接入。</string>
     <string name="offline_video_menu">离线视频：本地操作</string>
     <string name="offline_video_save">将已下载的离线视频导出到相册</string>
     <string name="offline_video_subtitles">Toki 字幕设置</string>
@@ -11,8 +11,11 @@
     <string name="offline_video_busy">已有一个本地视频保存任务正在进行。</string>
     <string name="offline_video_missing">没有找到这个视频的完整本地文件，未尝试联网下载。</string>
     <string name="offline_video_incomplete">已下载视频或必要音轨不完整、无法唯一配对或不能核实，未发布输出，也未联网补齐。</string>
-    <string name="offline_video_unsupported">暂不能导出此离线视频：需要已核对的宿主缓存／模型代码、Android 10 及以上及本地可读取的 MP4 轨道；加密数据、缺初始化块或不支持的音视频编码无法导出，没有转为联网下载。</string>
+    <string name="offline_video_unsupported">暂时无法读取此离线视频的格式，保存未完成。具体失败步骤已记录在操作摘要。</string>
     <string name="offline_video_export_failed">本地保存未完成，原缓存未改动，也未转为联网下载。相册中可能保留一条尚未发布的未完成记录。</string>
     <string name="offline_comment_button_enable">离线视频评论按钮打开缓存评论</string>
     <string name="offline_comment_button_summary">默认关闭，与长按菜单独立。开启后请重新进入视频。仅在已核对的 47.6.3 普通评论按钮路径、当前选中离线视频时，打开 Toki 缓存评论窗口；普通在线视频、过期/隐藏/不匹配组件或未适配代码保留原生行为。原评论按钮必须本来可见，此项不强制恢复被隐藏按钮，也不覆盖所有原生布局。先本地读取，在线评论/补译仍需主动点击；关闭即可恢复原生入口，无需重启。</string>
+    <string name="offline_video_timeline_failed">音视频时间戳校验未通过，保存未完成。具体失败步骤已记录在操作摘要。</string>
+    <string name="offline_video_code_mismatch">当前 TikTok 版本的离线读取适配未通过核对，保存未执行。</string>
+    <string name="offline_video_android_required">此设备的 Android 版本低于 10，暂不支持保存到相册。</string>
 </resources>

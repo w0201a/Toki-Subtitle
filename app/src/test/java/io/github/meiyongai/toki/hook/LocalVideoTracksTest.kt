@@ -49,4 +49,24 @@ class LocalVideoTracksTest {
         assertTrue(LocalVideoTracks.supportedAudio("audio/mp4a-latm"))
         assertFalse(LocalVideoTracks.supportedAudio("audio/opus")); assertFalse(LocalVideoTracks.supportedVideo("video/unknown"))
     }
+    @Test fun declaredAacPrimingUsesSampleRateWithRoundingAndDoesNotRelaxOtherTracks() {
+        assertEquals(-161134L, LocalVideoTracks.minimumSampleTime("audio/mp4a-latm", 22050, 3553))
+        assertEquals(0L, LocalVideoTracks.minimumSampleTime("audio/mp4a-latm", 22050, 0))
+        assertEquals(0L, LocalVideoTracks.minimumSampleTime("video/hevc", 22050, 3553))
+        assertEquals(0L, LocalVideoTracks.minimumSampleTime("audio/unknown", 22050, 3553))
+        for ((rate, delay) in listOf(0 to 3553, -1 to 1, 22050 to -1, 22050 to 44101, 384001 to 1)) {
+            assertEquals(LocalVideoFile.Failure.TIMELINE, assertThrows(LocalVideoFile.Unavailable::class.java) {
+                LocalVideoTracks.minimumSampleTime("audio/mp4a-latm", rate, delay)
+            }.reason)
+        }
+    }
+    @Test fun negativePrimingSamplesAreHashedOnlyWithinDeclaredDelay() {
+        val floor = LocalVideoTracks.minimumSampleTime("audio/mp4a-latm", 22050, 3553)
+        val digest = LocalVideoTracks.Digest(floor)
+        digest.sample(ByteBuffer.wrap(byteArrayOf(1)), 1, -161133)
+        digest.sample(ByteBuffer.wrap(byteArrayOf(2)), 1, 0)
+        assertEquals(2L, digest.count); assertEquals(-161133L, digest.firstUs)
+        assertThrows(IllegalArgumentException::class.java) { digest.sample(ByteBuffer.wrap(byteArrayOf(3)), 1, floor - 1) }
+        assertThrows(IllegalArgumentException::class.java) { LocalVideoTracks.Digest().sample(ByteBuffer.wrap(byteArrayOf(3)), 1, -1) }
+    }
 }

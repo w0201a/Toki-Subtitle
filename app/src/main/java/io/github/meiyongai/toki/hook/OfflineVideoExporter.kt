@@ -10,7 +10,7 @@ import java.util.UUID
 /** Export downloaded offline video to a user-accessible playable MP4, without modifying its cache or fetching bytes. */
 internal object OfflineVideoExporter {
     fun save(context: Context, source: LocalVideoTracks.Plan, directory: String, active: () -> Boolean, operation: OperationJournal.Run? = null): String {
-        if (Build.VERSION.SDK_INT < 29) throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.UNSUPPORTED)
+        if (Build.VERSION.SDK_INT < 29) throw LocalVideoFile.Unavailable(LocalVideoFile.Failure.PLATFORM)
         require(directory.substringBefore('/') in setOf("Movies", "DCIM", "Pictures", "Download") &&
             directory.split('/').all { it.isNotBlank() && it == it.trim() && it != "." && it != ".." } &&
             !directory.contains('\\') && ':' !in directory && directory.none(Char::isISOControl))
@@ -25,7 +25,7 @@ internal object OfflineVideoExporter {
         val target = checkNotNull(resolver.insert(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, values))
         // Pending on failure; do not delete any user/provider data without confirmation, or publish incomplete output.
         resolver.openFileDescriptor(target, "rw")?.use { destination ->
-            operation?.stage(OperationJournal.Step.MUX, mapOf("tracks" to source.tracks.size.toLong()))
+            operation?.stage(if (LocalVideoRemuxer.preservesContainer(source)) OperationJournal.Step.LOCAL_COPY else OperationJournal.Step.MUX, mapOf("tracks" to source.tracks.size.toLong()))
             LocalVideoRemuxer.write(source, destination.fileDescriptor, active)
             destination.fileDescriptor.sync()
             val size = destination.statSize
