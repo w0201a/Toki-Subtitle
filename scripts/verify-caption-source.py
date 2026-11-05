@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 116' in gradle and 'versionName = "2.0.96"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.96-debug / 116")
+check('versionCode = 117' in gradle and 'versionName = "2.0.97"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.97-debug / 117")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -85,7 +85,7 @@ check("publish = false" in module and "if (publish || failed.isNotEmpty())" in m
 check("status.phase !in setOf(HostScanPhase.SCANNING, HostScanPhase.EXTENSIONS, HostScanPhase.SAVING)" in scan, "incremental scans reject active scan stages")
 appearance = (JAVA / "model/SubtitleAppearance.kt").read_text(encoding="utf-8")
 style_keys = set(re.findall(r'"(subtitle_[a-z_]+)" to "', appearance.split("val ranges", 1)[0]))
-check(len(style_keys) == 14, "shared style contract defines fourteen additional options")
+check(len(style_keys) == 15 and "subtitle_bilingual_order" in style_keys, "shared style contract retains fourteen options plus bilingual line order")
 schema = (JAVA / "provider/ConfigSchema.kt").read_text(encoding="utf-8")
 check("SubtitleAppearance.defaults.keys" in schema and "SubtitleAppearance.ranges[key]" in schema, "new appearance fields are in import validation and bounded numeric ranges")
 preview = (JAVA / "ui/screen/SubtitleSettings.kt").read_text(encoding="utf-8")
@@ -766,7 +766,7 @@ lexical_files = [
     'provider/TrialLogCapture.kt', 'ui/screen/TrialLogSection.kt', 'hook/HookRuntime.kt',
     'hook/OfflineExportCandidates.kt', 'hook/OfflineExportCodeGate.kt', 'hook/LocalVideoTracks.kt', 'hook/LocalVideoRemuxer.kt',
     'hook/AnimatedStickerData.kt', 'hook/AnimatedStickerContainers.kt', 'hook/HostAnimatedStickerDecoder.kt', 'hook/AnimatedStickerExporter.kt',
-    'model/AdministrativeRegions.kt', 'model/RegionEnvironmentPolicy.kt', 'model/CountryCatalog.kt', 'model/RegionPresets.kt', 'hook/SimHook.kt', 'hook/LocaleHook.kt', 'hook/TimeZoneHook.kt',
+    'model/FontFileFormat.kt', 'model/AdministrativeRegions.kt', 'model/RegionEnvironmentPolicy.kt', 'model/CountryCatalog.kt', 'model/RegionPresets.kt', 'hook/SimHook.kt', 'hook/LocaleHook.kt', 'hook/TimeZoneHook.kt',
     'hook/GpsHook.kt', 'ui/screen/DashboardScreen.kt', 'ui/screen/ConfirmedConfigEdits.kt',
     'model/PageCleanupItem.kt', 'hook/PageCleanupBindings.kt', 'hook/PageCleanupContract.kt',
     'hook/PageCleanupCodeGate.kt', 'hook/PageCleanupHook.kt', 'ui/screen/PageCleanupSection.kt',
@@ -822,7 +822,7 @@ for relative in (
     'hook/CaptionPlaybackClockTest.kt', 'hook/SubtitleReplayRecoveryTest.kt', 'hook/CaptionTimelineFetchTest.kt',
     'hook/VideoDisplayModesTest.kt', 'hook/VideoLayoutBindingsTest.kt', 'hook/SmartVideoLayoutTest.kt', 'hook/VideoFillGeometryTest.kt',
     'hook/PageCleanupBindingsTest.kt', 'hook/PageCleanupContractTest.kt', 'hook/PageCleanupPolicyTest.kt',
-    'model/AdministrativeRegionsTest.kt', 'model/CountryCatalogTest.kt', 'ui/screen/ConfirmedConfigEditsTest.kt',
+    'model/FontFileFormatTest.kt', 'model/SubtitleCaptionPresentationTest.kt', 'model/AdministrativeRegionsTest.kt', 'model/CountryCatalogTest.kt', 'ui/screen/ConfirmedConfigEditsTest.kt',
     'hook/AnimatedStickerFixtures.kt', 'hook/AnimatedStickerDataTest.kt', 'hook/AnimatedStickerContainersTest.kt',
     'hook/OfflineExportFixtures.kt', 'hook/OfflineExportCandidatesTest.kt', 'hook/LocalVideoTracksTest.kt', 'hook/LocalVideoRemuxerTest.kt',
     'provider/OperationJournalTest.kt', 'provider/DiagnosticTextTest.kt', 'provider/DiagnosticOverviewTest.kt', 'provider/TrialLogCaptureTest.kt',
@@ -953,3 +953,12 @@ admin_dialog = read('app/src/main/java/io/github/meiyongai/toki/ui/screen/Locati
 check('AdministrativeRegions.read(context.assets.open' in admin_dialog and 'AdministrativeRegions.search(regions, country, search)' in admin_dialog, 'administrative directory is loaded from module assets and scoped to selected country')
 check('require(item.hasLocation)' in admin_regions and 'custom_latitude' in admin_regions and 'gps_follow_region' in admin_regions, 'region selection uses verified point and existing atomic configuration keys')
 check('binding.translator.hasNativeFrame(videoId)' in read('app/src/main/java/io/github/meiyongai/toki/hook/SubtitleOverlay.kt') and 'yieldToTimeline()' in read('app/src/main/java/io/github/meiyongai/toki/hook/SubtitleOverlay.kt') and 'timelineBindings.remove(this)' in read('app/src/main/java/io/github/meiyongai/toki/hook/SubtitleOverlay.kt'), 'stale native overlay cannot permanently block a current timeline; lifetime cleanup remains paired')
+
+font_store = read('app/src/main/java/io/github/meiyongai/toki/provider/SubtitleFontStore.kt')
+font_provider = read('app/src/main/java/io/github/meiyongai/toki/provider/SubtitleFontProvider.kt')
+font_resolver = read('app/src/main/java/io/github/meiyongai/toki/ui/SubtitleFontResolver.kt')
+check('subtitle_bilingual_order' in preview and 'subtitle_bilingual_order' in overlay and 'SubtitleCaptionPresentation.display' in preview, 'bilingual line order is live-wired to preview and playback')
+check('val nativeMode = nativeAppearance && !bilingual' in overlay, 'bilingual ordering composes Toki text even when typography follows the native appearance')
+check('FontFileFormat.inspect(destination)' in font_store and 'validateTypeface(destination)' in font_store and 'createNewFile()' in font_store and '.delete(' not in font_store, 'font registration follows bounded structural/native validation without source deletion')
+check('authorize()' in font_provider and 'Binder.clearCallingIdentity()' in font_provider and 'mode != "r"' in font_provider and 'MODE_READ_ONLY' in font_provider, 'font provider authenticates host/manager UIDs and exposes read-only descriptors')
+check('selections[it] == key' in font_resolver and 'worker.execute(it)' in font_resolver and 'retryAt' in font_resolver, 'async font completion checks the current view selection and bounds retry/worker use')

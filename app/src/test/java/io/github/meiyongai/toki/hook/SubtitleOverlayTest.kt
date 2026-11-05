@@ -116,6 +116,50 @@ class SubtitleOverlayTest {
             controller.pause().stop().destroy()
         }
     }
+    @Test fun bilingualOrderChangesImmediatelyWithoutANewFrameInBothTypographyModes() {
+        for (mode in listOf("custom", "native")) {
+            HookRuntime.start("bilingual-order-test-$mode") { _, _ -> }
+            val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
+            val activity = controller.get()
+            val page = FrameLayout(activity)
+            page.addView(SurfaceView(activity), FrameLayout.LayoutParams(1080, 2400))
+            val source = FrameLayout(activity)
+            source.addView(TextView(activity).apply { text = "original cue" })
+            page.addView(source, FrameLayout.LayoutParams(600, 100))
+            activity.setContentView(page)
+            activity.window.decorView.apply {
+                measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+                layout(0, 0, 1080, 2400); settleWindowFrame()
+            }
+            val events = arrayListOf<String>(); var requests = 0
+            val translator = fakeOnlineTranslator({ true }, { _, done -> requests++; done("译文"); AutoCloseable { } }, events::add)
+            translator.selectVideo("ordered-video", source); translator.noteNativeFrame("ordered-video")
+            // This is a presentation test: supply a completed pair through the real translation/cache path,
+            // independently of this synthetic window's transient request-eligibility/layout callbacks.
+            var available: String? = null
+            translator.request("ordered-video", "original cue", { true }) { available = it }
+            shadowOf(Looper.getMainLooper()).idle()
+            assertEquals("Completed translation must be present before testing line layout", "译文", available)
+            assertEquals(1, requests)
+            var settings = ConfigSnapshot(mapOf("subtitle_style_enabled" to true, "subtitle_render_mode" to mode,
+                "subtitle_text_mode" to "bilingual", "subtitle_bilingual_order" to "original_first"))
+            val overlay = SubtitleOverlay(source, translator, configuration = { settings })
+            overlay.update("EXPANDED", "original cue", "ordered-video")
+            overlay.onPreDraw(); shadowOf(Looper.getMainLooper()).idle(); overlay.onPreDraw()
+            val labelField = SubtitleOverlay::class.java.getDeclaredField("label").apply { isAccessible = true }
+            val label = labelField.get(overlay) as TextView
+            assertEquals("mode=$mode requests=$requests enabled=${translator.isEnabled("ordered-video")} events=$events", "original cue\n译文", label.text.toString())
+            val before = overlay.frameRevision
+            settings = ConfigSnapshot(settings.configuration() + ("subtitle_bilingual_order" to "translated_first"))
+            overlay.onPreDraw()
+            assertSame(label, labelField.get(overlay)); assertEquals(before, overlay.frameRevision)
+            assertEquals("译文\noriginal cue", label.text.toString())
+            assertEquals("Changing order does not fetch/translate the cue again", 1, requests)
+            assertEquals(0f, source.alpha)
+            overlay.close(); translator.close(); assertEquals(1f, source.alpha)
+            controller.pause().stop().destroy()
+        }
+    }
     private fun settleWindowFrame() { shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(16)) }
 
     private fun config(values: Map<String, Any>) =

@@ -22,6 +22,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Toki">
 
+        <provider android:name=".provider.SubtitleFontProvider"
+            android:authorities="io.github.meiyongai.toki.subtitle.fonts"
+            android:grantUriPermissions="true" android:exported="true" />
+
         <provider android:name=".provider.SubtitlePositionProvider"
             android:authorities="io.github.meiyongai.toki.subtitle.position"
             android:exported="true" />
@@ -52,6 +56,10 @@
 
         <!-- 桌面启动别名：隐藏图标只禁用该组件，不影响主活动的模块设置入口。 -->
         <activity android:name=".ui.SubtitleSettingsActivity"
+            android:theme="@style/Theme.Toki.SubtitleDialog"
+            android:exported="true" android:excludeFromRecents="true" />
+
+        <activity android:name=".ui.SubtitleFontImportActivity"
             android:theme="@style/Theme.Toki.SubtitleDialog"
             android:exported="true" android:excludeFromRecents="true" />
 

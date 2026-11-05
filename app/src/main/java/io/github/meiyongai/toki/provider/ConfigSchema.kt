@@ -60,7 +60,7 @@ object ConfigSchema {
         "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode", "video_fill_zoom_percent") +
         rangePrefixes.flatMap { listOf("${it}_min", "${it}_max") } +
         io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityKey }
-    private val subtitleKeys = setOf("subtitle_size", "subtitle_x", "subtitle_y", "subtitle_font", "subtitle_weight", "subtitle_color", "subtitle_background", "subtitle_background_mode") +
+    private val subtitleKeys = setOf("subtitle_size", "subtitle_x", "subtitle_y", "subtitle_font", "subtitle_font_asset", "subtitle_font_asset_name", "subtitle_weight", "subtitle_color", "subtitle_background", "subtitle_background_mode") +
         io.github.meiyongai.toki.subtitle.model.SubtitleAppearance.defaults.keys
     val keys: Set<String> = booleanDefaults.keys + stringKeys + subtitleKeys
 
@@ -105,6 +105,9 @@ object ConfigSchema {
                 "subtitle_background_mode" -> require(value in setOf("show", "hide"))
                 "subtitle_render_mode" -> require(value in setOf("native", "custom"))
                 "subtitle_font" -> require(value in io.github.meiyongai.toki.subtitle.model.SubtitleFonts.names)
+                "subtitle_font_asset" -> require(value.isEmpty() || SubtitleFontStore.validId(value))
+                "subtitle_font_asset_name" -> require(value.length <= 120 && value.none(Char::isISOControl))
+                "subtitle_bilingual_order" -> require(value in io.github.meiyongai.toki.subtitle.model.SubtitleCaptionPresentation.orders)
                 "subtitle_weight" -> require(value in setOf("normal", "bold", "italic", "bold_italic"))
                 "subtitle_color", "subtitle_background" -> require(value.matches(Regex("#[0-9A-Fa-f]{8}")))
                 "video_fit_mode" -> require(value in io.github.meiyongai.toki.subtitle.model.VideoFitMode.keys) { "视频显示模式无效" }

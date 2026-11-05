@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subtitle_font_import_title">Import font file</string>
+    <string name="subtitle_font_choose_file">Choose TTF / OTF</string>
+    <string name="subtitle_font_import_note">Choose a TTF or OTF file up to 64 MiB. Toki keeps a private copy and selects it for custom subtitle styling; your source file stays unchanged. Collection/web fonts (TTC, WOFF) are not supported. This does not enable custom rendering or translation.</string>
+    <string name="subtitle_font_import_busy">Reading and validating font…</string>
+    <string name="subtitle_font_import_done">Selected: %1$s. Return to subtitle settings to preview it in custom rendering mode.</string>
+    <string name="subtitle_font_import_failed">Font import did not complete. Choose a valid TTF or OTF file within the size limit and check available storage.</string>
+    <string name="subtitle_font_import_cancelled">No font was selected.</string>
+    <string name="subtitle_font_selected">Custom font: %1$s</string>
+    <string name="subtitle_font_custom_note">Imported fonts apply in Toki custom rendering mode. Selecting a system family switches back without deleting imported files.</string>
+    <string name="subtitle_font_recent">Recent imported fonts</string>
+    <string name="subtitle_font_none">No imported fonts yet.</string>
+    <string name="subtitle_font_manager_unavailable">Open or update the Toki manager to import and read custom fonts.</string>
+    <string name="subtitle_bilingual_order_title">Bilingual line order</string>
+    <string name="subtitle_original_on_top">Original above translation</string>
+    <string name="subtitle_translation_on_top">Translation above original</string>
+    <string name="subtitle_bilingual_order_note">The preview and playback update together. Bilingual lines are composed by Toki; native appearance keeps native typography where available. Missing translations show the original only.</string>
+</resources>

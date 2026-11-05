@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="subtitle_font_import_title">导入字体文件</string>
+    <string name="subtitle_font_choose_file">选择 TTF／OTF</string>
+    <string name="subtitle_font_import_note">选择不超过 64 MiB 的 TTF 或 OTF。Toki 会保留私有副本并选为自定义字幕字体，原文件不变。暂不支持 TTC 字体集合及 WOFF 网页字体。此操作不会开启自定义渲染或翻译。</string>
+    <string name="subtitle_font_import_busy">正在读取并校验字体…</string>
+    <string name="subtitle_font_import_done">已选中：%1$s。返回字幕设置，可在自定义渲染模式下查看效果。</string>
+    <string name="subtitle_font_import_failed">字体导入未完成，请选择大小符合要求且有效的 TTF／OTF，并检查剩余空间。</string>
+    <string name="subtitle_font_import_cancelled">未选择字体。</string>
+    <string name="subtitle_font_selected">自定义字体：%1$s</string>
+    <string name="subtitle_font_custom_note">导入字体用于 Toki 自定义渲染模式。选择系统字体可切回，不会删除已导入文件。</string>
+    <string name="subtitle_font_recent">最近导入字体</string>
+    <string name="subtitle_font_none">还没有已导入的字体。</string>
+    <string name="subtitle_font_manager_unavailable">请打开或更新 Toki 管理端，以导入和读取字体。</string>
+    <string name="subtitle_bilingual_order_title">双语上下顺序</string>
+    <string name="subtitle_original_on_top">原文在上，译文在下</string>
+    <string name="subtitle_translation_on_top">译文在上，原文在下</string>
+    <string name="subtitle_bilingual_order_note">切换后预览与播放同步更新。双语文字由 Toki 组合；选择原生样式时，尽可能沿用原生字体等外观。暂无译文时只显示原文。</string>
+</resources>

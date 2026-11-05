@@ -16,6 +16,7 @@ internal data class SubtitleAppearance(
             "subtitle_shadow_color" to "#CC000000", "subtitle_line_spacing" to "1", "subtitle_letter_spacing" to "0",
             "subtitle_background_radius" to "0", "subtitle_padding_horizontal" to "8", "subtitle_padding_vertical" to "4",
             "subtitle_alignment" to "center", "subtitle_max_lines" to "0", "subtitle_text_mode" to "translated",
+            "subtitle_bilingual_order" to "original_first",
         )
         val ranges = mapOf(
             "subtitle_outline_width" to 0.0..6.0, "subtitle_shadow_radius" to 0.0..12.0,
@@ -39,9 +40,12 @@ internal data class SubtitleAppearance(
 
 /** Never display a stale translation when the caller has invalidated its track or cue generation. */
 internal object SubtitleCaptionPresentation {
-    fun display(original: String, translated: String?, mode: String): String {
+    val orders = listOf("original_first", "translated_first")
+
+    fun display(original: String, translated: String?, mode: String, order: String = "original_first"): String {
         if (mode == "original" || translated.isNullOrBlank()) return original
         if (mode != "bilingual" || original.trim() == translated.trim()) return translated
-        return original + "\n" + translated
+        // Unknown persisted values keep the original-first layout without interrupting rendering.
+        return if (order == "translated_first") translated + "\n" + original else original + "\n" + translated
     }
 }

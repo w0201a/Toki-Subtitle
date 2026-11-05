@@ -58,9 +58,6 @@ internal class SubtitleOverlay(private val source: View,
     private val sourceRect = Rect()
     private val sourceLocation = IntArray(2)
     private val overlayLocation = IntArray(2)
-    private var fontName: String? = null
-    private var fontStyle = -1
-    private var font: Typeface? = null
     private var draggedPosition: Pair<Float, Float>? = null
     private var savedRevision = -1L
     private var lastBaseY: Float? = null
@@ -128,8 +125,11 @@ internal class SubtitleOverlay(private val source: View,
             unmount()
             return
         }
-        val nativeMode = settings.string("subtitle_render_mode", "native") == "native"
-        val styled = settings.boolean("subtitle_style_enabled") && !nativeMode
+        val nativeAppearance = settings.string("subtitle_render_mode", "native") == "native"
+        val bilingual = settings.string("subtitle_text_mode", "translated") == "bilingual"
+        // Bilingual layout is composed by Toki even when typography follows the native caption.
+        val nativeMode = nativeAppearance && !bilingual
+        val styled = settings.boolean("subtitle_style_enabled") && !nativeAppearance
         if (!styled) draggedPosition = null
         // A stale native renderer cannot keep a verified progressing timeline behind its old label.
         if (!timelineSource && translator?.hasNativeFrame(videoId) == false && framePlaybackRevision == translator.playbackRevision && timelineBindings.keys.any { binding ->
@@ -249,7 +249,8 @@ internal class SubtitleOverlay(private val source: View,
                 })
             }
         }
-        val displayed = SubtitleCaptionPresentation.display(caption, if (translating) translated else null, displayMode)
+        val displayed = SubtitleCaptionPresentation.display(caption, if (translating) translated else null, displayMode,
+            settings.string("subtitle_bilingual_order", "original_first")!!)
         if (text.text.toString() != displayed) text.text = displayed
         val background: Int
         if (styled) {
@@ -262,11 +263,9 @@ internal class SubtitleOverlay(private val source: View,
             }
             val pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, size, text.resources.displayMetrics)
             if (kotlin.math.abs(text.textSize - pixels) > .5f) text.setTextSize(TypedValue.COMPLEX_UNIT_PX, pixels)
-            val name = settings.string("subtitle_font", "sans-serif")
-            if (name != fontName || weight != fontStyle) {
-                fontName = name; fontStyle = weight
-                font = Typeface.create(name, weight)
-            }
+            val name = settings.string("subtitle_font", "sans-serif") ?: "sans-serif"
+            val font = io.github.meiyongai.toki.subtitle.ui.SubtitleFontResolver.shared.resolve(text, name, weight,
+                settings.string("subtitle_font_asset", "").orEmpty())
             if (text.typeface != font) text.typeface = font
             val color = Color.parseColor(settings.string("subtitle_color", "#FFFFFFFF"))
             if (text.currentTextColor != color) text.setTextColor(color)

@@ -17,6 +17,9 @@ import io.github.meiyongai.toki.subtitle.provider.ConfigSnapshot
 import io.github.meiyongai.toki.subtitle.ui.StyledSubtitleTextView
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
 import io.github.meiyongai.toki.subtitle.model.SubtitleFonts
+import io.github.meiyongai.toki.subtitle.model.SubtitleCaptionPresentation
+import io.github.meiyongai.toki.subtitle.provider.SubtitleFontStore
+import io.github.meiyongai.toki.subtitle.ui.SubtitleFontResolver
 import io.github.meiyongai.toki.subtitle.ui.component.PreferenceSection
 
 @Composable
@@ -47,7 +50,7 @@ fun SubtitleSettings() {
 internal fun SubtitleDialog(close: () -> Unit) {
     val context = LocalContext.current
     val defaults = mapOf("subtitle_size" to "20", "subtitle_x" to "0", "subtitle_y" to "0",
-        "subtitle_font" to "sans-serif", "subtitle_weight" to "normal",
+        "subtitle_font" to "sans-serif", "subtitle_font_asset" to "", "subtitle_font_asset_name" to "", "subtitle_weight" to "normal",
         "subtitle_color" to "#FFFFFFFF", "subtitle_background" to "#80000000", "subtitle_background_mode" to "show") + SubtitleAppearance.defaults
     var values by remember { mutableStateOf(defaults.mapValues { (k, v) -> ConfigClient.getString(context, k, v)!! }) }
     var gestures by remember { mutableStateOf(listOf("subtitle_drag_enabled", "subtitle_lock_x", "subtitle_lock_y")
@@ -63,6 +66,10 @@ internal fun SubtitleDialog(close: () -> Unit) {
     fun update(key: String, value: String, save: Boolean = true) {
         values = values + (key to value)
         if (save) persist(key, value)
+    }
+    fun selectFont(patch: Map<String, String>) {
+        try { ConfigClient.putValues(context, patch); values = values + patch }
+        catch (e: Exception) { error = e.message ?: "字体设置同步失败" }
     }
     val weight = values.getValue("subtitle_weight")
     DisposableEffect(context) {
@@ -81,7 +88,8 @@ internal fun SubtitleDialog(close: () -> Unit) {
                 isFocusable = false
                 importantForAccessibility = android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO
             } }, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp, max = 160.dp), update = { preview ->
-                preview.text = "这是字幕预览\nSubtitle preview"
+                preview.text = SubtitleCaptionPresentation.display("Original subtitle preview", "这是译文预览",
+                    values.getValue("subtitle_text_mode"), values.getValue("subtitle_bilingual_order"))
                 preview.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, values.getValue("subtitle_size").toFloat())
                 val style = when (weight) {
                     "bold" -> android.graphics.Typeface.BOLD
@@ -89,7 +97,7 @@ internal fun SubtitleDialog(close: () -> Unit) {
                     "bold_italic" -> android.graphics.Typeface.BOLD_ITALIC
                     else -> android.graphics.Typeface.NORMAL
                 }
-                preview.typeface = android.graphics.Typeface.create(values.getValue("subtitle_font"), style)
+                preview.typeface = SubtitleFontResolver.shared.resolve(preview, values.getValue("subtitle_font"), style, values.getValue("subtitle_font_asset"))
                 preview.setTextColor(android.graphics.Color.parseColor(values.getValue("subtitle_color")))
                 val background = if (values["subtitle_background_mode"] == "hide") android.graphics.Color.TRANSPARENT
                     else android.graphics.Color.parseColor(values.getValue("subtitle_background"))
@@ -164,6 +172,14 @@ internal fun SubtitleDialog(close: () -> Unit) {
                 })
             }
             SubtitleChoices("字幕内容", listOf("original" to "只看原文", "translated" to "只看译文", "bilingual" to "原文与译文"), values.getValue("subtitle_text_mode")) { update("subtitle_text_mode", it) }
+            if (values.getValue("subtitle_text_mode") == "bilingual") {
+                SubtitleChoices(context.getString(io.github.meiyongai.toki.subtitle.R.string.subtitle_bilingual_order_title), listOf(
+                    "original_first" to context.getString(io.github.meiyongai.toki.subtitle.R.string.subtitle_original_on_top),
+                    "translated_first" to context.getString(io.github.meiyongai.toki.subtitle.R.string.subtitle_translation_on_top)), values.getValue("subtitle_bilingual_order")) {
+                    update("subtitle_bilingual_order", it)
+                }
+                Text(context.getString(io.github.meiyongai.toki.subtitle.R.string.subtitle_bilingual_order_note), style = MaterialTheme.typography.bodySmall)
+            }
             Text("没有已缓存译文且服务不可用时仍显示原文；双语仅显示当前字幕句的原文和译文。", style = MaterialTheme.typography.bodySmall)
             SubtitleChoices("对齐", listOf("start" to "靠起始侧", "center" to "居中", "end" to "靠结束侧"), values.getValue("subtitle_alignment")) { update("subtitle_alignment", it) }
             for ((key, label) in listOf(
@@ -190,7 +206,10 @@ internal fun SubtitleDialog(close: () -> Unit) {
             Slider(value = values.getValue("subtitle_max_lines").toFloat(), valueRange = 0f..12f, steps = 11,
                 onValueChange = { update("subtitle_max_lines", kotlin.math.round(it).toInt().toString(), save = false) },
                 onValueChangeFinished = { persist("subtitle_max_lines", values.getValue("subtitle_max_lines")) })
-            SubtitleChoices("字体", SubtitleFonts.choices, values.getValue("subtitle_font")) { update("subtitle_font", it) }
+            SubtitleFontControls(values.getValue("subtitle_font_asset"), values.getValue("subtitle_font_asset_name"), ::selectFont)
+            SubtitleChoices("字体", SubtitleFonts.choices, if (values.getValue("subtitle_font_asset").isEmpty()) values.getValue("subtitle_font") else "") {
+                selectFont(mapOf("subtitle_font" to it, SubtitleFontStore.ASSET to "", SubtitleFontStore.NAME to ""))
+            }
             Text("使用手机系统字体，无需下载。部分字体主要改变拉丁字母；中文、日文、韩文或缺失字体会使用系统回退字体，实际效果以手机为准。", style = MaterialTheme.typography.bodySmall)
             SubtitleChoices("样式", listOf("normal" to "常规", "bold" to "粗体", "italic" to "斜体", "bold_italic" to "粗斜体"), weight) { update("subtitle_weight", it) }
             SubtitleChoices("文字颜色", listOf("#FFFFFFFF" to "白", "#FFFFFF00" to "黄", "#FF000000" to "黑", "#FF00FFFF" to "青"), values.getValue("subtitle_color")) { update("subtitle_color", it) }
