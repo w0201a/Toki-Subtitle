@@ -1,3 +1,7 @@
+# User acceptance — 2026-11-05: custom-font import and bilingual line-order switching
+
+After delivery of2.0.97, the user reports “完成”. Record both font-file import and original/translated vertical-order switching as accepted in this round's observed use. This supersedes the pending-device wording in the historical build evidence below; it does not claim every font format, device or source-language combination. Offline-comment work remains explicitly paused; HDR remains stopped. This acceptance update changes documentation only: no new implementation, build, tests, installation, phone action or settings change. Other remaining work is retained rather than automatically started.
+
 # Verified build — 2.0.97-debug /117: private custom-font import and live bilingual line order
 
 Latest steering: user confirmsGIF works; offline-comment work is explicitly paused. User expects phone testing later, so no phone commands, installation, restart or settings changes were made for this round. Font-file import and original/translated line-order switching are combined in the same package.
