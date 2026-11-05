@@ -73,7 +73,7 @@ internal object ManualCommentTranslateHook {
                 }
             }
             dialogs.remove(activity)?.dismiss()
-            val choose = AlertDialog.Builder(context).setTitle(context.getString(R.string.manual_comment_menu_title))
+            val choose = TokiDialogs.builder(context).setTitle(context.getString(R.string.manual_comment_menu_title))
                 .setItems(arrayOf(context.getString(R.string.manual_comment_translate),
                     context.getString(R.string.manual_comment_native_actions))) { _, index ->
                     if (index == 1) nativeMenu() else if (!activity.isFinishing && !activity.isDestroyed &&

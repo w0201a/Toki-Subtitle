@@ -1,6 +1,8 @@
 package io.github.meiyongai.toki.subtitle.ui.screen
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.Alignment
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.foundation.rememberScrollState
@@ -25,25 +27,76 @@ import io.github.meiyongai.toki.subtitle.ui.component.PreferenceSection
 @Composable
 fun SubtitleSettings() {
     val context = LocalContext.current
+    val defaults = SubtitleAppearance.defaults + mapOf("subtitle_size" to "20", "subtitle_font" to "sans-serif",
+        "subtitle_font_asset" to "", "subtitle_weight" to "normal", "subtitle_color" to "#FFFFFFFF",
+        "subtitle_background" to "#80000000", "subtitle_background_mode" to "show")
     var enabled by remember { mutableStateOf(ConfigClient.getBoolean(context, "subtitle_style_enabled")) }
+    var values by remember { mutableStateOf(defaults.mapValues { (key, fallback) -> ConfigClient.getString(context,key,fallback)!! }) }
     var open by remember { mutableStateOf(false) }
+    var help by remember { mutableStateOf(false) }
     DisposableEffect(context) {
         val subscription = ConfigClient.addStateListener {
             enabled = ConfigClient.getBoolean(context, "subtitle_style_enabled")
+            values = defaults.mapValues { (key,fallback) -> ConfigClient.getString(context,key,fallback)!! }
         }
         onDispose { subscription.close() }
     }
     PreferenceSection(title = "字幕外观与位置") {
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            TextButton(onClick = { open = true }) { Text("打开字幕设置") }
-            Switch(checked = enabled, onCheckedChange = {
-                enabled = it; ConfigClient.putBoolean(context, "subtitle_style_enabled", it)
-            })
+        Surface(shape = RoundedCornerShape(18.dp), color = MaterialTheme.colorScheme.surfaceContainer) {
+            Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text("自定义字幕样式",style=MaterialTheme.typography.bodyLarge)
+                        Text("字体、颜色、位置与双语顺序",style=MaterialTheme.typography.bodySmall,color=MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    Switch(checked = enabled, onCheckedChange = {
+                        enabled = it; ConfigClient.putBoolean(context, "subtitle_style_enabled", it)
+                    })
+                }
+                Surface(shape=RoundedCornerShape(14.dp),color=Color(0xFF28282E)) {
+                    Column(Modifier.fillMaxWidth().padding(12.dp)) {
+                        Text("字幕样式预览",style=MaterialTheme.typography.labelSmall,color=Color(0xFFB9B9C5))
+                        SubtitleStylePreview(values)
+                    }
+                }
+                Button(onClick={open=true},modifier=Modifier.fillMaxWidth()){Text("调整字体、颜色和位置")}
+                TextButton(onClick={help=true},modifier=Modifier.align(Alignment.End)){Text("使用说明")}
+            }
         }
-        Text("开启字幕外观及作品翻译后，跟随 TikTok 的“始终翻译作品”或单条视频译文选择。优先使用中文字幕轨；能读取完整字幕时异步预读并提前翻译后续句子，读不到时逐句翻译。等待或失败时保留原文。无需 API 密钥，字幕文字由 TikTok 服务处理。首次开启会按需查找并注册运行时依赖；已经创建的页面可能需切换一次视频后生效。", style = MaterialTheme.typography.bodySmall)
-        Text("TikTok 播放页：拖动字幕文字可调整位置；长按字幕不移动打开设置，也可从长按视频菜单进入“字幕设置”。", style = MaterialTheme.typography.bodySmall)
     }
     if (open) SubtitleDialog { open = false }
+    if (help) AlertDialog(onDismissRequest={help=false},title={Text("字幕使用说明")},text={
+        Column(Modifier.heightIn(max=420.dp).verticalScroll(rememberScrollState()),verticalArrangement=Arrangement.spacedBy(12.dp)) {
+            Text("开启字幕外观及作品翻译后，跟随 TikTok 的“始终翻译作品”或单条视频译文选择。优先使用中文字幕轨；能读取完整字幕时异步预读并提前翻译后续句子，读不到时逐句翻译。等待或失败时保留原文。无需 API 密钥，字幕文字由 TikTok 服务处理。首次开启会按需查找并注册运行时依赖；已经创建的页面可能需切换一次视频后生效。")
+            Text("TikTok 播放页：拖动字幕文字可调整位置；长按字幕不移动打开设置，也可从长按视频菜单进入“字幕设置”。")
+        }
+    },confirmButton={TextButton(onClick={help=false}){Text("关闭")}})
+}
+
+@Composable
+private fun SubtitleStylePreview(values: Map<String,String>) {
+    val weight = values.getValue("subtitle_weight")
+    AndroidView(factory = { StyledSubtitleTextView(it).apply {
+        gravity = android.view.Gravity.CENTER
+        isClickable = false
+        isFocusable = false
+        importantForAccessibility = android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO
+    } }, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp, max = 160.dp), update = { preview ->
+        preview.text = SubtitleCaptionPresentation.display("Original subtitle preview", "这是译文预览",
+            values.getValue("subtitle_text_mode"), values.getValue("subtitle_bilingual_order"))
+        preview.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, values.getValue("subtitle_size").toFloat())
+        val style = when (weight) {
+            "bold" -> android.graphics.Typeface.BOLD
+            "italic" -> android.graphics.Typeface.ITALIC
+            "bold_italic" -> android.graphics.Typeface.BOLD_ITALIC
+            else -> android.graphics.Typeface.NORMAL
+        }
+        preview.typeface = SubtitleFontResolver.shared.resolve(preview, values.getValue("subtitle_font"), style, values.getValue("subtitle_font_asset"))
+        preview.setTextColor(android.graphics.Color.parseColor(values.getValue("subtitle_color")))
+        val background = if (values["subtitle_background_mode"] == "hide") android.graphics.Color.TRANSPARENT
+            else android.graphics.Color.parseColor(values.getValue("subtitle_background"))
+        preview.applyAppearance(SubtitleAppearance.from(ConfigSnapshot(values)), background)
+    })
 }
 
 @Composable
@@ -83,26 +136,7 @@ internal fun SubtitleDialog(close: () -> Unit) {
     }
     AlertDialog(onDismissRequest = close, title = { Text("字幕设置") }, text = {
         Column(Modifier.fillMaxWidth().heightIn(max = 480.dp)) {
-            AndroidView(factory = { StyledSubtitleTextView(it).apply {
-                isClickable = false
-                isFocusable = false
-                importantForAccessibility = android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO
-            } }, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp, max = 160.dp), update = { preview ->
-                preview.text = SubtitleCaptionPresentation.display("Original subtitle preview", "这是译文预览",
-                    values.getValue("subtitle_text_mode"), values.getValue("subtitle_bilingual_order"))
-                preview.setTextSize(android.util.TypedValue.COMPLEX_UNIT_SP, values.getValue("subtitle_size").toFloat())
-                val style = when (weight) {
-                    "bold" -> android.graphics.Typeface.BOLD
-                    "italic" -> android.graphics.Typeface.ITALIC
-                    "bold_italic" -> android.graphics.Typeface.BOLD_ITALIC
-                    else -> android.graphics.Typeface.NORMAL
-                }
-                preview.typeface = SubtitleFontResolver.shared.resolve(preview, values.getValue("subtitle_font"), style, values.getValue("subtitle_font_asset"))
-                preview.setTextColor(android.graphics.Color.parseColor(values.getValue("subtitle_color")))
-                val background = if (values["subtitle_background_mode"] == "hide") android.graphics.Color.TRANSPARENT
-                    else android.graphics.Color.parseColor(values.getValue("subtitle_background"))
-                preview.applyAppearance(SubtitleAppearance.from(ConfigSnapshot(values)), background)
-            })
+            SubtitleStylePreview(values)
             Column(Modifier.weight(1f, fill = false).verticalScroll(rememberScrollState())) {
             for ((key, label, range) in listOf(Triple("subtitle_size", "字号（sp）", 6f..160f),
                 Triple("subtitle_x", "水平偏移 %", -200f..200f), Triple("subtitle_y", "垂直偏移 %", -200f..200f))) {

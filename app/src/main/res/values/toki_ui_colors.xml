@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="toki_ui_accent">#EF3458</color>
+    <color name="toki_ui_surface">#FFFFFF</color>
+    <color name="toki_ui_canvas">#F6F6F8</color>
+    <color name="toki_ui_ink">#1C1C22</color>
+    <color name="toki_ui_secondary">#74747E</color>
+    <color name="toki_ui_line">#E9E9EF</color>
+    <color name="toki_ui_on_accent">#FFFFFF</color>
+</resources>

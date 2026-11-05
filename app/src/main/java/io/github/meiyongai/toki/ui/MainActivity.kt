@@ -68,11 +68,16 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.material3.Typography
+import androidx.compose.material3.Shapes
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.zIndex
 import io.github.meiyongai.toki.subtitle.R
 import io.github.meiyongai.toki.subtitle.provider.ConfigClient
-import io.github.meiyongai.toki.subtitle.ui.screen.DashboardScreen
+import io.github.meiyongai.toki.subtitle.ui.screen.TokiSettingsHub
 import io.github.meiyongai.toki.subtitle.ui.screen.HomeScreen
 import io.github.meiyongai.toki.subtitle.ui.screen.HookStatusSection
 import io.github.meiyongai.toki.subtitle.ui.screen.LanguageScreen
@@ -124,7 +129,7 @@ class MainActivity : ComponentActivity() {
 /**
  * 应用全局主题包装器。
  *
- * 根据系统深浅色模式与 Android 12+ 动态壁纸颜色（Dynamic Color）自动构建 Material 3 配色方案。
+ * 根据当前深浅色模式，为独立应用和注入设置提供同一套 Toki 配色、字号与圆角。
  *
  * @param content 子可组合项树。
  * @return Unit。
@@ -141,6 +146,16 @@ fun TokiAppTheme(content: @Composable () -> Unit) {
 
     MaterialTheme(
         colorScheme = colorScheme,
+        shapes = Shapes(extraSmall = RoundedCornerShape(8.dp), small = RoundedCornerShape(12.dp),
+            medium = RoundedCornerShape(18.dp), large = RoundedCornerShape(24.dp), extraLarge = RoundedCornerShape(28.dp)),
+        typography = Typography(
+            headlineSmall = TextStyle(fontSize = 23.sp, lineHeight = 30.sp, fontWeight = FontWeight.SemiBold),
+            titleLarge = TextStyle(fontSize = 21.sp, lineHeight = 28.sp, fontWeight = FontWeight.SemiBold),
+            titleMedium = TextStyle(fontSize = 16.sp, lineHeight = 23.sp, fontWeight = FontWeight.SemiBold),
+            bodyLarge = TextStyle(fontSize = 15.sp, lineHeight = 22.sp),
+            bodyMedium = TextStyle(fontSize = 14.sp, lineHeight = 21.sp),
+            bodySmall = TextStyle(fontSize = 12.sp, lineHeight = 18.sp),
+            labelLarge = TextStyle(fontSize = 13.sp, lineHeight = 19.sp, fontWeight = FontWeight.Medium)),
         content = content
     )
 }
@@ -400,7 +415,7 @@ fun MainAppScreen() {
                 ) {
                     val importedRevision by io.github.meiyongai.toki.subtitle.provider.ConfigClient.importedRevision.collectAsState()
                     androidx.compose.runtime.key(importedRevision) {
-                        DashboardScreen(scrollState = dashboardScrollState)
+                        TokiSettingsHub(scrollState = dashboardScrollState, onDiagnostics = { secondaryPage = SecondaryPage.HOOK_STATUS; showSecondaryPage = true })
                     }
                 }
             }

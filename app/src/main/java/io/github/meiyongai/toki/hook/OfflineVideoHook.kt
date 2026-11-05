@@ -225,7 +225,7 @@ internal object OfflineVideoHook {
             val activity = target.activity.get()?.takeIf { !it.isFinishing && !it.isDestroyed } ?: return false
             val context = HostSettingsEntry.localizedContext(activity)
             closeMenu()
-            val shown = AlertDialog.Builder(context).setTitle(context.getString(R.string.offline_video_menu))
+            val shown = TokiDialogs.builder(context).setTitle(context.getString(R.string.offline_video_menu))
                 .setItems(arrayOf(context.getString(R.string.offline_video_save), context.getString(R.string.offline_video_subtitles),
                     context.getString(R.string.offline_comments_open))) { _, action ->
                     try {

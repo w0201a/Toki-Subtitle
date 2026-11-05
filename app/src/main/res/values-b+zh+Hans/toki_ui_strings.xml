@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toki_settings_title">Toki 设置</string>
+    <string name="toki_settings_intro">字幕、播放与下载，按你的习惯设置。</string>
+    <string name="toki_category_subtitles">字幕与翻译</string>
+    <string name="toki_category_subtitles_hint">显示样式、字体与双语顺序</string>
+    <string name="toki_category_comments">评论与贴图</string>
+    <string name="toki_category_comments_hint">评论翻译、复制与贴图保存</string>
+    <string name="toki_category_playback">播放控制</string>
+    <string name="toki_category_playback_hint">倍速、手势与直播滑动</string>
+    <string name="toki_category_cleanup">界面净化</string>
+    <string name="toki_category_cleanup_hint">按组件净化与筛选动态流</string>
+    <string name="toki_category_downloads">下载与离线</string>
+    <string name="toki_category_downloads_hint">视频、保存位置与离线内容</string>
+    <string name="toki_category_region">国家与地区</string>
+    <string name="toki_category_region_hint">地区、语言与作者位置</string>
+    <string name="toki_category_tools">工具与诊断</string>
+    <string name="toki_category_tools_hint">截图兼容与功能状态</string>
+    <string name="toki_more_actions">更多操作</string>
+    <string name="toki_about_title">关于 Toki</string>
+    <string name="toki_tools_open">打开诊断与功能状态</string>
+    <string name="toki_cached_counts">已存：%1$d 条主评论 · %2$d 条回复；包含 %3$d 项媒体（不代表均已下载）</string>
+    <string name="toki_platform_total">平台数量：%1$d · 本地总条数：%2$d</string>
+    <string name="toki_offline_read_hint">已缓存的原文、译文、回复和媒体可离线查看。</string>
+    <string name="toki_comment_actions">评论操作</string>
+    <string name="toki_ui_section_common">功能设置</string>
+    <string name="toki_restore_view">重新读取本地缓存</string>
+</resources>

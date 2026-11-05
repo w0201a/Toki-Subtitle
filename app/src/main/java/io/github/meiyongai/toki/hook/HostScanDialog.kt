@@ -49,7 +49,7 @@ import java.text.NumberFormat
  * Callers: HostScanController.render。
  */
 internal class HostScanDialog(activity: Activity, moduleResources: ModuleResources, onResultDismiss: () -> Unit, onBackground: () -> Unit) :
-    ComponentDialog(moduleResources.createActivityContext(activity), android.R.style.Theme_Material_Light_Dialog_NoActionBar) {
+    ComponentDialog(moduleResources.createActivityContext(activity), io.github.meiyongai.toki.subtitle.R.style.Theme_Toki_EmbeddedDialog) {
     constructor(activity: Activity, moduleResources: ModuleResources, onResultDismiss: () -> Unit) :
         this(activity, moduleResources, onResultDismiss, {})
     private var status by mutableStateOf(HostScanStatus())
@@ -57,7 +57,7 @@ internal class HostScanDialog(activity: Activity, moduleResources: ModuleResourc
         layoutDirection = context.resources.configuration.layoutDirection
         setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
         setContent {
-            MaterialTheme(colorScheme = tokiColorScheme(LocalContext.current, isSystemInDarkTheme())) {
+            io.github.meiyongai.toki.subtitle.ui.TokiAppTheme {
                 ScanContent(status, onResultDismiss, onBackground)
             }
         }

@@ -113,7 +113,8 @@ import io.github.meiyongai.toki.subtitle.ui.component.getGroupedShape
  */
 @Composable
 fun DashboardScreen(
-    scrollState: ScrollState = rememberScrollState()
+    scrollState: ScrollState = rememberScrollState(),
+    category: SettingsCategory? = null
 ) {
     val strings = LocalContext.current.resources
     val context = LocalContext.current
@@ -493,436 +494,450 @@ fun DashboardScreen(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         if (saveError) Text(strings.getString(R.string.dashboard_save_error), color = MaterialTheme.colorScheme.error)
-        // === 分组 1: 地区与环境伪装 (共 4 项) ===
-        PreferenceSection(title = strings.getString(R.string.feature_region_section)) {
-            SimSpoofCard(
-                shape = getGroupedShape(0, 4),
-                enabled = isSimSpoofEnabled,
-                onEnabledChange = { state ->
-                    isSimSpoofEnabled = state
-                    saveBoolean("sim_spoof_enabled", state)
-                },
-                regionCode = regionCode,
-                operatorCode = operatorCode,
-                operatorName = operatorName,
-                currentPreset = currentPreset,
-                countryOnly = countryOnly,
-                onSelectPresetClick = { showSelectDialog = true },
-                onCustomSimClick = { showCustomSimDialog = true }
-            )
+        if (category == null || category == SettingsCategory.REGION) {
+            PreferenceSection(title = strings.getString(R.string.feature_region_section)) {
+                SimSpoofCard(
+                    shape = getGroupedShape(0, 4),
+                    enabled = isSimSpoofEnabled,
+                    onEnabledChange = { state ->
+                        isSimSpoofEnabled = state
+                        saveBoolean("sim_spoof_enabled", state)
+                    },
+                    regionCode = regionCode,
+                    operatorCode = operatorCode,
+                    operatorName = operatorName,
+                    currentPreset = currentPreset,
+                    countryOnly = countryOnly,
+                    onSelectPresetClick = { showSelectDialog = true },
+                    onCustomSimClick = { showCustomSimDialog = true }
+                )
 
-            LanguageSpoofCard(
-                shape = getGroupedShape(1, 4),
-                enabled = isLanguageSpoofEnabled,
-                onEnabledChange = { state ->
-                    isLanguageSpoofEnabled = state
-                    saveBoolean("language_spoof_enabled", state)
-                },
-                followRegion = languageFollowRegion,
-                onFollowRegionChange = { state ->
-                    languageFollowRegion = state
-                    saveBoolean("language_follow_region", state)
-                },
-                effectiveLanguage = effectiveLanguage,
-                onCustomLanguageClick = { showCustomLangDialog = true }
-            )
+                LanguageSpoofCard(
+                    shape = getGroupedShape(1, 4),
+                    enabled = isLanguageSpoofEnabled,
+                    onEnabledChange = { state ->
+                        isLanguageSpoofEnabled = state
+                        saveBoolean("language_spoof_enabled", state)
+                    },
+                    followRegion = languageFollowRegion,
+                    onFollowRegionChange = { state ->
+                        languageFollowRegion = state
+                        saveBoolean("language_follow_region", state)
+                    },
+                    effectiveLanguage = effectiveLanguage,
+                    onCustomLanguageClick = { showCustomLangDialog = true }
+                )
 
-            TimeZoneSpoofCard(
-                shape = getGroupedShape(2, 4),
-                enabled = isTimeZoneSpoofEnabled,
-                onEnabledChange = { state ->
-                    isTimeZoneSpoofEnabled = state
-                    saveBoolean("timezone_spoof_enabled", state)
-                },
-                followRegion = timezoneFollowRegion,
-                onFollowRegionChange = { state ->
-                    timezoneFollowRegion = state
-                    saveBoolean("timezone_follow_region", state)
-                },
-                effectiveTimeZone = effectiveTimeZone,
-                onCustomTimeZoneClick = { showCustomTzDialog = true }
-            )
+                TimeZoneSpoofCard(
+                    shape = getGroupedShape(2, 4),
+                    enabled = isTimeZoneSpoofEnabled,
+                    onEnabledChange = { state ->
+                        isTimeZoneSpoofEnabled = state
+                        saveBoolean("timezone_spoof_enabled", state)
+                    },
+                    followRegion = timezoneFollowRegion,
+                    onFollowRegionChange = { state ->
+                        timezoneFollowRegion = state
+                        saveBoolean("timezone_follow_region", state)
+                    },
+                    effectiveTimeZone = effectiveTimeZone,
+                    onCustomTimeZoneClick = { showCustomTzDialog = true }
+                )
 
-            GpsSpoofCard(
-                shape = getGroupedShape(3, 4),
-                enabled = isGpsSpoofEnabled,
-                onEnabledChange = { state ->
-                    isGpsSpoofEnabled = state
-                    saveBoolean("gps_spoof_enabled", state)
-                },
-                followRegion = gpsFollowRegion,
-                onFollowRegionChange = { state ->
-                    gpsFollowRegion = state
-                    saveBoolean("gps_follow_region", state)
-                },
-                effectiveLatitude = effectiveLatitude,
-                effectiveLongitude = effectiveLongitude,
-                onCustomGpsClick = { showCustomGpsDialog = true }
-            )
+                GpsSpoofCard(
+                    shape = getGroupedShape(3, 4),
+                    enabled = isGpsSpoofEnabled,
+                    onEnabledChange = { state ->
+                        isGpsSpoofEnabled = state
+                        saveBoolean("gps_spoof_enabled", state)
+                    },
+                    followRegion = gpsFollowRegion,
+                    onFollowRegionChange = { state ->
+                        gpsFollowRegion = state
+                        saveBoolean("gps_follow_region", state)
+                    },
+                    effectiveLatitude = effectiveLatitude,
+                    effectiveLongitude = effectiveLongitude,
+                    onCustomGpsClick = { showCustomGpsDialog = true }
+                )
+            }
+
+            PreferenceSection(title = strings.getString(R.string.feature_author_region)) {
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(0, 1),
+                    title = strings.getString(R.string.feature_author_region),
+                    summary = strings.getString(R.string.feature_author_region_summary),
+                    checked = isAuthorLocationEnabled,
+                    onCheckedChange = { state ->
+                        isAuthorLocationEnabled = state
+                        saveBoolean(AuthorLocationHook.KEY_SHOW_AUTHOR_LOCATION, state)
+                    }
+                )
+            }
         }
 
-        OutlinedButton(onClick = { showLocationPresets = true }, modifier = Modifier.fillMaxWidth()) {
-            Text(strings.getString(R.string.location_presets_title))
+        if (category == null || category == SettingsCategory.PLAYBACK) {
+            PreferenceSection(title = strings.getString(R.string.feature_playback_section)) {
+                PlaybackSpeedCard(
+                    shape = getGroupedShape(0, 8),
+                    fixedSpeedEnabled = isSpeedSpoofEnabled,
+                    onFixedSpeedChange = { state ->
+                        isSpeedSpoofEnabled = state
+                        saveBoolean("fixed_speed_enabled", state)
+                    },
+                    expandEnabled = isSpeedExpandEnabled,
+                    onExpandChange = { state ->
+                        isSpeedExpandEnabled = state
+                        saveBoolean("speed_expand_enabled", state)
+                    },
+                    speedList = parsedSpeedList,
+                    onSpeedClick = { speedVal -> editingSpeedTarget = speedVal },
+                    onAddSpeedClick = { showAddSpeedDialog = true },
+                    onResetDefaultClick = {
+                        val defaultStr = "0.5,1.0,1.5,2.0"
+                        customSpeedListStr = defaultStr
+                        saveString("speed_expand_list", defaultStr)
+                    }
+                )
+
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(1, 8),
+                    title = strings.getString(R.string.feature_progress),
+                    summary = strings.getString(R.string.feature_progress_summary),
+                    checked = isAlwaysShowProgressBarEnabled,
+                    onCheckedChange = { state ->
+                        isAlwaysShowProgressBarEnabled = state
+                        saveBoolean(ProgressBarHook.KEY_ALWAYS_SHOW_PROGRESS_BAR, state)
+                    }
+                )
+
+                CleanModeCard(
+                    shape = getGroupedShape(2, 8),
+                    cleanModeEnabled = isCleanModeOnPlayEnabled,
+                    onCleanModeChange = { state ->
+                        isCleanModeOnPlayEnabled = state
+                        saveBoolean(AutoCleanModeHook.KEY_CLEAN_MODE_ON_PLAY, state)
+                    },
+                    showProgressBar = isCleanShowProgressBarEnabled,
+                    onShowProgressBarChange = { state ->
+                        isCleanShowProgressBarEnabled = state
+                        saveBoolean(ProgressBarHook.KEY_CLEAN_SHOW_PROGRESS_BAR, state)
+                    }
+                )
+
+                VideoDisplayCard(
+                    shape = getGroupedShape(3, 8),
+                    enabled = isImmersiveFullScreenEnabled,
+                    mode = videoFitMode,
+                    onEnabledChange = { state ->
+                        isImmersiveFullScreenEnabled = state
+                        saveBoolean(ImmersiveFullScreenHook.KEY_IMMERSIVE_FULL_SCREEN, state)
+                    },
+                    onModeChange = { mode ->
+                        videoFitMode = mode
+                        saveString(ImmersiveFullScreenHook.KEY_VIDEO_FIT_MODE, mode)
+                    }
+                )
+
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(4, 8),
+                    title = strings.getString(R.string.feature_live_swipe_lock),
+                    summary = strings.getString(R.string.feature_live_swipe_lock_summary),
+                    checked = isLiveSwipeLockEnabled,
+                    onCheckedChange = { state ->
+                        isLiveSwipeLockEnabled = state
+                        saveBoolean(LiveSwipeLockHook.KEY_LIVE_SWIPE_LOCK, state)
+                    }
+                )
+
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(5, 8),
+                    title = strings.getString(R.string.feature_autoplay),
+                    summary = strings.getString(R.string.feature_autoplay_summary),
+                    checked = isAutoScrollUnlockEnabled,
+                    onCheckedChange = { state ->
+                        isAutoScrollUnlockEnabled = state
+                        saveBoolean(AutoScrollHook.KEY_AUTO_SCROLL_UNLOCK, state)
+                    }
+                )
+
+                VideoDurationAlertCard(
+                    shape = getGroupedShape(6, 8),
+                    enabled = isDurationAlertEnabled,
+                    onEnabledChange = { state ->
+                        isDurationAlertEnabled = state
+                        saveBoolean(VideoDurationAlertHook.KEY_VIDEO_DURATION_ALERT_ENABLED, state)
+                    },
+                    threshold = durationAlertThreshold,
+                    onClick = { showDurationAlertDialog = true }
+                )
+
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(7, 8),
+                    title = strings.getString(R.string.feature_status_bar),
+                    checked = isStatusBarHidden,
+                    onCheckedChange = { state ->
+                        isStatusBarHidden = state
+                        saveBoolean(StatusBarHook.KEY_STATUS_BAR_HIDDEN, state)
+                    }
+                )
+            }
+            HdrPlaybackSection()
+            HoldSpeedGestureSection()
+
+            PreferenceSection(title = strings.getString(R.string.feature_background_audio)) {
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(0, 1),
+                    title = strings.getString(R.string.feature_background_audio),
+                    checked = isBackgroundAudioEnabled,
+                    onCheckedChange = { state ->
+                        isBackgroundAudioEnabled = state
+                        saveBoolean("background_audio_unlock", state)
+                    }
+                )
+            }
         }
 
-        // === 分组 2: 播放与交互体验 (共 8 项) ===
-        PreferenceSection(title = strings.getString(R.string.feature_playback_section)) {
-            PlaybackSpeedCard(
-                shape = getGroupedShape(0, 8),
-                fixedSpeedEnabled = isSpeedSpoofEnabled,
-                onFixedSpeedChange = { state ->
-                    isSpeedSpoofEnabled = state
-                    saveBoolean("fixed_speed_enabled", state)
-                },
-                expandEnabled = isSpeedExpandEnabled,
-                onExpandChange = { state ->
-                    isSpeedExpandEnabled = state
-                    saveBoolean("speed_expand_enabled", state)
-                },
-                speedList = parsedSpeedList,
-                onSpeedClick = { speedVal -> editingSpeedTarget = speedVal },
-                onAddSpeedClick = { showAddSpeedDialog = true },
-                onResetDefaultClick = {
-                    val defaultStr = "0.5,1.0,1.5,2.0"
-                    customSpeedListStr = defaultStr
-                    saveString("speed_expand_list", defaultStr)
-                }
-            )
+        if (category == null || category == SettingsCategory.CLEANUP) {
+            LayoutCleanupSection()
+            SharePanelCleanupSection()
+            PageCleanupSection()
 
-            SwitchPreferenceItem(
-                shape = getGroupedShape(1, 8),
-                title = strings.getString(R.string.feature_progress),
-                summary = strings.getString(R.string.feature_progress_summary),
-                checked = isAlwaysShowProgressBarEnabled,
-                onCheckedChange = { state ->
-                    isAlwaysShowProgressBarEnabled = state
-                    saveBoolean(ProgressBarHook.KEY_ALWAYS_SHOW_PROGRESS_BAR, state)
-                }
-            )
+            PreferenceSection(title = strings.getString(R.string.feature_filter_section)) {
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(0, 11),
+                    title = strings.getString(R.string.feature_remove_ads),
+                    checked = isFeedRemoveAdsEnabled,
+                    onCheckedChange = { state ->
+                        isFeedRemoveAdsEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_FEED_REMOVE_ADS, state)
+                    }
+                )
 
-            CleanModeCard(
-                shape = getGroupedShape(2, 8),
-                cleanModeEnabled = isCleanModeOnPlayEnabled,
-                onCleanModeChange = { state ->
-                    isCleanModeOnPlayEnabled = state
-                    saveBoolean(AutoCleanModeHook.KEY_CLEAN_MODE_ON_PLAY, state)
-                },
-                showProgressBar = isCleanShowProgressBarEnabled,
-                onShowProgressBarChange = { state ->
-                    isCleanShowProgressBarEnabled = state
-                    saveBoolean(ProgressBarHook.KEY_CLEAN_SHOW_PROGRESS_BAR, state)
-                }
-            )
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(1, 11),
+                    title = strings.getString(R.string.feature_remove_live),
+                    checked = isFeedRemoveLiveEnabled,
+                    onCheckedChange = { state ->
+                        isFeedRemoveLiveEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_FEED_REMOVE_LIVE, state)
+                    }
+                )
 
-            VideoDisplayCard(
-                shape = getGroupedShape(3, 8),
-                enabled = isImmersiveFullScreenEnabled,
-                mode = videoFitMode,
-                onEnabledChange = { state ->
-                    isImmersiveFullScreenEnabled = state
-                    saveBoolean(ImmersiveFullScreenHook.KEY_IMMERSIVE_FULL_SCREEN, state)
-                },
-                onModeChange = { mode ->
-                    videoFitMode = mode
-                    saveString(ImmersiveFullScreenHook.KEY_VIDEO_FIT_MODE, mode)
-                }
-            )
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(2, 11),
+                    title = strings.getString(R.string.feature_remove_photos),
+                    checked = isFeedRemoveImageEnabled,
+                    onCheckedChange = { state ->
+                        isFeedRemoveImageEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_FEED_REMOVE_IMAGE, state)
+                    }
+                )
 
-            SwitchPreferenceItem(
-                shape = getGroupedShape(4, 8),
-                title = strings.getString(R.string.feature_live_swipe_lock),
-                summary = strings.getString(R.string.feature_live_swipe_lock_summary),
-                checked = isLiveSwipeLockEnabled,
-                onCheckedChange = { state ->
-                    isLiveSwipeLockEnabled = state
-                    saveBoolean(LiveSwipeLockHook.KEY_LIVE_SWIPE_LOCK, state)
-                }
-            )
+                FilterRangeCard(
+                    shape = getGroupedShape(3, 11),
+                    title = strings.getString(R.string.feature_filter_views),
+                    enabled = isViewFilterEnabled,
+                    onEnabledChange = { state ->
+                        isViewFilterEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_FILTER_VIEWS_ENABLED, state)
+                    },
+                    minVal = viewMin,
+                    maxVal = viewMax,
+                    unitName = strings.getString(R.string.filter_metric_views),
+                    onClick = { showViewRangeDialog = true }
+                )
 
-            SwitchPreferenceItem(
-                shape = getGroupedShape(5, 8),
-                title = strings.getString(R.string.feature_autoplay),
-                summary = strings.getString(R.string.feature_autoplay_summary),
-                checked = isAutoScrollUnlockEnabled,
-                onCheckedChange = { state ->
-                    isAutoScrollUnlockEnabled = state
-                    saveBoolean(AutoScrollHook.KEY_AUTO_SCROLL_UNLOCK, state)
-                }
-            )
+                FilterRangeCard(
+                    shape = getGroupedShape(4, 11),
+                    title = strings.getString(R.string.feature_filter_likes),
+                    enabled = isLikeFilterEnabled,
+                    onEnabledChange = { state ->
+                        isLikeFilterEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_FILTER_LIKES_ENABLED, state)
+                    },
+                    minVal = likeMin,
+                    maxVal = likeMax,
+                    unitName = strings.getString(R.string.filter_metric_likes),
+                    onClick = { showLikeRangeDialog = true }
+                )
 
-            VideoDurationAlertCard(
-                shape = getGroupedShape(6, 8),
-                enabled = isDurationAlertEnabled,
-                onEnabledChange = { state ->
-                    isDurationAlertEnabled = state
-                    saveBoolean(VideoDurationAlertHook.KEY_VIDEO_DURATION_ALERT_ENABLED, state)
-                },
-                threshold = durationAlertThreshold,
-                onClick = { showDurationAlertDialog = true }
-            )
+                FilterRangeCard(
+                    shape = getGroupedShape(5, 11),
+                    title = strings.getString(R.string.feature_filter_duration),
+                    enabled = isDurationFilterEnabled,
+                    onEnabledChange = { state ->
+                        isDurationFilterEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_FILTER_DURATION_ENABLED, state)
+                    },
+                    minVal = durationMin,
+                    maxVal = durationMax,
+                    unitName = strings.getString(R.string.filter_metric_duration),
+                    unitSuffix = strings.getString(R.string.filter_unit_seconds),
+                    onClick = { showDurationRangeDialog = true }
+                )
 
-            SwitchPreferenceItem(
-                shape = getGroupedShape(7, 8),
-                title = strings.getString(R.string.feature_status_bar),
-                checked = isStatusBarHidden,
-                onCheckedChange = { state ->
-                    isStatusBarHidden = state
-                    saveBoolean(StatusBarHook.KEY_STATUS_BAR_HIDDEN, state)
-                }
-            )
+                FilterKeywordsCard(
+                    shape = getGroupedShape(6, 11),
+                    title = strings.getString(R.string.feature_filter_keywords),
+                    enabled = isKeywordFilterEnabled,
+                    onEnabledChange = { state ->
+                        isKeywordFilterEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_FILTER_KEYWORDS_ENABLED, state)
+                    },
+                    config = parsedKeywordConfig,
+                    onClick = { showKeywordListDialog = true }
+                )
+
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(7, 11),
+                    title = strings.getString(R.string.feature_block_offline),
+                    summary = strings.getString(R.string.feature_block_offline_summary),
+                    checked = isBlockOfflineVideoEnabled,
+                    onCheckedChange = { state ->
+                        isBlockOfflineVideoEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_REMOVE_OFFLINE, state)
+                    }
+                )
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(8, 11),
+                    title = strings.getString(R.string.feature_remove_ai),
+                    summary = strings.getString(R.string.feature_remove_ai_summary),
+                    checked = isRemoveAiGeneratedEnabled,
+                    onCheckedChange = { state ->
+                        isRemoveAiGeneratedEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_REMOVE_AI_GENERATED, state)
+                    }
+                )
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(9, 11),
+                    title = strings.getString(R.string.feature_filter_topics),
+                    checked = isRemoveTopicRecommendationsEnabled,
+                    onCheckedChange = { state ->
+                        isRemoveTopicRecommendationsEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_REMOVE_TOPIC_RECOMMENDATIONS, state)
+                    }
+                )
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(10, 11),
+                    title = strings.getString(R.string.feature_filter_creators),
+                    checked = isRemoveCreatorRecommendationsEnabled,
+                    onCheckedChange = { state ->
+                        isRemoveCreatorRecommendationsEnabled = state
+                        saveBoolean(FeedFilterHook.KEY_REMOVE_CREATOR_RECOMMENDATIONS, state)
+                    }
+                )
+            }
         }
 
-        HdrPlaybackSection()
-        HoldSpeedGestureSection()
-        LayoutCleanupSection()
-        SharePanelCleanupSection()
-        PageCleanupSection()
+        if (category == null || category == SettingsCategory.DOWNLOADS) {
+            PreferenceSection(title = strings.getString(R.string.toki_category_downloads)) {
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(0, 3),
+                    title = strings.getString(R.string.feature_download),
+                    summary = strings.getString(R.string.feature_download_summary),
+                    checked = isDownloadForceEnabled,
+                    onCheckedChange = { state ->
+                        isDownloadForceEnabled = state
+                        saveBoolean(DownloadHook.KEY_DOWNLOAD_FORCE_NO_WATERMARK, state)
+                    }
+                )
 
-        PreferenceSection(title = strings.getString(R.string.feature_screen_capture)) {
-            SwitchPreferenceItem(
-                shape = getGroupedShape(0, 1),
-                title = strings.getString(R.string.feature_screen_capture),
-                summary = strings.getString(R.string.feature_screen_capture_summary),
-                checked = captureCompatibility,
-                onCheckedChange = { state ->
-                    captureCompatibility = state
-                    saveBoolean("screen_capture_compatibility", state)
-                }
-            )
+                DownloadPathCard(
+                    shape = getGroupedShape(1, 3),
+                    enabled = isDownloadPathEnabled,
+                    onEnabledChange = { state ->
+                        isDownloadPathEnabled = state
+                        saveBoolean(DownloadHook.KEY_DOWNLOAD_PATH_ENABLED, state)
+                    },
+                    videoPath = downloadVideoPath,
+                    imagePath = downloadImagePath,
+                    onClick = { showDownloadPathDialog = true }
+                )
+
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(2, 3),
+                    title = strings.getString(R.string.feature_music),
+                    summary = strings.getString(R.string.feature_music_summary),
+                    checked = isMusicUnlockEnabled,
+                    onCheckedChange = { state ->
+                        isMusicUnlockEnabled = state
+                        saveBoolean(MusicUnlockHook.KEY_MUSIC_UNLOCK, state)
+                    }
+                )
+            }
+            OfflineVideoSection()
         }
 
-        // === 分组 3: 内容下载与操作增强 (共 8 项) ===
-        PreferenceSection(title = strings.getString(R.string.feature_media_section)) {
-            SwitchPreferenceItem(
-                shape = getGroupedShape(0, 8),
-                title = strings.getString(R.string.feature_download),
-                summary = strings.getString(R.string.feature_download_summary),
-                checked = isDownloadForceEnabled,
-                onCheckedChange = { state ->
-                    isDownloadForceEnabled = state
-                    saveBoolean(DownloadHook.KEY_DOWNLOAD_FORCE_NO_WATERMARK, state)
-                }
-            )
-
-            DownloadPathCard(
-                shape = getGroupedShape(1, 8),
-                enabled = isDownloadPathEnabled,
-                onEnabledChange = { state ->
-                    isDownloadPathEnabled = state
-                    saveBoolean(DownloadHook.KEY_DOWNLOAD_PATH_ENABLED, state)
-                },
-                videoPath = downloadVideoPath,
-                imagePath = downloadImagePath,
-                onClick = { showDownloadPathDialog = true }
-            )
-
-            SwitchPreferenceItem(
-                shape = getGroupedShape(2, 8),
-                title = strings.getString(R.string.feature_music),
-                summary = strings.getString(R.string.feature_music_summary),
-                checked = isMusicUnlockEnabled,
-                onCheckedChange = { state ->
-                    isMusicUnlockEnabled = state
-                    saveBoolean(MusicUnlockHook.KEY_MUSIC_UNLOCK, state)
-                }
-            )
-
-            SwitchPreferenceItem(
-                shape = getGroupedShape(3, 8),
-                title = strings.getString(R.string.feature_author_region),
-                summary = strings.getString(R.string.feature_author_region_summary),
-                checked = isAuthorLocationEnabled,
-                onCheckedChange = { state ->
-                    isAuthorLocationEnabled = state
-                    saveBoolean(AuthorLocationHook.KEY_SHOW_AUTHOR_LOCATION, state)
-                }
-            )
-
-            SwitchPreferenceItem(
-                shape = getGroupedShape(4, 8),
-                title = strings.getString(R.string.feature_copy_comment),
-                checked = isCopyCommentTextOnlyEnabled,
-                onCheckedChange = { state ->
-                    isCopyCommentTextOnlyEnabled = state
-                    saveBoolean(CommentCopyHook.KEY_COPY_COMMENT_TEXT_ONLY, state)
-                }
-            )
-
-            SwitchPreferenceItem(
-                shape = getGroupedShape(5, 8),
-                title = strings.getString(R.string.feature_video_translation),
-                summary = strings.getString(R.string.feature_video_translation_summary),
-                checked = isVideoTranslateEnabled,
-                onCheckedChange = { state ->
-                    isVideoTranslateEnabled = state
-                    saveBoolean(VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED, state)
-                }
-            )
-
-            SwitchPreferenceItem(
-                shape = getGroupedShape(6, 8),
-                title = strings.getString(R.string.feature_comment_translation),
-                summary = strings.getString(R.string.feature_comment_translation_summary),
-                checked = isCommentTranslateEnabled,
-                onCheckedChange = { state ->
-                    isCommentTranslateEnabled = state
-                    saveBoolean("comment_translate_enabled", state)
-                }
-            )
-            SwitchPreferenceItem(
-                shape = getGroupedShape(7, 8),
-                title = strings.getString(R.string.feature_background_audio),
-                checked = isBackgroundAudioEnabled,
-                onCheckedChange = { state ->
-                    isBackgroundAudioEnabled = state
-                    saveBoolean("background_audio_unlock", state)
-                }
-            )
+        if (category == null || category == SettingsCategory.SUBTITLES) {
+            SubtitleSettings()
+            PreferenceSection(title = strings.getString(R.string.feature_video_translation)) {
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(0, 1),
+                    title = strings.getString(R.string.feature_video_translation),
+                    summary = strings.getString(R.string.feature_video_translation_summary),
+                    checked = isVideoTranslateEnabled,
+                    onCheckedChange = { state ->
+                        isVideoTranslateEnabled = state
+                        saveBoolean(VideoTranslateHook.KEY_VIDEO_TRANSLATE_ENABLED, state)
+                    }
+                )
+            }
+            LocalTranslationSection()
         }
 
-        PreferenceSection(title = strings.getString(R.string.feature_comment_sticker_download)) {
-            SwitchPreferenceItem(
-                shape = getGroupedShape(0, 1),
-                title = strings.getString(R.string.feature_comment_sticker_download),
-                summary = strings.getString(R.string.feature_comment_sticker_download_hint),
-                checked = stickerDownloadEnabled,
-                onCheckedChange = { state ->
-                    stickerDownloadEnabled = state
-                    saveBoolean(CommentStickerDownloadHook.KEY, state)
-                }
-            )
+        if (category == null || category == SettingsCategory.COMMENTS) {
+            PreferenceSection(title = strings.getString(R.string.toki_category_comments)) {
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(0, 2),
+                    title = strings.getString(R.string.feature_copy_comment),
+                    checked = isCopyCommentTextOnlyEnabled,
+                    onCheckedChange = { state ->
+                        isCopyCommentTextOnlyEnabled = state
+                        saveBoolean(CommentCopyHook.KEY_COPY_COMMENT_TEXT_ONLY, state)
+                    }
+                )
+
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(1, 2),
+                    title = strings.getString(R.string.feature_comment_translation),
+                    summary = strings.getString(R.string.feature_comment_translation_summary),
+                    checked = isCommentTranslateEnabled,
+                    onCheckedChange = { state ->
+                        isCommentTranslateEnabled = state
+                        saveBoolean("comment_translate_enabled", state)
+                    }
+                )
+            }
+
+            PreferenceSection(title = strings.getString(R.string.feature_comment_sticker_download)) {
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(0, 1),
+                    title = strings.getString(R.string.feature_comment_sticker_download),
+                    summary = strings.getString(R.string.feature_comment_sticker_download_hint),
+                    checked = stickerDownloadEnabled,
+                    onCheckedChange = { state ->
+                        stickerDownloadEnabled = state
+                        saveBoolean(CommentStickerDownloadHook.KEY, state)
+                    }
+                )
+            }
+            ManualCommentTranslationSection()
         }
 
-        OfflineVideoSection()
-        LocalTranslationSection()
-        ManualCommentTranslationSection()
-        SubtitleSettings()
-
-        // === 分组 4: 动态流与精准过滤 (共 11 项) ===
-        PreferenceSection(title = strings.getString(R.string.feature_filter_section)) {
-            SwitchPreferenceItem(
-                shape = getGroupedShape(0, 11),
-                title = strings.getString(R.string.feature_remove_ads),
-                checked = isFeedRemoveAdsEnabled,
-                onCheckedChange = { state ->
-                    isFeedRemoveAdsEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_FEED_REMOVE_ADS, state)
-                }
-            )
-
-            SwitchPreferenceItem(
-                shape = getGroupedShape(1, 11),
-                title = strings.getString(R.string.feature_remove_live),
-                checked = isFeedRemoveLiveEnabled,
-                onCheckedChange = { state ->
-                    isFeedRemoveLiveEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_FEED_REMOVE_LIVE, state)
-                }
-            )
-
-            SwitchPreferenceItem(
-                shape = getGroupedShape(2, 11),
-                title = strings.getString(R.string.feature_remove_photos),
-                checked = isFeedRemoveImageEnabled,
-                onCheckedChange = { state ->
-                    isFeedRemoveImageEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_FEED_REMOVE_IMAGE, state)
-                }
-            )
-
-            FilterRangeCard(
-                shape = getGroupedShape(3, 11),
-                title = strings.getString(R.string.feature_filter_views),
-                enabled = isViewFilterEnabled,
-                onEnabledChange = { state ->
-                    isViewFilterEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_FILTER_VIEWS_ENABLED, state)
-                },
-                minVal = viewMin,
-                maxVal = viewMax,
-                unitName = strings.getString(R.string.filter_metric_views),
-                onClick = { showViewRangeDialog = true }
-            )
-
-            FilterRangeCard(
-                shape = getGroupedShape(4, 11),
-                title = strings.getString(R.string.feature_filter_likes),
-                enabled = isLikeFilterEnabled,
-                onEnabledChange = { state ->
-                    isLikeFilterEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_FILTER_LIKES_ENABLED, state)
-                },
-                minVal = likeMin,
-                maxVal = likeMax,
-                unitName = strings.getString(R.string.filter_metric_likes),
-                onClick = { showLikeRangeDialog = true }
-            )
-
-            FilterRangeCard(
-                shape = getGroupedShape(5, 11),
-                title = strings.getString(R.string.feature_filter_duration),
-                enabled = isDurationFilterEnabled,
-                onEnabledChange = { state ->
-                    isDurationFilterEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_FILTER_DURATION_ENABLED, state)
-                },
-                minVal = durationMin,
-                maxVal = durationMax,
-                unitName = strings.getString(R.string.filter_metric_duration),
-                unitSuffix = strings.getString(R.string.filter_unit_seconds),
-                onClick = { showDurationRangeDialog = true }
-            )
-
-            FilterKeywordsCard(
-                shape = getGroupedShape(6, 11),
-                title = strings.getString(R.string.feature_filter_keywords),
-                enabled = isKeywordFilterEnabled,
-                onEnabledChange = { state ->
-                    isKeywordFilterEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_FILTER_KEYWORDS_ENABLED, state)
-                },
-                config = parsedKeywordConfig,
-                onClick = { showKeywordListDialog = true }
-            )
-
-            SwitchPreferenceItem(
-                shape = getGroupedShape(7, 11),
-                title = strings.getString(R.string.feature_block_offline),
-                summary = strings.getString(R.string.feature_block_offline_summary),
-                checked = isBlockOfflineVideoEnabled,
-                onCheckedChange = { state ->
-                    isBlockOfflineVideoEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_REMOVE_OFFLINE, state)
-                }
-            )
-            SwitchPreferenceItem(
-                shape = getGroupedShape(8, 11),
-                title = strings.getString(R.string.feature_remove_ai),
-                summary = strings.getString(R.string.feature_remove_ai_summary),
-                checked = isRemoveAiGeneratedEnabled,
-                onCheckedChange = { state ->
-                    isRemoveAiGeneratedEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_REMOVE_AI_GENERATED, state)
-                }
-            )
-            SwitchPreferenceItem(
-                shape = getGroupedShape(9, 11),
-                title = strings.getString(R.string.feature_filter_topics),
-                checked = isRemoveTopicRecommendationsEnabled,
-                onCheckedChange = { state ->
-                    isRemoveTopicRecommendationsEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_REMOVE_TOPIC_RECOMMENDATIONS, state)
-                }
-            )
-            SwitchPreferenceItem(
-                shape = getGroupedShape(10, 11),
-                title = strings.getString(R.string.feature_filter_creators),
-                checked = isRemoveCreatorRecommendationsEnabled,
-                onCheckedChange = { state ->
-                    isRemoveCreatorRecommendationsEnabled = state
-                    saveBoolean(FeedFilterHook.KEY_REMOVE_CREATOR_RECOMMENDATIONS, state)
-                }
-            )
+        if (category == null || category == SettingsCategory.TOOLS) {
+            PreferenceSection(title = strings.getString(R.string.feature_screen_capture)) {
+                SwitchPreferenceItem(
+                    shape = getGroupedShape(0, 1),
+                    title = strings.getString(R.string.feature_screen_capture),
+                    summary = strings.getString(R.string.feature_screen_capture_summary),
+                    checked = captureCompatibility,
+                    onCheckedChange = { state ->
+                        captureCompatibility = state
+                        saveBoolean("screen_capture_compatibility", state)
+                    }
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(16.dp))

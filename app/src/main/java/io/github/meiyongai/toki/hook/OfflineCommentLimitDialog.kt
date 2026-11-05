@@ -19,7 +19,7 @@ internal object OfflineCommentLimitDialog {
         val units = RadioGroup(context).apply { orientation = RadioGroup.HORIZONTAL }
         val count = RadioButton(context).apply { id = android.view.View.generateViewId(); setText(R.string.offline_comment_limit_rows) }
         val pages = RadioButton(context).apply { id = android.view.View.generateViewId(); setText(R.string.offline_comment_limit_pages) }
-        units.addView(count); units.addView(pages); units.check(count.id)
+        units.addView(count); units.addView(pages); TokiDialogs.segmented(units); units.check(count.id)
         val input = EditText(context).apply { inputType = InputType.TYPE_CLASS_NUMBER; setText(current.toString()) }
         body.addView(TextView(context).apply { setText(R.string.offline_comment_limit_hint) }); body.addView(units); body.addView(input)
         var pageMode = false
@@ -31,7 +31,7 @@ internal object OfflineCommentLimitDialog {
             }
             pageMode = nextPage
         }
-        val builder = AlertDialog.Builder(context).setTitle(R.string.offline_comment_limit_title).setView(body)
+        val builder = TokiDialogs.builder(context).setTitle(R.string.offline_comment_limit_title).setView(body)
             .setPositiveButton(R.string.common_done, null).setNegativeButton(android.R.string.cancel, null)
         if (inherited) builder.setNeutralButton(R.string.offline_comment_limit_inherit) { _, _ -> save(null) }
         val dialog = builder.create(); dialog.show()

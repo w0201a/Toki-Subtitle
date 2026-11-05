@@ -51,7 +51,7 @@ private class ModuleResourceContext(
     private val moduleClassLoader: ClassLoader,
 ) : ContextWrapper(base) {
     private val moduleTheme = moduleResources.newTheme().apply {
-        applyStyle(android.R.style.Theme_Material_Light_Dialog_NoActionBar, true)
+        applyStyle(io.github.meiyongai.toki.subtitle.R.style.Theme_Toki_EmbeddedDialog, true)
     }
     private val inflater by lazy(LazyThreadSafetyMode.NONE) {
         // 使用宿主 Application 的标准 inflater，不继承宿主 Activity 的自定义视图工厂。

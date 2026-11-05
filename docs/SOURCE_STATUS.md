@@ -1,5 +1,13 @@
 # Verified build — 2.0.99-debug /119: batched offline comment companions (2026-11-06)
 
+## 2.1.1-debug /121 — Unified UI and bounded diagnostic storage (2026-11-06)
+
+Standalone and injected settings now share category navigation, stable light/dark colors, typography and shapes; all 58 original dashboard configuration-write expressions were retained. Real activation and host status precede About content in the manager. Only explicit module-owned framework dialogs are themed. Comment row actions are compact; counts distinguish local rows from platform totals.
+
+Root logcat previously bypassed the archive-only byte cap by redirecting stdout directly to a persistent file. New captures own bounded pipes (8MiB /10min), reserve against64MiB aggregate diagnostic storage, and stop on caps or failures. Exports construct fresh snapshots in memory directly in the chosen ZIP; cancelling the file picker follows capture stop. Old files remain untouched. Manual cleanup shows an immutable file plan and rejects escaped/symlink paths; destructive cleanup was not executed in tests. Legacy device processes and actual disk reclamation are unverified.
+
+32 focused tests, 852 source assertions, 589 frozen production inputs and unified/private APK signature/CRC/alignment/namespace/classes verified. No full regression, device install/restart/switch change, actual su command or file deletion was performed. Local Compose screenshots are desktop Android renders. Offline comments restricted to20 with missing replies/media and sustained traffic remain unresolved; HDR remains stopped. Artifact Toki-2.1.1-debug.apk: 88292339 bytes; SHA-256 071646202139e4ae44bee4c787ed89b5067709641b9a766df462236ea5f3ebdb. Private evidence work/unified-ui-20261106/.
+
 ## 2.1.0-debug /120 — 2026-11-06
 
 User accepted 2.0.99 offline comments and 2.0.98 cleanup/LIVE gestures. Rich offline comments now add global translated/original/bilingual presentation, account/video-bound original media bytes and cache-only export, local replies and a shared configurable 2500-row budget. Three independent data lanes remain subordinate to existing opt-in background permissions. Old serialized pages remain readable; lowering limits preserves stored data.

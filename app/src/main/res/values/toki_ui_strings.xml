@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="toki_settings_title">Toki settings</string>
+    <string name="toki_settings_intro">Captions, playback and downloads, arranged for you.</string>
+    <string name="toki_category_subtitles">Subtitles and translation</string>
+    <string name="toki_category_subtitles_hint">Appearance, fonts and bilingual order</string>
+    <string name="toki_category_comments">Comments and stickers</string>
+    <string name="toki_category_comments_hint">Translation, copying and saving</string>
+    <string name="toki_category_playback">Playback controls</string>
+    <string name="toki_category_playback_hint">Speed, gestures and LIVE navigation</string>
+    <string name="toki_category_cleanup">Interface cleanup</string>
+    <string name="toki_category_cleanup_hint">Choose components and feed filters</string>
+    <string name="toki_category_downloads">Downloads and offline</string>
+    <string name="toki_category_downloads_hint">Videos, media paths and cached content</string>
+    <string name="toki_category_region">Country and region</string>
+    <string name="toki_category_region_hint">Region, language and author location</string>
+    <string name="toki_category_tools">Tools and diagnostics</string>
+    <string name="toki_category_tools_hint">Capture compatibility and feature status</string>
+    <string name="toki_more_actions">More actions</string>
+    <string name="toki_about_title">About Toki</string>
+    <string name="toki_tools_open">Open diagnostics</string>
+    <string name="toki_cached_counts">Saved: %1$d comments · %2$d replies; %3$d media items listed (some may still be missing)</string>
+    <string name="toki_platform_total">Platform count: %1$d · local entries: %2$d</string>
+    <string name="toki_offline_read_hint">Saved originals, translations, replies and media are available offline.</string>
+    <string name="toki_comment_actions">Comment actions</string>
+    <string name="toki_ui_section_common">Features</string>
+    <string name="toki_restore_view">Read local cache</string>
+</resources>

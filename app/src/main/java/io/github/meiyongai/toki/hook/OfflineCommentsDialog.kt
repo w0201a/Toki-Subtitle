@@ -35,7 +35,7 @@ internal object OfflineCommentsDialog {
         val padding = (12 * density).toInt()
         val container = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL; setPadding(padding, 0, padding, 0) }
         val status = TextView(context).apply { textSize = 13f; setPadding(0, padding, 0, padding) }
-        val hint = TextView(context).apply { text = context.getString(R.string.offline_comments_hint); textSize = 11f }
+        val hint = TextView(context).apply { text = context.getString(R.string.toki_offline_read_hint); textSize = 11f }
         val networkStatus = TextView(context).apply { textSize = 12f }
         val online = Button(context).apply { text = context.getString(R.string.comment_page_online_first) }
         val nextPage = Button(context).apply { text = context.getString(R.string.comment_page_online_next) }
@@ -53,6 +53,7 @@ internal object OfflineCommentsDialog {
             "bilingual" -> OfflineCommentData.Mode.BILINGUAL
             else -> OfflineCommentData.Mode.TRANSLATED
         }
+        TokiDialogs.segmented(modes)
         val limitButton = Button(context).apply { setText(R.string.offline_comment_limit_this_video) }
         val list = ListView(context)
         var shown: AlertDialog? = null
@@ -84,7 +85,11 @@ internal object OfflineCommentsDialog {
             if (snapshot != null) {
                 val time = if (snapshot.capturedAt > 0) java.text.DateFormat.getDateTimeInstance().format(java.util.Date(snapshot.capturedAt))
                     else context.getString(R.string.offline_comments_unknown_time)
-                status.text = context.getString(R.string.offline_comments_count, adapter.count, snapshot.rows.size, snapshot.total, time) +
+                val top = snapshot.rows.count { it.parentId.isBlank() && it.depth == 0 }
+                val replyRows = snapshot.rows.size - top
+                val assets = snapshot.rows.sumOf { it.media.size }
+                status.text = context.getString(R.string.toki_cached_counts, top, replyRows, assets) + "\n" +
+                    context.getString(R.string.toki_platform_total, snapshot.total, snapshot.rows.size) +
                     (if (snapshot.hasMore || snapshot.truncated) "\n" + context.getString(R.string.offline_comments_partial) else "") +
                     (if (snapshot.retainedOlder) "\n" + context.getString(R.string.comment_page_retained_older) else "")
                 if (snapshot.rows.isEmpty()) status.text = context.getString(R.string.offline_comments_empty) + "\n" + status.text
@@ -171,9 +176,9 @@ internal object OfflineCommentsDialog {
             addView(online, LinearLayout.LayoutParams(0, -2, 1f)); addView(nextPage, LinearLayout.LayoutParams(0, -2, 1f))
         }
         container.addView(modes); container.addView(limitButton); container.addView(status); container.addView(hint); container.addView(actions); container.addView(networkStatus)
-        val height = minOf((360 * density).toInt(), (context.resources.displayMetrics.heightPixels * .42f).toInt())
+        val height = minOf((480 * density).toInt(), (context.resources.displayMetrics.heightPixels * .50f).toInt())
         container.addView(list, LinearLayout.LayoutParams(-1, height.coerceAtLeast((120 * density).toInt())))
-        val dialog = AlertDialog.Builder(context).setTitle(context.getString(R.string.offline_comments_title)).setView(container)
+        val dialog = TokiDialogs.builder(context).setTitle(context.getString(R.string.offline_comments_title)).setView(container)
             .setPositiveButton(context.getString(R.string.offline_comments_more), null)
             .setNeutralButton(context.getString(R.string.offline_comments_reload), null)
             .setNegativeButton(context.getString(R.string.common_close), null).create()
@@ -346,7 +351,8 @@ internal object OfflineCommentsDialog {
             worker.shutdown(); worker.queue.clear(); main.removeCallbacksAndMessages(null)
             adapter.submit(null); shown = null
         }
-        dialog.setOnDismissListener { release(); dismissed(dialog) }
+        dialog.setOnDismissListener {
+            adapter.dismissMenus(); release(); dismissed(dialog) }
         try {
             dialog.show(); refreshButtons()
             dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {

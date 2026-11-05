@@ -133,7 +133,7 @@ fun getGroupedShape(
     index: Int,
     count: Int,
     cornerRadius: Dp = 20.dp,
-    middleRadius: Dp = 4.dp
+    middleRadius: Dp = 0.dp
 ): GroupCornerShape {
     if (count <= 1) {
         return GroupCornerShape(cornerRadius, cornerRadius, cornerRadius, cornerRadius)
@@ -320,13 +320,13 @@ fun PreferenceSection(
         Text(
             text = title,
             style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             fontWeight = FontWeight.SemiBold,
-            modifier = Modifier.padding(start = 16.dp, bottom = 6.dp, top = 4.dp)
+            modifier = Modifier.padding(start = 6.dp, bottom = 9.dp, top = 6.dp)
         )
         Column(
             modifier = Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.spacedBy(2.dp),
+            verticalArrangement = Arrangement.spacedBy(1.dp),
             content = content
         )
     }
@@ -378,12 +378,10 @@ fun PreferenceItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (icon != null) {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    tint = iconTint,
-                    modifier = Modifier.size(22.dp)
-                )
+                Box(Modifier.size(34.dp).clip(RoundedCornerShape(10.dp)).background(iconTint.copy(alpha=0.10f)),
+                    contentAlignment=Alignment.Center) {
+                    Icon(imageVector=icon,contentDescription=null,tint=iconTint,modifier=Modifier.size(20.dp))
+                }
                 Spacer(modifier = Modifier.width(14.dp))
             }
             Column(
@@ -462,7 +460,7 @@ fun SwitchPreferenceItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 10.dp),
+                .padding(horizontal = 16.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             if (icon != null) {

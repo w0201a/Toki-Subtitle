@@ -53,4 +53,14 @@ class TrialLogCaptureTest {
         assertTrue(files.keys.any { it.endsWith("diagnostics.json") })
         assertFalse(files.keys.any { it.endsWith("final-logcat.txt") })
     }
+    @Test fun exportingDoesNotLeaveAnotherPersistentSnapshotOrModifyOldLogs() {
+        val context=RuntimeEnvironment.getApplication()
+        val root=java.io.File(context.filesDir,"trial-logs")
+        val old=java.io.File(root,"keep-${java.util.UUID.randomUUID()}").apply{mkdirs()}
+        val marker=java.io.File(old,"logcat-0.txt").apply{writeText("keep original evidence")}
+        val before=root.walkTopDown().filter{it.isFile}.map{it.absolutePath to it.length()}.toMap()
+        repeat(3){TrialLogCapture.export(context,Bundle(),ByteArrayOutputStream(),false)}
+        val after=root.walkTopDown().filter{it.isFile}.map{it.absolutePath to it.length()}.toMap()
+        assertEquals(before,after);assertEquals("keep original evidence",marker.readText())
+    }
 }

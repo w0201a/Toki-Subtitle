@@ -1,23 +1,33 @@
 package io.github.meiyongai.toki.subtitle.ui
 
 import android.content.Context
-import android.os.Build
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
+import androidx.compose.ui.graphics.Color
 
-/**
- * 为管理界面与宿主扫描窗口提供一致的 Material 3 配色，只读取系统资源。
- * @param context 当前界面上下文，用于读取系统动态色。
- * @param dark 是否使用深色主题。
- * @return Android 12 及以上使用动态配色，其他系统使用 Material 3 标准配色。
- * Callers: TokiAppTheme、HostScanDialog。
- */
-internal fun tokiColorScheme(context: Context, dark: Boolean): ColorScheme =
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        if (dark) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-    } else {
-        if (dark) darkColorScheme() else lightColorScheme()
-    }
+/** Stable Toki palette; wallpaper colors cannot split the manager and injected dialogs. */
+@Suppress("UNUSED_PARAMETER")
+internal fun tokiColorScheme(context: Context, dark: Boolean): ColorScheme = if (dark) darkColorScheme(
+    primary = Color(TokiPalette.ACCENT_DARK), onPrimary = Color(0xFF390512),
+    primaryContainer = Color(0xFF39232C), onPrimaryContainer = Color(0xFFFFB1C0),
+    secondary = Color(0xFF69CABE), secondaryContainer = Color(0xFF203834),
+    background = Color(TokiPalette.CANVAS_DARK), onBackground = Color(TokiPalette.INK_DARK),
+    surface = Color(TokiPalette.SURFACE_DARK), onSurface = Color(TokiPalette.INK_DARK),
+    surfaceVariant = Color(0xFF303037), onSurfaceVariant = Color(TokiPalette.SECONDARY_DARK),
+    surfaceContainer = Color(0xFF232328), surfaceContainerLow = Color(TokiPalette.SURFACE_DARK),
+    surfaceContainerHigh = Color(0xFF2B2B31), surfaceContainerHighest = Color(0xFF303037),
+    surfaceContainerLowest = Color(TokiPalette.CANVAS_DARK),
+    outline = Color(0xFF74747F), outlineVariant = Color(0xFF393940), surfaceTint = Color.Transparent
+) else lightColorScheme(
+    primary = Color(TokiPalette.ACCENT), onPrimary = Color.White,
+    primaryContainer = Color(0xFFFFF0F3), onPrimaryContainer = Color(0xFFAB2140),
+    secondary = Color(0xFF238B80), secondaryContainer = Color(0xFFE9F7F4),
+    background = Color(TokiPalette.CANVAS), onBackground = Color(TokiPalette.INK),
+    surface = Color(TokiPalette.SURFACE), onSurface = Color(TokiPalette.INK),
+    surfaceVariant = Color(0xFFF0F0F3), onSurfaceVariant = Color(TokiPalette.SECONDARY),
+    surfaceContainer = Color.White, surfaceContainerLow = Color.White,
+    surfaceContainerHigh = Color(0xFFF0F0F3), surfaceContainerHighest = Color(0xFFE9E9EF),
+    surfaceContainerLowest = Color.White, outline = Color(0xFF96969F),
+    outlineVariant = Color(0xFFE9E9EF), surfaceTint = Color.Transparent
+)

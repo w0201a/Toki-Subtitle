@@ -29,7 +29,7 @@ internal object OfflineCommentMediaViews {
         row: OfflineCommentData.Row, loader: ClassLoader, valid: () -> Boolean) {
         for (i in 0 until container.childCount) ((container.getChildAt(i) as? ImageView)?.drawable as? AnimatedImageDrawable)?.stop()
         container.removeAllViews(); container.visibility = if (row.media.isEmpty()) View.GONE else View.VISIBLE
-        val edge = (120 * context.resources.displayMetrics.density).toInt()
+        val edge = (96 * context.resources.displayMetrics.density).toInt()
         for (asset in row.media) {
             val image = ImageView(context).apply {
                 scaleType = ImageView.ScaleType.CENTER_CROP
@@ -73,7 +73,7 @@ internal object OfflineCommentMediaViews {
     private fun preview(context: Context, snapshot: OfflineCommentData.Snapshot, asset: OfflineCommentData.Media,
         loader: ClassLoader, valid: () -> Boolean) {
         val image = ImageView(context).apply { adjustViewBounds = true; scaleType = ImageView.ScaleType.FIT_CENTER }
-        val dialog = AlertDialog.Builder(context).setTitle(context.getString(R.string.offline_comment_media_preview)).setView(image)
+        val dialog = TokiDialogs.builder(context).setTitle(context.getString(R.string.offline_comment_media_preview)).setView(image)
             .setPositiveButton(R.string.offline_comment_media_save) { _, _ -> if (valid()) save(context, snapshot, asset, loader, valid) }
             .setNegativeButton(R.string.common_done, null).create()
         dialog.setOnDismissListener { (image.drawable as? AnimatedImageDrawable)?.stop() }
@@ -89,7 +89,7 @@ internal object OfflineCommentMediaViews {
             StickerExportMode.PNG -> "PNG"; StickerExportMode.JPEG -> "JPEG"; StickerExportMode.WEBP -> "WebP"
             StickerExportMode.ANIMATED_GIF -> "GIF"; StickerExportMode.ANIMATED_WEBP -> context.getString(R.string.offline_comment_media_animated_webp)
         } }
-        AlertDialog.Builder(context).setTitle(R.string.offline_comment_media_save).setItems(names.toTypedArray()) { _, which ->
+        TokiDialogs.builder(context).setTitle(R.string.offline_comment_media_save).setItems(names.toTypedArray()) { _, which ->
             if (!valid()) return@setItems
             val operation = OperationDiagnostics.start(OperationJournal.Kind.STICKER_EXPORT)
             try { worker.execute {

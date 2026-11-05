@@ -33,6 +33,7 @@ internal object ManualCommentDialog {
             modeIds[button.id] = mode
             modes.addView(button)
         }
+        TokiDialogs.segmented(modes)
         var selected = ManualCommentTranslation.Mode.TRANSLATED
         modes.check(modeIds.entries.single { it.value == selected }.key)
         val scroll = ScrollView(context).apply { addView(body) }
@@ -63,7 +64,7 @@ internal object ManualCommentDialog {
         modes.setOnCheckedChangeListener { _, id ->
             modeIds[id]?.let { selected = it; render(latest) }
         }
-        dialog = AlertDialog.Builder(context)
+        dialog = TokiDialogs.builder(context)
             .setTitle(context.getString(R.string.manual_comment_dialog_title))
             .setView(container)
             .setPositiveButton(context.getString(R.string.manual_comment_retry), null)

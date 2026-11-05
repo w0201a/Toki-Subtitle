@@ -10,6 +10,6 @@ import io.github.meiyongai.toki.subtitle.ui.screen.SubtitleDialog
 class SubtitleSettingsActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent { MaterialTheme { SubtitleDialog { finish() } } }
+        setContent { LocalizedTokiApp { TokiAppTheme { SubtitleDialog { finish() } } } }
     }
 }

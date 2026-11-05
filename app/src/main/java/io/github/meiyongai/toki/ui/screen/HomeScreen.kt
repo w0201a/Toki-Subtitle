@@ -120,37 +120,10 @@ fun HomeScreen(
             .verticalScroll(scrollState)
             .padding(horizontal = 16.dp, vertical = 12.dp)
     ) {
-        // 使用构建版本作为唯一来源，避免主页版本文案与实际安装包不一致。
-        Text(
-            text = "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
-            style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(bottom = 10.dp)
-        )
-
-        // 保留原作者及上游入口，字幕版贡献单独署名。
-        androidx.compose.material3.TextButton(
-            onClick = { openBrowserUrl(context, "https://github.com/MeiYongAI/Toki") }
-        ) {
-            Text(strings.getString(R.string.upstream_author))
-        }
-
-        // 字幕版联合创作：154Er 与 Gi-Ai154M。
-        Text(
-            text = strings.getString(R.string.subtitle_credits),
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(bottom = 12.dp)
-        )
-
-        PreferenceItem(
-            title = strings.getString(R.string.subtitle_sponsor_title),
-            summary = strings.getString(R.string.subtitle_sponsor_methods),
-            shape = getGroupedShape(0, 1),
-            icon = Icons.Outlined.Favorite,
-            onClick = { showSponsorDialog = true }
-        )
-        Spacer(modifier = Modifier.height(10.dp))
+        Text("Toki Subtitle", style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(top = 4.dp, bottom = 6.dp))
+        Text(strings.getString(R.string.toki_settings_intro), style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 18.dp))
 
         // === 1. LSPosed 激活状态卡片 ===
         LSPosedStatusCard(lsposedStatus = lsposedStatus)
@@ -190,6 +163,40 @@ fun HomeScreen(
         )
 
         Spacer(modifier = Modifier.height(20.dp))
+        PreferenceSection(title = strings.getString(R.string.toki_about_title)) {
+            // 使用构建版本作为唯一来源，避免主页版本文案与实际安装包不一致。
+            Text(
+                text = "v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 10.dp)
+            )
+
+            // 保留原作者及上游入口，字幕版贡献单独署名。
+            androidx.compose.material3.TextButton(
+                onClick = { openBrowserUrl(context, "https://github.com/MeiYongAI/Toki") }
+            ) {
+                Text(strings.getString(R.string.upstream_author))
+            }
+
+            // 字幕版联合创作：154Er 与 Gi-Ai154M。
+            Text(
+                text = strings.getString(R.string.subtitle_credits),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+
+            PreferenceItem(
+                title = strings.getString(R.string.subtitle_sponsor_title),
+                summary = strings.getString(R.string.subtitle_sponsor_methods),
+                shape = getGroupedShape(0, 1),
+                icon = Icons.Outlined.Favorite,
+                onClick = { showSponsorDialog = true }
+            )
+            Spacer(modifier = Modifier.height(10.dp))
+        }
+
     }
 
     // 赞助对话框

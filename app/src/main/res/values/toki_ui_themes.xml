@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Toki.EmbeddedDialog" parent="android:style/Theme.Material.Light.Dialog.Alert">
+        <item name="android:colorAccent">@color/toki_ui_accent</item>
+        <item name="android:colorBackground">@color/toki_ui_surface</item>
+        <item name="android:colorBackgroundFloating">@color/toki_ui_surface</item>
+        <item name="android:textColorPrimary">@color/toki_ui_ink</item>
+        <item name="android:textColorSecondary">@color/toki_ui_secondary</item>
+        <item name="android:windowBackground">@drawable/toki_dialog_background</item>
+        <item name="android:windowMinWidthMajor">92%</item>
+        <item name="android:windowMinWidthMinor">92%</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="android:buttonStyle">@style/Widget.Toki.DialogButton</item>
+        <item name="android:buttonBarButtonStyle">@style/Widget.Toki.DialogButton</item>
+    </style>
+</resources>

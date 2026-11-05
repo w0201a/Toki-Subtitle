@@ -169,11 +169,11 @@ internal object CommentStickerDownloadHook {
                     StickerExportMode.ANIMATED_WEBP -> R.string.sticker_export_animated_webp
                     StickerExportMode.ORIGINAL -> error("Original has a separate menu action")
                 }) }.toTypedArray()
-                showDialog(AlertDialog.Builder(context)
+                showDialog(TokiDialogs.builder(context)
                     .setTitle(context.getString(R.string.sticker_export_title))
                     .setItems(labels) { _, index -> queueExport(source, modes[index]) }
                     .setNeutralButton(context.getString(R.string.sticker_animation_help)) { _, _ ->
-                        showDialog(AlertDialog.Builder(context)
+                        showDialog(TokiDialogs.builder(context)
                             .setTitle(context.getString(R.string.sticker_animation_help))
                             .setMessage(context.getString(R.string.sticker_animation_limits))
                             .setPositiveButton(context.getString(R.string.sticker_animation_back)) { _, _ -> chooseFormat(source) }.create())
@@ -191,12 +191,12 @@ internal object CommentStickerDownloadHook {
                     StickerSource.ANIMATED -> R.string.sticker_source_animated
                     StickerSource.STATIC -> R.string.sticker_source_static
                 }) }.toTypedArray()
-                showDialog(AlertDialog.Builder(context)
+                showDialog(TokiDialogs.builder(context)
                     .setTitle(context.getString(R.string.sticker_source_title))
                     .setItems(labels) { _, index -> selected(sources[index]) }
                     .setNegativeButton(context.getString(R.string.common_cancel), null).create())
             }
-            showDialog(AlertDialog.Builder(context)
+            showDialog(TokiDialogs.builder(context)
                 .setTitle(context.getString(R.string.sticker_menu_title))
                 .setItems(arrayOf(context.getString(R.string.sticker_download), context.getString(R.string.sticker_export),
                     context.getString(R.string.sticker_more))) { _, index ->

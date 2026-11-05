@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 120' in gradle and 'versionName = "2.1.0"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.0-debug / 120")
+check('versionCode = 121' in gradle and 'versionName = "2.1.1"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.1-debug / 121")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -547,7 +547,7 @@ check('已注册并报告应用；实际业务结果另看操作摘要' in log_o
 check('requested.forEach features@' in log_overview and 'ConfigSchema.featureSwitches.keys' in log_overview and 'row.getLong("appliedRevision") != report.getLong("configRevision")' in log_overview and '快照超过60秒' in log_overview, 'all configured features, config-revision differences and stale snapshots are represented in the overview')
 check((ROOT / 'docs/FEATURE_STATUS_ZH.md').is_file() and 'docs/FEATURE_STATUS_ZH.md' in read('README.md') and '!/docs/FEATURE_STATUS_ZH.md' in read('.gitignore'), 'Chinese at-a-glance source/limitation matrix is saved and linked without declaring runtime completion')
 check('00-先看这里-诊断速览.txt' in log_capture and '01-阅读说明.txt' in log_capture and '-operations.txt' in log_capture and 'archive-status.txt' in log_capture, 'diagnostic archive includes a first-read overview, instructions, host operation reports and an archive manifest')
-check('root.walkTopDown()' not in log_capture and 'selected-capture' in log_capture and 'if (includeLogcat) synchronized(this) { directory }' in log_capture and '8L * 1024 * 1024' in log_capture and '32L * 1024 * 1024' in log_capture, 'export includes only the current snapshot/explicit selected capture and bounds file/archive bytes instead of attaching all history')
+check('snapshot-${System.currentTimeMillis()}' not in log_capture and 'selected-capture' in log_capture and 'if (includeLogcat) synchronized(this) { directory }' in log_capture and '8L * 1024 * 1024' in log_capture and '32L * 1024 * 1024' in log_capture, 'export includes only the current snapshot/explicit selected capture and bounds file/archive bytes instead of attaching all history')
 check('DiagnosticText.redact(value)' in log_capture and '完整logcat可能包含其他应用信息' in log_capture and '47.0.3' not in (JAVA / 'ui/screen/TrialLogSection.kt').read_text(encoding='utf-8'), 'JSON is redacted, full-logcat privacy is disclosed and obsolete hardcoded host-version UI is removed')
 
 # Shared standardized "template" renderers are not video-template business components.
@@ -1005,7 +1005,7 @@ rich_hold = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineHoldArb
 rich_speed_gate = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineSpeedGestureCodeGate.kt')
 current_build = read('app/build.gradle.kts')
 version = re.search(r'versionName = "(\d+)\.(\d+)\.(\d+)"', current_build)
-check(version is not None and int(version[3]) < 100 and 'versionCode = 120' in current_build, 'version rolls the patch component at base 100 while Android versionCode stays monotonic')
+check(version is not None and int(version[3]) < 100 and 'versionCode = 121' in current_build, 'version rolls the patch component at base 100 while Android versionCode stays monotonic')
 check(all(k in rich_preferences for k in ('MAX_COMMENTS = 2500', 'REQUEST_PAGE_SIZE = 20', 'DEFAULT_MODE = "translated"', '1..125')), 'offline comment count and page shortcuts share the 2500-entry ceiling')
 check(all(k in rich_dialog for k in ('RadioGroup.HORIZONTAL', 'adapter.setMode(mode)', 'syncingMode', 'offline_comment_mode_bilingual')), 'three global comment modes persist and follow external settings without recursive writes')
 check('if (!valid() || adapter.snapshot?.account != snapshot.account' in rich_dialog, 'stale per-video limit dialogs cannot write after an account or playback change')
@@ -1037,3 +1037,48 @@ check(rich_zh.keys() == rich_en.keys() and all(sorted(re.findall(r'%[1-9][0-9]*\
 check('if (!timelineSource) translator?.noteNativeFrame(video,' in overlay and overlay.index('if (!timelineSource) translator?.noteNativeFrame(video,') < overlay.index('state = displayState'), 'current native overlay frames renew ownership before rendering or replay handoff')
 ownership = overlay[overlay.index('if (timelineSource && nativeBindings.keys.any'):overlay.index('if (!frameVisible()')]
 check('presentationEnabled' not in ownership and 'binding.frameVisible()' in ownership, 'visible native captions retain ownership even when custom translation presentation is disabled')
+
+# Unified Toki manager and injected UI. Appearance never writes feature settings on entry.
+ui_hub = read('app/src/main/java/io/github/meiyongai/toki/ui/screen/TokiSettingsHub.kt')
+ui_theme = read('app/src/main/java/io/github/meiyongai/toki/ui/TokiColors.kt')
+ui_main = read('app/src/main/java/io/github/meiyongai/toki/ui/MainActivity.kt')
+ui_host = read('app/src/main/java/io/github/meiyongai/toki/hook/HostSettingsDialog.kt')
+ui_dashboard = read('app/src/main/java/io/github/meiyongai/toki/ui/screen/DashboardScreen.kt')
+ui_dialogs = read('app/src/main/java/io/github/meiyongai/toki/hook/TokiDialogs.kt')
+ui_preferences = read('app/src/main/java/io/github/meiyongai/toki/ui/component/PreferenceComponents.kt')
+ui_home = read('app/src/main/java/io/github/meiyongai/toki/ui/screen/HomeScreen.kt')
+check('TokiSettingsHub(' in ui_main and 'TokiSettingsHub(' in ui_host, 'standalone and injected settings use one shared category navigation surface')
+check('rememberSaveable' in ui_hub and 'BackHandler(enabled = category != null)' in ui_hub and 'selected = null' in ui_hub, 'category navigation retains its selection and returns to the category list before closing the host')
+check('ConfigClient.put' not in ui_hub and all('SettingsCategory.'+name in ui_dashboard for name in ('SUBTITLES','COMMENTS','CLEANUP','PLAYBACK','DOWNLOADS','REGION','TOOLS')), 'all seven settings categories remain reachable without writing configuration on entry')
+check('category: SettingsCategory? = null' in ui_dashboard and 'category == null || category ==' in ui_dashboard, 'the existing complete dashboard remains available alongside category filtering')
+check('TokiPalette' in ui_theme and 'dynamicLightColorScheme' not in ui_theme and 'Typography(' in ui_main and 'Shapes(' in ui_main, 'manager and injected Compose surfaces share stable deep and light colors typography and corner sizes')
+check('Theme_Toki_EmbeddedDialog' in ui_dialogs and 'Gravity.BOTTOM' in ui_dialogs and 'ContextThemeWrapper(context' in ui_dialogs and 'trackHook' not in ui_dialogs, 'framework styling is limited to explicit module-owned dialog constructors and never hooks host-owned dialogs')
+check('Theme_Toki_EmbeddedDialog' in read('app/src/main/java/io/github/meiyongai/toki/hook/ModuleResources.kt'), 'module-inflated custom dialog views resolve the same night-aware theme as their windows')
+check('TokiDialogs.segmented(modes)' in rich_dialog and 'button.buttonDrawable = null' in ui_dialogs and 'state_checked' in ui_dialogs, 'compact mode tabs preserve native exclusive radio selection and state descriptions')
+check('cell.more.setOnClickListener' in rich_adapter and 'tag = "comment-actions"' in rich_adapter and 'visibility = View.GONE' in rich_adapter, 'row translation controls remain in a compact explicit menu instead of three visible buttons per comment')
+check('toki_cached_counts' in rich_dialog and 'toki_platform_total' in rich_dialog and 'snapshot.rows.count' in rich_dialog, 'comment summaries distinguish cached top-level replies and media from platform totals')
+check(ui_home.index('LSPosedStatusCard(lsposedStatus') < ui_home.index('PreferenceSection(title = strings.getString(R.string.toki_about_title))'), 'the standalone overview presents real activation and host status before version attribution and support')
+check('DropdownMenu(' in ui_host and 'ManualHostAdaptationDialog(' in ui_host and 'HostSettingsMirror.status.collectAsState()' in ui_host, 'compact injected header retains language manual adaptation diagnostics and real settings delivery status')
+for variant in ('values', 'values-night'):
+    xml = ROOT / 'app/src/main/res' / variant / 'toki_ui_themes.xml'
+    check('toki_ui_accent' in xml.read_text(encoding='utf-8') and 'toki_dialog_background' in xml.read_text(encoding='utf-8'), variant + ' framework dialogs share palette and rounded backgrounds')
+ui_en = dict(catalog(ROOT / 'app/src/main/res/values/toki_ui_strings.xml'))
+ui_zh = dict(catalog(ROOT / 'app/src/main/res/values-b+zh+Hans/toki_ui_strings.xml'))
+check(ui_en.keys() == ui_zh.keys() and all(sorted(re.findall(r'%[1-9][0-9]*\$[sd]', ui_en[k])) == sorted(re.findall(r'%[1-9][0-9]*\$[sd]', ui_zh[k])) for k in ui_en), 'unified UI labels keep matching Chinese/default keys and count placeholders')
+
+log_limits = read('app/src/main/java/io/github/meiyongai/toki/provider/TrialLogStorage.kt')
+log_process = read('app/src/main/java/io/github/meiyongai/toki/provider/BoundedLogProcess.kt')
+log_ui = read('app/src/main/java/io/github/meiyongai/toki/ui/screen/TrialLogSection.kt')
+check('redirectOutput(' not in log_capture and 'BoundedLogProcess' in log_capture and 'limit-written' in log_process, 'live and snapshot logcat bytes pass through a bounded pipe rather than an unlimited file redirect')
+check('MAX_STREAM_BYTES = 8L * 1024 * 1024' in log_limits and 'MAX_TOTAL_BYTES = 64L * 1024 * 1024' in log_limits and 'MAX_CAPTURE_MILLIS = 10L * 60 * 1000' in log_limits, 'log files capture duration and aggregate storage have independent hard ceilings')
+check('watchdog.schedule' in log_process and 'Reason.TIME' in log_process and 'expiry?.cancel(false)' in log_process and 'process.destroy()' in log_process, 'capture expiry stops its owned process and cancels its timer even when the stream is idle')
+check('documents=linkedMapOf<String,ByteArray>()' in log_capture and 'ZipOutputStream(output)' in log_capture and 'snapshot-' not in log_capture, 'new exports write in-memory snapshots directly into the chosen ZIP without accumulating internal snapshot folders')
+check('reserved[key] = pending + bytes' in log_limits and 'canReserve(used,pending,bytes)' in log_limits, 'concurrent capture reservations count against total storage before files are created')
+check('clearPlan?.let' in log_ui and '确认清除日志' in log_ui and 'clearConfirmed(context,plan)' in log_ui and 'only an explicitly confirmed file plan' in log_limits, 'manual log removal first shows a concrete count size scope and irreversible-action confirmation')
+check('Files.isSymbolicLink(named.toPath())' in log_limits and 'it.parentFile == parent' in log_limits and 'file.canonicalFile.toPath().startsWith(root.toPath())' in log_limits and 'deleteRecursively' not in log_limits, 'log cleanup rejects symlink roots and escaped files and never recursively deletes a computed directory')
+check(log_ui.index('TrialLogCapture.stop()};refresh()') < log_ui.index('export.launch('), 'capture stops before the file picker so cancelling export cannot leave logcat running')
+
+check('finishOutput()' in log_process and 'synchronized(sinkLock)' in log_process and 'released.compareAndSet(false,true)' in log_process, 'timeout closes the owned output and releases its reservation even if a vendor pipe reader does not return')
+check('adapter.dismissMenus()' in rich_dialog and 'dismissMenus(); generation++' in rich_adapter, 'row action windows are dismissed when their parent list is replaced or closed')
+
+check('private fun SubtitleStylePreview' in read('app/src/main/java/io/github/meiyongai/toki/ui/screen/SubtitleSettings.kt') and 'if (help) AlertDialog' in read('app/src/main/java/io/github/meiyongai/toki/ui/screen/SubtitleSettings.kt'), 'subtitle overview shows the real saved-style preview and keeps detailed translation guidance in a readable disclosure')

@@ -72,4 +72,20 @@ class OfflineCommentListAdapterTest {
         assertEquals("source reply\n\n新回复译文", body(1))
         controller.pause().stop().destroy()
     }
+    @Test fun compactMoreMenuKeepsRowModeChangesAvailableWithoutThreeVisibleButtonsPerComment() {
+        val owner = Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity = owner.get(); val parent = ListView(activity)
+        val adapter = OfflineCommentListAdapter(activity, { true }) { }
+        adapter.submit(OfflineCommentData.Snapshot("account", "video", 1L, listOf(row("one", "译文")), 1L, false, false))
+        val cell = adapter.getView(0, null, parent) as LinearLayout
+        val actions = cell.findViewWithTag<Button>("comment-actions")
+        assertEquals(android.view.View.VISIBLE, actions.visibility)
+        assertEquals("译文", (cell.getChildAt(1) as TextView).text.toString())
+        actions.performClick()
+        val dialog = org.robolectric.shadows.ShadowAlertDialog.getLatestAlertDialog()
+        assertEquals(3, dialog.listView.adapter.count)
+        dialog.listView.performItemClick(dialog.listView.adapter.getView(0,null,dialog.listView), 0, 0L)
+        assertEquals("source one", (cell.getChildAt(1) as TextView).text.toString())
+        dialog.dismiss(); owner.pause().stop().destroy()
+    }
 }
