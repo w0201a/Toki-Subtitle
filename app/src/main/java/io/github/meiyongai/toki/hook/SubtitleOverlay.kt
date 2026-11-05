@@ -27,6 +27,7 @@ internal class SubtitleOverlay(private val source: View,
     companion object {
         private val sources = WeakHashMap<View, Unit>()
         private val nativeBindings = WeakHashMap<SubtitleOverlay, Unit>()
+        private val timelineBindings = WeakHashMap<SubtitleOverlay, Unit>()
         var sourceRevision = 0L
             private set
         fun isSource(view: View): Boolean = view in sources
@@ -39,6 +40,7 @@ internal class SubtitleOverlay(private val source: View,
     private var appliedAppearance: SubtitleAppearance? = null
     private var appearanceBackground: Int? = null
     private var state = "HIDDEN"
+    private var frameUpdatedAt = 0L
     private var caption = ""
     private var videoId = ""
     private var trackIdentity = ""
@@ -66,7 +68,7 @@ internal class SubtitleOverlay(private val source: View,
         private set
     init {
         sources[source] = Unit
-        if (!timelineSource) nativeBindings[this] = Unit
+        if (!timelineSource) nativeBindings[this] = Unit else timelineBindings[this] = Unit
         sourceRevision++
         source.addOnAttachStateChangeListener(this)
         if (source.isAttachedToWindow) onViewAttachedToWindow(source)
@@ -74,6 +76,7 @@ internal class SubtitleOverlay(private val source: View,
 
     fun update(displayState: String, text: String, video: String = "") {
         frameRevision++
+        frameUpdatedAt = android.os.SystemClock.uptimeMillis()
         val playback = translator?.playbackRevision ?: 0L
         if (caption != text || videoId != video || framePlaybackRevision != playback) {
             generation++
@@ -128,7 +131,21 @@ internal class SubtitleOverlay(private val source: View,
         val nativeMode = settings.string("subtitle_render_mode", "native") == "native"
         val styled = settings.boolean("subtitle_style_enabled") && !nativeMode
         if (!styled) draggedPosition = null
-        if (nativeMode) {
+        // A stale native renderer cannot keep a verified progressing timeline behind its old label.
+        if (!timelineSource && translator?.hasNativeFrame(videoId) == false && framePlaybackRevision == translator.playbackRevision && timelineBindings.keys.any { binding ->
+                binding.videoId == videoId && binding.framePlaybackRevision == framePlaybackRevision &&
+                    (binding.translator == null || binding.framePlaybackRevision == binding.translator.playbackRevision) &&
+                    binding.layer?.visibility == View.VISIBLE && binding.layerHost != null && binding.frameVisible() &&
+                    binding.visiblePage() != null
+            }) {
+            yieldToTimeline()
+            return
+        }
+        // A new takeover must come from a recent progress-driven timeline update. A mounted,
+        // still-current cue can remain while paused, but an old unmounted cue must not reappear.
+        if (timelineSource && translator != null && layer == null &&
+            android.os.SystemClock.uptimeMillis() - frameUpdatedAt >= 1500) return
+        if (nativeMode && (!timelineSource || translator == null || translator.hasNativeFrame(videoId))) {
             resetTranslation()
             unmount()
             diagnostic("state=$state chars=${caption.length} native=true")
@@ -145,6 +162,7 @@ internal class SubtitleOverlay(private val source: View,
         // Native-frame bindings own presentation as soon as they can show that cue.
         if (timelineSource && nativeBindings.keys.any { binding ->
                 binding.videoId == videoId && binding.caption.isNotBlank() && binding.frameVisible() &&
+                    (binding.translator == null || binding.translator.hasNativeFrame(videoId)) &&
                     (binding.translator == null || binding.framePlaybackRevision == binding.translator.playbackRevision) &&
                     binding.visiblePage() != null && binding.configuration()?.let(binding::presentationEnabled) == true
             }) {
@@ -290,6 +308,10 @@ internal class SubtitleOverlay(private val source: View,
             hidden.getOrPut(source) { source.alpha }
             if (source.alpha != 0f) source.alpha = 0f
         }
+        if (timelineSource && translator?.hasNativeFrame(videoId) == false) {
+            nativeBindings.keys.filter { it.videoId == videoId && it.framePlaybackRevision == framePlaybackRevision &&
+                it.visiblePage() != null }.forEach { it.yieldToTimeline() }
+        }
         diagnostic("state=$state chars=${caption.length} source=true overlay=true sizePx=${text.textSize}" +
             " bounds=${position.first},${position.second},${text.measuredWidth},${text.measuredHeight} page=${overlay.width}x${overlay.height}")
     }
@@ -410,6 +432,13 @@ internal class SubtitleOverlay(private val source: View,
     }
 
     fun discardDrag() { draggedPosition = null; source.postInvalidateOnAnimation() }
+    private fun yieldToTimeline() {
+        layer?.visibility = View.INVISIBLE
+        // Only the verified caption renderer source, never the video/player container.
+        hidden.getOrPut(source) { source.alpha }
+        if (source.alpha != 0f) source.alpha = 0f
+        diagnostic("stale native frame yielded to the current local timeline")
+    }
     private fun restoreSource() {
         hidden.forEach { (view, alpha) -> view.alpha = alpha }
         hidden.clear()
@@ -423,6 +452,7 @@ internal class SubtitleOverlay(private val source: View,
     }
     override fun close() {
         nativeBindings.remove(this)
+        timelineBindings.remove(this)
         if (sources.remove(source) != null) sourceRevision++
         source.removeOnAttachStateChangeListener(this)
         onViewDetachedFromWindow(source)

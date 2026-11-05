@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="region_directory_title">State / province and city location</string>
+    <string name="region_directory_note">Regions use a representative city for GPS and time zone. This does not change your IP or guarantee service availability. Regions without a supported point require manual coordinates.</string>
+    <string name="region_directory_regions">States / provinces</string>
+    <string name="region_directory_cities">City presets</string>
+    <string name="region_directory_search">Search name, city or region code</string>
+    <string name="region_directory_no_point">No supported location point; use manual coordinates</string>
+    <string name="region_directory_empty">No matching regions for this country. Try city presets or manual coordinates.</string>
+    <string name="region_directory_unavailable">Region data could not be loaded. City presets and manual coordinates remain available.</string>
+</resources>

@@ -61,6 +61,61 @@ class SubtitleOverlayTest {
         native.close(); timeline.close()
         controller.pause().stop().destroy()
     }
+    @Test fun staleNativeFrameYieldsToCurrentTimelineInBothModesAndFreshFrameTakesOverAgain() {
+        for (mode in listOf("custom", "native")) {
+            HookRuntime.start("stalled-caption-test-$mode") { _, _ -> }
+            val controller = Robolectric.buildActivity(Activity::class.java).setup().visible()
+            val activity = controller.get()
+            val page = FrameLayout(activity)
+            val video = SurfaceView(activity)
+            page.addView(video, FrameLayout.LayoutParams(1080, 2400))
+            val source = FrameLayout(activity)
+            val nativeText = TextView(activity).apply { text = "old cue" }
+            source.addView(nativeText)
+            page.addView(source, FrameLayout.LayoutParams(600, 100))
+            activity.setContentView(page)
+            activity.window.decorView.apply {
+                measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+                layout(0, 0, 1080, 2400); settleWindowFrame()
+            }
+            val translator = fakeOnlineTranslator({ true }, { _, _ -> AutoCloseable { } })
+            translator.selectVideo("video", video)
+            val settings = ConfigSnapshot(mapOf("subtitle_style_enabled" to true, "subtitle_render_mode" to mode, "subtitle_text_mode" to "original"))
+            val native = SubtitleOverlay(source, translator, configuration = { settings })
+            val timeline = SubtitleOverlay(video, translator, timelineSource = true, configuration = { settings })
+            val layer = SubtitleOverlay::class.java.getDeclaredField("layer").apply { isAccessible = true }
+            translator.noteNativeFrame("video")
+            native.update("EXPANDED", "old cue", "video"); native.onPreDraw()
+            timeline.update("EXPANDED", "current cue", "video"); timeline.onPreDraw()
+            assertNull("Fresh native frame keeps ownership in $mode", layer.get(timeline))
+            org.robolectric.shadows.ShadowSystemClock.advanceBy(Duration.ofMillis(2100))
+            assertFalse(translator.hasNativeFrame("video"))
+            timeline.onPreDraw()
+            assertNull("An old timeline cue must not take over merely because a paused clock advanced in $mode", layer.get(timeline))
+            assertEquals("Native renderer remains untouched while paused in $mode", if (mode == "native") 1f else 0f, source.alpha)
+            // Playback progress now supplies a current local cue, authorizing the takeover.
+            timeline.update("EXPANDED", "current cue", "video")
+            timeline.onPreDraw(); native.onPreDraw()
+            assertNotNull("Stale native frame must not block the timeline in $mode", layer.get(timeline))
+            assertEquals(0f, source.alpha)
+            assertTrue(layer.get(native) == null || (layer.get(native) as View).visibility == View.INVISIBLE)
+            org.robolectric.shadows.ShadowSystemClock.advanceBy(Duration.ofMillis(2100))
+            timeline.onPreDraw(); native.onPreDraw()
+            assertNotNull("A current mounted cue remains stable when playback pauses in $mode", layer.get(timeline))
+            translator.noteNativeFrame("video")
+            nativeText.text = "fresh cue"
+            native.update("EXPANDED", "fresh cue", "video"); native.onPreDraw(); timeline.onPreDraw()
+            assertNull("Current native frames regain ownership in $mode", layer.get(timeline))
+            org.robolectric.shadows.ShadowSystemClock.advanceBy(Duration.ofMillis(2100))
+            timeline.onPreDraw(); native.onPreDraw()
+            assertNull("Paused old timeline must not reclaim fresh native text in $mode", layer.get(timeline))
+            if (mode == "native") assertEquals(1f, source.alpha)
+            else assertEquals(View.VISIBLE, (layer.get(native) as View).visibility)
+            native.close(); timeline.close(); translator.close()
+            assertEquals(1f, source.alpha)
+            controller.pause().stop().destroy()
+        }
+    }
     private fun settleWindowFrame() { shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(16)) }
 
     private fun config(values: Map<String, Any>) =

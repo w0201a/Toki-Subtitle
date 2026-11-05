@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="region_directory_title">州省／行政区与城市定位</string>
+    <string name="region_directory_note">行政区使用一个代表城市的定位与时区，不改变网络 IP，也不保证服务可用范围。缺少可用定位点的条目需手动填写经纬度。</string>
+    <string name="region_directory_regions">州省／行政区</string>
+    <string name="region_directory_cities">城市预设</string>
+    <string name="region_directory_search">搜索名称、城市或行政区代码</string>
+    <string name="region_directory_no_point">暂无可用定位点，可手动填写经纬度</string>
+    <string name="region_directory_empty">当前国家没有匹配行政区，可查看城市预设或手动填写。</string>
+    <string name="region_directory_unavailable">行政区数据读取失败，仍可使用城市预设或手动填写。</string>
+</resources>

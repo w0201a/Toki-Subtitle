@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 115' in gradle and 'versionName = "2.0.95"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.95-debug / 115")
+check('versionCode = 116' in gradle and 'versionName = "2.0.96"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.96-debug / 116")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -766,7 +766,7 @@ lexical_files = [
     'provider/TrialLogCapture.kt', 'ui/screen/TrialLogSection.kt', 'hook/HookRuntime.kt',
     'hook/OfflineExportCandidates.kt', 'hook/OfflineExportCodeGate.kt', 'hook/LocalVideoTracks.kt', 'hook/LocalVideoRemuxer.kt',
     'hook/AnimatedStickerData.kt', 'hook/AnimatedStickerContainers.kt', 'hook/HostAnimatedStickerDecoder.kt', 'hook/AnimatedStickerExporter.kt',
-    'model/RegionEnvironmentPolicy.kt', 'model/CountryCatalog.kt', 'model/RegionPresets.kt', 'hook/SimHook.kt', 'hook/LocaleHook.kt', 'hook/TimeZoneHook.kt',
+    'model/AdministrativeRegions.kt', 'model/RegionEnvironmentPolicy.kt', 'model/CountryCatalog.kt', 'model/RegionPresets.kt', 'hook/SimHook.kt', 'hook/LocaleHook.kt', 'hook/TimeZoneHook.kt',
     'hook/GpsHook.kt', 'ui/screen/DashboardScreen.kt', 'ui/screen/ConfirmedConfigEdits.kt',
     'model/PageCleanupItem.kt', 'hook/PageCleanupBindings.kt', 'hook/PageCleanupContract.kt',
     'hook/PageCleanupCodeGate.kt', 'hook/PageCleanupHook.kt', 'ui/screen/PageCleanupSection.kt',
@@ -822,7 +822,7 @@ for relative in (
     'hook/CaptionPlaybackClockTest.kt', 'hook/SubtitleReplayRecoveryTest.kt', 'hook/CaptionTimelineFetchTest.kt',
     'hook/VideoDisplayModesTest.kt', 'hook/VideoLayoutBindingsTest.kt', 'hook/SmartVideoLayoutTest.kt', 'hook/VideoFillGeometryTest.kt',
     'hook/PageCleanupBindingsTest.kt', 'hook/PageCleanupContractTest.kt', 'hook/PageCleanupPolicyTest.kt',
-    'model/CountryCatalogTest.kt', 'ui/screen/ConfirmedConfigEditsTest.kt',
+    'model/AdministrativeRegionsTest.kt', 'model/CountryCatalogTest.kt', 'ui/screen/ConfirmedConfigEditsTest.kt',
     'hook/AnimatedStickerFixtures.kt', 'hook/AnimatedStickerDataTest.kt', 'hook/AnimatedStickerContainersTest.kt',
     'hook/OfflineExportFixtures.kt', 'hook/OfflineExportCandidatesTest.kt', 'hook/LocalVideoTracksTest.kt', 'hook/LocalVideoRemuxerTest.kt',
     'provider/OperationJournalTest.kt', 'provider/DiagnosticTextTest.kt', 'provider/DiagnosticOverviewTest.kt', 'provider/TrialLogCaptureTest.kt',
@@ -946,3 +946,10 @@ for relative in ('hook/AuthorRegionMemory.kt','model/LocationPresets.kt','ui/scr
     check(True, relative + ' lexical delimiters balanced (not compilation)')
 check('patch.onlyAbsent' in store and 'it !in snapshot().configuration()' in store, 'historical replay fills only currently absent manager keys inside the manager transaction')
 print("SOURCE CHECKS ONLY: this script does not verify compilation, JUnit, device runtime or TikTok 47.6.3 hook behavior.")
+
+# Imported public geography and stale-renderer ownership are separate from device acceptance.
+admin_regions = read('app/src/main/java/io/github/meiyongai/toki/model/AdministrativeRegions.kt')
+admin_dialog = read('app/src/main/java/io/github/meiyongai/toki/ui/screen/LocationPresetDialog.kt')
+check('AdministrativeRegions.read(context.assets.open' in admin_dialog and 'AdministrativeRegions.search(regions, country, search)' in admin_dialog, 'administrative directory is loaded from module assets and scoped to selected country')
+check('require(item.hasLocation)' in admin_regions and 'custom_latitude' in admin_regions and 'gps_follow_region' in admin_regions, 'region selection uses verified point and existing atomic configuration keys')
+check('binding.translator.hasNativeFrame(videoId)' in read('app/src/main/java/io/github/meiyongai/toki/hook/SubtitleOverlay.kt') and 'yieldToTimeline()' in read('app/src/main/java/io/github/meiyongai/toki/hook/SubtitleOverlay.kt') and 'timelineBindings.remove(this)' in read('app/src/main/java/io/github/meiyongai/toki/hook/SubtitleOverlay.kt'), 'stale native overlay cannot permanently block a current timeline; lifetime cleanup remains paired')

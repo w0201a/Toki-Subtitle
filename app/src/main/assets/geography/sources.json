@@ -1,0 +1,43 @@
+{
+  "format": 1,
+  "generatedDate": "2026-11-05",
+  "regions": 3865,
+  "countries": 228,
+  "withRepresentativePoint": 3782,
+  "localizedChineseByUniqueEnglishName": 2167,
+  "noRepresentativePoint": 83,
+  "sources": [
+    {
+      "file": "admin1CodesASCII.txt",
+      "source": "https://download.geonames.org/export/dump/admin1CodesASCII.txt",
+      "bytes": 151571,
+      "sha256": "2e4867f5397acb056ea26377601b57af37cb4c81399770225018e9e439e91ad3"
+    },
+    {
+      "file": "cities1000.zip",
+      "source": "https://download.geonames.org/export/dump/cities1000.zip",
+      "bytes": 11090045,
+      "sha256": "621da017da3e4eebd0d1012a641d4150703fe870e44b4828224d58e1dca666a2"
+    },
+    {
+      "file": "readme.txt",
+      "source": "https://download.geonames.org/export/dump/readme.txt",
+      "bytes": 8843,
+      "sha256": "b1957379b6c1242c700c98ac9a8aa0a09f56c3c0a50ee72175527005f48ef2c5"
+    },
+    {
+      "file": "subdivisions-zh.xml",
+      "source": "https://raw.githubusercontent.com/unicode-org/cldr/main/common/subdivisions/zh.xml",
+      "bytes": 390348,
+      "sha256": "4f875ffc235cba7c97092c95e4ccebb9805457bec159e37e0ef4b64abeda4cb8"
+    },
+    {
+      "file": "subdivisions-en.xml",
+      "source": "https://raw.githubusercontent.com/unicode-org/cldr/main/common/subdivisions/en.xml",
+      "bytes": 338930,
+      "sha256": "637705773cb923d63bf71abaf05e6246fd853ef98f143bd9796b11d2c5ac10c0"
+    }
+  ],
+  "outputSha256": "4e23919ca7dfc246c7a3233be5ce616834a86d32bb5a9d8143533059156b1482",
+  "mapping": "GeoNames country.admin1 joins city country/admin1 exactly. Prefer first-level seat, then national capital, lower-level seat, population. Chinese names use a unique per-country normalized CLDR English match; no guessing ISO suffixes from GeoNames FIPS codes."
+}

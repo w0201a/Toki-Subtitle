@@ -2,3 +2,8 @@
 app/src/main/resources/toki-host-rules.tsv text eol=lf
 app/src/main/resources/toki-host-shapes.tsv text eol=lf
 app/src/main/resources/toki-host-profiles/*.properties text eol=lf
+
+# Geography snapshots have a published byte hash; keep LF on every checkout.
+app/src/main/assets/geography/* text eol=lf
+# Empty final TSV columns mean no point is available, not stray whitespace.
+app/src/main/assets/geography/admin-regions.tsv whitespace=-blank-at-eol
