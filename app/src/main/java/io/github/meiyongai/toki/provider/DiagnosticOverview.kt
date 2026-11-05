@@ -6,6 +6,7 @@ import java.time.Instant
 /** Human-readable view of received evidence. Unknown/unobserved is never promoted to working. */
 internal object DiagnosticOverview {
     private val titles = mapOf(
+        "OfflineCommentDownloadHook" to "下载时缓存评论原文与译文",
         "OfflineVideoHook" to "离线视频导出／已有本地操作", "CommentStickerDownloadHook" to "贴图下载与转换", "LayoutCleanupHook" to "布局净化（含旧模板按钮映射）",
         "DanmakuEntranceHook" to "弹幕入口隐藏",
         "TemplateCleanupHook" to "模板／特效业务锚点隐藏",

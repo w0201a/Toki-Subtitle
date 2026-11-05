@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 112' in gradle and 'versionName = "2.0.92"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.92-debug / 112")
+check('versionCode = 113' in gradle and 'versionName = "2.0.93"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.0.93-debug / 113")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -300,7 +300,7 @@ check('NativeSubtitleTranslator.transport(loader)' in comment_online and 'LLILLI
 check('CachedCommentTranslateHook.watch' in comment_dialog and 'translation.close()' in comment_dialog and 'translation.cancel()' in comment_dialog, 'online comment sessions cancel on mode/feature/pause/window/reload lifecycle changes')
 check('TranslationNetworkPolicy.capture()' in comment_dialog and 'if (!remote.permitsNetwork())' in comment_dialog and 'requestTranslation' in comment_dialog, 'cached comments submit online text only from an explicit row action after hybrid/local-only checks')
 check('OfflineCommentListAdapter(context, ::valid, ::requestTranslation, ::renderSummary)' in comment_dialog and 'cached_comment_translate_action' in comment_adapter and 'fun update(' in comment_adapter, 'per-comment action, segmented progress and original/translation/bilingual result display are connected')
-check('CommentTranslationStore.restore' in comment_dialog and 'CommentTranslationStore.save' in comment_dialog and 'adapter.saved(row, target, text, saved)' in comment_dialog, 'local translation restoration and confirmed background commits are connected to comment UI')
+check('CommentTranslationStore.restore' in comment_dialog and 'OfflineCommentArchive.updateTranslation' in comment_dialog and 'adapter.saved(row,target,text,result)' in comment_dialog, 'legacy translation restoration and confirmed per-video archive commits are connected to comment UI')
 check('state.failed == 0' in comment_session and '!state.busy' in comment_session and '!committed' in comment_session and 'token == generation' in comment_session, 'only complete current successful translated results are submitted for persistence, once')
 check('listOf(account, video, comment, source, language)' in comment_key and 'SHA-256' in comment_key and 'putInt(bytes.size)' in comment_key, 'persisted result identity includes account/video/comment/exact source/target with length-prefixed hashing')
 check('MAX_RECORDS = 2000' in comment_store and 'MAX_CHARACTERS' in comment_store and '.commit()' in comment_store and 'Saved.FULL' in comment_store and '.remove(' not in comment_store and '.clear(' not in comment_store, 'private persistent cache is bounded and reports full/failed writes without eviction/deletion')
@@ -317,7 +317,7 @@ check('CommentPageCodeGate.verify(context)' in page_network and 'LJJZZI' in page
 check(not any(token in page_network for token in ('OfflineCommentLifecycleListener', 'X.0FTg', 'openConnection(', '.remove(', '.clear(', '.delete(')), 'comment page adapter does not invoke the native predownload/cache-clear manager or construct its own HTTP requests')
 check('remote.permitsNetwork()' in page_network and 'reader.accountMatches(account)' in page_network and 'contract.id.invoke(model) == video' in page_network and 'once.compareAndSet(false, true)' in page_network, 'page dispatch and response acceptance check explicit-network eligibility, identity and duplicate callbacks')
 check('online.setOnClickListener { requestPage(0L) }' in comment_dialog and 'nextPage.setOnClickListener' in comment_dialog and 'main.postDelayed(it, 15000)' in comment_dialog, 'online first/next page buttons and 15-second timeout are wired')
-check('CommentPageMerge.merge(old, page, cursor)' in comment_dialog and 'CommentSnapshotStore.save(app, merged)' in comment_dialog and 'CommentSnapshotStore.read(app, account, video)' in comment_dialog, 'received pages merge and persist privately and local reload restores them')
+check('CommentPageMerge.merge(old, page, cursor)' in comment_dialog and 'OfflineCommentArchive.save(app,page,cursor,replyRoot.orEmpty())' in comment_dialog and 'CommentSnapshotStore.read(app, account, video)' in comment_dialog, 'received pages merge and persist privately and local reload restores them')
 check('if (!active()) Saved.CANCELLED' in snapshot_store and snapshot_store.index('if (!active()) Saved.CANCELLED') < snapshot_store.index('.commit()'), 'snapshot persistence checks cancellation immediately before committing')
 check('old.nextCursor == requestedCursor' in page_merge and 'page.nextCursor > requestedCursor' in page_merge and 'old.account == page.account && old.video == page.video' in page_merge, 'page merges reject wrong account/video and non-progressing or mismatched cursors')
 check('previous.forEach { values.putIfAbsent(it.id, it) }' in page_merge and 'Comment snapshot capacity reached' in page_merge and 'comment_page_retained_older' in comment_dialog, 'refresh preserves earlier cached rows, reports older unverified rows and refuses overflow instead of evicting')
@@ -772,7 +772,7 @@ lexical_files = [
     'hook/LocalOnlyRequest.kt', 'hook/TranslationNetworkPolicy.kt', 'hook/HostSettingsEntry.kt', 'hook/SubtitleFeature.kt',
     'hook/OfflinePlaybackState.kt', 'hook/OfflineVideoContract.kt', 'hook/OfflineCacheCodeGate.kt',
     'hook/LocalVideoFile.kt', 'hook/HostLocalVideoCache.kt', 'hook/OfflineVideoExporter.kt',
-    'hook/OfflineNativeHoldContract.kt', 'hook/OfflineLongPressState.kt', 'hook/OfflineVideoHook.kt', 'ui/screen/OfflineVideoSection.kt', 'hook/SubtitleRemoteResume.kt',
+    'hook/OfflineCommentArchive.kt', 'hook/OfflineCommentDownloadHook.kt', 'hook/OfflineCommentDownloadContract.kt', 'hook/OfflineCommentDownloadProgress.kt', 'hook/OfflineNativeHoldContract.kt', 'hook/OfflineLongPressState.kt', 'hook/OfflineVideoHook.kt', 'ui/screen/OfflineVideoSection.kt', 'hook/SubtitleRemoteResume.kt',
     'hook/OfflineCommentData.kt', 'hook/OfflineCommentCodeGate.kt', 'hook/HostOfflineComments.kt',
     'hook/OfflineCommentListAdapter.kt', 'hook/OfflineCommentsDialog.kt',
     'hook/CachedCommentTranslateHook.kt', 'hook/CommentTranslationKey.kt', 'hook/CommentTranslationStore.kt',
@@ -802,7 +802,7 @@ for relative in (
     'hook/HoldSpeedGestureScopeTest.kt', 'hook/ManualCommentTranslationTest.kt',
     'hook/LocalOnlyRequestTest.kt', 'hook/LocalSubtitleExecutionTest.kt', 'hook/FakeOnlineTranslator.kt',
     'hook/NativeSubtitleTranslatorTest.kt', 'hook/SubtitleOverlayTest.kt',
-    'hook/OfflineNativeHoldContractTest.kt', 'hook/OfflinePlaybackStateTest.kt', 'hook/OfflineLongPressStateTest.kt', 'hook/LocalVideoFileTest.kt', 'hook/OfflineVideoHitTest.kt', 'hook/SubtitleRemoteResumeTest.kt',
+    'hook/OfflineCommentArchiveTest.kt', 'hook/OfflineCommentDownloadProgressTest.kt', 'hook/OfflineNativeHoldContractTest.kt', 'hook/OfflinePlaybackStateTest.kt', 'hook/OfflineLongPressStateTest.kt', 'hook/LocalVideoFileTest.kt', 'hook/OfflineVideoHitTest.kt', 'hook/SubtitleRemoteResumeTest.kt',
     'hook/OfflineCommentDataTest.kt', 'hook/OfflineCommentListAdapterTest.kt',
     'hook/CachedCommentTranslationSessionTest.kt', 'hook/CommentTranslationStoreTest.kt', 'hook/CachedCommentOnlineAdapterTest.kt',
     'hook/CommentPageMergeTest.kt', 'hook/CommentSnapshotCodecTest.kt', 'hook/CommentSnapshotStoreTest.kt',
@@ -914,6 +914,13 @@ for locale in ('values', 'values-b+zh+Hans', 'values-b+zh+Hant'):
 check('return synchronized(preferences)' in store and 'synchronized(preferences)' in mirror, 'local host configuration commit and ACK compare-and-clear share one monitor')
 check('ManualHostAdaptation.values(before, patch.host' in store, 'mirroring one authenticated host preserves another hosts pending rescan request')
 check('CommentStickerDownloadHook.isStickerComment(comment)' in read('app/src/main/java/io/github/meiyongai/toki/hook/ManualCommentTranslateHook.kt'), 'ordinary manual translation preserves sticker-menu ownership')
+download_comments = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineCommentDownloadHook.kt')
+durable_comments = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineCommentArchive.kt')
+check('X.0rF7' in download_comments and 'completion' in download_comments and 'translatePage(page,lang,position,root' in download_comments, 'comment original and translated pages are produced by native offline-download completion rather than only opening the viewer')
+check('NativeSubtitleTranslator.transport(loader,::capture)' in download_comments and 'NET_CAPABILITY_VALIDATED' in download_comments and 'reader.accountMatches(account)' in download_comments, 'separate opt-in download cache uses authenticated account and network checks independently from playback revision')
+check('noBackupFilesDir' in durable_comments and 'AtomicFile' in durable_comments and 'MAX_RECORDS' not in durable_comments and 'all.size >= 100' not in durable_comments, 'durable comment companions are per-video atomic files without legacy global record eviction')
+check('CLICK_CLEAR_ICON' in download_comments and 'clearAccountAfterManualClear' in download_comments and 'epoch:' in download_comments, 'only the inspected manual clear-all event schedules account-bound cleanup and cancels stale writers')
+check('OfflineCommentArchive.window' in comment_dialog and 'archiveNext' in comment_dialog, 'offline viewer opens local archive windows past the legacy single snapshot cap')
 native_offline = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineNativeHoldContract.kt')
 offline_hold = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineVideoHook.kt')
 check('OfflineNativeHoldContract.verify' in offline_hold and 'fresh.id != target.id' in offline_hold and '!fresh.offline' in offline_hold, 'offline native hold requires matched code and re-read selected offline identity before consumption')

@@ -23,6 +23,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         require(video.matches(Regex("[A-Za-z0-9_-]{1,128}")))
         val contract = reflected.value
         val account = contract.account()
+        OfflineCommentArchive.window(context, accountToken(account), video)?.let { return it.snapshot }
         val repo = contract.repo.invoke(null, "offline_comment_" + account)
         val raw = contract.getString.invoke(repo, "snap_" + video, null) as? String
             ?: throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.MISSING)
@@ -40,6 +41,13 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
     fun account(context: Context): String {
         if (!OfflineCommentCodeGate.verify(context)) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.UNSUPPORTED)
         return accountToken(reflected.value.account())
+    }
+
+    fun serializeModel(model: Any): String = reflected.value.serialize.invoke(reflected.value.gson.get(null), model) as String
+    fun parseModel(text: String): Any {
+        require(text.length<=4*1024*1024)
+        return checkNotNull(reflected.value.parse.invoke(reflected.value.gson.get(null), text,
+            Class.forName("com.ss.android.ugc.aweme.feed.model.Aweme",false,loader)))
     }
 
     fun copyResponse(context: Context, video: String, account: String, response: Any, capturedAt: Long,
@@ -119,6 +127,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         private val gsonType = type("com.google.gson.Gson")
         val gson = store.getDeclaredField("LJ").apply { check(type == gsonType && Modifier.isStatic(modifiers)); isAccessible = true }
         val parse = method(gsonType, "LJI", Any::class.java, String::class.java, Class::class.java)
+        val serialize = method(gsonType,"LJIILL",String::class.java,Any::class.java)
         val snapshot = type("X.0XJO")
         val list = type("com.ss.android.ugc.aweme.comment.model.CommentItemList")
         val snapshotId = snapshot.getDeclaredField("LIZ").apply { check(type == String::class.java); isAccessible = true }

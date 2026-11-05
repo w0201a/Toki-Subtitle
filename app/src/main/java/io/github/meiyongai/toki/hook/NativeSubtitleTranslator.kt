@@ -403,7 +403,7 @@ internal class NativeSubtitleTranslator(
         }
 
         /** 独立请求通道，供评论投票使用；不进入视频字幕的排程或预读队列。 */
-        fun transport(loader: ClassLoader): (String, (String?) -> Unit) -> AutoCloseable {
+        fun transport(loader: ClassLoader, access: () -> LocalOnlyRequest = TranslationNetworkPolicy::capture): (String, (String?) -> Unit) -> AutoCloseable {
             val facade = loader.adaptiveClass("X.03hV")
             val serviceField = facade.adaptiveDeclaredField("LIZIZ")
             val method = facade.adaptiveDeclaredMethod("LJIIJ", String::class.java)
@@ -426,7 +426,7 @@ internal class NativeSubtitleTranslator(
                 }
             }
             return request@{ text, complete ->
-                val remote = TranslationNetworkPolicy.capture()
+                val remote = access()
                 if (!remote.permitsNetwork()) {
                     HookRuntime.event("NativeSubtitleTranslation", "local-only: host transport not invoked")
                     complete(null)

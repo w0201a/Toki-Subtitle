@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_comment_download_title">下载时缓存评论原文与译文</string>
+    <string name="offline_comment_download_hint">离线视频下载完成时，联网获取评论分页、回复并提前翻译。本开关单独授权后台评论／翻译联网，即使播放设为仅本地；断网只读已有原文译文。按视频持久保留、不按LRU淘汰，失败不标完成。字幕尚未接入。 保存在宿主私有离线伴随目录，仅随手动清空全部离线视频清理；卸载或清应用数据仍可能删除。</string>
+    <string name="offline_comment_backfill_title">主动补齐已下载视频</string>
+    <string name="offline_comment_backfill_hint">联网时扫描已有离线视频，补齐缺失评论与译文；需开启下载时缓存。</string>
+    <string name="offline_comment_passive_title">打开旧离线视频时补齐</string>
+    <string name="offline_comment_passive_hint">仅对旧下载：联网打开时补齐缺失评论／译文。新下载始终从下载完成回调处理。</string>
+    <string name="offline_comment_cache_complete">评论原文与译文已缓存，可断网读取。</string>
+    <string name="offline_comment_cache_incomplete">评论／译文尚未缓存完整，缺失译文需联网补齐；已有原文仍可离线读取。</string>
+</resources>

@@ -13,6 +13,7 @@ object ConfigSchema {
         "SpeedOptions" to listOf("speed_expand_enabled"),
         "CommentTranslateHook" to listOf("comment_translate_enabled"),
         "ManualCommentTranslateHook" to listOf("comment_manual_translate_enabled"),
+        "OfflineCommentDownloadHook" to listOf("offline_comment_download_cache"),
         "OfflineVideoHook" to listOf("offline_video_controls_enabled", "offline_comment_button_enabled"),
         "CachedCommentTranslateHook" to listOf("cached_comment_online_translate_enabled"),
         "VideoTranslateHook" to listOf("video_translate_enabled", "subtitle_style_enabled"),
@@ -49,7 +50,7 @@ object ConfigSchema {
             "feed_remove_topic_recommendations", "feed_remove_creator_recommendations")
     )
     val booleanDefaults: Map<String, Boolean> = featureSwitches.values.flatten().associateWith { false } +
-        mapOf("sim_country_only_enabled" to false, "subtitle_drag_enabled" to true, "subtitle_lock_x" to false, "subtitle_lock_y" to false,
+        mapOf("offline_comment_backfill_active" to false, "offline_comment_backfill_passive" to false, "sim_country_only_enabled" to false, "subtitle_drag_enabled" to true, "subtitle_lock_x" to false, "subtitle_lock_y" to false,
             "subtitle_debug_overlay_enabled" to false, "subtitle_local_only_enabled" to false, "video_auto_crop_enabled" to true) +
         listOf("language_follow_region", "timezone_follow_region", "gps_follow_region").associateWith { true }
     private val rangePrefixes = listOf("feed_filter_views", "feed_filter_likes", "feed_filter_duration")

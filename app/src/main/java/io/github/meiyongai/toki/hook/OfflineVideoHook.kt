@@ -313,6 +313,7 @@ internal object OfflineVideoHook {
             if (changed) {
                 cancelTouch(); closeMenu(); binding = Binding(owner, video, activity)
                 HookRuntime.count(FEATURE, if (video.offline) "已绑定选中离线卡片" else "已绑定选中在线卡片")
+                if(video.offline)OfflineCommentDownloadHook.passive(video.model)
             }
             val dispatch = activity.javaClass.getMethod("dispatchTouchEvent", MotionEvent::class.java)
             if (activities.add(dispatch)) module.trackHook(FEATURE, dispatch, requiresConfiguration = false).intercept { chain ->

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_comment_download_title">Cache comments and translations during download</string>
+    <string name="offline_comment_download_hint">When an offline video finishes downloading, fetch its comment pages and replies and pretranslate while connected. This switch separately permits background comment/translation requests, even in local-only playback mode. Retains per-video originals and translations across restarts; no LRU expiry. Incomplete requests are not marked complete. Captions are not included yet. Stored under the host private offline companion directory. Retained until manual clear of all offline videos; uninstalling or clearing app data can remove it.</string>
+    <string name="offline_comment_backfill_title">Backfill existing offline videos</string>
+    <string name="offline_comment_backfill_hint">Scan already-downloaded videos while connected and fill missing comments/translations. Requires download comment caching.</string>
+    <string name="offline_comment_passive_title">Backfill on opening an offline video</string>
+    <string name="offline_comment_passive_hint">For old downloads only: enqueue missing comments/translations when viewed while connected. New downloads always use the download-completion callback.</string>
+    <string name="offline_comment_cache_complete">Comments and translations are saved for offline reading.</string>
+    <string name="offline_comment_cache_incomplete">Offline comment cache is incomplete; missing translations need an online retry. Existing originals remain readable.</string>
+</resources>

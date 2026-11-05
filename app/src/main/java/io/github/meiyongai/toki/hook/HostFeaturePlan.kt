@@ -86,7 +86,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
         val platform = setOf("SimHook", "LocaleHook", "TimeZoneHook", "GpsHook")
         val directHost = setOf("DanmakuEntranceHook", "HdrPlaybackHook", "StatusBarHook", "VideoDurationAlertHook", "ScreenCaptureHook", "SharePanelCleanupHook", "AuthorLocationHook", "QuickCommentCleanupHook", "TemplateCleanupHook", "PageCleanupHook", "HoldSpeedGestureHook", "OfflineVideoHook")
         // Environment, fixed rate, menu reads and audio group reads update live; immersive window restoration remains separate.
-        val liveInstallable = setOf("LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
+        val liveInstallable = setOf("OfflineCommentDownloadHook", "LayoutCleanupHook", "AuthorLocationHook", "CommentTranslateHook",
             "CommentCopyHook", "CommentStickerDownloadHook", "ManualCommentTranslateHook", "CachedCommentTranslateHook", "VideoTranslateHook", "LiveSwipeLockHook",
             "FeedFilterHook", "ProgressBarHook", "AutoCleanModeHook", "AutoScrollHook", "MusicUnlockHook", "PlaybackSpeedHook", "SpeedOptions", "BackgroundAudioHook", "DownloadHook", "ImmersiveFullScreenHook") + directHost + platform
 
@@ -110,6 +110,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
         private val fixedSpeedSymbols = setOf(HostSymbol.PLAYER_CONTROLLER, HostSymbol.PLAYER_MANAGER, HostSymbol.SPEED_MANAGER)
         private val speedMenuSymbols = setOf(HostSymbol.SPEED_OPTIONS)
         private val symbolDependencies = mapOf(
+            "OfflineCommentDownloadHook" to setOf(HostSymbol.COMMENT_TRANSLATION),
             "PlaybackSpeedHook" to fixedSpeedSymbols,
             "SpeedOptions" to speedMenuSymbols,
             "BackgroundAudioHook" to setOf(HostSymbol.BACKGROUND_AUDIO),

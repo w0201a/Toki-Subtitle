@@ -41,6 +41,9 @@ internal object OfflineCommentsDialog {
         var pageTimeout: Runnable? = null
         var loadingLocal = false
         var fetching = false
+        var archiveOffset=0
+        var archiveNext:Int?=null
+        var archiveState="missing"
         lateinit var adapter: OfflineCommentListAdapter
         var translatingSnapshot: OfflineCommentData.Snapshot? = null
         fun valid(): Boolean = !closed.get() && !activity.isFinishing && !activity.isDestroyed && current() &&
@@ -55,7 +58,7 @@ internal object OfflineCommentsDialog {
             online.isEnabled = !closed.get() && !fetching && !loadingLocal
             nextPage.isEnabled = online.isEnabled && snapshot?.hasMore == true &&
                 snapshot.nextCursor?.let { it > 0 } == true && snapshot.rows.size < OfflineCommentData.MAX_ROWS
-            shown?.getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled = adapter.hasNext
+            shown?.getButton(AlertDialog.BUTTON_POSITIVE)?.isEnabled = adapter.hasNext || archiveNext!=null
         }
         fun renderSummary() {
             val snapshot = adapter.snapshot
@@ -66,6 +69,8 @@ internal object OfflineCommentsDialog {
                     (if (snapshot.hasMore || snapshot.truncated) "\n" + context.getString(R.string.offline_comments_partial) else "") +
                     (if (snapshot.retainedOlder) "\n" + context.getString(R.string.comment_page_retained_older) else "")
                 if (snapshot.rows.isEmpty()) status.text = context.getString(R.string.offline_comments_empty) + "\n" + status.text
+                if(archiveState!="missing")status.append("\n"+context.getString(
+                    if(archiveState=="complete")R.string.offline_comment_cache_complete else R.string.offline_comment_cache_incomplete))
             }
             refreshButtons()
         }
@@ -77,10 +82,15 @@ internal object OfflineCommentsDialog {
                 val snapshot = translatingSnapshot
                 if (snapshot != null && valid()) {
                     val token = generation.get()
-                    CommentTranslationStore.save(app, snapshot, row, target, text) { saved -> main.post {
-                        if (!closed.get() && generation.get() == token && valid() && adapter.snapshot === snapshot)
-                            adapter.saved(row, target, text, saved)
-                    } }
+                    worker.execute {
+                        val result=try{
+                            if(!valid()||generation.get()!=token)throw IllegalStateException("Cancelled")
+                            OfflineCommentArchive.updateTranslation(app,snapshot,row,target,text)
+                            CommentTranslationStore.Saved.COMMITTED
+                        }catch(_:Exception){CommentTranslationStore.Saved.UNAVAILABLE}
+                        main.post { if(!closed.get()&&generation.get()==token&&valid()&&adapter.snapshot===snapshot)
+                            adapter.saved(row,target,text,result) }
+                    }
                 }
             })
         fun requestTranslation(snapshot: OfflineCommentData.Snapshot, row: OfflineCommentData.Row) {
@@ -140,7 +150,8 @@ internal object OfflineCommentsDialog {
                         val account = reader.account(app)
                         var savedReadFailed = false
                         val saved = try { CommentSnapshotStore.read(app, account, video) } catch (_: Exception) { savedReadFailed = true; null }
-                        val native = try { reader.read(app, video) { !closed.get() && generation.get() == token } }
+                        val archived=OfflineCommentArchive.window(app,account,video,archiveOffset)
+                        val native = archived?.snapshot ?: try { reader.read(app, video) { !closed.get() && generation.get() == token } }
                             catch (error: Exception) {
                                 if (saved == null) {
                                     if (savedReadFailed) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
@@ -148,19 +159,23 @@ internal object OfflineCommentsDialog {
                                 } else null
                             }
                         val snapshot = when {
+                            archived != null -> archived.snapshot
                             saved == null -> checkNotNull(native)
                             native == null || saved.capturedAt >= native.capturedAt -> CommentPageMerge.cached(saved, native)
                             else -> CommentPageMerge.cached(native, saved)
                         }
                         val readable = if (savedReadFailed) snapshot.copy(truncated = true) else snapshot
-                        val restored = try { CommentTranslationStore.restore(app, readable, preferredTarget) } catch (_: Exception) { readable }
-                        Result.success(restored)
-                    } catch (error: Exception) { Result.failure<OfflineCommentData.Snapshot>(error) }
-                      catch (error: LinkageError) { Result.failure<OfflineCommentData.Snapshot>(error) }
+                        if(archived==null)try{OfflineCommentArchive.save(app,readable,0L)}catch(_:Exception){}
+                        val restored = if(archived!=null)readable else try { CommentTranslationStore.restore(app, readable, preferredTarget) } catch (_: Exception) { readable }
+                        Result.success(Triple(restored,archived?.next,OfflineCommentArchive.state(app,account,video)))
+                    } catch (error: Exception) { Result.failure<Triple<OfflineCommentData.Snapshot,Int?,String>>(error) }
+                      catch (error: LinkageError) { Result.failure<Triple<OfflineCommentData.Snapshot,Int?,String>>(error) }
                     main.post {
                         if (closed.get() || generation.get() != token || !current()) return@post
                         loadingLocal = false
-                        val value = result.getOrNull()
+                        val value = result.getOrNull()?.first
+                        archiveNext=result.getOrNull()?.second
+                        archiveState=result.getOrNull()?.third?:"missing"
                         if (value != null && reader.accountMatches(value.account)) adapter.submit(value) else {
                             adapter.submit(null)
                             val reason = (result.exceptionOrNull() as? OfflineCommentData.Unavailable)?.reason
@@ -217,9 +232,10 @@ internal object OfflineCommentsDialog {
                                     val merged = if (replyRoot == null) CommentPageMerge.merge(old, page, cursor)
                                         else CommentReplyMerge.merge(checkNotNull(old), replyRoot, page, cursor)
                                     check(op.active && reader.accountMatches(account))
-                                    val saved = CommentSnapshotStore.save(app, merged) {
-                                        op.active && !closed.get() && generation.get() == token && reader.accountMatches(account)
+                                    OfflineCommentArchive.save(app,page,cursor,replyRoot.orEmpty()) {
+                                        op.active&&!closed.get()&&generation.get()==token&&reader.accountMatches(account)
                                     }
+                                    val saved=CommentSnapshotStore.Saved.COMMITTED
                                     val restored = try { CommentTranslationStore.restore(app, merged, preferredTarget) } catch (_: Exception) { merged }
                                     Result.success(restored to saved)
                                 } catch (error: Exception) { Result.failure<Pair<OfflineCommentData.Snapshot, CommentSnapshotStore.Saved>>(error) }
@@ -275,8 +291,10 @@ internal object OfflineCommentsDialog {
         dialog.setOnDismissListener { release(); dismissed(dialog) }
         try {
             dialog.show(); refreshButtons()
-            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener { adapter.append() }
-            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener { load() }
+            dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                if(adapter.hasNext)adapter.append() else archiveNext?.let{archiveOffset=it;load()}
+            }
+            dialog.getButton(AlertDialog.BUTTON_NEUTRAL).setOnClickListener { archiveOffset=0;load() }
             online.setOnClickListener { requestPage(0L) }
             nextPage.setOnClickListener { adapter.snapshot?.nextCursor?.let { requestPage(it) } }
             main.post(checkAccount); load()

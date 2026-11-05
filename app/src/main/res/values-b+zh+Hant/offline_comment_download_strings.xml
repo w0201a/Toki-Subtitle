@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="offline_comment_download_title">下載時快取評論原文與譯文</string>
+    <string name="offline_comment_download_hint">離線影片下載完成時，連線取得評論分頁、回覆並提前翻譯。此開關另行授權背景評論／翻譯連線，即使播放設為僅本機；斷線只讀既有原文譯文。依影片持久保留、不按LRU淘汰，失敗不標完成。字幕尚未接入。 儲存在宿主私有離線伴隨目錄，僅隨手動清空全部離線影片清理；解除安裝或清除應用程式資料仍可能刪除。</string>
+    <string name="offline_comment_backfill_title">主動補齊已下載影片</string>
+    <string name="offline_comment_backfill_hint">連線時掃描既有離線影片，補齊缺少評論與譯文；需開啟下載時快取。</string>
+    <string name="offline_comment_passive_title">開啟舊離線影片時補齊</string>
+    <string name="offline_comment_passive_hint">僅針對舊下載：連線開啟時補齊缺少評論／譯文。新下載一律從下載完成回呼處理。</string>
+    <string name="offline_comment_cache_complete">評論原文與譯文已快取，可離線讀取。</string>
+    <string name="offline_comment_cache_incomplete">評論／譯文尚未快取完整，缺少譯文需連線補齊；既有原文仍可離線讀取。</string>
+</resources>
