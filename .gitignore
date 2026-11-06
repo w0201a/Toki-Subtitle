@@ -24,6 +24,7 @@ signing.properties
 
 # Local analysis, device captures and design experiments
 /work/
+/app/work/
 /.codex/
 /scratch_*
 /preview_logos.html
@@ -55,3 +56,6 @@ signing.properties
 
 # Curated Chinese status at a glance, requested by the user.
 !/docs/FEATURE_STATUS_ZH.md
+
+# Curated no-root report findings; raw reports and phone evidence remain private.
+!/docs/NO_ROOT_DIAGNOSTIC_ZH.md

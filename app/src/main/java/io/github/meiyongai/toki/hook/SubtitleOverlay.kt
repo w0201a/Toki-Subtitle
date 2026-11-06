@@ -21,6 +21,9 @@ import java.util.WeakHashMap
 internal class SubtitleOverlay(private val source: View,
     private val translator: NativeSubtitleTranslator? = null,
     private val timelineSource: Boolean = false,
+    private val singleOwner: Boolean = false,
+    private val nativeSources: () -> List<View> = { emptyList() },
+    private val authoritativeGap: () -> Boolean = { false },
     private val configuration: () -> ConfigSnapshot? = { if (ConfigClient.isReady) ConfigClient.snapshot() else null }
 ) : AutoCloseable,
     View.OnAttachStateChangeListener, ViewTreeObserver.OnPreDrawListener {
@@ -58,9 +61,9 @@ internal class SubtitleOverlay(private val source: View,
     private val sourceRect = Rect()
     private val sourceLocation = IntArray(2)
     private val overlayLocation = IntArray(2)
+    private val viewportLocation = IntArray(2)
     private var draggedPosition: Pair<Float, Float>? = null
     private var savedRevision = -1L
-    private var lastBaseY: Float? = null
     var frameRevision = 0L
         private set
     init {
@@ -83,7 +86,7 @@ internal class SubtitleOverlay(private val source: View,
         }
         framePlaybackRevision = playback
         if (!timelineSource) translator?.noteNativeFrame(video,
-            displayState == "EXPANDED" && text.isNotBlank())
+            displayState == "EXPANDED" && text.isNotBlank(), text)
         state = displayState
         caption = text
         videoId = video
@@ -134,7 +137,7 @@ internal class SubtitleOverlay(private val source: View,
         val styled = settings.boolean("subtitle_style_enabled") && !nativeAppearance
         if (!styled) draggedPosition = null
         // A stale native renderer cannot keep a verified progressing timeline behind its old label.
-        if (!timelineSource && translator?.hasNativeFrame(videoId) == false && framePlaybackRevision == translator.playbackRevision && timelineBindings.keys.any { binding ->
+        if (!singleOwner && !timelineSource && translator?.hasNativeFrame(videoId) == false && framePlaybackRevision == translator.playbackRevision && timelineBindings.keys.any { binding ->
                 binding.videoId == videoId && binding.framePlaybackRevision == framePlaybackRevision &&
                     (binding.translator == null || binding.framePlaybackRevision == binding.translator.playbackRevision) &&
                     binding.layer?.visibility == View.VISIBLE && binding.layerHost != null && binding.frameVisible() &&
@@ -145,9 +148,9 @@ internal class SubtitleOverlay(private val source: View,
         }
         // A new takeover must come from a recent progress-driven timeline update. A mounted,
         // still-current cue can remain while paused, but an old unmounted cue must not reappear.
-        if (timelineSource && translator != null && layer == null &&
+        if (!singleOwner && timelineSource && translator != null && layer == null &&
             android.os.SystemClock.uptimeMillis() - frameUpdatedAt >= 1500) return
-        if (nativeMode && (!timelineSource || translator == null || translator.hasNativeFrame(videoId))) {
+        if (!singleOwner && nativeMode && (!timelineSource || translator == null || translator.hasNativeFrame(videoId))) {
             resetTranslation()
             unmount()
             diagnostic("state=$state chars=${caption.length} native=true")
@@ -162,7 +165,7 @@ internal class SubtitleOverlay(private val source: View,
         val sourceVisible = page != null
         // A rendered caption and a playback-timeline fallback share the same video.
         // Native-frame bindings own presentation as soon as they can show that cue.
-        if (timelineSource && nativeBindings.keys.any { binding ->
+        if (!singleOwner && timelineSource && nativeBindings.keys.any { binding ->
                 binding.videoId == videoId && binding.caption.isNotBlank() && binding.frameVisible() &&
                     (binding.translator == null || binding.translator.hasNativeFrame(videoId)) &&
                     (binding.translator == null || binding.framePlaybackRevision == binding.translator.playbackRevision) &&
@@ -173,7 +176,12 @@ internal class SubtitleOverlay(private val source: View,
         if (!frameVisible() || caption.isBlank() || !sourceVisible) {
             resetTranslation()
             layer?.visibility = View.INVISIBLE
-            restoreSource()
+            if (singleOwner && authoritativeGap() && sourceVisible) {
+                // An authoritative timeline gap owns an empty replacement frame, not stale native text.
+                nativeSources().filter { it.isAttachedToWindow && it.rootView === source.rootView }.forEach { view ->
+                    hidden.getOrPut(view) { view.alpha }; view.alpha = 0f
+                }
+            } else restoreSource()
             diagnostic("state=$state chars=${caption.length} source=$sourceVisible overlay=false mode=${if (nativeMode) "native" else "custom"}")
             return
         }
@@ -294,14 +302,17 @@ internal class SubtitleOverlay(private val source: View,
             appearanceBackground = background
         }
         val margin = (12 * text.resources.displayMetrics.density).toInt()
-        text.measure(View.MeasureSpec.makeMeasureSpec((overlay.width - margin * 2).coerceAtLeast(1), View.MeasureSpec.AT_MOST),
-            View.MeasureSpec.makeMeasureSpec((overlay.height - margin * 2).coerceAtLeast(1), View.MeasureSpec.AT_MOST))
-        source.getLocationOnScreen(sourceLocation)
+        val viewport = placementViewport()
+        text.measure(View.MeasureSpec.makeMeasureSpec((viewport.width - margin * 2).coerceAtLeast(1), View.MeasureSpec.AT_MOST),
+            View.MeasureSpec.makeMeasureSpec((viewport.height - margin * 2).coerceAtLeast(1), View.MeasureSpec.AT_MOST))
+        viewport.getLocationOnScreen(viewportLocation)
         overlay.getLocationOnScreen(overlayLocation)
-        val baseY = baseline(text.measuredHeight)
-        val position = SubtitlePlacement.place(overlay.width, overlay.height, text.measuredWidth, text.measuredHeight,
-            baseY, if (styled) draggedPosition?.first ?: settings.string("subtitle_x", "0")!!.toFloat() else 0f,
+        val viewportPosition = SubtitlePlacement.place(viewport.width, viewport.height, text.measuredWidth, text.measuredHeight,
+            viewport.height * .78f - text.measuredHeight,
+            if (styled) draggedPosition?.first ?: settings.string("subtitle_x", "0")!!.toFloat() else 0f,
             if (styled) draggedPosition?.second ?: settings.string("subtitle_y", "0")!!.toFloat() else 0f, margin)
+        val position = (viewportPosition.first + viewportLocation[0] - overlayLocation[0]) to
+            (viewportPosition.second + viewportLocation[1] - overlayLocation[1])
         text.layout(position.first, position.second, position.first + text.measuredWidth, position.second + text.measuredHeight)
         // 保留原视图测量和宿主状态；仅当独立层已可显示时隐藏重复绘制，关闭/离开即恢复。
         // 隐藏整个原字幕渲染容器，包含原背景；isShown 与布局保持不变。
@@ -309,9 +320,14 @@ internal class SubtitleOverlay(private val source: View,
             hidden.getOrPut(source) { source.alpha }
             if (source.alpha != 0f) source.alpha = 0f
         }
-        if (timelineSource && translator?.hasNativeFrame(videoId) == false) {
+        if (!singleOwner && timelineSource && translator?.hasNativeFrame(videoId) == false) {
             nativeBindings.keys.filter { it.videoId == videoId && it.framePlaybackRevision == framePlaybackRevision &&
                 it.visiblePage() != null }.forEach { it.yieldToTimeline() }
+        }
+        if (singleOwner) {
+            val eligible = nativeSources().filter { it.isAttachedToWindow && it.rootView === source.rootView }
+            hidden.keys.toList().filter { it !in eligible }.forEach { view -> hidden.remove(view)?.let { view.alpha = it } }
+            eligible.forEach { view -> hidden.getOrPut(view) { view.alpha }; view.alpha = 0f }
         }
         diagnostic("state=$state chars=${caption.length} source=true overlay=true sizePx=${text.textSize}" +
             " bounds=${position.first},${position.second},${text.measuredWidth},${text.measuredHeight} page=${overlay.width}x${overlay.height}")
@@ -339,7 +355,7 @@ internal class SubtitleOverlay(private val source: View,
     }
 
     private fun nativeTextView(): TextView? {
-        val pending = ArrayDeque<View>().apply { add(source) }
+        val pending = ArrayDeque<View>().apply { if (singleOwner) addAll(nativeSources()) else add(source) }
         val matches = mutableListOf<TextView>()
         var inspected = 0
         while (pending.isNotEmpty() && inspected++ < 32) {
@@ -376,11 +392,16 @@ internal class SubtitleOverlay(private val source: View,
         return null
     }
 
+    private fun placementViewport(): View = source.rootView.findViewById<View>(android.R.id.content)
+        ?.takeIf { it.width > 0 && it.height > 0 } ?: source.rootView
+
     private fun baseline(textHeight: Int): Float {
-        if (!timelineSource && source.isShown && source.height > 0) {
-            lastBaseY = (sourceLocation[1] - overlayLocation[1] + source.height).toFloat()
-        }
-        return (lastBaseY ?: ((layerHost?.height ?: 0) * .78f)) - textHeight
+        val viewport = placementViewport()
+        viewport.getLocationOnScreen(viewportLocation)
+        (layerHost ?: source).getLocationOnScreen(overlayLocation)
+        // Both native-caption and timeline sources use the same window CONTENT rectangle.
+        // Their mounting hosts may be different sizes; no overlay is moved to the window root.
+        return viewportLocation[1] - overlayLocation[1] + viewport.height * .78f - textHeight
     }
 
     private fun diagnostic(value: String) {
@@ -420,8 +441,9 @@ internal class SubtitleOverlay(private val source: View,
         if (host.width <= 0 || host.height <= 0) return null
         val lockX = settings.boolean("subtitle_lock_x")
         val lockY = settings.boolean("subtitle_lock_y")
-        val requested = ((origin.first + (if (lockX) 0f else dx) * 100f / host.width).coerceIn(-1000f, 1000f) to
-            (origin.second + (if (lockY) 0f else dy) * 100f / host.height).coerceIn(-1000f, 1000f))
+        val viewport = placementViewport()
+        val requested = ((origin.first + (if (lockX) 0f else dx) * 100f / viewport.width).coerceIn(-1000f, 1000f) to
+            (origin.second + (if (lockY) 0f else dy) * 100f / viewport.height).coerceIn(-1000f, 1000f))
         savedRevision = configuration()?.revision ?: -1L
         draggedPosition = requested
         render()
@@ -429,8 +451,8 @@ internal class SubtitleOverlay(private val source: View,
         source.getLocationOnScreen(sourceLocation)
         host.getLocationOnScreen(overlayLocation)
         val baseY = baseline(text.measuredHeight)
-        return ((if (lockX) origin.first else (text.left - (host.width - text.width) / 2f) * 100f / host.width) to
-            (if (lockY) origin.second else (text.top - baseY) * 100f / host.height)).also { draggedPosition = it }
+        return ((if (lockX) origin.first else (text.left - (viewport.width - text.width) / 2f - viewportLocation[0] + overlayLocation[0]) * 100f / viewport.width) to
+            (if (lockY) origin.second else (text.top - baseY) * 100f / viewport.height)).also { draggedPosition = it }
     }
 
     fun discardDrag() { draggedPosition = null; source.postInvalidateOnAnimation() }

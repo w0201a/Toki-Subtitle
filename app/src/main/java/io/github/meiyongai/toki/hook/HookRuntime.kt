@@ -88,7 +88,7 @@ internal object HookRuntime {
         state("HostSymbols", if (failed.isEmpty()) "适配结果已应用" else "部分适配")
         for ((parent, children) in mapOf(
             "VideoTranslateHook" to listOf("TranslationReverseGate", "CaptionConsumerGate", "CaptionFallback", "CaptionOriginalVisibility", "SubtitleLanguage", "SubtitleExcludedLanguages", "SubtitleFeature", "SubtitleRendererBinding", "SubtitleCleanFrames", "SubtitleFeedPrefetch", "SubtitleMenu", "DescriptionNativeTranslation", "DescriptionTranslation", "CaptionMenuGate"),
-            "CommentTranslateHook" to listOf("CommentTranslationGate", "CommentPollTranslation"),
+            "CommentTranslateHook" to listOf("CommentTranslationGate", "CommentRequestTranslation", "CommentResponseTranslation", "CommentPollTranslation"),
             "DownloadHook" to listOf("DownloadSource"),
             "SharePanelCleanupHook" to listOf("SharePanelRecipients"),
             "AutoScrollHook" to listOf("AutoScrollBehavior"),
@@ -116,13 +116,14 @@ internal object HookRuntime {
         val installStarted = SystemClock.elapsedRealtime()
         event("TokiHookRuntime", "开始注册 feature=$feature")
         val scope = synchronized(this) {
-            scope(feature).also {
-                check(it.active) { "本次会话已撤销功能 $feature，不能重新安装" }
+            // Repeated package/configuration callbacks must remain fail-closed, not crash the host.
+            // Retain the original error and never execute an installer for a revoked scope.
+            scope(feature).takeIf { it.active }?.also {
                 it.begin()
                 entry(feature).putBoolean("registrationCommitted", false)
                 state(feature, "注册中")
             }
-        }
+        } ?: return
         try {
             install()
             synchronized(this) {

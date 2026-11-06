@@ -118,11 +118,12 @@ internal object CaptionFallbackHook {
             val wasEnabled = original?.let { contract.enabled.getBoolean(it) } ?: false
             NativeSubtitleTranslator.noteTrack(aidText(contract, aweme), tracksOf(contract, model)
                 .firstOrNull { contract.itemSubId.getInt(it) == chosen }?.let { contract.itemCode.get(it) as? String })
-            CaptionPrefetch.note(aidText(contract, aweme), tracksOf(contract, model)
-                .firstOrNull { contract.itemSubId.getInt(it) == chosen }?.let {
-                    (contract.itemUrl.get(it) as? String)?.takeIf(String::isNotBlank)
-                        ?: (contract.itemUrls.get(it) as? List<*>)?.filterIsInstance<String>()?.firstOrNull(String::isNotBlank)
-                })
+            val selectedLocation=tracksOf(contract, model).firstOrNull { contract.itemSubId.getInt(it) == chosen }?.let {
+                (contract.itemUrl.get(it) as? String)?.takeIf(String::isNotBlank)
+                    ?: (contract.itemUrls.get(it) as? List<*>)?.filterIsInstance<String>()?.firstOrNull(String::isNotBlank)
+            }
+            // A transient/offline model without URL is not evidence to discard an already persisted valid track.
+            if(!selectedLocation.isNullOrBlank())CaptionPrefetch.note(aidText(contract, aweme),selectedLocation)
             explainOnce(contract, aweme, reported, "${method.declaringClass.simpleName}.${method.name}",
                 "chosen=$chosen active=$active enabled=$wasEnabled skipLoading=$wasSkipped load=$load", model)
             if (!active || model == null || (chosen == reported && (!load || (!wasSkipped && wasEnabled)))) original

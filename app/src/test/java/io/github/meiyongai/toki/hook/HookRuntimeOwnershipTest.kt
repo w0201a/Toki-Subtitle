@@ -17,7 +17,7 @@ import org.robolectric.annotation.Config
 
 /** 安装回滚拥有 Hook 句柄及订阅，按逆序全部释放，错误保留原始来源。 */
 @RunWith(RobolectricTestRunner::class)
-@Config(manifest = Config.NONE, sdk = [35])
+@Config(manifest = Config.NONE, sdk = [29, 35])
 class HookRuntimeOwnershipTest {
     @Before fun initializeDiagnostics() {
         HookRuntime.start("ownership-tests") { _, _ -> }
@@ -154,7 +154,7 @@ class HookRuntimeOwnershipTest {
         assertEquals(2, resourceClosed)
         assertEquals(1, hookClosed)
         assertFalse(HookRuntime.scope(feature).active)
-        assertThrows(IllegalStateException::class.java) { HookRuntime.install(feature) { fail("cannot reinstall") } }
+        repeat(3) { HookRuntime.install(feature) { fail("revoked installer must never run again") } }
         @Suppress("UNCHECKED_CAST")
         val resources = HookRuntime::class.java.getDeclaredField("resources").apply { isAccessible = true }
             .get(null) as Map<String, *>
@@ -208,4 +208,20 @@ class HookRuntimeOwnershipTest {
         assertEquals(0, businessCalls.get())
         assertFalse(HookRuntime.scope(feature).active)
     }
+    @Test fun reportedNoRootTemplateFailureReplayCannotAbortUnrelatedStartupRegistration() {
+        val feature = "no-root-template-replay"
+        var attempts = 0
+        HookRuntime.install(feature) { attempts++;throw NoSuchMethodException("unsupported host template method") }
+        repeat(5) { HookRuntime.install(feature) { attempts++;fail("failed feature was retried") } }
+        assertEquals(1, attempts)
+        assertFalse(HookRuntime.scope(feature).active)
+        assertFalse(HookRuntime.scope(feature).committed)
+        val snapshot = HookRuntime::class.java.getDeclaredMethod("snapshot").apply { isAccessible = true }.invoke(HookRuntime) as android.os.Bundle
+        val receipt = snapshot.getBundle("features")!!.getBundle(feature)!!
+        assertEquals("注册失败，已撤销", receipt.getString("state"))
+        var unrelatedInstalled = false
+        HookRuntime.install("no-root-independent-startup") { unrelatedInstalled = true }
+        assertTrue(unrelatedInstalled)
+    }
+
 }

@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 121' in gradle and 'versionName = "2.1.1"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.1-debug / 121")
+check('versionCode = 136' in gradle and 'versionName = "2.1.16"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.16-debug / 136")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -322,15 +322,15 @@ page_merge = (JAVA / 'hook/CommentPageMerge.kt').read_text(encoding='utf-8')
 snapshot_codec = (JAVA / 'hook/CommentSnapshotCodec.kt').read_text(encoding='utf-8')
 snapshot_store = (JAVA / 'hook/CommentSnapshotStore.kt').read_text(encoding='utf-8')
 check('HostCommentPageNetwork(loader)' in offline_hook and 'commentNetwork, commentReplies, video.model' in offline_hook, 'offline comment viewer receives the current native video model and explicit page request adapter')
-check('CommentPageCodeGate.verify(context)' in page_network and 'LJJZZI' in page_network and 'OFFLINE_COMMENT' in page_network and 'contract.request.invoke(null, video, cursor, 20' in page_network, 'comment page adapter uses inspected native request and Rx contracts for one 20-item page')
+check('CommentPageCodeGate.verify(context)' in page_network and 'LJJZZI' in page_network and 'DEFAULT' in page_network and 'contract.request.invoke(null, video, cursor, 20' in page_network, 'comment page adapter uses inspected native request and Rx contracts for one 20-item page')
 check(not any(token in page_network for token in ('OfflineCommentLifecycleListener', 'X.0FTg', 'openConnection(', '.remove(', '.clear(', '.delete(')), 'comment page adapter does not invoke the native predownload/cache-clear manager or construct its own HTTP requests')
 check('remote.permitsNetwork()' in page_network and 'reader.accountMatches(account)' in page_network and 'contract.id.invoke(model) == video' in page_network and 'once.compareAndSet(false, true)' in page_network, 'page dispatch and response acceptance check explicit-network eligibility, identity and duplicate callbacks')
-check('online.setOnClickListener { requestPage(0L) }' in comment_dialog and 'nextPage.setOnClickListener' in comment_dialog and 'main.postDelayed(it, 15000)' in comment_dialog, 'online first/next page buttons and 15-second timeout are wired')
-check('CommentPageMerge.merge(old, page, cursor)' in comment_dialog and 'OfflineCommentArchive.save(app,page,cursor,replyRoot.orEmpty())' in comment_dialog and 'CommentSnapshotStore.read(app, account, video)' in comment_dialog, 'received pages merge and persist privately and local reload restores them')
+check('online.setOnClickListener' in comment_dialog and 'onlineContinuation = true' in comment_dialog and 'nextPage.setOnClickListener' in comment_dialog and 'main.postDelayed(it, 15000)' in comment_dialog, 'explicit online continuous loading and translation actions retain a 15-second request timeout')
+check('CommentPageMerge.merge(old, page, cursor)' in comment_dialog and 'OfflineCommentArchive.save(app,page.copy(rows = page.rows.filter { it.id in admitted }),cursor,replyRoot.orEmpty(), verifiedReplyTotals = true)' in comment_dialog and 'CommentSnapshotStore.read(app, account, video)' in comment_dialog, 'received pages merge and persist privately and local reload restores them')
 check('if (!active()) Saved.CANCELLED' in snapshot_store and snapshot_store.index('if (!active()) Saved.CANCELLED') < snapshot_store.index('.commit()'), 'snapshot persistence checks cancellation immediately before committing')
 check('old.nextCursor == requestedCursor' in page_merge and 'page.nextCursor > requestedCursor' in page_merge and 'old.account == page.account && old.video == page.video' in page_merge, 'page merges reject wrong account/video and non-progressing or mismatched cursors')
 check('previous.forEach { values.putIfAbsent(it.id, it) }' in page_merge and 'Comment snapshot capacity reached' in page_merge and 'comment_page_retained_older' in comment_dialog, 'refresh preserves earlier cached rows, reports older unverified rows and refuses overflow instead of evicting')
-check('parentId' in comment_data and 'append(replies, depth + 1, id)' in comment_reader and 'children[row.id]' in page_merge and 'comment_page_reply_to' in comment_adapter, 'reply parent identity is preserved through copying, page ordering and row display')
+check('parentId' in comment_data and 'append(replies, depth + 1, id)' in comment_reader and 'children[row.id]' in page_merge and 'toki_reply_to' in comment_adapter, 'reply parent identity is preserved through copying, page ordering and row display')
 check('MAX_BYTES = 4 * 1024 * 1024' in snapshot_codec and 'input.available() == 0' in snapshot_codec and 'seen.add(id)' in snapshot_codec and 'value.toByteArray(Charsets.UTF_8).contentEquals(raw)' in snapshot_codec, 'private snapshot codec is bounded/versioned and rejects trailing bytes, duplicate rows and malformed UTF-8')
 check('all.size >= 100' in snapshot_store and 'characters > 12 * 1024 * 1024' in snapshot_store and '.remove(' not in snapshot_store and '.clear(' not in snapshot_store, 'snapshot store reports capacity without deleting existing account/video archives')
 check('cancelPage()' in comment_dialog and 'pageOperation !== op' in comment_dialog and 'generation.get() != token' in comment_dialog and 'configSubscription.close()' in comment_dialog, 'page completions and listeners have owner/generation/configuration cancellation boundaries')
@@ -687,7 +687,7 @@ check('if (state.blocked) return Decision(true)' in live_gestures and 'if (!enab
 check('TemplateAnchorPolicy.element(code)' in template_contract and 'binding.element == value.element' in template_roots and 'rules.forEach { (element, rule)' in template_roots, 'independent anchor controls validate the current business category as well as root/model/video identity before applying their own visibility owner')
 check('element.aggregate?.let' in (JAVA / 'hook/LayoutCleanupPolicy.kt').read_text(encoding='utf-8') and 'layout_individual_component_hint' in (JAVA / 'ui/screen/LayoutCleanupSection.kt').read_text(encoding='utf-8'), 'individual component controls retain legacy aggregate behavior and explain aggregate precedence in settings')
 check('providerDisplayAnchor' in template_contract and 'providerAweme' in template_contract and '"getType"' in template_contract and 'in allowed' in template_contract, 'template cleanup reads the selected business anchor and current video context instead of inferring type from schema class names')
-check('inspectedAnchorCodes' in template_contract and 'check(it == inspectedAnchorCodes.getValue(name))' in template_contract and '"CAPCUT" to' not in template_contract and '"DONATION_STICKER" to' not in template_contract, 'only inspected symbolic template/effect codes are accepted, with generic CapCut/donation entries left native')
+check('inspectedAnchorCodes' in template_contract and 'check(it == inspectedAnchorCodes.getValue(name))' in template_contract and '"CAPCUT" to 54' in template_contract and '"DONATION_STICKER" to' not in template_contract, 'only inspected symbolic template/effect codes plus the user-reported CapCut category are accepted, with donation entries left native')
 check('method(type, "rootView", View::class.java)' in template_contract and '"LLJJLIIIJLLLLLLLZ"' in template_contract and 'TemplateRootBindings.Snapshot(view, selected, item' in template_contract, 'standard renderer root ownership is tied to the actual selected anchor/provider rather than the whole multi-tag area')
 check('"LLJLL"' in template_contract and 'cursor !== view' in template_contract and 'depth++ < 32' in template_contract and '"onDestroyView"' in template_contract, 'specific template-button binding requires its child inside its own content root and explicit release callbacks')
 check('WeakReference(source.identity)' in template_roots and 'WeakReference(source.context)' in template_roots and 'binding.identity.get() === value.identity' in template_roots and 'binding.context.get() === value.context' in template_roots, 'root refresh validates exact anchor/video identity so recycled contexts cannot inherit prior hiding')
@@ -942,7 +942,7 @@ check('X.0rF7' in download_comments and 'completion' in download_comments and 'f
 check('NativeSubtitleTranslator.transport(loader, ::capture)' in download_comments and 'NET_CAPABILITY_VALIDATED' in download_comments and 'reader.accountMatches(job.getString("account"))' in download_comments, 'separate opt-in download cache uses authenticated account and network checks independently from playback revision')
 check('noBackupFilesDir' in durable_comments and 'AtomicFile' in durable_comments and 'MAX_RECORDS' not in durable_comments and 'all.size >= 100' not in durable_comments, 'durable comment companions are per-video atomic files without legacy global record eviction')
 check('CLICK_CLEAR_ICON' in download_comments and 'clearAccountAfterManualClear' in download_comments and 'epoch:' in download_comments, 'only the inspected manual clear-all event schedules account-bound cleanup and cancels stale writers')
-check('OfflineCommentArchive.display' in comment_dialog and 'OfflineCommentPreferences.limit' in comment_dialog, 'offline viewer renders a bounded local comment tree past the legacy single snapshot cap')
+check('OfflineCommentArchive.scoped' in comment_dialog and 'OfflineCommentPreferences.limit' in comment_dialog, 'offline viewer renders a bounded local comment tree past the legacy single snapshot cap')
 native_offline = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineNativeHoldContract.kt')
 offline_hold = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineVideoHook.kt')
 check('OfflineNativeHoldContract.verify' in offline_hold and 'fresh.id != target.id' in offline_hold and '!fresh.offline' in offline_hold, 'offline native hold requires matched code and re-read selected offline identity before consumption')
@@ -1005,9 +1005,14 @@ rich_hold = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineHoldArb
 rich_speed_gate = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineSpeedGestureCodeGate.kt')
 current_build = read('app/build.gradle.kts')
 version = re.search(r'versionName = "(\d+)\.(\d+)\.(\d+)"', current_build)
-check(version is not None and int(version[3]) < 100 and 'versionCode = 121' in current_build, 'version rolls the patch component at base 100 while Android versionCode stays monotonic')
+# Keep the approved 2.1.0 /120 release series; architectural changes do not promote its minor component.
+release_code = re.search(r'versionCode = (\d+)', current_build)
+release_ordinal = int(release_code[1]) - 120 if release_code else -1
+expected_release = (2, 1 + release_ordinal // 100, release_ordinal % 100)
+check(version is not None and release_ordinal >= 0 and tuple(map(int, version.groups())) == expected_release,
+    'release sequence follows 2.1.0 /120 at base 100; no early minor-version increment')
 check(all(k in rich_preferences for k in ('MAX_COMMENTS = 2500', 'REQUEST_PAGE_SIZE = 20', 'DEFAULT_MODE = "translated"', '1..125')), 'offline comment count and page shortcuts share the 2500-entry ceiling')
-check(all(k in rich_dialog for k in ('RadioGroup.HORIZONTAL', 'adapter.setMode(mode)', 'syncingMode', 'offline_comment_mode_bilingual')), 'three global comment modes persist and follow external settings without recursive writes')
+check(all(k in rich_dialog for k in ('sheet.modes', 'adapter.setMode(mode)', 'syncingMode', 'offline_comment_mode_bilingual')), 'three global comment modes persist and follow external settings without recursive writes')
 check('if (!valid() || adapter.snapshot?.account != snapshot.account' in rich_dialog, 'stale per-video limit dialogs cannot write after an account or playback change')
 check('No offline media source' in rich_media and 'noBackupFilesDir' in rich_media and 'sha256' in rich_media, 'media bytes stay in checked durable account/video companion storage')
 check('ImageDecoder.decodeBitmap' in rich_media and 'setOnPartialImageListener { false }' in rich_media and 'setTargetSize(1, 1)' in rich_media, 'media persistence validates decodable complete images with bounded decoding')
@@ -1015,7 +1020,7 @@ check('OfflineCommentMediaStore.bytes' in rich_views and 'CommentStickerDownload
 check('AnimatedImageDrawable' in rich_views and 'onViewDetachedFromWindow' in rich_views, 'animated cached stickers play with attachment-aware drawable cleanup')
 check(all(k in rich_reader for k in ('getImageList', 'getOriginUrl', 'getCropUrl', 'CommentStickerDownloadHook.Reader')), 'photo and sticker extraction uses inspected native data contracts')
 check('saveCached(' in sticker_hook and 'publish(' in sticker_hook, 'cached comment media shares the existing static and animated gallery publication path')
-check('admitted.size >= limit' in rich_budget and 'existing.forEach' in rich_budget and 'old.translation' in rich_budget, 'one shared original/reply admission budget preserves existing rows and exact-source translations')
+check('admitted.size >= limit' in rich_budget and 'existing.forEach' in rich_budget and 'old.translation' in rich_budget, 'legacy bounded page merge preserves existing rows and exact-source translations')
 check('putInt' in rich_override and 'clear(' not in rich_override and 'delete(' not in rich_override, 'per-video limit overrides never clear downloaded pages')
 check('fromPages(value)' in rich_limit and 'value !in 1..2500' in rich_limit and 'value !in 1..125' in rich_limit, 'count and page inputs validate their bounds before writing')
 check('fun display(' in durable_comments and 'window(context, account, video, 0, limit, limit)' in durable_comments and 'MAX_ROWS = 500' in read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineCommentData.kt'), '2500-row presentation aggregation leaves individual serialized page bounds intact')
@@ -1027,7 +1032,7 @@ check('mediaReady", true' in comment_jobs and 'sourceRevision") != sourceRevisio
 check('speedPress.owns' in offline_hook and 'module.deoptimize(speed.begin)' in offline_hook and 'module.deoptimize(speed.touch)' in offline_hook, 'native speed ownership is observed even through compiled call sites before the offline menu competes')
 check('WeakReference' in rich_hold and 'it.revision == revision' in rich_hold and 'classes6.dex' in rich_speed_gate, 'native speed arbitration is weak, playback-scoped and guarded by the inspected host DEX')
 translator_source = read('app/src/main/java/io/github/meiyongai/toki/hook/NativeSubtitleTranslator.kt')
-check('if (!visible) { nativeFrames.remove(video); return }' in translator_source and 'translator?.noteNativeFrame(id,' in subtitle_feature, 'hidden or empty native frames immediately release their timeline suppression lease')
+check('if (!visible) { nativeFrames.remove(video); nativeFrameTexts.remove(video); return }' in translator_source and 'translator?.noteNativeFrame(id,' in subtitle_feature, 'hidden or empty native frames immediately release their timeline suppression lease')
 check('translating() && translator.canPrefetch(id)' in subtitle_feature and 'timelineEnabled = ::captionEnabled' in translator_source, 'native typography can use the cached playback timeline without enabling custom translation requests')
 check('private val ends = LongArray' in read('app/src/main/java/io/github/meiyongai/toki/hook/CaptionTimeline.kt') and 'cueIndex.at(positionMs)' in read('app/src/main/java/io/github/meiyongai/toki/hook/CaptionPrefetch.kt'), 'indexed movie timelines retain longer active cues under expired overlapping cues without per-frame index rebuilding')
 rich_zh = dict(catalog(ROOT / 'app/src/main/res/values-b+zh+Hans/offline_comment_rich_strings.xml'))
@@ -1035,7 +1040,7 @@ rich_en = dict(catalog(ROOT / 'app/src/main/res/values/offline_comment_rich_stri
 check(rich_zh.keys() == rich_en.keys() and all(sorted(re.findall(r'%[1-9][0-9]*\$[sd]', rich_zh[k])) == sorted(re.findall(r'%[1-9][0-9]*\$[sd]', rich_en[k])) for k in rich_en), 'rich comment labels retain matching Chinese and default keys and placeholders')
 
 check('if (!timelineSource) translator?.noteNativeFrame(video,' in overlay and overlay.index('if (!timelineSource) translator?.noteNativeFrame(video,') < overlay.index('state = displayState'), 'current native overlay frames renew ownership before rendering or replay handoff')
-ownership = overlay[overlay.index('if (timelineSource && nativeBindings.keys.any'):overlay.index('if (!frameVisible()')]
+ownership = overlay[overlay.index('if (!singleOwner && timelineSource && nativeBindings.keys.any'):overlay.index('if (!frameVisible()')]
 check('presentationEnabled' not in ownership and 'binding.frameVisible()' in ownership, 'visible native captions retain ownership even when custom translation presentation is disabled')
 
 # Unified Toki manager and injected UI. Appearance never writes feature settings on entry.
@@ -1056,7 +1061,7 @@ check('Theme_Toki_EmbeddedDialog' in ui_dialogs and 'Gravity.BOTTOM' in ui_dialo
 check('Theme_Toki_EmbeddedDialog' in read('app/src/main/java/io/github/meiyongai/toki/hook/ModuleResources.kt'), 'module-inflated custom dialog views resolve the same night-aware theme as their windows')
 check('TokiDialogs.segmented(modes)' in rich_dialog and 'button.buttonDrawable = null' in ui_dialogs and 'state_checked' in ui_dialogs, 'compact mode tabs preserve native exclusive radio selection and state descriptions')
 check('cell.more.setOnClickListener' in rich_adapter and 'tag = "comment-actions"' in rich_adapter and 'visibility = View.GONE' in rich_adapter, 'row translation controls remain in a compact explicit menu instead of three visible buttons per comment')
-check('toki_cached_counts' in rich_dialog and 'toki_platform_total' in rich_dialog and 'snapshot.rows.count' in rich_dialog, 'comment summaries distinguish cached top-level replies and media from platform totals')
+check('toki_cached_counts' in rich_dialog and 'toki_count_breakdown' in rich_dialog and 'snapshot.rows.count' in rich_dialog, 'comment summaries distinguish cached top-level replies and media from platform totals')
 check(ui_home.index('LSPosedStatusCard(lsposedStatus') < ui_home.index('PreferenceSection(title = strings.getString(R.string.toki_about_title))'), 'the standalone overview presents real activation and host status before version attribution and support')
 check('DropdownMenu(' in ui_host and 'ManualHostAdaptationDialog(' in ui_host and 'HostSettingsMirror.status.collectAsState()' in ui_host, 'compact injected header retains language manual adaptation diagnostics and real settings delivery status')
 for variant in ('values', 'values-night'):
@@ -1082,3 +1087,93 @@ check('finishOutput()' in log_process and 'synchronized(sinkLock)' in log_proces
 check('adapter.dismissMenus()' in rich_dialog and 'dismissMenus(); generation++' in rich_adapter, 'row action windows are dismissed when their parent list is replaced or closed')
 
 check('private fun SubtitleStylePreview' in read('app/src/main/java/io/github/meiyongai/toki/ui/screen/SubtitleSettings.kt') and 'if (help) AlertDialog' in read('app/src/main/java/io/github/meiyongai/toki/ui/screen/SubtitleSettings.kt'), 'subtitle overview shows the real saved-style preview and keeps detailed translation guidance in a readable disclosure')
+
+comment_sheet = read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineCommentsSheet.kt')
+check('OfflineCommentsSheet(context)' in rich_dialog and '.setPositiveButton(' not in rich_dialog, 'cached comments use a dedicated sheet instead of a framework three-button alert')
+check('View.GONE' in comment_sheet and 'cache-details' in comment_sheet and 'LinearLayout.LayoutParams(-1, 0, 1f)' in comment_sheet, 'cache details are collapsed and comments own the remaining bounded sheet area')
+check('continueStream = {' in rich_dialog and 'adapter.append()' in rich_dialog and 'sheet.reload.setOnClickListener' in rich_dialog and 'limitButton.setOnClickListener' in rich_dialog, 'continuous scroll reload and per-video limits retain their real callbacks')
+check('cell.mediaScroll.visibility' in rich_adapter and 'cell.replies.visibility' in rich_adapter, 'empty comment media and reply placeholders do not consume row height')
+check('viewport.height * .78f - textHeight' in (JAVA / 'hook/SubtitleOverlay.kt').read_text(encoding='utf-8') and 'lastBaseY' not in (JAVA / 'hook/SubtitleOverlay.kt').read_text(encoding='utf-8'), 'all composed subtitle bindings share a page anchor independent of host caption relayout')
+
+check('HostCaptionFile.read(app.filesDir, location)' in prefetch and prefetch.index('if (HostCaptionFile.isLocal(location))') < prefetch.index('CaptionTimelineDiskCache.read(identity)'), 'local realtime captions are read as bounded host files before the archived or HTTPS path')
+check('file.parentFile == allowed' in prefetch and 'MAX_BYTES = 1_048_576' in prefetch and 'check(current())' in prefetch, 'local caption reads enforce the canonical host directory, size and cancellation boundaries')
+check('nativeFrameTexts[video] == text' in translator_source and 'frameText.get(frame) as? String)' in subtitle_feature, 'duplicate native text cannot renew a stale frame suppression lease forever')
+check('installRequestPolicy(module, loader)' in read('app/src/main/java/io/github/meiyongai/toki/hook/CommentTranslateHook.kt') and 'CommentPageCodeGate.verify(app)' in read('app/src/main/java/io/github/meiyongai/toki/hook/CommentTranslateHook.kt'), 'native automatic comment request translation has its own exact-code guarded policy, not only a feature gate')
+check('OfflineCommentJobStore.repairSource(row' in download_comments and 'row.put("schema", 7)' in comment_jobs and 'refreshSource' in download_comments and '.name == "DEFAULT"' in page_network, 'existing offline jobs receive an additive fresh first-page repair through the normal server comment scene')
+check('!row.translation.isNullOrBlank() && CommentTranslationKey.normalizedTarget(row.language) == target' in read('app/src/main/java/io/github/meiyongai/toki/hook/CommentTranslationStore.kt'), 'older auxiliary preferences cannot replace a current matching-language archive translation')
+
+check('"CAPCUT" to 54' in template_contract and '54, 110 -> LayoutElement.ANCHOR_CAPCUT' in read('app/src/main/java/io/github/meiyongai/toki/hook/TemplateAnchorPolicy.kt'), 'explicit CapCut anchors 54 and 110 share the existing independent CapCut category')
+check('CCTemplateAreaAssem' in template_contract and 'findViewById(2131367119)' in template_contract and 'TemplateRootBindings.Snapshot(view, owner, owner, true, LayoutElement.ANCHOR_CAPCUT)' in template_contract, 'dedicated CapCut-area cleanup binds only its checked child, never its player container')
+check('standardComponent(load(name)' in template_contract and 'anchorKey.invoke(it) == componentKey' in template_contract and 'singleOrNull()' in template_contract and 'renderer.getDeclaredField("LJIIJ")' in template_contract, 'standardized component cleanup requires a unique anchor matching its renderer component key and current video instead of hiding shared class families')
+
+check('legacyCoordinator(load("X.0B4Q")' in template_contract and 'candidates?.singleOrNull()' in template_contract, 'legacy anchor rendering only hides a verified single business anchor and refuses shared multi-anchor areas')
+
+check('fun normalizeReplyPage' in durable_comments and 'normalizeReplyPage(read(replyPage), row.id)' in durable_comments, 'old and newly saved flat reply pages regain their real parent identity without deleting archives')
+check('tag = "comment-reply-relation"' in rich_adapter and 'drawLine(' in rich_adapter and 'R.string.toki_view_cached_replies' in rich_adapter, 'reply rows have explicit reply-to labels smaller avatars indentation and a thread rail')
+check('val choices = cell.buttons' in rich_adapter and 'button.isEnabled = true' in rich_adapter, 'all three row presentation choices remain visible even before translation is cached')
+check('prepareMedia(value.first)' in rich_dialog and 'OfflineCommentMediaStore.cache(app, account, video, asset)' in rich_dialog, 'explicit online additions prepare missing image and sticker bytes separately from local read-only preview')
+check('OfflineCommentLimitOverrides.configured(app, account, video)' in rich_dialog and 'toki_limit_overridden' in rich_dialog, 'reading and online continuation use the same actual per-video and inherited limit shown in the sheet')
+
+check('CommentResponseTranslationQueue<Row>' in read('app/src/main/java/io/github/meiyongai/toki/hook/CommentTranslateHook.kt') and 'val getItems = list.getMethod("getItems")' in read('app/src/main/java/io/github/meiyongai/toki/hook/CommentTranslateHook.kt'), 'automatic comment translation admits complete returned response lists and replies rather than only visible cells')
+check('sheet.feedback(message, busy)' in rich_dialog and 'tag = "cache-action-progress"' in comment_sheet and 'R.string.toki_action_stopped' in rich_dialog, 'comment actions publish visible busy results errors and explicit cancellation feedback')
+
+check('OfflineCommentStreamPlan.next(' in rich_dialog and 'nextPage.setOnClickListener { translationOnly = true' in rich_dialog, 'network continuation is an explicit bounded stream plan with independent reply cursors, not a visible next-page control')
+check('normalizeReplyPage(page, root)' in durable_comments and 'CommentSnapshotCodec.encode(durable)' in durable_comments, 'server reply roots are persisted and same-source rich metadata remains intact across reopen')
+
+check('data class Quotas' in rich_budget and 'fun mergeScoped' in rich_budget and 'val rootFull = quotas.rootCount' in read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineCommentStreamPlan.kt'), 'root comments and replies have independent counters with per-thread caps in reading and continuation')
+check('offline_comment_reply_limit' in schema and 'offline_comment_thread_reply_limit' in schema and 'fun replies(context: Context' in rich_limit, 'reply total and per-comment quotas are validated saved settings with visible editing controls')
+
+check('val reusable = previous?.owner == owner' in rich_views and 'tile.image.drawable == null && !tile.loading' in rich_views, 'unchanged comment media reuse attached tiles and drawables without repeated decode or animation restart')
+check('OfflineCommentArchive.observe' in rich_dialog and 'adapter.submit(read.snapshot, retain = true)' in rich_dialog and 'archiveSubscription.close()' in rich_dialog, 'open comment counts observe committed archive updates and keep scroll and reply expansion')
+check('storedRoots.size, storedReplies.size' in durable_comments and 'if (row.id in admitted) continue' in durable_comments and 'toki_count_breakdown' in rich_dialog, 'stored versus quota-filtered counts are explicit and duplicate reply pages do not consume unique reply quota')
+
+check('"getReplyCommentTotal", java.lang.Long.TYPE' in comment_reader and 'depth, replyTotal, shortened' in comment_reader, 'offline reply scheduling reads the actual native reply_comment_total rather than only the unrelated zero reply_count')
+check('replyTotalsVersion' in durable_comments and 'OfflineCommentArchive.replyTotalsVerified' in download_comments, 'old pages with unverified reply totals are refreshed through metadata repair without removing originals or media')
+check('placementViewport()' in overlay and 'android.R.id.content' in overlay and 'viewportLocation[1] - overlayLocation[1]' in overlay, 'native and timeline mounting hosts share a window-content coordinate space rather than each host height')
+
+# v3: prove the installed path, not just preserved legacy implementation text.
+v3_repo = read('app/src/main/java/io/github/meiyongai/toki/hook/CommentRepository.kt')
+v3_engine = read('app/src/main/java/io/github/meiyongai/toki/hook/CommentEngine.kt')
+v3_reader = read('app/src/main/java/io/github/meiyongai/toki/hook/CommentReaderSheet.kt')
+v3_presenter = read('app/src/main/java/io/github/meiyongai/toki/hook/SubtitleSessionPresenter.kt')
+v3_controller = read('app/src/main/java/io/github/meiyongai/toki/hook/SubtitleDisplayController.kt')
+check('CommentEngine.install(module, loader)' in download_comments and 'private fun initLegacy' in download_comments, 'rollout selector installs exactly one engine; legacy worker remains a mutually exclusive recovery path')
+check('return CommentReaderSheet.show' in rich_dialog and 'private fun showLegacy' in rich_dialog, 'new comment entry bypasses the independent legacy dialog pipeline only after rollout selection')
+check('SQLiteDatabase.openOrCreateDatabase' in v3_repo and all(x in v3_repo for x in ('comment_versions','translations','assets','streams','tasks','lane_turns','migration')), 'comment facts, history, translations, media, stream cursors, leased tasks and fair turns are durable SQLite data')
+check('ORDER BY q.ticket' in v3_repo and 'UPDATE lane_turns SET ticket' in v3_repo and 'LIMIT 1' in v3_repo, 'every claim advances a durable video lane ticket before execution')
+check('lease=?' in v3_repo and 'v.epoch=?' in v3_repo and 'source_hash' in v3_repo, 'late work must match item lease, video epoch and source hash')
+check('observeVideo' in v3_reader and 'submitCommand' in v3_reader and 'readVideo' in v3_reader and '.fetch(' not in v3_reader and 'NativeSubtitleTranslator.transport' not in v3_reader, 'reader only observes facts, reads locally and submits commands without direct network workers')
+check('it.take(2)' in v3_reader and 'expanded' in v3_reader and 'hasStableIds()=true' in v3_reader, 'two cached reply previews and stable row identities survive incremental refresh')
+check('val presenter = SubtitleSessionPresenter' in subtitle_feature and 'SubtitleOverlay(' not in subtitle_feature, 'installed subtitle hooks share exactly one session presenter, never competing renderer overlays')
+check('timelineReady=ready' in v3_controller and 'SystemClock' not in v3_controller and 'nativeSources' in v3_presenter, 'caption controller uses track/playback state rather than a two-second native-frame expiry')
+
+check('private var selected: Boolean?' in read('app/src/main/java/io/github/meiyongai/toki/hook/CommentCoreRollout.kt') and 'if (!CommentCoreRollout.enabled())' in subtitle_feature and 'else initLegacy' in download_comments, 'rollout is frozen for a process, retains a default-off recovery route and cannot install both writers')
+
+regression_reader = read('app/src/main/java/io/github/meiyongai/toki/hook/CommentReaderSheet.kt')
+valid_guard = regression_reader[regression_reader.index('fun valid()'):regression_reader.index('fun notify(')]
+check('current()' not in valid_guard and 'source.accountMatches(account)' not in valid_guard, 'pinned cached reader survives playback-holder and login-account changes while retaining Activity guards')
+check('runtime.readers.execute' in v3_engine and 'onlyVideo=video' in v3_engine, 'reader registration is not queued behind full backfill and only migrates its own video')
+check('progressCounts(reader.account(app))' in v3_engine and 'mapNotNull{repo.readVideo' not in v3_engine and 'scope_stats' in v3_repo, 'background diagnostics read compact persisted counters instead of decoding every comment under the global monitor')
+check('repo.nextDelay' in v3_engine and 'main.postDelayed(tick,1500)' not in v3_engine and 'registerDefaultNetworkCallback' in v3_engine, 'idle comment workers have no permanent polling loop and resume on due work or network callbacks')
+check('nativeFrames[root]' in v3_presenter and 'nativeOwner' in v3_presenter and 'presenter.nativeRevision(root)!=previousRevision' in subtitle_feature, 'hidden sibling renderers cannot erase the selected native cue and a VM duplicate cannot overwrite a delivered renderer frame')
+
+local_identity = read('app/src/main/java/io/github/meiyongai/toki/hook/HostOfflineComments.kt')
+check('token == LOCAL_SCOPE ||' in local_identity and 'reflected.isInitialized() && token' not in local_identity, 'fresh local readers never report a false account change because their host contract was not initialized')
+check('migrateLocalScope' in v3_repo and 'copyLocalVideo' in v3_repo and 'restored.copy(account=account)' in v3_repo, 'old account partitions and legacy pages migrate additively into the device-local cache without deleting originals')
+check('Renderer geometry is not playback visibility' in v3_presenter and 'it.isShown&&it.getGlobalVisibleRect' not in v3_presenter, 'verified expanded captions survive collapsed native containers; selected page visibility still guards presentation')
+
+check('repo.leaseAlive(w)' in v3_engine and 'repo.authorized(w)' not in v3_engine and 'ConcurrentHashMap<String,Work>' in v3_repo, 'main-thread transport eligibility uses a memory lease, never waits for SQLite migration monitor')
+check('DigestHex.encode' in v3_repo and 'String.format' not in v3_repo and '"%02x"' not in v3_repo, 'bulk migration digest encoding does not re-enter host Locale hooks per byte')
+
+check('capturedSnapshot(' in local_identity and 'truncated || total > sourceRows.size' not in local_identity and 'db.version=4' in v3_repo, 'native 20-row pages do not stop merely because server total exceeds page size; old premature stops reopen non-destructively')
+
+check("if (CommentReaderSheet.isReading) return@intercept false" in read("app/src/main/java/io/github/meiyongai/toki/hook/AutoScrollHook.kt") and "openReaders.decrementAndGet()" in regression_reader, "cached reading temporarily blocks native auto-advance without rewriting auto-scroll settings")
+
+check('if (replyTotal > replies.orEmpty().size) truncated = true' not in local_identity and 'if(!seen.add(id))continue' in local_identity and '!page.hasMore&&(page.truncated||insufficientReply)' in v3_repo, 'missing embedded replies and duplicate IDs do not prematurely stop a valid main-comment cursor')
+
+check('CommentConcurrency(4)' in v3_engine and 'newFixedThreadPool(concurrency.limit(lane))' in v3_engine and 'NOT EXISTS(SELECT 1 FROM tasks flight' in v3_repo, 'comment translation has four bounded concurrent workers with one in-flight item per video and durable fair admission')
+
+check('SELECT payload FROM comments WHERE account=? AND video=? AND id=? AND source_hash=?' in v3_repo and 'UPDATE scope_stats SET text_ready=MIN(text_total,text_ready+1)' in v3_repo, 'translation admission and completion use keyed reads and incremental counts rather than whole-video reconciliation')
+
+check('scope(feature).takeIf { it.active }' in read("app/src/main/java/io/github/meiyongai/toki/hook/HookRuntime.kt") and '(startupFeatures + liveFeatures) - rejected' in read("app/src/main/java/io/github/meiyongai/toki/hook/HostFeaturePlan.kt"), "revoked hooks remain disabled across repeated package callbacks without crashing host startup")
+check('connection.died(service)' in read("app/src/main/java/io/github/meiyongai/toki/util/LSPosedStatusHelper.kt") and 'current !== service' in read("app/src/main/java/io/github/meiyongai/toki/util/FrameworkServiceConnection.kt"), "only the currently bound framework service can disconnect configuration and activation state")

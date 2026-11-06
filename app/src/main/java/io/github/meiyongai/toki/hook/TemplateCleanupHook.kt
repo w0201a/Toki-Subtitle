@@ -85,7 +85,7 @@ internal object TemplateCleanupHook {
                 desired && !ready -> "部分功能已注册"
                 else -> "已注册"
             })
-            HookRuntime.detail(FEATURE, "只隐藏已核对业务类型的当前渲染根和专用视频模板组件；codeReady=$ready; trackedOwners=${owners.size}; types=${TemplateAnchorContract.allowedAnchorNames.size}; 不处理未知／普通CapCut链接，不按共享schema类名隐藏；首次注入前已有实例仍需宿主回调")
+            HookRuntime.detail(FEATURE, "只隐藏已核对业务类型的当前渲染根和专用视频模板组件；codeReady=$ready; trackedOwners=${owners.size}; types=${TemplateAnchorContract.allowedAnchorNames.size}; 包含已核验CapCut类型54与110及专用区域子控件，不处理未知类型，不按共享schema类名隐藏；首次注入前已有实例仍需宿主回调")
             config?.let { HookRuntime.appliedConfiguration(FEATURE, it, desired && ready) }
             recordEvidence()
         }

@@ -10,8 +10,7 @@ internal object CommentSnapshotStore {
     private fun prefs(context: Context) = context.getSharedPreferences("toki_comment_snapshots_v1", Context.MODE_PRIVATE)
     internal fun key(account: String, video: String): String {
         require(account.matches(Regex("[a-f0-9]{64}")) && video.length in 1..128)
-        return MessageDigest.getInstance("SHA-256").digest((account + ":" + video).toByteArray(Charsets.UTF_8))
-            .joinToString("") { "%02x".format(it.toInt() and 255) }
+        return DigestHex.encode(MessageDigest.getInstance("SHA-256").digest((account + ":" + video).toByteArray(Charsets.UTF_8)))
     }
     fun read(context: Context, account: String, video: String): OfflineCommentData.Snapshot? {
         val raw = prefs(context).getString(key(account, video), null) ?: return null

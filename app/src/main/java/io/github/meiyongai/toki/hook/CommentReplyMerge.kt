@@ -19,11 +19,12 @@ internal object CommentReplyMerge {
             require(parentId == root || parentId in incomingIds)
             val before = values[row.id]
             require(before == null || before.parentId == parentId) { "Reply belongs to another cached parent" }
-            values[row.id] = row.copy(parentId = parentId, depth = row.depth + 1)
+            val resolved = row.copy(parentId = parentId, depth = row.depth + 1)
+            values[row.id] = OfflineCommentBudget.merge(listOfNotNull(before), listOf(resolved), emptySet(), 1).last()
         }
         val savedChildren = values.values.count { it.parentId == root }.toLong()
         values[root] = parent.copy(replyCount = maxOf(parent.replyCount, page.total, savedChildren))
-        require(values.size <= OfflineCommentData.MAX_ROWS) { "Comment snapshot capacity reached" }
+        require(values.size <= io.github.meiyongai.toki.subtitle.model.OfflineCommentPreferences.MAX_DISPLAY_ROWS) { "Comment snapshot capacity reached" }
         val earlier = old.rows.any { it.parentId == root && it.id !in incomingIds }
         val cursors = old.replyCursors + (root to OfflineCommentData.ReplyCursor(page.nextCursor, page.hasMore))
         return old.copy(rows = CommentPageMerge.ordered(values.values), capturedAt = maxOf(old.capturedAt, page.capturedAt),

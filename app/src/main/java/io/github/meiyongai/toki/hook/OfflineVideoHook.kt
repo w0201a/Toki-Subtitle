@@ -63,7 +63,10 @@ internal object OfflineVideoHook {
         val speedPress = OfflineHoldArbiter()
 
         fun cancelTouch() { timer?.let(main::removeCallbacks); timer = null; gesture.cancel() }
-        fun closeMenu() { dialog?.dismiss(); dialog = null; comments?.dismiss(); comments = null }
+        fun closeMenu(closeComments: Boolean = true) {
+            dialog?.dismiss(); dialog = null
+            if (closeComments) { comments?.dismiss(); comments = null }
+        }
         HookRuntime.onDispose(FEATURE) {
             life.closed = true; life.enabled = false; entryReady.set(false); speedReady.set(false); speedPress.clear(); worker.shutdown()
             fun release() { cancelTouch(); closeMenu(); binding = null; state.clear() }
@@ -348,15 +351,15 @@ internal object OfflineVideoHook {
             if (life.closed || !life.enabled || Looper.myLooper() != main.looper) return
             val video = contract.read(owner) ?: run {
                 HookRuntime.count(FEATURE, "卡片绑定缺少模型或播放器")
-                cancelTouch(); closeMenu(); binding = null; state.select(owner, "", true); return
+                cancelTouch(); closeMenu(closeComments = !CommentCoreRollout.enabled()); binding = null; state.select(owner, "", true); return
             }
             state.select(owner, video.id, video.offline)
-            val activity = activity(video.view.context) ?: run { cancelTouch(); closeMenu(); binding = null; return }
+            val activity = activity(video.view.context) ?: run { cancelTouch(); closeMenu(closeComments = !CommentCoreRollout.enabled()); binding = null; return }
             val previous = binding
             val changed = previous == null || previous.owner.get() !== owner || previous.id != video.id ||
                 previous.offline != video.offline || previous.view.get() !== video.view || previous.activity.get() !== activity
             if (changed) {
-                cancelTouch(); closeMenu(); binding = Binding(owner, video, activity)
+                cancelTouch(); closeMenu(closeComments = !CommentCoreRollout.enabled()); binding = Binding(owner, video, activity)
                 HookRuntime.count(FEATURE, if (video.offline) "已绑定选中离线卡片" else "已绑定选中在线卡片")
                 if(video.offline)OfflineCommentDownloadHook.passive(video.model)
             }
@@ -381,11 +384,11 @@ internal object OfflineVideoHook {
         }
         for (method in contract.released) module.trackHook(FEATURE, method, requiresConfiguration = false).intercept { chain ->
             val owner = chain.thisObject
-            if (binding?.owner?.get() === owner) { cancelTouch(); closeMenu(); binding = null; if (owner != null) state.retire(owner) }
+            if (binding?.owner?.get() === owner) { cancelTouch(); closeMenu(closeComments = !CommentCoreRollout.enabled()); binding = null; if (owner != null) state.retire(owner) }
             chain.proceed()
         }
         module.trackHook(FEATURE, Activity::class.java.getDeclaredMethod("onPause"), requiresConfiguration = false).intercept { chain ->
-            if (binding?.activity?.get() === chain.thisObject) { cancelTouch(); closeMenu(); binding = null; state.clear() }
+            if (binding?.activity?.get() === chain.thisObject) { cancelTouch(); closeMenu(closeComments = !CommentCoreRollout.enabled()); binding = null; state.clear() }
             chain.proceed()
         }
         HookRuntime.subscribe(FEATURE) { snapshot ->

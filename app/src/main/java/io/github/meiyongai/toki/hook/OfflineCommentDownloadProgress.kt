@@ -9,6 +9,10 @@ internal object OfflineCommentDownloadProgress {
         require(next!=null&&next>cursor){"Non-progressing offline comment cursor"}
         return next
     }
+    /** A cursor can advance while the server repeats the same ids. Stop a bounded no-growth run,
+     * retain the partial archive, and continue pending replies rather than downloading forever. */
+    fun noGrowth(previous: Int, before: Set<String>, after: Set<String>, hasMore: Boolean): Int =
+        if (!hasMore || after.any { it !in before }) 0 else (previous + 1).coerceAtMost(3)
     fun translated(page:OfflineCommentData.Snapshot,target:String):Boolean=page.rows.all{
         it.source.isBlank()||!it.sourceTruncated&&!it.translation.isNullOrBlank()&&
             CommentTranslationKey.normalizedTarget(it.language)==target

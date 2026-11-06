@@ -115,6 +115,7 @@ internal class NativeSubtitleTranslator(
     private var closed = false
     private var selectedVideo = ""
     private val nativeFrames = LinkedHashMap<String, Long>()
+    private val nativeFrameTexts = LinkedHashMap<String, String>()
     private val playback = CaptionPlaybackClock()
     internal val playbackRevision: Long get() = playback.revision
     internal var requestRevision = 0L
@@ -129,7 +130,7 @@ internal class NativeSubtitleTranslator(
     }
     private fun invalidatePlaybackPresentation() {
         requestRevision++
-        nativeFrames.clear()
+        nativeFrames.clear(); nativeFrameTexts.clear()
         pending = null
         releaseActive()
         main.removeCallbacks(pump)
@@ -332,6 +333,8 @@ internal class NativeSubtitleTranslator(
     internal val completedVideos: Int get() = cache.size
     internal val prefetchIdle: Boolean get() = background == null && ahead.isEmpty()
     internal fun cueAt(video: String, positionMs: Long) = trackPrefetch.cueAt(video, positionMs)
+    internal fun timelineReady(video: String): Boolean = trackPrefetch.timelineReady(video)
+    internal fun cueRangeAt(video: String, positionMs: Long): CaptionTimeline.Cue? = trackPrefetch.cueRangeAt(video, positionMs)
     internal fun trackIdentity(video: String): String = CaptionPrefetch.identity(video)
     internal fun clearCache() {
         cancel()
@@ -352,12 +355,19 @@ internal class NativeSubtitleTranslator(
     }
     internal fun diagnosticSummary(): String = "${cache.diagnostic()} active=${active != null} background=${background != null} queued=${ahead.size}"
     internal fun trackSummary(video: String): String = trackIdentity(video).take(8).ifBlank { "pending" }
-    internal fun noteNativeFrame(video: String, visible: Boolean = true) {
+    internal fun noteNativeFrame(video: String, visible: Boolean = true, text: String? = null) {
         if (video.isBlank()) return
-        if (!visible) { nativeFrames.remove(video); return }
+        if (!visible) { nativeFrames.remove(video); nativeFrameTexts.remove(video); return }
+        // Rebinding the same stuck native line must not renew its suppression lease forever.
+        // Null remains an explicit ownership signal for callers without a text frame.
+        if (text != null && nativeFrameTexts[video] == text && video in nativeFrames) return
         nativeFrames[video] = SystemClock.uptimeMillis()
-        while (nativeFrames.size > 100) nativeFrames.remove(nativeFrames.keys.first())
+        if (text != null) nativeFrameTexts[video] = text
+        while (nativeFrames.size > 100) {
+            val oldest = nativeFrames.keys.first(); nativeFrames.remove(oldest); nativeFrameTexts.remove(oldest)
+        }
     }
+    /** Legacy overlay compatibility only; installed SubtitleSessionPresenter never uses this lease. */
     internal fun hasNativeFrame(video: String): Boolean = nativeFrames[video]?.let {
         SystemClock.uptimeMillis() - it < 2000
     } == true

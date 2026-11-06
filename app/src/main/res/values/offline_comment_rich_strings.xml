@@ -14,7 +14,7 @@
     <string name="offline_comment_limit_rows">Comment count</string>
     <string name="offline_comment_limit_pages">Page count</string>
     <string name="offline_comment_limit_title">Per-video comment cache limit</string>
-    <string name="offline_comment_limit_hint">Up to 2500 comments and replies combined. Page entry converts each page to 20 comments. Images and stickers are cached with those comments. Lowering a limit retains existing data.</string>
+    <string name="offline_comment_limit_hint">Only top-level comments count toward this limit. Replies have separate total and per-comment limits. Lowering a limit preserves stored content.</string>
     <string name="offline_comment_limit_error">Enter 1–2500 comments or 1–125 pages</string>
     <string name="offline_comment_limit_inherit">Use default limit</string>
     <string name="offline_comment_limit_current">Default per video: %1$d comments (about %2$d pages)</string>

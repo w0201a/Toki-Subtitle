@@ -15,13 +15,30 @@ internal object OfflineCommentMediaStore {
         require(asset.id.matches(Regex("[a-f0-9]{64}")))
         return directory(context, account, video)
     }
-    private fun digest(bytes: ByteArray) = MessageDigest.getInstance("SHA-256").digest(bytes).joinToString("") { "%02x".format(it.toInt() and 255) }
+    private fun digest(bytes: ByteArray) = DigestHex.encode(MessageDigest.getInstance("SHA-256").digest(bytes))
     private val listeners = java.util.concurrent.CopyOnWriteArraySet<() -> Unit>()
     fun observe(listener: () -> Unit): AutoCloseable { listeners += listener; return AutoCloseable { listeners -= listener } }
     private val verified = object : LinkedHashMap<String, Pair<Long, Long>>(128, .75f, true) {
         override fun removeEldestEntry(eldest: MutableMap.MutableEntry<String, Pair<Long, Long>>?) = size > 512
     }
+    fun referenceLegacy(context:Context,scope:String,video:String,legacy:String) {
+        if(scope==legacy)return
+        require(legacy.matches(Regex("[a-f0-9]{64}")))
+        val prefs=context.getSharedPreferences("toki_comment_media_locations_v1",Context.MODE_PRIVATE)
+        val key=CommentSnapshotStore.key(scope,video)
+        val old=prefs.getStringSet(key,emptySet()).orEmpty()
+        if(legacy !in old)check(prefs.edit().putStringSet(key,old+legacy).commit())
+    }
     @Synchronized fun file(context: Context, account: String, video: String, asset: OfflineCommentData.Media): File? {
+        checkedFile(context,account,video,asset)?.let{return it}
+        if(account!=HostOfflineComments.LOCAL_SCOPE)return null
+        val prefs=context.getSharedPreferences("toki_comment_media_locations_v1",Context.MODE_PRIVATE)
+        for(legacy in prefs.getStringSet(CommentSnapshotStore.key(account,video),emptySet()).orEmpty()) {
+            if(legacy.matches(Regex("[a-f0-9]{64}")))checkedFile(context,legacy,video,asset)?.let{return it}
+        }
+        return null
+    }
+    private fun checkedFile(context: Context, account: String, video: String, asset: OfflineCommentData.Media): File? {
         val dir = base(context, account, video, asset)
         val file = File(dir, asset.id + ".bin"); val record = File(dir, asset.id + ".json")
         if (!file.isFile || !record.isFile || record.length() !in 1..4096L || file.length() !in 1..CommentStickerMedia.MAX_BYTES.toLong()) return null

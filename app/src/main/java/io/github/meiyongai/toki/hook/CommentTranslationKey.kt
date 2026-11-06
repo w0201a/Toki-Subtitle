@@ -15,6 +15,6 @@ internal object CommentTranslationKey {
             val bytes = value.toByteArray(Charsets.UTF_8)
             digest.update(java.nio.ByteBuffer.allocate(4).putInt(bytes.size).array()); digest.update(bytes)
         }
-        return digest.digest().joinToString("") { "%02x".format(it.toInt() and 255) }
+        return DigestHex.encode(digest.digest())
     }
 }

@@ -13,7 +13,7 @@ object ConfigSchema {
         "SpeedOptions" to listOf("speed_expand_enabled"),
         "CommentTranslateHook" to listOf("comment_translate_enabled"),
         "ManualCommentTranslateHook" to listOf("comment_manual_translate_enabled"),
-        "OfflineCommentDownloadHook" to listOf("offline_comment_download_cache"),
+        "OfflineCommentDownloadHook" to listOf("offline_comment_download_cache", "comment_caption_core_v3"),
         "OfflineVideoHook" to listOf("offline_video_controls_enabled", "offline_comment_button_enabled"),
         "CachedCommentTranslateHook" to listOf("cached_comment_online_translate_enabled"),
         "VideoTranslateHook" to listOf("video_translate_enabled", "subtitle_style_enabled"),
@@ -60,7 +60,7 @@ object ConfigSchema {
         "adaptation_retry_token", "subtitle_cache_clear_revision", "subtitle_render_mode", "custom_language", "custom_timezone", "custom_latitude", "custom_longitude",
         "share_hidden_custom_keys", "fixed_speed_value", "speed_expand_list", "download_video_path", "download_image_path",
         "video_duration_alert_threshold", "feed_filter_keywords_json", "video_fit_mode", "video_fill_zoom_percent",
-        "offline_comment_display_mode", "offline_comment_cache_limit") +
+        "offline_comment_display_mode", "offline_comment_cache_limit", "offline_comment_reply_limit", "offline_comment_thread_reply_limit") +
         rangePrefixes.flatMap { listOf("${it}_min", "${it}_max") } +
         io.github.meiyongai.toki.subtitle.model.LayoutGroup.entries.map { it.opacityKey }
     private val subtitleKeys = setOf("subtitle_size", "subtitle_x", "subtitle_y", "subtitle_font", "subtitle_font_asset", "subtitle_font_asset_name", "subtitle_weight", "subtitle_color", "subtitle_background", "subtitle_background_mode") +
@@ -104,6 +104,7 @@ object ConfigSchema {
                 "subtitle_text_mode" -> require(value in setOf("original", "translated", "bilingual"))
                 "offline_comment_display_mode" -> require(value in io.github.meiyongai.toki.subtitle.model.OfflineCommentPreferences.modes)
                 "offline_comment_cache_limit" -> require(value.toIntOrNull() in 1..2500)
+                "offline_comment_reply_limit", "offline_comment_thread_reply_limit" -> require(value.toIntOrNull() in 0..2500)
                 "subtitle_max_lines" -> require(value.toIntOrNull() in 0..12)
                 "subtitle_size" -> number(key, value, 6.0, 160.0)
                 "subtitle_x", "subtitle_y" -> number(key, value, -1000.0, 1000.0)

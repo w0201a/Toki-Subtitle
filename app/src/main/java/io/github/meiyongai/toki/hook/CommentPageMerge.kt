@@ -22,8 +22,8 @@ internal object CommentPageMerge {
         val values = linkedMapOf<String, OfflineCommentData.Row>()
         primary.rows.forEach { values[it.id] = it }
         secondary.rows.forEach { values.putIfAbsent(it.id, it) }
-        return primary.copy(rows = ordered(values.values.take(OfflineCommentData.MAX_ROWS)),
-            truncated = primary.truncated || secondary.truncated || values.size > OfflineCommentData.MAX_ROWS,
+        return primary.copy(rows = ordered(values.values.take(io.github.meiyongai.toki.subtitle.model.OfflineCommentPreferences.MAX_DISPLAY_ROWS)),
+            truncated = primary.truncated || secondary.truncated || values.size > io.github.meiyongai.toki.subtitle.model.OfflineCommentPreferences.MAX_DISPLAY_ROWS,
             retainedOlder = primary.retainedOlder || secondary.retainedOlder || values.size > primary.rows.size,
             replyCursors = secondary.replyCursors + primary.replyCursors)
     }
@@ -35,14 +35,20 @@ internal object CommentPageMerge {
         val values = linkedMapOf<String, OfflineCommentData.Row>()
         val previous = old?.rows.orEmpty()
         if (requestedCursor == 0L) {
-            page.rows.forEach { values[it.id] = it }
+            page.rows.forEach { row ->
+                values[row.id] = OfflineCommentBudget.merge(listOfNotNull(old?.rows?.firstOrNull { it.id == row.id }), listOf(row),
+                    emptySet(), 1).last()
+            }
             previous.forEach { values.putIfAbsent(it.id, it) }
         } else {
             previous.forEach { values[it.id] = it }
-            page.rows.forEach { values[it.id] = it }
+            page.rows.forEach { row ->
+                values[row.id] = OfflineCommentBudget.merge(listOfNotNull(old?.rows?.firstOrNull { it.id == row.id }), listOf(row),
+                    emptySet(), 1).last()
+            }
         }
         val retained = requestedCursor == 0L && previous.any { before -> page.rows.none { it.id == before.id } }
-        require(values.size <= OfflineCommentData.MAX_ROWS) { "Comment snapshot capacity reached" }
+        require(values.size <= io.github.meiyongai.toki.subtitle.model.OfflineCommentPreferences.MAX_DISPLAY_ROWS) { "Comment snapshot capacity reached" }
         return page.copy(rows = ordered(values.values),
             truncated = page.truncated || old?.truncated == true,
             retainedOlder = old?.retainedOlder == true || retained, replyCursors = old?.replyCursors.orEmpty())

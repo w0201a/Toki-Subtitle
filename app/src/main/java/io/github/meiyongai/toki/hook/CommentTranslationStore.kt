@@ -20,7 +20,8 @@ internal object CommentTranslationStore {
         val target = preferredTarget?.let(CommentTranslationKey::normalizedTarget)
             ?: prefs.getString("target:" + snapshot.account, null)?.let(CommentTranslationKey::normalizedTarget) ?: return snapshot
         return snapshot.copy(rows = snapshot.rows.map { row ->
-            if (row.source.isBlank() || row.sourceTruncated) row else {
+            if (row.source.isBlank() || row.sourceTruncated ||
+                !row.translation.isNullOrBlank() && CommentTranslationKey.normalizedTarget(row.language) == target) row else {
                 val key = CommentTranslationKey.key(snapshot.account, snapshot.video, row.id, row.source, target)
                 val saved = prefs.getString(key, null)?.takeIf { it.isNotBlank() && it.length <= 80000 }
                 if (saved == null) row else row.copy(translation = saved, language = target)

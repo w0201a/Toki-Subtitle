@@ -65,7 +65,7 @@ internal class HostCommentPageNetwork(private val loader: ClassLoader) {
         }
         private val scene = type("X.0F2U")
         val sceneValue: Int = scene.getMethod("getValue").invoke(
-            scene.enumConstants.single { (it as Enum<*>).name == "OFFLINE_COMMENT" }) as Int
+            scene.enumConstants.single { (it as Enum<*>).name == "DEFAULT" }) as Int
         val request = type("X.0F2w").getDeclaredMethod("LIZ", String::class.java, java.lang.Long.TYPE,
             java.lang.Integer.TYPE, String::class.java, java.lang.Integer.TYPE, java.lang.Integer.TYPE, aweme,
             String::class.java, List::class.java, String::class.java, java.lang.Long::class.java,

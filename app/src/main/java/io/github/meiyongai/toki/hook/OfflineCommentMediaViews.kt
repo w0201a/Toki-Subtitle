@@ -25,32 +25,85 @@ internal object OfflineCommentMediaViews {
     private val main = Handler(Looper.getMainLooper())
     private val worker = ThreadPoolExecutor(2, 2, 0L, TimeUnit.MILLISECONDS, ArrayBlockingQueue<Runnable>(64),
         { task -> Thread(task, "toki-offline-media-view").apply { isDaemon = true } }, ThreadPoolExecutor.AbortPolicy())
+    private data class Owner(val account: String, val video: String, val comment: String, val source: String)
+    private class Binding(val owner: Owner, var snapshot: OfflineCommentData.Snapshot, var row: OfflineCommentData.Row,
+        var loader: ClassLoader, var valid: () -> Boolean, var status: ((OfflineCommentData.Media) -> String)? = null) {
+        val tiles = mutableListOf<Tile>()
+    }
+    private class Tile(var asset: OfflineCommentData.Media, val frame: android.widget.FrameLayout, val image: ImageView,
+        val badge: TextView) {
+        var loading = false
+        var attemptedRevision = -1L
+    }
+    // A row owns its decoded drawables. Rebinding the same identity only replaces callbacks,
+    // never detaches the image, clears its drawable or restarts its animation.
+    private val mediaRevision = java.util.concurrent.atomic.AtomicLong()
+    private val mediaChanges = OfflineCommentMediaStore.observe { mediaRevision.incrementAndGet() }
     fun bind(container: LinearLayout, context: Context, snapshot: OfflineCommentData.Snapshot,
-        row: OfflineCommentData.Row, loader: ClassLoader, valid: () -> Boolean) {
-        for (i in 0 until container.childCount) ((container.getChildAt(i) as? ImageView)?.drawable as? AnimatedImageDrawable)?.stop()
-        container.removeAllViews(); container.visibility = if (row.media.isEmpty()) View.GONE else View.VISIBLE
+        row: OfflineCommentData.Row, loader: ClassLoader, valid: () -> Boolean) = bind(container, context, snapshot, row, loader, valid, null)
+    fun bind(container: LinearLayout, context: Context, snapshot: OfflineCommentData.Snapshot,
+        row: OfflineCommentData.Row, loader: ClassLoader, valid: () -> Boolean, status: ((OfflineCommentData.Media) -> String)?) {
+        val owner = Owner(snapshot.account, snapshot.video, row.id, row.source)
+        val previous = container.tag as? Binding
+        val reusable = previous?.owner == owner && previous.tiles.map { it.asset.id } == row.media.map { it.id }
+        val binding = if (reusable) checkNotNull(previous) else {
+            previous?.tiles?.forEach { (it.image.drawable as? AnimatedImageDrawable)?.stop() }
+            container.removeAllViews()
+            Binding(owner, snapshot, row, loader, valid).also { container.tag = it }
+        }
+        binding.status = status
+        binding.snapshot = snapshot; binding.row = row; binding.loader = loader; binding.valid = valid
+        container.visibility = if (row.media.isEmpty()) View.GONE else View.VISIBLE
         val edge = (96 * context.resources.displayMetrics.density).toInt()
-        for (asset in row.media) {
-            val image = ImageView(context).apply {
-                scaleType = ImageView.ScaleType.CENTER_CROP
-                contentDescription = context.getString(if (asset.kind == OfflineCommentData.MediaKind.IMAGE) R.string.offline_comment_image else R.string.offline_comment_sticker)
-                layoutParams = LinearLayout.LayoutParams(edge, edge).apply { marginEnd = 8 }
-                tag = asset.id
+        fun current(tile: Tile): Boolean = container.tag === binding && binding.valid() && tile.frame.parent === container
+        for ((index, asset) in row.media.withIndex()) {
+            val tile = if (reusable) binding.tiles[index].also { it.asset = asset } else {
+                val image = ImageView(context).apply {
+                    scaleType = ImageView.ScaleType.FIT_CENTER; tag = asset.id
+                    contentDescription = context.getString(if (asset.kind == OfflineCommentData.MediaKind.IMAGE) R.string.offline_comment_image else R.string.offline_comment_sticker)
+                }
+                val frame = android.widget.FrameLayout(context).apply {
+                    layoutParams = LinearLayout.LayoutParams(if(asset.kind == OfflineCommentData.MediaKind.IMAGE)(edge * 1.4f).toInt() else edge, edge).apply { marginEnd = (8 * context.resources.displayMetrics.density).toInt() }
+                    background = android.graphics.drawable.GradientDrawable().apply {
+                        setColor(0x183F6D73); cornerRadius = 10 * context.resources.displayMetrics.density
+                    }
+                    clipToOutline = true
+                }
+                val badge = TextView(context).apply {
+                    tag = "offline-media-badge"; textSize = 12f; gravity = android.view.Gravity.CENTER
+                    setTextColor(context.getColor(R.color.toki_ui_secondary))
+                    text = context.getString(if (asset.kind == OfflineCommentData.MediaKind.IMAGE) R.string.offline_comment_image else R.string.offline_comment_sticker)
+                }
+                frame.addView(image, android.widget.FrameLayout.LayoutParams(-1, -1))
+                frame.addView(badge, android.widget.FrameLayout.LayoutParams(-1, -2, android.view.Gravity.BOTTOM))
+                container.addView(frame)
+                Tile(asset, frame, image, badge).also { created ->
+                    binding.tiles += created
+                    image.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
+                        override fun onViewAttachedToWindow(view: View) { if (current(created)) (image.drawable as? AnimatedImageDrawable)?.start() }
+                        override fun onViewDetachedFromWindow(view: View) { (image.drawable as? AnimatedImageDrawable)?.stop() }
+                    })
+                    image.setOnClickListener { if (current(created)) preview(context, binding.snapshot, created.asset, binding.loader) { current(created) } }
+                    image.setOnLongClickListener { if (current(created)) { save(context, binding.snapshot, created.asset, binding.loader) { current(created) }; true } else false }
+                }
             }
-            image.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener {
-                override fun onViewAttachedToWindow(view: View) { (image.drawable as? AnimatedImageDrawable)?.start() }
-                override fun onViewDetachedFromWindow(view: View) { (image.drawable as? AnimatedImageDrawable)?.stop() }
-            })
-            container.addView(image)
-            decode(image, context, snapshot, asset, edge) { valid() && image.parent === container && image.tag == asset.id }
-            image.setOnClickListener {
-                if (valid()) preview(context, snapshot, asset, loader, valid)
+            if (tile.image.drawable == null) {
+                tile.badge.text = status?.invoke(asset)?.takeIf { it.isNotBlank() } ?: context.getString(R.string.offline_comment_media_missing)
+                tile.badge.visibility = View.VISIBLE
             }
-            image.setOnLongClickListener { if (valid()) { save(context, snapshot, asset, loader, valid); true } else false }
+            val revision = mediaRevision.get()
+            if (tile.image.drawable == null && !tile.loading && tile.attemptedRevision != revision) {
+                tile.loading = true; tile.attemptedRevision = revision
+                decode(tile.image, context, snapshot, asset, edge, { current(tile) }) {
+                    tile.loading = false
+                    // A callback rejected during a generation change may be retried on the next bind.
+                    if (tile.image.drawable == null && !binding.valid()) tile.attemptedRevision = -1L
+                }
+            }
         }
     }
     private fun decode(image: ImageView, context: Context, snapshot: OfflineCommentData.Snapshot,
-        asset: OfflineCommentData.Media, edge: Int, valid: () -> Boolean) {
+        asset: OfflineCommentData.Media, edge: Int, valid: () -> Boolean, finished: () -> Unit = {}) {
         try { worker.execute {
             val drawable = try {
                 val file = OfflineCommentMediaStore.file(context, snapshot.account, snapshot.video, asset) ?: error("Media missing")
@@ -64,11 +117,26 @@ internal object OfflineCommentMediaViews {
             main.post {
                 if (valid()) {
                     image.setImageDrawable(drawable)
+                    if (drawable != null && asset.kind == OfflineCommentData.MediaKind.IMAGE && drawable.intrinsicWidth > 0 && drawable.intrinsicHeight > 0) {
+                        val frame=image.parent as? android.widget.FrameLayout
+                        val width=(edge * 1.4f).toInt()
+                        val height=(width.toFloat() * drawable.intrinsicHeight / drawable.intrinsicWidth).toInt().coerceIn(edge/2,edge*2)
+                        frame?.layoutParams=frame?.layoutParams?.apply { this.width=width;this.height=height }
+                    }
                     if (drawable != null && image.isAttachedToWindow) (drawable as? AnimatedImageDrawable)?.start()
-                    if (drawable == null) { image.setBackgroundColor(0x22333333); image.contentDescription = context.getString(R.string.offline_comment_media_missing) }
+                    (image.parent as? android.widget.FrameLayout)?.findViewWithTag<TextView>("offline-media-badge")?.apply {
+                        visibility = if (drawable == null) View.VISIBLE else View.GONE
+                        if (drawable == null) {
+                            val binding = (image.parent?.parent as? View)?.tag as? Binding
+                            text = binding?.status?.invoke(asset)?.takeIf { it.isNotBlank() }
+                                ?: "媒体加载失败（本地文件缺失或无法解码）"
+                        }
+                    }
+                    if (drawable == null) { image.contentDescription = context.getString(R.string.offline_comment_media_missing) }
                 } else (drawable as? AnimatedImageDrawable)?.stop()
+                finished()
             }
-        } } catch (_: java.util.concurrent.RejectedExecutionException) { image.contentDescription = context.getString(R.string.offline_comment_media_missing) }
+        } } catch (_: java.util.concurrent.RejectedExecutionException) { image.contentDescription = context.getString(R.string.offline_comment_media_missing); finished() }
     }
     private fun preview(context: Context, snapshot: OfflineCommentData.Snapshot, asset: OfflineCommentData.Media,
         loader: ClassLoader, valid: () -> Boolean) {
@@ -78,7 +146,7 @@ internal object OfflineCommentMediaViews {
             .setNegativeButton(R.string.common_done, null).create()
         dialog.setOnDismissListener { (image.drawable as? AnimatedImageDrawable)?.stop() }
         dialog.show()
-        decode(image, context, snapshot, asset, 2048) { valid() && dialog.isShowing }
+        decode(image, context, snapshot, asset, 2048, { valid() && dialog.isShowing })
     }
     private fun save(context: Context, snapshot: OfflineCommentData.Snapshot, asset: OfflineCommentData.Media,
         loader: ClassLoader, valid: () -> Boolean) {

@@ -32,4 +32,13 @@ class OfflineCommentDownloadProgressTest {
         assertTrue(plan.requiresScan)
         assertFalse(requested.boolean(CachedCommentTranslateHook.KEY))
     }
+    @Test fun advancingCursorWithoutAnyNewIdsStopsAtABoundedPartialRun() {
+        val known = setOf("one", "two")
+        assertEquals(1, OfflineCommentDownloadProgress.noGrowth(0, known, known, true))
+        assertEquals(3, OfflineCommentDownloadProgress.noGrowth(2, known, known, true))
+        assertEquals(3, OfflineCommentDownloadProgress.noGrowth(3, known, known, true))
+        assertEquals(0, OfflineCommentDownloadProgress.noGrowth(2, known, known + "three", true))
+        assertEquals(0, OfflineCommentDownloadProgress.noGrowth(2, known, known, false))
+    }
+
 }

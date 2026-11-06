@@ -61,8 +61,8 @@ internal class HostCommentReplyNetwork(private val loader: ClassLoader) {
                         try {
                             check(operation.active && remote.permitsNetwork() && reader.accountMatches(account))
                             val service = c.service.get(null)
-                            val response = c.request.invoke(service, root, cursor, 20, "", video, "", 0, "", false, "", 0,
-                                "offline_mode_page", "", c.nonPersonalized.invoke(c.privacy.get(null)), null, null, null, -1L,
+                            val response = c.request.invoke(service, root, cursor, 20, "", video, "", 0, "", true, "zh-Hans", 0,
+                                "comment_page", "", c.nonPersonalized.invoke(c.privacy.get(null)), null, null, null, -1L,
                                 null, null, c.sceneValue, null, null, bridge)
                             if (response === suspended) suspended else { result(response); unit }
                         } catch (error: Exception) {
@@ -122,6 +122,6 @@ internal class HostCommentReplyNetwork(private val loader: ClassLoader) {
             check(returnType == java.lang.Boolean.TYPE && !Modifier.isStatic(modifiers)); isAccessible = true
         }
         private val scene = type("X.0F2U")
-        val sceneValue = scene.getMethod("getValue").invoke(scene.enumConstants.single { (it as Enum<*>).name == "OFFLINE_COMMENT" }) as Int
+        val sceneValue = scene.getMethod("getValue").invoke(scene.enumConstants.single { (it as Enum<*>).name == "DEFAULT" }) as Int
     }
 }

@@ -86,4 +86,36 @@ class OfflineCommentJobStoreTest {
         assertEquals("pending", store.get("media")!!.getString("state"))
         assertFalse(store.get("media")!!.getBoolean("translationReady"))
     }
+    @Test fun oldTwentyRowCompleteJobIsReopenedWithoutDroppingAccountOrExistingArchives() {
+        val row = JSONObject().put("account", "a".repeat(64)).put("video", "saved-video")
+            .put("schema", 3).put("cacheLimit", 200).put("firstPage", true).put("sourceReady", true)
+            .put("translationReady", true).put("mediaReady", true).put("sourceRevision", 8)
+            .put("state", "complete").put("epoch", 3)
+        assertTrue(OfflineCommentJobStore.repairSource(row, 200, true))
+        assertEquals(7, row.getInt("schema")); assertEquals(9L, row.getLong("sourceRevision"))
+        assertTrue(row.getBoolean("firstPage")); assertTrue(row.getBoolean("refreshSource"))
+        assertFalse(row.getBoolean("sourceReady")); assertFalse(row.getBoolean("translationReady")); assertFalse(row.getBoolean("mediaReady"))
+        assertEquals("saved-video", row.getString("video")); assertEquals(3L, row.getLong("epoch"))
+        assertFalse(OfflineCommentJobStore.repairSource(row, 200, true))
+    }
+
+    @Test fun replyLimitChangeReopensSourceButKeepsItsAccountAndEpoch() {
+        val row = JSONObject().put("account", "a".repeat(64)).put("video", "quota-change").put("epoch", 7)
+        assertTrue(OfflineCommentJobStore.repairSource(row, 200, true, OfflineCommentBudget.Quotas(200, 1000, 50)))
+        assertFalse(OfflineCommentJobStore.repairSource(row, 200, true, OfflineCommentBudget.Quotas(200, 1000, 50)))
+        assertTrue(OfflineCommentJobStore.repairSource(row, 200, true, OfflineCommentBudget.Quotas(200, 200, 10)))
+        assertEquals(200, row.getInt("replyLimit")); assertEquals(10, row.getInt("threadLimit")); assertEquals(7, row.getInt("epoch"))
+    }
+
+    @Test fun fullyTranslatedPartialServerCoverageNeverBecomesACompleteArchive() {
+        val prefs = org.robolectric.RuntimeEnvironment.getApplication().getSharedPreferences("partial-source", android.content.Context.MODE_PRIVATE)
+        val store = OfflineCommentJobStore(prefs)
+        store.put("partial", org.json.JSONObject().put("account", "a".repeat(64)).put("video", "partial").put("epoch", 0L)
+            .put("sourceRevision", 1L).put("sourceReady", true).put("sourceIncomplete", true).put("mediaReady", true))
+        assertTrue(store.finishTranslation("partial", 0L, 1L))
+        assertEquals("partial", store.get("partial")!!.getString("state"))
+        assertTrue(store.finishMedia("partial", 0L, 1L))
+        assertEquals("partial", store.get("partial")!!.getString("state"))
+    }
+
 }

@@ -30,12 +30,24 @@ internal class OfflineCommentJobStore(private val preferences: SharedPreferences
         action(current)
         return put(key, current)
     }
+    companion object {
+        /** Re-open source coverage after replacing the old offline-only request scene. Pages/media are never cleared. */
+        fun repairSource(row: JSONObject, limit: Int, first: Boolean, quotas: OfflineCommentBudget.Quotas = OfflineCommentBudget.Quotas(limit)): Boolean {
+            if (row.optInt("schema") == 7 && row.optInt("cacheLimit") == limit && row.optInt("replyLimit", -1) == quotas.replies && row.optInt("threadLimit", -1) == quotas.perThread) return false
+            row.put("schema", 7).put("replyLimit", quotas.replies).put("threadLimit", quotas.perThread).put("refreshSource", true).put("cacheLimit", limit).put("firstPage", first)
+                .put("sourceRevision", maxOf(1L, row.optLong("sourceRevision") + 1L))
+                .put("cursor", 0L).put("roots", org.json.JSONArray()).put("rootPhase", false).put("nextReply", false)
+                .put("sourceIncomplete", false).put("sourceNoGrowth", 0).put("sourceReady", false).put("translationReady", false).put("mediaReady", false).put("state", "pending")
+                .put("sourceRetryAt", 0L).put("translationRetryAt", 0L).put("mediaRetryAt", 0L)
+            return true
+        }
+    }
     @Synchronized fun finishTranslation(key: String, epoch: Long, sourceRevision: Long): Boolean {
         val current = get(key) ?: return false
         if (current.optLong("sourceRevision") != sourceRevision) return false
         return change(key, epoch) {
             it.put("translationReady", true).put("translationAttempts", 0).put("translationRetryAt", 0L)
-            it.put("state", if (it.optBoolean("sourceReady") && it.optBoolean("mediaReady", true)) "complete" else "pending")
+            it.put("state", if (it.optBoolean("sourceReady") && it.optBoolean("mediaReady", true)) if (it.optBoolean("sourceIncomplete")) "partial" else "complete" else "pending")
         }
     }
     @Synchronized fun finishMedia(key: String, epoch: Long, sourceRevision: Long): Boolean {
@@ -43,7 +55,7 @@ internal class OfflineCommentJobStore(private val preferences: SharedPreferences
         if (current.optLong("sourceRevision") != sourceRevision) return false
         return change(key, epoch) {
             it.put("mediaReady", true).put("mediaAttempts", 0).put("mediaRetryAt", 0L)
-            it.put("state", if (it.optBoolean("sourceReady") && it.optBoolean("translationReady")) "complete" else "pending")
+            it.put("state", if (it.optBoolean("sourceReady") && it.optBoolean("translationReady")) if (it.optBoolean("sourceIncomplete")) "partial" else "complete" else "pending")
         }
     }
     @Synchronized fun retry(account: String) {

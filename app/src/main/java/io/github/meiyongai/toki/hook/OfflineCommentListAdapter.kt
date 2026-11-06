@@ -41,8 +41,11 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
         return value.id
     }
     private fun rebuild() {
-        pages = OfflineCommentPages(snapshot?.rows.orEmpty().filter { it.parentId.isBlank() || root(it)?.let(expanded::contains) != false })
-        pages.append()
+        val wasShown = pages.count.coerceAtLeast(40)
+        pages = OfflineCommentPages(CommentPageMerge.ordered(snapshot?.rows.orEmpty()).filter {
+            it.parentId.isBlank() || root(it)?.let(expanded::contains) != false
+        })
+        while (pages.hasNext && pages.count < wasShown) pages.append()
     }
 
     private data class Online(val source: String, val target: String, val state: ManualCommentTranslation.State,
@@ -65,8 +68,11 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
         notifyDataSetChanged()
     }
     val hasNext: Boolean get() = pages.hasNext
-    fun submit(value: OfflineCommentData.Snapshot?) {
-        dismissMenus(); generation++; snapshot = value; modes.clear(); online.clear(); expanded.clear()
+    fun submit(value: OfflineCommentData.Snapshot?, retain: Boolean = false) {
+        val same = retain && value != null && snapshot?.account == value.account && snapshot?.video == value.video
+        dismissMenus(); generation++; snapshot = value
+        if (!same) { modes.clear(); online.clear(); expanded.clear(); pages = OfflineCommentPages(emptyList()) }
+        if (value == null) pages = OfflineCommentPages(emptyList())
         byId = value?.rows.orEmpty().associateBy { it.id }
         replyCounts = value?.rows.orEmpty().filter { it.parentId.isNotBlank() }.mapNotNull { root(it) }.groupingBy { it }.eachCount()
         rebuild(); notifyDataSetChanged(); changed()
@@ -85,19 +91,38 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
         val row = getItem(position)
         val token = generation
         val dp = context.resources.displayMetrics.density
-        cell.root.setPaddingRelative(((12 + row.depth * 14) * dp).toInt(), (8 * dp).toInt(), (12 * dp).toInt(), (8 * dp).toInt())
+        val reply = row.parentId.isNotBlank()
+        cell.replyStyle(reply)
+        cell.root.setPaddingRelative(((12 + if (reply) 38 + (row.depth - 1).coerceAtLeast(0) * 10 else 0) * dp).toInt(), (8 * dp).toInt(), (12 * dp).toInt(), (8 * dp).toInt())
+        cell.avatar.layoutParams = cell.avatar.layoutParams.apply {
+            width = ((if (row.depth > 0) 24 else 32) * dp).toInt(); height = width
+        }
         cell.avatar.text = row.author.ifBlank { row.handle }.let { value ->
             if (value.isBlank()) "?" else String(Character.toChars(value.codePointAt(0))).uppercase(java.util.Locale.ROOT)
         }
         val name = row.author.ifBlank { context.getString(R.string.offline_comments_unknown_author) }
-        cell.author.text = name + (if (row.handle.isBlank()) "" else "  @" + row.handle) +
-            if (row.parentId.isBlank()) "" else "  " + context.getString(R.string.comment_page_reply_to, byId[row.parentId]?.author?.takeIf { it.isNotBlank() } ?: context.getString(R.string.offline_comments_unknown_author))
+        cell.author.text = name + if (row.handle.isBlank()) "" else "  @" + row.handle
+        cell.relation.visibility = if (reply) View.VISIBLE else View.GONE
+        val parentRow = byId[row.parentId]
+        val parentName = parentRow?.handle?.takeIf { it.isNotBlank() }?.let { "@$it" }
+            ?: parentRow?.author?.takeIf { it.isNotBlank() } ?: context.getString(R.string.offline_comments_unknown_author)
+        cell.relation.text = context.getString(R.string.toki_reply_to, parentName)
         fun selectedMode() = modes[row.id] ?: defaultMode
         fun render() {
             val mode = selectedMode()
             val content = row.text(mode)
-            val shown = content.ifBlank { context.getString(R.string.offline_comments_no_text) }
-            if (cell.body.text.toString() != shown) cell.body.text = shown
+            val pair = mode == OfflineCommentData.Mode.BILINGUAL && !row.translation.isNullOrBlank() && row.source != row.translation
+            val shown = if (pair) row.translation + "\n" + row.source
+                else content.ifBlank { context.getString(R.string.offline_comments_no_text) }
+            val styled = android.text.SpannableString(shown)
+            if (pair) {
+                val start = (checkNotNull(row.translation).length + 1).coerceAtMost(shown.length)
+                val end = shown.length
+                styled.setSpan(android.text.style.ForegroundColorSpan(context.getColor(R.color.toki_ui_secondary)),
+                    start, end, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                styled.setSpan(android.text.style.RelativeSizeSpan(.9f), start, end, android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
+            cell.body.text = styled
             cell.body.visibility = if (content.isBlank() && row.media.isNotEmpty()) View.GONE else View.VISIBLE
             val live = online[row.id]?.takeIf { it.source == row.source }
             cell.status.visibility = if (row.translation != null && live == null) View.GONE else View.VISIBLE
@@ -116,6 +141,7 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
             }
             cell.online.text = context.getString(if (live != null && live.state.failed > 0)
                 R.string.cached_comment_retry_action else R.string.cached_comment_translate_action)
+            cell.online.visibility = if (translate != null && row.source.isNotBlank() && row.translation.isNullOrBlank()) View.VISIBLE else View.GONE
             cell.online.isEnabled = translate != null && row.source.isNotBlank() && !row.sourceTruncated && live?.state?.busy != true
             cell.online.setOnClickListener {
                 val snapshot = this.snapshot
@@ -127,41 +153,54 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
             val localReplies = replyCounts[row.id] ?: 0
             cell.loadReplies.visibility = if (row.parentId.isBlank() && row.depth == 0 && (row.replyCount > 0 || localReplies > 0)) View.VISIBLE else View.GONE
             cell.loadReplies.text = context.getString(if (row.id in expanded) R.string.offline_comment_replies_collapse
-                else if (localReplies > 0) R.string.offline_comment_replies_expand else R.string.offline_comment_replies_missing, localReplies)
+                else if (localReplies > 0) R.string.toki_view_cached_replies else R.string.offline_comment_replies_missing, localReplies)
             cell.loadReplies.isEnabled = localReplies > 0
             cell.loadReplies.setOnClickListener {
                 if (token == generation && valid()) {
                     if (!expanded.add(row.id)) expanded.remove(row.id)
                     rebuild(); notifyDataSetChanged(); changed()
+                    cell.root.announceForAccessibility(context.getString(if (row.id in expanded) R.string.toki_action_expanded else R.string.toki_action_collapsed))
                 }
             }
             val replyCursor = snapshot?.replyCursors?.get(row.id)
             val remote = try { TranslationNetworkPolicy.capture().permitsNetwork() } catch (_: Exception) { false }
-            cell.onlineReplies.visibility = if (row.parentId.isBlank() && row.replyCount > localReplies && loadReplies != null && remote) View.VISIBLE else View.GONE
+            cell.onlineReplies.visibility = if (row.parentId.isBlank() && (row.replyCount > localReplies || replyCursor?.hasMore == true) && loadReplies != null && remote) View.VISIBLE else View.GONE
             cell.onlineReplies.setText(if (replyCursor?.hasMore == true) R.string.comment_reply_online_next else R.string.comment_reply_online_first)
             cell.onlineReplies.setOnClickListener {
                 val value = snapshot
-                if (token == generation && valid() && value != null) loadReplies?.invoke(value, row)
+                if (token == generation && valid() && value != null && row.parentId.isBlank() &&
+                    cell.onlineReplies.visibility == View.VISIBLE && TranslationNetworkPolicy.capture().permitsNetwork()) {
+                    loadReplies?.invoke(value, row)
+                }
             }
-            cell.replies.text = if (row.replyCount > 0) context.getString(R.string.offline_comments_reply_count, row.replyCount) else ""
+            cell.replies.visibility = if (row.parentId.isBlank() && row.replyCount > localReplies) View.VISIBLE else View.GONE
+            cell.mediaScroll.visibility = if (row.media.isNotEmpty()) View.VISIBLE else View.GONE
+            cell.replies.text = if (row.replyCount > localReplies) context.getString(R.string.toki_reply_coverage, localReplies, row.replyCount) else ""
             for ((button, value, label) in cell.buttons) {
                 button.text = (if (value == mode) "• " else "") + context.getString(label)
-                button.isEnabled = value == OfflineCommentData.Mode.ORIGINAL || row.translation != null
+                button.isEnabled = true
                 button.setOnClickListener {
                     if (token == generation && valid() && snapshot?.rows?.any { it.id == row.id && it.source == row.source } == true) {
                         modes[row.id] = value; render()
+                        if (value != OfflineCommentData.Mode.ORIGINAL && row.translation.isNullOrBlank()) cell.online.performClick()
                     }
                 }
             }
         }
         cell.more.setOnClickListener {
             if (token != generation || !valid()) return@setOnClickListener
-            val choices = cell.buttons.filter { (_, value, _) -> value == OfflineCommentData.Mode.ORIGINAL || row.translation != null }
+            val choices = cell.buttons
             val labels = choices.map { (_, value, label) -> (if (value == selectedMode()) "• " else "") + context.getString(label) }
             dismissMenus()
-            rowMenu = TokiDialogs.builder(context).setTitle(R.string.toki_comment_actions).setItems(labels.toTypedArray()) { _, which ->
+            val withTranslation = if (cell.online.isEnabled) labels + cell.online.text.toString() else labels
+            rowMenu = TokiDialogs.builder(context).setTitle(R.string.toki_comment_actions).setItems(withTranslation.toTypedArray()) { _, which ->
                 if (token == generation && valid() && snapshot?.rows?.any { it.id == row.id && it.source == row.source } == true) {
-                    modes[row.id] = choices[which].second; render()
+                    if (which < choices.size) {
+                        val mode = choices[which].second
+                        modes[row.id] = mode; render()
+                        if (mode != OfflineCommentData.Mode.ORIGINAL && row.translation.isNullOrBlank()) cell.online.performClick()
+                    }
+                    else cell.online.performClick()
                 }
             }.show()
         }
@@ -181,48 +220,78 @@ internal class OfflineCommentListAdapter(private val context: Context, private v
         private fun dp(value: Int) = (value * density).toInt()
         private val ink = context.getColor(R.color.toki_ui_ink)
         private val secondary = context.getColor(R.color.toki_ui_secondary)
-        val root = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL; tag = this@Cell }
+        val root = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; tag = this@Cell }
         val avatar = TextView(context).apply {
             textSize = 12f; gravity = Gravity.CENTER; setTextColor(secondary)
             importantForAccessibility = View.IMPORTANT_FOR_ACCESSIBILITY_NO
             background = GradientDrawable().apply { shape = GradientDrawable.OVAL; setColor(context.getColor(R.color.toki_ui_canvas)) }
         }
-        val author = TextView(context).apply { textSize = 12f; setTextColor(secondary); typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL) }
+        val author = TextView(context).apply {
+            textSize = 12f; maxLines = 1; ellipsize = android.text.TextUtils.TruncateAt.END
+            setTextColor(secondary); typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
+        }
         val more = Button(context).apply {
             text = "⋯"; textSize = 18f; tag = "comment-actions"; contentDescription = context.getString(R.string.toki_comment_actions)
             minWidth = 0; minimumWidth = 0; minHeight = dp(40); minimumHeight = dp(40)
-            setPadding(0,0,0,0); background = null; setTextColor(secondary)
+            setPadding(0, 0, 0, 0); background = null; setTextColor(secondary)
         }
         private val header = LinearLayout(context).apply {
             orientation = LinearLayout.HORIZONTAL; gravity = Gravity.CENTER_VERTICAL
-            addView(avatar, LinearLayout.LayoutParams(dp(32),dp(32)))
-            addView(author, LinearLayout.LayoutParams(0,ViewGroup.LayoutParams.WRAP_CONTENT,1f).apply { marginStart=dp(10) })
-            addView(more, LinearLayout.LayoutParams(dp(40),dp(40)))
+            addView(author, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f))
+            addView(more, LinearLayout.LayoutParams(dp(40), dp(40)))
         }
-        val body = TextView(context).apply { textSize = 14f; setTextColor(ink); setTextIsSelectable(true); setPaddingRelative(dp(42),0,0,0) }
-        val status = TextView(context).apply { textSize = 10f; setTextColor(secondary); setPaddingRelative(dp(42),dp(4),0,0) }
+        val relation = TextView(context).apply {
+            tag = "comment-reply-relation"; textSize = 11f; setTextColor(context.getColor(R.color.toki_ui_accent))
+            setPadding(0, 0, 0, dp(5)); maxLines = 2
+        }
+        fun replyStyle(reply: Boolean) {
+            root.background = if (!reply) null else object : android.graphics.drawable.Drawable() {
+                private val paint = android.graphics.Paint(android.graphics.Paint.ANTI_ALIAS_FLAG).apply { color = secondary; alpha = 80; strokeWidth = dp(2).toFloat() }
+                override fun draw(canvas: android.graphics.Canvas) {
+                    val x = if (root.layoutDirection == View.LAYOUT_DIRECTION_RTL) bounds.right - dp(28) else dp(28)
+                    canvas.drawLine(x.toFloat(), 0f, x.toFloat(), bounds.bottom.toFloat(), paint)
+                }
+                override fun setAlpha(alpha: Int) { paint.alpha = alpha }
+                override fun setColorFilter(filter: android.graphics.ColorFilter?) { paint.colorFilter = filter }
+                @Deprecated("Deprecated in Android") override fun getOpacity() = android.graphics.PixelFormat.TRANSLUCENT
+            }
+            avatar.textSize = if (reply) 10f else 12f
+        }
+        val body = TextView(context).apply {
+            tag = "comment-body"; textSize = 14f; setTextColor(ink); setTextIsSelectable(true)
+            setLineSpacing(dp(2).toFloat(), 1.05f)
+        }
+        val status = TextView(context).apply {
+            tag = "comment-status"; textSize = 10f; setTextColor(secondary); setPadding(0, dp(4), 0, 0)
+        }
         val media = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL }
-        private val mediaScroll = HorizontalScrollView(context).apply { addView(media); isHorizontalScrollBarEnabled = false; setPaddingRelative(dp(42),dp(6),0,0) }
-        val replies = TextView(context).apply { textSize = 10f; setTextColor(secondary); setPaddingRelative(dp(42),dp(4),0,0) }
-        private fun textAction() = Button(context).apply {
-            textSize = 12f; isAllCaps = false; setTextColor(secondary); background = null
-            gravity = Gravity.START or Gravity.CENTER_VERTICAL; setPaddingRelative(dp(42),0,0,0)
-            minHeight = dp(40); minimumHeight = dp(40)
+        val mediaScroll = HorizontalScrollView(context).apply {
+            addView(media); isHorizontalScrollBarEnabled = false; setPadding(0, dp(6), 0, 0)
         }
-        val online = textAction()
-        val loadReplies = textAction()
-        val onlineReplies = textAction()
-        // Kept as the same row-mode actions for callers; the visible entry is the compact More menu.
-        private val controls = LinearLayout(context).apply { orientation = LinearLayout.HORIZONTAL; visibility = View.GONE }
+        val replies = TextView(context).apply { textSize = 10f; setTextColor(secondary); setPadding(0, dp(4), 0, 0) }
+        private fun textAction(tagName: String) = Button(context).apply {
+            tag = tagName; textSize = 12f; isAllCaps = false; setTextColor(secondary); background = null
+            gravity = Gravity.START or Gravity.CENTER_VERTICAL; setPadding(0, 0, 0, 0)
+            minHeight = dp(40); minimumHeight = dp(40); minWidth = 0; minimumWidth = 0; includeFontPadding = false
+        }
+        val online = textAction("comment-translate")
+        val loadReplies = textAction("comment-local-replies").apply { setTextColor(context.getColor(R.color.toki_ui_accent)); typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL) }
+        val onlineReplies = textAction("comment-online-replies")
+        private val controls = LinearLayout(context).apply {
+            tag = "comment-mode-controls"; orientation = LinearLayout.HORIZONTAL; visibility = View.GONE
+        }
         val buttons = listOf(
             Triple(Button(context), OfflineCommentData.Mode.ORIGINAL, R.string.manual_comment_original),
             Triple(Button(context), OfflineCommentData.Mode.TRANSLATED, R.string.manual_comment_translated),
             Triple(Button(context), OfflineCommentData.Mode.BILINGUAL, R.string.manual_comment_bilingual),
         )
         init {
-            root.addView(header); root.addView(body); root.addView(mediaScroll); root.addView(status); root.addView(replies)
+            val content = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL }
+            root.addView(avatar, LinearLayout.LayoutParams(dp(32), dp(32)).apply { topMargin = dp(5) })
+            root.addView(content, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f).apply { marginStart = dp(10) })
+            content.addView(header); content.addView(relation); content.addView(body); content.addView(mediaScroll); content.addView(status); content.addView(replies)
             buttons.forEach { (button, _, _) -> controls.addView(button, LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1f)) }
-            root.addView(controls); root.addView(online); root.addView(loadReplies); root.addView(onlineReplies)
+            content.addView(controls); content.addView(online); content.addView(loadReplies); content.addView(onlineReplies)
         }
     }
 }

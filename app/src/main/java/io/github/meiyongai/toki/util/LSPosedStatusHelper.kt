@@ -34,6 +34,7 @@ object LSPosedStatusHelper {
     val status: StateFlow<LSPosedStatus> = _status.asStateFlow()
 
     private var isInitialized = false
+    private val connection = FrameworkServiceConnection()
 
     /**
      * 注册并启动 LSPosed 服务监听器。
@@ -41,34 +42,37 @@ object LSPosedStatusHelper {
      * @return Unit；无入参。
      * Callers: TokiApplication.onCreate、MainActivity.onCreate。
      */
-    fun init() {
+    @Synchronized fun init() {
         if (isInitialized) return
         isInitialized = true
 
         XposedServiceHelper.registerListener(object : XposedServiceHelper.OnServiceListener {
             /** 发布当前完整配置并更新激活信息。@param service 框架连接。@return Unit。Callers: XposedServiceHelper。 */
             override fun onServiceBind(service: XposedService) {
-                ConfigClient.connectFramework { service.getRemotePreferences(ConfigClient.FRAMEWORK_GROUP) }
-                val frameworkName = service.frameworkName.ifBlank { "LSPosed" }
-                val frameworkVersion = service.frameworkVersion.ifBlank { "2.2.0-it" }
-                val frameworkVersionCode = service.frameworkVersionCode
-                val apiVersion = service.apiVersion
-                val details = "$frameworkName $frameworkVersion ($frameworkVersionCode), API $apiVersion"
-
-                _status.value = LSPosedStatus(
-                    isActivated = true,
-                    details = details
-                )
+                connection.bind(service) {
+                    try {
+                        // Read remote metadata before claiming a live connection; dead Binder calls can throw.
+                        val frameworkName = service.frameworkName.ifBlank { "LSPosed" }
+                        val frameworkVersion = service.frameworkVersion.ifBlank { "unknown" }
+                        val details = "$frameworkName $frameworkVersion (${service.frameworkVersionCode}), API ${service.apiVersion}"
+                        ConfigClient.connectFramework { service.getRemotePreferences(ConfigClient.FRAMEWORK_GROUP) }
+                        _status.value = LSPosedStatus(isActivated = true, details = details)
+                    } catch (error: Exception) {
+                        connection.died(service) { disconnected() }
+                        android.util.Log.e("TokiFramework", "框架连接建立失败，保留本地设置", error)
+                    }
+                }
             }
 
-            /** 标记服务断开，保留本地设置。@param service 已失效连接。@return Unit。Callers: XposedServiceHelper。 */
+            /** Ignore death of a replaced connection, but never pretend a genuinely dead service is active. */
             override fun onServiceDied(service: XposedService) {
-                ConfigClient.disconnectFramework()
-                _status.value = LSPosedStatus(
-                    isActivated = false,
-                    details = "None"
-                )
+                connection.died(service) { disconnected() }
             }
         })
     }
+    private fun disconnected() {
+        ConfigClient.disconnectFramework()
+        _status.value = LSPosedStatus(isActivated = false, details = "None")
+    }
+
 }

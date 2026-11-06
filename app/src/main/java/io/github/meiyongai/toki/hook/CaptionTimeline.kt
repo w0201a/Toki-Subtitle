@@ -15,7 +15,8 @@ internal object CaptionTimeline {
             var end = -1L
             this.cues.forEachIndexed { i, cue -> end = maxOf(end, cue.endMs); ends[i] = end }
         }
-        fun at(positionMs: Long): String? {
+        fun at(positionMs: Long): String? = cueAt(positionMs)?.text
+        fun cueAt(positionMs: Long): Cue? {
             if (positionMs < 0) return null
             var low = 0
             var high = cues.lastIndex
@@ -27,7 +28,7 @@ internal object CaptionTimeline {
             }
             while (index >= 0 && ends[index] > positionMs) {
                 val cue = cues[index--]
-                if (positionMs < cue.endMs) return cue.text
+                if (positionMs < cue.endMs) return cue
             }
             return null
         }

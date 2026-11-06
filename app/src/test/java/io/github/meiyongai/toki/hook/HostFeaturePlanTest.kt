@@ -342,4 +342,20 @@ class HostFeaturePlanTest {
         assertFalse(late.apply(request).boolean(key))
     }
 
+    @Test fun rejectedStartupFeaturesDisappearFromEverySubsequentInstallationPass() {
+        val request = config("comment_sticker_download_enabled" to true)
+        val plan = HostFeaturePlan(request)
+        assertTrue("CommentStickerDownloadHook" in plan.features)
+        plan.reject("CommentStickerDownloadHook")
+        repeat(3) {
+            assertFalse("CommentStickerDownloadHook" in plan.features)
+            assertFalse("CommentStickerDownloadHook" in plan.adaptedFeatures)
+            assertFalse("CommentStickerDownloadHook" in plan.directHostFeatures)
+            assertTrue(plan.symbols.isEmpty())
+            assertTrue(plan.liveCandidates(request).isEmpty())
+            assertFalse(plan.apply(request).boolean("comment_sticker_download_enabled"))
+            assertTrue(plan.requiresRestart("CommentStickerDownloadHook", request))
+        }
+    }
+
 }

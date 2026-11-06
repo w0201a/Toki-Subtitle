@@ -11,6 +11,7 @@ internal object SubtitleFeature {
     private fun translating() = ConfigClient.getBoolean("video_translate_enabled")
 
     fun install(module: XposedModule, loader: ClassLoader, owner: String) {
+        if (!CommentCoreRollout.enabled()) { LegacySubtitleFeature.install(module, loader, owner); return }
         HookRuntime.install("SubtitleLanguage") { installLanguage(module, loader, "SubtitleLanguage") }
         HookRuntime.install("SubtitleExcludedLanguages") { installExcludedLanguages(module, loader, "SubtitleExcludedLanguages") }
         HookRuntime.install("SubtitleMenu") { SubtitleMenu.install(module, loader, "SubtitleMenu") }
@@ -56,6 +57,8 @@ internal object SubtitleFeature {
             HookRuntime.event("NativeSubtitleTranslation", "unavailable contract=${error.javaClass.simpleName}; original retained")
             null
         }
+        val presenter = SubtitleSessionPresenter(translator)
+        HookRuntime.onDispose(owner) { presenter.close() }
         val renderer = loader.adaptiveClass("X.0B1g")
         if (translator != null) {
             val prefetchOwner = "SubtitleFeedPrefetch"
@@ -68,17 +71,15 @@ internal object SubtitleFeature {
                 val holder = loader.loadClass("com.ss.android.ugc.aweme.feed.adapter.VideoViewCell")
                 val getAweme = holder.getMethod("getAweme")
                 val selection = CaptionPlaybackSelection()
-                var timelineOverlay: SubtitleOverlay? = null
-                var timelineVideo = ""
                 var nextTimelineRefresh = 0L
                 val getVideoView = holder.getMethod("getVideoView")
                 HookRuntime.onDispose(prefetchOwner) {
-                    selection.clear(); timelineOverlay?.close(); timelineOverlay = null
+                    selection.clear(); presenter.close()
                 }
                 module.trackHook(prefetchOwner, android.app.Activity::class.java.getDeclaredMethod("onPause")).intercept { chain ->
                     selection.clear()
                     translator.cancel()
-                    timelineOverlay?.close(); timelineOverlay = null; timelineVideo = ""
+                    presenter.close()
                     chain.proceed()
                 }
                 val progress = holder.getMethod("onPlayProgressChange", String::class.java,
@@ -103,28 +104,19 @@ internal object SubtitleFeature {
                             CaptionDebugOverlay.update(debugView, id, "timeline",
                                 if (cue == null) "HIDDEN" else "EXPANDED", cue?.length ?: 0, translator)
                         }
-                        if (timelineVideo != id) { timelineOverlay?.close(); timelineOverlay = null; timelineVideo = id }
-                        if (cue != null) {
-                            val view = getVideoView.invoke(chain.thisObject) as? View
-                            if (view != null) {
-                                val binding = timelineOverlay ?: SubtitleOverlay(view, translator, timelineSource = true).also {
-                                    timelineOverlay = it
-                                    HookRuntime.event("SubtitleTimelineDisplay", "playback timeline display attached")
-                                }
-                                binding.update("EXPANDED", cue, id)
-                            }
-                        } else timelineOverlay?.update("HIDDEN", "", id)
+                        presenter.progress(getVideoView.invoke(chain.thisObject) as? View, id, chain.args[1] as Long)
                     }
                     result
                 }
                 fun selectedPlayback(instance: Any) {
                     getAweme.invoke(instance)?.let(upcoming::selected)?.let { id ->
                         if (id != selection.video) {
-                            timelineOverlay?.close(); timelineOverlay = null; timelineVideo = ""; nextTimelineRefresh = 0L
+                            presenter.close(); nextTimelineRefresh = 0L
                             CaptionDebugOverlay.clear()
                         }
                         translator.selectVideo(id, instance)
                         selection.select(instance, id)
+                        presenter.select(getVideoView.invoke(instance) as? View, id)
                         translator.readAhead(id, "") {
                             selection.current(id) && translating()
                         }
@@ -163,15 +155,12 @@ internal object SubtitleFeature {
             HookRuntime.event(owner, "renderer method not found; independently verified frame path required")
             null
         }
-        val bindings = WeakHashMap<View, WeakReference<SubtitleOverlay>>()
         val verifiedRenderers = WeakHashMap<Any, Boolean>()
         val frameVideos = WeakHashMap<Any, String>()
         val gestures = WeakHashMap<android.app.Activity, SubtitleGesture>()
         HookRuntime.onDispose(owner) {
             gestures.values.forEach { it.close() }
             gestures.clear()
-            bindings.values.toList().forEach { it.get()?.close() }
-            bindings.clear()
             verifiedRenderers.clear()
             frameVideos.clear()
         }
@@ -186,9 +175,7 @@ internal object SubtitleFeature {
             val screen = chain.thisObject as android.app.Activity
             val event = chain.args[0] as android.view.MotionEvent
             val gesture = gestures.getOrPut(screen) { SubtitleGesture(screen) }
-            if (gesture.touch(event) { x, y -> bindings.values.firstNotNullOfOrNull { ref ->
-                    ref.get()?.takeIf { it.hit(screen, x, y) }
-                } }) true else chain.proceed()
+            if (gesture.touch(event) { x, y -> presenter.hit(screen, x, y) }) true else chain.proceed()
         }
         var unknownRootReported = false
         // 原生清屏期间 bs 会因 onBlockUIUpdate 提前返回，渲染器收不到新帧。
@@ -223,28 +210,22 @@ internal object SubtitleFeature {
                 val frame = chain.args[0]
                 if (frame != null) translator?.noteNativeFrame(frameVideo,
                     (frameState.get(frame) as? Enum<*>)?.name == "EXPANDED" &&
-                        !(frameText.get(frame) as? String).isNullOrBlank())
+                        !(frameText.get(frame) as? String).isNullOrBlank(), frameText.get(frame) as? String)
                 rendererField.get(instance)?.let { verifiedRenderers[it] = true; frameVideos[it] = frameVideo }
-                val previousRoot = rendererField.get(instance)?.let { rootField.get(it) as View }
-                val previousBinding = previousRoot?.let { bindings[it]?.get() }
-                val previousRevision = previousBinding?.frameRevision
+                val previousRoot=rendererField.get(instance)?.let{rootField.get(it) as? View}
+                val previousRevision=previousRoot?.let(presenter::nativeRevision)
                 val result = chain.proceed()
                 rendererField.get(instance)?.let { nativeRenderer ->
                     verifiedRenderers[nativeRenderer] = true
                     frameVideos[nativeRenderer] = frameVideo
                     val root = rootField.get(nativeRenderer) as View
                     if (verifiedRenderers.containsKey(nativeRenderer)) {
-                        val updated = bindings[root]?.get()
-                        // 原生渲染已送帧时不重复以 VM 原始内容覆盖；仅补足清屏阻塞的路径。
-                        if (updated != null && (updated !== previousBinding || updated.frameRevision != previousRevision))
-                            return@intercept result
-                        val binding = bindings[root]?.get() ?: SubtitleOverlay(root, translator).also {
-                            bindings[root] = WeakReference(it)
-                        }
-                        val frame = checkNotNull(chain.args[0])
-                        binding.update((frameState.get(frame) as? Enum<*>)?.name ?: "UNKNOWN",
-                            frameText.get(frame) as? String ?: "",
-                            frameVideo)
+                        // The renderer hook already delivered the actual selected-track frame. VM text must not overwrite it.
+                        if(root===previousRoot&&presenter.nativeRevision(root)!=previousRevision)return@intercept result
+                        val freshFrame = checkNotNull(chain.args[0])
+                        presenter.native(root, frameVideo,
+                            (frameState.get(freshFrame) as? Enum<*>)?.name ?: "UNKNOWN",
+                            frameText.get(freshFrame) as? String ?: "")
                     }
                 }
                 result
@@ -261,14 +242,11 @@ internal object SubtitleFeature {
                 }
                 return@intercept result
             }
-            val binding = bindings[root]?.get() ?: SubtitleOverlay(root, translator).also {
-                bindings[root] = WeakReference(it)
-            }
             val id = (videoField?.get(chain.thisObject) as? String)?.takeIf(String::isNotBlank)
                 ?: frameVideos[chain.thisObject].orEmpty()
             translator?.noteNativeFrame(id, (chain.args[1] as? Enum<*>)?.name == "EXPANDED" &&
-                !(chain.args[2] as? String).isNullOrBlank())
-            binding.update((chain.args[1] as? Enum<*>)?.name ?: "UNKNOWN", chain.args[2] as? String ?: "", id)
+                !(chain.args[2] as? String).isNullOrBlank(), chain.args[2] as? String)
+            presenter.native(root, id, (chain.args[1] as? Enum<*>)?.name ?: "UNKNOWN", chain.args[2] as? String ?: "")
             result
         }
         check(display != null || HookRuntime.scope("SubtitleCleanFrames").active) {

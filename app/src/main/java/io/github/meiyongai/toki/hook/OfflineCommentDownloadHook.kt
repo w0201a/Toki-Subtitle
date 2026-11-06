@@ -32,9 +32,9 @@ internal object OfflineCommentDownloadHook {
     const val PASSIVE = "offline_comment_backfill_passive"
     private var enqueueVisible: ((Any) -> Unit)? = null
     private val progress = AtomicReference<Bundle?>()
-    fun statusSnapshot(): Bundle? = progress.get()?.let(::Bundle)
-    fun refresh(model: Any) { enqueueVisible?.invoke(model) }
-    fun passive(model: Any) { if (ConfigClient.isReady && ConfigClient.getBoolean(PASSIVE)) enqueueVisible?.invoke(model) }
+    fun statusSnapshot(): Bundle? = if (CommentCoreRollout.enabled()) CommentEngine.statusSnapshot() else progress.get()?.let(::Bundle)
+    fun refresh(model: Any) { if (CommentCoreRollout.enabled()) CommentEngine.offer(model) else enqueueVisible?.invoke(model) }
+    fun passive(model: Any) { if (ConfigClient.isReady && ConfigClient.getBoolean(PASSIVE)) refresh(model) }
     private fun prefs(context: Context) = context.getSharedPreferences("toki_offline_comment_jobs_v1", Context.MODE_PRIVATE)
     fun networkAllowed(): Boolean {
         return try {
@@ -46,6 +46,10 @@ internal object OfflineCommentDownloadHook {
     }
     fun capture() = LocalOnlyRequest { networkAllowed() }
     fun init(module: XposedModule, loader: ClassLoader) {
+        if (CommentCoreRollout.enabled()) CommentEngine.install(module, loader) else initLegacy(module, loader)
+    }
+    /** Retained for recovery/reference only. Never installed alongside the v3 engine. */
+    private fun initLegacy(module: XposedModule, loader: ClassLoader) {
         val app = checkNotNull(HookRuntime.hostContext); val main = Handler(Looper.getMainLooper())
         fun worker(name: String) = Executors.newSingleThreadExecutor { task -> Thread(task, name).apply { isDaemon = true } }
         val indexWorker = worker("toki-comment-index")
@@ -69,8 +73,9 @@ internal object OfflineCommentDownloadHook {
         val language by lazy { facade.adaptiveDeclaredMethod("LLILLIZIL") }
         fun cacheLimit(account: String? = null, video: String? = null): Int {
             val fallback = OfflineCommentPreferences.limit(ConfigClient.getString(OfflineCommentPreferences.LIMIT))
-            return if (account == null || video == null) fallback else OfflineCommentLimitOverrides.effective(app, account, video, fallback)
+            return if (account == null || video == null) fallback else OfflineCommentLimitOverrides.configured(app, account, video)
         }
+        fun quotas(account: String, video: String) = OfflineCommentLimitOverrides.quotas(app, account, video)
         fun target(): String = CommentTranslationKey.normalizedTarget(language.invoke(service.get(null)) as String)
             ?: error("Translation target unavailable")
         val closedFlag = AtomicBoolean(false); val readyFlag = AtomicBoolean(false)
@@ -91,13 +96,16 @@ internal object OfflineCommentDownloadHook {
                 putInt("originals", rows.count { it.optBoolean("firstPage") })
                 putInt("sourcesReady", rows.count { it.optBoolean("sourceReady") })
                 putInt("mediaReady", rows.count { it.optBoolean("mediaReady", true) }); putInt("commentLimit", cacheLimit())
-                putInt("ready", rows.count { it.optBoolean("sourceReady") && it.optBoolean("translationReady") && it.optBoolean("mediaReady", true) })
-                putInt("retrying", rows.count { it.optString("state") == "partial" })
+                putInt("ready", rows.count { it.optString("state") == "complete" })
+                putInt("preparedPartial", rows.count { it.optBoolean("sourceReady") && it.optBoolean("translationReady") && it.optBoolean("mediaReady", true) && it.optString("state") != "complete" })
+                putInt("partial", rows.count { it.optString("state") == "partial" })
+                putInt("retrying", rows.count { row -> listOf("source", "translation", "media").any { lane -> row.optLong(lane + "RetryAt") > System.currentTimeMillis() } })
                 putInt("queued", ingress.size()); putBoolean("network", networkAllowed()); putBoolean("verified", ready())
-                putString("failure", lastFailure.get()); putLong("updated", System.currentTimeMillis())
+                putString("failure", if (rows.all { it.optString("state") == "complete" }) "" else lastFailure.get())
+                putLong("updated", System.currentTimeMillis())
             })
             HookRuntime.detail(FEATURE, "batch=5 videos=${rows.size} sourceReady=${rows.count { it.optBoolean("sourceReady") }} " +
-                "ready=${rows.count { it.optBoolean("sourceReady") && it.optBoolean("translationReady") && it.optBoolean("mediaReady", true) }} queued=${ingress.size()}; " + lastFailure.get())
+                "ready=${rows.count { it.optString("state") == "complete" }} queued=${ingress.size()}; " + lastFailure.get())
         }
         fun record(model: Any) {
             if (closed() || !ready() || !ConfigClient.isReady || !ConfigClient.getBoolean(KEY) || !aweme.isInstance(model)) return
@@ -108,12 +116,8 @@ internal object OfflineCommentDownloadHook {
             OfflineCommentArchive.saveModel(app, account, video, reader.serializeModel(model))
             jobs.register(key, seed) { row ->
                 val first = try { OfflineCommentArchive.page(app, account, video, 0L) != null } catch (_: Exception) { false }
-                if (row.optInt("schema") != 3 || row.optInt("cacheLimit") != cacheLimit(account, video)) {
-                    row.put("schema", 3).put("cacheLimit", cacheLimit(account, video)).put("firstPage", first)
-                        .put("sourceRevision", maxOf(1L, row.optLong("sourceRevision") + 1L))
-                        .put("cursor", 0L).put("roots", JSONArray()).put("rootPhase", false).put("nextReply", false)
-                        .put("sourceReady", false).put("translationReady", false).put("mediaReady", false).put("state", "pending")
-                        .put("sourceRetryAt", 0L).put("translationRetryAt", 0L).put("mediaRetryAt", 0L)
+                if (OfflineCommentJobStore.repairSource(row, cacheLimit(account, video), first, quotas(account, video))) {
+                    OfflineCommentArchive.status(app, account, video, "pending")
                 }
                 if (!first && (row.optBoolean("firstPage") || row.optBoolean("sourceReady") || row.optLong("cursor") > 0L || row.optBoolean("rootPhase") || row.getJSONArray("roots").length() > 0)) {
                     row.put("cursor", 0L).put("roots", JSONArray()).put("rootPhase", false)
@@ -174,20 +178,39 @@ internal object OfflineCommentDownloadHook {
         fun sourcePage(key: String, job: JSONObject) {
             check(active(job))
             val account = job.getString("account"); val video = job.getString("video"); val limit = cacheLimit(account, video)
-            val selected = OfflineCommentArchive.selectedRows(app, account, video, limit)
-            val upgrade = OfflineCommentArchive.metadataPage(app, account, video, limit, job.optBoolean("refreshMedia"))
-            val roots = job.getJSONArray("roots")
+            val selected = OfflineCommentArchive.selectedRows(app, account, video, limit, quotas(account, video))
+            val upgrade = OfflineCommentArchive.metadataPage(app, account, video, limit, job.optBoolean("refreshMedia"), quotas(account, video))
+            val limits = quotas(account, video)
+            if (limits.rootCount(selected) >= limit) job.put("rootPhase", true)
+            val oldRoots = job.getJSONArray("roots")
+            val roots = JSONArray()
+            val archived = OfflineCommentArchive.scoped(app, account, video, limits)?.snapshot
+            val rootIds = (0 until oldRoots.length()).mapTo(hashSetOf()) { oldRoots.getJSONObject(it).getString("id") }
+            for (candidate in selected) {
+                if (candidate.parentId.isNotBlank() || candidate.depth != 0 || candidate.id in rootIds) continue
+                val cursor = archived?.replyCursors?.get(candidate.id)
+                if (limits.acceptsReplies(selected, candidate.id) && (cursor?.hasMore ?: (candidate.replyCount > selected.count { it.parentId == candidate.id }))) {
+                    oldRoots.put(JSONObject().put("id", candidate.id).put("cursor", if (cursor?.hasMore == true) cursor.next ?: 0L else 0L))
+                }
+            }
+            for (i in 0 until oldRoots.length()) {
+                val candidate = oldRoots.getJSONObject(i)
+                if (limits.acceptsReplies(selected, candidate.getString("id"))) roots.put(candidate)
+            }
+            job.put("roots", roots)
             val root = upgrade?.root ?: if (roots.length() > 0 && (job.optBoolean("rootPhase") || job.optBoolean("nextReply")))
                 roots.getJSONObject(0).getString("id") else ""
             val cursor = upgrade?.cursor ?: if (root.isNotEmpty()) roots.getJSONObject(0).getLong("cursor") else job.optLong("cursor")
-            if (selected.size >= limit && upgrade == null) {
-                jobs.change(key, job.optLong("epoch")) { it.put("sourceReady", true).put("limited", true).put("state", "pending") }
+            if (job.optBoolean("rootPhase") && roots.length() == 0 && upgrade == null) {
+                jobs.change(key, job.optLong("epoch")) { it.put("sourceReady", true).put("sourceIncomplete", !OfflineCommentArchive.coverage(app, account, video))
+                        .put("limited", limits.rootCount(selected) >= limit).put("state", "pending") }
                 OfflineCommentArchive.bounded(app, account, video, limit, !(try { OfflineCommentArchive.coverage(app, account, video) } catch (_: Exception) { false }))
                 return
             }
             val model = reader.parseModel(OfflineCommentArchive.model(app, account, video))
             val saved = try { OfflineCommentArchive.page(app, account, video, cursor, root) } catch (_: Exception) { null }
-            val page = saved?.takeIf { !job.optBoolean("refreshMedia") && it.rows.all { row -> row.mediaKnown } } ?: run {
+            val page = saved?.takeIf { !job.optBoolean("refreshSource") && !job.optBoolean("refreshMedia") &&
+                OfflineCommentArchive.replyTotalsVerified(app, account, video, cursor, root) && it.rows.all { row -> row.mediaKnown } } ?: run {
                 val op = CommentPageOperation(); val remote = capture()
                 val response = await<Any> { done ->
                     if (root.isEmpty()) network.fetch(app, reader, video, model, cursor, account, remote, op, done)
@@ -198,12 +221,13 @@ internal object OfflineCommentDownloadHook {
                 val incoming = if (root.isEmpty()) raw else raw.copy(rows = raw.rows.map {
                     it.copy(depth = (it.depth + 1).coerceAtMost(3), parentId = it.parentId.ifBlank { root })
                 })
-                val merged = incoming.copy(rows = OfflineCommentBudget.merge(saved?.rows.orEmpty(), incoming.rows, selected.mapTo(hashSetOf()) { it.id }, limit))
-                OfflineCommentArchive.save(app, merged, cursor, root) { active(job) }
+                val admitted = OfflineCommentBudget.mergeScoped(selected, incoming.rows, limits).mapTo(hashSetOf()) { it.id }
+                val merged = incoming.copy(rows = incoming.rows.filter { it.id in admitted })
+                OfflineCommentArchive.save(app, merged, cursor, root, verifiedReplyTotals = true) { active(job) }
                 merged
             }
-            val after = OfflineCommentArchive.selectedRows(app, account, video, limit)
-            if (upgrade != null && !job.optBoolean("refreshMedia") && after.count { !it.mediaKnown } >= selected.count { !it.mediaKnown })
+            val after = OfflineCommentArchive.selectedRows(app, account, video, limit, quotas(account, video))
+            if (upgrade != null && !job.optBoolean("refreshMedia") && !OfflineCommentArchive.replyTotalsVerified(app, account, video, cursor, root) && after.count { !it.mediaKnown } >= selected.count { !it.mediaKnown })
                 throw IllegalStateException("Comment media metadata unavailable")
             if (upgrade == null) {
                 val next = OfflineCommentDownloadProgress.advance(cursor, page)
@@ -211,7 +235,14 @@ internal object OfflineCommentDownloadHook {
                     val known = (0 until roots.length()).map { roots.getJSONObject(it).getString("id") }.toMutableSet()
                     page.rows.filter { it.depth == 0 && it.parentId.isBlank() && it.replyCount > page.rows.count { child -> child.parentId == it.id } }
                         .forEach { if (known.add(it.id)) roots.put(JSONObject().put("id", it.id).put("cursor", 0L)) }
-                    if (next != null) job.put("cursor", next) else job.put("rootPhase", true)
+                    val noGrowth = OfflineCommentDownloadProgress.noGrowth(job.optInt("sourceNoGrowth"),
+                        selected.filter { it.parentId.isBlank() }.mapTo(hashSetOf()) { it.id },
+                        after.filter { it.parentId.isBlank() }.mapTo(hashSetOf()) { it.id }, page.hasMore)
+                    job.put("sourceNoGrowth", noGrowth)
+                    if (next != null && noGrowth < 3) job.put("cursor", next) else {
+                        job.put("rootPhase", true)
+                        if (noGrowth >= 3) job.put("sourceIncomplete", true)
+                    }
                     job.put("nextReply", true)
                 } else {
                     val remaining = JSONArray()
@@ -220,33 +251,37 @@ internal object OfflineCommentDownloadHook {
                     job.put("roots", remaining).put("nextReply", false)
                 }
             }
-            val quota = after.size >= limit && after.all { it.mediaKnown }
+            val quota = limits.rootCount(after) >= limit && job.getJSONArray("roots").let { queue ->
+                (0 until queue.length()).none { limits.acceptsReplies(after, queue.getJSONObject(it).getString("id")) }
+            } && after.all { it.mediaKnown }
             val ended = job.optBoolean("rootPhase") && job.getJSONArray("roots").length() == 0
             val covered = ended && OfflineCommentArchive.coverage(app, account, video)
             check(active(job))
             jobs.change(key, job.optLong("epoch")) { row ->
                 if (ended && !covered && !quota) row.put("coverageFailures", row.optInt("coverageFailures") + 1)
                 else if (covered || quota) row.put("coverageFailures", 0)
-                row.put("cursor", if (ended && !covered && !quota) 0L else job.optLong("cursor"))
-                    .put("roots", if (ended && !covered && !quota) JSONArray() else job.getJSONArray("roots"))
-                    .put("rootPhase", ended && (covered || quota) || !ended && job.optBoolean("rootPhase"))
+                row.put("cursor", job.optLong("cursor"))
+                    .put("roots", job.getJSONArray("roots"))
+                    .put("rootPhase", job.optBoolean("rootPhase"))
+                    .put("sourceNoGrowth", job.optInt("sourceNoGrowth"))
+                    .put("sourceIncomplete", ended && !covered && !quota || job.optBoolean("sourceIncomplete"))
                     .put("nextReply", job.optBoolean("nextReply")).put("firstPage", true)
-                    .put("sourceReady", covered || quota).put("limited", quota && !covered)
-                    .put("translationReady", false).put("mediaReady", false).put("refreshMedia", false).put("mediaRetryAt", 0L)
+                    .put("sourceReady", ended || covered || quota).put("limited", quota && !covered)
+                    .put("translationReady", false).put("mediaReady", false).put("refreshSource", false).put("refreshMedia", false).put("mediaRetryAt", 0L)
                     .put("sourceRevision", row.optLong("sourceRevision") + 1L)
                     .put("sourceAttempts", 0).put("sourceRetryAt", 0L).put("state", "pending")
             }
             OfflineCommentArchive.bounded(app, account, video, limit, quota && !covered)
-            if (ended && !covered && !quota) throw IncompleteCoverage()
+            if (ended && !covered && !quota) HookRuntime.event(FEATURE, "server exhausted before coverage; saved partial archive retained")
             OfflineCommentArchive.status(app, account, video, "pending")
         }
         fun translateRow(key: String, job: JSONObject) {
             check(active(job)); val lang = target()
             if (job.optString("target") != lang) jobs.change(key, job.optLong("epoch")) { it.put("target", lang).put("translationReady", false) }
             val account = job.getString("account"); val video = job.getString("video")
-            val work = OfflineCommentArchive.nextTranslation(app, account, video, lang, cacheLimit(account, video))
+            val work = OfflineCommentArchive.nextTranslation(app, account, video, lang, cacheLimit(account, video), quotas(account, video))
             if (work == null) {
-                if (OfflineCommentArchive.translationsReady(app, account, video, lang, cacheLimit(account, video)) &&
+                if (OfflineCommentArchive.translationsReady(app, account, video, lang, cacheLimit(account, video), quotas(account, video)) &&
                     jobs.finishTranslation(key, job.optLong("epoch"), job.optLong("sourceRevision"))) {
                     val state = jobs.get(key)?.optString("state") ?: "pending"
                     OfflineCommentArchive.status(app, account, video, state)
@@ -279,11 +314,11 @@ internal object OfflineCommentDownloadHook {
         }
         fun mediaRow(key: String, job: JSONObject) {
             check(active(job)); val account = job.getString("account"); val video = job.getString("video")
-            val asset = OfflineCommentArchive.nextMedia(app, account, video, cacheLimit(account, video))
+            val asset = OfflineCommentArchive.nextMedia(app, account, video, cacheLimit(account, video), quotas(account, video))
             if (asset != null) {
                 OfflineCommentMediaStore.cache(app, account, video, asset) { active(job) }
                 jobs.change(key, job.optLong("epoch")) { it.put("mediaAttempts", 0).put("mediaRetryAt", 0L) }
-            } else if (OfflineCommentArchive.mediaReady(app, account, video, cacheLimit(account, video))) {
+            } else if (OfflineCommentArchive.mediaReady(app, account, video, cacheLimit(account, video), quotas(account, video))) {
                 if (jobs.finishMedia(key, job.optLong("epoch"), job.optLong("sourceRevision")))
                     OfflineCommentArchive.status(app, account, video, jobs.get(key)?.optString("state") ?: "pending")
             } else jobs.change(key, job.optLong("epoch")) { it.put("mediaRetryAt", System.currentTimeMillis() + 3_000L) }
@@ -417,7 +452,8 @@ internal object OfflineCommentDownloadHook {
         }
         var signature: List<Any>? = null
         HookRuntime.subscribe(FEATURE) { snapshot -> if (snapshot != null) {
-            val next = listOf(snapshot.boolean(KEY), snapshot.boolean(BACKFILL), snapshot.boolean(PASSIVE), snapshot.string(OfflineCommentPreferences.LIMIT, "2500") ?: "2500")
+            val next = listOf(snapshot.boolean(KEY), snapshot.boolean(BACKFILL), snapshot.boolean(PASSIVE), snapshot.string(OfflineCommentPreferences.LIMIT, "2500") ?: "2500",
+                OfflineCommentPreferences.replies(snapshot.string(OfflineCommentPreferences.REPLY_LIMIT)), OfflineCommentPreferences.threadReplies(snapshot.string(OfflineCommentPreferences.THREAD_LIMIT)))
             if (next != signature) { signature = next; if (snapshot.boolean(KEY)) backfill() }
             if (snapshot.boolean(KEY)) { drain(); pump() }
             else { ingressGeneration.incrementAndGet(); ingress.clear() }

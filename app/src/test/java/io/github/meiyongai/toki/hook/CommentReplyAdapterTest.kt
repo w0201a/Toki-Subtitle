@@ -19,6 +19,21 @@ class CommentReplyAdapterTest {
     @Test fun recycledRootButtonsRetainTheirOwnCursorAndNeverRequestRepliesForAnUnrelatedRow() {
         val controller = Robolectric.buildActivity(Activity::class.java).setup()
         val activity = controller.get()
+        io.github.meiyongai.toki.subtitle.provider.ConfigClient.putValues(activity,
+            mapOf(TranslationNetworkPolicy.KEY to false))
+        assertTrue(io.github.meiyongai.toki.subtitle.provider.ConfigClient.isReady)
+        HookRuntime.start("reply-adapter-test") { _, _ -> }; HookRuntime.attach(activity)
+        val connectivity = activity.getSystemService(android.content.Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val shadow = org.robolectric.Shadows.shadowOf(connectivity)
+        val network = org.robolectric.shadows.ShadowNetwork.newInstance(42)
+        val info = org.robolectric.shadows.ShadowNetworkInfo.newInstance(android.net.NetworkInfo.DetailedState.CONNECTED,
+            android.net.ConnectivityManager.TYPE_WIFI, 0, true, true)
+        shadow.addNetwork(network, info); shadow.setActiveNetworkInfo(info)
+        val capabilities = org.robolectric.shadows.ShadowNetworkCapabilities.newInstance()
+        org.robolectric.Shadows.shadowOf(capabilities).addCapability(android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET)
+        org.robolectric.Shadows.shadowOf(capabilities).addCapability(android.net.NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        shadow.setNetworkCapabilities(checkNotNull(connectivity.activeNetwork), capabilities)
+        assertTrue(TranslationNetworkPolicy.capture().permitsNetwork())
         val parent = ListView(activity)
         val root = OfflineCommentData.Row("root1", "a", "h", "u", "source", null, "", 0, 2)
         val second = root.copy(id = "root2")
@@ -30,11 +45,13 @@ class CommentReplyAdapterTest {
         adapter.submit(OfflineCommentData.Snapshot("a".repeat(64), "v", 1, listOf(root, reply, second), 2, false, false,
             replyCursors = mapOf("root2" to OfflineCommentData.ReplyCursor(40, true))))
         val view = adapter.getView(0, null, parent) as LinearLayout
-        val button = view.getChildAt(6) as Button
+        val button = view.findViewWithTag<Button>("comment-online-replies")
         assertEquals(View.VISIBLE, button.visibility)
         assertEquals(activity.getString(R.string.comment_reply_online_first), button.text.toString())
         button.performClick()
         assertEquals(listOf("root1" to null), requested)
+        view.findViewWithTag<Button>("comment-local-replies").performClick()
+        assertEquals(3, adapter.count)
         adapter.getView(2, view, parent)
         assertEquals(activity.getString(R.string.comment_reply_online_next), button.text.toString())
         button.performClick()

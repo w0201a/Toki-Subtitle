@@ -44,4 +44,27 @@ internal object OfflineCommentLimitDialog {
             catch (_: Exception) { input.error = context.getString(R.string.manual_comment_save_error) }
         }
     }
+    fun replies(context: Context, total: Int, perThread: Int, save: (Int, Int) -> Unit) {
+        val density = context.resources.displayMetrics.density
+        val body = LinearLayout(context).apply { orientation = LinearLayout.VERTICAL; setPadding((16*density).toInt(), 0, (16*density).toInt(), 0) }
+        body.addView(TextView(context).apply { setText(R.string.toki_reply_limits_hint) })
+        body.addView(TextView(context).apply { setText(R.string.toki_reply_total_label) })
+        val totalInput = EditText(context).apply { inputType = InputType.TYPE_CLASS_NUMBER; setText(total.toString()); tag = "reply-total-input" }
+        body.addView(totalInput)
+        body.addView(TextView(context).apply { setText(R.string.toki_reply_thread_label) })
+        val threadInput = EditText(context).apply { inputType = InputType.TYPE_CLASS_NUMBER; setText(perThread.toString()); tag = "reply-thread-input" }
+        body.addView(threadInput)
+        val dialog = TokiDialogs.builder(context).setTitle(R.string.toki_reply_limits_title).setView(body)
+            .setPositiveButton(R.string.common_done, null).setNegativeButton(android.R.string.cancel, null).create()
+        dialog.show()
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val count = totalInput.text.toString().toIntOrNull()
+            val thread = threadInput.text.toString().toIntOrNull()
+            if (count == null || count !in 0..2500) { totalInput.error = context.getString(R.string.toki_reply_limits_error); return@setOnClickListener }
+            if (thread == null || thread !in 0..2500) { threadInput.error = context.getString(R.string.toki_reply_limits_error); return@setOnClickListener }
+            try { save(count, thread); dialog.dismiss() }
+            catch (_: Exception) { totalInput.error = context.getString(R.string.manual_comment_save_error) }
+        }
+    }
+
 }

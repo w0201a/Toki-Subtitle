@@ -41,10 +41,10 @@ class CommentPageMergeTest {
         assertThrows(IllegalArgumentException::class.java) { CommentPageMerge.merge(null, cycle, 0) }
     }
     @Test fun capacityIsNotMadeAvailableBySilentlyEvictingSavedRows() {
-        val old = snapshot((1..500).map { row(it.toString()) })
+        val old = snapshot((1..5000).map { row(it.toString()) })
         val extra = snapshot(listOf(row("new")), 40)
         assertThrows(IllegalArgumentException::class.java) { CommentPageMerge.merge(old, extra, 20) }
-        assertEquals(500, old.rows.size)
+        assertEquals(5000, old.rows.size)
         assertEquals("1", old.rows.first().id)
     }
     @Test fun cacheCombinationRetainsRowsWithoutPretendingTheyWereRevalidatedOnline() {
@@ -68,4 +68,15 @@ class CommentPageMergeTest {
         second.close(); second.close()
         assertEquals(2, disposed)
     }
+    @Test fun serverPageSizeDoesNotCapTheContinuouslyMergedListAtTwentyOrFiveHundred() {
+        var saved: OfflineCommentData.Snapshot? = null
+        repeat(100) { page ->
+            val cursor = page * 20L
+            val next = snapshot((0 until 20).map { row("c${cursor + it}") }, cursor + 20, page < 99)
+            saved = CommentPageMerge.merge(saved, next, cursor)
+        }
+        assertEquals(2000, saved!!.rows.size)
+        assertEquals("c0", saved!!.rows.first().id); assertEquals("c1999", saved!!.rows.last().id)
+    }
+
 }

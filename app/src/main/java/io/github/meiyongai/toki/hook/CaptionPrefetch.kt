@@ -59,6 +59,9 @@ internal class CaptionPrefetch(
     fun cueAt(id: String, positionMs: Long): String? =
         if (id == video) cueIndex.at(positionMs) else null
 
+    fun cueRangeAt(id: String, positionMs: Long): CaptionTimeline.Cue? = if (id == video) cueIndex.cueAt(positionMs) else null
+    fun timelineReady(id: String): Boolean = id == video && cues.isNotEmpty() && identityFor(url) == identity(id)
+
     fun update(id: String, text: String, valid: () -> Boolean) {
         if (closed) return
         val trackUrl = track(id).orEmpty()
@@ -100,7 +103,8 @@ internal class CaptionPrefetch(
         fetchTimeline?.invoke(location, generation, remote) ?: loadCues(location, generation, remote)
 
     private fun ensureCurrentTimeline() {
-        if (closed || !current() || !translator.canPrefetch(video) || cues.isNotEmpty() ||
+        val local = HostCaptionFile.isLocal(url)
+        if (closed || !current() || !translator.canPrefetch(video) || cues.isNotEmpty() && !local ||
             url.isBlank() || currentLoading || android.os.SystemClock.uptimeMillis() < currentRetryAt) return
         val generation = token
         val trackUrl = url // A retry uses the newest signed URL, not the first failed one.
@@ -122,7 +126,8 @@ internal class CaptionPrefetch(
                     if (parsed.isNotEmpty()) {
                         cues = parsed; normalized = keys
                         timelines[identity] = parsed
-                        currentFailures = 0; currentRetryAt = 0L
+                        currentFailures = 0
+                        currentRetryAt = if (local) android.os.SystemClock.uptimeMillis() + 1500 else 0L
                         HookRuntime.event("CaptionPrefetch", "current timeline ready cues=${parsed.size}")
                         queue()
                     } else {
@@ -219,6 +224,15 @@ internal class CaptionPrefetch(
     private fun loadCues(location: String, generation: Long, remote: LocalOnlyRequest): List<CaptionTimeline.Cue> {
         check(!closed && token == generation)
         val identity = identityFor(location)
+        // Real-time captions are host-private WEBVTT files and can grow while playing.
+        // Read them before an archived body; never turn a local path into an HTTPS request.
+        if (HostCaptionFile.isLocal(location)) {
+            val app = checkNotNull(HookRuntime.hostContext)
+            val body = HostCaptionFile.read(app.filesDir, location) { !closed && token == generation }
+            val parsed = CaptionTimeline.parse(body)
+            if (parsed.isNotEmpty() && !closed && token == generation) CaptionTimelineDiskCache.save(identity, body)
+            return parsed
+        }
         CaptionTimelineDiskCache.read(identity)?.let { stored ->
             val parsed = CaptionTimeline.parse(stored)
             if (parsed.isNotEmpty()) return parsed
@@ -397,6 +411,34 @@ internal class CaptionPrefetch(
                     append(digits[value ushr 4]); append(digits[value and 0x0f])
                 }
             }
+        }
+    }
+}
+
+/** Only verified host realtime-caption files. No content resolver, arbitrary path or network fallback. */
+internal object HostCaptionFile {
+    private const val MAX_BYTES = 1_048_576
+    fun isLocal(location: String): Boolean = location.startsWith("/") || location.startsWith("file:")
+    fun read(filesDir: java.io.File, location: String, current: () -> Boolean): String {
+        require(isLocal(location))
+        val namedRoot = java.io.File(filesDir.canonicalFile, "realtime_captions_cache")
+        val allowed = namedRoot.canonicalFile
+        require(allowed == namedRoot.absoluteFile) { "Symlinked caption root" }
+        val named = if (location.startsWith("file:")) java.io.File(java.net.URI(location)) else java.io.File(location)
+        val file = named.canonicalFile
+        require(file.parentFile == allowed && file.name.startsWith("cla_realtime_")) { "Caption file outside host realtime directory" }
+        require(file.isFile && file.length() in 1..MAX_BYTES.toLong()) { "Local caption file missing or oversized" }
+        return file.inputStream().use { input ->
+            val output = java.io.ByteArrayOutputStream()
+            val buffer = ByteArray(8192)
+            while (true) {
+                check(current()) { "Local caption read cancelled" }
+                val count = input.read(buffer)
+                if (count < 0) break
+                require(output.size() + count <= MAX_BYTES)
+                output.write(buffer, 0, count)
+            }
+            output.toString("UTF-8")
         }
     }
 }

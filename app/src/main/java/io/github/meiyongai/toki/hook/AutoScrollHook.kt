@@ -102,6 +102,7 @@ object AutoScrollHook {
             } else chain.proceed()
         }
         module.trackHook("AutoScrollBehavior", canAdvance).intercept { chain ->
+            if (CommentReaderSheet.isReading) return@intercept false
             if (ConfigClient.getBoolean(KEY_AUTO_SCROLL_UNLOCK)) {
                 adScope.checking(currentVideo.invoke(chain.thisObject)) { chain.proceed() }
             } else chain.proceed()

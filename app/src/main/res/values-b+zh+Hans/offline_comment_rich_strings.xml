@@ -14,10 +14,10 @@
     <string name="offline_comment_limit_rows">按条数</string>
     <string name="offline_comment_limit_pages">按页数</string>
     <string name="offline_comment_limit_title">每视频评论缓存上限</string>
-    <string name="offline_comment_limit_hint">主评论与回复合计最多2500条；按页输入时每页换算20条。图片和贴图随所选评论缓存。降低上限不会删除已有缓存。</string>
+    <string name="offline_comment_limit_hint">此上限仅计算主评论；回复使用独立总上限和单条上限，不占主评论名额。降低上限不删除已有缓存。</string>
     <string name="offline_comment_limit_error">条数请输入1～2500；页数请输入1～125</string>
     <string name="offline_comment_limit_inherit">使用默认上限</string>
-    <string name="offline_comment_limit_current">默认每视频：%1$d条（约%2$d页）</string>
+    <string name="offline_comment_limit_current">默认主评论：%1$d条（每次请求20条，约%2$d批）</string>
     <string name="offline_comment_limit_this_video">调整本视频的缓存上限</string>
     <string name="offline_comment_media_status">图片／贴图就绪：%1$d个视频；默认上限：%2$d条</string>
     <string name="offline_comment_mode_translated">翻译</string>

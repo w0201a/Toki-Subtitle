@@ -42,9 +42,9 @@ class CommentReplyMergeTest {
         val refreshed = CommentReplyMerge.merge(old, "root", snapshot(listOf(row("new"))), 0)
         assertEquals(setOf("root", "old", "new"), refreshed.rows.map { it.id }.toSet())
         assertTrue(refreshed.retainedOlder)
-        val full = snapshot(listOf(row("root")) + (1..499).map { row("other" + it) })
+        val full = snapshot(listOf(row("root")) + (1..4999).map { row("other" + it) })
         assertThrows(IllegalArgumentException::class.java) { CommentReplyMerge.merge(full, "root", snapshot(listOf(row("extra"))), 0) }
-        assertEquals(500, full.rows.size)
+        assertEquals(5000, full.rows.size)
     }
     @Test fun nestedReplyParentsAreRetainedAndSavedCursorsSurviveTopLevelRefresh() {
         val old = snapshot(listOf(row("root")))

@@ -15,7 +15,7 @@ internal class HostFeaturePlan(private val startup: ConfigSnapshot?) {
     private fun canInstallLive(feature: String) = feature in liveInstallable &&
         (feature != "ImmersiveFullScreenHook" || immersiveLiveCapability)
     val features: Set<String>
-        @Synchronized get() = startupFeatures + liveFeatures
+        @Synchronized get() = (startupFeatures + liveFeatures) - rejected
     val platformFeatures: Set<String> get() = features.intersect(platform)
     private val downloadRepair = startup?.boolean("download_force_no_watermark") == true
     val directHostFeatures: Set<String> get() = features.intersect(directHost) +

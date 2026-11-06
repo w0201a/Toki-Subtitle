@@ -70,4 +70,30 @@ class OfflineCommentArchiveTest {
         OfflineCommentArchive.status(context,account,p.video,"partial","offline")
         assertTrue(OfflineCommentArchive.window(context,account,p.video)!!.snapshot.truncated)
     }
+    @Test fun rawReplyResponsesReopenAsRepliesAndKeepIndependentContinuationCursors() {
+        val video = "raw-reply-parent"
+        OfflineCommentArchive.save(context, page(video, listOf(row("root").copy(replyCount = 2)), true, 20, 3), 0)
+        // Host's reply response uses depth=0 and no parent; archive owns the explicit request root.
+        OfflineCommentArchive.save(context, page(video, listOf(row("reply1")), true, 20, 2), 0, "root")
+        val read = OfflineCommentArchive.display(context, account, video, 200)!!.snapshot
+        assertEquals(listOf("root", "reply1"), read.rows.map { it.id })
+        assertEquals("root", read.rows[1].parentId); assertEquals(1, read.rows[1].depth)
+        assertTrue(read.hasMore); assertEquals(20L, read.nextCursor)
+        assertTrue(read.replyCursors.getValue("root").hasMore)
+        assertEquals(20L, read.replyCursors.getValue("root").next)
+        OfflineCommentArchive.save(context, page(video, listOf(row("reply2")), false, 40, 2), 20, "root")
+        val reopened = OfflineCommentArchive.display(context, account, video, 200)!!.snapshot
+        assertEquals(3, reopened.rows.size)
+        assertFalse(reopened.replyCursors.getValue("root").hasMore)
+        assertTrue(reopened.hasMore)
+    }
+    @Test fun addingOnlineMetadataDoesNotEraseAlreadySavedMediaOrTranslations() {
+        val asset = OfflineCommentData.Media("c".repeat(64), OfflineCommentData.MediaKind.IMAGE, listOf("https://p16.tiktokcdn.com/image.png"))
+        val existing = row("same").copy(media = listOf(asset), mediaKnown = true)
+        OfflineCommentArchive.save(context, page("retain-rich", listOf(existing)), 0)
+        OfflineCommentArchive.save(context, page("retain-rich", listOf(existing.copy(translation = null, language = "", media = emptyList()))), 0)
+        val read = OfflineCommentArchive.page(context, account, "retain-rich", 0)!!.rows.single()
+        assertEquals("译文", read.translation); assertEquals(listOf(asset), read.media)
+    }
+
 }

@@ -9,7 +9,7 @@ internal object TemplateAnchorPolicy {
         LayoutElement.ANCHOR_PHOTO, LayoutElement.ANCHOR_OTHER_TEMPLATE)
     fun element(code: Int): LayoutElement? = when (code) {
         28, -28, 64, 120 -> LayoutElement.ANCHOR_EFFECT
-        110 -> LayoutElement.ANCHOR_CAPCUT
+        54, 110 -> LayoutElement.ANCHOR_CAPCUT
         111 -> LayoutElement.ANCHOR_AI
         31, 87 -> LayoutElement.ANCHOR_PHOTO
         29, 65, 66, 78, 127 -> LayoutElement.ANCHOR_OTHER_TEMPLATE

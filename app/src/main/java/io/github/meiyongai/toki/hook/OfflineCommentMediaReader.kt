@@ -37,7 +37,7 @@ internal class OfflineCommentMediaReader(loader: ClassLoader) {
         internal fun identity(kind: String, nativeId: String?, location: String): String {
             val source = URI(location)
             val stable = kind + ":" + nativeId.orEmpty() + ":" + source.host + source.path
-            return MessageDigest.getInstance("SHA-256").digest(stable.toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it.toInt() and 255) }
+            return DigestHex.encode(MessageDigest.getInstance("SHA-256").digest(stable.toByteArray(Charsets.UTF_8)))
         }
     }
 }

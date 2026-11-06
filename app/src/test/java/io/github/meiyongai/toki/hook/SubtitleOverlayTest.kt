@@ -612,4 +612,134 @@ class SubtitleOverlayTest {
             native.close(); timeline.close(); translator.close(); controller.pause().stop().destroy()
         }
     }
+    @Test fun pageAnchorDoesNotFollowHostCaptionRelayoutOrTimelineOwnership() {
+        for ((renderMode, textMode) in listOf("custom" to "original", "custom" to "bilingual", "native" to "bilingual")) {
+            HookRuntime.start("stable-anchor-$renderMode-$textMode") { _, _ -> }
+            val owner = Robolectric.buildActivity(Activity::class.java).setup().visible()
+            val activity = owner.get()
+            val page = FrameLayout(activity)
+            val video = SurfaceView(activity)
+            val source = FrameLayout(activity)
+            source.addView(TextView(activity).apply { text = "same cue" })
+            page.addView(video, FrameLayout.LayoutParams(1080, 2400))
+            page.addView(source, FrameLayout.LayoutParams(600, 100).apply { topMargin = 700 })
+            activity.setContentView(page)
+            fun layout() {
+                activity.window.decorView.apply {
+                    measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                        View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+                    layout(0, 0, 1080, 2400); settleWindowFrame()
+                }
+            }
+            layout()
+            val settings = ConfigSnapshot(mapOf("subtitle_style_enabled" to true,
+                "subtitle_render_mode" to renderMode, "subtitle_text_mode" to textMode))
+            val native = SubtitleOverlay(source, configuration = { settings })
+            val timeline = SubtitleOverlay(video, timelineSource = true, configuration = { settings })
+            val layer = SubtitleOverlay::class.java.getDeclaredField("layer").apply { isAccessible = true }
+            fun label(binding: SubtitleOverlay) = (layer.get(binding) as FrameLayout).getChildAt(0) as TextView
+            native.update("EXPANDED", "same cue", "video"); native.onPreDraw()
+            val before = label(native).bottom
+            repeat(8) { i ->
+                (source.layoutParams as FrameLayout.LayoutParams).apply { height = 100 + i * 20; topMargin = 500 + i * 30 }
+                source.translationY = i * 3f
+                layout(); native.update("EXPANDED", "same cue", "video"); native.onPreDraw()
+                assertEquals("Host animations must not move the caption anchor", before, label(native).bottom)
+            }
+            native.update("HIDDEN", "", "video"); native.onPreDraw()
+            timeline.update("EXPANDED", "same cue", "video"); timeline.onPreDraw()
+            assertEquals("Timeline fallback must use the same anchor", before, label(timeline).bottom)
+            repeat(8) { timeline.update("EXPANDED", "same cue", "video"); timeline.onPreDraw() }
+            assertEquals(before, label(timeline).bottom)
+            timeline.update("HIDDEN", "", "video"); timeline.onPreDraw()
+            native.update("EXPANDED", "same cue", "video"); native.onPreDraw(); timeline.onPreDraw()
+            assertEquals("Native takeover must not jump back", before, label(native).bottom)
+            native.close(); timeline.close(); owner.pause().stop().destroy()
+        }
+    }
+
+    @Test fun duplicateStuckNativeFramesCannotSuppressTheCurrentTimelineForever() {
+        HookRuntime.start("duplicate-native-stall") { _, _ -> }
+        val owner = Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity = owner.get()
+        val page = FrameLayout(activity)
+        val video = SurfaceView(activity)
+        val source = FrameLayout(activity)
+        source.addView(TextView(activity).apply { text = "stuck" })
+        page.addView(video, FrameLayout.LayoutParams(1080, 2400))
+        page.addView(source, FrameLayout.LayoutParams(600, 100))
+        activity.setContentView(page)
+        activity.window.decorView.apply {
+            measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+            layout(0, 0, 1080, 2400); settleWindowFrame()
+        }
+        val translator = fakeOnlineTranslator({ true }, { _, _ -> AutoCloseable { } })
+        translator.selectVideo("stall", video)
+        val settings = ConfigSnapshot(mapOf("subtitle_style_enabled" to true, "subtitle_render_mode" to "custom", "subtitle_text_mode" to "original"))
+        val native = SubtitleOverlay(source, translator, configuration = { settings })
+        val timeline = SubtitleOverlay(video, translator, timelineSource = true, configuration = { settings })
+        val layer = SubtitleOverlay::class.java.getDeclaredField("layer").apply { isAccessible = true }
+        native.update("EXPANDED", "stuck", "stall"); native.onPreDraw()
+        repeat(25) {
+            org.robolectric.shadows.ShadowSystemClock.advanceBy(Duration.ofMillis(100))
+            native.update("EXPANDED", "stuck", "stall")
+        }
+        assertFalse(translator.hasNativeFrame("stall"))
+        timeline.update("EXPANDED", "current timeline line", "stall")
+        timeline.onPreDraw(); native.onPreDraw()
+        val overlay = layer.get(timeline) as FrameLayout
+        assertEquals("current timeline line", (overlay.getChildAt(0) as TextView).text.toString())
+        assertEquals(0f, source.alpha)
+        native.update("EXPANDED", "fresh native line", "stall"); native.onPreDraw(); timeline.onPreDraw()
+        assertTrue(translator.hasNativeFrame("stall"))
+        assertNull(layer.get(timeline))
+        native.close(); timeline.close(); translator.close(); owner.pause().stop().destroy()
+    }
+
+    @Test fun nativeAndTimelineWithDifferentMountHeightsKeepTheSameScreenCoordinates() {
+        HookRuntime.start("window-viewport-handoff") { _, _ -> }
+        val owner = Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity = owner.get()
+        val page = FrameLayout(activity)
+        val video = SurfaceView(activity)
+        val inner = FrameLayout(activity)
+        val source = FrameLayout(activity).apply { addView(TextView(activity).apply { text = "same cue" }) }
+        inner.addView(source, FrameLayout.LayoutParams(600,100))
+        page.addView(video, FrameLayout.LayoutParams(1080,2293))
+        page.addView(inner, FrameLayout.LayoutParams(1080,1879))
+        activity.setContentView(page)
+        fun layout() {
+            activity.window.decorView.apply {
+                measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY),
+                    View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
+                layout(0, 0, 1080, 2400); settleWindowFrame()
+            }
+        }
+        layout()
+        val config = ConfigSnapshot(mapOf("subtitle_style_enabled" to true,"subtitle_render_mode" to "custom","subtitle_text_mode" to "original"))
+        val native = SubtitleOverlay(source, configuration = { config })
+        val timeline = SubtitleOverlay(video, timelineSource = true, configuration = { config })
+        val layer = SubtitleOverlay::class.java.getDeclaredField("layer").apply { isAccessible = true }
+        fun bottom(binding: SubtitleOverlay): Int {
+            val label = (layer.get(binding) as FrameLayout).getChildAt(0)
+            val location = IntArray(2); label.getLocationOnScreen(location)
+            return location[1] + label.height
+        }
+        native.update("EXPANDED","same cue","video"); native.onPreDraw()
+        val expected = bottom(native)
+        repeat(6) { i ->
+            (inner.layoutParams as FrameLayout.LayoutParams).apply { height = if (i % 2 == 0) 2293 else 1879; topMargin = if (i % 2 == 0) 0 else 35 }
+            layout(); native.onPreDraw()
+            assertEquals("Host size/location changes do not change subtitle screen anchor", expected, bottom(native))
+            native.update("HIDDEN","","video"); native.onPreDraw()
+            timeline.update("EXPANDED","same cue","video"); timeline.onPreDraw()
+            assertEquals("Timeline and native-caption mount in one window viewport", expected, bottom(timeline))
+            timeline.update("HIDDEN","","video"); timeline.onPreDraw()
+            native.update("EXPANDED","same cue","video"); native.onPreDraw()
+            assertEquals(expected, bottom(native))
+        }
+        native.close(); timeline.close(); owner.pause().stop().destroy()
+    }
+
 }

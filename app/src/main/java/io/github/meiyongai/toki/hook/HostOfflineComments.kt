@@ -11,7 +11,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
     private val media = lazy { OfflineCommentMediaReader(loader) }
 
     fun accountMatches(token: String): Boolean = try {
-        reflected.isInitialized() && token == accountToken(reflected.value.account())
+        token == LOCAL_SCOPE || token == accountToken(reflected.value.account())
     } catch (_: Exception) { false } catch (_: LinkageError) { false }
 
     fun read(context: Context, video: String, active: () -> Boolean): OfflineCommentData.Snapshot {
@@ -24,7 +24,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         require(video.matches(Regex("[A-Za-z0-9_-]{1,128}")))
         val contract = reflected.value
         val account = contract.account()
-        OfflineCommentArchive.window(context, accountToken(account), video)?.let { return it.snapshot }
+        OfflineCommentArchive.window(context, accountToken(account), video)?.let { return it.snapshot.copy(account=LOCAL_SCOPE) }
         val repo = contract.repo.invoke(null, "offline_comment_" + account)
         val raw = contract.getString.invoke(repo, "snap_" + video, null) as? String
             ?: throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.MISSING)
@@ -36,12 +36,12 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         } catch (_: Exception) { throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT) }
         if (contract.snapshotId.get(native) != video) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
         val response = contract.response.get(native) ?: throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.CORRUPT)
-        return copyResponse(context, video, accountToken(account), response, contract.cachedTime.getLong(native), active = active)
+        return copyResponse(context, video, LOCAL_SCOPE, response, contract.cachedTime.getLong(native), active = active)
     }
 
     fun account(context: Context): String {
         if (!OfflineCommentCodeGate.verify(context)) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.UNSUPPORTED)
-        return accountToken(reflected.value.account())
+        return LOCAL_SCOPE
     }
 
     fun serializeModel(model: Any): String = reflected.value.serialize.invoke(reflected.value.gson.get(null), model) as String
@@ -77,7 +77,8 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
                 if (++visited > 1000 || result.size >= OfflineCommentData.MAX_ROWS) { truncated = true; return }
                 if (item == null || !contract.comment.isInstance(item)) { truncated = true; continue }
                 val id = contract.id.invoke(item) as? String
-                if (id.isNullOrBlank() || id.length > 128 || !seen.add(id)) { truncated = true; continue }
+                if (id.isNullOrBlank() || id.length > 128) { truncated = true; continue }
+                if(!seen.add(id))continue // Native lists may repeat an embedded reply; de-duplication is not copy loss.
                 val ownerVideo = contract.video.invoke(item) as? String
                 if (!ownerVideo.isNullOrBlank() && ownerVideo != video) { truncated = true; continue }
                 val visible = contract.text.invoke(item) as? String
@@ -87,14 +88,16 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
                 val translation = if (shortened) null else OfflineCommentData.translated(source,
                     contract.translated.invoke(item) as? String, visible, contract.isTranslated.invoke(item) == true)
                 val user = contract.user.invoke(item)
+                val replies = contract.replies.invoke(item) as? List<*>
+                val replyTotal = replyTotal(contract.replyCommentTotal.invoke(item) as Long,
+                    contract.replyCount.invoke(item) as Int, replies.orEmpty().size)
                 result += OfflineCommentData.Row(id,
                     OfflineCommentData.bounded(user?.let { contract.nickname.invoke(it) as? String }, 256),
                     OfflineCommentData.bounded(user?.let { contract.handle.invoke(it) as? String }, 128),
                     OfflineCommentData.bounded(user?.let { contract.uid.invoke(it) as? String }, 128),
                     source, translation, OfflineCommentData.bounded(contract.language.invoke(item) as? String, 64),
-                    depth, (contract.replyCount.invoke(item) as Int).toLong().coerceAtLeast(0), shortened, parentId, media.value.read(item), true)
-                val replies = contract.replies.invoke(item) as? List<*>
-                if ((contract.replyCount.invoke(item) as Int).toLong() > replies.orEmpty().size) truncated = true
+                    depth, replyTotal, shortened, parentId, media.value.read(item), true)
+                // Missing embedded replies belong to independent reply cursors, not a truncated main-comment page.
                 if (!replies.isNullOrEmpty()) {
                     if (depth < 3) append(replies, depth + 1, id) else truncated = true
                 }
@@ -104,9 +107,8 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         requireCurrent()
         if (!accountMatches(account)) throw OfflineCommentData.Unavailable(OfflineCommentData.Failure.ACCOUNT_CHANGED)
         val total = (contract.total.invoke(response) as Long).coerceAtLeast(0)
-        return OfflineCommentData.Snapshot(account, video, capturedAt.coerceAtLeast(0),
-            result.toList(), total, contract.hasMore.invoke(response) == true, truncated || total > sourceRows.size,
-            nextCursor = (contract.cursor.invoke(response) as Long).takeIf { it >= 0 })
+        return capturedSnapshot(account,video,capturedAt,result,total,contract.hasMore.invoke(response)==true,
+            (contract.cursor.invoke(response) as Long).takeIf{it>=0},truncated)
     }
 
     private class Contract(private val loader: ClassLoader) {
@@ -151,6 +153,7 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
         val isTranslated = method(comment, "isTranslated", java.lang.Boolean.TYPE)
         val replies = method(comment, "getReplyComments", List::class.java)
         val replyCount = method(comment, "getReplyCount", java.lang.Integer.TYPE)
+        val replyCommentTotal = method(comment, "getReplyCommentTotal", java.lang.Long.TYPE)
         private val profile = type("com.ss.android.ugc.aweme.profile.model.User")
         val user = method(comment, "getUser", profile)
         val nickname = method(profile, "getNickname", String::class.java)
@@ -159,6 +162,14 @@ internal class HostOfflineComments(private val loader: ClassLoader) {
     }
 
     companion object {
+        /** Server total is not a truncation flag: ordinary 20-item pages remain independently pageable. */
+        internal fun capturedSnapshot(scope:String,video:String,at:Long,rows:List<OfflineCommentData.Row>,total:Long,
+            more:Boolean,next:Long?,copyLoss:Boolean)=OfflineCommentData.Snapshot(scope,video,at.coerceAtLeast(0),
+                rows.toList(),total,more,copyLoss,nextCursor=next)
+        /** Host-private local cache identity; unrelated to the currently logged-in account. */
+        internal val LOCAL_SCOPE = accountToken("toki-device-local-comments-v1")
+        internal fun replyTotal(total: Long, legacyCount: Int, embedded: Int): Long =
+            maxOf(total.coerceAtLeast(0), legacyCount.toLong().coerceAtLeast(0), embedded.toLong().coerceAtLeast(0))
         internal fun accountToken(account: String): String = MessageDigest.getInstance("SHA-256")
             .digest(account.toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it.toInt() and 255) }
     }

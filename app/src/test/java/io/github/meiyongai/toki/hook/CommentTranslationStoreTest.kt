@@ -54,4 +54,13 @@ class CommentTranslationStoreTest {
         assertNotEquals(first, CommentTranslationKey.key(account, "v2", "c", "source", "zh-Hans"))
         assertNotEquals(first, CommentTranslationKey.key(HostOfflineComments.accountToken("other"), "v", "c", "source", "zh-Hans"))
     }
+    @Test fun olderAuxiliaryPreferenceCannotOverwriteANewerArchiveTranslationForTheSameSource() {
+        val context = RuntimeEnvironment.getApplication()
+        val value = snapshot("archive-newer")
+        assertEquals(CommentTranslationStore.Saved.COMMITTED, save(context, value, "zh-Hans", "旧偏好译文"))
+        val archive = value.copy(rows = listOf(value.rows.single().copy(translation = "最新档案译文", language = "zh-Hans")))
+        assertEquals("最新档案译文", CommentTranslationStore.restore(context, archive, "zh-hans").rows.single().translation)
+        assertEquals("旧偏好译文", CommentTranslationStore.restore(context, value, "zh-hans").rows.single().translation)
+    }
+
 }
