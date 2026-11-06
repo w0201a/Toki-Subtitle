@@ -50,19 +50,23 @@ class HostSettingsDialogTest {
                 dialog.show()
             }
             compose.onNodeWithText("Toki 设置").assertIsDisplayed()
-            compose.onNodeWithText("地区与环境伪装").assertIsDisplayed()
+            compose.onNodeWithTag("settings-category-REGION").performScrollTo().assertIsDisplayed()
             assertTrue(ConfigClient.getBoolean(dialog.context,"video_translate_enabled"))
             assertFalse(ConfigClient.getBoolean("video_translate_enabled"))
-            compose.onNodeWithText("字幕设置").assertIsDisplayed()
-            compose.onNodeWithText("Toki · 界面语言 · 跟随系统").performClick()
+            compose.onNodeWithContentDescription("字幕设置").assertIsDisplayed()
+            compose.onNodeWithContentDescription("更多操作").performClick()
+            compose.onNodeWithText("界面语言").performClick()
             compose.onNodeWithText("跟随系统", useUnmergedTree = true).assertIsDisplayed()
             compose.onNode(hasSetTextAction()).performTextInput("en")
             compose.onNodeWithText("English (US)").performClick()
-            compose.onNodeWithText("Toki settings").assertIsDisplayed()
+            compose.onNodeWithContentDescription("More actions").assertIsDisplayed()
             assertEquals(io.github.meiyongai.toki.subtitle.util.AppLanguage.ENGLISH,
                 io.github.meiyongai.toki.subtitle.util.LocaleHelper.getAppLanguage(dialog.context))
-            compose.onNodeWithText("Toki · App language · English (US)").performClick()
-            compose.onNodeWithText("Subtitles").assertIsDisplayed()
+            // Language is a toolbar menu action now; toggle it off and verify
+            // the actual unified category hub, not removed legacy text buttons.
+            compose.onNodeWithContentDescription("More actions").performClick()
+            compose.onNodeWithText("App language").performClick()
+            compose.onNodeWithTag("settings-category-SUBTITLES").assertIsDisplayed()
             compose.runOnUiThread { ConfigClient.putString(dialog.context,"subtitle_size","30") }
             assertEquals("30",ConfigClient.requestedSnapshot().string("subtitle_size"))
             assertEquals("30",app.getSharedPreferences("toki_host_settings",Context.MODE_PRIVATE).getString("subtitle_size",null))

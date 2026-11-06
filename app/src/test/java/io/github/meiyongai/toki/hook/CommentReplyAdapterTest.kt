@@ -14,13 +14,28 @@ import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [35])
+@Config(sdk = [35], application = android.app.Application::class)
 class CommentReplyAdapterTest {
     @Test fun recycledRootButtonsRetainTheirOwnCursorAndNeverRequestRepliesForAnUnrelatedRow() {
         val controller = Robolectric.buildActivity(Activity::class.java).setup()
         val activity = controller.get()
-        io.github.meiyongai.toki.subtitle.provider.ConfigClient.putValues(activity,
-            mapOf(TranslationNetworkPolicy.KEY to false))
+        // This is a host-side adapter fixture: supply a verified read-only framework
+        // snapshot explicitly instead of writing manager preferences through an Activity.
+        val client = io.github.meiyongai.toki.subtitle.provider.ConfigClient
+        val storeType = io.github.meiyongai.toki.subtitle.provider.ConfigStore::class.java
+        fun field(type: Class<*>, name: String) = type.getDeclaredField(name).apply { isAccessible = true }
+        for (name in listOf("listeners", "stateListeners"))
+            (field(client.javaClass, name).get(null) as MutableCollection<*>).clear()
+        for (name in listOf("initialized", "host")) field(client.javaClass, name).set(null, false)
+        for (name in listOf("connectionChanged", "hostSessionTransform", "effectiveCache")) field(client.javaClass, name).set(null, null)
+        val store = field(client.javaClass, "store").get(null)
+        for (name in listOf("current", "syncError", "local", "remote")) field(storeType, name).set(store, null)
+        for (name in listOf("isReady", "host")) field(storeType, name).set(store, false)
+        val remote = activity.getSharedPreferences("reply-adapter-framework", android.content.Context.MODE_PRIVATE)
+        remote.edit().putInt(io.github.meiyongai.toki.subtitle.provider.ConfigStore.PROTOCOL, 1)
+            .putLong(io.github.meiyongai.toki.subtitle.provider.ConfigStore.REVISION, 1L)
+            .putBoolean(TranslationNetworkPolicy.KEY, false).commit()
+        assertTrue(client.initHost({ remote }, {}))
         assertTrue(io.github.meiyongai.toki.subtitle.provider.ConfigClient.isReady)
         HookRuntime.start("reply-adapter-test") { _, _ -> }; HookRuntime.attach(activity)
         val connectivity = activity.getSystemService(android.content.Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
