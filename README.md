@@ -3,6 +3,13 @@
 
 ## Toki Subtitle edition
 
+### Test prerelease: 2.1.16-debug /136
+
+The source and changelog now include the previously local 2.1.2–2.1.16 repair sequence. Patch numbers carry at 100; intermediate 127–135 APKs were incorrectly labeled 2.2.x and are documented, not silently renamed. See [current evidence and limitations](docs/FEATURE_STATUS_ZH.md), [continuous changelog](CHANGELOG.md), and [non-root report findings](docs/NO_ROOT_DIAGNOSTIC_ZH.md).
+
+This snapshot includes a durable comment repository, independent root/reply quotas, up to four different videos translating concurrently, a single page-local subtitle presenter, and fail-closed non-root startup/Binder ownership repairs. The 195 targeted regressions passed, including API29 failure replay. **The reported Huawei/LSPatch/47.4.16 environment has not been retested end to end**; the connected Android13/47.6.3 phone is a different environment. The corrected outer APK and embedded payload passed version, CRC, signature, alignment, entry-point and provider checks. [Download the test prerelease](https://github.com/w0201a/Toki-Subtitle/releases/tag/v2.1.16-debug); it is not declared stable. The historical stable release remains separate.
+
+
 [当前功能状态与验证范围](docs/FEATURE_STATUS_ZH.md) · [更新记录](CHANGELOG.md)
 
 An MIT-licensed derivative of [MeiYongAI/Toki](https://github.com/MeiYongAI/Toki). Upstream attribution and community links are retained below; download and issue links target this edition.
