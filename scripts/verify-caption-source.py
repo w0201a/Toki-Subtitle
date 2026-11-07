@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 138' in gradle and 'versionName = "2.1.18"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.18-debug / 138")
+check('versionCode = 139' in gradle and 'versionName = "2.1.19"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.19-debug / 139")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -1188,3 +1188,8 @@ check('root in rootIds&&limits.acceptsReplies(scope,root)' in v3_repo and 'if(q.
     'only currently required reply streams affect scope completion; fulfilled quota does not erase historical failures')
 check('root_shortfall:' in v3_repo and 'coverageExplanation(s.reason)' in read('app/src/main/java/io/github/meiyongai/toki/hook/CommentReaderSheet.kt'),
     'real configured deficits and stream stop reasons remain readable rather than falsely prepared')
+
+# Defaults are product defaults, not the maximum supported archival capacity.
+check('DEFAULT_LIMIT = 200' in rich_preferences and 'DEFAULT_THREAD_LIMIT = 15' in rich_preferences and '?: DEFAULT_LIMIT' in rich_preferences, 'unset comment quotas use independent 200/1000/15 product defaults while retaining the 2500 ceiling')
+check('OfflineCommentPreferences.DEFAULT_LIMIT' in read('app/src/main/java/io/github/meiyongai/toki/ui/screen/OfflineCommentCacheSettings.kt') and 'save(OfflineCommentPreferences.DEFAULT_LIMIT)' in rich_limit and 'save(OfflineCommentPreferences.DEFAULT_REPLY_LIMIT, OfflineCommentPreferences.DEFAULT_THREAD_LIMIT)' in rich_limit, 'global count and reply resets share the product defaults; per-video reset retains inheritance')
+check('CREATE TABLE IF NOT EXISTS migration_scopes' in v3_repo and 'bindMigration(account,v,folder.name,checkpoint)' in v3_repo and 'inheritMigrations(old,v,scope)' in v3_repo and 'val errors=migrationErrors(account,video)' in v3_repo, 'migration provenance survives local-scope copies and drives both reader and background incomplete status')

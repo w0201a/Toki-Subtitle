@@ -37,7 +37,7 @@ internal fun OfflineCommentCacheSettings() {
     }
     TextButton(onClick = {
         OfflineCommentLimitDialog.show(context, value) { next ->
-            ConfigClient.putString(context, OfflineCommentPreferences.LIMIT, (next ?: 2500).toString())
+            ConfigClient.putString(context, OfflineCommentPreferences.LIMIT, (next ?: OfflineCommentPreferences.DEFAULT_LIMIT).toString())
         }
     }) { Text(context.getString(R.string.offline_comment_limit_current, value, OfflineCommentPreferences.pages(value))) }
     TextButton(onClick = {

@@ -1,5 +1,7 @@
 package io.github.meiyongai.toki.subtitle.hook
 
+import io.github.meiyongai.toki.subtitle.model.OfflineCommentPreferences
+
 /** Bounded page merges and independent video quotas. Lowering limits never deletes stored pages or assets. */
 internal object OfflineCommentBudget {
     fun merge(existing: List<OfflineCommentData.Row>, incoming: List<OfflineCommentData.Row>, known: Set<String>, limit: Int): List<OfflineCommentData.Row> {
@@ -20,7 +22,9 @@ internal object OfflineCommentBudget {
         }
         return result.values.toList()
     }
-    data class Quotas(val comments: Int, val replies: Int = 1000, val perThread: Int = 50) {
+    data class Quotas(val comments: Int = OfflineCommentPreferences.DEFAULT_LIMIT,
+        val replies: Int = OfflineCommentPreferences.DEFAULT_REPLY_LIMIT,
+        val perThread: Int = OfflineCommentPreferences.DEFAULT_THREAD_LIMIT) {
         init { require(comments in 1..2500 && replies in 0..2500 && perThread in 0..2500) }
         fun rootCount(rows: List<OfflineCommentData.Row>) = rows.count { it.parentId.isBlank() && it.depth == 0 }
         fun replyCount(rows: List<OfflineCommentData.Row>) = rows.count { it.parentId.isNotBlank() || it.depth > 0 }

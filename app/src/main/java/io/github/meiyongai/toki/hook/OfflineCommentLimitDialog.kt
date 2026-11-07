@@ -34,6 +34,7 @@ internal object OfflineCommentLimitDialog {
         val builder = TokiDialogs.builder(context).setTitle(R.string.offline_comment_limit_title).setView(body)
             .setPositiveButton(R.string.common_done, null).setNegativeButton(android.R.string.cancel, null)
         if (inherited) builder.setNeutralButton(R.string.offline_comment_limit_inherit) { _, _ -> save(null) }
+        else builder.setNeutralButton(R.string.speed_restore) { _, _ -> save(OfflineCommentPreferences.DEFAULT_LIMIT) }
         val dialog = builder.create(); dialog.show()
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val value = input.text.toString().toIntOrNull()
@@ -55,6 +56,9 @@ internal object OfflineCommentLimitDialog {
         val threadInput = EditText(context).apply { inputType = InputType.TYPE_CLASS_NUMBER; setText(perThread.toString()); tag = "reply-thread-input" }
         body.addView(threadInput)
         val dialog = TokiDialogs.builder(context).setTitle(R.string.toki_reply_limits_title).setView(body)
+            .setNeutralButton(R.string.speed_restore) { _, _ ->
+                save(OfflineCommentPreferences.DEFAULT_REPLY_LIMIT, OfflineCommentPreferences.DEFAULT_THREAD_LIMIT)
+            }
             .setPositiveButton(R.string.common_done, null).setNegativeButton(android.R.string.cancel, null).create()
         dialog.show()
         dialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {

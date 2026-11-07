@@ -66,6 +66,8 @@ internal class CommentRepository(private val context: Context, file: File = File
         if(query("PRAGMA table_info(streams)").none { it["name"]=="detail" })
             db.execSQL("ALTER TABLE streams ADD COLUMN detail TEXT NOT NULL DEFAULT ''")
         db.execSQL("CREATE TABLE IF NOT EXISTS migration(folder TEXT PRIMARY KEY,stamp TEXT NOT NULL,errors INTEGER NOT NULL DEFAULT 0)")
+        // Source folder identity survives account-to-device copies; one source contributes errors once.
+        db.execSQL("CREATE TABLE IF NOT EXISTS migration_scopes(account TEXT,video TEXT,source TEXT,checkpoint TEXT NOT NULL,PRIMARY KEY(account,video,source))")
         db.execSQL("CREATE TABLE IF NOT EXISTS comment_versions(account TEXT,video TEXT,id TEXT,source_hash TEXT,payload TEXT NOT NULL,PRIMARY KEY(account,video,id,source_hash))")
         db.execSQL("CREATE TABLE IF NOT EXISTS stream_seen(account TEXT,video TEXT,root TEXT,id TEXT,PRIMARY KEY(account,video,root,id))")
         // Only one repository/engine is created per host process. Process death releases abandoned leases.
@@ -78,6 +80,17 @@ internal class CommentRepository(private val context: Context, file: File = File
             // Old native adapters used "total > page size" as truncation and prematurely stopped valid cursor streams.
             db.execSQL("UPDATE streams SET terminal='' WHERE terminal='incomplete' AND no_growth<3 AND cursor>0")
             db.version=4
+        }
+        if(db.version<5) transaction {
+            // Add provenance for pre-existing checkpoints without rewriting pages or old migration rows.
+            for(info in query("SELECT account,video FROM videos")) {
+                val a=info.getValue("account");val v=info.getValue("video");val source=CommentSnapshotStore.key(a,v)
+                exec("INSERT OR IGNORE INTO migration_scopes SELECT ?,?,?,folder FROM migration WHERE folder=?",a,v,source,source)
+                exec("INSERT OR IGNORE INTO migration_scopes SELECT ?,?,?,folder FROM migration WHERE folder=?",
+                    HostOfflineComments.LOCAL_SCOPE,v,source,source+":"+HostOfflineComments.LOCAL_SCOPE)
+            }
+            exec("UPDATE scope_stats SET incomplete=1 WHERE EXISTS(SELECT 1 FROM migration_scopes s JOIN migration m ON m.folder=s.checkpoint WHERE s.account=scope_stats.account AND s.video=scope_stats.video AND m.errors>0)")
+            db.version=5
         }
     }
     private fun query(sql: String, vararg args: String): List<Map<String,String>> = db.rawQuery(sql,args).use { c ->
@@ -108,6 +121,16 @@ internal class CommentRepository(private val context: Context, file: File = File
             reconcile(account,video)
         };emit(account,video)
     }
+    private fun migrationErrors(a:String,v:String):Int = query("SELECT COALESCE(SUM(m.errors),0) errors FROM migration_scopes s JOIN migration m ON m.folder=s.checkpoint WHERE s.account=? AND s.video=?",a,v)
+        .single().getValue("errors").toInt()
+    /** Unchanged migration fast paths only repair the error bit, never decode all stored bodies. */
+    private fun markMigrationIncomplete(a:String,v:String) {
+        if(migrationErrors(a,v)>0)exec("UPDATE scope_stats SET incomplete=1 WHERE account=? AND video=?",a,v)
+    }
+    private fun bindMigration(a:String,v:String,source:String,checkpoint:String) =
+        exec("INSERT OR REPLACE INTO migration_scopes VALUES(?,?,?,?)",a,v,source,checkpoint)
+    private fun inheritMigrations(old:String,v:String,scope:String) =
+        exec("INSERT OR IGNORE INTO migration_scopes SELECT ?,video,source,checkpoint FROM migration_scopes WHERE account=? AND video=?",scope,old,v)
     private fun quotas(r:Map<String,String>)=OfflineCommentBudget.Quotas(r.getValue("root_limit").toInt(),r.getValue("reply_limit").toInt(),r.getValue("thread_limit").toInt())
     private fun rows(a:String,v:String): List<OfflineCommentData.Row> {
         val target=video(a,v)?.getValue("target")?:"zh-hans"
@@ -154,7 +177,7 @@ internal class CommentRepository(private val context: Context, file: File = File
         val text=scope.filter{needsTranslation(it)&&!it.sourceTruncated}
         val media=scope.flatMap{it.media}.distinctBy{it.id}
         val saved=query("SELECT id FROM assets WHERE account=? AND video=? AND ready=1",a,v).mapTo(hashSetOf()){it.getValue("id")}
-        exec("INSERT OR REPLACE INTO scope_stats VALUES(?,?,?,?,?,?,?,?)",a,v,scope.size,text.size,text.count{!it.translation.isNullOrBlank()},media.size,media.count{it.id in saved},if(scope.any{it.sourceTruncated||!it.mediaKnown}||q.rootCount(scope)<q.comments)1 else 0)
+        exec("INSERT OR REPLACE INTO scope_stats VALUES(?,?,?,?,?,?,?,?)",a,v,scope.size,text.size,text.count{!it.translation.isNullOrBlank()},media.size,media.count{it.id in saved},if(migrationErrors(a,v)>0||scope.any{it.sourceTruncated||!it.mediaKnown}||q.rootCount(scope)<q.comments)1 else 0)
     }
     private fun ingest(a:String,v:String,page:OfflineCommentData.Snapshot,root:String,verified:Boolean=true) {
         require(page.account==a&&page.video==v)
@@ -191,11 +214,14 @@ internal class CommentRepository(private val context: Context, file: File = File
             val indexFile=File(folder,"index.json");if(!indexFile.isFile)return
             val stamp="${indexFile.lastModified()}:${indexFile.length()}"
             val checkpoint=if(account==HostOfflineComments.LOCAL_SCOPE)folder.name+":"+account else folder.name
-            if(query("SELECT stamp FROM migration WHERE folder=?",checkpoint).firstOrNull()?.get("stamp")==stamp)return
             val index=try { JSONObject(indexFile.readText()) } catch(_:Exception) { return }
             val legacy=index.optString("account")
             if(account!=HostOfflineComments.LOCAL_SCOPE && legacy!=account)return
             val v=index.optString("video");if(v.isBlank() || onlyVideo!=null&&v!=onlyVideo)return
+            if(query("SELECT stamp FROM migration WHERE folder=?",checkpoint).firstOrNull()?.get("stamp")==stamp && video(account,v)!=null) {
+                transaction { bindMigration(account,v,folder.name,checkpoint);markMigrationIncomplete(account,v) }
+                emit(account,v);return
+            }
             if(account==HostOfflineComments.LOCAL_SCOPE)OfflineCommentMediaStore.referenceLegacy(context,account,v,legacy)
             transaction {
                 val model=try { File(folder,"model.json").readText() } catch(_:Exception) { "" }
@@ -219,9 +245,9 @@ internal class CommentRepository(private val context: Context, file: File = File
                         p.rows.forEach { exec("INSERT OR IGNORE INTO stream_seen VALUES(?,?,?,?)",account,v,root,it.id) }
                     }
                 } catch(_:Exception) { errors++ }
-                reconcile(account,v)
                 exec("INSERT OR REPLACE INTO migration VALUES(?,?,?)",checkpoint,stamp,errors)
-                if(errors>0)exec("UPDATE scope_stats SET incomplete=1 WHERE account=? AND video=?",account,v)
+                bindMigration(account,v,folder.name,checkpoint)
+                reconcile(account,v)
             };emit(account,v)
     }
     fun migrateLocalScope(scope:String,onlyVideo:String?=null) {
@@ -231,8 +257,11 @@ internal class CommentRepository(private val context: Context, file: File = File
     }
     @Synchronized private fun copyLocalVideo(old:String,v:String,scope:String) {
         val marker="sqlite-local:"+old+":"+v
-        if(query("SELECT folder FROM migration WHERE folder=?",marker).isNotEmpty())return
         val info=video(old,v)?:return
+        if(query("SELECT folder FROM migration WHERE folder=?",marker).isNotEmpty()) {
+            transaction { inheritMigrations(old,v,scope);markMigrationIncomplete(scope,v) }
+            emit(scope,v);return
+        }
         OfflineCommentMediaStore.referenceLegacy(context,scope,v,old)
         transaction {
             if(OfflineCommentLimitOverrides.savedLimit(context,scope,v)==null)OfflineCommentLimitOverrides.savedLimit(context,old,v)?.let{OfflineCommentLimitOverrides.set(context,scope,v,it)}
@@ -248,6 +277,7 @@ internal class CommentRepository(private val context: Context, file: File = File
                 exec("UPDATE streams SET cursor=?,terminal=?,no_growth=?,detail=? WHERE account=? AND video=? AND root=? AND cursor=0 AND terminal=''",stream.getValue("cursor").toLong(),stream.getValue("terminal"),stream.getValue("no_growth").toInt(),stream.getValue("detail"),scope,v,stream.getValue("root"))
             }
             exec("INSERT OR IGNORE INTO stream_seen SELECT ?,video,root,id FROM stream_seen WHERE account=? AND video=?",scope,old,v)
+            inheritMigrations(old,v,scope)
             reconcile(scope,v)
             exec("INSERT OR REPLACE INTO migration VALUES(?,'imported',0)",marker)
         };emit(scope,v)
@@ -392,7 +422,7 @@ internal class CommentRepository(private val context: Context, file: File = File
         val relevant=streams.filter { stream -> val root=stream.getValue("root")
             root.isBlank()||root in rootIds&&limits.acceptsReplies(scope,root) }
         val sourceDone=relevant.isNotEmpty()&&relevant.all { it.getValue("terminal").isNotBlank() }
-        val errors=query("SELECT errors FROM migration WHERE folder=?",CommentSnapshotStore.key(account,video)).firstOrNull()?.get("errors")?.toIntOrNull()?:0
+        val errors=migrationErrors(account,video)
         val incomplete=errors>0||relevant.any { it["terminal"]=="incomplete" }||scope.any{it.sourceTruncated||!it.mediaKnown}||quotas(info).rootCount(scope)<quotas(info).comments
         val phase=when { info["paused"]=="1"->"paused";work.any{it["status"]=="running"}->"running";sourceDone&&translated==text.size&&ready==assets.size->if(incomplete)"partial" else "ready";work.any{it["status"]=="retry"}->"retry";else->"queued" }
         val reasons=mutableListOf<String>()

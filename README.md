@@ -3,6 +3,8 @@
 
 ## Toki Subtitle edition
 
+**Source continuation: 2.1.19 /139 (not a published release).** Unset comment quotas now share 200 roots /1000 replies /15 replies per thread, while explicit settings and stored rows remain intact. Migration provenance is being checked across device-scope copies and restarts so damaged legacy pages cannot silently become ready. Build138 has now passed local tests/lint/unified package verification; build139 full verification is in progress. No phone is currently connected, and Huawei non-root / full subtitle playback scenarios remain unverified. See the [source and artifact status](docs/SOURCE_STATUS.md) for the exact boundary.
+
 ### Test prerelease: 2.1.17-debug /137
 
 The source and changelog now include the previously local 2.1.2–2.1.16 repair sequence. Patch numbers carry at 100; intermediate 127–135 APKs were incorrectly labeled 2.2.x and are documented, not silently renamed. See [current evidence and limitations](docs/FEATURE_STATUS_ZH.md), [continuous changelog](CHANGELOG.md), and [non-root report findings](docs/NO_ROOT_DIAGNOSTIC_ZH.md).

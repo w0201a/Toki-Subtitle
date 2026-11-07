@@ -8,7 +8,7 @@ import org.junit.Test
 class OfflineCommentRichPolicyTest {
     private fun row(id: String, translated: String? = null, parent: String = "") = OfflineCommentData.Row(id,"a","h","u",id,translated,"zh-hans",if(parent.isEmpty())0 else 1,0L,parentId=parent)
     @Test fun canonicalLimitSupportsExactCountsAndPageShortcutUpTo2500() {
-        assertEquals(2500, OfflineCommentPreferences.limit(null))
+        assertEquals(200, OfflineCommentPreferences.limit(null))
         assertEquals(125, OfflineCommentPreferences.pages(2500)); assertEquals(3, OfflineCommentPreferences.pages(41))
         assertEquals(2500, OfflineCommentPreferences.fromPages(125))
         for (value in listOf("1","20","2500")) ConfigSchema.validate(mapOf(OfflineCommentPreferences.LIMIT to value))
