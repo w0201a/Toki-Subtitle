@@ -51,6 +51,16 @@ jobs:
       - name: Build Release when explicitly requested
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.build_release }}
         run: ./gradlew :app:assembleRelease --stacktrace --console=plain
+      - name: Upload test and lint reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: Toki-Verification-Reports
+          path: |
+            app/build/test-results/testDebugUnitTest/
+            app/build/reports/tests/testDebugUnitTest/
+            app/build/reports/lint-results-debug.*
+          if-no-files-found: ignore
       - name: Upload build artifacts
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:

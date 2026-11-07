@@ -131,24 +131,28 @@ class SubtitleOverlayTest {
                 measure(View.MeasureSpec.makeMeasureSpec(1080, View.MeasureSpec.EXACTLY), View.MeasureSpec.makeMeasureSpec(2400, View.MeasureSpec.EXACTLY))
                 layout(0, 0, 1080, 2400); settleWindowFrame()
             }
+            // Each typography pass must have its own cache identity. The real translator
+            // intentionally persists completed cues, so reusing one video makes the second
+            // pass a legitimate cache hit (zero transports), not a display failure.
+            val videoId = "ordered-video-$mode-${java.util.UUID.randomUUID()}"
             val events = arrayListOf<String>(); var requests = 0
             val translator = fakeOnlineTranslator({ true }, { _, done -> requests++; done("译文"); AutoCloseable { } }, events::add)
-            translator.selectVideo("ordered-video", source); translator.noteNativeFrame("ordered-video")
+            translator.selectVideo(videoId, source); translator.noteNativeFrame(videoId)
             // This is a presentation test: supply a completed pair through the real translation/cache path,
             // independently of this synthetic window's transient request-eligibility/layout callbacks.
             var available: String? = null
-            translator.request("ordered-video", "original cue", { true }) { available = it }
+            translator.request(videoId, "original cue", { true }) { available = it }
             shadowOf(Looper.getMainLooper()).idle()
             assertEquals("Completed translation must be present before testing line layout", "译文", available)
             assertEquals(1, requests)
             var settings = ConfigSnapshot(mapOf("subtitle_style_enabled" to true, "subtitle_render_mode" to mode,
                 "subtitle_text_mode" to "bilingual", "subtitle_bilingual_order" to "original_first"))
             val overlay = SubtitleOverlay(source, translator, configuration = { settings })
-            overlay.update("EXPANDED", "original cue", "ordered-video")
+            overlay.update("EXPANDED", "original cue", videoId)
             overlay.onPreDraw(); shadowOf(Looper.getMainLooper()).idle(); overlay.onPreDraw()
             val labelField = SubtitleOverlay::class.java.getDeclaredField("label").apply { isAccessible = true }
             val label = labelField.get(overlay) as TextView
-            assertEquals("mode=$mode requests=$requests enabled=${translator.isEnabled("ordered-video")} events=$events", "original cue\n译文", label.text.toString())
+            assertEquals("mode=$mode requests=$requests enabled=${translator.isEnabled(videoId)} events=$events", "original cue\n译文", label.text.toString())
             val before = overlay.frameRevision
             settings = ConfigSnapshot(settings.configuration() + ("subtitle_bilingual_order" to "translated_first"))
             overlay.onPreDraw()
