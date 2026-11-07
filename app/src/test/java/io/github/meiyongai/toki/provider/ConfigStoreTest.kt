@@ -207,6 +207,60 @@ class ConfigStoreTest {
         assertTrue(remote.getBoolean("feed_remove_ads", false))
     }
 
+    /** Binding is not a successful publication when acquisition fails. */
+    @Test fun connectionResultRejectsFailedAcquisitionAndPreservesSettings() {
+        val local = preferences()
+        local.edit().putBoolean("sim_spoof_enabled", true).putLong(ConfigStore.REVISION, 18L).commit()
+        val before = local.all.toMap()
+        val manager = ConfigStore({}, {})
+        manager.attachLocal(local)
+        assertEquals(false, manager.connect { throw IllegalStateException("temporary service failure") })
+        assertEquals(before, local.all)
+        assertNotNull(manager.syncError)
+        val remote = preferences()
+        assertEquals(true, manager.connect { remote })
+        assertNull(manager.syncError)
+        assertEquals(before, local.all)
+        assertEquals(18L, remote.getLong(ConfigStore.REVISION, -1))
+    }
+
+    /** Only an acknowledged commit permits a successful connection result. */
+    @Test fun connectionResultRejectsUnacknowledgedCommit() {
+        val target = preferences()
+        val failing = object : SharedPreferences by target {
+            override fun edit(): SharedPreferences.Editor {
+                val editor = target.edit()
+                return object : SharedPreferences.Editor by editor {
+                    override fun clear(): SharedPreferences.Editor { editor.clear(); return this }
+                    override fun putInt(key: String, value: Int): SharedPreferences.Editor { editor.putInt(key, value); return this }
+                    override fun commit(): Boolean = false
+                }
+            }
+        }
+        val manager = ConfigStore({}, {})
+        manager.attachLocal(preferences())
+        assertEquals(false, manager.connect { failing })
+        assertNotNull(manager.syncError)
+        assertTrue(target.all.isEmpty())
+    }
+
+    /** Retrying a transient publication failure sends the latest complete saved revision. */
+    @Test fun connectionRetryPublishesLatestWithoutReplayingOrResettingSavedValues() {
+        val manager = ConfigStore({}, {})
+        val local = preferences()
+        manager.attachLocal(local)
+        assertEquals(false, manager.connect { throw IllegalStateException("not ready") })
+        manager.update(mapOf("feed_remove_ads" to true))
+        manager.update(mapOf("feed_remove_ads" to false, "feed_remove_live" to true))
+        val before = local.all.toMap()
+        val remote = preferences()
+        assertEquals(true, manager.connect { remote })
+        assertEquals(before, local.all)
+        assertEquals(2L, remote.getLong(ConfigStore.REVISION, -1))
+        assertFalse(remote.getBoolean("feed_remove_ads", true))
+        assertTrue(remote.getBoolean("feed_remove_live", false))
+    }
+
     /** 服务重连只发布当前完整版本，不重放中间修改。@return Unit。Callers: JUnit。 */
     @Test fun reconnectPublishesLatestLocalRevision() {
         val manager = ConfigStore({}, {})

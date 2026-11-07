@@ -12,6 +12,9 @@
     <queries>
         <package android:name="com.zhiliaoapp.musically" />
         <package android:name="com.ss.android.ugc.trill" />
+        <intent>
+            <action android:name="org.lsposed.lspatch.action.REQUEST_PUSH" />
+        </intent>
     </queries>
 
     <application

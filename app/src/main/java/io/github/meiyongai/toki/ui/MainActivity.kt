@@ -93,6 +93,12 @@ import kotlinx.coroutines.withContext
  * 采用原生标准尺寸顶部标题栏（[TopAppBar]），负责展示与修改模块配置，并通过 [ConfigClient] 与私有数据源同步。
  */
 class MainActivity : ComponentActivity() {
+    /** Foreground recovery does not restart TikTok or change saved user settings. */
+    override fun onResume() {
+        super.onResume()
+        io.github.meiyongai.toki.subtitle.util.LSPosedStatusHelper.requestConnection(applicationContext)
+    }
+
     /**
      * 活动组件生命周期创建入口。
      *

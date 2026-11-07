@@ -109,10 +109,10 @@ internal class ConfigStore(
     /**
      * 连接框架发布端并立即提交完整配置；失败保存本地配置并明确标记未同步。
      * @param acquire 获取框架管理端可写配置的操作。
-     * @return Unit。
+     * @return 只有当前完整事务被框架确认时返回 true。
      * Callers: ConfigClient.connectFramework、ConfigStoreTest。
      */
-    @Synchronized fun connect(acquire: () -> SharedPreferences) {
+    @Synchronized fun connect(acquire: () -> SharedPreferences): Boolean {
         check(local != null && !host) { "仅管理端可以发布配置" }
         remote = null
         try {
@@ -120,9 +120,10 @@ internal class ConfigStore(
             publish()
         } catch (error: Exception) {
             publicationFailed(error)
-            return
+            return false
         }
         changed()
+        return true
     }
 
     /**

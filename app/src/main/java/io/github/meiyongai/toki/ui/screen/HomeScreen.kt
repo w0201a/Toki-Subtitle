@@ -224,7 +224,7 @@ fun HomeScreen(
 @Composable
 private fun LSPosedStatusCard(lsposedStatus: LSPosedStatus) {
     val strings = LocalContext.current.resources
-    val isActivated = lsposedStatus.isActivated
+    val isActivated = lsposedStatus.isActivated && lsposedStatus.configurationSynced
 
     val badgeColor = if (isActivated) {
         MaterialTheme.colorScheme.primaryContainer
@@ -239,7 +239,7 @@ private fun LSPosedStatusCard(lsposedStatus: LSPosedStatus) {
     }
 
     val statusTitle = if (isActivated) strings.getString(R.string.home_activated) else strings.getString(R.string.home_inactive)
-    val statusDetails = if (isActivated) lsposedStatus.details else strings.getString(R.string.home_activation_missing)
+    val statusDetails = if (lsposedStatus.isActivated) lsposedStatus.details else strings.getString(R.string.home_activation_missing)
 
     Surface(
         shape = RoundedCornerShape(20.dp),

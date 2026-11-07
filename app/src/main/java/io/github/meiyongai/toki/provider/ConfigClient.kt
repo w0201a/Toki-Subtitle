@@ -114,7 +114,7 @@ object ConfigClient {
     /**
      * 将管理端设置发布到新绑定的框架服务。
      * @param acquire 框架管理端可写配置的获取操作。
-     * @return Unit。
+     * @return 框架是否确认了当前完整配置。
      * Callers: LSPosedStatusHelper.onServiceBind。
      */
     fun connectFramework(acquire: () -> SharedPreferences) = store.connect(acquire)

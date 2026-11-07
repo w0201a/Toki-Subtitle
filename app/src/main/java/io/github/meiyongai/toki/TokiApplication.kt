@@ -15,5 +15,6 @@ class TokiApplication : Application() {
         super.onCreate()
         ConfigClient.init(this)
         LSPosedStatusHelper.init()
+        LSPosedStatusHelper.requestConnection(this)
     }
 }

@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
  */
 data class LSPosedStatus(
     val isActivated: Boolean = false,
-    val details: String = "None"
+    val details: String = "None",
+    val configurationSynced: Boolean = false
 )
 
 /**
@@ -35,6 +36,16 @@ object LSPosedStatusHelper {
 
     private var isInitialized = false
     private val connection = FrameworkServiceConnection()
+    private var pull: FrameworkServicePullClient? = null
+    private var settingsSubscription: AutoCloseable? = null
+
+    /** Ask an existing manager to restore this process's own service; never launch a host. */
+    @Synchronized fun requestConnection(context: android.content.Context) {
+        if (_status.value.isActivated && ConfigClient.syncError == null) return
+        val client = pull ?: FrameworkServicePullClient(context.applicationContext,
+            { _status.value.isActivated && ConfigClient.syncError == null }, { android.util.Log.i("TokiFramework", it) }).also { pull = it }
+        client.request()
+    }
 
     /**
      * 注册并启动 LSPosed 服务监听器。
@@ -45,6 +56,10 @@ object LSPosedStatusHelper {
     @Synchronized fun init() {
         if (isInitialized) return
         isInitialized = true
+        settingsSubscription = ConfigClient.addStateListener {
+            val previous = _status.value
+            if (previous.isActivated) _status.value = previous.copy(configurationSynced = ConfigClient.syncError == null)
+        }
 
         XposedServiceHelper.registerListener(object : XposedServiceHelper.OnServiceListener {
             /** 发布当前完整配置并更新激活信息。@param service 框架连接。@return Unit。Callers: XposedServiceHelper。 */
@@ -55,8 +70,11 @@ object LSPosedStatusHelper {
                         val frameworkName = service.frameworkName.ifBlank { "LSPosed" }
                         val frameworkVersion = service.frameworkVersion.ifBlank { "unknown" }
                         val details = "$frameworkName $frameworkVersion (${service.frameworkVersionCode}), API ${service.apiVersion}"
-                        ConfigClient.connectFramework { service.getRemotePreferences(ConfigClient.FRAMEWORK_GROUP) }
-                        _status.value = LSPosedStatus(isActivated = true, details = details)
+                        val synced = ConfigClient.connectFramework { service.getRemotePreferences(ConfigClient.FRAMEWORK_GROUP) }
+                        // A live Binder, acknowledged settings, and host execution are separate facts.
+                        _status.value = LSPosedStatus(isActivated = true, details = details, configurationSynced = synced)
+                        if (synced) pull?.cancel()
+                        else android.util.Log.w("TokiFramework", "Framework connected, configuration not acknowledged")
                     } catch (error: Exception) {
                         connection.died(service) { disconnected() }
                         android.util.Log.e("TokiFramework", "框架连接建立失败，保留本地设置", error)

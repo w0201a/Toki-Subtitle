@@ -25,7 +25,7 @@ import android.os.Looper
 
 /** 驱动真实入口，验证按需安装边界；全关仅有明确的诊断入口。 */
 @RunWith(RobolectricTestRunner::class)
-@Config(manifest = Config.NONE, application = Application::class, sdk = [28, 35])
+@Config(manifest = Config.NONE, application = Application::class, sdk = [28, 29, 35])
 @LooperMode(LooperMode.Mode.PAUSED)
 class TokiStartupTest {
     private val hooks = mutableListOf<Pair<Executable, XposedInterface.Hooker>>()

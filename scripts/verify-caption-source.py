@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 141' in gradle and 'versionName = "2.1.21"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.21-debug / 141")
+check('versionCode = 142' in gradle and 'versionName = "2.1.22"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.22-debug / 142")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -1201,3 +1201,10 @@ check('reason=renderer-text-changed' in v3_presenter and 'watchDraw(null)' in v3
 
 check('state=="EXPANDED"&&(owner==null||owner===root)' in v3_presenter and 'state!="EXPANDED"&&owner===root' in v3_presenter, 'empty expanded frames retain only their current renderer observer; explicitly hidden frames cannot resurrect')
 check('rowIndex.replies(r.id)' in regression_reader and 'rowIndex.byId[r.parentId]' in regression_reader and 'rowIndex.matches(owner,source)' in regression_reader, 'comment adapter uses snapshot-scoped parent reply and source indexes rather than nested scans per visible row')
+
+# Companion process recreation must restore a manager-owned service without replacing a host/framework.
+pull_client = read("app/src/main/java/io/github/meiyongai/toki/util/FrameworkServicePullClient.kt")
+check('org.lsposed.lspatch.action.REQUEST_PUSH' in pull_client and 'org.lsposed.lspatch.IXposedServicePull' in pull_client and 'IBinder.FIRST_CALL_TRANSACTION' in pull_client, "companion recovery uses the installed manager pull protocol rather than a replacement injector")
+check('MAX_ATTEMPTS = 3' in pull_client and 'TIMEOUT_MS = 5_000L' in pull_client and 'workerBusy.compareAndSet' in pull_client and 'app.unbindService(request)' in pull_client, "companion pull has bounded attempts, timeout, one worker and binding cleanup")
+check('LSPosedStatusHelper.requestConnection(this)' in read("app/src/main/java/io/github/meiyongai/toki/TokiApplication.kt") and 'LSPosedStatusHelper.requestConnection(applicationContext)' in read("app/src/main/java/io/github/meiyongai/toki/ui/MainActivity.kt"), "process recreation and foreground entry request recovery without starting TikTok")
+check('fun connect(acquire: () -> SharedPreferences): Boolean' in read("app/src/main/java/io/github/meiyongai/toki/provider/ConfigStore.kt") and 'connectionResultRejectsUnacknowledgedCommit' in read("app/src/test/java/io/github/meiyongai/toki/provider/ConfigStoreTest.kt"), "configuration connection result requires acknowledged publication and preserves failed state")

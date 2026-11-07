@@ -1,5 +1,11 @@
 # Toki
 
+## In progress: Toki 2.1.22-debug /142 (not publicly released)
+
+The current scope permits changes and updates to **Toki only**: no LSPatch/TikTok replacements, patched-host changes, extra test-app installations, network switching, or data resets. This candidate restores the companion service after Toki process recreation using the installed manager's existing pull endpoint, with bounded background retries and binding cleanup. Configuration acknowledgment and Binder connection are separate facts; saved settings remain unchanged.
+
+The first 57 targeted tests and all 1,404 local tests passed (3 existing environment skips). The verified APK was installed as a Toki-only update; saved configuration and host/manager APK hashes were unchanged. Companion reconnection after process recreation was verified. However, a continuously captured host launch still failed in framework Kotlin bootstrap before module dispatch, and video remained unavailable. Actual module entry and individual feature behavior are not accepted. Activation UI has alternated while actual functionality remains unavailable; a green badge is not acceptance. The objective remains complete rootless feature usability and upgrade regression, not a framework or one-off host package. See the [current rootless investigation](docs/NO_ROOT_DIAGNOSTIC_ZH.md).
+
 ## Current Toki module work: 2.1.21-debug /141
 
 This continuation changes **Toki only**, not TikTok or LSPatch. It fixes losing the selected native-caption observer after an empty EXPANDED frame and removes repeated full reply scans from comment adapter bindings. The old module failed the new caption reproduction; the corrected 12 targeted tests pass. Local/CI full runs have 1370 tests, zero failures, with three/four environment skips. The same-signer standalone Toki APK is built and verified; this does not prove the original playback scenario, actual translation throughput or the rootless device is fixed. Live140 data still reports failing host requests with network=-2223. Previous framework experiments are historical and are not this module's delivery.
