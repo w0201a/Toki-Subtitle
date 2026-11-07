@@ -1,5 +1,9 @@
 # Toki
 
+## Non-root delivery correction (2026-11-08)
+
+**Toki is distributed to multiple users. A second patch of one user's already patched TikTok is not the product deliverable.** The local host cover-test APK is a diagnostic experiment only, not recommended for installation or redistribution and not evidence of general compatibility. Toki remains a standalone module APK. The observed Vector failure occurs before module entry and requires a reusable framework build/loader fix plus a clear signing/upgrade path and cross-device end-to-end validation. Users must not have to submit their individual TikTok APKs for manual modification. The general non-root solution is still incomplete; no automatic framework installation, uninstall or data clearing is authorized.
+
 ### Source/build continuation: 2.1.20 /140 (not publicly released)
 
 Posted native-caption text observation, outside dismissal and indexed fair comment scheduling are built and locally/CI checked: 1365 tests, zero failures, three local/four cloud environment skips. The latest non-root report fails in Vector bootstrap before Toki. An isolated loader made from the supplied LSPatch487 reproduces and avoids the exact Intrinsics failure in a standalone Android13 ART test, but it is not an installable manager or a Huawei API29 end-to-end fix. The supplied patched TikTok47.4.16 was subsequently confirmed to use Manager mode. A local same-package/version/certificate cover-test APK now passes independent APK signature and alignment checks while preserving the original manager configuration and application data bytes; it has not been installed or verified on the reported Huawei API29 phone. No data was cleared, no framework installed and no new public release created. See [rootless evidence and boundaries](docs/NO_ROOT_DIAGNOSTIC_ZH.md).
