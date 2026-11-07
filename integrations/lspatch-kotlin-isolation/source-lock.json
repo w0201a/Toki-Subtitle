@@ -1,0 +1,15 @@
+{
+  "upstream": "https://github.com/JingMatrix/LSPatch.git",
+  "frameworkCommit": "4d573639e4192c33afb3f1b76b16fc248dbeb830",
+  "vectorCommit": "e00c5c5038bbcc14e0b382ab893301d6993e6989",
+  "testApplicationId": "io.github.meiyongai.toki.lspatch",
+  "testVersionCode": 1000487,
+  "testVersionName": "1.2-kotlinfix-test.1",
+  "binaryNativeReuse": {
+    "originalManagerVersionCode": 487,
+    "managerSha256": "e93e34c5170831aad51b2035e3cd94a1c3b5298711189fabc359b566bc34ad17",
+    "vectorVersionCode": 7306,
+    "vectorVersionName": "canary-3106",
+    "reason": "Only native assets are reused. Loader, manager and CLI are compiled from pinned sources. Default build can compile native libraries when the full NDK submodule tree is provided."
+  }
+}

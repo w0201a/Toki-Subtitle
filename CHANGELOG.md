@@ -1,5 +1,15 @@
 # Changelog
 
+## 通用无Root框架修复：源码、管理器与补丁器已构建（2026-11-08，兼容测试版）
+
+本轮不再交付专用TikTok。修复已接入LSPatch正常构建任务：框架loader生成时隔离Kotlin依赖，管理器与CLI统一消费该产物；无需按TikTok版本写固定DEX偏移。完整实现和源码锁定保存在`integrations/lspatch-kotlin-isolation/`。
+
+- LSPatch／Vector固定源码构建成功，203项Gradle任务完成；loader／metaloader／管理器／CLI由源码构建，四ABI原生库复用经核对的487／core7306二进制，没有伪称原生部分重编。8项构建工具回归通过，异常输入使打包停止，未隔离原始DEX不进入分发资产。
+- 通用测试管理器`Toki-LSPatch-KotlinFix-test.1.apk`与通用补丁器`Toki-LSPatch-KotlinFix-test.1.jar`已产出；管理器签名／16KiB对齐、四ABI与两种交付相同loader校验通过。
+- 新管理器使用独立包名`io.github.meiyongai.toki.lspatch`，实际与原管理器并存安装并启动；未卸载、迁移或清除原管理器数据，未自动授予Shizuku。它是debug签名测试版，不冒充上游正式包或原证书更新。
+- 两个独立合成应用（旧Kotlin／无Kotlin）经同一通用引擎生成补丁，集成模式与管理器模式共4次Android13实机启动均进入测试模块。管理器模式仅在新测试管理器数据库为两个合成包添加作用域，使用run-as，没有su／原TikTok／旧框架作用域／网络修改。手机系统本身有Root，所以不冒充全新无Root华为验收。
+- **报告华为API29及Toki实际字幕／评论功能仍未端到端验收。** 新测试管理器不会自动接管旧`org.lsposed.lspatch`绑定的宿主；现有用户的安全迁移和正式签名升级路径必须单独设计，不能让用户卸载／清数据。新用户可使用同一通用框架与独立Toki模块正常配置，不再交出私有TikTok逐包二次修改。
+
 ## 无 Root 交付方向纠正（2026-11-08）
 
 **Toki面向多人分发。某个用户的已补丁TikTok再次改包，不是Toki的正式兼容方案，也不是完成标准。**

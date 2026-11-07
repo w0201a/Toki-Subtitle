@@ -1,5 +1,9 @@
 # Toki
 
+## Generic non-root framework repair (2026-11-08, compatibility test)
+
+A reusable build-time Kotlin isolation fix now produces a source-built LSPatch manager and CLI, not a user-specific TikTok package. The 203-task build and 8 transform regressions passed. Two synthetic apps (old Kotlin / no Kotlin) entered their test module in both integrated and manager modes on Android13 physical hardware; the manager launched side-by-side. Four native7306 binaries were reused from the reviewed487 manager, not rebuilt. The Huawei API29 report environment, real Toki features, and production signing/safe migration remain unverified. See [reproducible framework integration](integrations/lspatch-kotlin-isolation/README.md). No original-manager uninstall, data reset, or automatic retargeting of existing patched apps is performed.
+
 ## Non-root delivery correction (2026-11-08)
 
 **Toki is distributed to multiple users. A second patch of one user's already patched TikTok is not the product deliverable.** The local host cover-test APK is a diagnostic experiment only, not recommended for installation or redistribution and not evidence of general compatibility. Toki remains a standalone module APK. The observed Vector failure occurs before module entry and requires a reusable framework build/loader fix plus a clear signing/upgrade path and cross-device end-to-end validation. Users must not have to submit their individual TikTok APKs for manual modification. The general non-root solution is still incomplete; no automatic framework installation, uninstall or data clearing is authorized.

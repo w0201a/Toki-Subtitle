@@ -1,0 +1,74 @@
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 30f8fb1..43cbf2c 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -60 +60 @@ val (coreCommitCount, coreLatestTag, coreCommitHash) = FileRepositoryBuilder()
+-val defaultManagerPackageName by extra("org.lsposed.lspatch")
++val defaultManagerPackageName by extra(providers.gradleProperty("tokiManagerPackage").getOrElse("org.lsposed.lspatch"))
+@@ -62,5 +62,5 @@ val apiCode by extra(102)
+-val verCode by extra(commitCount)
+-val verName by extra("1.2")
+-val coreVerCode by extra(coreCommitCount)
+-val coreVerName by extra(coreLatestTag)
+-val coreVerHash by extra(coreCommitHash)
++val verCode by extra(providers.gradleProperty("tokiVersionCode").orNull?.toInt() ?: commitCount)
++val verName by extra(providers.gradleProperty("tokiVersionName").getOrElse("1.2"))
++val coreVerCode by extra(providers.gradleProperty("tokiCoreVersionCode").orNull?.toInt() ?: coreCommitCount)
++val coreVerName by extra(providers.gradleProperty("tokiCoreVersionName").getOrElse(coreLatestTag))
++val coreVerHash by extra(providers.gradleProperty("tokiCoreVersionHash").getOrElse(coreCommitHash))
+diff --git a/manager/src/main/AndroidManifest.xml b/manager/src/main/AndroidManifest.xml
+index ae66410..4304beb 100644
+--- a/manager/src/main/AndroidManifest.xml
++++ b/manager/src/main/AndroidManifest.xml
+@@ -33 +33 @@
+-        android:label="@string/app_name"
++        android:label="Toki LSPatch Compatibility Test"
+diff --git a/patch-loader/build.gradle.kts b/patch-loader/build.gradle.kts
+index f9d9068..6bdaed5 100644
+--- a/patch-loader/build.gradle.kts
++++ b/patch-loader/build.gradle.kts
+@@ -23,3 +23,3 @@ android {
+-    externalNativeBuild {
+-        cmake {
+-            path("src/main/jni/CMakeLists.txt")
++    if (!providers.gradleProperty("tokiNativeAssets").isPresent) {
++        externalNativeBuild {
++            cmake { path("src/main/jni/CMakeLists.txt") }
+@@ -37,2 +37,15 @@ androidComponents.onVariants { variant ->
+-        rename("classes.dex", "loader.dex")
+-        into("${rootProject.projectDir}/out/assets/${variant.name}/lspatch")
++        rename("classes.dex", "loader.raw.dex")
++        doLast {
++            // Isolate the framework runtime ONCE during framework construction, not per target app.
++            val javaHome = System.getProperty("java.home")
++            val javaBinary = File(javaHome, "bin/" + if (System.getProperty("os.name").startsWith("Windows")) "java.exe" else "java")
++            val assets = File(rootProject.projectDir, "out/assets/${variant.name}/lspatch")
++            val process = ProcessBuilder(javaBinary.absolutePath, "--source", "21",
++                File(rootProject.projectDir, "tools/IsolateKotlinDex.java").absolutePath,
++                File(buildDir, "intermediates/tokiRawLoader/${variant.name}/loader.raw.dex").absolutePath, File(assets, "loader.dex").absolutePath)
++                .inheritIO().start()
++            check(process.waitFor() == 0) { "Framework Kotlin isolation failed; manager/CLI packaging stopped" }
++        }
++        inputs.file(rootProject.file("tools/IsolateKotlinDex.java"))
++        outputs.file(rootProject.file("out/assets/${variant.name}/lspatch/loader.dex"))
++        into("$buildDir/intermediates/tokiRawLoader/${variant.name}")
+@@ -42,9 +55,10 @@ androidComponents.onVariants { variant ->
+-        dependsOn("assemble$variantCapped")
+-        dependsOn("strip${variantCapped}DebugSymbols")
+-        val libDir = variant.name + "/strip${variantCapped}DebugSymbols"
+-        from(
+-            fileTree(
+-                "dir" to "$buildDir/intermediates/stripped_native_libs/$libDir/out/lib",
+-                "include" to listOf("**/liblspatch.so")
+-            )
+-        )
++        val prebuilt = providers.gradleProperty("tokiNativeAssets").orNull
++        if (prebuilt != null) {
++            // Optional reproducible Java-only compatibility build, using the supplied core7306 binary.
++            from(zipTree(File(prebuilt))) { include("assets/lspatch/so/**/liblspatch.so"); eachFile { path = path.removePrefix("assets/lspatch/so/") }; includeEmptyDirs = false }
++        } else {
++            dependsOn("assemble$variantCapped")
++            dependsOn("strip${variantCapped}DebugSymbols")
++            val libDir = variant.name + "/strip${variantCapped}DebugSymbols"
++            from(fileTree("dir" to "$buildDir/intermediates/stripped_native_libs/$libDir/out/lib", "include" to listOf("**/liblspatch.so")))
++        }
