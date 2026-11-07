@@ -1,5 +1,9 @@
 # Toki
 
+## Current Toki module work: 2.1.21-debug /141
+
+This continuation changes **Toki only**, not TikTok or LSPatch. It fixes losing the selected native-caption observer after an empty EXPANDED frame and removes repeated full reply scans from comment adapter bindings. The old module failed the new caption reproduction; the corrected 12 targeted tests pass. Local/CI full runs have 1370 tests, zero failures, with three/four environment skips. The same-signer standalone Toki APK is built and verified; this does not prove the original playback scenario, actual translation throughput or the rootless device is fixed. Live140 data still reports failing host requests with network=-2223. Previous framework experiments are historical and are not this module's delivery.
+
 ## Generic non-root framework repair (2026-11-08, compatibility test)
 
 A reusable build-time Kotlin isolation fix now produces a source-built LSPatch manager and CLI, not a user-specific TikTok package. The 203-task build and 8 transform regressions passed. Two synthetic apps (old Kotlin / no Kotlin) entered their test module in both integrated and manager modes on Android13 physical hardware; the manager launched side-by-side. Four native7306 binaries were reused from the reviewed487 manager, not rebuilt. The Huawei API29 report environment, real Toki features, and production signing/safe migration remain unverified. See [reproducible framework integration](integrations/lspatch-kotlin-isolation/README.md). No original-manager uninstall, data reset, or automatic retargeting of existing patched apps is performed.
