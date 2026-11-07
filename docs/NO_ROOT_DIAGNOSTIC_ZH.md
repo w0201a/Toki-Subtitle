@@ -1,5 +1,38 @@
 # 无Root模式：报告定位与验证边界（2026-11-07）
 
+## 新报告补充：框架在模块入口前失败（2.1.20源码回合）
+
+新报告的API29／LSPatch 1.2(487)／Vector canary-3106环境仍不能使用。Shizuku授权和Binder均为true，不能再归因为未授权。
+
+### 本次明确阻断
+
+新的verbose日志有4次独立启动，在Vector自己的`VectorInlinedCallers.<clinit>`中调用`kotlin.jvm.internal.Intrinsics.checkNotNull(Object)`失败；异常指出该类来自TikTok的base.apk。调用链为：
+
+```text
+NoSuchMethodError: kotlin.jvm.internal.Intrinsics.checkNotNull(Object)
+  VectorInlinedCallers.<clinit>
+  VectorDeopter.deoptBootMethods
+  VectorStartup.init
+  org.matrix.vector.Startup.initXposed
+  org.lsposed.lspatch.loader.LSPApplication.onLoad
+```
+
+这是框架启动、尚未到Toki模块入口的失败。新日志中存在139 APK文件传输记录，不能据此确认139已被加载；没有读取到139模块入口运行证据。报告还打包了旧framework日志中的模板启动崩溃，旧记录与新阻断分别归档，不能混为139回归。
+
+### 已做的验证，不扩大结论
+
+- 只读ZIP分类器`scripts/analyze-lspatch-report.py`对新旧日志分组、同时间的重复堆栈去重，不输出原始日志、视频／账号／请求头或凭据；5项Python回归通过。
+- 本地最小JVM复现：父加载器先提供旧宿主Intrinsics时，框架入口复现相同NoSuchMethodError；父加载器隔离到平台后最小入口成功，宿主类本身不改写。这只是类加载机制复现，不是Android／华为验收。
+- 核对JingMatrix/LSPatch主源码的`patch-loader/src/main/jni/src/patch_loader.cpp`，框架加载器的父链仍连接宿主stub加载器。已在本地work目录保存一份“隔离到boot父加载器”的未应用上游候选补丁。
+- 没有重建、签名、覆盖安装或验收新的LSPatch管理器／宿主补丁包；当前工作区没有该框架的NDK构建环境，报告设备也不在ADB中。候选补丁不当作已修复安装包。
+- 未发现足够证据证明仅换上游canary即可修复此特定Kotlin冲突，因此不宣称“升级492就好”。更换管理器与给TikTok重新注入修正后的loader是两件事。
+
+### 需要修复的层与安全边界
+
+修复点是LSPatch／Vector的框架ClassLoader隔离，或框架自带Kotlin运行库的命名空间重定位；不是在Toki设置中加一个开关。不要向TikTok的Kotlin类硬塞缺失方法、不要在模块中吞掉框架错误，也不要卸载／清数据来掩盖失败。
+
+下一步需要精确匹配正在使用的487管理器／加载器APK或其对应源码版本，再构建并验证loader修复以及报告手机上的注入与模块入口。仅给Toki 140不能保证这个入口前阻断消失。
+
 用户报告“模块一会显示可用一会不行”，并提供LSPatch导出报告。
 
 ## 不应混为一谈的三个状态

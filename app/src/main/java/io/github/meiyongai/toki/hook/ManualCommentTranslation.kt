@@ -7,7 +7,9 @@ internal class ManualCommentTranslation(
     private val remove: (Runnable) -> Unit,
     private val changed: (State) -> Unit,
     private val report: (String) -> Unit = {},
+    private val timeoutMs: Long = 6000L,
 ) : AutoCloseable {
+    init { require(timeoutMs in 1..20_000) }
     enum class Mode { ORIGINAL, TRANSLATED, BILINGUAL }
     data class State(val original: String, val translated: String?, val completed: Int, val total: Int,
         val failed: Int, val busy: Boolean) {
@@ -66,7 +68,7 @@ internal class ManualCommentTranslation(
         if (current < 0) { publish(); return }
         index = current
         val token = ++generation
-        timeout = Runnable { finish(token, current, null) }.also { post(it, 6000) }
+        timeout = Runnable { finish(token, current, null) }.also { post(it, timeoutMs) }
         publish()
         // Observers may dismiss or restart the dialog while rendering this state.
         if (closed || generation != token || index != current) return

@@ -13,11 +13,26 @@ internal class SubtitleSessionPresenter(private val translator:NativeSubtitleTra
     private var video=""
     private var overlay:SubtitleOverlay?=null
     private val nativeViews=java.util.WeakHashMap<View,String>()
-    private data class NativeFrame(val text:String,val visible:Boolean,val sequence:Long)
+    private data class NativeFrame(var text:String,var visible:Boolean,val sequence:Long,
+        var observed:WeakReference<android.widget.TextView> = WeakReference(null),var observedText:String?=null)
     private val nativeFrames=java.util.WeakHashMap<View,NativeFrame>()
     private var nativeOwner=WeakReference<View>(null)
     private var sequence=0L
     private var diagnostic=""
+    private var drawTree:android.view.ViewTreeObserver?=null
+    // Native renderers can post TextView updates after their frame callback returns.
+    // Observe only the proven current renderer; no wall-clock expiry or global setText hook.
+    private val nativeDraw=android.view.ViewTreeObserver.OnPreDrawListener {
+        val before=controller.frame();syncNativeInput()
+        if(controller.frame()!=before)render()
+        true
+    }
+    private fun watchDraw(view:View?) {
+        val tree=view?.viewTreeObserver
+        if(drawTree===tree)return
+        drawTree?.takeIf{it.isAlive}?.removeOnPreDrawListener(nativeDraw)
+        drawTree=tree;tree?.addOnPreDrawListener(nativeDraw)
+    }
     fun select(view:View?,id:String) {
         if(id.isBlank())return
         val changed=video!=id
@@ -28,6 +43,7 @@ internal class SubtitleSessionPresenter(private val translator:NativeSubtitleTra
                 overlay?.close();overlay=null;anchor=WeakReference(view)
             }
         }
+        watchDraw(anchor.get())
         val identityChanged=controller.select(id,translator?.playbackRevision?:0,translator?.trackIdentity(id).orEmpty())
         if(identityChanged){nativeFrames.clear();nativeOwner.clear()}
         if(changed||identityChanged)render()
@@ -43,7 +59,9 @@ internal class SubtitleSessionPresenter(private val translator:NativeSubtitleTra
         nativeViews[root]=id
         if(controller.select(id,translator?.playbackRevision?:0,translator?.trackIdentity(id).orEmpty())){nativeFrames.clear();nativeOwner.clear()}
         val visible=text.isNotBlank()&&(state=="EXPANDED" || state=="HIDDEN"&&matchingVisibleText(root,text))
-        nativeFrames[root]=NativeFrame(text,visible,++sequence)
+        nativeFrames[root]=NativeFrame(text,visible,++sequence).also { frame ->
+            nativeText(root,text)?.let { frame.observed=WeakReference(it);frame.observedText=it.text.toString() }
+        }
         val owner=nativeOwner.get()
         if(visible)nativeOwner=WeakReference(root)
         if(!visible&&owner===root)nativeOwner.clear() // Never resurrect an older renderer's cached sentence.
@@ -63,7 +81,27 @@ internal class SubtitleSessionPresenter(private val translator:NativeSubtitleTra
         // The single overlay independently verifies the selected player page before displaying anything.
         if(live==null)nativeOwner.clear()
         val selected=live?.let{nativeFrames[it]}
+        if(live!=null&&selected!=null) {
+            val observed=selected.observed.get()?.takeIf{it.isAttachedToWindow}
+            if(observed==null)nativeText(live,selected.text)?.let { selected.observed=WeakReference(it);selected.observedText=it.text.toString() }
+            else {
+                val actual=observed.text.toString()
+                if(actual!=selected.observedText) {
+                    selected.observedText=actual;selected.text=actual;selected.visible=actual.isNotBlank()
+                    HookRuntime.event("SubtitleInput","reason=renderer-text-changed chars=${actual.length} sequence=${selected.sequence}")
+                }
+            }
+        }
         controller.native(video,translator?.playbackRevision?:0,selected?.text.orEmpty(),selected?.visible==true)
+    }
+    private fun nativeText(root:View,text:String):android.widget.TextView? {
+        val pending=ArrayDeque<View>();pending.add(root);val candidates=mutableListOf<android.widget.TextView>();var inspected=0
+        while(pending.isNotEmpty()&&inspected++<32) {
+            val view=pending.removeFirst()
+            if(view is android.widget.TextView)candidates+=view
+            if(view is android.view.ViewGroup)for(i in 0 until minOf(view.childCount,(32-inspected-pending.size).coerceAtLeast(0)))pending.add(view.getChildAt(i))
+        }
+        return candidates.filter{it.text.toString()==text}.singleOrNull()?:candidates.singleOrNull()
     }
     fun nativeRevision(root:View):Long=nativeFrames[root]?.sequence?:0L
     private fun matchingVisibleText(root:View,text:String):Boolean {
@@ -96,5 +134,5 @@ internal class SubtitleSessionPresenter(private val translator:NativeSubtitleTra
         binding.onPreDraw()
     }
     fun hit(activity:android.app.Activity,x:Float,y:Float):SubtitleOverlay?=overlay?.takeIf{it.hit(activity,x,y)}
-    override fun close(){overlay?.close();overlay=null;nativeViews.clear();nativeFrames.clear();nativeOwner.clear();video="";anchor.clear();controller.select("",-1,"")}
+    override fun close(){watchDraw(null);overlay?.close();overlay=null;nativeViews.clear();nativeFrames.clear();nativeOwner.clear();video="";anchor.clear();controller.select("",-1,"")}
 }

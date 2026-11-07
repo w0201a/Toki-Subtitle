@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.os.Looper
 import android.view.View
+import android.view.MotionEvent
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
@@ -91,6 +92,25 @@ class CommentReaderSheetTest {
         assertTrue(explanation.contains("2 条正文被截断"));assertTrue(explanation.contains("回复未达"))
         assertFalse(explanation.contains("root_shortfall"))
         assertEquals("已达到当前设置上限",CommentReaderSheet.coverageExplanation("quota"))
+    }
+
+    @Test fun tappingOutsideTheReaderCancelsOnlyTheWindowAndReleasesReadingGuard() {
+        val owner=Robolectric.buildActivity(Activity::class.java).setup().visible();val activity=owner.get()
+        val snapshot=OfflineCommentData.Snapshot("a".repeat(64),"video",1,listOf(row("a")),1,false,false)
+        val fake=Fake(CommentRepository.VideoState(snapshot,1,0,1,1,0,0,"ready","quota",false,false,emptyMap(),emptyMap(),0))
+        var dismissed=0
+        val dialog=CommentReaderSheet.show(activity,"video",HostOfflineComments(javaClass.classLoader!!),Any(),{true},{dismissed++},fake)
+        val panel=dialog.window!!.decorView.findViewWithTag<View>("v3-comment-sheet")
+        settle{fake.observer!=null}
+        activity.window.decorView.apply{measure(View.MeasureSpec.makeMeasureSpec(1080,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(2400,View.MeasureSpec.EXACTLY));layout(0,0,1080,2400)}
+        dialog.window!!.decorView.apply{measure(View.MeasureSpec.makeMeasureSpec(1080,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(1600,View.MeasureSpec.EXACTLY));layout(0,0,1080,1600)}
+        assertTrue(dialog.isShowing);assertTrue(CommentReaderSheet.isReading)
+        val now=android.os.SystemClock.uptimeMillis()
+        val event=MotionEvent.obtain(now,now,MotionEvent.ACTION_OUTSIDE,-50f,-50f,0)
+        assertTrue(dialog.onTouchEvent(event));event.recycle();shadowOf(Looper.getMainLooper()).idle()
+        assertFalse(dialog.isShowing);assertFalse(CommentReaderSheet.isReading);assertEquals(1,dismissed)
+        assertNull(fake.observer);assertTrue(fake.commands.isEmpty())
+        owner.pause().stop().destroy()
     }
 
 }

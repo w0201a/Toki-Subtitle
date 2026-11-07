@@ -206,10 +206,12 @@ internal object CommentEngine {
                 val cancelled=AtomicBoolean(false);var task:ManualCommentTranslation?=null
                 main.post {
                     if(cancelled.get()||!active(w)){done(Result.failure(IllegalStateException("Cancelled")));return@post}
-                    val transport=NativeSubtitleTranslator.transport(loader){LocalOnlyRequest{active(w)}}
-                    task=ManualCommentTranslation(translate=transport,post={action,delay->main.postDelayed(action,delay);Unit},remove={main.removeCallbacks(it)},changed={s->
+                    val failure=AtomicReference<Throwable?>()
+                    val started=android.os.SystemClock.uptimeMillis()
+                    val transport=NativeSubtitleTranslator.transport(loader,access={LocalOnlyRequest{active(w)}},failure={failure.set(it)})
+                    task=ManualCommentTranslation(translate=transport,timeoutMs=20_000,post={action,delay->main.postDelayed(action,delay);Unit},remove={main.removeCallbacks(it)},changed={s->
                         if(!s.busy) { val text=s.translated?:s.original.takeIf{s.failed==0&&s.completed==s.total}
-                            done(if(text!=null&&s.failed==0)Result.success(text)else Result.failure(IllegalStateException("Translation incomplete"))) }
+                            done(if(text!=null&&s.failed==0)Result.success(text)else Result.failure(failure.get()?:if(android.os.SystemClock.uptimeMillis()-started>=20_000)TimeoutException("Comment translation timed out")else IllegalStateException("Translation response empty"))) }
                     });task?.start(r.source)
                 }
                 AutoCloseable { cancelled.set(true);main.post{task?.close()} }

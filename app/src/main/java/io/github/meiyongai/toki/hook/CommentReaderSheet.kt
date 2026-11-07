@@ -89,7 +89,7 @@ internal object CommentReaderSheet {
         val footer=label(12f,secondary).apply{gravity=Gravity.CENTER;setPadding(0,dp(5),0,dp(5))};root.addView(footer)
         val dialog=TokiDialogs.builder(context).setView(root).create()
         var readerWindowRegistered=false
-        dialog.setCanceledOnTouchOutside(false)
+        dialog.setCanceledOnTouchOutside(true)
         fun valid()=!closed.get()&&!activity.isFinishing&&!activity.isDestroyed
         fun notify(text:String){feedback.text=text;feedback.visibility=View.VISIBLE}
         fun submit(command:CommentRepository.Command) {

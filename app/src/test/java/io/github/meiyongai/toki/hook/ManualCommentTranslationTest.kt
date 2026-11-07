@@ -206,4 +206,23 @@ class ManualCommentTranslationTest {
         assertNull(ManualCommentTranslateHook.sourceText(TextWithoutIdentity("   "), getter))
         assertNull(ManualCommentTranslateHook.sourceText(TextWithoutIdentity("x".repeat(ManualCommentTranslation.MAX_SOURCE_LENGTH + 1)), getter))
     }
+    @Test fun backgroundBudgetDoesNotDiscardAValidResponseAfterSixSeconds() {
+        val clock=Clock();var callback:((String?)->Unit)?=null;var disposed=0
+        val task=ManualCommentTranslation({ _,done -> callback=done;AutoCloseable{disposed++} },clock::post,clock::remove,{},timeoutMs=20_000)
+        task.start("background comment");clock.advance();clock.advance(6500)
+        assertTrue(task.snapshot().busy);assertEquals(0,disposed)
+        callback!!("后台评论译文");clock.advance()
+        assertFalse(task.snapshot().busy);assertEquals(0,task.snapshot().failed)
+        assertEquals("后台评论译文",task.snapshot().translated);assertEquals(1,disposed)
+        task.close()
+    }
+    @Test fun backgroundBudgetStillTimesOutAndCannotAcceptAnExpiredResult() {
+        val clock=Clock();var callback:((String?)->Unit)?=null;var disposed=0
+        val task=ManualCommentTranslation({ _,done -> callback=done;AutoCloseable{disposed++} },clock::post,clock::remove,{},timeoutMs=20_000)
+        task.start("stalled background comment");clock.advance();clock.advance(20_000)
+        assertEquals(1,task.snapshot().failed);assertEquals(1,disposed)
+        callback!!("too late");clock.advance();assertNull(task.snapshot().translated)
+        task.close()
+    }
+
 }

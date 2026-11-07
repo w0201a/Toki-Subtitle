@@ -74,4 +74,32 @@ class SubtitleSessionPresenterTest {
         gap=true;binding.update("HIDDEN","","v");binding.onPreDraw();assertEquals(0f,native.alpha);assertEquals(1f,video.alpha)
         binding.close();assertEquals(1f,native.alpha);owner.pause().stop().destroy()
     }
+    @Test fun postedNativeTextChangesReplaceTheOldSentenceWithoutAnotherFrameCallback() {
+        HookRuntime.start("subtitle-native-text-watch"){_,_->}
+        val owner=Robolectric.buildActivity(Activity::class.java).setup().visible();val activity=owner.get()
+        val page=FrameLayout(activity);val video=SurfaceView(activity)
+        val text=TextView(activity).apply{this.text="first native cue"}
+        val renderer=FrameLayout(activity).apply{addView(text)}
+        val siblingText=TextView(activity).apply{this.text="unselected stale cue"}
+        val sibling=FrameLayout(activity).apply{addView(siblingText)}
+        page.addView(video,FrameLayout.LayoutParams(1080,2293));page.addView(renderer,FrameLayout.LayoutParams(600,100));page.addView(sibling,FrameLayout.LayoutParams(600,100))
+        activity.setContentView(page);activity.window.decorView.apply{measure(View.MeasureSpec.makeMeasureSpec(1080,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(2400,View.MeasureSpec.EXACTLY));layout(0,0,1080,2400)}
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(16))
+        val presenter=SubtitleSessionPresenter(null){settings};presenter.select(video,"v");presenter.native(renderer,"v","EXPANDED","first native cue")
+        val binding=SubtitleSessionPresenter::class.java.getDeclaredField("overlay").apply{isAccessible=true}.get(presenter) as SubtitleOverlay
+        val layer=SubtitleOverlay::class.java.getDeclaredField("layer").apply{isAccessible=true}.get(binding) as FrameLayout
+        val label=layer.getChildAt(0) as TextView
+        text.text="posted second native cue";page.viewTreeObserver.dispatchOnPreDraw()
+        assertEquals("posted second native cue",label.text.toString())
+        siblingText.text="must not steal current cue";page.viewTreeObserver.dispatchOnPreDraw()
+        assertEquals("posted second native cue",label.text.toString())
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofSeconds(8));page.viewTreeObserver.dispatchOnPreDraw()
+        assertEquals("Pause alone cannot expire a valid long sentence","posted second native cue",label.text.toString())
+        text.text="";page.viewTreeObserver.dispatchOnPreDraw();assertEquals(View.INVISIBLE,layer.visibility)
+        text.text="third native cue";page.viewTreeObserver.dispatchOnPreDraw()
+        assertEquals(View.VISIBLE,layer.visibility);assertEquals("third native cue",label.text.toString())
+        presenter.close();text.text="after close";page.viewTreeObserver.dispatchOnPreDraw()
+        assertEquals(1f,renderer.alpha);owner.pause().stop().destroy()
+    }
+
 }

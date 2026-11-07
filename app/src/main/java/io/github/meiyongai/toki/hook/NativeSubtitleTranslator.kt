@@ -418,7 +418,8 @@ internal class NativeSubtitleTranslator(
         }
 
         /** 独立请求通道，供评论投票使用；不进入视频字幕的排程或预读队列。 */
-        fun transport(loader: ClassLoader, access: () -> LocalOnlyRequest = TranslationNetworkPolicy::capture): (String, (String?) -> Unit) -> AutoCloseable {
+        fun transport(loader: ClassLoader, access: () -> LocalOnlyRequest = TranslationNetworkPolicy::capture,
+            failure: (Throwable) -> Unit = {}): (String, (String?) -> Unit) -> AutoCloseable {
             val facade = loader.adaptiveClass("X.03hV")
             val serviceField = facade.adaptiveDeclaredField("LIZIZ")
             val method = facade.adaptiveDeclaredMethod("LJIIJ", String::class.java)
@@ -452,7 +453,9 @@ internal class NativeSubtitleTranslator(
                 val subscription = subscribe.invoke(observable,
                     callback { value -> complete(if (remote.permitsNetwork() && result.isInstance(value)) content.get(value) as? String else null) },
                     callback { error ->
-                        HookRuntime.event("NativeSubtitleTranslation", "host-error type=${error?.javaClass?.simpleName}")
+                        val cause=error as? Throwable ?: IllegalStateException("Host translation failed without Throwable")
+                        HookRuntime.event("NativeSubtitleTranslation", OfflineCommentRequestFailure.describe("translation",cause))
+                        failure(cause)
                         complete(null)
                     })
                 AutoCloseable { if (subscription != null) dispose.invoke(subscription) }

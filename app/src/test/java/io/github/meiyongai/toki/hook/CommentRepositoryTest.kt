@@ -433,4 +433,20 @@ class CommentRepositoryTest {
         }
     }
 
+    @Test fun videoScopedTaskProbesHaveCoveringAndRunningIndexesAfterReopen() {
+        val f=file()
+        CommentRepository(app,f).use { repo -> register(repo,"indexed") }
+        CommentRepository(app,f).use { repo ->
+            val db=CommentRepository::class.java.getDeclaredField("db").apply{isAccessible=true}.get(repo) as android.database.sqlite.SQLiteDatabase
+            val names=mutableSetOf<String>()
+            db.rawQuery("PRAGMA index_list(tasks)",null).use{c->while(c.moveToNext())names+=c.getString(c.getColumnIndexOrThrow("name"))}
+            assertTrue(names.containsAll(listOf("task_video_due","task_running")))
+            val plan=mutableListOf<String>()
+            db.rawQuery("EXPLAIN QUERY PLAN SELECT MIN(retry_at) FROM tasks WHERE account=? AND video=? AND lane=? AND eligible=1 AND status IN ('pending','retry')",arrayOf(account,"indexed","TRANSLATION")).use{c->while(c.moveToNext())plan+=c.getString(3)}
+            assertTrue(plan.joinToString().contains("task_video_due"))
+            assertNotNull(repo.claim(account,CommentRepository.Lane.SOURCE,0,true))
+            assertNull(repo.claim(account,CommentRepository.Lane.SOURCE,0,true))
+        }
+    }
+
 }
