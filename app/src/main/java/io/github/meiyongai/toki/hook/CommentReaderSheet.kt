@@ -47,10 +47,7 @@ internal object CommentReaderSheet {
         fun submitCommand(account:String,video:String,command:CommentRepository.Command)
     }
     internal fun visibleRows(rows:List<OfflineCommentData.Row>,expanded:Set<String>,rootLimit:Int):List<OfflineCommentData.Row> {
-        val byId=rows.associateBy{it.id}
-        fun rootOf(r:OfflineCommentData.Row):String? { var p=r;var n=0;while(p.parentId.isNotBlank()&&n++<4)p=byId[p.parentId]?:return null;return p.id }
-        val groups=rows.filter{it.parentId.isNotBlank()}.groupBy{rootOf(it)}
-        return rows.filter{it.parentId.isBlank()}.take(rootLimit).flatMap { r ->listOf(r)+groups[r.id].orEmpty().let{if(r.id in expanded)it else it.take(2)} }
+        return CommentReaderIndex(rows).visible(expanded,rootLimit)
     }
     fun show(activity:Activity,video:String,reader:HostOfflineComments,model:Any,current:()->Boolean,dismissed:(AlertDialog)->Unit,
         suppliedSource:Source?=null):AlertDialog {
@@ -104,8 +101,9 @@ internal object CommentReaderSheet {
         }
         lateinit var adapter:BaseAdapter
         var display=emptyList<OfflineCommentData.Row>()
+        var rowIndex=CommentReaderIndex(emptyList())
         val stableIds=mutableMapOf<String,Long>();var nextId=0L
-        fun project(){display=visibleRows(state?.snapshot?.rows.orEmpty(),expanded,shown)}
+        fun project(){display=rowIndex.visible(expanded,shown)}
         fun rebuild(){val first=list.firstVisiblePosition;val key=display.getOrNull(first)?.id;val top=list.getChildAt(0)?.top?:0;project();adapter.notifyDataSetChanged();key?.let{k->val index=display.indexOfFirst{it.id==k};if(index>=0)list.setSelectionFromTop(index,top)}}
         class ThreadLayout:LinearLayout(context){
                 var replyRail=false
@@ -136,7 +134,7 @@ internal object CommentReaderSheet {
                 cell.avatar.layoutParams=cell.avatar.layoutParams.apply{width=dp(if(reply)22 else 28);height=width}
                 val name=r.handle.ifBlank{r.author}.ifBlank{"用户"}
                 cell.avatar.text=name.take(1).uppercase()
-                val parentRow=s.snapshot.rows.firstOrNull{it.id==r.parentId}
+                val parentRow=rowIndex.byId[r.parentId]
                 cell.author.text=if(reply)"$name  ·  回复 @${parentRow?.handle?.ifBlank{parentRow.author}?:"主评论"}" else name
                 cell.text.text=r.text(mode);cell.text.visibility=if(r.source.isBlank())View.GONE else View.VISIBLE
                 val item=s.translationStates[r.id]
@@ -149,9 +147,9 @@ internal object CommentReaderSheet {
                 }
                 cell.note.visibility=if(cell.note.text.isBlank())View.GONE else View.VISIBLE
                 val owner=r.id;val source=r.source
-                OfflineCommentMediaViews.bind(cell.media,context,s.snapshot,r,model.javaClass.classLoader?:context.classLoader,{valid()&&state?.snapshot?.rows?.any{it.id==owner&&it.source==source}==true},
+                OfflineCommentMediaViews.bind(cell.media,context,s.snapshot,r,model.javaClass.classLoader?:context.classLoader,{valid()&&rowIndex.matches(owner,source)},
                     status={asset->when(val m=s.mediaStates[asset.id]){null->if(s.mediaReady==s.mediaTotal)""else"媒体待下载";else->when(m.status){"running"->"媒体下载中";"retry"->"下载失败，等待重试";else->"媒体待下载"}}})
-                val thread=if(reply)emptyList()else s.snapshot.rows.filter{it.parentId==r.id || (it.parentId.isNotBlank()&&it.parentId in s.snapshot.rows.filter{p->p.parentId==r.id}.map{p->p.id})}
+                val thread=if(reply)emptyList()else rowIndex.replies(r.id)
                 cell.replies.visibility=if(!reply&&thread.size>2)View.VISIBLE else View.GONE
                 cell.replies.text=if(r.id in expanded)"收起回复 · 已缓存 ${thread.size} 条" else "展开其余 ${thread.size-2} 条已缓存回复"
                 cell.replies.setOnClickListener{if(!expanded.add(r.id))expanded.remove(r.id);rebuild()}
@@ -167,9 +165,9 @@ internal object CommentReaderSheet {
         for((value,name)in listOf(OfflineCommentData.Mode.ORIGINAL to "原文",OfflineCommentData.Mode.TRANSLATED to "翻译",OfflineCommentData.Mode.BILINGUAL to "双语")){
             val b=button(name);modeButtons[value]=b;tabs.addView(b,LinearLayout.LayoutParams(0,dp(48),1f));b.setOnClickListener{mode=value;modeButtons.forEach{(m,view)->view.setTextColor(if(m==mode)accent else secondary)};adapter.notifyDataSetChanged()}
         };modeButtons.forEach{(m,b)->b.setTextColor(if(m==mode)accent else secondary)}
-        fun render(s:CommentRepository.VideoState){state=s;rebuild()
+        fun render(s:CommentRepository.VideoState){state=s;rowIndex=CommentReaderIndex(s.snapshot.rows);rebuild()
             val phase=when(s.phase){"ready"->"已准备好";"partial"->"部分完成";"running"->"处理中";"retry"->"等待重试";"paused"->"已暂停";else->"排队中"}
-            val roots=s.snapshot.rows.count{it.parentId.isBlank()};val replies=s.snapshot.rows.size-roots
+            val roots=rowIndex.roots.size;val replies=s.snapshot.rows.size-roots
             val limits=OfflineCommentLimitOverrides.quotas(app,account,video)
             summary.text="主评论 $roots/${limits.comments} · 回复 $replies/${limits.replies} · 每串 ${limits.perThread}\n译文 ${s.translated}/${s.translatable} · 媒体 ${s.mediaReady}/${s.mediaTotal} · $phase"
             footer.text=when{shown<roots->"继续下滑，读取更多本地评论";s.phase=="ready"->"已显示当前范围内的本地缓存";s.phase=="partial"->"本地已读完 · ${coverageExplanation(s.reason)}";else->"本地已读完 · 后台进度更新后自动显示"}
@@ -180,7 +178,7 @@ internal object CommentReaderSheet {
         }}}}}
         val refreshTick=Runnable{refresh()}
         list.setOnScrollListener(object:AbsListView.OnScrollListener{override fun onScrollStateChanged(v:AbsListView?,scrollState:Int){}
-            override fun onScroll(v:AbsListView?,first:Int,count:Int,total:Int){if(count>0&&first+count>=total&&state!=null&&shown<state!!.snapshot.rows.count{it.parentId.isBlank()}){shown+=40;list.post{rebuild()}}}})
+            override fun onScroll(v:AbsListView?,first:Int,count:Int,total:Int){if(count>0&&first+count>=total&&state!=null&&shown<rowIndex.roots.size){shown+=40;list.post{rebuild()}}}})
         tools.setOnClickListener{
             TokiDialogs.builder(context).setItems(arrayOf("缓存详情","联网补齐此视频（排队）",if(state?.paused==true)"继续此视频"else"暂停此视频","重试失败项","设置数量上限")){_,which->
                 when(which){

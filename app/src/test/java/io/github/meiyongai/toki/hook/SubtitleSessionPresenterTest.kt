@@ -102,4 +102,32 @@ class SubtitleSessionPresenterTest {
         assertEquals(1f,renderer.alpha);owner.pause().stop().destroy()
     }
 
+    @Test fun emptyExpandedFrameKeepsWatchingItsCurrentRendererForThePostedNextCue() {
+        HookRuntime.start("subtitle-empty-expanded-recovery"){_,_->}
+        val owner=Robolectric.buildActivity(Activity::class.java).setup().visible();val activity=owner.get()
+        val page=FrameLayout(activity);val video=SurfaceView(activity)
+        val text=TextView(activity).apply{this.text="first cue"}
+        val renderer=FrameLayout(activity).apply{addView(text)}
+        val siblingText=TextView(activity).apply{this.text=""}
+        val sibling=FrameLayout(activity).apply{addView(siblingText)}
+        page.addView(video,FrameLayout.LayoutParams(1080,2293));page.addView(renderer,FrameLayout.LayoutParams(600,100));page.addView(sibling,FrameLayout.LayoutParams(600,100))
+        activity.setContentView(page);activity.window.decorView.apply{measure(View.MeasureSpec.makeMeasureSpec(1080,View.MeasureSpec.EXACTLY),View.MeasureSpec.makeMeasureSpec(2400,View.MeasureSpec.EXACTLY));layout(0,0,1080,2400)}
+        shadowOf(Looper.getMainLooper()).idleFor(Duration.ofMillis(16))
+        val presenter=SubtitleSessionPresenter(null){settings};presenter.select(video,"v");presenter.native(renderer,"v","EXPANDED","first cue")
+        val binding=SubtitleSessionPresenter::class.java.getDeclaredField("overlay").apply{isAccessible=true}.get(presenter) as SubtitleOverlay
+        val layer=SubtitleOverlay::class.java.getDeclaredField("layer").apply{isAccessible=true}.get(binding) as FrameLayout
+        val label=layer.getChildAt(0) as TextView
+        // Native VM first clears the frame, then posts the TextView update without another hook call.
+        text.text="";presenter.native(renderer,"v","EXPANDED","");assertEquals(View.INVISIBLE,layer.visibility)
+        text.text="posted next cue";page.viewTreeObserver.dispatchOnPreDraw()
+        assertEquals("Clearing an EXPANDED frame must not detach asynchronous cue observation",View.VISIBLE,layer.visibility)
+        assertEquals("posted next cue",label.text.toString())
+        presenter.native(sibling,"v","EXPANDED","");siblingText.text="stale neighbouring renderer";page.viewTreeObserver.dispatchOnPreDraw()
+        assertEquals("An empty sibling cannot steal the current renderer","posted next cue",label.text.toString())
+        text.text="";presenter.native(renderer,"v","HIDDEN","")
+        text.text="late old hidden text";page.viewTreeObserver.dispatchOnPreDraw()
+        assertEquals("An explicitly hidden owner must not resurrect on a late write",View.INVISIBLE,layer.visibility)
+        presenter.close();owner.pause().stop().destroy()
+    }
+
 }

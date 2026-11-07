@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 140' in gradle and 'versionName = "2.1.20"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.20-debug / 140")
+check('versionCode = 141' in gradle and 'versionName = "2.1.21"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.21-debug / 141")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -1143,7 +1143,8 @@ check('SQLiteDatabase.openOrCreateDatabase' in v3_repo and all(x in v3_repo for 
 check('ORDER BY q.ticket' in v3_repo and 'UPDATE lane_turns SET ticket' in v3_repo and 'LIMIT 1' in v3_repo, 'every claim advances a durable video lane ticket before execution')
 check('lease=?' in v3_repo and 'v.epoch=?' in v3_repo and 'source_hash' in v3_repo, 'late work must match item lease, video epoch and source hash')
 check('observeVideo' in v3_reader and 'submitCommand' in v3_reader and 'readVideo' in v3_reader and '.fetch(' not in v3_reader and 'NativeSubtitleTranslator.transport' not in v3_reader, 'reader only observes facts, reads locally and submits commands without direct network workers')
-check('it.take(2)' in v3_reader and 'expanded' in v3_reader and 'hasStableIds()=true' in v3_reader, 'two cached reply previews and stable row identities survive incremental refresh')
+reader_index = read('app/src/main/java/io/github/meiyongai/toki/hook/CommentReaderIndex.kt')
+check('it.take(2)' in reader_index and 'expanded' in reader_index and 'hasStableIds()=true' in v3_reader, 'two cached reply previews and stable row identities survive incremental refresh')
 check('val presenter = SubtitleSessionPresenter' in subtitle_feature and 'SubtitleOverlay(' not in subtitle_feature, 'installed subtitle hooks share exactly one session presenter, never competing renderer overlays')
 check('timelineReady=ready' in v3_controller and 'SystemClock' not in v3_controller and 'nativeSources' in v3_presenter, 'caption controller uses track/playback state rather than a two-second native-frame expiry')
 
@@ -1197,3 +1198,6 @@ check('CREATE TABLE IF NOT EXISTS migration_scopes' in v3_repo and 'bindMigratio
 check('dialog.setCanceledOnTouchOutside(true)' in regression_reader, 'cached comment sheet allows explicit outside-window dismissal without cache commands')
 check('task_video_due' in v3_repo and 'task_running' in v3_repo and 'Select the fair VIDEO first' in v3_repo, 'comment scheduling uses indexed per-video probes while preserving fair lane tickets and one lease per video')
 check('reason=renderer-text-changed' in v3_presenter and 'watchDraw(null)' in v3_presenter, 'posted text changes from the selected native renderer update the single caption owner and the listener is released')
+
+check('state=="EXPANDED"&&(owner==null||owner===root)' in v3_presenter and 'state!="EXPANDED"&&owner===root' in v3_presenter, 'empty expanded frames retain only their current renderer observer; explicitly hidden frames cannot resurrect')
+check('rowIndex.replies(r.id)' in regression_reader and 'rowIndex.byId[r.parentId]' in regression_reader and 'rowIndex.matches(owner,source)' in regression_reader, 'comment adapter uses snapshot-scoped parent reply and source indexes rather than nested scans per visible row')

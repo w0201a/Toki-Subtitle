@@ -63,8 +63,10 @@ internal class SubtitleSessionPresenter(private val translator:NativeSubtitleTra
             nativeText(root,text)?.let { frame.observed=WeakReference(it);frame.observedText=it.text.toString() }
         }
         val owner=nativeOwner.get()
-        if(visible)nativeOwner=WeakReference(root)
-        if(!visible&&owner===root)nativeOwner.clear() // Never resurrect an older renderer's cached sentence.
+        // EXPANDED can briefly carry an empty frame before the renderer posts its next TextView text.
+        // Keep watching that current owner (or the first candidate), but never let an empty sibling steal it.
+        if(visible || state=="EXPANDED"&&(owner==null||owner===root))nativeOwner=WeakReference(root)
+        if(!visible&&state!="EXPANDED"&&owner===root)nativeOwner.clear() // Explicit hiding must not resurrect an older sentence.
         reportInput(if(visible)"accepted-visible"else"accepted-hidden",state,text.length,root)
         syncNativeInput()
         render()
