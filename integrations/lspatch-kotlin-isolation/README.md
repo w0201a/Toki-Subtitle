@@ -55,7 +55,7 @@ Use an argument-array launcher rather than unquoted PowerShell dotted `-P...` va
 ## Not yet verified
 
 - The report's Huawei Android10/API29 full startup and module features.
-- A clean API29 emulator was attempted separately, but success must not be claimed until its own boot/runtime evidence exists.
+- A clean API29 software emulator was attempted twice, but did not complete boot without host hardware acceleration. Its test process was gracefully shut down and AVD/logs retained; no API29 runtime success is claimed.
 - A production manager signing/upgrade policy and broad device/host compatibility matrix.
 - Subtitle-stall resolution and comment-throughput improvement in the reported real playback/cache workload. These remain separate Toki acceptance tasks.
 
