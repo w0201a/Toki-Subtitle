@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 137' in gradle and 'versionName = "2.1.17"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.17-debug / 137")
+check('versionCode = 138' in gradle and 'versionName = "2.1.18"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.18-debug / 138")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -1183,3 +1183,8 @@ check('main.hasCallbacks(archiveChanged)' not in read('app/src/main/java/io/gith
 import xml.etree.ElementTree as lint_et
 lint_backlog = lint_et.fromstring(read('app/lint-baseline.xml'))
 check(len(lint_backlog) == 389 and all(x.get('id') == 'MissingTranslation' for x in lint_backlog), 'lint baseline is limited to enumerated existing extension translation fallback debt')
+
+check('root in rootIds&&limits.acceptsReplies(scope,root)' in v3_repo and 'if(q.acceptsReplies(scope,root))1 else 0' in v3_repo,
+    'only currently required reply streams affect scope completion; fulfilled quota does not erase historical failures')
+check('root_shortfall:' in v3_repo and 'coverageExplanation(s.reason)' in read('app/src/main/java/io/github/meiyongai/toki/hook/CommentReaderSheet.kt'),
+    'real configured deficits and stream stop reasons remain readable rather than falsely prepared')

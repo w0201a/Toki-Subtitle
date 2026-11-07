@@ -360,4 +360,77 @@ class CommentRepositoryTest {
         }
     }
 
+    @Test fun fulfilledVideoReplyBudgetIsReadyWithoutErasingEarlierIncompleteThreadEvidence() {
+        repository().use { repo ->
+            register(repo,"coverage",OfflineCommentBudget.Quotas(2,2,2))
+            repo.importPage(page("coverage",listOf(row("a",translation="甲",replies=2),row("b",translation="乙",replies=2))))
+            val a=repo.claim(account,CommentRepository.Lane.SOURCE,0,true)!!
+            assertEquals("a",a.item)
+            assertTrue(repo.commitPage(a,page("coverage",emptyList())))
+            val b=repo.claim(account,CommentRepository.Lane.SOURCE,0,true)!!
+            assertEquals("b",b.item)
+            assertTrue(repo.commitPage(b,page("coverage",listOf(row("b1","b",translation="回复一"),row("b2","b",translation="回复二")))))
+            val state=repo.readVideo(account,"coverage")!!
+            assertEquals(2,state.snapshot.rows.count{it.parentId.isBlank()})
+            assertEquals(2,state.snapshot.rows.count{it.parentId.isNotBlank()})
+            assertEquals("Fulfilled scope must not inherit obsolete thread failures","ready",state.phase)
+            assertEquals(1,repo.progressCounts(account).getValue("ready"))
+            assertNull(repo.claim(account,CommentRepository.Lane.SOURCE,0,true))
+            val db=CommentRepository::class.java.getDeclaredField("db").apply{isAccessible=true}.get(repo) as android.database.sqlite.SQLiteDatabase
+            db.rawQuery("SELECT terminal FROM streams WHERE video='coverage' AND root='a'",null).use {
+                assertTrue(it.moveToFirst());assertEquals("incomplete",it.getString(0))
+            }
+            register(repo,"coverage",OfflineCommentBudget.Quotas(2,3,2))
+            assertEquals("Increasing scope makes the same retained failure relevant again","partial",repo.readVideo(account,"coverage")!!.phase)
+            assertEquals(1,repo.progressCounts(account).getValue("partial"))
+            register(repo,"coverage",OfflineCommentBudget.Quotas(2,2,2))
+            assertEquals("ready",repo.readVideo(account,"coverage")!!.phase)
+        }
+    }
+
+    @Test fun reachingPerThreadQuotaDoesNotEraseEarlierCoverageFailureOrConsumeMainCommentBudget() {
+        repository().use { repo ->
+            register(repo,"thread-cap",OfflineCommentBudget.Quotas(1,10,1))
+            repo.importPage(page("thread-cap",listOf(row("a",translation="主评",replies=4))))
+            val stream=repo.claim(account,CommentRepository.Lane.SOURCE,0,true)!!
+            repo.commitPage(stream,page("thread-cap",emptyList()))
+            repo.importPage(page("thread-cap",listOf(row("r","a",translation="回复"))),"a")
+            val state=repo.readVideo(account,"thread-cap")!!
+            assertEquals(1,state.storedRoots);assertEquals(1,state.storedReplies)
+            assertEquals("Only one reply is required by this thread setting","ready",state.phase)
+            assertEquals(1,repo.progressCounts(account).getValue("ready"))
+        }
+    }
+
+    @Test fun scopeFailureReasonsPersistAcrossReopenAndDoNotPretendMissingMainCommentsAreReady() {
+        val f=file()
+        CommentRepository(app,f).use { repo ->
+            register(repo,"missing",OfflineCommentBudget.Quotas(2,0,0))
+            val w=repo.claim(account,CommentRepository.Lane.SOURCE,0,true)!!
+            repo.commitPage(w,page("missing",listOf(row("one",translation="一")),true,0))
+            val s=repo.readVideo(account,"missing")!!
+            assertEquals("partial",s.phase)
+            assertTrue(s.reason.contains("root_shortfall:1/2"))
+            assertTrue(s.reason.contains("cursor_not_advancing"))
+            assertEquals(0,repo.progressCounts(account).getValue("ready"))
+        }
+        CommentRepository(app,f).use { repo ->
+            assertTrue(repo.readVideo(account,"missing")!!.reason.contains("cursor_not_advancing"))
+            assertEquals("partial",repo.readVideo(account,"missing")!!.phase)
+        }
+    }
+
+    @Test fun exactConfiguredCountsStillDoNotHideTruncatedBodiesOrUnverifiedMedia() {
+        repository().use { repo ->
+            register(repo,"content",OfflineCommentBudget.Quotas(1,0,0))
+            val w=repo.claim(account,CommentRepository.Lane.SOURCE,0,true)!!
+            repo.commitPage(w,page("content",listOf(row("a").copy(sourceTruncated=true,mediaKnown=false))))
+            val s=repo.readVideo(account,"content")!!
+            assertEquals("partial",s.phase)
+            assertTrue(s.reason.contains("truncated_bodies:1"))
+            assertTrue(s.reason.contains("unknown_media:1"))
+            assertEquals(0,repo.progressCounts(account).getValue("ready"))
+        }
+    }
+
 }

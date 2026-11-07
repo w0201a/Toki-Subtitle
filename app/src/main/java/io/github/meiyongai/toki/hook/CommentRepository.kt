@@ -62,6 +62,9 @@ internal class CommentRepository(private val context: Context, file: File = File
         db.execSQL("CREATE TABLE IF NOT EXISTS streams(account TEXT,video TEXT,root TEXT,cursor INTEGER NOT NULL DEFAULT 0,terminal TEXT NOT NULL DEFAULT '',no_growth INTEGER NOT NULL DEFAULT 0,turn INTEGER NOT NULL DEFAULT 0,PRIMARY KEY(account,video,root))")
         db.execSQL("CREATE TABLE IF NOT EXISTS tasks(account TEXT,video TEXT,lane TEXT,item TEXT,version TEXT,target TEXT,status TEXT NOT NULL DEFAULT 'pending',attempts INTEGER NOT NULL DEFAULT 0,retry_at INTEGER NOT NULL DEFAULT 0,lease TEXT NOT NULL DEFAULT '',detail TEXT NOT NULL DEFAULT '',eligible INTEGER NOT NULL DEFAULT 1,turn INTEGER NOT NULL DEFAULT 0,manual INTEGER NOT NULL DEFAULT 0,PRIMARY KEY(account,video,lane,item,version,target))")
         db.execSQL("CREATE TABLE IF NOT EXISTS lane_turns(account TEXT,video TEXT,lane TEXT,ticket INTEGER NOT NULL,PRIMARY KEY(account,video,lane))")
+        // Additive only: retain every old cursor, terminal and cached row during upgrade.
+        if(query("PRAGMA table_info(streams)").none { it["name"]=="detail" })
+            db.execSQL("ALTER TABLE streams ADD COLUMN detail TEXT NOT NULL DEFAULT ''")
         db.execSQL("CREATE TABLE IF NOT EXISTS migration(folder TEXT PRIMARY KEY,stamp TEXT NOT NULL,errors INTEGER NOT NULL DEFAULT 0)")
         db.execSQL("CREATE TABLE IF NOT EXISTS comment_versions(account TEXT,video TEXT,id TEXT,source_hash TEXT,payload TEXT NOT NULL,PRIMARY KEY(account,video,id,source_hash))")
         db.execSQL("CREATE TABLE IF NOT EXISTS stream_seen(account TEXT,video TEXT,root TEXT,id TEXT,PRIMARY KEY(account,video,root,id))")
@@ -131,7 +134,10 @@ internal class CommentRepository(private val context: Context, file: File = File
         }
         val roots=scope.filter { it.parentId.isBlank() }.associateBy { it.id }
         exec("UPDATE scope_roots SET active=0 WHERE account=? AND video=?",a,v)
-        roots.keys.forEach{exec("INSERT OR REPLACE INTO scope_roots VALUES(?,?,?,1)",a,v,it)}
+        // active means that this selected root still needs reply coverage in the current scope.
+        // An old failed thread cannot block a fulfilled total/per-thread quota; its facts stay intact.
+        roots.keys.forEach { root -> exec("INSERT OR REPLACE INTO scope_roots VALUES(?,?,?,?)",
+            a,v,root,if(q.acceptsReplies(scope,root))1 else 0) }
         val verifiedRoots=query("SELECT id FROM comments WHERE account=? AND video=? AND verified=1",a,v).mapTo(hashSetOf()){it.getValue("id")}
         for(s in query("SELECT * FROM streams WHERE account=? AND video=?",a,v)) {
             val root=s.getValue("root");val terminal=s.getValue("terminal")
@@ -238,8 +244,8 @@ internal class CommentRepository(private val context: Context, file: File = File
             exec("UPDATE comments SET verified=1 WHERE account=? AND video=? AND id IN(SELECT id FROM comments WHERE account=? AND video=? AND verified=1)",scope,v,old,v)
             exec("UPDATE videos SET total=MAX(total,?) WHERE account=? AND video=?",info.getValue("total").toLong(),scope,v)
             for(stream in query("SELECT * FROM streams WHERE account=? AND video=?",old,v)) {
-                exec("INSERT OR IGNORE INTO streams(account,video,root,cursor,terminal,no_growth,turn) VALUES(?,?,?,?,?,?,?)",scope,v,stream.getValue("root"),stream.getValue("cursor").toLong(),stream.getValue("terminal"),stream.getValue("no_growth").toInt(),stream.getValue("turn").toLong())
-                exec("UPDATE streams SET cursor=?,terminal=?,no_growth=? WHERE account=? AND video=? AND root=? AND cursor=0 AND terminal=''",stream.getValue("cursor").toLong(),stream.getValue("terminal"),stream.getValue("no_growth").toInt(),scope,v,stream.getValue("root"))
+                exec("INSERT OR IGNORE INTO streams(account,video,root,cursor,terminal,no_growth,turn,detail) VALUES(?,?,?,?,?,?,?,?)",scope,v,stream.getValue("root"),stream.getValue("cursor").toLong(),stream.getValue("terminal"),stream.getValue("no_growth").toInt(),stream.getValue("turn").toLong(),stream.getValue("detail"))
+                exec("UPDATE streams SET cursor=?,terminal=?,no_growth=?,detail=? WHERE account=? AND video=? AND root=? AND cursor=0 AND terminal=''",stream.getValue("cursor").toLong(),stream.getValue("terminal"),stream.getValue("no_growth").toInt(),stream.getValue("detail"),scope,v,stream.getValue("root"))
             }
             exec("INSERT OR IGNORE INTO stream_seen SELECT ?,video,root,id FROM stream_seen WHERE account=? AND video=?",scope,old,v)
             reconcile(scope,v)
@@ -307,7 +313,15 @@ internal class CommentRepository(private val context: Context, file: File = File
             val expected=scope.firstOrNull{it.id==w.item}?.replyCount?:0
             val insufficientReply=w.item.isNotBlank()&&!page.hasMore&&limits.threadCount(scope,w.item)<minOf(expected,limits.perThread.toLong())&&limits.replyCount(scope)<limits.replies
             val terminal=when { page.hasMore&&(noGrowth>=3||next==null)->"incomplete";!page.hasMore&&(page.truncated||insufficientReply)->"incomplete";!page.hasMore->"ended";else->"" }
-            exec("UPDATE streams SET cursor=?,terminal=?,no_growth=? WHERE account=? AND video=? AND root=?",next?:w.cursor,terminal,noGrowth,w.account,w.video,w.item)
+            val detail=when {
+                page.hasMore&&noGrowth>=3 -> "no_growth_three_pages"
+                page.hasMore&&next==null -> "cursor_not_advancing"
+                !page.hasMore&&page.truncated -> "response_incomplete"
+                insufficientReply -> "reply_shortfall"
+                terminal=="ended" -> "server_ended"
+                else -> ""
+            }
+            exec("UPDATE streams SET cursor=?,terminal=?,no_growth=?,detail=? WHERE account=? AND video=? AND root=?",next?:w.cursor,terminal,noGrowth,detail,w.account,w.video,w.item)
             finish(w,if(terminal.isBlank())"pending" else "done")
             reconcile(w.account,w.video)
         };emit(w.account,w.video);return true
@@ -374,12 +388,26 @@ internal class CommentRepository(private val context: Context, file: File = File
         val assets=scope.flatMap{it.media}.distinctBy{it.id};val ready=assets.count { m -> query("SELECT ready FROM assets WHERE account=? AND video=? AND id=?",account,video,m.id).firstOrNull()?.get("ready")=="1" }
         val streams=query("SELECT * FROM streams WHERE account=? AND video=?",account,video)
         val rootIds=scope.filter { it.parentId.isBlank() }.mapTo(hashSetOf()){it.id}
-        val relevant=streams.filter { it.getValue("root").isBlank()||it.getValue("root") in rootIds }
+        val limits=quotas(info)
+        val relevant=streams.filter { stream -> val root=stream.getValue("root")
+            root.isBlank()||root in rootIds&&limits.acceptsReplies(scope,root) }
         val sourceDone=relevant.isNotEmpty()&&relevant.all { it.getValue("terminal").isNotBlank() }
         val errors=query("SELECT errors FROM migration WHERE folder=?",CommentSnapshotStore.key(account,video)).firstOrNull()?.get("errors")?.toIntOrNull()?:0
         val incomplete=errors>0||relevant.any { it["terminal"]=="incomplete" }||scope.any{it.sourceTruncated||!it.mediaKnown}||quotas(info).rootCount(scope)<quotas(info).comments
         val phase=when { info["paused"]=="1"->"paused";work.any{it["status"]=="running"}->"running";sourceDone&&translated==text.size&&ready==assets.size->if(incomplete)"partial" else "ready";work.any{it["status"]=="retry"}->"retry";else->"queued" }
-        val reason=when { incomplete->"coverage_incomplete";relevant.any{it["terminal"]=="quota"}->"quota";sourceDone->"server_ended";else->"fetching" }
+        val reasons=mutableListOf<String>()
+        if(errors>0)reasons+="migration_errors:$errors"
+        val roots=limits.rootCount(scope)
+        if(roots<limits.comments)reasons+="root_shortfall:$roots/${limits.comments}"
+        scope.count{it.sourceTruncated}.takeIf{it>0}?.let{reasons+="truncated_bodies:$it"}
+        scope.count{!it.mediaKnown}.takeIf{it>0}?.let{reasons+="unknown_media:$it"}
+        relevant.filter{it["terminal"]=="incomplete"}.forEach {
+            val detail=it.getValue("detail").ifBlank {
+                if(it.getValue("no_growth").toInt()>=3)"no_growth_three_pages"else"legacy_coverage_incomplete"
+            }
+            if(detail !in reasons)reasons+=detail
+        }
+        val reason=when { reasons.isNotEmpty()->reasons.joinToString(";");relevant.any{it["terminal"]=="quota"}->"quota";sourceDone->"server_ended";else->"fetching" }
         return VideoState(OfflineCommentData.Snapshot(account,video,System.currentTimeMillis(),scope,info.getValue("total").toLong(),!sourceDone,incomplete),all.count{it.parentId.isBlank()},all.count{it.parentId.isNotBlank()},translated,text.size,ready,assets.size,phase,reason,info["paused"]=="1",info["authorized"]=="1",states(Lane.TRANSLATION),states(Lane.MEDIA),errors)
     }
     @Synchronized override fun close() { liveLeases.clear();db.close() }

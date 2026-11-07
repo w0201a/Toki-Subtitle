@@ -85,4 +85,12 @@ class CommentReaderSheetTest {
         dialog.dismiss();shadowOf(Looper.getMainLooper()).idle();assertFalse(CommentReaderSheet.isReading);assertNull(fake.observer);owner.pause().stop().destroy()
     }
 
+    @Test fun coverageDetailsExplainActualDeficitsInsteadOfShowingAnOpaqueDebugCode() {
+        val explanation=CommentReaderSheet.coverageExplanation("root_shortfall:79/333;no_growth_three_pages;truncated_bodies:2;reply_shortfall")
+        assertTrue(explanation.contains("79/333"));assertTrue(explanation.contains("连续三页"))
+        assertTrue(explanation.contains("2 条正文被截断"));assertTrue(explanation.contains("回复未达"))
+        assertFalse(explanation.contains("root_shortfall"))
+        assertEquals("已达到当前设置上限",CommentReaderSheet.coverageExplanation("quota"))
+    }
+
 }

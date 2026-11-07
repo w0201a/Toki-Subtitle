@@ -22,6 +22,23 @@ import java.util.concurrent.atomic.AtomicBoolean
 internal object CommentReaderSheet {
     private val openReaders=java.util.concurrent.atomic.AtomicInteger()
     val isReading:Boolean get()=openReaders.get()>0
+    internal fun coverageExplanation(reason:String):String = reason.split(';').filter{it.isNotBlank()}.joinToString("；") { token ->
+        val kind=token.substringBefore(':');val value=token.substringAfter(':',"")
+        when(kind) {
+            "root_shortfall" -> "主评论未达设置：$value"
+            "truncated_bodies" -> "$value 条正文被截断，未当作完整内容"
+            "unknown_media" -> "$value 条评论的媒体描述未核验"
+            "migration_errors" -> "$value 页旧缓存导入异常，原文件保留"
+            "no_growth_three_pages" -> "连续三页无新增唯一评论"
+            "cursor_not_advancing" -> "接口返回的下一页游标未前进"
+            "response_incomplete" -> "接口结束但响应内容未完整保存"
+            "reply_shortfall" -> "接口已结束，回复未达当前串要求"
+            "quota" -> "已达到当前设置上限"
+            "server_ended" -> "接口已结束"
+            "fetching" -> "仍有抓取任务"
+            else -> "旧抓取流覆盖不足，原记录保留，可明确重试"
+        }
+    }
     internal interface Source {
         fun register(model:Any,done:(Result<Pair<String,String>>)->Unit)
         fun observeVideo(account:String,video:String,changed:()->Unit):AutoCloseable
@@ -155,7 +172,7 @@ internal object CommentReaderSheet {
             val roots=s.snapshot.rows.count{it.parentId.isBlank()};val replies=s.snapshot.rows.size-roots
             val limits=OfflineCommentLimitOverrides.quotas(app,account,video)
             summary.text="主评论 $roots/${limits.comments} · 回复 $replies/${limits.replies} · 每串 ${limits.perThread}\n译文 ${s.translated}/${s.translatable} · 媒体 ${s.mediaReady}/${s.mediaTotal} · $phase"
-            footer.text=when{shown<roots->"继续下滑，读取更多本地评论";s.phase=="ready"->"已显示当前范围内的本地缓存";s.phase=="partial"->"本地已读完 · 接口覆盖不足";else->"本地已读完 · 后台进度更新后自动显示"}
+            footer.text=when{shown<roots->"继续下滑，读取更多本地评论";s.phase=="ready"->"已显示当前范围内的本地缓存";s.phase=="partial"->"本地已读完 · ${coverageExplanation(s.reason)}";else->"本地已读完 · 后台进度更新后自动显示"}
         }
         lateinit var refresh:()->Unit
         refresh={if(valid()&&account.isNotBlank()){dirty=true;if(!reading){reading=true;dirty=false;worker.execute{val result=runCatching{source.readVideo(account,video)};main.post{
@@ -168,7 +185,7 @@ internal object CommentReaderSheet {
             TokiDialogs.builder(context).setItems(arrayOf("缓存详情","联网补齐此视频（排队）",if(state?.paused==true)"继续此视频"else"暂停此视频","重试失败项","设置数量上限")){_,which->
                 when(which){
                     0->{val s=state;val q=if(account.isBlank())null else OfflineCommentLimitOverrides.quotas(app,account,video)
-                        TokiDialogs.builder(context).setTitle("缓存详情").setMessage("磁盘保存：${s?.storedRoots?:0} 条主评论、${s?.storedReplies?:0} 条回复\n当前范围：${q?.comments?:0} 主评论 / ${q?.replies?:0} 回复 / 每串 ${q?.perThread?:0}\n平台报告：${s?.snapshot?.total?:0}（不作为完成分母）\n结束原因：${s?.reason?:"读取中"}\n迁移异常页：${s?.migrationErrors?:0}\n长按评论可复制或提交翻译。\n此处的展开、滚动和模式切换均不联网。")
+                        TokiDialogs.builder(context).setTitle("缓存详情").setMessage("磁盘保存：${s?.storedRoots?:0} 条主评论、${s?.storedReplies?:0} 条回复\n当前范围：${q?.comments?:0} 主评论 / ${q?.replies?:0} 回复 / 每串 ${q?.perThread?:0}\n平台报告：${s?.snapshot?.total?:0}（不作为完成分母）\n结束原因：${s?.let{coverageExplanation(it.reason)}?:"读取中"}\n迁移异常页：${s?.migrationErrors?:0}\n长按评论可复制或提交翻译。\n此处的展开、滚动和模式切换均不联网。")
                             .setPositiveButton("知道了",null).show()}
                     1->explicit(CommentRepository.Command.Prepare)
                     2->if(state?.paused==true)explicit(CommentRepository.Command.Resume)else submit(CommentRepository.Command.Pause)
