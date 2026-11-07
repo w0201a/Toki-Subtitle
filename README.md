@@ -3,7 +3,7 @@
 
 ## Toki Subtitle edition
 
-**Source continuation: 2.1.19 /139 (not a published release).** Unset comment quotas now share 200 roots /1000 replies /15 replies per thread, while explicit settings and stored rows remain intact. Migration provenance is being checked across device-scope copies and restarts so damaged legacy pages cannot silently become ready. Build138 has now passed local tests/lint/unified package verification; build139 full verification is in progress. No phone is currently connected, and Huawei non-root / full subtitle playback scenarios remain unverified. See the [source and artifact status](docs/SOURCE_STATUS.md) for the exact boundary.
+**Source continuation: 2.1.19 /139 (not a published release).** Unset comment quotas now share 200 roots /1000 replies /15 replies per thread, while explicit settings and stored rows remain intact. Migration provenance is retained across device-scope copies and restarts so damaged legacy pages cannot silently become ready; 49 targeted regressions passed without skips. Build138 and build139 have now passed local tests/lint/unified package verification. Build139 has 1360 tests with zero failures (three local/four cloud environment-specific skips), and CI run 42376745007 passed. This does not install, load or publicly release build139. No phone is currently connected, and Huawei non-root / full subtitle playback scenarios remain unverified. See the [source and artifact status](docs/SOURCE_STATUS.md) for the exact boundary.
 
 ### Test prerelease: 2.1.17-debug /137
 
