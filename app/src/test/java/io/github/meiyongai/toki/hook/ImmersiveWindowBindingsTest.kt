@@ -169,4 +169,27 @@ class ImmersiveWindowBindingsTest {
         assertTrue(errors.isNotEmpty()); fail = false; state.configure(false)
         assertEquals(Color.GREEN, activity.window.statusBarColor); state.close()
     }
+    @Test @Config(sdk = [28])
+    fun android9CapturesAndRestoresOnlyWindowPropertiesSupportedByItsApi() {
+        val owner = Robolectric.buildActivity(Activity::class.java).setup().visible()
+        val activity = owner.get()
+        activity.window.statusBarColor = Color.GREEN
+        activity.window.navigationBarColor = Color.BLUE
+        val flags = activity.window.decorView.systemUiVisibility
+        val touched = mutableListOf<ImmersiveWindowBindings.Property>()
+        val errors = mutableListOf<Exception>()
+        val state = ImmersiveWindowBindings(errors::add, touched::add)
+        state.observe(activity)
+        state.configure(true)
+        assertTrue(touched.isNotEmpty())
+        assertFalse(touched.any { it in setOf(ImmersiveWindowBindings.Property.STATUS_CONTRAST,
+            ImmersiveWindowBindings.Property.NAVIGATION_CONTRAST, ImmersiveWindowBindings.Property.FITS) })
+        state.configure(false)
+        assertEquals(Color.GREEN, activity.window.statusBarColor)
+        assertEquals(Color.BLUE, activity.window.navigationBarColor)
+        assertEquals(flags, activity.window.decorView.systemUiVisibility)
+        assertTrue(errors.isEmpty())
+        state.close(); owner.pause().stop().destroy()
+    }
+
 }

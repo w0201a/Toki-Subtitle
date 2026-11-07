@@ -1,5 +1,14 @@
 # Source and artifact status
 
+## 2.1.17-debug /137 — CI运行时安全修复与可审计的翻译积压（2026-11-07，验证中）
+
+- GitHub全量1343项已无失败，4项跳过分别为私有评论迁移fixture和3项需Android原生MP4解码测试；同版本地提供已有只读fixture后1343项无失败、3项原生MP4测试跳过。不是全量真机通过。
+- 后续lint检出缺少ACCESS_NETWORK_STATE声明、API28不支持的Handler.hasCallbacks调用，以及窗口对比度/API30方法未在访问点显式保护。137补 normal网络状态权限、用主线程标志保持500ms合并刷新、为各窗口API调用补版本保护并增加API28窗口恢复回归。不关闭MissingPermission/NewApi检查。
+- CapCut精确宿主资源ID属于宿主APK而非模块R，仅对已核验方法局部说明ResourceType例外，保留节点归属检查，不扩展隐藏容器。
+- lint另有389条既有扩展文案在其他语言回退英文的积压。只把这389个具体MissingTranslation记录纳入可审计baseline，不把英文复制到其他语种冒充译文、不关闭后续新文案的MissingTranslation，也不基线化权限/API/资源正确性错误。
+- 137完整测试、lint、统一包正在执行；136已校验APK仍保留GitHub草稿，未标成可下载稳定版。当前ADB设备列表为空，后续真机验收受此限制。报告华为无Root环境仍未端到端复测。
+
+
 ## 2026-11-07 GitHub同步补记：2.1.16-debug /136（正确版本已构建校验）
 
 此前GitHub停在2.1.1，本次补齐2.1.2～2.1.16的连续变更和失败记录，详见CHANGELOG.md。中间包127～135误标2.2.0～2.2.8，本应为2.1.7～2.1.15；136为2.1.16。遵守满100进1，旧实际包名保留作对照，不重命名伪装重新构建。

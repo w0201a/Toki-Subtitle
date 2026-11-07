@@ -60,6 +60,8 @@ internal class TemplateAnchorContract(val type: Class<*>, val bound: List<Method
                     TemplateRootBindings.Snapshot(view, owner, owner, true, LayoutElement.ANCHOR_OTHER_TEMPLATE)
             }
         }
+        // The literal below is a verified host-owned ID, not an ID from the module's R.
+        @android.annotation.SuppressLint("ResourceType")
         internal fun capcutArea(type: Class<*>): TemplateAnchorContract {
             val child = type.getDeclaredField("LLJJJJJIL").apply {
                 check(android.widget.RelativeLayout::class.java.isAssignableFrom(this.type) && !Modifier.isStatic(modifiers)); isAccessible = true

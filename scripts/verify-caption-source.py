@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 136' in gradle and 'versionName = "2.1.16"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.16-debug / 136")
+check('versionCode = 137' in gradle and 'versionName = "2.1.17"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.17-debug / 137")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -1177,3 +1177,9 @@ check('SELECT payload FROM comments WHERE account=? AND video=? AND id=? AND sou
 
 check('scope(feature).takeIf { it.active }' in read("app/src/main/java/io/github/meiyongai/toki/hook/HookRuntime.kt") and '(startupFeatures + liveFeatures) - rejected' in read("app/src/main/java/io/github/meiyongai/toki/hook/HostFeaturePlan.kt"), "revoked hooks remain disabled across repeated package callbacks without crashing host startup")
 check('connection.died(service)' in read("app/src/main/java/io/github/meiyongai/toki/util/LSPosedStatusHelper.kt") and 'current !== service' in read("app/src/main/java/io/github/meiyongai/toki/util/FrameworkServiceConnection.kt"), "only the currently bound framework service can disconnect configuration and activation state")
+
+check('android.permission.ACCESS_NETWORK_STATE' in read('app/src/main/AndroidManifest.xml'), 'network state observation declares its normal manifest permission')
+check('main.hasCallbacks(archiveChanged)' not in read('app/src/main/java/io/github/meiyongai/toki/hook/OfflineCommentsDialog.kt'), 'cache notification coalescing remains compatible with API28')
+import xml.etree.ElementTree as lint_et
+lint_backlog = lint_et.fromstring(read('app/lint-baseline.xml'))
+check(len(lint_backlog) == 389 and all(x.get('id') == 'MissingTranslation' for x in lint_backlog), 'lint baseline is limited to enumerated existing extension translation fallback debt')

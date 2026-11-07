@@ -23,8 +23,8 @@ android {
         applicationId = "io.github.meiyongai.toki.subtitle"
         minSdk = 28
         targetSdk = 35
-        versionCode = 136
-        versionName = "2.1.16"
+        versionCode = 137
+        versionName = "2.1.17"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         // 默认仍可构建通用包；真机调试包可只带目标 ABI。
         providers.gradleProperty("subtitleAbi").orNull?.let { ndk.abiFilters.add(it) }
@@ -89,6 +89,8 @@ android {
     }
 
     lint {
+        // Only known extension-catalog English fallback debt; new keys and runtime errors remain gated.
+        baseline = file("lint-baseline.xml")
         // PrivateApiDetector 无法解析宿主 X.08ZA 等合法 DEX 混淆类名，会在报告前崩溃。
         // 此检查针对 Android 隐藏 API；宿主反射契约另由代码身份和运行时检查限定。
         disable += setOf("BlockedPrivateApi", "DiscouragedPrivateApi", "PrivateApi", "SoonBlockedPrivateApi")

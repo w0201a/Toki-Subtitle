@@ -120,8 +120,8 @@ internal class ImmersiveWindowBindings(private val report: (Exception) -> Unit =
     private fun read(window: Window, property: Property): Any = when (property) {
         Property.STATUS -> window.statusBarColor
         Property.NAVIGATION -> window.navigationBarColor
-        Property.STATUS_CONTRAST -> window.isStatusBarContrastEnforced
-        Property.NAVIGATION_CONTRAST -> window.isNavigationBarContrastEnforced
+        Property.STATUS_CONTRAST -> if (Build.VERSION.SDK_INT >= 29) window.isStatusBarContrastEnforced else false
+        Property.NAVIGATION_CONTRAST -> if (Build.VERSION.SDK_INT >= 29) window.isNavigationBarContrastEnforced else false
         Property.CUTOUT -> window.attributes.layoutInDisplayCutoutMode
         Property.FITS -> window.javaClass.getMethod("decorFitsSystemWindows").also {
             check(it.returnType == Boolean::class.javaPrimitiveType && it.parameterCount == 0)
@@ -136,12 +136,12 @@ internal class ImmersiveWindowBindings(private val report: (Exception) -> Unit =
             when (property) {
                 Property.STATUS -> window.statusBarColor = value as Int
                 Property.NAVIGATION -> window.navigationBarColor = value as Int
-                Property.STATUS_CONTRAST -> window.isStatusBarContrastEnforced = value as Boolean
-                Property.NAVIGATION_CONTRAST -> window.isNavigationBarContrastEnforced = value as Boolean
+                Property.STATUS_CONTRAST -> if (Build.VERSION.SDK_INT >= 29) window.isStatusBarContrastEnforced = value as Boolean
+                Property.NAVIGATION_CONTRAST -> if (Build.VERSION.SDK_INT >= 29) window.isNavigationBarContrastEnforced = value as Boolean
                 Property.CUTOUT -> window.attributes = WindowManager.LayoutParams().also {
                     it.copyFrom(window.attributes); it.layoutInDisplayCutoutMode = value as Int
                 }
-                Property.FITS -> window.setDecorFitsSystemWindows(value as Boolean)
+                Property.FITS -> if (Build.VERSION.SDK_INT >= 30) window.setDecorFitsSystemWindows(value as Boolean)
                 Property.FLAGS -> window.decorView.systemUiVisibility = value as Int
             }
         } finally { writing-- }

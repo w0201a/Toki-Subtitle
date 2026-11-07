@@ -189,12 +189,20 @@ internal object OfflineCommentsDialog {
         adapter = OfflineCommentListAdapter(context, ::valid, ::requestTranslation, ::renderSummary)
         val mediaRefresh = Runnable { if (!closed.get() && valid()) adapter.notifyDataSetChanged() }
         val mediaSubscription = OfflineCommentMediaStore.observe { main.removeCallbacks(mediaRefresh); main.postDelayed(mediaRefresh, 120L) }
-        val archiveChanged = Runnable { if (!closed.get()) { cacheDirty = true; refreshCached() } }
+        // Handler.hasCallbacks is API29+. Coalesce on the main thread without delaying
+        // a queued refresh indefinitely while new progress notifications keep arriving.
+        var archiveRefreshQueued = false
+        val archiveChanged = Runnable {
+            archiveRefreshQueued = false
+            if (!closed.get()) { cacheDirty = true; refreshCached() }
+        }
         val archiveSubscription = OfflineCommentArchive.observe { account, changedVideo ->
             if (changedVideo == video) main.post {
                 if (!closed.get() && adapter.snapshot?.account?.let { it == account } != false) {
                     cacheDirty = true
-                    if (!main.hasCallbacks(archiveChanged)) main.postDelayed(archiveChanged, 500L)
+                    if (!archiveRefreshQueued) {
+                        archiveRefreshQueued = main.postDelayed(archiveChanged, 500L)
+                    }
                 }
             }
         }
