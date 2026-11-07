@@ -1,5 +1,14 @@
 # 无Root模式：报告定位与验证边界（2026-11-07）
 
+## 487原管理器到件后的验证（2026-11-08，未安装）
+
+- 已核对用户提供的原管理器：org.lsposed.lspatch／1.2／487；原APK和报告ZIP保持不变，未覆盖安装／卸载／清数据。
+- 实际loader自带1075个Kotlin/kotlinx类，仍被宿主父加载器同名类抢先解析。新增`scripts/prepare-lspatch-kotlin-loader.py`，将框架自带运行库隔离为kotlim/kotlimx，保留DEX所有偏移／大小／排序，重算SHA1和Adler32；8项回归覆盖正确生成、损坏输入、命名空间冲突及排序越界，拒绝覆盖输出。
+- 使用准确487的真实loader在Android13独立ART进程重放：旧宿主Intrinsics父加载器下原loader初始化真实VectorInlinedCallers失败，错误精确为报告中的checkNotNull(Object)；隔离loader初始化成功并执行自有方法，宿主类未改写。这不是只有JVM模拟，但仍不是华为API29／完整框架／全部模块端到端验收。
+- 原管理器作者签名与内置公开补丁签名不同，未找到可用于原位更新管理器的同证书签名材料；没有生成冒充可覆盖的管理器APK。未向模块硬塞宿主Kotlin方法，未修改宿主类。
+- 本地保留加载器候选ZIP、原始/隔离DEX、Android ART证据和复现脚本；不上传用户APK／日志／数据库。候选ZIP是技术修复材料，不是可直接安装的APK。
+- **下一必需输入：这台无Root手机当前已打补丁TikTok的完整安装APK。** 需要核对当前Local／Manager模式、实际嵌入模块、loader与签名，再判断能否同证书覆盖修复。原报告最后补丁记录是Local且嵌入0模块，而487的LocalApplicationService实际只枚举assets/lspatch/modules；不能把管理器勾选记录当成Local已嵌入Toki。报告同时含多应用／多次补丁记录，最终结论必须以当前宿主APK为准。
+
 ## 新报告补充：框架在模块入口前失败（2.1.20源码回合）
 
 新报告的API29／LSPatch 1.2(487)／Vector canary-3106环境仍不能使用。Shizuku授权和Binder均为true，不能再归因为未授权。

@@ -1,5 +1,8 @@
 # Toki
 
+### Source/build continuation: 2.1.20 /140 (not publicly released)
+
+Posted native-caption text observation, outside dismissal and indexed fair comment scheduling are built and locally/CI checked: 1365 tests, zero failures, three local/four cloud environment skips. The latest non-root report fails in Vector bootstrap before Toki. An isolated loader made from the supplied LSPatch487 reproduces and avoids the exact Intrinsics failure in a standalone Android13 ART test, but it is not an installable manager or a Huawei API29 end-to-end fix. The current patched TikTok APK and its signature/mode need inspection before an in-place rootless repair. No data was cleared, no framework installed and no new public release created. See [rootless evidence and boundaries](docs/NO_ROOT_DIAGNOSTIC_ZH.md).
 
 ## Toki Subtitle edition
 
