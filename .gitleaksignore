@@ -1,0 +1,2 @@
+# Reviewed synthetic redaction-test input, not an operational credential; exact historical finding only.
+53c8dfee73a9c2d7619fd4aba38427553e5252e5:app/src/test/java/io/github/meiyongai/toki/provider/DiagnosticTextTest.kt:generic-api-key:9

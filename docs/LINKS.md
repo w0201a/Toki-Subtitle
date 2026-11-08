@@ -7,6 +7,8 @@
 | 入口 | 目标 | 说明 |
 | --- | --- | --- |
 | 字幕版源码／软件首页 GitHub | [w0201a/Toki-Subtitle](https://github.com/w0201a/Toki-Subtitle) | 当前字幕版维护仓库 |
+| 当前正式版（需要Root） | [v2.1.23](https://github.com/w0201a/Toki-Subtitle/releases/tag/v2.1.23) | 本版本无法在无Root环境下使用 |
+| 本版更新说明 | [RELEASE_NOTES_2.1.23.md](../RELEASE_NOTES_2.1.23.md) | 新功能、Bug修复、限制和签名说明 |
 | 最新发行版下载 | [Releases latest](https://github.com/w0201a/Toki-Subtitle/releases/latest) | GitHub 自动跳转最新正式发行版 |
 | 更新日志 | [CHANGELOG.md](../CHANGELOG.md) | 字幕版记录在前，上游历史在后 |
 | 问题与修复 | [ISSUES_AND_FIXES.md](ISSUES_AND_FIXES.md) | 按验证证据区分已修复与待回归 |
@@ -18,3 +20,5 @@
 | 字幕版赞助 | 首页赞助选择器，[微信](../app/src/main/res/drawable-nodpi/sponsor_wechat_154er.jpg)／[支付宝](../app/src/main/res/drawable-nodpi/sponsor_alipay_154er.jpg) | 与原作者赞助分开说明 |
 
 发行签名、安装迁移和发布步骤见 [RELEASING.md](../RELEASING.md)。
+
+独立Toki的内置检查只查询此仓库的最新正式Release，首次打开一次、此后每月最多一次，每个新版本自动只提示一次；无更新不提醒，支持手动检查。

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Explicit English fallback for the new update UI; existing translations remain unchanged. -->
+    <string name="release_root_only_title">"Root required"</string>
+    <string name="release_root_only_message">"This version cannot be used without root. A rooted device with LSPosed is required. A connected framework does not prove that features work."</string>
+    <string name="app_update_title">"App updates"</string>
+    <string name="app_update_manual">"Check for updates"</string>
+    <string name="app_update_policy">"Checks once when first opened, then at most monthly when Toki is opened. Each new version is announced once. No update means no automatic notice."</string>
+    <string name="app_update_checking">"Checking for updates…"</string>
+    <string name="app_update_latest">"You are using the latest available stable version."</string>
+    <string name="app_update_failed">"Could not check. You can try again manually later."</string>
+    <string name="app_update_available">"New version %1$s"</string>
+    <string name="app_update_notes">"New features and bug fixes"</string>
+    <string name="app_update_notes_empty">"No detailed release notes were provided."</string>
+    <string name="app_update_open">"View update and download"</string>
+    <string name="app_update_current_notes">"Changes in this version"</string>
+    <string name="app_update_current_body">"New: monthly, one-time update notices and manual checking, with release notes.\nFixes: Toki companion connection recovery and configuration acknowledgment; caption recovery after empty expanded frames; indexed comment reading to reduce repeated scans.\nKnown limitation: this version cannot be used without root. These changes do not restore rootless injection or promise that every TikTok version works."</string>
+</resources>

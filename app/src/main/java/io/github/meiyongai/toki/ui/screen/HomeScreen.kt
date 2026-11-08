@@ -125,6 +125,9 @@ fun HomeScreen(
         Text(strings.getString(R.string.toki_settings_intro), style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(bottom = 18.dp))
 
+        RootOnlyReleaseNotice()
+        Spacer(modifier = Modifier.height(10.dp))
+
         // === 1. LSPosed 激活状态卡片 ===
         LSPosedStatusCard(lsposedStatus = lsposedStatus)
 
@@ -138,6 +141,8 @@ fun HomeScreen(
             icon = Icons.Outlined.Code,
             onClick = onHookStatusClick
         )
+
+        AppUpdateSection(onOpenUrl = { openBrowserUrl(context, it) })
 
         // === 3. 开源与社区 Section ===
         ConfigTransferSection()

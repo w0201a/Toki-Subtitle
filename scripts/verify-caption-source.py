@@ -71,7 +71,7 @@ check('if (persistenceScheduled) flushCache()' in native, "pending snapshot is s
 ui = (JAVA / "ui/screen/LayoutCleanupSection.kt").read_text(encoding="utf-8")
 check("ConfigClient.addStateListener" in ui and "subscription.close()" in ui, "cleanup UI subscribes and disposes configuration listener")
 gradle = read("app/build.gradle.kts")
-check('versionCode = 142' in gradle and 'versionName = "2.1.22"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.22-debug / 142")
+check('versionCode = 143' in gradle and 'versionName = "2.1.23"' in gradle and 'versionNameSuffix = "-debug"' in gradle, "next debug version is 2.1.23-debug / 143")
 for name in ("CaptionCacheCodec.kt", "CaptionCacheStorage.kt", "CaptionTimelineDiskCache.kt"):
     check((JAVA / "hook" / name).is_file(), name + " is present")
 plan = (JAVA / "hook/HostFeaturePlan.kt").read_text(encoding="utf-8")
@@ -1208,3 +1208,13 @@ check('org.lsposed.lspatch.action.REQUEST_PUSH' in pull_client and 'org.lsposed.
 check('MAX_ATTEMPTS = 3' in pull_client and 'TIMEOUT_MS = 5_000L' in pull_client and 'workerBusy.compareAndSet' in pull_client and 'app.unbindService(request)' in pull_client, "companion pull has bounded attempts, timeout, one worker and binding cleanup")
 check('LSPosedStatusHelper.requestConnection(this)' in read("app/src/main/java/io/github/meiyongai/toki/TokiApplication.kt") and 'LSPosedStatusHelper.requestConnection(applicationContext)' in read("app/src/main/java/io/github/meiyongai/toki/ui/MainActivity.kt"), "process recreation and foreground entry request recovery without starting TikTok")
 check('fun connect(acquire: () -> SharedPreferences): Boolean' in read("app/src/main/java/io/github/meiyongai/toki/provider/ConfigStore.kt") and 'connectionResultRejectsUnacknowledgedCommit' in read("app/src/test/java/io/github/meiyongai/toki/provider/ConfigStoreTest.kt"), "configuration connection result requires acknowledged publication and preserves failed state")
+
+# Production release update policy; actual tests and artifact signing remain separate gates.
+update_engine = read("app/src/main/java/io/github/meiyongai/toki/update/UpdateEngine.kt")
+check('plusMonths(1)' in update_engine and update_engine.index('store.write(state.copy(nextAutomaticAt') < update_engine.index('source.latest()'), "monthly update attempt is persisted before networking, including failed checks")
+check('state.notified' in update_engine and 'fun claimNotice(' in update_engine and 'AtomicBoolean' in update_engine, "update notices are version-deduplicated with a single in-flight check")
+update_ui = read("app/src/main/java/io/github/meiyongai/toki/ui/screen/AppUpdateSection.kt")
+check('repeatOnLifecycle(Lifecycle.State.RESUMED)' in update_ui and 'if (manual) feedback' in update_ui and 'withContext(Dispatchers.IO)' in update_ui, "standalone foreground update checks are background-threaded and automatic empty/error results are silent")
+check('RootOnlyReleaseNotice()' in read("app/src/main/java/io/github/meiyongai/toki/ui/screen/HomeScreen.kt") and '此版本无法在无 Root 环境下使用' in read("app/src/main/res/values-b+zh+Hans/app_update_strings.xml"), "this release prominently declares that it cannot be used without root")
+check('releases/latest' in read("app/src/main/java/io/github/meiyongai/toki/update/GitHubReleaseSource.kt") and 'instanceFollowRedirects = false' in read("app/src/main/java/io/github/meiyongai/toki/update/GitHubReleaseSource.kt"), "release metadata is bounded HTTPS from the official stable endpoint without redirect-following")
+check('monthlyScheduleUsesCalendarMonths' in read("app/src/test/java/io/github/meiyongai/toki/update/UpdateEngineTest.kt") and 'sameNewVersionCanPromptAutomaticallyOnlyOnce' in read("app/src/test/java/io/github/meiyongai/toki/update/UpdateEngineTest.kt"), "update regression covers calendar scheduling and persistent one-time notices")

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="release_root_only_title">"本版本需要 Root"</string>
+    <string name="release_root_only_message">"此版本无法在无 Root 环境下使用，需要 Root 并通过 LSPosed 加载。框架显示已连接不代表实际功能可用。"</string>
+    <string name="app_update_title">"版本更新"</string>
+    <string name="app_update_manual">"手动检查更新"</string>
+    <string name="app_update_policy">"首次打开检查一次，此后每月最多自动检查一次（在打开 Toki 时进行）。每个新版本只提示一次，无更新不提醒。"</string>
+    <string name="app_update_checking">"正在检查更新…"</string>
+    <string name="app_update_latest">"当前已是可用的最新正式版本。"</string>
+    <string name="app_update_failed">"检查失败，可稍后手动重试。"</string>
+    <string name="app_update_available">"发现新版本 %1$s"</string>
+    <string name="app_update_notes">"新增功能与 Bug 修复"</string>
+    <string name="app_update_notes_empty">"此版本未提供详细更新说明。"</string>
+    <string name="app_update_open">"查看更新并下载"</string>
+    <string name="app_update_current_notes">"本版更新说明"</string>
+    <string name="app_update_current_body">"新增：每月一次的更新检查、同版本仅提示一次、手动检查及新版功能／修复说明。\n修复：Toki 本体进程重建后的框架连接恢复、配置发布确认；字幕空展开帧后的观察恢复；评论读取改用索引，减少重复扫描。\n已知限制：此版本无法在无 Root 环境下使用。上述改动不代表已修复无 Root 注入，也不保证所有 TikTok 版本和功能均已实测通过。"</string>
+</resources>

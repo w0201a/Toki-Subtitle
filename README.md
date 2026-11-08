@@ -1,16 +1,29 @@
 # Toki
 
-## In progress: Toki 2.1.22-debug /142 (not publicly released)
+## Toki 2.1.23 production release /143 — Root required
+
+> **This version cannot be used without root. A rooted device with LSPosed is required. Rootless injection is still unavailable.** Companion activation alone is not proof of working features.
+
+[Download](https://github.com/w0201a/Toki-Subtitle/releases/tag/v2.1.23) · [Release notes](RELEASE_NOTES_2.1.23.md) · [Changelog](CHANGELOG.md)
+
+New: one update check on first opening, then at most monthly while the standalone app is opened; one automatic notice per newer stable version; manual checking; feature/bug-fix notes. Automatic no-update/failure results remain silent. No background host wakeups, APK downloads or automatic installation. The homepage includes the root-only warning and on-demand current release notes.
+
+Includes caption observation recovery, indexed comment reading, acknowledged configuration publication and companion reconnection fixes. These do not restore rootless injection. The APK uses the existing production certificate and must not be installed by uninstalling a differently signed Debug build. Publication is explicitly authorized; tests, signatures and artifact verification are recorded separately from runtime feature acceptance.
+
+Verification: 1441 local tests, zero failures (3 existing environment skips); 37 update-focused tests passed. Production signing continuity, both optimized runtimes, non-debuggable flags and alignment were checked. Full real-device feature acceptance remains separate.
+
+
+## Historical development: Toki 2.1.22-debug /142
 
 The current scope permits changes and updates to **Toki only**: no LSPatch/TikTok replacements, patched-host changes, extra test-app installations, network switching, or data resets. This candidate restores the companion service after Toki process recreation using the installed manager's existing pull endpoint, with bounded background retries and binding cleanup. Configuration acknowledgment and Binder connection are separate facts; saved settings remain unchanged.
 
 The first 57 targeted tests and all 1,404 local tests passed (3 existing environment skips). The verified APK was installed as a Toki-only update; saved configuration and host/manager APK hashes were unchanged. Companion reconnection after process recreation was verified. However, a continuously captured host launch still failed in framework Kotlin bootstrap before module dispatch, and video remained unavailable. Actual module entry and individual feature behavior are not accepted. Activation UI has alternated while actual functionality remains unavailable; a green badge is not acceptance. The objective remains complete rootless feature usability and upgrade regression, not a framework or one-off host package. See the [current rootless investigation](docs/NO_ROOT_DIAGNOSTIC_ZH.md).
 
-## Current Toki module work: 2.1.21-debug /141
+## Historical module work: 2.1.21-debug /141
 
 This continuation changes **Toki only**, not TikTok or LSPatch. It fixes losing the selected native-caption observer after an empty EXPANDED frame and removes repeated full reply scans from comment adapter bindings. The old module failed the new caption reproduction; the corrected 12 targeted tests pass. Local/CI full runs have 1370 tests, zero failures, with three/four environment skips. The same-signer standalone Toki APK is built and verified; this does not prove the original playback scenario, actual translation throughput or the rootless device is fixed. Live140 data still reports failing host requests with network=-2223. Previous framework experiments are historical and are not this module's delivery.
 
-## Generic non-root framework repair (2026-11-08, compatibility test)
+## Historical framework experiment (not a release recommendation)
 
 A reusable build-time Kotlin isolation fix now produces a source-built LSPatch manager and CLI, not a user-specific TikTok package. The 203-task build and 8 transform regressions passed. Two synthetic apps (old Kotlin / no Kotlin) entered their test module in both integrated and manager modes on Android13 physical hardware; the manager launched side-by-side. Four native7306 binaries were reused from the reviewed487 manager, not rebuilt. The Huawei API29 report environment, real Toki features, and production signing/safe migration remain unverified. See [reproducible framework integration](integrations/lspatch-kotlin-isolation/README.md). No original-manager uninstall, data reset, or automatic retargeting of existing patched apps is performed.
 
@@ -92,6 +105,7 @@ through a Material 3 interface with 57 language options.
 | Requirement | Supported configuration |
 | --- | --- |
 | Android | Android 9 (API 28) or newer |
+| Root | **Required for this release; rootless use is unavailable** |
 | Framework | A working LSPosed installation supporting **libxposed API 102** |
 | TikTok | Official client; on-device adaptation uses code identity. TikTok **47.4.16** was exercised on a Huawei device; compatibility of every feature and future version is not guaranteed. |
 | Module scope | `com.zhiliaoapp.musically` or `com.ss.android.ugc.trill` |
@@ -105,6 +119,8 @@ variants can contain different code, so a listed version alone does not
 guarantee that every feature will work.
 
 ### Enable the module
+
+**2.1.23 requires Root. Do not follow rootless/LSPatch installation experiments for this release. A differently signed Debug build cannot be covered by the production APK; do not uninstall or clear its data to force installation.**
 
 1. Download and install the Toki APK from
    [Releases](https://github.com/w0201a/Toki-Subtitle/releases/latest).
