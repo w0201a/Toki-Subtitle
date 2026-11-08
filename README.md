@@ -13,6 +13,9 @@ Includes caption observation recovery, indexed comment reading, acknowledged con
 Verification: 1441 local tests, zero failures (3 existing environment skips); 37 update-focused tests passed. Production signing continuity, both optimized runtimes, non-debuggable flags and alignment were checked. Full real-device feature acceptance remains separate.
 
 
+Published November 8, 2026 at 16:08 JST. All three public asset downloads matched local SHA-256 values; the compiled updater parsed the published v2.1.23 metadata and notes.
+
+
 ## Historical development: Toki 2.1.22-debug /142
 
 The current scope permits changes and updates to **Toki only**: no LSPatch/TikTok replacements, patched-host changes, extra test-app installations, network switching, or data resets. This candidate restores the companion service after Toki process recreation using the installed manager's existing pull endpoint, with bounded background retries and binding cleanup. Configuration acknowledgment and Binder connection are separate facts; saved settings remain unchanged.
